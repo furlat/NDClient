@@ -1,8 +1,42 @@
 {
-  "arguments": [
-    "--recording=C:/Users/tommaso/Documents/Dev/dnd_engine/.runtime/server-latency/checkpoint32-plain/journal",
-    "--previous=C:/Users/tommaso/Documents/Dev/NDClientGodot/.runtime/player-runs/20261013T094752.111137Z/journal"
+  "checks": 379,
+  "evidence": [
+    {
+      "case": "door/amber",
+      "final_objects": 87,
+      "final_tiles": 142,
+      "missing_base_control": true,
+      "records": 14
+    },
+    {
+      "case": "door/blue",
+      "final_objects": 45,
+      "final_tiles": 92,
+      "missing_base_control": true,
+      "records": 12
+    },
+    {
+      "case": "oa-jump-late-lethal/amber",
+      "final_objects": 0,
+      "final_tiles": 225,
+      "missing_base_control": false,
+      "records": 3
+    },
+    {
+      "case": "oa-jump-late-lethal/blue",
+      "final_objects": 0,
+      "final_tiles": 225,
+      "missing_base_control": false,
+      "records": 3
+    }
   ],
-  "checks": 33,
-  "failures": []
+  "failures": [],
+  "producer_reference": {
+    "commit": "211b71134ed15c89e62232587381f7e15a5961c3",
+    "path": "/home/tommaso/.cache/ndclient/dnd_engine-211b71134",
+    "player_schema_version": 16.0,
+    "protocol_version": 1.0,
+    "schema_digest": "49d14bc20920f5698eb4f09e3aeece442380242cd1453893d45f94ea9fb0c8a5"
+  },
+  "scope": "All actual Door/lethal-OA faction prefixes against frozen Python canonical states; missing-base negative control on actual Door world rows, rejection/no publication, retry, exact durable bytes, retained snapshots, duplicate and cold replay. Schema6/7/8/9 refusal only; no compatibility replay or invented positive wire facts."
 }

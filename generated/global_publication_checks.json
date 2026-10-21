@@ -1,5 +1,5 @@
 {
-  "checks": 104,
+  "checks": 35,
   "comparisons": [
     {
       "case": "cap",
@@ -25,51 +25,40 @@
       "case": "restore",
       "different_pixels": 0,
       "maximum_error": 0.0
-    },
-    {
-      "case": "resize",
-      "different_pixels": 0,
-      "maximum_error": 0.0
     }
   ],
   "failures": [],
-  "scope": "Actual frozen recording through strict Play quarter/cap/Normals preparation; independent full lighting reference on first published frame. CPU slices include sampling and draw synchronization; no live latency acceptance or constant-time commit claim.",
+  "scope": "Actual frozen recording through Play quarter/cap/Normals requests; cap/Normals are receiving globals published on the first sampled frame, a quarter publishes its prepared view. First published frame versus a complete republication of every receiving global. CPU slices include sampling and draw synchronization; no live latency acceptance.",
   "timings": [
     {
       "case": "cap",
-      "frames": 8,
-      "last_publication_cpu_ms": 4.276,
-      "max_step_cpu_ms": 4.276
+      "frames": 1,
+      "last_publication_cpu_ms": 0.832,
+      "max_step_cpu_ms": 0.832
     },
     {
       "case": "normals",
-      "frames": 12,
-      "last_publication_cpu_ms": 4.072,
-      "max_step_cpu_ms": 8.298
+      "frames": 1,
+      "last_publication_cpu_ms": 0.64,
+      "max_step_cpu_ms": 0.64
     },
     {
       "case": "quarter-one",
-      "frames": 13,
-      "last_publication_cpu_ms": 5.569,
-      "max_step_cpu_ms": 5.569
+      "frames": 9,
+      "last_publication_cpu_ms": 3.382,
+      "max_step_cpu_ms": 3.382
     },
     {
       "case": "quarter-two",
-      "frames": 11,
-      "last_publication_cpu_ms": 5.53,
-      "max_step_cpu_ms": 5.53
+      "frames": 9,
+      "last_publication_cpu_ms": 3.342,
+      "max_step_cpu_ms": 3.342
     },
     {
       "case": "restore",
-      "frames": 20,
-      "last_publication_cpu_ms": 4.358,
-      "max_step_cpu_ms": 4.453
-    },
-    {
-      "case": "resize",
-      "held_frames": 15,
-      "last_publication_cpu_ms": 14.988,
-      "max_step_cpu_ms": 19.415
+      "frames": 2,
+      "last_publication_cpu_ms": 2.922,
+      "max_step_cpu_ms": 2.922
     }
   ]
 }

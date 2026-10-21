@@ -1,6 +1,8 @@
 extends "res://tools/profile_studio.gd"
 ## One normal-clock Gallery run, then actual transport and drawn-lane checks.
 ## Captures/seeks are outside the performance interval inherited from the tool.
+const Journal=preload("res://sdk/journal.gd")
+const NativeSpells=preload("res://presentation/native_spell_authoring.gd")
 var checks:int=0
 var checkpoint:Dictionary={"captures":[],"loop":{},"checks":0}
 const CAPTURE_DIR="res://.captures/studio/checkpoint"
@@ -16,11 +18,49 @@ func rendered()->void:
 func followed_visible()->bool:
     return studio.tracks.followed_visible()
 
+## Read the admitted original independently of the compiled presentation.
+## This Gallery has three actual misses; positive SR contacts remain the
+## distinct spell.scorching_ray/baseline native batch-render control.
+func scorching_ray_applications()->Array:
+    var journal=Journal.new()
+    var opened:Dictionary=journal.open(studio.active_directory,true,false)
+    check(opened.ok,"The continuous Gallery journal admits its exact stored producer contract")
+    if not opened.ok:return []
+    var applications:Dictionary={}
+    var files:Array=Array(DirAccess.get_files_at(studio.active_directory));files.sort()
+    for file in files:
+        if not file.ends_with(".json") or file.length()!=21:continue
+        var sequence:int=int(file.trim_suffix(".json"))
+        var decoded:Dictionary=journal.decode_record(sequence,FileAccess.get_file_as_bytes(studio.active_directory.path_join(file)))
+        check(decoded.ok,"Original Gallery packet decodes for independent outcome evidence: "+file)
+        if not decoded.ok:return []
+        for lineage in decoded.value.get("lineages",[]):
+            var declarations:Dictionary={}
+            for event in lineage.events:
+                var fact:Dictionary=event.fact if event.get("fact")!=null else {}
+                if fact.get("kind")!="spell" or fact.get("behavior_id")==null or event.get("resolution")==null:continue
+                var resolution:Dictionary=lineage.resolutions[int(event.resolution)]
+                if resolution.get("application_id")==null:declarations[str(resolution.lineage)]=fact
+            for event in lineage.events:
+                if event.phase!="completion" or event.get("canceled",false) or event.get("resolution")==null:continue
+                var resolution:Dictionary=lineage.resolutions[int(event.resolution)]
+                if resolution.get("application_id")==null:continue
+                var declaration:Dictionary=declarations.get(str(resolution.lineage),{})
+                var event_fact:Dictionary=event.fact if event.get("fact")!=null else {}
+                if declaration.get("behavior_id")!="spell.scorching_ray" or event_fact.get("kind")!="spell":continue
+                var fact:Dictionary=declaration.merged(event_fact,true)
+                applications[str(resolution.application_id)]={"sequence":sequence,"occurrence":event.occurrence,
+                    "application_id":resolution.application_id,"fact":fact}
+    return applications.values()
+
 func transport_checks()->void:
     check(studio.follow_tracks and studio.follow_button.button_pressed,"Follow is visibly enabled by default")
     var following:Array=frames.filter(func(frame):return not frame.follow.source.is_empty())
     check(not following.is_empty(),"Normal playback follows actual recorded work")
-    check(following.all(func(frame):return frame.follow.visible),"Followed animation lane stays inside the drawn timeline during normal playback")
+    var lost_follow:Array=following.filter(func(frame):return not frame.follow.visible)
+    checkpoint.follow={"samples":following.size(),"lost_count":lost_follow.size(),
+        "first_lost":lost_follow.slice(0,8).map(func(frame):return {"engine_frame":frame.engine_frame,"display_ms":frame.display_ms,"follow":frame.follow})}
+    check(lost_follow.is_empty(),"Followed animation lane stays inside the drawn timeline during normal playback: "+JSON.stringify(checkpoint.follow))
     check(following.all(func(frame):return frame.follow.playhead_visible),"Horizontal Follow keeps the actual playback cursor inside the timeline")
     var offsets:Dictionary={}
     for record in following:offsets[roundi(record.follow.scroll_y)]=true
@@ -33,14 +73,35 @@ func transport_checks()->void:
     for wrapped in groups:
         for component in wrapped.group.components:
             if not component.get("native_spell",false):continue
-            var spell:String=component.spell_id
+            var spell:String=str(component.get("spell_id",""))
             if spell not in ["spell.magic_missile","spell.scorching_ray","spell.fireball"]:continue
             if not counts.has(spell):counts[spell]={}
             var role:String=component.native_cue.role
             counts[spell][role]=int(counts[spell].get(role,0))+1
-    var expected={"spell.magic_missile":{"cast":2,"flight":6,"impact":6},"spell.scorching_ray":{"cast":1,"flight":3,"impact":1},"spell.fireball":{"cast":1,"flight":1,"area":1}}
-    check(counts==expected,"Compact tracks retain the recorded casts, missiles, rays, impacts and single Fireball area")
+    var applications:Array=scorching_ray_applications()
+    var outcomes:Dictionary={"Miss":0,"Hit":0,"Crit":0,"Crit Miss":0}
+    for application in applications:
+        var outcome:String=str(application.fact.get("attack_outcome","undisclosed"))
+        outcomes[outcome]=int(outcomes.get(outcome,0))+1
+    check(applications.size()==3 and outcomes=={"Miss":3,"Hit":0,"Crit":0,"Crit Miss":0},
+        "Original Gallery discloses exactly three completed ScorchingRay misses and no Hit/Crit applications")
+    var source:Dictionary=NativeSpells.source("spell.scorching_ray",studio.index.cache)
+    check(source.recipe.get("projectile",{}).get("impact",{}).get("onMiss")=="omit",
+        "Selected ScorchingRay recipe explicitly omits miss impacts")
+    check(source.selection.get("staging",{}).get("cues",[]).any(func(cue):return cue.role=="impact"),
+        "ScorchingRay retains its authored impact source for actual positive-contact originals")
+    for application in applications:
+        var selected:Dictionary=NativeSpells.selected(source,application.fact)
+        check(not NativeSpells.miss_impact_authored(selected.selection,application.fact),
+            "Actual missed application selects no replacement miss-impact source: "+str(application.application_id))
+    var expected={"spell.magic_missile":{"cast":2,"flight":6,"impact":6},"spell.scorching_ray":{"cast":1,"flight":3},"spell.fireball":{"cast":1,"flight":1,"area":1}}
+    check(counts==expected,"Compact tracks retain exact recorded cast/delivery roles, omit actual missed rays' impacts and keep one Fireball area")
+    check(int(counts.get("spell.scorching_ray",{}).get("impact",0))==0,
+        "Three actual misses produce no invented ScorchingRay impact tracks")
     checkpoint.native_roles=counts
+    checkpoint.scorching_ray={"applications":applications,"outcomes":outcomes,"authored_miss_impact":"omit",
+        "positive_contact_control":{"case":"spell.scorching_ray/baseline","gate":"native_spell_batch_render_checks --only=scorching_ray",
+            "scope":"Distinct genuine positive-contact original; not supplied or qualified by this continuous all-Miss Gallery transport run."}}
     DirAccess.make_dir_recursive_absolute(CAPTURE_DIR)
     var selections:Array=[]
     var movement:Array=studio.index.rows.filter(func(row):return row.kind=="body" and row.get("track",{}).get("clip")=="Run" and row.end_ms-row.start_ms>100)

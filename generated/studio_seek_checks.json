@@ -1,5 +1,5 @@
 {
-  "checks": 5454,
+  "checks": 1726,
   "condition_lifecycle": [
     {
       "active_samples": 0,
@@ -11,7 +11,7 @@
       },
       "indexed_state_intervals": 0,
       "initial": 0,
-      "recording": "res://.runtime/studio-cases/walk_diagonal-seed3-v2/amber/journal",
+      "recording": "res://tests/fixtures/schema16/scenarios/melee/amber",
       "removals": 0,
       "suppressed_samples": 0
     },
@@ -25,7 +25,7 @@
       },
       "indexed_state_intervals": 0,
       "initial": 0,
-      "recording": "res://.runtime/studio-cases/oa_jump_late_lethal-seed5-v2/amber/journal",
+      "recording": "res://tests/fixtures/schema16/scenarios/oa-jump/amber",
       "removals": 0,
       "suppressed_samples": 0
     },
@@ -39,122 +39,8 @@
       },
       "indexed_state_intervals": 0,
       "initial": 0,
-      "recording": "res://.runtime/studio-cases/action_economy-seed3-v2/amber/journal",
+      "recording": "res://tests/fixtures/schema16/scenarios/revive/amber",
       "removals": 0,
-      "suppressed_samples": 0
-    },
-    {
-      "active_samples": 9,
-      "applications": 3,
-      "expired_tail_checks": 3,
-      "indexed_mechanisms": {
-        "kinds": {
-          "condition_material": 2,
-          "condition_pose": 1,
-          "registered_media": 8
-        },
-        "members": 11
-      },
-      "indexed_state_intervals": 0,
-      "initial": 0,
-      "recording": "res://.runtime/studio-cases/hold_person-seed3/amber/journal",
-      "removals": 3,
-      "suppressed_samples": 0
-    },
-    {
-      "active_samples": 0,
-      "applications": 0,
-      "expired_tail_checks": 0,
-      "indexed_mechanisms": {
-        "kinds": {},
-        "members": 0
-      },
-      "indexed_state_intervals": 0,
-      "initial": 0,
-      "recording": "res://.runtime/studio-cases/window-seed3-v2/amber/journal",
-      "removals": 0,
-      "suppressed_samples": 0
-    },
-    {
-      "active_samples": 0,
-      "applications": 0,
-      "expired_tail_checks": 1,
-      "indexed_mechanisms": {
-        "kinds": {
-          "registered_media": 1
-        },
-        "members": 1
-      },
-      "indexed_state_intervals": 0,
-      "initial": 1,
-      "recording": "res://.runtime/studio-cases/prone-seed3-v3/blue/journal",
-      "removals": 1,
-      "suppressed_samples": 0
-    },
-    {
-      "active_samples": 2,
-      "applications": 0,
-      "expired_tail_checks": 1,
-      "indexed_mechanisms": {
-        "kinds": {
-          "condition_material": 2,
-          "registered_media": 2
-        },
-        "members": 4
-      },
-      "indexed_state_intervals": 0,
-      "initial": 1,
-      "recording": "res://.runtime/studio-cases/poisoned-seed3-v2/amber/journal",
-      "removals": 1,
-      "suppressed_samples": 0
-    },
-    {
-      "active_samples": 6,
-      "applications": 2,
-      "expired_tail_checks": 2,
-      "indexed_mechanisms": {
-        "kinds": {
-          "condition_material": 2,
-          "registered_media": 4
-        },
-        "members": 6
-      },
-      "indexed_state_intervals": 0,
-      "initial": 0,
-      "recording": "res://.runtime/studio-cases/rage-seed3-v3/amber/journal",
-      "removals": 2,
-      "suppressed_samples": 0
-    },
-    {
-      "active_samples": 14,
-      "applications": 2,
-      "expired_tail_checks": 1,
-      "indexed_mechanisms": {
-        "kinds": {},
-        "members": 0
-      },
-      "indexed_state_intervals": 3,
-      "initial": 0,
-      "recording": "res://.runtime/studio-cases/condition_suppression-seed3-v2/amber/journal",
-      "removals": 1,
-      "suppressed_samples": 3
-    },
-    {
-      "active_samples": 24,
-      "applications": 5,
-      "expired_tail_checks": 5,
-      "indexed_mechanisms": {
-        "kinds": {
-          "condition_material": 3,
-          "condition_pose": 2,
-          "registered_media": 17
-        },
-        "members": 22
-      },
-      "indexed_state_intervals": 0,
-      "initial": 0,
-      "recording": "res://.runtime/studio-cases/condition_owners-seed4/amber/journal",
-      "removals": 5,
       "suppressed_samples": 0
     }
   ],
@@ -162,160 +48,55 @@
   "failures": [],
   "invocation": {
     "arguments": [
-      "--recording=res://.runtime/studio-cases/walk_diagonal-seed3-v2/amber/journal",
-      "--recording=res://.runtime/studio-cases/oa_jump_late_lethal-seed5-v2/amber/journal",
-      "--recording=res://.runtime/studio-cases/action_economy-seed3-v2/amber/journal",
-      "--recording=res://.runtime/studio-cases/hold_person-seed3/amber/journal",
-      "--recording=res://.runtime/studio-cases/window-seed3-v2/amber/journal",
-      "--recording=res://.runtime/studio-cases/prone-seed3-v3/blue/journal",
-      "--recording=res://.runtime/studio-cases/poisoned-seed3-v2/amber/journal",
-      "--recording=res://.runtime/studio-cases/rage-seed3-v3/amber/journal",
-      "--recording=res://.runtime/studio-cases/condition_suppression-seed3-v2/amber/journal",
-      "--recording=res://.runtime/studio-cases/condition_owners-seed4/amber/journal"
+      "--recording=res://tests/fixtures/schema16/scenarios/melee/amber",
+      "--recording=res://tests/fixtures/schema16/scenarios/oa-jump/amber",
+      "--recording=res://tests/fixtures/schema16/scenarios/revive/amber"
     ],
     "script": "res://tests/studio_seek_checks.gd"
   },
   "real_reverse_steps": 22,
   "recordings": [
     {
-      "bodies": 3,
+      "bodies": 2,
       "canonical_endpoints": 2,
-      "commits": 18,
-      "components": 3,
-      "duration_ms": 1767.76692271233,
-      "events": 14,
-      "facing_observations": 3,
+      "commits": 10,
+      "components": 6,
+      "duration_ms": 2416.66666666667,
+      "events": 6,
+      "facing_observations": 0,
       "groups": 2,
       "operations": 2,
-      "recording": "res://.runtime/studio-cases/walk_diagonal-seed3-v2/amber/journal",
-      "rows": 53,
-      "seek_samples": 10
-    },
-    {
-      "bodies": 6,
-      "canonical_endpoints": 2,
-      "commits": 30,
-      "components": 7,
-      "duration_ms": 2801.75438596491,
-      "events": 24,
-      "facing_observations": 2,
-      "groups": 4,
-      "operations": 2,
-      "recording": "res://.runtime/studio-cases/oa_jump_late_lethal-seed5-v2/amber/journal",
-      "rows": 85,
-      "seek_samples": 11
-    },
-    {
-      "bodies": 9,
-      "canonical_endpoints": 6,
-      "commits": 106,
-      "components": 34,
-      "duration_ms": 8916.66666666667,
-      "events": 94,
-      "facing_observations": 0,
-      "groups": 6,
-      "operations": 6,
-      "recording": "res://.runtime/studio-cases/action_economy-seed3-v2/amber/journal",
-      "rows": 237,
-      "seek_samples": 19
-    },
-    {
-      "bodies": 1,
-      "canonical_endpoints": 8,
-      "commits": 39,
-      "components": 4,
-      "duration_ms": 1250.0,
-      "events": 20,
-      "facing_observations": 0,
-      "groups": 11,
-      "operations": 8,
-      "recording": "res://.runtime/studio-cases/hold_person-seed3/amber/journal",
-      "rows": 50,
-      "seek_samples": 5
-    },
-    {
-      "bodies": 2,
-      "canonical_endpoints": 3,
-      "commits": 17,
-      "components": 2,
-      "duration_ms": 900.0,
-      "events": 11,
-      "facing_observations": 2,
-      "groups": 3,
-      "operations": 3,
-      "recording": "res://.runtime/studio-cases/window-seed3-v2/amber/journal",
-      "rows": 37,
+      "recording": "res://tests/fixtures/schema16/scenarios/melee/amber",
+      "rows": 39,
       "seek_samples": 7
     },
     {
       "bodies": 5,
-      "canonical_endpoints": 4,
-      "commits": 41,
+      "canonical_endpoints": 2,
+      "commits": 25,
       "components": 9,
-      "duration_ms": 3166.66666666667,
-      "events": 32,
+      "duration_ms": 3266.66666666667,
+      "events": 21,
+      "facing_observations": 2,
+      "groups": 2,
+      "operations": 2,
+      "recording": "res://tests/fixtures/schema16/scenarios/oa-jump/amber",
+      "rows": 93,
+      "seek_samples": 11
+    },
+    {
+      "bodies": 10,
+      "canonical_endpoints": 17,
+      "commits": 92,
+      "components": 31,
+      "duration_ms": 6860.0,
+      "events": 54,
       "facing_observations": 1,
-      "groups": 5,
-      "operations": 4,
-      "recording": "res://.runtime/studio-cases/prone-seed3-v3/blue/journal",
-      "rows": 105,
-      "seek_samples": 10
-    },
-    {
-      "bodies": 2,
-      "canonical_endpoints": 3,
-      "commits": 15,
-      "components": 4,
-      "duration_ms": 1666.66666666667,
-      "events": 9,
-      "facing_observations": 1,
-      "groups": 3,
-      "operations": 3,
-      "recording": "res://.runtime/studio-cases/poisoned-seed3-v2/amber/journal",
-      "rows": 38,
-      "seek_samples": 8
-    },
-    {
-      "bodies": 4,
-      "canonical_endpoints": 7,
-      "commits": 41,
-      "components": 7,
-      "duration_ms": 2187.5,
-      "events": 25,
-      "facing_observations": 3,
-      "groups": 9,
-      "operations": 7,
-      "recording": "res://.runtime/studio-cases/rage-seed3-v3/amber/journal",
-      "rows": 75,
-      "seek_samples": 12
-    },
-    {
-      "bodies": 7,
-      "canonical_endpoints": 8,
-      "commits": 89,
-      "components": 11,
-      "duration_ms": 4583.33333333333,
-      "events": 73,
-      "facing_observations": 5,
-      "groups": 8,
-      "operations": 8,
-      "recording": "res://.runtime/studio-cases/condition_suppression-seed3-v2/amber/journal",
-      "rows": 184,
-      "seek_samples": 24
-    },
-    {
-      "bodies": 2,
-      "canonical_endpoints": 15,
-      "commits": 75,
-      "components": 8,
-      "duration_ms": 2500.0,
-      "events": 39,
-      "facing_observations": 0,
       "groups": 21,
-      "operations": 15,
-      "recording": "res://.runtime/studio-cases/condition_owners-seed4/amber/journal",
-      "rows": 97,
-      "seek_samples": 9
+      "operations": 17,
+      "recording": "res://tests/fixtures/schema16/scenarios/revive/amber",
+      "rows": 227,
+      "seek_samples": 28
     }
   ],
   "scope": "Offline real-recording index/commit/seek ownership and source metadata. Native frame, media gating, material/particle/audio and UI appearance require separate integration evidence.",

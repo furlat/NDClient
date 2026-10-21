@@ -1035,6 +1035,16 @@ static func _check_constructor(use:Resource,where:String,clips:Dictionary,report
     for approach in candidates:
         var phase:Resource=load(approach.source_phase)
         var components:Array=phase.to_clip().components
+        if binding.has("argument"):
+            var argument:Variant=binding.argument
+            var fields:Variant=phase.options.get("construction_operands",[])
+            var contract:Variant=approach.get("construction_input_contract")
+            if not argument is String or argument.is_empty() or argument in ["layer_mask","phase","operands","clip"] \
+                or binding.get("component_path")!=[argument] or binding.get("input_field","")!="" \
+                or components.size()!=1 or components[0].id!=argument \
+                or not fields is Array or fields.is_empty() or not fields.all(func(field):return field is String and not field.is_empty()) \
+                or not contract is String or contract.is_empty():
+                Common.error(report,where,"named constructor argument requires one declared source component and its factual operand fields");return
         # A mapped public constructor can expose one virtual operand for
         # several actual source layers. It is not a Source.make child path.
         if binding.get("kind")=="spatial_owner" and binding.get("cell_input")=="partitioned_surface" and binding.component_path==["surface"]:
@@ -1164,7 +1174,13 @@ static func _check_constructor(use:Resource,where:String,clips:Dictionary,report
                 or "grant_state" not in clips[use.clip].get("inputs",[]):
                 Common.error(report,where,"breath phase must consume the exact delivered grant state, selected element and original phase")
         if binding.get("kind")=="spatial_owner" and binding.get("cell_input")=="wall_assembly":
-            if binding.get("component_path")!=["wall"] or use.approach not in ["runtime-prepared-production-review-20261020","runtime-prepared-wall-child-v3-20261021"] \
+            var setter:String=str(clips[use.clip].get("input_setters",{}).get("visual_state",""))
+            var declared_assembly:bool=binding.get("argument")==component.id \
+                and phase.options.get("construction_operands",[])==["wall_uuid","anchor_position","wall_geometry"] \
+                and phase.options.get("owner_lifetime",false)==true and not setter.is_empty() \
+                and (setter in approach.get("public_setters",[]) or approach.get("public_callbacks",{}).get("visual_state")==setter)
+            var legacy_assembly:bool=use.approach in ["runtime-prepared-production-review-20261020","runtime-prepared-wall-child-v3-20261021"]
+            if binding.get("component_path")!=["wall"] or not (legacy_assembly or declared_assembly) \
                 or "visual_state" not in clips[use.clip].get("inputs",[]) or use.orientation!="world" \
                 or not is_equal_approx(use.scale,0.471404520693175) or use.extra.get("wall_forms",[]).is_empty():
                 Common.error(report,where,"actual wall requires its exact opt-in geometry/state source, construction component and source-unit conversion")

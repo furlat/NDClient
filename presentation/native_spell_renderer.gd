@@ -97,6 +97,10 @@ func prepare(compiled_groups:Array,cache:Dictionary,world:Node=null,prefetch_gro
     var preparation_owners:Dictionary=wanted.duplicate()
     preparation_owners.merge(optional);preparation_owners.merge(handles)
     Effects.retain_preparation(_resource_cache,preparation_owners)
+    var resource_interests:Array=clips.duplicate()
+    if clips.is_empty() and allow_optional:
+        for component in optional.values():resource_interests.append(Effects.occurrence_clip(component))
+    Effects.retain_source_preparation(_resource_cache,resource_interests)
     var optical:Dictionary=wanted
     if not optical_groups.is_empty():
         optical={}
@@ -109,7 +113,7 @@ func prepare(compiled_groups:Array,cache:Dictionary,world:Node=null,prefetch_gro
     if not clips.is_empty() and not budget.is_empty() and budget.used_usec>=budget.limit_usec:
         Effects.Admission.can_mutate() # Completion polling never constructs a source.
         result={"ready":false,"pending":clips.size(),"errors":[]}
-    else:result=Effects.prepare(clips,_resource_cache)
+    else:result=Effects.prepare(clips,_resource_cache,true,resource_interests)
     if not budget.is_empty():budget.used_usec+=Time.get_ticks_usec()-started
     if world!=null:FrameProfile.end_phase(world.profile,"native_prepare_resources",started)
     if world==null:
@@ -150,12 +154,13 @@ func prepare(compiled_groups:Array,cache:Dictionary,world:Node=null,prefetch_gro
     preparation_state={"resources_ready":resources_ready,"appearance_ready":appearance.ready,"receivers_ready":receivers.ready,
         "optics_ready":prepared_optics,"support_images_ready":support_images.ready,"pending_instances":result.pending,"wanted_ids":wanted.keys()}
     result.ready=result.ready and result.pending==0 and result.errors.is_empty() and appearance.ready and receivers.ready and prepared_optics and support_images.ready
+    if not result.ready:Effects.retain_source_preparation(_resource_cache,clips)
     if allow_optional and result.ready:
         for id in optional:
             if handles.has(id) or _prepare_failures.has(id):continue
             if not budget.is_empty() and budget.used_usec>=budget.limit_usec:break
             started=Time.get_ticks_usec()
-            var loading:Dictionary=Effects.prepare([Effects.occurrence_clip(optional[id])],_resource_cache,false)
+            var loading:Dictionary=Effects.prepare([Effects.occurrence_clip(optional[id])],_resource_cache,false,resource_interests)
             if not budget.is_empty():budget.used_usec+=Time.get_ticks_usec()-started
             FrameProfile.end_phase(world.profile,"native_prepare_resources",started)
             if not loading.errors.is_empty():_prepare_failures[id]=str(loading.errors);continue
@@ -761,6 +766,7 @@ func _pending(component:Dictionary,reason:String)->void:
 func close(world:Node=null)->void:
     # Immutable loaded Resources may survive a replay epoch; transient source
     # discovery carries private occurrence operands and must end with it.
+    Effects.Admission.cancel_source_cache(_resource_cache)
     _resource_cache.erase("native_immutable_jobs")
     for handle in handles.values():Inputs.release_departure(handle);Effects.close(handle)
     handles.clear();diagnostics.clear();witnesses.clear();issues.clear();required_images.clear();required_cpu_images.clear();preparation_state.clear()

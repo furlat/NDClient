@@ -1,38 +1,25 @@
 {
   "cases": [
     {
-      "adapter_different_frames": 24,
-      "age": 0.4,
-      "canvas": [
-        449,
-        323
-      ],
-      "covered_pixels": 5846,
+      "age": 0.64375,
+      "covered_pixels": 3110,
       "fps": 60,
-      "original_control_different_bounds": 0,
-      "original_control_different_frames": 0,
-      "rate": 1.0
+      "frames": 39,
+      "rate": 1.0,
+      "source_bundle": "res://assets/vfx/recordings/b86408cca3d8d6d34b385b95/0.res"
     },
     {
-      "adapter_different_frames": 12,
-      "age": 0.4,
-      "canvas": [
-        449,
-        323
-      ],
-      "covered_pixels": 5895,
+      "age": 0.64375,
+      "covered_pixels": 3110,
       "fps": 60,
-      "original_control_different_bounds": 1,
-      "original_control_different_frames": 0,
-      "rate": 2.0
+      "frames": 20,
+      "rate": 2.0,
+      "source_bundle": "res://assets/vfx/recordings/b86408cca3d8d6d34b385b95/0.res"
     }
   ],
-  "failed": 2,
-  "failures": [
-    "Any byte-parity limitation is also reproduced by two direct native controls",
-    "Any byte-parity limitation is also reproduced by two direct native controls"
-  ],
-  "passed": 228,
+  "checks": 377,
+  "failed": 0,
+  "failures": [],
   "renderer": "forward_plus",
-  "scope": "Moving original selected Magic Missile emitter transforms and native fixed_fps at real display cadence; independent native controls never call helper sample. Byte differences are reported separately; trajectory, native source configuration, visible advancing age and paused stability are asserted."
+  "scope": "Actual sealed recorded Magic Missile at requested display cadences/rates; exact root/path/source clock operands, independent raw-recorded same-prefix RGBA, positive native output, pause and source immutability. Retired GPUParticles speed_scale/fixed_fps implementation is not claimed."
 }

@@ -1,31 +1,31 @@
 {
-  "checks": 187,
+  "checks": 184,
   "evidence": [
     {
-      "actor": "Amber presentation actor",
-      "case": "hide-seed3-v3",
-      "end_ms": 5437.68428548177,
+      "actor": "Amber caster",
+      "case": "hide",
+      "end_ms": 5703.88888888889,
       "from": 0.55,
       "mechanism": "alphaMultiplier",
-      "removed_ms": 4187.68428548177,
-      "start_ms": 4187.68428548177,
+      "removed_ms": 5105.55555555556,
+      "start_ms": 5105.55555555556,
       "to": 1.0
     },
     {
-      "actor": "Amber presentation actor",
-      "case": "hide-seed3-v3",
-      "end_ms": 5437.68428548177,
+      "actor": "Amber caster",
+      "case": "hide",
+      "end_ms": 5703.88888888889,
       "from": {
         "activity": "idle",
         "clip": "CrouchIdle",
-        "condition_uuid": "a652450d-63c3-451f-b9a7-db97c4892b46",
+        "condition_uuid": "2343fef6-2749-43d8-abb0-4a53c4a0ab06",
         "frame": 0,
         "sampling": "loop",
-        "source": "res://authoring/presentation/conditions/hidden.tres::activity_poses/0"
+        "source": "res://authoring/abilities/conditions/condition.hidden.tres::poses/0"
       },
       "mechanism": "pose",
-      "removed_ms": 4187.68428548177,
-      "start_ms": 4187.68428548177,
+      "removed_ms": 5105.55555555556,
+      "start_ms": 5105.55555555556,
       "to": {
         "activity": "idle",
         "clip": "Idle",
@@ -36,30 +36,30 @@
       }
     },
     {
-      "actor": "Amber presentation actor",
-      "case": "hide-light-schema9-seed3",
-      "end_ms": 8511.84461514155,
+      "actor": "Amber caster",
+      "case": "hide-light",
+      "end_ms": 6561.84461514155,
       "from": 0.55,
       "mechanism": "alphaMultiplier",
-      "removed_ms": 7111.84461514155,
-      "start_ms": 7111.84461514155,
+      "removed_ms": 5161.84461514155,
+      "start_ms": 5161.84461514155,
       "to": 1.0
     },
     {
-      "actor": "Amber presentation actor",
-      "case": "hide-light-schema9-seed3",
-      "end_ms": 8511.84461514155,
+      "actor": "Amber caster",
+      "case": "hide-light",
+      "end_ms": 6561.84461514155,
       "from": {
         "activity": "idle",
         "clip": "CrouchIdle",
-        "condition_uuid": "ebe61e95-98b4-45f6-8dd5-091880791a1f",
+        "condition_uuid": "c2f2cb60-ea54-4312-933e-a9aeac4e0f2c",
         "frame": 0,
         "sampling": "loop",
-        "source": "res://authoring/presentation/conditions/hidden.tres::activity_poses/0"
+        "source": "res://authoring/abilities/conditions/condition.hidden.tres::poses/0"
       },
       "mechanism": "pose",
-      "removed_ms": 7111.84461514155,
-      "start_ms": 7111.84461514155,
+      "removed_ms": 5161.84461514155,
+      "start_ms": 5161.84461514155,
       "to": {
         "activity": "idle",
         "clip": "Idle",
@@ -70,9 +70,9 @@
       }
     },
     {
-      "actor": "Amber presentation actor",
-      "case": "dodge-seed3",
-      "end_ms": 3850.0,
+      "actor": "Amber caster",
+      "case": "dodge",
+      "end_ms": 2800.0,
       "from": {
         "alphaThreshold": 100,
         "color": 5805540,
@@ -88,8 +88,8 @@
       "to": {}
     },
     {
-      "actor": "Amber lifecycle 1",
-      "case": "invisibility-seed3-v2",
+      "actor": "Amber caster",
+      "case": "invisibility",
       "end_ms": 6633.33333333333,
       "from": {
         "brightness": 0.96,
@@ -106,8 +106,8 @@
       }
     },
     {
-      "actor": "Amber lifecycle 1",
-      "case": "invisibility-seed3-v2",
+      "actor": "Amber caster",
+      "case": "invisibility",
       "end_ms": 6633.33333333333,
       "from": 0.5,
       "mechanism": "alphaMultiplier",
@@ -116,17 +116,17 @@
       "to": 1.0
     },
     {
-      "actor": "Amber presentation actor",
-      "case": "rage-seed3-v3",
-      "end_ms": 4787.5,
+      "actor": "Amber caster",
+      "case": "rage",
+      "end_ms": 5828.28947368421,
       "from": {
         "brightness": 1.08,
         "saturation": 1.4,
         "tint": "(1.0, 0.470588, 0.588235)"
       },
       "mechanism": "bodyColor",
-      "removed_ms": 3387.5,
-      "start_ms": 3737.5,
+      "removed_ms": 4428.28947368421,
+      "start_ms": 4778.28947368421,
       "to": {
         "brightness": 1.0,
         "saturation": 1.0,
@@ -134,9 +134,9 @@
       }
     },
     {
-      "actor": "Amber presentation actor",
-      "case": "rage-seed3-v3",
-      "end_ms": 4787.5,
+      "actor": "Amber caster",
+      "case": "rage",
+      "end_ms": 5828.28947368421,
       "from": {
         "applicationMs": 180.0,
         "colors": [
@@ -153,31 +153,31 @@
         "textureWeight": 0.4
       },
       "mechanism": "bodyRamp",
-      "removed_ms": 3387.5,
-      "start_ms": 3737.5,
+      "removed_ms": 4428.28947368421,
+      "start_ms": 4778.28947368421,
       "to": {}
     },
     {
-      "actor": "Blue lifecycle 1",
-      "case": "condition_owners-seed4",
-      "end_ms": 6768.75,
+      "actor": "Blue target",
+      "case": "condition-owners",
+      "end_ms": 9683.33333333333,
       "from": {
         "color": 16761417.0,
         "pulseColor": 16766076.0
       },
       "mechanism": "bodyOutline",
       "removed_ms": 4050.0,
-      "start_ms": 4250.0,
+      "start_ms": 4300.0,
       "to": {}
     },
     {
-      "actor": "Blue lifecycle 1",
-      "case": "condition_owners-seed4",
-      "end_ms": 6768.75,
+      "actor": "Blue target",
+      "case": "condition-owners",
+      "end_ms": 9683.33333333333,
       "from": {
         "activity": "idle",
         "clip": "Idle",
-        "condition_uuid": "fe5663a1-ba95-4d54-b7ab-09d82089c1ba",
+        "condition_uuid": "f536cfce-abc4-4389-96bd-a54fcd37dac1",
         "frame": 3.0,
         "sampling": "hold",
         "source": "catalog/condition_recipes.json:/condition.paralyzed/persistent/frozenPose"

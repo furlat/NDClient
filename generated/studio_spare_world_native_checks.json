@@ -1,30 +1,41 @@
 {
-  "checks": 36,
+  "checks": 269,
   "evidence": {
     "native": true,
     "new_world_preparations": 3,
     "prefixes": [
       {
         "at_ms": 0.0,
-        "install_ms": 0.398,
-        "ready_ms": 517,
+        "install_ms": 1.301,
+        "ready_ms": 85,
         "world_revision": 1
       },
       {
         "at_ms": 2416.66666666667,
-        "install_ms": 0.72,
-        "ready_ms": 59,
-        "world_revision": 21
+        "install_ms": 3.815,
+        "ready_ms": 45,
+        "world_revision": 2
       },
       {
         "at_ms": 0.0,
-        "install_ms": 2.636,
-        "ready_ms": 111,
+        "install_ms": 4.409,
+        "ready_ms": 51,
         "world_revision": 1
       }
     ],
-    "retained_source_count": 82
+    "retained_source_count": 112,
+    "reused_quarter": {
+      "canonical_unchanged": true,
+      "captures": {
+        "q0_before": "res://.captures/studio/spare-world/q0-before.png",
+        "q1_fresh": "res://.captures/studio/spare-world/q1-fresh.png",
+        "q1_reused": "res://.captures/studio/spare-world/q1-reused.png"
+      },
+      "fresh_q1_wall_sources": 10,
+      "q0_wall_sources": 10,
+      "reused_q1_wall_sources": 10
+    }
   },
   "failures": [],
-  "scope": "Three actual initial/terminal prefix restores in one hidden native host, original atlas/source reuse, full world preparation, new epochs, no stale audio/native owners and audible-host rejection. Studio keeps the visible/spare publication boundary."
+  "scope": "Three actual initial/terminal prefix restores in one hidden native host, original light-table/source reuse, full world preparation, new epochs, no stale audio/native owners and audible-host rejection. Studio keeps the visible/spare publication boundary. Reusing a q0 spare after the reference publishes q1 preserves the original prefix while actual wall source registration and authored billboard planes publish together; original/fresh/reused viewport captures are saved."
 }

@@ -1,5 +1,25 @@
 # Everything remaining: client, Factory migration and Studio
 
+**Implementation stopped by the human,21October.** Root's native queue and
+current test process are stopped; the implementation heartbeat is paused.
+Sub-agents finished their assigned source-only work, leaving their pending
+proposals unapplied. The current request is post-mortem analysis and
+documentation only. Older execution directions below do not authorize resume.
+[Client rendering regressions and execution post-mortem](post_mortem/CLIENT_RENDERING_REGRESSIONS_2026-10-21.md)
+records the real client latency regression, rendering/Studio defects, test
+mistakes, exact stop boundary and unresolved evidence. No current82a runtime or
+performance pass is claimed.
+[Opus optimization regression and introducing-commit audit](post_mortem/OPUS_PERFORMANCE_REGRESSION_AUDIT_2026-10-21.md)
+compares the pre-migration source with current paths and saved measurements,
+including the later Door/Move freezes and repeated global environment work.
+
+**Latest human request: a complete recovery plan, with literal restoration code.**
+[Proposed Opus recovery and completion plan](OPUS_RECOVERY_AND_COMPLETION_PLAN_2026-10-21.md)
+contains the full original/adapted code, pending patch texts and exact queue.
+The human's priority is restoration first; older R1/R2-before-performance
+sequencing below does not override it. This is a planning deliverable;
+implementation/testing and the heartbeat remain stopped.
+
 **Current task authority — updated 21 October 2026, branch `codex-authoring-schemabump`. Original migration snapshot: `fb3a3760`; the R2 consumer cohorts below supersede its affected counts and evidence.**
 
 This is the single current remaining-work list. It supersedes remaining-task
@@ -11,6 +31,26 @@ execution order; later sections and appendices hold the exact inventory/evidence
 
 ## 1. The actual situation
 
+
+**New complete delivery boundary,21October20:12UTC:** Factory
+`runtime-speed-completion-20261021-82a271b677ff9604` is installed through its
+complete archive, with the original8dd namespace preserved separately. It
+retains all1,246 clip IDs/504 default selections, extends the typed table62→71,
+and supplies the Wind coverage and two Freezing noise-resource corrections.
+Editor import exits0 with zero script/engine errors. Receiving integration,
+explicit resource choices, publication and affected client qualification are
+underway; installation does not establish them.
+[Complete intake](../.runtime/vfx-successor-82a/namespace-installation.json).
+The8dd broad native queue stopped cleanly between processes at **79/79 passing**;
+its102 unrun rows remain explicit. No8dd result is relabelled82a. Its original
+Factory-dependent Event failure remains historical pending the repaired-package
+rerun. The genuine mixed Gallery run exposed a Follow layout/budget defect and
+old spell-only harness assumptions; the peer-reviewed client repair is applied
+and awaits its affected batch. Ranged Shield remains a missing positive original
+after two preserved ordinary-Miss attempts, without a backend defect or forced
+outcome.
+
+The following8dd boundary retains its actual source/package qualification.
 
 **Current execution boundary,21October19:49UTC:** complete Factory8dd is committed
 at **`4ac732d3`**. Source checkpoint **`24a993f0`** contains the coherent authoring
@@ -1317,9 +1357,11 @@ No extra recurring runtime checksum gate is required.
 
 ## 5. R4: Studio, scenarios and full rendering-method visibility
 
-The current ordinary Studio Library is usable:357 recorded cases out of360,
+The current ordinary Studio Library is usable:369 recorded cases out of372,
 with voluntary Drop Prone, developer TestBless setup and Extend Intimidating
-Presence's actual `no_valid_targets` retained as failures.
+Presence's actual `no_valid_targets` retained as failures. The complete369-original
+reader/compiler cohort passes49,862 checks across both seats. Current case
+counts do not turn historical output evidence into current package evidence.
 Historical originals retain their actual engine labels; same-wire playback and
 strict current engine/package output qualification are separate. The old
 299/285/14,331/312/19 and354/352/2 populations are preserved receipts, not today's Library
@@ -1571,9 +1613,18 @@ and one hosted sandbox invocation. These are applicability groups, not passing
 results. In particular, the old “16 Factory defects” condition label is stale
 after the delivered7ca package, the atlas check already defaults to the real
 Gallery journal, and supplied arguments do not resolve historical exact-oracle
-comparisons automatically. The named missing shield-ranged/shield-walk originals
-and continuous mixed-spell checkpoint corpus are recording duties, not new
-backend APIs or permission to concatenate unrelated journals. Current named
+comparisons automatically. The genuine continuous Gallery original already
+contains the mixed-spell and Shield-interrupted opportunity-attack/resumed-walk
+duties in both seats; those are no longer missing corpus. Current Gallery
+qualification exposed a Follow visibility failure and old harness assumptions
+that all native components carry a spell ID; those client repairs remain open.
+The separate ranged Shield duty still lacks a positive original: one fixed
+single-attack capture and one fixed legal Attack/earned ExtraAttack exchange
+both naturally missed without Shield. Their original actors/seed/outcomes remain
+unchanged and both failed captures are preserved under
+`.runtime/studio-current9f-shield-ranged-20261021`. No backend defect or additional
+seed/outcome calibration is inferred. Corpus and runtime duties do not authorize
+concatenating unrelated journals. Current named
 Factory/body/audio and runtime limits elsewhere remain open. The complete
 source/receipt table is retained in
 `.runtime/closing-repairs/non-ok-manifest/APPLICABILITY.md`; standalone historical

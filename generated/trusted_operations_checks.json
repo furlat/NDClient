@@ -1,8 +1,8 @@
 {
-  "checks": 165,
-  "command": "Godot --headless --path <NDClientGodot> --script res://tests/trusted_operations_checks.gd -- --recording=res://.runtime/player-runs/20261016T110104.141262Z/journal",
+  "checks": 199,
+  "command": "Godot --headless --path <NDClientGodot> --script res://tests/trusted_operations_checks.gd -- --recording=res://tests/fixtures/schema16/current-production-0c/door/amber",
   "failures": [],
-  "operations": 6,
-  "recording": "res://.runtime/player-runs/20261016T110104.141262Z/journal",
-  "scope": "Current raw server operations equal strict decoded and normalized values, including types/decimal bits. Exact JSON plus bounded canonical envelope; strict public/offline input unchanged. Real HTTP/SSE verifies opt-in, current identity, scope, ID/order, duplicate handling, consumer rejection and operation-only trust. Nested malformed producer bodies deliberately outside trusted-body validation. No live timing claim."
+  "operations": 13,
+  "recording": "res://tests/fixtures/schema16/current-production-0c/door/amber",
+  "scope": "Unchanged current Gallery operations equal strict decoded and normalized values, including types/decimal bits. Public/offline negative schema controls remain strict; current-producer checks cover actual identity and positive sequence without recursive body validation. Real HTTP/SSE verifies opt-in, identity, scope, ID/order, duplicate handling, consumer rejection and operation-only trust. Named malformed producer-body controls are not gameplay recordings. No live timing claim."
 }

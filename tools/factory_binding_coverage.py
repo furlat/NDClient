@@ -234,7 +234,7 @@ def report() -> dict:
     clips = {c["clip_id"]: c for c in factory["clips"]}
     selections = {s.get("spell_id", s["key"]): s for s in factory["selections"]}
     condition_selections = {s["key"]: s for s in factory["selections"] if s.get("condition")}
-    standalone = json.loads((ROOT / "assets/vfx/format/spirit-runtime-20261021-source-resources.json").read_text()).get("resources", [])
+    standalone = json.loads((ROOT / "assets/vfx/format/speed-completion-20261021-source-resources.json").read_text()).get("resources", [])
     typed = [typed_source(p, section) for section in ["spells", "conditions", "actions"]
              for p in sorted((ROOT / "authoring/abilities" / section).glob("*.tres"))]
     by_id = defaultdict(list)

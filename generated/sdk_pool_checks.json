@@ -1,5 +1,5 @@
 {
-  "checks": 28,
+  "checks": 30,
   "evidence": [
     {
       "case": "idle_expiry",
@@ -10,8 +10,8 @@
           "operation": "submit_command",
           "request_id": 2,
           "stage": "request_enqueued",
-          "started_us": 315622,
-          "time_us": 315632
+          "started_us": 302558,
+          "time_us": 302568
         },
         {
           "http_id": 3,
@@ -21,7 +21,7 @@
           "reused_connected": true,
           "schema": "ReceiptResponse",
           "stage": "http_created",
-          "time_us": 316937
+          "time_us": 302784
         },
         {
           "http_id": 3,
@@ -33,7 +33,7 @@
           "request_id": 2,
           "schema": "ReceiptResponse",
           "stage": "connection_replaced",
-          "time_us": 317401
+          "time_us": 303372
         },
         {
           "http_id": 3,
@@ -45,8 +45,8 @@
           "request_id": 2,
           "schema": "ReceiptResponse",
           "stage": "request_sent",
-          "started_us": 318814,
-          "time_us": 318857
+          "started_us": 304665,
+          "time_us": 304718
         },
         {
           "declared_bytes": 337,
@@ -57,7 +57,7 @@
           "schema": "ReceiptResponse",
           "stage": "response_headers",
           "status": 200,
-          "time_us": 322847
+          "time_us": 310190
         },
         {
           "bytes": 337,
@@ -68,7 +68,7 @@
           "schema": "ReceiptResponse",
           "stage": "body_complete",
           "status": 200,
-          "time_us": 324817
+          "time_us": 312161
         },
         {
           "bytes": 337,
@@ -79,8 +79,9 @@
           "request_id": 2,
           "schema": "ReceiptResponse",
           "stage": "http_admission",
-          "started_us": 324827,
-          "time_us": 325154
+          "started_us": 312175,
+          "time_us": 312409,
+          "validation": "full_schema"
         },
         {
           "http_id": 3,
@@ -90,8 +91,8 @@
           "request_id": 2,
           "schema": "ReceiptResponse",
           "stage": "reply_check",
-          "started_us": 325172,
-          "time_us": 325298
+          "started_us": 312425,
+          "time_us": 312505
         },
         {
           "http_id": 3,
@@ -100,16 +101,16 @@
           "request_id": 2,
           "schema": "ReceiptResponse",
           "stage": "response_normalization",
-          "started_us": 325304,
-          "time_us": 325400
+          "started_us": 312509,
+          "time_us": 312533
         },
         {
           "ok": true,
           "operation": "submit_command",
           "request_id": 2,
           "stage": "response_published",
-          "started_us": 325405,
-          "time_us": 325418
+          "started_us": 312537,
+          "time_us": 312547
         },
         {
           "bytes": 337,
@@ -129,7 +130,7 @@
           "sent": true,
           "stage": "http_end",
           "status": 200,
-          "time_us": 325428,
+          "time_us": 312557,
           "transport_reason": "connection_poll_failed"
         }
       ]
@@ -143,8 +144,8 @@
           "operation": "submit_command",
           "request_id": 2,
           "stage": "request_enqueued",
-          "started_us": 439831,
-          "time_us": 439836
+          "started_us": 343970,
+          "time_us": 343977
         },
         {
           "http_id": 3,
@@ -154,7 +155,7 @@
           "reused_connected": true,
           "schema": "ReceiptResponse",
           "stage": "http_created",
-          "time_us": 439964
+          "time_us": 345409
         },
         {
           "http_id": 3,
@@ -166,8 +167,8 @@
           "request_id": 2,
           "schema": "ReceiptResponse",
           "stage": "request_sent",
-          "started_us": 439991,
-          "time_us": 440023
+          "started_us": 345451,
+          "time_us": 345493
         },
         {
           "http_id": 3,
@@ -177,16 +178,16 @@
           "request_id": 2,
           "schema": "ReceiptResponse",
           "stage": "reply_check",
-          "started_us": 447944,
-          "time_us": 447946
+          "started_us": 351380,
+          "time_us": 351383
         },
         {
           "ok": false,
           "operation": "submit_command",
           "request_id": 2,
           "stage": "response_published",
-          "started_us": 447952,
-          "time_us": 447956
+          "started_us": 351398,
+          "time_us": 351408
         },
         {
           "bytes": 0,
@@ -206,7 +207,7 @@
           "sent": true,
           "stage": "http_end",
           "status": 0,
-          "time_us": 447962,
+          "time_us": 351418,
           "transport_reason": "connection_poll_failed"
         }
       ]

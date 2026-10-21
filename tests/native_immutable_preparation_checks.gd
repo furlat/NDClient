@@ -2,6 +2,8 @@ extends SceneTree
 ## Production admission of the delivered immutable bank; no source prototypes,
 ## fixture outcomes or hidden actor state are shared by preparation.
 const Effects=preload("res://presentation/effect_package.gd")
+const Admission=preload("res://presentation/native_source_admission.gd")
+const Baked=preload("res://presentation/baked_effect.gd")
 var checks:int=0
 var failures:Array=[]
 var evidence:Array=[]
@@ -14,10 +16,38 @@ func run()->void:
     var cache:Dictionary={};var clips:Array=[]
     for id in ["sorcerer_quickened_native","sorcerer_twinned_native","sorcerer_distant_native"]:clips.append(Effects.clip(id))
     var prepared:Dictionary={"ready":false,"errors":[]}
+    var requested:Array=[clips[0]]
+    var expanded:bool=false
+    var expansion:Dictionary={}
+    var recorded_clip:Dictionary=Effects.clip("spells/acid_splash/default/travel").duplicate(false)
+    recorded_clip.approach_id="recorded-0"
+    var recorded:Variant=null
     var deadline:int=Time.get_ticks_msec()+45000
-    while not prepared.ready and prepared.errors.is_empty() and Time.get_ticks_msec()<deadline:
-        prepared=Effects.prepare(clips,cache)
+    while (not expanded or not prepared.ready or not recorded is Resource) and prepared.errors.is_empty() and Time.get_ticks_msec()<deadline:
+        prepared=Effects.prepare(requested,cache)
+        if not expanded:
+            var active:Dictionary=Admission._source_job
+            if not active.is_empty() and is_same(active.owner,cache) and not active.draining and not active.job.complete:
+                var missing:Array=[]
+                for sibling in clips.slice(1):
+                    for path in Effects.resource_paths(sibling):
+                        if not cache.has(path) and path not in missing:missing.append(path)
+                check(not missing.is_empty(),"Same-owner expansion adds actual uncached sibling resource paths")
+                expansion={"source_preparer":active.preparation.resource_path,"source_at":active.job.at,
+                    "same_cache_owner":is_same(active.owner,cache),"source_unfinished":not active.job.complete,
+                    "additional_clips":clips.slice(1).map(func(clip):return clip.id),"uncached_paths":missing}
+                requested=clips;expanded=true;prepared.ready=false
+                # Exercise the existing independent recorded queue at the same
+                # source-owner boundary, without constructing another owner.
+                recorded=Baked.ready_for(recorded_clip,0,true)
+        elif not recorded is Resource:
+            recorded=Baked.ready_for(recorded_clip,0,true)
         await process_frame
+    check(expanded,"Required-source expansion begins while the same cache owns an actual unfinished immutable job")
+    check(recorded is Resource,"Concurrent original recorded resource completes its existing loader/upload lane")
+    evidence.append({"same_owner_expansion":expansion,"recorded_clip":recorded_clip.id,
+        "recorded_path":recorded.resource_path if recorded is Resource else "",
+        "scope":"Actual retained required source plus uncached sibling resources and original recorded load; no frame-cost or general mixed-lane race claim"})
     check(prepared.ready and prepared.errors.is_empty(),"Selected production clips complete immutable admission: "+str(prepared))
     var paths:Array=[]
     for job in cache.get("native_immutable_jobs",{}).values():

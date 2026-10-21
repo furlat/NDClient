@@ -1,240 +1,485 @@
 {
   "captures": "res://.captures/studio/hide-native",
-  "checks": 1139,
+  "checks": 824,
   "evidence": [
     {
       "alpha_coverage_mismatches": 0,
+      "alpha_max_byte_error": 0,
       "alpha_max_error": 0.0,
       "clip": "Idle",
       "condition_alpha": 1.0,
-      "frame": 13,
-      "gear": 9,
+      "covered_pixels": 1260,
+      "frame": 3,
+      "gear": 6,
       "label": "transition-normal-idle",
-      "parts": 10,
+      "parts": 7,
       "quarter": 0,
       "source_profile": "reference",
-      "time_ms": 1091.66666666667
+      "texel_boundary_flips": 9,
+      "time_ms": 250.0
     },
     {
       "alpha_coverage_mismatches": 0,
+      "alpha_max_byte_error": 0,
       "alpha_max_error": 0.0,
       "clip": "CrouchIdle",
       "condition_alpha": 1.0,
+      "covered_pixels": 1173,
       "frame": 6,
-      "gear": 9,
+      "gear": 6,
       "label": "transition-hide-action",
-      "parts": 10,
+      "parts": 7,
       "quarter": 0,
       "source_profile": "reference",
-      "time_ms": 1454.16666666667
+      "texel_boundary_flips": 11,
+      "time_ms": 687.5
     },
     {
       "alpha_coverage_mismatches": 0,
+      "alpha_max_byte_error": 0,
       "alpha_max_error": 0.0,
       "clip": "CrouchIdle",
       "condition_alpha": 1.0,
+      "covered_pixels": 1158,
       "frame": 14,
-      "gear": 9,
+      "gear": 6,
       "label": "transition-before-effect",
-      "parts": 10,
+      "parts": 7,
       "quarter": 0,
       "source_profile": "reference",
-      "time_ms": 1682.33333333333
+      "texel_boundary_flips": 14,
+      "time_ms": 915.666666666667
     },
     {
       "alpha_coverage_mismatches": 0,
-      "alpha_max_error": 0.000195312500000044,
+      "alpha_max_byte_error": 0,
+      "alpha_max_error": 0.0,
       "clip": "CrouchIdle",
       "condition_alpha": 0.55,
+      "covered_pixels": 1162,
       "frame": 0,
-      "gear": 9,
+      "gear": 6,
       "label": "transition-hidden-condition",
-      "parts": 10,
+      "parts": 7,
       "quarter": 0,
       "source_profile": "reference",
-      "time_ms": 1683.33333333333
+      "texel_boundary_flips": 13,
+      "time_ms": 916.666666666667
     },
     {
       "crossings": 1,
-      "effect_ms": 1683.33333333333,
-      "first_voice_ms": 1683.33333333333,
+      "effect_ms": 916.666666666667,
+      "first_voice_ms": 916.666666666667,
       "label": "hide-effect-audio",
-      "mixed_frames": 40448,
-      "mixed_peak": 0.0101970657706261,
+      "mixed_frames": 42496,
+      "mixed_peak": 0.0201011151075363,
       "started_shots": 1
     },
     {
-      "action_end_ms": 1683.33333333333,
-      "action_start_ms": 1266.66666666667,
-      "effect_ms": 1683.33333333333,
-      "first_hidden_frame_ms": 1683.33333333333,
+      "action_end_ms": 916.666666666667,
+      "action_start_ms": 500.0,
+      "effect_ms": 916.666666666667,
+      "first_hidden_frame_ms": 916.666666666667,
       "forward_frames": {
-        "action": 60,
+        "action": 59,
         "hidden": 33,
-        "idle": 29
+        "idle": 38
       },
       "label": "hide-action-boundary",
       "mismatch_frames": [],
       "playback_speed": 3.0,
       "source_clip": "CrouchIdle",
-      "source_event_uuid": "6a558b3b-2c55-4e54-be48-c33a1e5f6256",
+      "source_event_uuid": "58",
       "source_fps": 12.0,
-      "source_frames": 15,
+      "source_frames": 15.0,
       "violations": 0
     },
     {
       "alpha_coverage_mismatches": 0,
-      "alpha_max_error": 0.000195312500000044,
+      "alpha_max_byte_error": 0,
+      "alpha_max_error": 0.0,
+      "clip": "CrouchIdle",
+      "condition_alpha": 1.0,
+      "covered_pixels": 1173,
+      "frame": 6,
+      "gear": 6,
+      "label": "transition-reverse-action",
+      "parts": 7,
+      "quarter": 0,
+      "source_profile": "reference",
+      "texel_boundary_flips": 11,
+      "time_ms": 687.5
+    },
+    {
+      "actual_actor_pixels": {
+        "changed_pixels": 0,
+        "covered_pixels": 617
+      },
+      "alpha_changed_pixels": 0,
+      "difference": {
+        "actor_bounds": "[P: (557, 59), S: (165, 165)]",
+        "changed_bounds": "[P: (0, 0), S: (0, 0)]",
+        "changed_pixels": 0,
+        "maximum_byte_error": 0
+      },
+      "label": "transition-reverse-action-framebuffer",
+      "source_after": {
+        "clip": "CrouchIdle",
+        "clock": 687.5,
+        "facing": "SW",
+        "layers": [
+          {
+            "condition_alpha": 1.0,
+            "frame_uv": "(0.4, 0.375, 0.066667, 0.125)",
+            "layer_alpha": 1.0,
+            "path": "res://assets/art/media/smallscale/modular/NakedBody/CrouchIdle.png",
+            "slot": "body",
+            "transform": "[X: (0.707107, 0.0, -0.707107), Y: (-0.353553, 0.866025, -0.353553), Z: (0.612372, 0.5, 0.612372), O: (3.0, 0.0, 7.0)]",
+            "wall_opacity": null
+          },
+          {
+            "condition_alpha": 1.0,
+            "frame_uv": "(0.4, 0.375, 0.066667, 0.125)",
+            "layer_alpha": 1.0,
+            "path": "res://assets/art/media/smallscale/modular/Legs6/CrouchIdle.png",
+            "slot": "legs",
+            "transform": "[X: (0.707107, 0.0, -0.707107), Y: (-0.353553, 0.866025, -0.353553), Z: (0.612372, 0.5, 0.612372), O: (3.0, 0.0, 7.0)]",
+            "wall_opacity": null
+          },
+          {
+            "condition_alpha": 1.0,
+            "frame_uv": "(0.4, 0.375, 0.066667, 0.125)",
+            "layer_alpha": 1.0,
+            "path": "res://assets/art/media/smallscale/modular/Shoes1/CrouchIdle.png",
+            "slot": "shoes",
+            "transform": "[X: (0.707107, 0.0, -0.707107), Y: (-0.353553, 0.866025, -0.353553), Z: (0.612372, 0.5, 0.612372), O: (3.0, 0.0, 7.0)]",
+            "wall_opacity": null
+          },
+          {
+            "condition_alpha": 1.0,
+            "frame_uv": "(0.4, 0.375, 0.066667, 0.125)",
+            "layer_alpha": 1.0,
+            "path": "res://assets/art/media/smallscale/modular/Chest14/CrouchIdle.png",
+            "slot": "chest",
+            "transform": "[X: (0.707107, 0.0, -0.707107), Y: (-0.353553, 0.866025, -0.353553), Z: (0.612372, 0.5, 0.612372), O: (3.0, 0.0, 7.0)]",
+            "wall_opacity": null
+          },
+          {
+            "condition_alpha": 1.0,
+            "frame_uv": "(0.4, 0.375, 0.066667, 0.125)",
+            "layer_alpha": 1.0,
+            "path": "res://assets/art/media/smallscale/modular/Belt1/CrouchIdle.png",
+            "slot": "belt",
+            "transform": "[X: (0.707107, 0.0, -0.707107), Y: (-0.353553, 0.866025, -0.353553), Z: (0.612372, 0.5, 0.612372), O: (3.0, 0.0, 7.0)]",
+            "wall_opacity": null
+          },
+          {
+            "condition_alpha": 1.0,
+            "frame_uv": "(0.4, 0.375, 0.066667, 0.125)",
+            "layer_alpha": 1.0,
+            "path": "res://assets/art/media/smallscale/modular/Melee1/CrouchIdle.png",
+            "slot": "weapon",
+            "transform": "[X: (0.707107, 0.0, -0.707107), Y: (-0.353553, 0.866025, -0.353553), Z: (0.612372, 0.5, 0.612372), O: (3.0, 0.0, 7.0)]",
+            "wall_opacity": null
+          },
+          {
+            "condition_alpha": 1.0,
+            "frame_uv": "(0.4, 0.375, 0.066667, 0.125)",
+            "layer_alpha": 1.0,
+            "path": "res://assets/art/media/smallscale/modular/Head9/CrouchIdle.png",
+            "slot": "head",
+            "transform": "[X: (0.707107, 0.0, -0.707107), Y: (-0.353553, 0.866025, -0.353553), Z: (0.612372, 0.5, 0.612372), O: (3.0, 0.0, 7.0)]",
+            "wall_opacity": null
+          }
+        ],
+        "position": [
+          3.0,
+          7.0
+        ],
+        "quarter": 0,
+        "source_seconds": 0.562499985098839,
+        "world_quarter": 0
+      },
+      "source_before": {
+        "clip": "CrouchIdle",
+        "clock": 687.5,
+        "facing": "SW",
+        "layers": [
+          {
+            "condition_alpha": 1.0,
+            "frame_uv": "(0.4, 0.375, 0.066667, 0.125)",
+            "layer_alpha": 1.0,
+            "path": "res://assets/art/media/smallscale/modular/NakedBody/CrouchIdle.png",
+            "slot": "body",
+            "transform": "[X: (0.707107, 0.0, -0.707107), Y: (-0.353553, 0.866025, -0.353553), Z: (0.612372, 0.5, 0.612372), O: (3.0, 0.0, 7.0)]",
+            "wall_opacity": null
+          },
+          {
+            "condition_alpha": 1.0,
+            "frame_uv": "(0.4, 0.375, 0.066667, 0.125)",
+            "layer_alpha": 1.0,
+            "path": "res://assets/art/media/smallscale/modular/Legs6/CrouchIdle.png",
+            "slot": "legs",
+            "transform": "[X: (0.707107, 0.0, -0.707107), Y: (-0.353553, 0.866025, -0.353553), Z: (0.612372, 0.5, 0.612372), O: (3.0, 0.0, 7.0)]",
+            "wall_opacity": null
+          },
+          {
+            "condition_alpha": 1.0,
+            "frame_uv": "(0.4, 0.375, 0.066667, 0.125)",
+            "layer_alpha": 1.0,
+            "path": "res://assets/art/media/smallscale/modular/Shoes1/CrouchIdle.png",
+            "slot": "shoes",
+            "transform": "[X: (0.707107, 0.0, -0.707107), Y: (-0.353553, 0.866025, -0.353553), Z: (0.612372, 0.5, 0.612372), O: (3.0, 0.0, 7.0)]",
+            "wall_opacity": null
+          },
+          {
+            "condition_alpha": 1.0,
+            "frame_uv": "(0.4, 0.375, 0.066667, 0.125)",
+            "layer_alpha": 1.0,
+            "path": "res://assets/art/media/smallscale/modular/Chest14/CrouchIdle.png",
+            "slot": "chest",
+            "transform": "[X: (0.707107, 0.0, -0.707107), Y: (-0.353553, 0.866025, -0.353553), Z: (0.612372, 0.5, 0.612372), O: (3.0, 0.0, 7.0)]",
+            "wall_opacity": null
+          },
+          {
+            "condition_alpha": 1.0,
+            "frame_uv": "(0.4, 0.375, 0.066667, 0.125)",
+            "layer_alpha": 1.0,
+            "path": "res://assets/art/media/smallscale/modular/Belt1/CrouchIdle.png",
+            "slot": "belt",
+            "transform": "[X: (0.707107, 0.0, -0.707107), Y: (-0.353553, 0.866025, -0.353553), Z: (0.612372, 0.5, 0.612372), O: (3.0, 0.0, 7.0)]",
+            "wall_opacity": null
+          },
+          {
+            "condition_alpha": 1.0,
+            "frame_uv": "(0.4, 0.375, 0.066667, 0.125)",
+            "layer_alpha": 1.0,
+            "path": "res://assets/art/media/smallscale/modular/Melee1/CrouchIdle.png",
+            "slot": "weapon",
+            "transform": "[X: (0.707107, 0.0, -0.707107), Y: (-0.353553, 0.866025, -0.353553), Z: (0.612372, 0.5, 0.612372), O: (3.0, 0.0, 7.0)]",
+            "wall_opacity": null
+          },
+          {
+            "condition_alpha": 1.0,
+            "frame_uv": "(0.4, 0.375, 0.066667, 0.125)",
+            "layer_alpha": 1.0,
+            "path": "res://assets/art/media/smallscale/modular/Head9/CrouchIdle.png",
+            "slot": "head",
+            "transform": "[X: (0.707107, 0.0, -0.707107), Y: (-0.353553, 0.866025, -0.353553), Z: (0.612372, 0.5, 0.612372), O: (3.0, 0.0, 7.0)]",
+            "wall_opacity": null
+          }
+        ],
+        "position": [
+          3.0,
+          7.0
+        ],
+        "quarter": 0,
+        "source_seconds": 0.562499985098839,
+        "world_quarter": 0
+      }
+    },
+    {
+      "alpha_coverage_mismatches": 0,
+      "alpha_max_byte_error": 0,
+      "alpha_max_error": 0.0,
       "clip": "CrouchIdle",
       "condition_alpha": 0.55,
+      "covered_pixels": 1163,
       "frame": 2,
-      "gear": 9,
+      "gear": 6,
       "label": "idle-q0",
-      "parts": 10,
+      "parts": 7,
       "quarter": 0,
       "source_profile": "reference",
-      "time_ms": 1858.33333333333
+      "texel_boundary_flips": 12,
+      "time_ms": 1091.66666666667
     },
     {
       "alpha_coverage_mismatches": 0,
-      "alpha_max_error": 0.000195312500000044,
+      "alpha_max_byte_error": 0,
+      "alpha_max_error": 0.0,
       "clip": "CrouchRun",
       "condition_alpha": 0.55,
+      "covered_pixels": 1498,
       "frame": 3,
-      "gear": 9,
+      "gear": 6,
       "label": "move-q0",
-      "parts": 10,
+      "parts": 7,
       "quarter": 0,
       "source_profile": "reference",
-      "time_ms": 2283.33333333333
+      "texel_boundary_flips": 0,
+      "time_ms": 1516.66666666667
     },
     {
       "alpha_coverage_mismatches": 0,
-      "alpha_max_error": 0.000195312500000044,
+      "alpha_max_byte_error": 0,
+      "alpha_max_error": 0.0,
       "clip": "CrouchIdle",
       "condition_alpha": 0.55,
+      "covered_pixels": 1639,
       "frame": 2,
-      "gear": 9,
+      "gear": 6,
       "label": "idle-q1",
-      "parts": 10,
+      "parts": 7,
       "quarter": 1,
       "source_profile": "reference",
-      "time_ms": 1858.33333333333
+      "texel_boundary_flips": 22,
+      "time_ms": 1091.66666666667
     },
     {
       "alpha_coverage_mismatches": 0,
-      "alpha_max_error": 0.000195312500000044,
+      "alpha_max_byte_error": 0,
+      "alpha_max_error": 0.0,
       "clip": "CrouchRun",
       "condition_alpha": 0.55,
+      "covered_pixels": 1370,
       "frame": 3,
-      "gear": 9,
+      "gear": 6,
       "label": "move-q1",
-      "parts": 10,
+      "parts": 7,
       "quarter": 1,
       "source_profile": "reference",
-      "time_ms": 2283.33333333333
+      "texel_boundary_flips": 0,
+      "time_ms": 1516.66666666667
     },
     {
       "alpha_coverage_mismatches": 0,
-      "alpha_max_error": 0.000195312500000044,
+      "alpha_max_byte_error": 0,
+      "alpha_max_error": 0.0,
       "clip": "CrouchIdle",
       "condition_alpha": 0.55,
+      "covered_pixels": 1430,
       "frame": 2,
-      "gear": 9,
+      "gear": 6,
       "label": "idle-q2",
-      "parts": 10,
+      "parts": 7,
       "quarter": 2,
       "source_profile": "reference",
-      "time_ms": 1858.33333333333
+      "texel_boundary_flips": 15,
+      "time_ms": 1091.66666666667
     },
     {
       "alpha_coverage_mismatches": 0,
-      "alpha_max_error": 0.000195312500000044,
+      "alpha_max_byte_error": 0,
+      "alpha_max_error": 0.0,
       "clip": "CrouchRun",
       "condition_alpha": 0.55,
+      "covered_pixels": 1504,
       "frame": 3,
-      "gear": 9,
+      "gear": 6,
       "label": "move-q2",
-      "parts": 10,
+      "parts": 7,
       "quarter": 2,
       "source_profile": "reference",
-      "time_ms": 2283.33333333333
+      "texel_boundary_flips": 0,
+      "time_ms": 1516.66666666667
     },
     {
       "alpha_coverage_mismatches": 0,
-      "alpha_max_error": 0.000195312500000044,
+      "alpha_max_byte_error": 0,
+      "alpha_max_error": 0.0,
       "clip": "CrouchIdle",
       "condition_alpha": 0.55,
+      "covered_pixels": 1508,
       "frame": 2,
-      "gear": 9,
+      "gear": 6,
       "label": "idle-q3",
-      "parts": 10,
+      "parts": 7,
       "quarter": 3,
       "source_profile": "reference",
-      "time_ms": 1858.33333333333
+      "texel_boundary_flips": 14,
+      "time_ms": 1091.66666666667
     },
     {
       "alpha_coverage_mismatches": 0,
-      "alpha_max_error": 0.000195312500000044,
+      "alpha_max_byte_error": 0,
+      "alpha_max_error": 0.0,
       "clip": "CrouchRun",
       "condition_alpha": 0.55,
+      "covered_pixels": 1221,
       "frame": 3,
-      "gear": 9,
+      "gear": 6,
       "label": "move-q3",
-      "parts": 10,
+      "parts": 7,
       "quarter": 3,
       "source_profile": "reference",
-      "time_ms": 2283.33333333333
+      "texel_boundary_flips": 0,
+      "time_ms": 1516.66666666667
     },
     {
       "alpha_coverage_mismatches": 0,
-      "alpha_max_error": 0.000195312500000044,
-      "clip": "Attack3",
+      "alpha_max_byte_error": 1,
+      "alpha_max_error": 0.00392158329486847,
+      "clip": "Attack5",
       "condition_alpha": 0.55,
+      "covered_pixels": 1664,
       "frame": 5,
-      "gear": 8,
-      "label": "attack-before-removal",
-      "parts": 9,
+      "gear": 6,
+      "label": "revealing-action-original-cut",
+      "parts": 7,
       "quarter": 3,
       "source_profile": "reference",
-      "time_ms": 3237.5
+      "texel_boundary_flips": 23,
+      "time_ms": 2470.83333333333
     },
     {
       "alpha_coverage_mismatches": 0,
+      "alpha_max_byte_error": 0,
       "alpha_max_error": 0.0,
       "clip": "Idle",
       "condition_alpha": 1.0,
-      "frame": 5,
-      "gear": 9,
+      "covered_pixels": 1414,
+      "frame": 1,
+      "gear": 6,
       "label": "authoritative-removal",
-      "parts": 10,
+      "parts": 7,
       "quarter": 3,
       "source_profile": "reference",
-      "time_ms": 4212.68428548177
+      "texel_boundary_flips": 6,
+      "time_ms": 5130.55555555556
     },
     {
-      "foreground_changed_glyph_pixels": 1,
+      "foreground_changed_glyph_pixels": 4,
       "label": "removal-badge-order",
       "maximum_glyph_rgb_byte_error": 1,
-      "old_order_changed_glyph_samples": 872,
-      "old_order_covered_opaque_pixels": 31,
-      "opaque_glyph_pixels": 32
+      "old_order_changed_glyph_samples": 709,
+      "old_order_covered_opaque_pixels": 18,
+      "opaque_glyph_pixels": 18
+    },
+    {
+      "actual_original_hidden": true,
+      "actual_original_visible": true,
+      "label": "Blue selected cut",
+      "perspective": "blue",
+      "rendered_visible": true,
+      "time_ms": 1516.66666666667
     },
     {
       "alpha_coverage_mismatches": 0,
+      "alpha_max_byte_error": 0,
       "alpha_max_error": 0.0,
       "clip": "Idle",
       "condition_alpha": 1.0,
+      "covered_pixels": 1260,
       "frame": 3,
-      "gear": 9,
+      "gear": 6,
       "label": "blue-before-hide",
-      "parts": 10,
+      "parts": 7,
       "quarter": 0,
       "source_profile": "reference",
+      "texel_boundary_flips": 9,
       "time_ms": 250.0
+    },
+    {
+      "actual_original_hidden": true,
+      "actual_original_visible": true,
+      "label": "Blue original restored cut",
+      "perspective": "blue",
+      "rendered_visible": true,
+      "time_ms": 1516.66666666667
     }
   ],
   "failures": [],
   "renderer": "forward_plus",
-  "scope": "Actual recorded normal idle -> finite authored Hide action -> effect-owned Hidden state, in forward playback and reverse seek; cold source demand, shared Graphs, original body+gear atlas alpha/normal registration, four sustained views, native feedback/removal, faction visibility and isolated reload. Lighting unchanged; alpha allows native HDR storage error <=1/255 with exact support. CrouchIdle is existing crouched source, not a newly invented standing-to-crouching animation."
+  "scope": "Unchanged two-seat schema16 Hide originals: normal idle -> finite authored Hide -> condition-owned crouch/opacity -> actual Fire Bolt and authoritative removal, forward playback and reverse seek; cold source demand, shared Graphs, original body+gear isolated alpha/normals, four published views, actual mixed audio, per-seat original disclosure and rejected-recording candidate ownership. Lighting unchanged; alpha allows native HDR storage error <=1/255 with exact support. CrouchIdle is the actual crouched source. Retired overlay rejection is not qualified by this test; typed source-index/reload rejection has separate current gates."
 }

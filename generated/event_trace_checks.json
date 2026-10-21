@@ -1,19 +1,29 @@
 {
-  "checks": 3486,
+  "checks": 4404,
   "evidence": {
-    "conditions": 6,
-    "deduplicated_nested_logs": 78,
-    "future_contacts": 15,
-    "hierarchical_links": 378,
+    "conditions": 0,
+    "deduplicated_nested_logs": 0,
+    "future_contacts": 33,
+    "hierarchical_links": 314,
     "jump_reactions": 1,
     "lethal_chains": 1,
-    "logs": 143,
-    "nodes": 521,
-    "operations": 60,
-    "partial_attacks": 12,
-    "precommit_attack_privacy": 17,
+    "logs": 227,
+    "nodes": 462,
+    "operations": 123,
+    "partial_attacks": 4,
+    "precommit_attack_privacy": 18,
     "preserved_nested_logs": 0,
-    "supported_tracks": 1
+    "supported_tracks": 8
   },
-  "failures": 0
+  "failures": 0,
+  "historical_finite_log_originals": [
+    "res://tests/oracles/event_trace_original/0000000000000059.json",
+    "res://tests/oracles/event_trace_original/0000000000000084.json"
+  ],
+  "recordings": [
+    "res://tests/fixtures/schema16/scenarios/gallery/amber",
+    "res://tests/fixtures/schema16/scenarios/oa-jump-late-lethal/amber",
+    "res://tests/fixtures/schema16/scenarios/revive/amber"
+  ],
+  "scope": "Current schema16 originals qualify event identity/privacy/ancestry/contact/retention. Unchanged historical raw log operands separately qualify finite nested composition/multiplicity/repeated identity only; no historical normalization or current nested/repeated-route replay proof is claimed."
 }

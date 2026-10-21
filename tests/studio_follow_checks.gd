@@ -216,6 +216,22 @@ func run()->void:
         view.follow_rows=[raw];view.follow_from=INF
         check(view.follow_at((raw.start_ms+raw.end_ms)*.5)==raw.id,"An action with only its real "+kind+" source remains followable")
     view.follow_rows=all_follow_rows
+    # The displayed lane must advance even when real source work consumed the
+    # shared frame budget. Its thumbnail request remains deferred, not ready.
+    view.manual_collapse.clear();view.follow_from=INF
+    view.follow_at((samples.front().start_ms+samples.front().end_ms)*.5);view.prepare_visible()
+    var earlier_follow:String=view.followed_row
+    var earlier_requests:Array=view.thumbnails.pending.duplicate()
+    var earlier_preview_signature:Array=view.preview_signature.duplicate(true)
+    view.preparation_admission={"frame":Engine.get_process_frames(),"limit_usec":2000,"used_usec":2000,"phase_usec":{}}
+    view.follow_at((samples.back().start_ms+samples.back().end_ms)*.5)
+    var deferred:Dictionary=view.prepare_visible()
+    check(view.followed_row!=earlier_follow and view.followed_visible(),"A different actual Gallery source is visibly followed while resource preparation is budget-exhausted")
+    check(not deferred.ready and view.preview_signature==earlier_preview_signature and view.thumbnails.pending==earlier_requests,
+        "Publishing current row geometry does not submit or qualify deferred source preparation")
+    view.preparation_admission={};view.prepare_visible()
+    check(view.followed_visible() and view.published_layout.preview_keys==view.preview_keys,
+        "Ordinary source admission attaches the exact cell keys to the already current layout")
     check(JSON.stringify(index.rows)==original,"Grouping, Details, search and Follow preserve every indexed event/component byte")
     view.queue_free();await process_frame
     finish()

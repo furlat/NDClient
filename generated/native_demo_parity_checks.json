@@ -1,17 +1,15 @@
 {
-  "checks": 17,
+  "checks": 19,
   "failures": [],
   "renderer": "forward_plus",
   "rows": [
     {
-      "atlas_address": [
-        8003,
-        29
-      ],
       "demo_vs_final3d": {
         "alpha_mismatches": 0,
         "changed_pixels": 0,
-        "maximum_byte_error": 0
+        "examples": [],
+        "maximum_byte_error": 0,
+        "pixels_over_one_byte": 0
       },
       "id": "Chest14-r0-reference",
       "lit": false,
@@ -22,14 +20,49 @@
       "zoom": 1.0
     },
     {
-      "atlas_address": [
-        8003,
-        29
-      ],
       "demo_vs_final3d": {
         "alpha_mismatches": 0,
-        "changed_pixels": 161,
-        "maximum_byte_error": 2
+        "changed_pixels": 160,
+        "examples": [
+          {
+            "actual": [
+              199,
+              121,
+              88,
+              255
+            ],
+            "at": [
+              149,
+              156
+            ],
+            "expected": [
+              197,
+              120,
+              88,
+              255
+            ]
+          },
+          {
+            "actual": [
+              235,
+              140,
+              100,
+              255
+            ],
+            "at": [
+              151,
+              159
+            ],
+            "expected": [
+              233,
+              139,
+              99,
+              255
+            ]
+          }
+        ],
+        "maximum_byte_error": 2,
+        "pixels_over_one_byte": 2
       },
       "id": "Chest14-r0-reference",
       "lit": true,
@@ -40,14 +73,12 @@
       "zoom": 1.0
     },
     {
-      "atlas_address": [
-        8003,
-        29
-      ],
       "batch_vs_single": {
         "alpha_mismatches": 0,
         "changed_pixels": 0,
-        "maximum_byte_error": 0
+        "examples": [],
+        "maximum_byte_error": 0,
+        "pixels_over_one_byte": 0
       },
       "id": "floor-stone",
       "lit": false,
@@ -58,14 +89,28 @@
       "zoom": 1.0
     },
     {
-      "atlas_address": [
-        8003,
-        29
+      "batch_vs_single": {
+        "alpha_mismatches": 0,
+        "changed_pixels": 0,
+        "examples": [],
+        "maximum_byte_error": 0,
+        "pixels_over_one_byte": 0
+      },
+      "id": "floor-stone",
+      "lit": true,
+      "offset": [
+        0.370000004768372,
+        0.230000004172325
       ],
+      "zoom": 1.0
+    },
+    {
       "demo_vs_final3d": {
         "alpha_mismatches": 0,
         "changed_pixels": 0,
-        "maximum_byte_error": 0
+        "examples": [],
+        "maximum_byte_error": 0,
+        "pixels_over_one_byte": 0
       },
       "id": "Chest14-r0-reference",
       "lit": false,
@@ -76,14 +121,121 @@
       "zoom": 1.37
     },
     {
-      "atlas_address": [
-        8003,
-        29
-      ],
       "demo_vs_final3d": {
         "alpha_mismatches": 0,
-        "changed_pixels": 270,
-        "maximum_byte_error": 2
+        "changed_pixels": 276,
+        "examples": [
+          {
+            "actual": [
+              180,
+              111,
+              82,
+              255
+            ],
+            "at": [
+              188,
+              161
+            ],
+            "expected": [
+              178,
+              110,
+              81,
+              255
+            ]
+          },
+          {
+            "actual": [
+              188,
+              115,
+              84,
+              255
+            ],
+            "at": [
+              191,
+              173
+            ],
+            "expected": [
+              190,
+              116,
+              85,
+              255
+            ]
+          },
+          {
+            "actual": [
+              242,
+              144,
+              102,
+              255
+            ],
+            "at": [
+              191,
+              177
+            ],
+            "expected": [
+              244,
+              144,
+              103,
+              255
+            ]
+          },
+          {
+            "actual": [
+              205,
+              124,
+              90,
+              255
+            ],
+            "at": [
+              195,
+              180
+            ],
+            "expected": [
+              207,
+              125,
+              91,
+              255
+            ]
+          },
+          {
+            "actual": [
+              225,
+              135,
+              97,
+              255
+            ],
+            "at": [
+              195,
+              181
+            ],
+            "expected": [
+              227,
+              136,
+              97,
+              255
+            ]
+          },
+          {
+            "actual": [
+              237,
+              141,
+              101,
+              255
+            ],
+            "at": [
+              173,
+              183
+            ],
+            "expected": [
+              239,
+              142,
+              101,
+              255
+            ]
+          }
+        ],
+        "maximum_byte_error": 2,
+        "pixels_over_one_byte": 8
       },
       "id": "Chest14-r0-reference",
       "lit": true,
@@ -94,14 +246,12 @@
       "zoom": 1.37
     },
     {
-      "atlas_address": [
-        8003,
-        29
-      ],
       "batch_vs_single": {
         "alpha_mismatches": 0,
         "changed_pixels": 0,
-        "maximum_byte_error": 0
+        "examples": [],
+        "maximum_byte_error": 0,
+        "pixels_over_one_byte": 0
       },
       "id": "floor-stone",
       "lit": false,
@@ -112,14 +262,28 @@
       "zoom": 1.37
     },
     {
-      "atlas_address": [
-        8003,
-        29
+      "batch_vs_single": {
+        "alpha_mismatches": 0,
+        "changed_pixels": 0,
+        "examples": [],
+        "maximum_byte_error": 0,
+        "pixels_over_one_byte": 0
+      },
+      "id": "floor-stone",
+      "lit": true,
+      "offset": [
+        0.370000004768372,
+        0.230000004172325
       ],
+      "zoom": 1.37
+    },
+    {
       "demo_vs_final3d": {
         "alpha_mismatches": 0,
         "changed_pixels": 0,
-        "maximum_byte_error": 0
+        "examples": [],
+        "maximum_byte_error": 0,
+        "pixels_over_one_byte": 0
       },
       "id": "Chest14-r0-reference",
       "lit": false,
@@ -130,14 +294,121 @@
       "zoom": 3.0
     },
     {
-      "atlas_address": [
-        8003,
-        29
-      ],
       "demo_vs_final3d": {
         "alpha_mismatches": 0,
-        "changed_pixels": 1263,
-        "maximum_byte_error": 2
+        "changed_pixels": 1290,
+        "examples": [
+          {
+            "actual": [
+              116,
+              77,
+              60,
+              255
+            ],
+            "at": [
+              283,
+              245
+            ],
+            "expected": [
+              114,
+              76,
+              60,
+              255
+            ]
+          },
+          {
+            "actual": [
+              146,
+              91,
+              68,
+              255
+            ],
+            "at": [
+              274,
+              251
+            ],
+            "expected": [
+              144,
+              90,
+              68,
+              255
+            ]
+          },
+          {
+            "actual": [
+              153,
+              96,
+              73,
+              255
+            ],
+            "at": [
+              277,
+              251
+            ],
+            "expected": [
+              151,
+              96,
+              72,
+              255
+            ]
+          },
+          {
+            "actual": [
+              185,
+              113,
+              83,
+              255
+            ],
+            "at": [
+              280,
+              251
+            ],
+            "expected": [
+              183,
+              113,
+              83,
+              255
+            ]
+          },
+          {
+            "actual": [
+              146,
+              91,
+              68,
+              255
+            ],
+            "at": [
+              274,
+              252
+            ],
+            "expected": [
+              144,
+              90,
+              68,
+              255
+            ]
+          },
+          {
+            "actual": [
+              153,
+              96,
+              73,
+              255
+            ],
+            "at": [
+              277,
+              252
+            ],
+            "expected": [
+              151,
+              96,
+              72,
+              255
+            ]
+          }
+        ],
+        "maximum_byte_error": 2,
+        "pixels_over_one_byte": 63
       },
       "id": "Chest14-r0-reference",
       "lit": true,
@@ -148,14 +419,12 @@
       "zoom": 3.0
     },
     {
-      "atlas_address": [
-        8003,
-        29
-      ],
       "batch_vs_single": {
         "alpha_mismatches": 0,
         "changed_pixels": 0,
-        "maximum_byte_error": 0
+        "examples": [],
+        "maximum_byte_error": 0,
+        "pixels_over_one_byte": 0
       },
       "id": "floor-stone",
       "lit": false,
@@ -166,23 +435,21 @@
       "zoom": 3.0
     },
     {
-      "atlas_address": [
-        8003,
-        7019
-      ],
       "batch_vs_single": {
         "alpha_mismatches": 0,
         "changed_pixels": 0,
-        "maximum_byte_error": 0
+        "examples": [],
+        "maximum_byte_error": 0,
+        "pixels_over_one_byte": 0
       },
       "id": "floor-stone",
-      "lit": false,
+      "lit": true,
       "offset": [
         0.370000004768372,
         0.230000004172325
       ],
-      "zoom": 1.37
+      "zoom": 3.0
     }
   ],
-  "scope": "Original demo directCanvas vs final3D RGBA; actual cropped floor Single vs MultiMesh odd farX and farY coordinates; no extra sourcealbedo cap. Lit transfer residual up to3RGBbytes explicitly retained."
+  "scope": "Original demo directCanvas vs the lit modular sprite (final3D RGBA) at three zooms and a fractional offset; actual floor single quad vs one-instance MultiMesh, unlit and lit. Lit sampling residual up to3RGBbytes explicitly retained; no extra sourcealbedo cap."
 }

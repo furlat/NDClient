@@ -168,7 +168,9 @@ static func _step(world:Node3D,cache:Dictionary,request:Dictionary,budget:Dictio
     if request.is_empty():
         request={"plan":_state.get("catalog_plan",[]),"optional":true}
         if request.plan.is_empty():request.plan=_plan(cache)
-    if request.plan.is_empty():return status(request)
+    if request.plan.is_empty():
+        if _state.has("resources"):Effects.retain_source_preparation(_state.resources,[])
+        return status(request)
     if _state.is_empty():
         _state={"plan":[],"known":{},"done":{},"failures":{},"resources":{},"completed":0,"active":{},"owner":null,"errors":[],
             "ready":true,"started":Time.get_ticks_usec(),"elapsed_ms":0.0,"construction_ms":[],
@@ -188,6 +190,13 @@ static func _step(world:Node3D,cache:Dictionary,request:Dictionary,budget:Dictio
     if optional:
         eligible.append_array(request.get("priority",[]))
         eligible.append_array(request.plan)
+    # Only the first currently eligible source can advance resource discovery.
+    # A changed priority abandons its predecessor even before budget admission.
+    var resource_interest:Array=[]
+    for candidate in eligible:
+        if not _state.done.has(_key(candidate.clip)) and not _state.failures.has(_key(candidate.clip)):
+            resource_interest.append(candidate.clip);break
+    Effects.retain_source_preparation(_state.resources,resource_interest)
     if eligible.is_empty():return status(request)
     if not budget.is_empty() and budget.used_usec>=budget.limit_usec:return status(request)
     if _frame==Engine.get_process_frames():return status(request)
@@ -282,6 +291,7 @@ static func reset()->void:
     # Explicit source reload only. Seeking or replacing a Play host does not
     # release the process-owned native program prototypes.
     if not _state.is_empty():
+        Effects.Admission.cancel_source_cache(_state.resources)
         if not _state.active.is_empty():Effects.close(_state.active.handle)
         if is_instance_valid(_state.get("viewport")):_state.viewport.free()
     _state={};_frame=-1

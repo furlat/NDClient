@@ -3,51 +3,192 @@
     {
       "difference": {
         "alpha": 0,
-        "changed": 1863,
-        "maximum": 230
+        "changed": 80560,
+        "maximum": 80
       },
-      "joined": 1362,
-      "props": 42,
+      "joined": 142,
+      "lights": 8,
+      "props": 5,
       "quarter": 0,
-      "unjoined": 1
+      "unjoined": 0
     },
     {
       "difference": {
         "alpha": 0,
-        "changed": 3642,
-        "maximum": 183
+        "changed": 108575,
+        "maximum": 80
       },
-      "joined": 1362,
-      "props": 42,
+      "joined": 142,
+      "lights": 8,
+      "props": 5,
       "quarter": 1,
-      "unjoined": 1
+      "unjoined": 0
     },
     {
       "difference": {
         "alpha": 0,
-        "changed": 418,
-        "maximum": 232
+        "changed": 88934,
+        "maximum": 74
       },
-      "joined": 1362,
-      "props": 42,
+      "joined": 142,
+      "lights": 8,
+      "props": 5,
       "quarter": 2,
-      "unjoined": 1
+      "unjoined": 0
     },
     {
       "difference": {
         "alpha": 0,
-        "changed": 318,
-        "maximum": 235
+        "changed": 55493,
+        "maximum": 78
       },
-      "joined": 1362,
-      "props": 42,
+      "joined": 142,
+      "lights": 8,
+      "props": 5,
       "quarter": 3,
-      "unjoined": 1
+      "unjoined": 0
     }
   ],
-  "checks": 32,
+  "checks": 44,
   "driver": "vulkan",
   "failures": [],
+  "lighting": {
+    "actors": [
+      {
+        "id": "78a905ca-2891-4fb6-b655-dbd88025cce0",
+        "name": "Amber caster",
+        "position": [
+          13,
+          6
+        ],
+        "torches": [
+          {
+            "id": "8008f524-bd44-46b8-9282-14ed3f3eedd3",
+            "is_lit": true,
+            "name": "Torch"
+          }
+        ]
+      },
+      {
+        "id": "ebec3351-c9b1-4311-a2d3-32185be4dbf7",
+        "name": "Amber ally",
+        "position": [
+          5,
+          6
+        ],
+        "torches": [
+          {
+            "id": "71d8dbc8-f7f5-486d-8f27-2fe90dcb5232",
+            "is_lit": true,
+            "name": "Torch"
+          }
+        ]
+      }
+    ],
+    "light_strength": 0.43,
+    "resolved_sources": [
+      {
+        "actor_id": "ebec3351-c9b1-4311-a2d3-32185be4dbf7",
+        "anchor_item_uuid": "",
+        "enabled": true,
+        "id": "51bd3e67-f090-4829-a984-3dcb58ff4e9f",
+        "name": "Amber ally",
+        "position": [
+          5.0,
+          2.04124140739441,
+          6.0
+        ]
+      },
+      {
+        "actor_id": "78a905ca-2891-4fb6-b655-dbd88025cce0",
+        "anchor_item_uuid": "",
+        "enabled": true,
+        "id": "5e40f859-ebaf-4aa5-ab96-b38d864fe786",
+        "name": "Amber caster",
+        "position": [
+          13.0,
+          2.04124140739441,
+          6.0
+        ]
+      },
+      {
+        "actor_id": "",
+        "anchor_item_uuid": "56a4b5c4-0e6a-4b2b-a7a3-f7d4377d68e9",
+        "enabled": true,
+        "id": "786ff52e-e10e-4b5e-a734-46bd46e1c7b8",
+        "name": "Wall Torch",
+        "position": [
+          19.0,
+          0.816496610641479,
+          3.0
+        ]
+      },
+      {
+        "actor_id": "",
+        "anchor_item_uuid": "aca0a97e-7a43-48c4-afed-66709ff015b2",
+        "enabled": true,
+        "id": "9ac338b6-94d1-4fc5-ae31-e4f4420723f9",
+        "name": "Wall Torch",
+        "position": [
+          13.0,
+          0.816496610641479,
+          3.0
+        ]
+      },
+      {
+        "actor_id": "",
+        "anchor_item_uuid": "8cf21f47-2f6b-4050-a224-ce276e2f02c6",
+        "enabled": true,
+        "id": "9e2ec3db-f70d-4249-b0d0-4f962dcf2f9d",
+        "name": "Wall Torch",
+        "position": [
+          2.0,
+          0.816496610641479,
+          3.0
+        ]
+      },
+      {
+        "actor_id": "",
+        "anchor_item_uuid": "58147718-bf10-4cef-bafc-8c92d78083c1",
+        "enabled": true,
+        "id": "afc771c9-c0a7-4f84-a0ca-50221c46b8ff",
+        "name": "Wall Torch",
+        "position": [
+          6.0,
+          0.816496610641479,
+          3.0
+        ]
+      },
+      {
+        "actor_id": "",
+        "anchor_item_uuid": "6019b16f-9fa4-4a7b-a985-717571cdd40a",
+        "enabled": true,
+        "id": "b0587d18-c007-45d0-834d-d123dc5b6e98",
+        "name": "Wall Torch",
+        "position": [
+          19.0,
+          0.816496610641479,
+          9.0
+        ]
+      },
+      {
+        "actor_id": "",
+        "anchor_item_uuid": "22b54b5d-5b3e-4af0-80e7-7fad87ffe23f",
+        "enabled": true,
+        "id": "c10ead59-a24d-4ac4-abcf-d2073edd6aa3",
+        "name": "Wall Torch",
+        "position": [
+          10.0,
+          0.816496610641479,
+          5.0
+        ]
+      }
+    ],
+    "sequence": 13,
+    "source_override": false,
+    "table_lights": 8,
+    "wall_mode": "solid"
+  },
   "renderer": "forward_plus",
-  "scope": "Final3D actual71-packet scene in four quarters. Before uses original single-ray prop normals and independently exposed floor skirts; after uses source pixel-integrated Cycles normals and published-topology interior joins. Alpha/state unchanged. Pixel differences are recorded, not a subjective-quality assertion."
+  "scope": "Final3D finite recorded scene in four quarters, lit sprite shaders. Before uses original single-ray prop normals (geometry packet) and independently exposed floor skirts (no ground supports); after uses source pixel-integrated Cycles normals and published-topology interior joins. Alpha/state unchanged. Pixel differences are recorded, not a subjective-quality assertion."
 }

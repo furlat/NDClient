@@ -1,107 +1,112 @@
 {
-  "checks": 84,
+  "checks": 169,
   "failures": [],
   "measurements": [
     {
       "case": "wall at [7, 5] closed q0",
-      "lit_delta": 0.0173180323615088,
-      "one_sided_delta": 0.000675040894000429
+      "lit_delta": 0.00948723472774469,
+      "normal_delta": 0.00384909464945344
     },
     {
       "case": "wall at [7, 8] closed q0",
-      "lit_delta": 0.0131797899631622,
-      "one_sided_delta": 0.000604132638464863
+      "lit_delta": 0.0151015458765,
+      "normal_delta": 0.00531142791367731
+    },
+    {
+      "case": "native_directional_original_door",
+      "lit_pixels": 14989,
+      "whole_view_delta": 0.00424761719821011
     },
     {
       "case": "door at [7, 6] closed q0",
-      "lit_delta": 0.00887716189522406,
-      "one_sided_delta": 0.000495881016282106
+      "lit_delta": 0.00398476659822336,
+      "normal_delta": 0.00240357783109276
     },
     {
       "case": "door at [7, 6] inward q0",
-      "lit_delta": 0.00768852147843265,
-      "one_sided_delta": 0.000495881016282106
+      "lit_delta": 0.00499353227012762,
+      "normal_delta": 0.00114988430836901
     },
     {
       "case": "door at [7, 6] outward q0",
-      "lit_delta": 0.00785498391547662,
-      "one_sided_delta": 0.000495881016282106
+      "lit_delta": 0.00542521120885794,
+      "normal_delta": 0.00117332180626868
     },
     {
       "case": "wall at [7, 5] closed q1",
-      "lit_delta": 0.0145369523465827,
-      "one_sided_delta": 0.00264414837212017
+      "lit_delta": 0.0104354918159273,
+      "normal_delta": 0.00282172534947879
     },
     {
       "case": "wall at [7, 8] closed q1",
-      "lit_delta": 0.00723708153823585,
-      "one_sided_delta": 0.00380490884655349
+      "lit_delta": 0.00626805911354798,
+      "normal_delta": 0.00598153276886377
     },
     {
       "case": "door at [7, 6] closed q1",
-      "lit_delta": 0.00677833964028347,
-      "one_sided_delta": 0.000691823267172569
+      "lit_delta": 0.002436836244823,
+      "normal_delta": 0.00381357244474606
     },
     {
       "case": "door at [7, 6] inward q1",
-      "lit_delta": 0.0058300314393576,
-      "one_sided_delta": 0.00305325781243179
+      "lit_delta": 0.00460214132519872,
+      "normal_delta": 0.0014751328329698
     },
     {
       "case": "door at [7, 6] outward q1",
-      "lit_delta": 0.005918181635057,
-      "one_sided_delta": 0.00309691590410188
+      "lit_delta": 0.00493174714531859,
+      "normal_delta": 0.00161213245248493
     },
     {
       "case": "wall at [7, 5] closed q2",
-      "lit_delta": 0.0220478799439863,
-      "one_sided_delta": 0.0216171371443973
+      "lit_delta": 0.0119020292033221,
+      "normal_delta": 0.00167641963072432
     },
     {
       "case": "wall at [7, 8] closed q2",
-      "lit_delta": 0.0207684848566714,
-      "one_sided_delta": 0.0206696456651035
+      "lit_delta": 0.0159081737268328,
+      "normal_delta": 0.00446006967977155
     },
     {
       "case": "door at [7, 6] closed q2",
-      "lit_delta": 0.00903096092388498,
-      "one_sided_delta": 0.00874707271812844
+      "lit_delta": 0.00561650686111534,
+      "normal_delta": 0.00147991560399532
     },
     {
       "case": "door at [7, 6] inward q2",
-      "lit_delta": 0.00835147767011626,
-      "one_sided_delta": 0.00806723202967583
+      "lit_delta": 0.00410978360298436,
+      "normal_delta": 0.0030702445230256
     },
     {
       "case": "door at [7, 6] outward q2",
-      "lit_delta": 0.00730450052479783,
-      "one_sided_delta": 0.00702073146384969
+      "lit_delta": 0.00358758861762908,
+      "normal_delta": 0.00317556857702988
     },
     {
       "case": "wall at [7, 5] closed q3",
-      "lit_delta": 0.0177436689920917,
-      "one_sided_delta": 0.0154792523980399
+      "lit_delta": 0.0111164219172335,
+      "normal_delta": 0.0018618600793545
     },
     {
       "case": "wall at [7, 8] closed q3",
-      "lit_delta": 0.00803024596579942,
-      "one_sided_delta": 0.0026694411446806
+      "lit_delta": 0.0071795685686973,
+      "normal_delta": 0.00643382371442082
     },
     {
       "case": "door at [7, 6] closed q3",
-      "lit_delta": 0.00788585944821938,
-      "one_sided_delta": 0.00745036787637623
+      "lit_delta": 0.00583638021313568,
+      "normal_delta": 0.00083815021567716
     },
     {
       "case": "door at [7, 6] inward q3",
-      "lit_delta": 0.00741064152330283,
-      "one_sided_delta": 0.00337964675474925
+      "lit_delta": 0.00351079121281348,
+      "normal_delta": 0.00344160211122976
     },
     {
       "case": "door at [7, 6] outward q3",
-      "lit_delta": 0.00619214680714625,
-      "one_sided_delta": 0.00312072790134051
+      "lit_delta": 0.00300641688234464,
+      "normal_delta": 0.00326165929578969
     }
   ],
-  "policy": "Two-sided normal response for wall and door artwork, independent of opacity; source radius/visibility unchanged."
+  "policy": "Approved native2D max(N·L,0) receiving replaces retired3D abs-dot control; real wall/door normals, alpha, placement, restoration and directional contribution remain explicit checks. No production graphics changes."
 }

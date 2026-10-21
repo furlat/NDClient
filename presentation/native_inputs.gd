@@ -446,12 +446,17 @@ static func _prepare_draw_sources(world:Node,handle:Dictionary,captures:Array,ad
     for sample in samples.values():
         var clip:Dictionary=Effects.occurrence_clip(sample)
         if clip.get("inputs",[]).any(func(channel):return channel not in ["actor_layers","treatment_state","pose_provider","appearance_provider","owner_state"]):
+            Effects.retain_source_preparation(handle.get("departure_source_resources",{}),[])
             return {"ready":false,"pending":false,"reason":"history_native_owner_requires_unsupported_input:"+str(sample.id)}
-        if Effects.choice(clip).kind in ["","recorded"]:return {"ready":false,"pending":false,"reason":"history_native_owner_requires_live_source:"+str(sample.id)}
+        if Effects.choice(clip).kind in ["","recorded"]:
+            Effects.retain_source_preparation(handle.get("departure_source_resources",{}),[])
+            return {"ready":false,"pending":false,"reason":"history_native_owner_requires_live_source:"+str(sample.id)}
         if not records.has(sample.id):clips.append(clip)
+    Effects.retain_source_preparation(handle.get("departure_source_resources",{}),clips)
     if not clips.is_empty():
         if not admit:return {"ready":false,"pending":true,"reason":"history_draw_sources_preparing"}
-        var loading:Dictionary=Effects.prepare(clips,world.catalog_cache)
+        if not handle.has("departure_source_resources"):handle.departure_source_resources={}
+        var loading:Dictionary=Effects.prepare(clips,handle.departure_source_resources)
         if not loading.errors.is_empty():return {"ready":false,"pending":false,"reason":"; ".join(loading.errors)}
         if not loading.ready:return {"ready":false,"pending":true,"reason":"history_draw_sources_preparing"}
         for sample in samples.values():
@@ -623,6 +628,7 @@ static func release_departure(handle:Dictionary)->void:
     for field in ["history_sources","history_active_sources","history_captures","history_prepare_key","history_seeded_key","history_requested_key","history_sources_ready_key","history_allocation_key","history_allocation_step","history_capture_range"]:handle.erase(field)
     for field in ["departure_task","departure_resource_task"]:
         if int(handle.get(field,-1))>=0:WorkerThreadPool.wait_for_task_completion(handle[field])
+    if handle.has("departure_source_resources"):Effects.Admission.cancel_source_cache(handle.departure_source_resources)
     for record in handle.get("departure_draw_sources",{}).values():Effects.close(record)
     if handle.has("departure_appearances"):handle.departure_appearances.clear()
     if handle.has("departure_native_hits"):handle.departure_native_hits.close()
@@ -631,7 +637,7 @@ static func release_departure(handle:Dictionary)->void:
         for packets in handle.departure_output.get("rows",{}).values():
             for packet in packets.values():
                 if is_instance_valid(packet.entry.node):packet.entry.node.free()
-    for field in ["departure_key","departure_capture","departure_metadata","departure_task","departure_paths","departure_output","departure_resource_task","departure_parent","departure_entries","departure_seeded_key","departure_draw_sources","departure_draw_status","departure_appearances","departure_native_hits"]:handle.erase(field)
+    for field in ["departure_key","departure_capture","departure_metadata","departure_task","departure_paths","departure_output","departure_resource_task","departure_parent","departure_entries","departure_seeded_key","departure_draw_sources","departure_draw_status","departure_appearances","departure_native_hits","departure_source_resources"]:handle.erase(field)
 
 static func endpoints(component:Dictionary,points:Dictionary,surface:Dictionary)->Array:
     # Legacy targets forwards to set_live_endpoints (source, recipient).

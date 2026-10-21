@@ -7,22 +7,7 @@
 [ext_resource type="PackedScene" path="res://assets/vfx/extensions/late-20261020/sources/396128509aa2e0623060/freezing-native-source.tscn" id="5_koe4s"]
 [ext_resource type="Script" path="res://assets/vfx/extensions/late-20261020/sources/820df97b3292c59d68f5/bank.gd" id="6_4fv61"]
 
-[sub_resource type="Gradient" id="Gradient_8uaq1"]
-interpolation_color_space = 2
-offsets = PackedFloat32Array(0.00561798, 1)
-colors = PackedColorArray(0.779292, 0.779291, 0.779291, 1, 0, 0, 0, 1)
-
-[sub_resource type="FastNoiseLite" id="FastNoiseLite_ju4cx"]
-frequency = 0.0166
-domain_warp_enabled = true
-domain_warp_frequency = -0.06
-domain_warp_fractal_type = 0
-
-[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_pugai"]
-noise = SubResource("FastNoiseLite_ju4cx")
-color_ramp = SubResource("Gradient_8uaq1")
-seamless = true
-seamless_blend_skirt = 1.0
+[ext_resource type="Texture2D" path="res://assets/vfx/extensions/freezing-noise-offline-20261021/texture-4980b34dfe0d5e8a64ee.tres" id="offline_freezing_noise"]
 
 [sub_resource type="Gradient" id="Gradient_g0g4f"]
 interpolation_color_space = 2
@@ -32,23 +17,6 @@ colors = PackedColorArray(0.0972, 0.17208, 0.27, 1, 0.424525, 0.485861, 0.584245
 [sub_resource type="GradientTexture1D" id="GradientTexture1D_aawi5"]
 gradient = SubResource("Gradient_g0g4f")
 
-[sub_resource type="Gradient" id="Gradient_68klg"]
-interpolation_color_space = 2
-offsets = PackedFloat32Array(0.00561798, 1)
-colors = PackedColorArray(0.779292, 0.779291, 0.779291, 1, 0, 0, 0, 1)
-
-[sub_resource type="FastNoiseLite" id="FastNoiseLite_vusqc"]
-frequency = 0.0166
-domain_warp_enabled = true
-domain_warp_frequency = -0.06
-domain_warp_fractal_type = 0
-
-[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_8y0w6"]
-noise = SubResource("FastNoiseLite_vusqc")
-color_ramp = SubResource("Gradient_68klg")
-seamless = true
-seamless_blend_skirt = 1.0
-
 [sub_resource type="Gradient" id="Gradient_5lhmi"]
 interpolation_color_space = 2
 offsets = PackedFloat32Array(0, 0.640669, 0.724234, 0.785515, 1)
@@ -56,23 +24,6 @@ colors = PackedColorArray(0.0972, 0.17208, 0.27, 1, 0.424525, 0.485861, 0.584245
 
 [sub_resource type="GradientTexture1D" id="GradientTexture1D_0o0tp"]
 gradient = SubResource("Gradient_5lhmi")
-
-[sub_resource type="Gradient" id="Gradient_3vj68"]
-interpolation_color_space = 2
-offsets = PackedFloat32Array(0.00561798, 1)
-colors = PackedColorArray(0.779292, 0.779291, 0.779291, 1, 0, 0, 0, 1)
-
-[sub_resource type="FastNoiseLite" id="FastNoiseLite_7uf6n"]
-frequency = 0.0166
-domain_warp_enabled = true
-domain_warp_frequency = -0.06
-domain_warp_fractal_type = 0
-
-[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_k48g6"]
-noise = SubResource("FastNoiseLite_7uf6n")
-color_ramp = SubResource("Gradient_3vj68")
-seamless = true
-seamless_blend_skirt = 1.0
 
 [sub_resource type="Gradient" id="Gradient_leve2"]
 interpolation_color_space = 2
@@ -82,23 +33,6 @@ colors = PackedColorArray(0.0972, 0.17208, 0.27, 1, 0.424525, 0.485861, 0.584245
 [sub_resource type="GradientTexture1D" id="GradientTexture1D_om2k2"]
 gradient = SubResource("Gradient_leve2")
 
-[sub_resource type="Gradient" id="Gradient_ef281"]
-interpolation_color_space = 2
-offsets = PackedFloat32Array(0.00561798, 1)
-colors = PackedColorArray(0.779292, 0.779291, 0.779291, 1, 0, 0, 0, 1)
-
-[sub_resource type="FastNoiseLite" id="FastNoiseLite_xucp2"]
-frequency = 0.0166
-domain_warp_enabled = true
-domain_warp_frequency = -0.06
-domain_warp_fractal_type = 0
-
-[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_he26a"]
-noise = SubResource("FastNoiseLite_xucp2")
-color_ramp = SubResource("Gradient_ef281")
-seamless = true
-seamless_blend_skirt = 1.0
-
 [sub_resource type="Gradient" id="Gradient_7yw48"]
 interpolation_color_space = 2
 offsets = PackedFloat32Array(0, 0.640669, 0.724234, 0.785515, 1)
@@ -106,23 +40,6 @@ colors = PackedColorArray(0.0972, 0.17208, 0.27, 1, 0.424525, 0.485861, 0.584245
 
 [sub_resource type="GradientTexture1D" id="GradientTexture1D_u6wor"]
 gradient = SubResource("Gradient_7yw48")
-
-[sub_resource type="Gradient" id="Gradient_b24ig"]
-interpolation_color_space = 2
-offsets = PackedFloat32Array(0.00561798, 1)
-colors = PackedColorArray(0.779292, 0.779291, 0.779291, 1, 0, 0, 0, 1)
-
-[sub_resource type="FastNoiseLite" id="FastNoiseLite_h4t6w"]
-frequency = 0.0166
-domain_warp_enabled = true
-domain_warp_frequency = -0.06
-domain_warp_fractal_type = 0
-
-[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_hsuv5"]
-noise = SubResource("FastNoiseLite_h4t6w")
-color_ramp = SubResource("Gradient_b24ig")
-seamless = true
-seamless_blend_skirt = 1.0
 
 [sub_resource type="Gradient" id="Gradient_g03ap"]
 interpolation_color_space = 2
@@ -132,23 +49,6 @@ colors = PackedColorArray(0.0972, 0.17208, 0.27, 1, 0.424525, 0.485861, 0.584245
 [sub_resource type="GradientTexture1D" id="GradientTexture1D_d7uyh"]
 gradient = SubResource("Gradient_g03ap")
 
-[sub_resource type="Gradient" id="Gradient_88fan"]
-interpolation_color_space = 2
-offsets = PackedFloat32Array(0.00561798, 1)
-colors = PackedColorArray(0.779292, 0.779291, 0.779291, 1, 0, 0, 0, 1)
-
-[sub_resource type="FastNoiseLite" id="FastNoiseLite_xuptr"]
-frequency = 0.0166
-domain_warp_enabled = true
-domain_warp_frequency = -0.06
-domain_warp_fractal_type = 0
-
-[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_2is8n"]
-noise = SubResource("FastNoiseLite_xuptr")
-color_ramp = SubResource("Gradient_88fan")
-seamless = true
-seamless_blend_skirt = 1.0
-
 [sub_resource type="Gradient" id="Gradient_ef8cv"]
 interpolation_color_space = 2
 offsets = PackedFloat32Array(0, 0.640669, 0.724234, 0.785515, 1)
@@ -156,23 +56,6 @@ colors = PackedColorArray(0.0972, 0.17208, 0.27, 1, 0.424525, 0.485861, 0.584245
 
 [sub_resource type="GradientTexture1D" id="GradientTexture1D_22goa"]
 gradient = SubResource("Gradient_ef8cv")
-
-[sub_resource type="Gradient" id="Gradient_jobmg"]
-interpolation_color_space = 2
-offsets = PackedFloat32Array(0.00561798, 1)
-colors = PackedColorArray(0.779292, 0.779291, 0.779291, 1, 0, 0, 0, 1)
-
-[sub_resource type="FastNoiseLite" id="FastNoiseLite_n0v4p"]
-frequency = 0.0166
-domain_warp_enabled = true
-domain_warp_frequency = -0.06
-domain_warp_fractal_type = 0
-
-[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_mbcom"]
-noise = SubResource("FastNoiseLite_n0v4p")
-color_ramp = SubResource("Gradient_jobmg")
-seamless = true
-seamless_blend_skirt = 1.0
 
 [sub_resource type="Gradient" id="Gradient_ur251"]
 interpolation_color_space = 2
@@ -182,23 +65,6 @@ colors = PackedColorArray(0.0972, 0.17208, 0.27, 1, 0.424525, 0.485861, 0.584245
 [sub_resource type="GradientTexture1D" id="GradientTexture1D_oxcer"]
 gradient = SubResource("Gradient_ur251")
 
-[sub_resource type="Gradient" id="Gradient_iqhay"]
-interpolation_color_space = 2
-offsets = PackedFloat32Array(0.00561798, 1)
-colors = PackedColorArray(0.779292, 0.779291, 0.779291, 1, 0, 0, 0, 1)
-
-[sub_resource type="FastNoiseLite" id="FastNoiseLite_qgn1a"]
-frequency = 0.0166
-domain_warp_enabled = true
-domain_warp_frequency = -0.06
-domain_warp_fractal_type = 0
-
-[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_ew8is"]
-noise = SubResource("FastNoiseLite_qgn1a")
-color_ramp = SubResource("Gradient_iqhay")
-seamless = true
-seamless_blend_skirt = 1.0
-
 [sub_resource type="Gradient" id="Gradient_fxurk"]
 interpolation_color_space = 2
 offsets = PackedFloat32Array(0, 0.640669, 0.724234, 0.785515, 1)
@@ -206,23 +72,6 @@ colors = PackedColorArray(0.0972, 0.17208, 0.27, 1, 0.424525, 0.485861, 0.584245
 
 [sub_resource type="GradientTexture1D" id="GradientTexture1D_hh0og"]
 gradient = SubResource("Gradient_fxurk")
-
-[sub_resource type="Gradient" id="Gradient_7bvn0"]
-interpolation_color_space = 2
-offsets = PackedFloat32Array(0.00561798, 1)
-colors = PackedColorArray(0.779292, 0.779291, 0.779291, 1, 0, 0, 0, 1)
-
-[sub_resource type="FastNoiseLite" id="FastNoiseLite_pexhm"]
-frequency = 0.0166
-domain_warp_enabled = true
-domain_warp_frequency = -0.06
-domain_warp_fractal_type = 0
-
-[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_s5stx"]
-noise = SubResource("FastNoiseLite_pexhm")
-color_ramp = SubResource("Gradient_7bvn0")
-seamless = true
-seamless_blend_skirt = 1.0
 
 [sub_resource type="Gradient" id="Gradient_sfy7a"]
 interpolation_color_space = 2
@@ -232,23 +81,6 @@ colors = PackedColorArray(0.0972, 0.17208, 0.27, 1, 0.424525, 0.485861, 0.584245
 [sub_resource type="GradientTexture1D" id="GradientTexture1D_c8288"]
 gradient = SubResource("Gradient_sfy7a")
 
-[sub_resource type="Gradient" id="Gradient_qadfj"]
-interpolation_color_space = 2
-offsets = PackedFloat32Array(0.00561798, 1)
-colors = PackedColorArray(0.779292, 0.779291, 0.779291, 1, 0, 0, 0, 1)
-
-[sub_resource type="FastNoiseLite" id="FastNoiseLite_at5c4"]
-frequency = 0.0166
-domain_warp_enabled = true
-domain_warp_frequency = -0.06
-domain_warp_fractal_type = 0
-
-[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_g87ba"]
-noise = SubResource("FastNoiseLite_at5c4")
-color_ramp = SubResource("Gradient_qadfj")
-seamless = true
-seamless_blend_skirt = 1.0
-
 [sub_resource type="Gradient" id="Gradient_qqnp5"]
 interpolation_color_space = 2
 offsets = PackedFloat32Array(0, 0.640669, 0.724234, 0.785515, 1)
@@ -256,23 +88,6 @@ colors = PackedColorArray(0.0972, 0.17208, 0.27, 1, 0.424525, 0.485861, 0.584245
 
 [sub_resource type="GradientTexture1D" id="GradientTexture1D_fx7cb"]
 gradient = SubResource("Gradient_qqnp5")
-
-[sub_resource type="Gradient" id="Gradient_u4spw"]
-interpolation_color_space = 2
-offsets = PackedFloat32Array(0.00561798, 1)
-colors = PackedColorArray(0.779292, 0.779291, 0.779291, 1, 0, 0, 0, 1)
-
-[sub_resource type="FastNoiseLite" id="FastNoiseLite_6fkvs"]
-frequency = 0.0166
-domain_warp_enabled = true
-domain_warp_frequency = -0.06
-domain_warp_fractal_type = 0
-
-[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_kci1e"]
-noise = SubResource("FastNoiseLite_6fkvs")
-color_ramp = SubResource("Gradient_u4spw")
-seamless = true
-seamless_blend_skirt = 1.0
 
 [sub_resource type="Gradient" id="Gradient_srmwh"]
 interpolation_color_space = 2
@@ -282,23 +97,6 @@ colors = PackedColorArray(0.0972, 0.17208, 0.27, 1, 0.424525, 0.485861, 0.584245
 [sub_resource type="GradientTexture1D" id="GradientTexture1D_wcyhg"]
 gradient = SubResource("Gradient_srmwh")
 
-[sub_resource type="Gradient" id="Gradient_aj6a7"]
-interpolation_color_space = 2
-offsets = PackedFloat32Array(0.00561798, 1)
-colors = PackedColorArray(0.779292, 0.779291, 0.779291, 1, 0, 0, 0, 1)
-
-[sub_resource type="FastNoiseLite" id="FastNoiseLite_if2uy"]
-frequency = 0.0166
-domain_warp_enabled = true
-domain_warp_frequency = -0.06
-domain_warp_fractal_type = 0
-
-[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_e6pnq"]
-noise = SubResource("FastNoiseLite_if2uy")
-color_ramp = SubResource("Gradient_aj6a7")
-seamless = true
-seamless_blend_skirt = 1.0
-
 [sub_resource type="Gradient" id="Gradient_txalq"]
 interpolation_color_space = 2
 offsets = PackedFloat32Array(0, 0.640669, 0.724234, 0.785515, 1)
@@ -306,23 +104,6 @@ colors = PackedColorArray(0.0972, 0.17208, 0.27, 1, 0.424525, 0.485861, 0.584245
 
 [sub_resource type="GradientTexture1D" id="GradientTexture1D_0j6uq"]
 gradient = SubResource("Gradient_txalq")
-
-[sub_resource type="Gradient" id="Gradient_rxej3"]
-interpolation_color_space = 2
-offsets = PackedFloat32Array(0.00561798, 1)
-colors = PackedColorArray(0.779292, 0.779291, 0.779291, 1, 0, 0, 0, 1)
-
-[sub_resource type="FastNoiseLite" id="FastNoiseLite_j6hwo"]
-frequency = 0.0166
-domain_warp_enabled = true
-domain_warp_frequency = -0.06
-domain_warp_fractal_type = 0
-
-[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_44ksd"]
-noise = SubResource("FastNoiseLite_j6hwo")
-color_ramp = SubResource("Gradient_rxej3")
-seamless = true
-seamless_blend_skirt = 1.0
 
 [sub_resource type="Gradient" id="Gradient_pmx0a"]
 interpolation_color_space = 2
@@ -332,23 +113,6 @@ colors = PackedColorArray(0.0972, 0.17208, 0.27, 1, 0.424525, 0.485861, 0.584245
 [sub_resource type="GradientTexture1D" id="GradientTexture1D_2knsp"]
 gradient = SubResource("Gradient_pmx0a")
 
-[sub_resource type="Gradient" id="Gradient_fo4xv"]
-interpolation_color_space = 2
-offsets = PackedFloat32Array(0.00561798, 1)
-colors = PackedColorArray(0.779292, 0.779291, 0.779291, 1, 0, 0, 0, 1)
-
-[sub_resource type="FastNoiseLite" id="FastNoiseLite_w35hs"]
-frequency = 0.0166
-domain_warp_enabled = true
-domain_warp_frequency = -0.06
-domain_warp_fractal_type = 0
-
-[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_wvpxa"]
-noise = SubResource("FastNoiseLite_w35hs")
-color_ramp = SubResource("Gradient_fo4xv")
-seamless = true
-seamless_blend_skirt = 1.0
-
 [sub_resource type="Gradient" id="Gradient_ex6k3"]
 interpolation_color_space = 2
 offsets = PackedFloat32Array(0, 0.640669, 0.724234, 0.785515, 1)
@@ -357,23 +121,6 @@ colors = PackedColorArray(0.0972, 0.17208, 0.27, 1, 0.424525, 0.485861, 0.584245
 [sub_resource type="GradientTexture1D" id="GradientTexture1D_v48hr"]
 gradient = SubResource("Gradient_ex6k3")
 
-[sub_resource type="Gradient" id="Gradient_8feq8"]
-interpolation_color_space = 2
-offsets = PackedFloat32Array(0.00561798, 1)
-colors = PackedColorArray(0.779292, 0.779291, 0.779291, 1, 0, 0, 0, 1)
-
-[sub_resource type="FastNoiseLite" id="FastNoiseLite_56fsj"]
-frequency = 0.0166
-domain_warp_enabled = true
-domain_warp_frequency = -0.06
-domain_warp_fractal_type = 0
-
-[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_4yvpf"]
-noise = SubResource("FastNoiseLite_56fsj")
-color_ramp = SubResource("Gradient_8feq8")
-seamless = true
-seamless_blend_skirt = 1.0
-
 [sub_resource type="Gradient" id="Gradient_b16ge"]
 interpolation_color_space = 2
 offsets = PackedFloat32Array(0, 0.640669, 0.724234, 0.785515, 1)
@@ -381,23 +128,6 @@ colors = PackedColorArray(0.0972, 0.17208, 0.27, 1, 0.424525, 0.485861, 0.584245
 
 [sub_resource type="GradientTexture1D" id="GradientTexture1D_q2p42"]
 gradient = SubResource("Gradient_b16ge")
-
-[sub_resource type="Gradient" id="Gradient_wjae3"]
-interpolation_color_space = 2
-offsets = PackedFloat32Array(0.00561798, 1)
-colors = PackedColorArray(0.779292, 0.779291, 0.779291, 1, 0, 0, 0, 1)
-
-[sub_resource type="FastNoiseLite" id="FastNoiseLite_20mfd"]
-frequency = 0.0166
-domain_warp_enabled = true
-domain_warp_frequency = -0.06
-domain_warp_fractal_type = 0
-
-[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_hyweg"]
-noise = SubResource("FastNoiseLite_20mfd")
-color_ramp = SubResource("Gradient_wjae3")
-seamless = true
-seamless_blend_skirt = 1.0
 
 [sub_resource type="Gradient" id="Gradient_g3shu"]
 interpolation_color_space = 2
@@ -425,7 +155,7 @@ shader_parameter/Texture_add2_offset = Vector2(2.485, 1.02)
 shader_parameter/AddTexture2 = ExtResource("3_ql232")
 shader_parameter/Details_scale = Vector2(1, 1)
 shader_parameter/Details_speed = Vector2(0, 0.05)
-shader_parameter/DetailsTexture = SubResource("NoiseTexture2D_pugai")
+shader_parameter/DetailsTexture = ExtResource("offline_freezing_noise")
 shader_parameter/Color1DGradient = SubResource("GradientTexture1D_aawi5")
 shader_parameter/ColorIntensity = 2.8
 metadata/factory_clock_names = ["payload_seconds"]
@@ -452,7 +182,7 @@ shader_parameter/Texture_add2_offset = Vector2(2.485, 1.02)
 shader_parameter/AddTexture2 = ExtResource("3_ql232")
 shader_parameter/Details_scale = Vector2(1, 1)
 shader_parameter/Details_speed = Vector2(0, 0.05)
-shader_parameter/DetailsTexture = SubResource("NoiseTexture2D_8y0w6")
+shader_parameter/DetailsTexture = ExtResource("offline_freezing_noise")
 shader_parameter/Color1DGradient = SubResource("GradientTexture1D_0o0tp")
 shader_parameter/ColorIntensity = 2.8
 metadata/factory_clock_names = ["payload_seconds"]
@@ -479,7 +209,7 @@ shader_parameter/Texture_add2_offset = Vector2(2.485, 1.02)
 shader_parameter/AddTexture2 = ExtResource("3_ql232")
 shader_parameter/Details_scale = Vector2(1, 1)
 shader_parameter/Details_speed = Vector2(0, 0.05)
-shader_parameter/DetailsTexture = SubResource("NoiseTexture2D_k48g6")
+shader_parameter/DetailsTexture = ExtResource("offline_freezing_noise")
 shader_parameter/Color1DGradient = SubResource("GradientTexture1D_om2k2")
 shader_parameter/ColorIntensity = 2.8
 metadata/factory_clock_names = ["payload_seconds"]
@@ -506,7 +236,7 @@ shader_parameter/Texture_add2_offset = Vector2(2.485, 1.02)
 shader_parameter/AddTexture2 = ExtResource("3_ql232")
 shader_parameter/Details_scale = Vector2(1, 1)
 shader_parameter/Details_speed = Vector2(0, 0.05)
-shader_parameter/DetailsTexture = SubResource("NoiseTexture2D_he26a")
+shader_parameter/DetailsTexture = ExtResource("offline_freezing_noise")
 shader_parameter/Color1DGradient = SubResource("GradientTexture1D_u6wor")
 shader_parameter/ColorIntensity = 2.8
 metadata/factory_clock_names = ["payload_seconds"]
@@ -533,7 +263,7 @@ shader_parameter/Texture_add2_offset = Vector2(2.485, 1.02)
 shader_parameter/AddTexture2 = ExtResource("3_ql232")
 shader_parameter/Details_scale = Vector2(1, 1)
 shader_parameter/Details_speed = Vector2(0, 0.05)
-shader_parameter/DetailsTexture = SubResource("NoiseTexture2D_hsuv5")
+shader_parameter/DetailsTexture = ExtResource("offline_freezing_noise")
 shader_parameter/Color1DGradient = SubResource("GradientTexture1D_d7uyh")
 shader_parameter/ColorIntensity = 2.8
 metadata/factory_clock_names = ["payload_seconds"]
@@ -560,7 +290,7 @@ shader_parameter/Texture_add2_offset = Vector2(2.485, 1.02)
 shader_parameter/AddTexture2 = ExtResource("3_ql232")
 shader_parameter/Details_scale = Vector2(1, 1)
 shader_parameter/Details_speed = Vector2(0, 0.05)
-shader_parameter/DetailsTexture = SubResource("NoiseTexture2D_2is8n")
+shader_parameter/DetailsTexture = ExtResource("offline_freezing_noise")
 shader_parameter/Color1DGradient = SubResource("GradientTexture1D_22goa")
 shader_parameter/ColorIntensity = 2.8
 metadata/factory_clock_names = ["payload_seconds"]
@@ -587,7 +317,7 @@ shader_parameter/Texture_add2_offset = Vector2(2.485, 1.02)
 shader_parameter/AddTexture2 = ExtResource("3_ql232")
 shader_parameter/Details_scale = Vector2(1, 1)
 shader_parameter/Details_speed = Vector2(0, 0.05)
-shader_parameter/DetailsTexture = SubResource("NoiseTexture2D_mbcom")
+shader_parameter/DetailsTexture = ExtResource("offline_freezing_noise")
 shader_parameter/Color1DGradient = SubResource("GradientTexture1D_oxcer")
 shader_parameter/ColorIntensity = 2.8
 metadata/factory_clock_names = ["payload_seconds"]
@@ -614,7 +344,7 @@ shader_parameter/Texture_add2_offset = Vector2(2.485, 1.02)
 shader_parameter/AddTexture2 = ExtResource("3_ql232")
 shader_parameter/Details_scale = Vector2(1, 1)
 shader_parameter/Details_speed = Vector2(0, 0.05)
-shader_parameter/DetailsTexture = SubResource("NoiseTexture2D_ew8is")
+shader_parameter/DetailsTexture = ExtResource("offline_freezing_noise")
 shader_parameter/Color1DGradient = SubResource("GradientTexture1D_hh0og")
 shader_parameter/ColorIntensity = 2.8
 metadata/factory_clock_names = ["payload_seconds"]
@@ -641,7 +371,7 @@ shader_parameter/Texture_add2_offset = Vector2(2.485, 1.02)
 shader_parameter/AddTexture2 = ExtResource("3_ql232")
 shader_parameter/Details_scale = Vector2(1, 1)
 shader_parameter/Details_speed = Vector2(0, 0.05)
-shader_parameter/DetailsTexture = SubResource("NoiseTexture2D_s5stx")
+shader_parameter/DetailsTexture = ExtResource("offline_freezing_noise")
 shader_parameter/Color1DGradient = SubResource("GradientTexture1D_c8288")
 shader_parameter/ColorIntensity = 2.8
 metadata/factory_clock_names = ["payload_seconds"]
@@ -668,7 +398,7 @@ shader_parameter/Texture_add2_offset = Vector2(2.485, 1.02)
 shader_parameter/AddTexture2 = ExtResource("3_ql232")
 shader_parameter/Details_scale = Vector2(1, 1)
 shader_parameter/Details_speed = Vector2(0, 0.05)
-shader_parameter/DetailsTexture = SubResource("NoiseTexture2D_g87ba")
+shader_parameter/DetailsTexture = ExtResource("offline_freezing_noise")
 shader_parameter/Color1DGradient = SubResource("GradientTexture1D_fx7cb")
 shader_parameter/ColorIntensity = 2.8
 metadata/factory_clock_names = ["payload_seconds"]
@@ -695,7 +425,7 @@ shader_parameter/Texture_add2_offset = Vector2(2.485, 1.02)
 shader_parameter/AddTexture2 = ExtResource("3_ql232")
 shader_parameter/Details_scale = Vector2(1, 1)
 shader_parameter/Details_speed = Vector2(0, 0.05)
-shader_parameter/DetailsTexture = SubResource("NoiseTexture2D_kci1e")
+shader_parameter/DetailsTexture = ExtResource("offline_freezing_noise")
 shader_parameter/Color1DGradient = SubResource("GradientTexture1D_wcyhg")
 shader_parameter/ColorIntensity = 2.8
 metadata/factory_clock_names = ["payload_seconds"]
@@ -722,7 +452,7 @@ shader_parameter/Texture_add2_offset = Vector2(2.485, 1.02)
 shader_parameter/AddTexture2 = ExtResource("3_ql232")
 shader_parameter/Details_scale = Vector2(1, 1)
 shader_parameter/Details_speed = Vector2(0, 0.05)
-shader_parameter/DetailsTexture = SubResource("NoiseTexture2D_e6pnq")
+shader_parameter/DetailsTexture = ExtResource("offline_freezing_noise")
 shader_parameter/Color1DGradient = SubResource("GradientTexture1D_0j6uq")
 shader_parameter/ColorIntensity = 2.8
 metadata/factory_clock_names = ["payload_seconds"]
@@ -749,7 +479,7 @@ shader_parameter/Texture_add2_offset = Vector2(2.485, 1.02)
 shader_parameter/AddTexture2 = ExtResource("3_ql232")
 shader_parameter/Details_scale = Vector2(1, 1)
 shader_parameter/Details_speed = Vector2(0, 0.05)
-shader_parameter/DetailsTexture = SubResource("NoiseTexture2D_44ksd")
+shader_parameter/DetailsTexture = ExtResource("offline_freezing_noise")
 shader_parameter/Color1DGradient = SubResource("GradientTexture1D_2knsp")
 shader_parameter/ColorIntensity = 2.8
 metadata/factory_clock_names = ["payload_seconds"]
@@ -776,7 +506,7 @@ shader_parameter/Texture_add2_offset = Vector2(2.485, 1.02)
 shader_parameter/AddTexture2 = ExtResource("3_ql232")
 shader_parameter/Details_scale = Vector2(1, 1)
 shader_parameter/Details_speed = Vector2(0, 0.05)
-shader_parameter/DetailsTexture = SubResource("NoiseTexture2D_wvpxa")
+shader_parameter/DetailsTexture = ExtResource("offline_freezing_noise")
 shader_parameter/Color1DGradient = SubResource("GradientTexture1D_v48hr")
 shader_parameter/ColorIntensity = 2.8
 metadata/factory_clock_names = ["payload_seconds"]
@@ -803,7 +533,7 @@ shader_parameter/Texture_add2_offset = Vector2(2.485, 1.02)
 shader_parameter/AddTexture2 = ExtResource("3_ql232")
 shader_parameter/Details_scale = Vector2(1, 1)
 shader_parameter/Details_speed = Vector2(0, 0.05)
-shader_parameter/DetailsTexture = SubResource("NoiseTexture2D_4yvpf")
+shader_parameter/DetailsTexture = ExtResource("offline_freezing_noise")
 shader_parameter/Color1DGradient = SubResource("GradientTexture1D_q2p42")
 shader_parameter/ColorIntensity = 2.8
 metadata/factory_clock_names = ["payload_seconds"]
@@ -830,7 +560,7 @@ shader_parameter/Texture_add2_offset = Vector2(2.485, 1.02)
 shader_parameter/AddTexture2 = ExtResource("3_ql232")
 shader_parameter/Details_scale = Vector2(1, 1)
 shader_parameter/Details_speed = Vector2(0, 0.05)
-shader_parameter/DetailsTexture = SubResource("NoiseTexture2D_hyweg")
+shader_parameter/DetailsTexture = ExtResource("offline_freezing_noise")
 shader_parameter/Color1DGradient = SubResource("GradientTexture1D_bao7s")
 shader_parameter/ColorIntensity = 2.8
 metadata/factory_clock_names = ["payload_seconds"]
@@ -860,7 +590,7 @@ material_settings = Array[Dictionary]([{
 "BreakFactorGlobal": 0.0,
 "Color1DGradient": SubResource("GradientTexture1D_aawi5"),
 "ColorIntensity": 2.8,
-"DetailsTexture": SubResource("NoiseTexture2D_pugai"),
+"DetailsTexture": ExtResource("offline_freezing_noise"),
 "Details_scale": Vector2(1, 1),
 "Details_speed": Vector2(0, 0.05),
 "Texture_add2_offset": Vector2(2.485, 1.02),
@@ -888,7 +618,7 @@ material_settings = Array[Dictionary]([{
 "BreakFactorGlobal": 0.0,
 "Color1DGradient": SubResource("GradientTexture1D_0o0tp"),
 "ColorIntensity": 2.8,
-"DetailsTexture": SubResource("NoiseTexture2D_8y0w6"),
+"DetailsTexture": ExtResource("offline_freezing_noise"),
 "Details_scale": Vector2(1, 1),
 "Details_speed": Vector2(0, 0.05),
 "Texture_add2_offset": Vector2(2.485, 1.02),
@@ -916,7 +646,7 @@ material_settings = Array[Dictionary]([{
 "BreakFactorGlobal": 0.0,
 "Color1DGradient": SubResource("GradientTexture1D_om2k2"),
 "ColorIntensity": 2.8,
-"DetailsTexture": SubResource("NoiseTexture2D_k48g6"),
+"DetailsTexture": ExtResource("offline_freezing_noise"),
 "Details_scale": Vector2(1, 1),
 "Details_speed": Vector2(0, 0.05),
 "Texture_add2_offset": Vector2(2.485, 1.02),
@@ -944,7 +674,7 @@ material_settings = Array[Dictionary]([{
 "BreakFactorGlobal": 0.0,
 "Color1DGradient": SubResource("GradientTexture1D_u6wor"),
 "ColorIntensity": 2.8,
-"DetailsTexture": SubResource("NoiseTexture2D_he26a"),
+"DetailsTexture": ExtResource("offline_freezing_noise"),
 "Details_scale": Vector2(1, 1),
 "Details_speed": Vector2(0, 0.05),
 "Texture_add2_offset": Vector2(2.485, 1.02),
@@ -972,7 +702,7 @@ material_settings = Array[Dictionary]([{
 "BreakFactorGlobal": 0.0,
 "Color1DGradient": SubResource("GradientTexture1D_d7uyh"),
 "ColorIntensity": 2.8,
-"DetailsTexture": SubResource("NoiseTexture2D_hsuv5"),
+"DetailsTexture": ExtResource("offline_freezing_noise"),
 "Details_scale": Vector2(1, 1),
 "Details_speed": Vector2(0, 0.05),
 "Texture_add2_offset": Vector2(2.485, 1.02),
@@ -1000,7 +730,7 @@ material_settings = Array[Dictionary]([{
 "BreakFactorGlobal": 0.0,
 "Color1DGradient": SubResource("GradientTexture1D_22goa"),
 "ColorIntensity": 2.8,
-"DetailsTexture": SubResource("NoiseTexture2D_2is8n"),
+"DetailsTexture": ExtResource("offline_freezing_noise"),
 "Details_scale": Vector2(1, 1),
 "Details_speed": Vector2(0, 0.05),
 "Texture_add2_offset": Vector2(2.485, 1.02),
@@ -1028,7 +758,7 @@ material_settings = Array[Dictionary]([{
 "BreakFactorGlobal": 0.0,
 "Color1DGradient": SubResource("GradientTexture1D_oxcer"),
 "ColorIntensity": 2.8,
-"DetailsTexture": SubResource("NoiseTexture2D_mbcom"),
+"DetailsTexture": ExtResource("offline_freezing_noise"),
 "Details_scale": Vector2(1, 1),
 "Details_speed": Vector2(0, 0.05),
 "Texture_add2_offset": Vector2(2.485, 1.02),
@@ -1056,7 +786,7 @@ material_settings = Array[Dictionary]([{
 "BreakFactorGlobal": 0.0,
 "Color1DGradient": SubResource("GradientTexture1D_hh0og"),
 "ColorIntensity": 2.8,
-"DetailsTexture": SubResource("NoiseTexture2D_ew8is"),
+"DetailsTexture": ExtResource("offline_freezing_noise"),
 "Details_scale": Vector2(1, 1),
 "Details_speed": Vector2(0, 0.05),
 "Texture_add2_offset": Vector2(2.485, 1.02),
@@ -1084,7 +814,7 @@ material_settings = Array[Dictionary]([{
 "BreakFactorGlobal": 0.0,
 "Color1DGradient": SubResource("GradientTexture1D_c8288"),
 "ColorIntensity": 2.8,
-"DetailsTexture": SubResource("NoiseTexture2D_s5stx"),
+"DetailsTexture": ExtResource("offline_freezing_noise"),
 "Details_scale": Vector2(1, 1),
 "Details_speed": Vector2(0, 0.05),
 "Texture_add2_offset": Vector2(2.485, 1.02),
@@ -1112,7 +842,7 @@ material_settings = Array[Dictionary]([{
 "BreakFactorGlobal": 0.0,
 "Color1DGradient": SubResource("GradientTexture1D_fx7cb"),
 "ColorIntensity": 2.8,
-"DetailsTexture": SubResource("NoiseTexture2D_g87ba"),
+"DetailsTexture": ExtResource("offline_freezing_noise"),
 "Details_scale": Vector2(1, 1),
 "Details_speed": Vector2(0, 0.05),
 "Texture_add2_offset": Vector2(2.485, 1.02),
@@ -1140,7 +870,7 @@ material_settings = Array[Dictionary]([{
 "BreakFactorGlobal": 0.0,
 "Color1DGradient": SubResource("GradientTexture1D_wcyhg"),
 "ColorIntensity": 2.8,
-"DetailsTexture": SubResource("NoiseTexture2D_kci1e"),
+"DetailsTexture": ExtResource("offline_freezing_noise"),
 "Details_scale": Vector2(1, 1),
 "Details_speed": Vector2(0, 0.05),
 "Texture_add2_offset": Vector2(2.485, 1.02),
@@ -1168,7 +898,7 @@ material_settings = Array[Dictionary]([{
 "BreakFactorGlobal": 0.0,
 "Color1DGradient": SubResource("GradientTexture1D_0j6uq"),
 "ColorIntensity": 2.8,
-"DetailsTexture": SubResource("NoiseTexture2D_e6pnq"),
+"DetailsTexture": ExtResource("offline_freezing_noise"),
 "Details_scale": Vector2(1, 1),
 "Details_speed": Vector2(0, 0.05),
 "Texture_add2_offset": Vector2(2.485, 1.02),
@@ -1196,7 +926,7 @@ material_settings = Array[Dictionary]([{
 "BreakFactorGlobal": 0.0,
 "Color1DGradient": SubResource("GradientTexture1D_2knsp"),
 "ColorIntensity": 2.8,
-"DetailsTexture": SubResource("NoiseTexture2D_44ksd"),
+"DetailsTexture": ExtResource("offline_freezing_noise"),
 "Details_scale": Vector2(1, 1),
 "Details_speed": Vector2(0, 0.05),
 "Texture_add2_offset": Vector2(2.485, 1.02),
@@ -1224,7 +954,7 @@ material_settings = Array[Dictionary]([{
 "BreakFactorGlobal": 0.0,
 "Color1DGradient": SubResource("GradientTexture1D_v48hr"),
 "ColorIntensity": 2.8,
-"DetailsTexture": SubResource("NoiseTexture2D_wvpxa"),
+"DetailsTexture": ExtResource("offline_freezing_noise"),
 "Details_scale": Vector2(1, 1),
 "Details_speed": Vector2(0, 0.05),
 "Texture_add2_offset": Vector2(2.485, 1.02),
@@ -1252,7 +982,7 @@ material_settings = Array[Dictionary]([{
 "BreakFactorGlobal": 0.0,
 "Color1DGradient": SubResource("GradientTexture1D_q2p42"),
 "ColorIntensity": 2.8,
-"DetailsTexture": SubResource("NoiseTexture2D_4yvpf"),
+"DetailsTexture": ExtResource("offline_freezing_noise"),
 "Details_scale": Vector2(1, 1),
 "Details_speed": Vector2(0, 0.05),
 "Texture_add2_offset": Vector2(2.485, 1.02),
@@ -1280,7 +1010,7 @@ material_settings = Array[Dictionary]([{
 "BreakFactorGlobal": 0.0,
 "Color1DGradient": SubResource("GradientTexture1D_bao7s"),
 "ColorIntensity": 2.8,
-"DetailsTexture": SubResource("NoiseTexture2D_hyweg"),
+"DetailsTexture": ExtResource("offline_freezing_noise"),
 "Details_scale": Vector2(1, 1),
 "Details_speed": Vector2(0, 0.05),
 "Texture_add2_offset": Vector2(2.485, 1.02),

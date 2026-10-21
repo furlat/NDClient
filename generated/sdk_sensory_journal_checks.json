@@ -1,5 +1,50 @@
 {
-  "checks": 31,
+  "checks": 513,
+  "evidence": [
+    {
+      "case": "door/amber",
+      "control_sequence": 4,
+      "durable_refusal": true,
+      "later_original_available": true,
+      "records": 14,
+      "replay_rollback": true,
+      "semantic_refusal": true
+    },
+    {
+      "case": "door/blue",
+      "control_sequence": 10,
+      "durable_refusal": true,
+      "later_original_available": true,
+      "records": 12,
+      "replay_rollback": true,
+      "semantic_refusal": true
+    },
+    {
+      "case": "oa-jump-late-lethal/amber",
+      "control_sequence": 2,
+      "durable_refusal": true,
+      "later_original_available": false,
+      "records": 3,
+      "replay_rollback": true,
+      "semantic_refusal": true
+    },
+    {
+      "case": "oa-jump-late-lethal/blue",
+      "control_sequence": 2,
+      "durable_refusal": true,
+      "later_original_available": false,
+      "records": 3,
+      "replay_rollback": true,
+      "semantic_refusal": true
+    }
+  ],
   "failures": [],
-  "scope": "Real sensory operations, late semantic failure, durable rename failure, retry, frozen captures and strict replay rollback"
+  "producer_reference": {
+    "commit": "211b71134ed15c89e62232587381f7e15a5961c3",
+    "path": "/home/tommaso/.cache/ndclient/dnd_engine-211b71134",
+    "player_schema_version": 16.0,
+    "protocol_version": 1.0,
+    "schema_digest": "49d14bc20920f5698eb4f09e3aeece442380242cd1453893d45f94ea9fb0c8a5"
+  },
+  "scope": "Actual native16 Door/lethal-OA prefixes and independent frozen Python cuts. Late malformed-HUD and durable-write controls preserve exact canonical mask/source ownership; actual retry, frozen event captures, duplicate, replay rollback and initialization seek. No old cell-context cache, synthetic positive operation, compatibility replay or rendering claim."
 }

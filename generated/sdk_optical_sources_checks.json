@@ -1,17 +1,93 @@
 {
-  "checks": 425,
+  "checks": 514,
+  "complete_legacy_control_inventory": false,
   "failures": [],
+  "producer_reference": {
+    "commit": "211b71134ed15c89e62232587381f7e15a5961c3",
+    "path": "/home/tommaso/.cache/ndclient/dnd_engine-211b71134",
+    "player_schema_version": 16.0,
+    "protocol_version": 1.0,
+    "schema_digest": "49d14bc20920f5698eb4f09e3aeece442380242cd1453893d45f94ea9fb0c8a5"
+  },
   "recordings": [
     {
-      "audience": "amber",
-      "cursor": 14,
-      "sequences": 15
+      "actual_source_patches": 8,
+      "actual_source_removals": 0,
+      "case": "door/amber",
+      "observer_count": 2,
+      "records": 14,
+      "source_counts": [
+        4,
+        4,
+        4,
+        4,
+        4,
+        5,
+        5,
+        5,
+        5,
+        5,
+        5,
+        5,
+        8,
+        8
+      ]
     },
     {
-      "audience": "blue",
-      "cursor": 14,
-      "sequences": 15
+      "actual_source_patches": 2,
+      "actual_source_removals": 0,
+      "case": "door/blue",
+      "observer_count": 2,
+      "records": 12,
+      "source_counts": [
+        3,
+        3,
+        3,
+        3,
+        3,
+        3,
+        3,
+        3,
+        3,
+        3,
+        8,
+        8
+      ]
+    },
+    {
+      "actual_source_patches": 0,
+      "actual_source_removals": 1,
+      "case": "oa-jump-late-lethal/amber",
+      "observer_count": 1,
+      "records": 3,
+      "source_counts": [
+        1,
+        1,
+        0
+      ]
+    },
+    {
+      "actual_source_patches": 0,
+      "actual_source_removals": 0,
+      "case": "oa-jump-late-lethal/blue",
+      "observer_count": 1,
+      "records": 3,
+      "source_counts": [
+        1,
+        1,
+        1
+      ]
     }
   ],
-  "scope": "Schema9 optical observations, observer revision/tombstone composition, public ownership and explicit schema8 offline compatibility; no renderer or gameplay rule change"
+  "scope": "Current native16 canonical optical/contact/cell ownership, exact frozen Python states, native reference vectors, detach/retention and retired schema refusal. Precomposed originals do not qualify the unavailable old multi-observer producer inputs. No renderer, gameplay-light inference or compatibility path.",
+  "unexercised_producer_controls": [
+    "Equal source revisions union only authorized observer footprints",
+    "Equal source revisions coalesce only actually disclosed optional anchors",
+    "Equal observer tombstone is view loss while another observer retains source",
+    "Newer source tombstone suppresses an older other-observer source",
+    "Newer source shape replaces obsolete observer footprints",
+    "Authoritative empty observer reset clears both source and tombstone history",
+    "One native delta removes and re-adds the same light source in producer order",
+    "Empty and omitted per-source footprints with multi-observer optional anchors"
+  ]
 }

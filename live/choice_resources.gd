@@ -23,6 +23,7 @@ func request(choices:Dictionary,cache:Dictionary)->void:
     if _choice_job.is_empty() or int(_choice_job.get("task",-1))<0:_start(cache)
 
 func _start(cache:Dictionary)->void:
+    NativeSpells.Effects.retain_source_preparation(_choice_resource_cache,[])
     # Only immutable authoring/metadata crosses this worker boundary. It never
     # receives actor coordinates, constructs nodes, or simulates an outcome.
     _choice_job={"ids":_choice_ids.duplicate(),"cache":Catalog.source_snapshot(cache),"clips":[],"cursor":0,"task":-1}
@@ -56,5 +57,7 @@ func prepare(cache:Dictionary,budget:Dictionary)->void:
     choice_preparation.ready=choice_preparation.pending==0 and choice_preparation.errors.is_empty()
 
 func _notification(what:int)->void:
-    if what==NOTIFICATION_PREDELETE and not _choice_job.is_empty() and _choice_job.get("task",-1)>=0:
+    if what!=NOTIFICATION_PREDELETE:return
+    NativeSpells.Effects.Admission.cancel_source_cache(_choice_resource_cache)
+    if not _choice_job.is_empty() and _choice_job.get("task",-1)>=0:
         WorkerThreadPool.wait_for_task_completion(_choice_job.task)

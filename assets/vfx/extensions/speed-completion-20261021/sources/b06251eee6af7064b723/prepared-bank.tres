@@ -1,0 +1,144 @@
+[gd_resource type="Resource" format=3]
+
+[ext_resource type="Script" path="res://assets/vfx/extensions/speed-completion-20261021/sources/236d0fded5571e3856a6/wind.gd" id="1_4hkyu"]
+[ext_resource type="Resource" path="res://assets/vfx/extensions/speed-completion-20261021/sources/943de46d2f616508fce4/bank.tres" id="2_rbe8m"]
+[ext_resource type="Script" path="res://assets/vfx/extensions/speed-completion-20261021/sources/de84eb1f92f545a203b4/bank.gd" id="3_014uu"]
+
+[sub_resource type="Shader" id="Shader_qctl3"]
+code = "// NOTE: Shader automatically converted from Godot Engine 4.7.2.stable's StandardMaterial3D.
+
+shader_type spatial;
+render_mode blend_mix, depth_draw_opaque, cull_disabled, diffuse_burley, specular_schlick_ggx, unshaded;
+
+uniform vec4 albedo : source_color;
+uniform sampler2D texture_albedo : source_color, filter_linear_mipmap, repeat_enable;
+uniform ivec2 albedo_texture_size;
+uniform float point_size : hint_range(0.1, 128.0, 0.1);
+
+uniform float roughness : hint_range(0.0, 1.0);
+uniform sampler2D texture_metallic : hint_default_white, filter_linear_mipmap, repeat_enable;
+uniform vec4 metallic_texture_channel;
+uniform sampler2D texture_roughness : hint_roughness_r, filter_linear_mipmap, repeat_enable;
+
+uniform float specular : hint_range(0.0, 1.0, 0.01);
+uniform float metallic : hint_range(0.0, 1.0, 0.01);
+
+uniform vec3 uv1_scale;
+uniform vec3 uv1_offset;
+uniform vec3 uv2_scale;
+uniform vec3 uv2_offset;
+
+void vertex() {
+	UV = UV * uv1_scale.xy + uv1_offset.xy;
+}
+
+void fragment() {
+	vec2 base_uv = UV;
+
+	vec4 albedo_tex = texture(texture_albedo, base_uv);
+	ALBEDO = albedo.rgb * albedo_tex.rgb;
+
+	float metallic_tex = dot(texture(texture_metallic, base_uv), metallic_texture_channel);
+	METALLIC = metallic_tex * metallic;
+	SPECULAR = specular;
+
+	vec4 roughness_texture_channel = vec4(1.0, 0.0, 0.0, 0.0);
+	float roughness_tex = dot(texture(texture_roughness, base_uv), roughness_texture_channel);
+	ROUGHNESS = roughness_tex * roughness;
+	ALPHA *= albedo.a * albedo_tex.a;
+}
+
+"
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_n8ap1"]
+render_priority = 0
+shader = SubResource("Shader_qctl3")
+shader_parameter/albedo = Color(0.66, 0.68, 0.61, 0.7)
+shader_parameter/albedo_texture_size = Vector2i(0, 0)
+shader_parameter/point_size = 1.0
+shader_parameter/roughness = 1.0
+shader_parameter/metallic_texture_channel = Vector4(1, 0, 0, 0)
+shader_parameter/specular = 0.5
+shader_parameter/metallic = 0.0
+shader_parameter/uv1_scale = Vector3(1, 1, 1)
+shader_parameter/uv1_offset = Vector3(0, 0, 0)
+shader_parameter/uv2_scale = Vector3(1, 1, 1)
+shader_parameter/uv2_offset = Vector3(0, 0, 0)
+metadata/factory_prepared_shader = SubResource("Shader_qctl3")
+metadata/factory_world_space_uniform = false
+metadata/factory_clock_names = []
+metadata/factory_clock_pool_required = false
+
+[resource]
+script = ExtResource("3_014uu")
+original_bank = ExtResource("2_rbe8m")
+debris_material = SubResource("ShaderMaterial_n8ap1")
+native_program_sha256 = "fc1f9793405fbb9adaaf3a7d8413288991c823b0f4aa521e94797a1bee2c6409"
+native_uniforms = PackedStringArray("albedo", "texture_albedo", "albedo_texture_size", "point_size", "roughness", "texture_metallic", "metallic_texture_channel", "texture_roughness", "specular", "metallic", "uv1_scale", "uv1_offset", "uv2_scale", "uv2_offset")
+adapter_script = ExtResource("1_4hkyu")
+pool_required = true
+provenance = {
+"generated_spatial_program_sha256": "7f53262480e7570898c20fa655683ac8c431846c3a99161d196b1e28cdc935d8",
+"native_operands": Array[Dictionary]([{
+"name": "albedo",
+"type": 20,
+"value": "Color(0.66, 0.68, 0.61, 0.7)"
+}, {
+"name": "texture_albedo",
+"type": 0,
+"value": "null"
+}, {
+"name": "albedo_texture_size",
+"type": 0,
+"value": "null"
+}, {
+"name": "point_size",
+"type": 3,
+"value": "1.0"
+}, {
+"name": "roughness",
+"type": 3,
+"value": "1.0"
+}, {
+"name": "texture_metallic",
+"type": 0,
+"value": "null"
+}, {
+"name": "metallic_texture_channel",
+"type": 12,
+"value": "Vector4(1, 0, 0, 0)"
+}, {
+"name": "texture_roughness",
+"type": 0,
+"value": "null"
+}, {
+"name": "specular",
+"type": 3,
+"value": "0.5"
+}, {
+"name": "metallic",
+"type": 3,
+"value": "0.0"
+}, {
+"name": "uv1_scale",
+"type": 9,
+"value": "Vector3(1, 1, 1)"
+}, {
+"name": "uv1_offset",
+"type": 9,
+"value": "Vector3(0, 0, 0)"
+}, {
+"name": "uv2_scale",
+"type": 9,
+"value": "Vector3(1, 1, 1)"
+}, {
+"name": "uv2_offset",
+"type": 9,
+"value": "Vector3(0, 0, 0)"
+}]),
+"native_standard_writer_retained": true,
+"owner_or_layout_captured": false,
+"source_bank": "res://assets/vfx/extensions/speed-completion-20261021/sources/943de46d2f616508fce4/bank.tres",
+"source_bank_sha256": "2a05c3fc9735a73bd7253bfe569d96bf1dcef2d01b3a5b839755cb73464824a9",
+"source_ticks": 0
+}

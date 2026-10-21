@@ -1,7 +1,8 @@
 extends SceneTree
-## Fresh-process disk thumbnails at the real Recording -> TimelineView boundary.
-## This measures thumbnail availability, not full Studio Library navigation.
-const Fixtures=preload("res://tests/recording_fixtures.gd")
+## Actual composed previews and eligible source-only disk Resources at the
+## Recording -> TimelineView boundary, separate from full Library navigation.
+const Library=preload("res://studio/case_library.gd")
+const Play=preload("res://play.gd")
 const Effects=preload("res://presentation/effect_package.gd")
 const Recording=preload("res://studio/recording.gd")
 const TimelineView=preload("res://studio/timeline_view.gd")
@@ -13,8 +14,11 @@ const REPORT="res://.runtime/studio-native-preview-resource-checks.json"
 var checks:int=0
 var failures:Array=[]
 var measurements:Array=[]
+var observed_sources:Array=[]
 var tracks:Control
 var finished:bool=false
+var reference:Node3D
+var reference_view:SubViewport
 
 func _initialize()->void:
     root.unfocusable=true;root.position=Vector2i(-16000,-16000);root.size=Vector2i(1280,800)
@@ -24,88 +28,108 @@ func check(value:bool,label:String)->void:
     checks+=1
     if not value:failures.append(label);print("NATIVE_PREVIEW_RESOURCE_FAIL ",label)
 
-func no_native_work(label:String)->void:
+func bounded_sources(label:String)->void:
     var cache:RefCounted=tracks.thumbnails
-    check(cache.pending.is_empty() and cache.native_composites.is_empty() and cache.active.is_empty(),label+": baked demand starts no native simulation job")
-    check(cache.errors.is_empty() and cache.native_store.issues.is_empty(),label+": disk resources have no loading/format errors")
-    check(cache.texture_bytes<=cache.texture_limit and cache.native_store.retained_bytes<=Store.MEMORY_LIMIT,label+": resident preview caches remain within their budgets")
+    check(cache.errors.is_empty() and cache.native_store.issues.is_empty(),label+": source and Resource preparation have no errors")
+    check(cache.texture_bytes<=cache.texture_limit and cache.native_store.retained_bytes<=Store.MEMORY_LIMIT,
+        label+": resident preview caches retain their existing byte budgets")
+    check(cache.native_composites.size()<=Thumbnails.NATIVE_BATCH_LIMIT,label+": source-only preparation keeps its existing bounded batch")
+    if not cache.composed_pane.is_empty():
+        check(cache.composed_pane.viewport.own_world_3d and cache.composed_pane.world.get_world_3d()!=reference.get_world_3d(),
+            label+": the single reused composed pane owns its private production world")
+        check(cache.composed_pane.world.timeline.paused and not cache.composed_pane.world.component_renderer.audio.enabled,
+            label+": composed context uses the recorded sample clock and muted audio")
 
-func measure(label:String,require_disk:bool=true)->Dictionary:
-    var before_hits:int=tracks.thumbnails.native_store.hits
-    var before_misses:int=tracks.thumbnails.native_store.misses
-    var before_loads:int=tracks.thumbnails.native_store.disk_loads
-    var before_descriptor:int=tracks.thumbnails.native_store.descriptor_usec
-    var before_resource:int=tracks.thumbnails.native_store.resource_load_usec
+func bind_recording(index:Dictionary)->void:
+    tracks.thumbnails.recording=index;tracks.thumbnails.reference_world=reference
+    tracks.thumbnails.set_displayed_world(reference)
+
+func measure(label:String)->Dictionary:
+    var cache:RefCounted=tracks.thumbnails
+    var before_hits:int=cache.native_store.hits;var before_misses:int=cache.native_store.misses
+    var before_loads:int=cache.native_store.disk_loads
     var begin:int=Time.get_ticks_usec()
     var state:Dictionary=tracks.prepare_visible(true)
-    var cpu_ms:float=float(Time.get_ticks_usec()-begin)/1000.0
-    check(state.ready and state.pending==0 and state.errors.is_empty(),label+": all visible four-view samples load immediately from Resources")
-    no_native_work(label)
+    var request_cpu_ms:float=float(Time.get_ticks_usec()-begin)/1000.0
+    var deadline:int=Time.get_ticks_msec()+120000
+    while not state.ready and state.errors.is_empty() and Time.get_ticks_msec()<deadline:
+        await process_frame;await RenderingServer.frame_post_draw
+        state=tracks.prepare_visible(true)
+    check(state.ready and state.pending==0 and state.errors.is_empty(),label+": actual visible four-view samples complete through their eligible production path")
+    bounded_sources(label)
     await process_frame;await RenderingServer.frame_post_draw
     var available_ms:float=float(Time.get_ticks_usec()-begin)/1000.0
-    var record={"label":label,"request_cpu_ms":cpu_ms,"through_post_draw_ms":available_ms,"samples":state.samples,
-        "disk_hits":tracks.thumbnails.native_store.hits-before_hits,"disk_misses":tracks.thumbnails.native_store.misses-before_misses,
-        "disk_loads":tracks.thumbnails.native_store.disk_loads-before_loads,
-        "descriptor_ms":float(tracks.thumbnails.native_store.descriptor_usec-before_descriptor)/1000.0,
-        "resource_load_ms":float(tracks.thumbnails.native_store.resource_load_usec-before_resource)/1000.0,
-        "available":state.ready,"target_ms":200.0,"within_target":state.ready and available_ms<=200.0,"errors":state.errors}
-    measurements.append(record)
-    print("NATIVE_PREVIEW_RESOURCE_TIME ",JSON.stringify(record))
-    check(state.samples>0,label+": the measured timeline actually requested thumbnails")
-    if require_disk:
-        check(tracks.thumbnails.native_store.hits>before_hits and tracks.thumbnails.native_store.disk_loads>before_loads,label+": actual persisted source data served the demand")
-    check(tracks.thumbnails.native_store.misses==before_misses,label+": no missing/stale baked source was silently simulated")
+    var record={"label":label,"request_cpu_ms":request_cpu_ms,"through_post_draw_ms":available_ms,"samples":state.samples,
+        "disk_hits":cache.native_store.hits-before_hits,"disk_misses":cache.native_store.misses-before_misses,
+        "disk_loads":cache.native_store.disk_loads-before_loads,"available":state.ready,"target_ms":200.0,
+        "within_target":state.ready and available_ms<=200.0,"errors":state.errors,
+        "scope":"Input-bearing rows use exact recorded full context; source-only rows may use persisted Resources or normal bounded rendering. Actual disk identity/dependency proof is separate below."}
+    measurements.append(record);print("NATIVE_PREVIEW_RESOURCE_TIME ",JSON.stringify(record))
+    check(state.samples>0,label+": the measured timeline actually requests source thumbnails")
     return record
+
+func source_texture(cache:RefCounted,key:String,label:String,row:Dictionary={},sample_ms:float=-1.0,quarter:int=-1)->Texture2D:
+    var already_published:bool=cache.textures.has(key)
+    var deadline:int=Time.get_ticks_msec()+20000
+    while not cache.textures.has(key) and not cache.errors.has(key) and not cache.inactive.has(key) and Time.get_ticks_msec()<deadline:
+        await process_frame;cache.poll();await RenderingServer.frame_post_draw
+    check(not key.is_empty() and cache.textures.has(key) and not cache.errors.has(key),label+": exact requested source completes: "+str(cache.errors.get(key,cache.inactive.get(key,""))))
+    if not already_published and cache.textures.has(key) and not row.is_empty() and Thumbnails._composed_row(row):
+        check(not cache.composed_pane.is_empty() and is_same(cache.composed_pane.index,cache.recording),label+": composed source belongs to this exact recorded index")
+        if not cache.composed_pane.is_empty():
+            var owner:Node3D=cache.composed_pane.world
+            var current:Array=owner.displayed_components.filter(func(component):return component.id==row.component.id)
+            var status:Dictionary=owner.component_renderer.native_spells.diagnostics.get(row.component.id,{})
+            check(current.size()==1 and owner.timeline.display_ms==sample_ms and owner.quarter==quarter and not owner.rotation_pending(),
+                label+": full-context image retains the actual source occurrence, sample and published quarter")
+            check(status.get("status")=="rendered" and status.get("input_bindings",{}).get("unavailable",{}).is_empty(),
+                label+": the actual input-bearing source completes its native draw before context capture")
+    return cache.textures.get(key)
 
 func phase_samples(rows:Array)->Dictionary:
     var samples:Dictionary={}
     for row in rows:
-        for fraction in [.1,.5,.9]:
-            var at:float=lerpf(row.start_ms,row.end_ms,fraction)
+        for fraction in [.1,.5,.9,1.0]:
+            var at:float=row.end_ms-.001 if fraction==1.0 else lerpf(row.start_ms,row.end_ms,fraction)
             for quarter in 4:
                 var key:String=tracks.thumbnails.request(row,at,quarter,false)
-                check(not key.is_empty() and tracks.thumbnails.textures.has(key),str(row.component.native_cue.role)+": source phase sample loads at "+str(fraction)+" q"+str(quarter))
-                if tracks.thumbnails.textures.has(key):samples[key]=tracks.thumbnails.textures[key]
-        for quarter in 4:
-            var key:String=tracks.thumbnails.request(row,row.end_ms-.001,quarter,false)
-            check(tracks.thumbnails.textures.has(key),str(row.component.native_cue.role)+": final retained-tail source bin is baked q"+str(quarter))
-    no_native_work("phase/late-tail coverage")
+                var texture:Texture2D=await source_texture(tracks.thumbnails,key,str(row.component.native_cue.role)+" actual phase/tail "+str(fraction)+" q"+str(quarter),row,at,quarter)
+                if texture!=null:
+                    samples[key]=texture
+                    var pending:int=tracks.thumbnails.pending.size()
+                    check(tracks.thumbnails.request(row,at,quarter,false)==key and tracks.thumbnails.pending.size()==pending,
+                        "Repeated exact recorded source/sample/view reuses its published image without another job")
+    bounded_sources("actual phase/retained-tail coverage")
     return samples
 
-func identity_and_authoring(row:Dictionary)->void:
-    var cache:RefCounted=tracks.thumbnails
+func identity_and_authoring(row:Dictionary,index:Dictionary)->void:
+    check(not Thumbnails._composed_row(row),"Persisted-source identity reuse uses an actual source-only recorded phase, without clearing operands")
+    if Thumbnails._composed_row(row):return
+    var cache=Thumbnails.new();cache.host=root;cache.cache=Thumbnails.Catalog.source_snapshot(index.cache)
     var at:float=lerpf(row.start_ms,row.end_ms,.5)
     var original:String=cache.request(row,at,0,false)
-    var copy:Dictionary=row.duplicate(true)
-    copy.id+="/unrelated-occurrence"
-    copy.component.id+="/unrelated-occurrence"
-    copy.component.actor_uuid="unrelated-actor"
-    copy.component.target_uuid="unrelated-recipient"
-    copy.component.source_event_uuid="unrelated-event"
-    var before:int=cache.native_store.hits
-    var repeated:String=cache.request(copy,at,0,false)
-    check(cache.textures.has(original) and cache.textures.has(repeated),"An unrelated recorded occurrence identity reuses the same source artwork")
-    check(cache.native_store.hits==before+1,"Event/actor identity changes still hit persisted source data")
-    if cache.textures.has(original) and cache.textures.has(repeated):
-        check(cache.textures[original].get_image().get_data()==cache.textures[repeated].get_image().get_data(),"Identity-only reuse preserves exact native thumbnail pixels")
-    var bookkeeping:Dictionary=row.duplicate(true);bookkeeping.id+="/bookkeeping-only"
+    var texture:Texture2D=await source_texture(cache,original,"Actual standalone source for disk controls")
+    if texture==null:cache.close();return
+    var copy:Dictionary=row.duplicate(true);copy.id+="/unrelated-occurrence";copy.component.id+="/unrelated-occurrence"
+    copy.component.actor_uuid="unrelated-actor";copy.component.target_uuid="unrelated-recipient";copy.component.source_event_uuid="unrelated-event"
+    var store=Store.new()
+    var hz:float=maxf(1,float(row.get("source_fps",row.component.get("sample_hz",32))))
+    var baseline:Dictionary=store.visual_specification(row.component,hz)
+    check(store.visual_specification(copy.component,hz)==baseline,"Only eligible source-only artwork excludes unrelated occurrence/actor identity")
+    var bookkeeping:Dictionary=row.duplicate(true)
     var names:Dictionary={}
     for field in bookkeeping.component.native_cue:names[StringName(str(field))]=bookkeeping.component.native_cue[field]
     names[&"clip"]="different-intake-order";names[&"source_index"]=98765;names[&"role"]=StringName(str(names[&"role"]))
     bookkeeping.component.native_cue=names
-    before=cache.native_store.hits
-    var equivalent:String=cache.request(bookkeeping,at,0,false)
-    check(cache.textures.has(equivalent) and cache.native_store.hits==before+1,"Bookkeeping-only phase order and StringName keys reuse the persisted visual source")
-    if cache.textures.has(original) and cache.textures.has(equivalent):
-        check(cache.textures[original].get_image().get_data()==cache.textures[equivalent].get_image().get_data(),"Canonical key representation changes preserve exact source pixels")
-    no_native_work("occurrence reuse")
-    var edited:Dictionary=row.duplicate(true);edited.id+="/changed-scale"
-    edited.component.native_cue.scale*=.731
-    var invalidated:String=cache.request(edited,at,0,false)
-    check(not cache.textures.has(invalidated),"Changed visual cue cannot serve stale persisted artwork")
-    check(cache.pending.any(func(job):return job.key==invalidated),"Changed visual cue enters the existing explicit render fallback")
-    # Do not render this intentionally unbaked variant or disturb its source.
-    cache.reset()
+    check(store.visual_specification(bookkeeping.component,hz)==baseline,"Bookkeeping phase order and StringName keys preserve the exact canonical source specification")
+    var edited:Dictionary=row.duplicate(true)
+    edited.component.native_cue.scale=float(edited.component.native_cue.get("scale",1.0))*.731
+    check(store.visual_specification(edited.component,hz)!=baseline,"A changed visual cue cannot alias the prior persisted source specification")
+    var invalidated:String=cache.request(edited.merged({"id":row.id+"/changed-scale"},true),at,0,false)
+    check(not cache.textures.has(invalidated) and cache.pending.any(func(job):return job.key==invalidated),
+        "An unbaked changed visual cue enters the existing explicit source render fallback")
+    cache.close()
+    await dependency_revision(row,texture)
 
 func dependency_revision(row:Dictionary,texture:Texture2D)->void:
     var root_path:String="res://.runtime/native-preview-resource-probe-"+str(OS.get_process_id())
@@ -114,14 +138,15 @@ func dependency_revision(row:Dictionary,texture:Texture2D)->void:
     component.native_clip=Effects.occurrence_clip(component).duplicate(true)
     var selected:Dictionary=Effects.choice(component.native_clip)
     var actual:Dictionary=selected.approaches[0] if not selected.approaches.is_empty() else {}
-    var source:String=str(actual.get("source_phase",""))
-    check(source.ends_with(".tres") and FileAccess.file_exists(source),"Dependency qualification uses this selected phase's actual current native Resource")
-    if not source.ends_with(".tres") or not FileAccess.file_exists(source):
+    var field:String="source_phase" if str(actual.get("source_phase","")).get_extension() in ["tres","tscn","gd"] else "path"
+    var source:String=str(actual.get(field,""))
+    check(source.get_extension() in ["tres","tscn","gd","res"] and FileAccess.file_exists(source),"Dependency qualification uses this selected source's actual Resource or program")
+    if source.get_extension() not in ["tres","tscn","gd","res"] or not FileAccess.file_exists(source):
         DirAccess.remove_absolute(root_path);return
-    var fixture:String=root_path.path_join("source.tres")
-    var original:String=FileAccess.get_file_as_string(source)
-    FileAccess.open(fixture,FileAccess.WRITE).store_string(original)
-    actual.source_phase=fixture
+    var fixture:String=root_path.path_join("source."+source.get_extension())
+    var original:PackedByteArray=FileAccess.get_file_as_bytes(source)
+    FileAccess.open(fixture,FileAccess.WRITE).store_buffer(original)
+    actual[field]=fixture
     var store=Store.new()
     var hz:float=maxf(1,float(row.get("source_fps",component.get("sample_hz",32))))
     var descriptor:Dictionary=store.descriptor(component,hz)
@@ -134,15 +159,44 @@ func dependency_revision(row:Dictionary,texture:Texture2D)->void:
     check(not FileAccess.file_exists(path),"Dependency probe has its own new derived Resource")
     if FileAccess.file_exists(path):
         DirAccess.remove_absolute(fixture);DirAccess.remove_absolute(root_path);return
+    DirAccess.make_dir_recursive_absolute(Store.DIRECTORY)
     check(ResourceSaver.save(packet,path,ResourceSaver.FLAG_COMPRESS)==OK,"Owned dependency probe saves through Godot ResourceSaver")
-    check(store.lookup(descriptor,0,0)!=null,"Unchanged selected source can load its saved Resource")
-    FileAccess.open(fixture,FileAccess.WRITE).store_string(original+"\n; source revision for owned invalidation qualification\n")
+    var loaded:Texture2D=store.lookup(descriptor,0,0)
+    var deadline:int=Time.get_ticks_msec()+15000
+    while loaded==null and store.pending(descriptor,0,0) and Time.get_ticks_msec()<deadline:
+        await process_frame;loaded=store.lookup(descriptor,0,0)
+    check(loaded!=null and store.disk_loads==1 and store.issues.is_empty(),"Actual completed disk Resource serves the unchanged selected source")
+    if loaded!=null:
+        check(loaded.get_image().get_data()==texture.get_image().get_data(),"Persisted source Resource preserves exact native source pixels")
+        var unrelated:Dictionary=component.duplicate(true)
+        unrelated.actor_uuid="unrelated-actor";unrelated.target_uuid="unrelated-recipient";unrelated.source_event_uuid="unrelated-event"
+        var same_source:Dictionary=store.descriptor(unrelated,hz)
+        var reused:Texture2D=store.lookup(same_source,0,0)
+        check(same_source.signature==descriptor.signature and reused!=null and store.disk_loads==1,
+            "A distinct eligible source-only occurrence reuses the actual persisted Resource without a second load")
+        if reused!=null:check(reused.get_image().get_data()==loaded.get_image().get_data(),"Source-only occurrence reuse preserves exact disk pixels")
+    if source.get_extension()=="res":
+        var queued:Error=ResourceLoader.load_threaded_request(fixture,"",false,ResourceLoader.CACHE_MODE_IGNORE)
+        check(queued==OK,"Owned byte-identical recording copy requests its own actual Resource token")
+        var loaded_source:Resource
+        deadline=Time.get_ticks_msec()+15000
+        while queued==OK and ResourceLoader.load_threaded_get_status(fixture)==ResourceLoader.THREAD_LOAD_IN_PROGRESS and Time.get_ticks_msec()<deadline:await process_frame
+        if queued==OK and ResourceLoader.load_threaded_get_status(fixture)==ResourceLoader.THREAD_LOAD_LOADED:
+            loaded_source=ResourceLoader.load_threaded_get(fixture)
+        check(loaded_source!=null,"Owned recording copy reaches actual ResourceLoader completion before revision")
+        if loaded_source!=null:
+            loaded_source.resource_name+=" owned metadata revision"
+            check(ResourceSaver.save(loaded_source,fixture,ResourceSaver.FLAG_COMPRESS)==OK,"A valid recording metadata revision preserves the original rendering fields")
+    else:
+        var comment:String="#" if source.get_extension()=="gd" else ";"
+        FileAccess.open(fixture,FileAccess.WRITE).store_string(original.get_string_from_utf8()+"\n"+comment+" source revision for owned invalidation qualification\n")
     store.reset()
     var revised:Dictionary=store.descriptor(component,hz)
     check(revised.signature!=descriptor.signature,"An actual source file revision invalidates the prior visual signature")
     check(store.lookup(revised,0,0)==null,"A revised source cannot load the previous saved image")
     store.reset();packet=null
     DirAccess.remove_absolute(path);DirAccess.remove_absolute(fixture);DirAccess.remove_absolute(root_path)
+    check(FileAccess.get_file_as_bytes(source)==original,"Dependency qualification never edits the original packaged source")
 
 func incremental_pages(textures:Array)->void:
     if textures.size()<2:check(false,"Incremental page qualification has two actual native images");return
@@ -161,28 +215,48 @@ func incremental_pages(textures:Array)->void:
     check(not Baker.merge_page(current,another) and another.ticks==PackedInt32Array([64]),"A different bounded source page cannot consume or rewrite this page")
 
 func run()->void:
-    check(DisplayServer.get_name()!="headless","Disk availability qualification uses a native renderer and completed draw")
+    check(DisplayServer.get_name()!="headless","Recorded preview qualification uses a native renderer and completed draw")
     if DisplayServer.get_name()=="headless":finish();return
     DisplayServer.window_set_vsync_mode(DisplayServer.VSYNC_DISABLED)
-    var original:Dictionary=Fixtures.case_record("fireball")
-    check(original.get("id")=="spell.fireball/area","The exact current independent Fireball original is available")
-    if original.is_empty():finish();return
+    var originals:Array=Library.read().filter(func(record):return record.id=="spell.fireball/baseline")
+    check(originals.size()==1 and originals[0].ready,"The exact current Library Fireball original is available")
+    if originals.size()!=1 or not originals[0].ready:finish();return
     var begin:int=Time.get_ticks_usec()
-    var index:Dictionary=Recording.read(Fixtures.journal("fireball"))
+    var index:Dictionary=Recording.read(originals[0].perspectives[0].journal)
     var indexing_ms:float=float(Time.get_ticks_usec()-begin)/1000.0
-    check(index.ok,"Original Fireball journal compiles with the ordinary Studio Recording")
+    check(index.ok,"Original Fireball journal compiles with ordinary Studio Recording")
     if not index.ok:finish();return
-    var rows:Array=index.rows.filter(func(row):return row.kind=="native_effect" and row.get("component",{}).get("native_spell",false) and row.component.spell_id=="spell.fireball")
+    var rows:Array=index.rows.filter(func(row):return row.kind=="native_effect" and row.get("component",{}).get("native_spell",false) and row.component.get("spell_id")=="spell.fireball")
     check(rows.size()==3,"Real recording retains cast, flight and area source rows")
     if rows.size()!=3:finish();return
     var immutable:PackedByteArray=var_to_bytes(rows)
-    tracks=TimelineView.new();root.add_child(tracks);tracks.set_process(false)
-    tracks.size=Vector2(1280,800);tracks.filter="native_effect"
-    tracks.set_index(index);tracks.rebuild_rows();tracks.fit()
+    for row in rows:
+        check(not str(row.get("source","")).is_empty() and row.source==row.component.get("source"),"The actual source preview retains its exact authored row/component pointer")
+        observed_sources.append({"row":row.id,"source":row.source,"event":row.source_event_uuid,"clip":row.component.native_clip.id,
+            "inputs":row.component.native_clip.get("inputs",[]),"scope":"recorded_composed_context" if Thumbnails._composed_row(row) else "isolated_source"})
+    reference_view=SubViewport.new();reference_view.size=Vector2i(640,480);reference_view.own_world_3d=true
+    reference_view.render_target_update_mode=SubViewport.UPDATE_ALWAYS;root.add_child(reference_view)
+    reference=Play.new();reference.external_playback=true;reference.external_clock=true
+    reference.catalog_cache=Play.Catalog.source_snapshot(index.cache);reference.media_warmup.budget_bytes=0
+    reference.component_renderer.audio.set_enabled(false);reference.native_startup_background=false
+    reference.playback_end_ms=index.presentation_end_ms;reference_view.add_child(reference)
+    reference.install_playback(Recording.restore(index,0.0));reference.timeline.paused=true
+    var deadline:int=Time.get_ticks_msec()+20000
+    while not reference.playback_prepared() and Time.get_ticks_msec()<deadline:await process_frame
+    check(reference.playback_prepared(),"The actual recorded production reference prepares before source requests")
+    if not reference.playback_prepared():reference_view.queue_free();finish();return
+    reference.claim_receiving();reference._publish_receiving()
+    tracks=TimelineView.new();root.add_child(tracks);tracks.size=Vector2(1280,800);tracks.filter="native_effect"
+    tracks.preparation_admission=reference.preparation_admission
+    tracks.set_index(index);bind_recording(index);tracks.rebuild_rows();tracks.fit()
     check(tracks.thumbnails.textures.is_empty(),"Fresh process begins without resident thumbnail images")
-    var fresh:Dictionary=await measure("fresh-process Fireball four-view fit")
-    fresh.recording_index_ms=indexing_ms
-    var snapshots:Dictionary=phase_samples(rows)
+    var fresh:Dictionary=await measure("fresh-process Fireball exact four-view context");fresh.recording_index_ms=indexing_ms
+    # Sequential actual-cut witnesses start with no earlier cached image whose
+    # reusable pane may already belong to another sample. Cache hits thereafter
+    # retain their keyed image without claiming the pane is still its origin.
+    tracks.set_process(false);tracks.set_index(index);bind_recording(index)
+    var snapshots:Dictionary=await phase_samples(rows)
+    tracks.set_process(true)
     var coloured:int=0
     for texture in snapshots.values():
         var image:Image=texture.get_image()
@@ -190,22 +264,31 @@ func run()->void:
             for x in image.get_width():
                 var pixel:Color=image.get_pixel(x,y)
                 if maxf(pixel.r,maxf(pixel.g,pixel.b))>1.0/255.0:coloured+=1
-    check(coloured>0,"Persisted real native samples contain source pixels, not placeholder swatches")
+    check(coloured>0,"Actual native preview samples contain rendered pixels; composed scene pixels are not isolated-effect evidence")
     tracks.pixels_per_second*=1.75;tracks.origin_ms=index.presentation_end_ms*.45
-    await measure("changed zoom and late source bins",false)
-    tracks.set_index(index);tracks.filter="native_effect";tracks.rebuild_rows();tracks.fit()
-    await measure("reset/reload disk reuse")
+    await measure("changed zoom and actual late-source bins")
+    tracks.set_index(index);bind_recording(index);tracks.filter="native_effect";tracks.rebuild_rows();tracks.fit()
+    await measure("reset/reload exact recording context")
     incremental_pages(snapshots.values())
-    identity_and_authoring(rows[0])
-    if not snapshots.is_empty():dependency_revision(rows[0],snapshots.values()[0])
-    check(var_to_bytes(rows)==immutable,"Requests and invalidation checks preserve real recording rows and authored cues")
-    tracks.queue_free();await process_frame;await RenderingServer.frame_post_draw
+    # Disk identity remains a source-only contract. Select a genuine eligible
+    # phase from these exact existing originals; never strip required inputs.
+    var source_index:Dictionary=index
+    var eligible:Array=source_index.rows.filter(func(row):return row.kind=="native_effect" and row.get("status")!="missing" and row.get("component",{}).get("native_spell",false) and not Thumbnails._composed_row(row))
+    if eligible.is_empty():
+        var missile:Array=Library.read().filter(func(record):return record.id=="spell.magic_missile/baseline" and record.ready)
+        if missile.size()==1:
+            source_index=Recording.read(missile[0].perspectives[0].journal)
+            if source_index.get("ok",false):eligible=source_index.rows.filter(func(row):return row.kind=="native_effect" and row.get("status")!="missing" and row.get("component",{}).get("native_spell",false) and not Thumbnails._composed_row(row))
+    check(not eligible.is_empty(),"Existing Fireball/MagicMissile originals contain an actual source-only phase for separate disk Resource controls")
+    if not eligible.is_empty():await identity_and_authoring(eligible[0],source_index)
+    check(var_to_bytes(rows)==immutable,"Requests and invalidation preserve real recording rows and authored cues")
+    tracks.queue_free();reference_view.queue_free();await process_frame;await RenderingServer.frame_post_draw
     finish()
 
 func finish()->void:
     if finished:return
     finished=true
-    var report={"checks":checks,"failed":failures.size(),"failures":failures,"measurements":measurements,
-        "scope":"Fresh-process real Fireball Recording/Timeline all-view Resource thumbnail availability, retained tails, changed zoom bins, reload, occurrence-identity reuse and visual/source invalidation. This does not measure full Library navigation or grant artistic approval."}
+    var report={"checks":checks,"failed":failures.size(),"failures":failures,"measurements":measurements,"sources":observed_sources,
+        "scope":"Actual current Fireball Recording/Timeline previews, exact composed context where inputs require it, four views/tails/zoom/reset and existing budgets; separately eligible actual source-only identity, persisted Resource/dependency revision and bounded-page controls. Full-context pixels are not isolated-effect evidence. No full Library timing, current-engine qualification or artwork approval is inferred."}
     FileAccess.open(REPORT,FileAccess.WRITE).store_string(JSON.stringify(report,"  "))
     print("NATIVE_PREVIEW_RESOURCE ",JSON.stringify(report));quit(0 if failures.is_empty() else 1)

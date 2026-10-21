@@ -1,13 +1,12 @@
 {
-  "checks": 34,
+  "checks": 46,
   "evidence": [
     {
       "display_ms": 4109.72222222222,
-      "layer_count": 9,
+      "layer_count": 8,
       "state_matches_restore": true,
       "transient_ids": [
-        "6:edfcf5eb-0ebf-43b0-86f6-ac7d6c8466b2:sprite_layer:0",
-        "6:edfcf5eb-0ebf-43b0-86f6-ac7d6c8466b2:sprite_layer:1"
+        "6:59:sprite_layer:0"
       ]
     },
     {
@@ -26,6 +25,17 @@
       "display_ms": 4116.66666666667,
       "fixture": "internal recorded-layer endpoint with longer presentation tail",
       "gate_calls": 2
+    },
+    {
+      "difference_ms": 0.000000000000454747350886464,
+      "duration_ms": 1086.95652173913,
+      "endpoint_ms": 3947.9641131815,
+      "fixture": "verified nonzero-local arithmetic operands on existing admitted source carrier",
+      "gate_calls": 2,
+      "origin_ms": 2733.33333333333,
+      "reassociated_ms": 3947.9641131815,
+      "scope": "Constructor interval arithmetic only; actual Earth native replay remains separately qualified.",
+      "start_ms": 127.674258109041
     }
   ],
   "failures": [],

@@ -92,6 +92,7 @@ func texture()->Texture2D:return output.get_texture()
 
 ## Park: release the source, stop drawing, keep the viewports for reuse.
 func release()->void:
+    Effects.retain_source_preparation(prepared,[])
     if not handle.is_empty():Effects.close(handle);handle={}
     if is_instance_valid(source_parent):source_parent.free()
     component={}
@@ -100,6 +101,10 @@ func release()->void:
         viewport.render_target_update_mode=SubViewport.UPDATE_DISABLED
 
 func close()->void:
+    Effects.Admission.cancel_source_cache(prepared)
     if not handle.is_empty():Effects.close(handle);handle={}
     if is_instance_valid(output):output.queue_free()
     prepared.clear()
+
+func _exit_tree()->void:
+    Effects.Admission.cancel_source_cache(prepared)

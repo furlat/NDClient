@@ -1,70 +1,368 @@
 {
-  "checks": 5,
-  "comparison": {
-    "alpha_mismatches": 0,
-    "changed_pixels": 64970,
-    "maximum_byte_error": 73
-  },
+  "checks": 10,
   "driver": "vulkan",
   "expected_blend_space": "linear",
   "failures": [],
-  "low_codes": [
-    {
-      "actual": 0,
-      "expected": 0,
-      "source": 0
+  "modes": {
+    "cap": {
+      "comparison": {
+        "alpha_mismatches": 0,
+        "changed_pixels": 64969,
+        "examples": [
+          {
+            "actual": [
+              0,
+              0,
+              13,
+              1
+            ],
+            "at": [
+              0,
+              1
+            ],
+            "expected": [
+              0,
+              0,
+              1,
+              1
+            ]
+          },
+          {
+            "actual": [
+              0,
+              1,
+              13,
+              1
+            ],
+            "at": [
+              1,
+              1
+            ],
+            "expected": [
+              0,
+              0,
+              1,
+              1
+            ]
+          },
+          {
+            "actual": [
+              0,
+              4,
+              12,
+              1
+            ],
+            "at": [
+              2,
+              1
+            ],
+            "expected": [
+              0,
+              1,
+              1,
+              1
+            ]
+          },
+          {
+            "actual": [
+              0,
+              9,
+              12,
+              1
+            ],
+            "at": [
+              3,
+              1
+            ],
+            "expected": [
+              0,
+              1,
+              1,
+              1
+            ]
+          },
+          {
+            "actual": [
+              0,
+              0,
+              12,
+              1
+            ],
+            "at": [
+              4,
+              1
+            ],
+            "expected": [
+              0,
+              0,
+              1,
+              1
+            ]
+          },
+          {
+            "actual": [
+              0,
+              2,
+              12,
+              1
+            ],
+            "at": [
+              5,
+              1
+            ],
+            "expected": [
+              0,
+              0,
+              1,
+              1
+            ]
+          }
+        ],
+        "maximum_byte_error": 73,
+        "pixels_over_one_byte": 64265
+      },
+      "low_codes": [
+        {
+          "actual": 0,
+          "expected": 0,
+          "source": 0
+        },
+        {
+          "actual": 1,
+          "expected": 1,
+          "source": 1
+        },
+        {
+          "actual": 2,
+          "expected": 2,
+          "source": 2
+        },
+        {
+          "actual": 3,
+          "expected": 3,
+          "source": 3
+        },
+        {
+          "actual": 4,
+          "expected": 4,
+          "source": 4
+        },
+        {
+          "actual": 5,
+          "expected": 5,
+          "source": 5
+        },
+        {
+          "actual": 6,
+          "expected": 6,
+          "source": 6
+        },
+        {
+          "actual": 7,
+          "expected": 7,
+          "source": 7
+        },
+        {
+          "actual": 8,
+          "expected": 8,
+          "source": 8
+        }
+      ],
+      "native_blend_reference": {
+        "alpha_mismatches": 0,
+        "changed_pixels": 10651,
+        "examples": [],
+        "maximum_byte_error": 1,
+        "pixels_over_one_byte": 0
+      },
+      "opaque_row": {
+        "alpha_mismatches": 0,
+        "changed_pixels": 0,
+        "examples": [],
+        "maximum_byte_error": 0,
+        "pixels_over_one_byte": 0
+      }
     },
-    {
-      "actual": 1,
-      "expected": 1,
-      "source": 1
-    },
-    {
-      "actual": 2,
-      "expected": 2,
-      "source": 2
-    },
-    {
-      "actual": 3,
-      "expected": 3,
-      "source": 3
-    },
-    {
-      "actual": 4,
-      "expected": 4,
-      "source": 4
-    },
-    {
-      "actual": 5,
-      "expected": 5,
-      "source": 5
-    },
-    {
-      "actual": 6,
-      "expected": 6,
-      "source": 6
-    },
-    {
-      "actual": 7,
-      "expected": 7,
-      "source": 7
-    },
-    {
-      "actual": 8,
-      "expected": 8,
-      "source": 8
+    "ldr": {
+      "comparison": {
+        "alpha_mismatches": 0,
+        "changed_pixels": 64969,
+        "examples": [
+          {
+            "actual": [
+              0,
+              0,
+              13,
+              1
+            ],
+            "at": [
+              0,
+              1
+            ],
+            "expected": [
+              0,
+              0,
+              1,
+              1
+            ]
+          },
+          {
+            "actual": [
+              0,
+              1,
+              13,
+              1
+            ],
+            "at": [
+              1,
+              1
+            ],
+            "expected": [
+              0,
+              0,
+              1,
+              1
+            ]
+          },
+          {
+            "actual": [
+              0,
+              4,
+              12,
+              1
+            ],
+            "at": [
+              2,
+              1
+            ],
+            "expected": [
+              0,
+              1,
+              1,
+              1
+            ]
+          },
+          {
+            "actual": [
+              0,
+              9,
+              12,
+              1
+            ],
+            "at": [
+              3,
+              1
+            ],
+            "expected": [
+              0,
+              1,
+              1,
+              1
+            ]
+          },
+          {
+            "actual": [
+              0,
+              0,
+              12,
+              1
+            ],
+            "at": [
+              4,
+              1
+            ],
+            "expected": [
+              0,
+              0,
+              1,
+              1
+            ]
+          },
+          {
+            "actual": [
+              0,
+              2,
+              12,
+              1
+            ],
+            "at": [
+              5,
+              1
+            ],
+            "expected": [
+              0,
+              0,
+              1,
+              1
+            ]
+          }
+        ],
+        "maximum_byte_error": 73,
+        "pixels_over_one_byte": 64265
+      },
+      "low_codes": [
+        {
+          "actual": 0,
+          "expected": 0,
+          "source": 0
+        },
+        {
+          "actual": 1,
+          "expected": 1,
+          "source": 1
+        },
+        {
+          "actual": 2,
+          "expected": 2,
+          "source": 2
+        },
+        {
+          "actual": 3,
+          "expected": 3,
+          "source": 3
+        },
+        {
+          "actual": 4,
+          "expected": 4,
+          "source": 4
+        },
+        {
+          "actual": 5,
+          "expected": 5,
+          "source": 5
+        },
+        {
+          "actual": 6,
+          "expected": 6,
+          "source": 6
+        },
+        {
+          "actual": 7,
+          "expected": 7,
+          "source": 7
+        },
+        {
+          "actual": 8,
+          "expected": 8,
+          "source": 8
+        }
+      ],
+      "native_blend_reference": {
+        "alpha_mismatches": 0,
+        "changed_pixels": 10651,
+        "examples": [],
+        "maximum_byte_error": 1,
+        "pixels_over_one_byte": 0
+      },
+      "opaque_row": {
+        "alpha_mismatches": 0,
+        "changed_pixels": 0,
+        "examples": [],
+        "maximum_byte_error": 0,
+        "pixels_over_one_byte": 0
+      }
     }
-  ],
-  "native_blend_reference": {
-    "alpha_mismatches": 0,
-    "changed_pixels": 54794,
-    "maximum_byte_error": 1
-  },
-  "opaque_row": {
-    "alpha_mismatches": 0,
-    "changed_pixels": 0,
-    "maximum_byte_error": 0
   },
   "renderer": "forward_plus",
-  "scope": "Independent RGBA8 image with all256 channel values crossed with all256 alpha values. Forward+/Mobile use analytical linear-alpha compositing (1byte half-float quantization bound); Compatibility is encodedCanvas byteexact. Original opaque RGB and alpha are exact in both. Full encodedCanvas difference is retained as diagnostic."
+  "scope": "Independent RGBA8 image with all256 channel values crossed with all256 alpha values through the lit sprites' unlit storage/decode (presentation/fixture_flame.gdshader), light cap off (byte storage) and on (half storage). Forward+/Mobile use analytical linear-alpha compositing (1byte half-float quantization bound). Original opaque RGB and alpha are exact. Full encodedCanvas difference is retained as diagnostic."
 }

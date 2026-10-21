@@ -1,5 +1,38 @@
 {
-  "checks": 152,
+  "checks": 350,
   "failures": [],
-  "rejection_after_sensory": {}
+  "rejection_after_sensory": [
+    {
+      "case": "door/amber",
+      "committed_reducer_cursor": 48,
+      "negative_control": "unheld final HUD resource key; original native facts/rows unchanged",
+      "prior_reducer_cursor": 29,
+      "sensory_facts": 1,
+      "sequence": 4
+    },
+    {
+      "case": "door/blue",
+      "committed_reducer_cursor": 63,
+      "negative_control": "unheld final HUD resource key; original native facts/rows unchanged",
+      "prior_reducer_cursor": 50,
+      "sensory_facts": 1,
+      "sequence": 10
+    },
+    {
+      "case": "oa-jump-late-lethal/amber",
+      "committed_reducer_cursor": 95,
+      "negative_control": "unheld final HUD resource key; original native facts/rows unchanged",
+      "prior_reducer_cursor": 16,
+      "sensory_facts": 3,
+      "sequence": 2
+    },
+    {
+      "case": "oa-jump-late-lethal/blue",
+      "committed_reducer_cursor": 83,
+      "negative_control": "unheld final HUD resource key; original native facts/rows unchanged",
+      "prior_reducer_cursor": 16,
+      "sensory_facts": 3,
+      "sequence": 2
+    }
+  ]
 }

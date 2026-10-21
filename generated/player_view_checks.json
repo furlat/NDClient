@@ -1,11 +1,471 @@
 {
-  "checks": 51,
+  "checks": 72,
   "failures": [],
   "final": {
     "actors": {
-      "bd0bd82c-a957-432e-9015-7c1552272b39": {
-        "clip": "Die",
+      "6ebeca0c-630e-423f-ba18-467bf2f11e43": {
+        "clip": "Idle",
+        "facing": "SW",
+        "height": 0,
+        "position": [
+          18,
+          6
+        ],
+        "rendered_height": 0.0,
+        "rendered_position": [
+          18.0,
+          6.0
+        ],
+        "rig": "smallscale.goblin01",
+        "source_paths": [
+          "res://assets/art/media/smallscale/authored/orcs-and-goblins/Bodies/Goblin 01/Idle.png"
+        ],
+        "source_seconds": 0.7166716456413269,
+        "visible_layers": 1,
+        "visible_slots": [
+          "body"
+        ]
+      },
+      "78a905ca-2891-4fb6-b655-dbd88025cce0": {
+        "clip": "Idle",
         "facing": "SE",
+        "height": 0,
+        "position": [
+          13,
+          6
+        ],
+        "rendered_height": 0.0,
+        "rendered_position": [
+          13.0,
+          6.0
+        ],
+        "rig": "neuroclient.modular",
+        "source_paths": [
+          "res://assets/art/media/smallscale/modular/NakedBody/Idle.png",
+          "res://assets/art/media/smallscale/modular/Legs7/Idle.png",
+          "res://assets/art/media/smallscale/modular/Shoes2/Idle.png",
+          "res://assets/art/media/smallscale/modular/Chest7/Idle.png",
+          "res://assets/art/media/smallscale/modular/Belt1/Idle.png",
+          "res://assets/art/media/smallscale/modular/Shield5/Idle.png",
+          "res://assets/art/media/smallscale/modular/Melee2/Idle.png",
+          "res://assets/art/media/smallscale/modular/Head2/Idle.png",
+          "res://assets/art/media/smallscale/modular/Head10/Idle.png",
+          "res://assets/art/media/smallscale/modular/Head13/Idle.png"
+        ],
+        "source_seconds": 0.7166716456413269,
+        "visible_layers": 10,
+        "visible_slots": [
+          "body",
+          "legs",
+          "shoes",
+          "chest",
+          "belt",
+          "offhand",
+          "weapon",
+          "beard",
+          "head",
+          "helmet"
+        ]
+      },
+      "abd359f0-780d-463b-9b85-1b4b2a7d38f3": {
+        "clip": "Idle",
+        "facing": "SW",
+        "height": 0,
+        "position": [
+          16,
+          6
+        ],
+        "rendered_height": 0.0,
+        "rendered_position": [
+          16.0,
+          6.0
+        ],
+        "rig": "smallscale.goblin01",
+        "source_paths": [
+          "res://assets/art/media/smallscale/authored/orcs-and-goblins/Bodies/Goblin 01/Idle.png"
+        ],
+        "source_seconds": 0.7166716456413269,
+        "visible_layers": 1,
+        "visible_slots": [
+          "body"
+        ]
+      },
+      "ebec3351-c9b1-4311-a2d3-32185be4dbf7": {
+        "clip": "Idle",
+        "facing": "SW",
+        "height": 0,
+        "position": [
+          5,
+          6
+        ],
+        "rendered_height": 0.0,
+        "rendered_position": [
+          5.0,
+          6.0
+        ],
+        "rig": "neuroclient.modular",
+        "source_paths": [
+          "res://assets/art/media/smallscale/modular/NakedBody/Idle.png",
+          "res://assets/art/media/smallscale/modular/Legs1/Idle.png",
+          "res://assets/art/media/smallscale/modular/Shoes1/Idle.png",
+          "res://assets/art/media/smallscale/modular/Chest14/Idle.png",
+          "res://assets/art/media/smallscale/modular/Belt2/Idle.png",
+          "res://assets/art/media/smallscale/modular/Melee1/Idle.png",
+          "res://assets/art/media/smallscale/modular/Head22/Idle.png",
+          "res://assets/art/media/smallscale/modular/Head15/Idle.png"
+        ],
+        "source_seconds": 0.7166716456413269,
+        "visible_layers": 8,
+        "visible_slots": [
+          "body",
+          "legs",
+          "shoes",
+          "chest",
+          "belt",
+          "weapon",
+          "head",
+          "helmet"
+        ]
+      }
+    },
+    "errors": [],
+    "media": {
+      "accounting": "Decoded CPU bytes plus conservative RGBA8 GPU estimate; not measured VRAM/RSS; combined environment and character budget.",
+      "budget_bytes": 17179869184,
+      "combined_estimated_bytes": 3749969920,
+      "consumers": 1,
+      "cpu_bytes": 1026293760,
+      "cpu_release_pending": 104,
+      "cpu_released_bytes_this_frame": 3932160,
+      "cpu_released_this_frame": 2,
+      "decode_jobs": 4,
+      "decode_ms": 2948.2549999999997,
+      "decode_worker_limit": 8,
+      "decoded": 412,
+      "demand_counts": {
+        "affected": 0,
+        "consumers": 1,
+        "records_added": 0,
+        "records_removed": 1,
+        "records_retained": 139,
+        "required": 319,
+        "source_role_entries_visited": 0,
+        "source_roles_visited": 0
+      },
+      "demand_noops": 55,
+      "demand_phases": {
+        "family_handoff": 0.004,
+        "interest_updates": 0.0,
+        "pending": 0.002,
+        "readiness": 0.004,
+        "record_delta": 0.092,
+        "required": 0.092,
+        "total": 0.102
+      },
+      "demand_runs": 74,
+      "estimated_bytes": 3527147520,
+      "evicted": 0,
+      "eviction_pending_bytes": 0,
+      "failed": {},
+      "gpu_estimated_bytes": 2500853760,
+      "metadata_jobs": 33,
+      "metadata_ms": 866.7360000000002,
+      "metadata_optional_pending": false,
+      "metadata_phases": {
+        "optional": {
+          "estimates": 0.003,
+          "families": 5.931,
+          "source_files": 0.458
+        },
+        "required": {
+          "characters": 3.485,
+          "environment": 4.848,
+          "environment_all_paths": 0.003,
+          "environment_commit_updates": 4.722,
+          "environment_initial_update": 0.009,
+          "environment_tail": 0.184,
+          "roles": 0.078,
+          "source_files": 0.041,
+          "source_headers_cached_count": 1883,
+          "source_headers_selected_count": 453,
+          "source_publications": 1.557,
+          "source_sizes": 0.019
+        }
+      },
+      "pending": 405,
+      "pinned_bytes": 2815426560,
+      "pinned_over_budget_bytes": 0,
+      "publication": {
+        "budget_ms": 2.0,
+        "count": 1,
+        "elapsed_ms": 0.115,
+        "frame": 155,
+        "optional": 1,
+        "required": 0,
+        "uploads": [
+          {
+            "create_ms": 0.001,
+            "created": true,
+            "decode_ms": 3.823,
+            "decode_phases_ms": {
+              "accounting": 0.003,
+              "fixture": 0.001,
+              "load": 3.819
+            },
+            "gpu_estimated_bytes": 7864320,
+            "height": 1024,
+            "path": "res://assets/art/geometry/modular/Belt1/AttackRun/raw-support.png",
+            "width": 1920,
+            "worker_clock_us": {
+              "dispatched": 4910721,
+              "loaded": 4914580,
+              "queued": 3975189,
+              "started": 4910761,
+              "upload_finished": 4915006,
+              "upload_started": 4914587
+            },
+            "worker_upload_ms": 0.419
+          }
+        ]
+      },
+      "resident_sheets": 318,
+      "selection_jobs": 0,
+      "selection_pending": true,
+      "source_revision": 0
+    },
+    "quarter": 3,
+    "received": 13,
+    "retiring_nodes": 0,
+    "retiring_views": 0,
+    "static_draws": 187,
+    "timeline": {
+      "active_group": "",
+      "completed_groups": 15,
+      "completed_retained": 15,
+      "display_ms": 5716.671666666668,
+      "paused": true,
+      "pending_world_key": [],
+      "queued_groups": 0,
+      "revision": 83,
+      "sequence": 13,
+      "skipped": [
+        {
+          "kind": "turn",
+          "occurrence": "17",
+          "reason": "no_body_visual_in_this_pass"
+        },
+        {
+          "kind": "turn",
+          "occurrence": "21",
+          "reason": "no_body_visual_in_this_pass"
+        },
+        {
+          "kind": "turn",
+          "occurrence": "25",
+          "reason": "no_body_visual_in_this_pass"
+        },
+        {
+          "kind": "spatial",
+          "occurrence": "33",
+          "reason": "no_body_visual_in_this_pass"
+        },
+        {
+          "kind": "undisclosed",
+          "occurrence": "40",
+          "reason": "no_body_visual_in_this_pass"
+        },
+        {
+          "kind": "sensory",
+          "occurrence": "43",
+          "reason": "no_body_visual_in_this_pass"
+        },
+        {
+          "kind": "spatial",
+          "occurrence": "37",
+          "reason": "no_body_visual_in_this_pass"
+        },
+        {
+          "kind": "sensory",
+          "occurrence": "53",
+          "reason": "no_body_visual_in_this_pass"
+        },
+        {
+          "kind": "spatial",
+          "occurrence": "50",
+          "reason": "no_body_visual_in_this_pass"
+        },
+        {
+          "kind": "spatial",
+          "occurrence": "61",
+          "reason": "no_body_visual_in_this_pass"
+        },
+        {
+          "kind": "undisclosed",
+          "occurrence": "68",
+          "reason": "no_body_visual_in_this_pass"
+        },
+        {
+          "kind": "sensory",
+          "occurrence": "71",
+          "reason": "no_body_visual_in_this_pass"
+        },
+        {
+          "kind": "spatial",
+          "occurrence": "65",
+          "reason": "no_body_visual_in_this_pass"
+        },
+        {
+          "kind": "spatial",
+          "occurrence": "76",
+          "reason": "no_body_visual_in_this_pass"
+        },
+        {
+          "kind": "undisclosed",
+          "occurrence": "83",
+          "reason": "no_body_visual_in_this_pass"
+        },
+        {
+          "kind": "sensory",
+          "occurrence": "86",
+          "reason": "no_body_visual_in_this_pass"
+        },
+        {
+          "kind": "spatial",
+          "occurrence": "80",
+          "reason": "no_body_visual_in_this_pass"
+        },
+        {
+          "kind": "spatial",
+          "occurrence": "91",
+          "reason": "no_body_visual_in_this_pass"
+        },
+        {
+          "kind": "undisclosed",
+          "occurrence": "98",
+          "reason": "no_body_visual_in_this_pass"
+        },
+        {
+          "kind": "sensory",
+          "occurrence": "101",
+          "reason": "no_body_visual_in_this_pass"
+        },
+        {
+          "kind": "spatial",
+          "occurrence": "95",
+          "reason": "no_body_visual_in_this_pass"
+        },
+        {
+          "kind": "turn",
+          "occurrence": "106",
+          "reason": "no_body_visual_in_this_pass"
+        },
+        {
+          "kind": "turn",
+          "occurrence": "110",
+          "reason": "no_body_visual_in_this_pass"
+        },
+        {
+          "kind": "turn",
+          "occurrence": "114",
+          "reason": "no_body_visual_in_this_pass"
+        },
+        {
+          "kind": "turn",
+          "occurrence": "115",
+          "reason": "no_body_visual_in_this_pass"
+        },
+        {
+          "kind": "turn",
+          "occurrence": "119",
+          "reason": "no_body_visual_in_this_pass"
+        },
+        {
+          "kind": "turn",
+          "occurrence": "123",
+          "reason": "no_body_visual_in_this_pass"
+        },
+        {
+          "kind": "spatial",
+          "occurrence": "131",
+          "reason": "no_body_visual_in_this_pass"
+        },
+        {
+          "kind": "undisclosed",
+          "occurrence": "138",
+          "reason": "no_body_visual_in_this_pass"
+        },
+        {
+          "kind": "sensory",
+          "occurrence": "141",
+          "reason": "no_body_visual_in_this_pass"
+        },
+        {
+          "kind": "spatial",
+          "occurrence": "135",
+          "reason": "no_body_visual_in_this_pass"
+        },
+        {
+          "kind": "sensory",
+          "occurrence": "151",
+          "reason": "no_body_visual_in_this_pass"
+        },
+        {
+          "kind": "spatial",
+          "occurrence": "148",
+          "reason": "no_body_visual_in_this_pass"
+        },
+        {
+          "kind": "spatial",
+          "occurrence": "159",
+          "reason": "no_body_visual_in_this_pass"
+        },
+        {
+          "kind": "undisclosed",
+          "occurrence": "166",
+          "reason": "no_body_visual_in_this_pass"
+        },
+        {
+          "kind": "sensory",
+          "occurrence": "169",
+          "reason": "no_body_visual_in_this_pass"
+        },
+        {
+          "kind": "spatial",
+          "occurrence": "163",
+          "reason": "no_body_visual_in_this_pass"
+        },
+        {
+          "kind": "spatial",
+          "occurrence": "174",
+          "reason": "no_body_visual_in_this_pass"
+        },
+        {
+          "kind": "undisclosed",
+          "occurrence": "181",
+          "reason": "no_body_visual_in_this_pass"
+        },
+        {
+          "kind": "sensory",
+          "occurrence": "184",
+          "reason": "no_body_visual_in_this_pass"
+        },
+        {
+          "kind": "spatial",
+          "occurrence": "178",
+          "reason": "no_body_visual_in_this_pass"
+        }
+      ],
+      "skipped_count": 41,
+      "waiting_for_media": false,
+      "waiting_for_world": false
+    },
+    "unresolved": []
+  },
+  "initial": {
+    "actors": {
+      "78a905ca-2891-4fb6-b655-dbd88025cce0": {
+        "clip": "Idle",
+        "facing": "SW",
         "height": 0,
         "position": [
           6,
@@ -18,608 +478,1124 @@
         ],
         "rig": "neuroclient.modular",
         "source_paths": [
-          "/media/smallscale/modular/NakedBody/Die.png",
-          "/media/smallscale/modular/Legs6/Die.png",
-          "/media/smallscale/modular/Shoes1/Die.png",
-          "/media/smallscale/modular/Chest14/Die.png",
-          "/media/smallscale/modular/Belt1/Die.png",
-          "/media/smallscale/modular/Melee1/Die.png",
-          "/media/smallscale/modular/Head9/Die.png"
+          "res://assets/art/media/smallscale/modular/NakedBody/Idle.png",
+          "res://assets/art/media/smallscale/modular/Legs7/Idle.png",
+          "res://assets/art/media/smallscale/modular/Shoes2/Idle.png",
+          "res://assets/art/media/smallscale/modular/Chest7/Idle.png",
+          "res://assets/art/media/smallscale/modular/Belt1/Idle.png",
+          "res://assets/art/media/smallscale/modular/Shield5/Idle.png",
+          "res://assets/art/media/smallscale/modular/Melee2/Idle.png",
+          "res://assets/art/media/smallscale/modular/Head2/Idle.png",
+          "res://assets/art/media/smallscale/modular/Head10/Idle.png",
+          "res://assets/art/media/smallscale/modular/Head13/Idle.png"
         ],
-        "source_seconds": 1.25,
-        "visible_layers": 8,
+        "source_seconds": 0.0,
+        "visible_layers": 10,
         "visible_slots": [
-          "shadow",
           "body",
           "legs",
           "shoes",
           "chest",
           "belt",
+          "offhand",
           "weapon",
-          "head"
+          "beard",
+          "head",
+          "helmet"
         ]
-      }
-    },
-    "errors": [],
-    "media": {
-      "budget_bytes": 536870912,
-      "decode_ms": 1780.3120000000004,
-      "decoded": 208,
-      "estimated_bytes": 534773760,
-      "evicted": 140,
-      "failed": {},
-      "metadata_jobs": 5,
-      "metadata_ms": 300.856,
-      "pending": 0,
-      "pinned_bytes": 346030080,
-      "pinned_over_budget_bytes": 0,
-      "resident_sheets": 60
-    },
-    "quarter": 3,
-    "received": 2,
-    "static_draws": 1,
-    "timeline": {
-      "active_group": "",
-      "completed_groups": 4,
-      "completed_retained": 4,
-      "display_ms": 2801.7553859649124,
-      "paused": true,
-      "queued_groups": 0,
-      "revision": 31,
-      "sequence": 2,
-      "skipped": [
-        {
-          "kind": "turn",
-          "occurrence": "e1122f38-21d6-404c-8111-3f0ee9a217a5",
-          "reason": "no_body_visual_in_this_pass"
-        },
-        {
-          "kind": "spatial",
-          "occurrence": "db7b02a4-fd31-4be7-bf18-ba1fc6efc3cd",
-          "reason": "no_body_visual_in_this_pass"
-        },
-        {
-          "kind": "spatial",
-          "occurrence": "312b438d-fc40-49fd-b963-b58e71d40745",
-          "reason": "no_body_visual_in_this_pass"
-        },
-        {
-          "kind": "spatial",
-          "occurrence": "79ec6ede-e7ac-4866-8df0-c57c53e9fead",
-          "reason": "no_body_visual_in_this_pass"
-        },
-        {
-          "kind": "sensory",
-          "occurrence": "f10858a8-b45b-418c-938c-66759dac4dd0",
-          "reason": "no_body_visual_in_this_pass"
-        },
-        {
-          "kind": "spatial",
-          "occurrence": "88960d86-b092-429d-bff6-2decaf149093",
-          "reason": "no_body_visual_in_this_pass"
-        },
-        {
-          "kind": "spatial",
-          "occurrence": "93f828bc-db2c-46ae-9797-17faf24b8dda",
-          "reason": "no_body_visual_in_this_pass"
-        },
-        {
-          "kind": "sensory",
-          "occurrence": "01d0e9b9-5fcd-46e2-9800-109f250bff38",
-          "reason": "no_body_visual_in_this_pass"
-        },
-        {
-          "kind": "spatial",
-          "occurrence": "bcdfa5b2-a674-4fae-a960-ef681ef6b968",
-          "reason": "no_body_visual_in_this_pass"
-        },
-        {
-          "kind": "sensory",
-          "occurrence": "b2628125-c3c8-48cf-b998-0dd5c663534f",
-          "reason": "no_body_visual_in_this_pass"
-        },
-        {
-          "kind": "spatial",
-          "occurrence": "246e8b23-57b7-4a29-9b8d-6ddc26cbc724",
-          "reason": "no_body_visual_in_this_pass"
-        },
-        {
-          "kind": "undisclosed",
-          "occurrence": "e547fbc4-d13f-4cd9-b2df-9744204f1b10",
-          "reason": "no_body_visual_in_this_pass"
-        },
-        {
-          "kind": "damage",
-          "occurrence": "9991697d-324b-4895-b508-0a8127ebaffa",
-          "reason": "no_body_visual_in_this_pass"
-        },
-        {
-          "kind": "spatial",
-          "occurrence": "aca59a35-3e81-458b-beb4-c43fdb4964ef",
-          "reason": "no_body_visual_in_this_pass"
-        },
-        {
-          "kind": "spatial",
-          "occurrence": "2d72167e-fbfa-4432-832c-c07e4b942d53",
-          "reason": "no_body_visual_in_this_pass"
-        },
-        {
-          "kind": "turn",
-          "occurrence": "a00dcd25-46b9-4c64-aa0a-ee0a43555fce",
-          "reason": "no_body_visual_in_this_pass"
-        },
-        {
-          "kind": "turn",
-          "occurrence": "2dc4559e-2b76-4cf3-a160-202ea79f09d7",
-          "reason": "no_body_visual_in_this_pass"
-        }
-      ],
-      "skipped_count": 17,
-      "waiting_for_media": false
-    },
-    "unresolved": []
-  },
-  "initial": {
-    "actors": {
-      "378c7a39-f2bc-4058-a8da-e6ef9e0b1061": {
+      },
+      "ebec3351-c9b1-4311-a2d3-32185be4dbf7": {
         "clip": "Idle",
         "facing": "SW",
         "height": 0,
         "position": [
           5,
-          7
-        ],
-        "rendered_height": 0.0,
-        "rendered_position": [
-          5.0,
-          7.0
-        ],
-        "rig": "neuroclient.modular",
-        "source_paths": [
-          "/media/smallscale/modular/NakedBody/Idle.png",
-          "/media/smallscale/modular/Legs9/Idle.png",
-          "/media/smallscale/modular/Shoes2/Idle.png",
-          "/media/smallscale/modular/Chest6/Idle.png",
-          "/media/smallscale/modular/Melee14/Idle.png",
-          "/media/smallscale/modular/Head17/Idle.png"
-        ],
-        "source_seconds": 0.0,
-        "visible_layers": 7,
-        "visible_slots": [
-          "shadow",
-          "body",
-          "legs",
-          "shoes",
-          "chest",
-          "weapon",
-          "head"
-        ]
-      },
-      "bd0bd82c-a957-432e-9015-7c1552272b39": {
-        "clip": "Idle",
-        "facing": "SW",
-        "height": 0,
-        "position": [
-          4,
           6
         ],
         "rendered_height": 0.0,
         "rendered_position": [
-          4.0,
+          5.0,
           6.0
         ],
         "rig": "neuroclient.modular",
         "source_paths": [
-          "/media/smallscale/modular/NakedBody/Idle.png",
-          "/media/smallscale/modular/Legs6/Idle.png",
-          "/media/smallscale/modular/Shoes1/Idle.png",
-          "/media/smallscale/modular/Chest14/Idle.png",
-          "/media/smallscale/modular/Belt1/Idle.png",
-          "/media/smallscale/modular/Melee1/Idle.png",
-          "/media/smallscale/modular/Head9/Idle.png"
+          "res://assets/art/media/smallscale/modular/NakedBody/Idle.png",
+          "res://assets/art/media/smallscale/modular/Legs1/Idle.png",
+          "res://assets/art/media/smallscale/modular/Shoes1/Idle.png",
+          "res://assets/art/media/smallscale/modular/Chest14/Idle.png",
+          "res://assets/art/media/smallscale/modular/Belt2/Idle.png",
+          "res://assets/art/media/smallscale/modular/Melee1/Idle.png",
+          "res://assets/art/media/smallscale/modular/Head22/Idle.png",
+          "res://assets/art/media/smallscale/modular/Head15/Idle.png"
         ],
         "source_seconds": 0.0,
         "visible_layers": 8,
         "visible_slots": [
-          "shadow",
           "body",
           "legs",
           "shoes",
           "chest",
           "belt",
           "weapon",
-          "head"
+          "head",
+          "helmet"
         ]
       }
     },
     "errors": [],
     "media": {
-      "budget_bytes": 536870912,
-      "decode_ms": 557.773,
-      "decoded": 70,
-      "estimated_bytes": 597688320,
+      "accounting": "Decoded CPU bytes plus conservative RGBA8 GPU estimate; not measured VRAM/RSS; combined environment and character budget.",
+      "budget_bytes": 17179869184,
+      "combined_estimated_bytes": 2203058176,
+      "consumers": 1,
+      "cpu_bytes": 672399360,
+      "cpu_release_pending": 79,
+      "cpu_released_bytes_this_frame": 9830400,
+      "cpu_released_this_frame": 2,
+      "decode_jobs": 4,
+      "decode_ms": 1654.8479999999993,
+      "decode_worker_limit": 8,
+      "decoded": 246,
+      "demand_counts": {
+        "affected": 0,
+        "consumers": 1,
+        "records_added": 0,
+        "records_removed": 1,
+        "records_retained": 108,
+        "required": 244,
+        "source_role_entries_visited": 49,
+        "source_roles_visited": 49
+      },
+      "demand_noops": 2,
+      "demand_phases": {
+        "family_handoff": 0.01,
+        "interest_updates": 0.072,
+        "pending": 0.005,
+        "readiness": 0.007,
+        "record_delta": 0.157,
+        "required": 0.229,
+        "total": 0.251
+      },
+      "demand_runs": 3,
+      "estimated_bytes": 2025062400,
       "evicted": 0,
+      "eviction_pending_bytes": 0,
       "failed": {},
-      "metadata_jobs": 2,
-      "metadata_ms": 294.377,
-      "pending": 138,
-      "pinned_bytes": 597688320,
-      "pinned_over_budget_bytes": 60817408,
-      "resident_sheets": 62
+      "gpu_estimated_bytes": 1352663040,
+      "metadata_jobs": 4,
+      "metadata_ms": 634.9190000000001,
+      "metadata_optional_pending": false,
+      "metadata_phases": {
+        "optional": {
+          "estimates": 33.58,
+          "families": 9.547,
+          "source_files": 0.487
+        },
+        "required": {
+          "characters": 107.253,
+          "environment": 197.163,
+          "environment_all_paths": 0.068,
+          "environment_commit_updates": 0.0,
+          "environment_initial_update": 172.255,
+          "environment_tail": 0.001,
+          "roles": 0.207,
+          "source_files": 0.036,
+          "source_headers_cached_count": 346,
+          "source_headers_selected_count": 346,
+          "source_publications": 2.511,
+          "source_sizes": 0.317
+        }
+      },
+      "pending": 253,
+      "pinned_bytes": 1627914240,
+      "pinned_over_budget_bytes": 0,
+      "publication": {
+        "budget_ms": 2.0,
+        "count": 1,
+        "elapsed_ms": 0.091,
+        "frame": 69,
+        "optional": 1,
+        "required": 0,
+        "uploads": [
+          {
+            "create_ms": 0.001,
+            "created": true,
+            "decode_ms": 13.525,
+            "decode_phases_ms": {
+              "accounting": 0.006,
+              "fixture": 0.001,
+              "load": 13.518
+            },
+            "gpu_estimated_bytes": 7864320,
+            "height": 1024,
+            "path": "res://assets/art/geometry/modular/NakedBody/AttackRun/depth.png",
+            "width": 1920,
+            "worker_clock_us": {
+              "dispatched": 4064689,
+              "loaded": 4078226,
+              "queued": 3949006,
+              "started": 4064708,
+              "upload_finished": 4078777,
+              "upload_started": 4078238
+            },
+            "worker_upload_ms": 0.539
+          }
+        ]
+      },
+      "resident_sheets": 172,
+      "selection_jobs": 0,
+      "selection_pending": true,
+      "source_revision": 0
     },
     "quarter": 0,
-    "received": 2,
-    "static_draws": 1,
+    "received": 13,
+    "retiring_nodes": 0,
+    "retiring_views": 0,
+    "static_draws": 77,
     "timeline": {
       "active_group": "",
       "completed_groups": 0,
       "completed_retained": 0,
       "display_ms": 0.0,
       "paused": true,
-      "queued_groups": 4,
+      "pending_world_key": [],
+      "queued_groups": 2,
       "revision": 1,
       "sequence": 0,
       "skipped": [
         {
           "kind": "turn",
-          "occurrence": "e1122f38-21d6-404c-8111-3f0ee9a217a5",
+          "occurrence": "17",
+          "reason": "no_body_visual_in_this_pass"
+        },
+        {
+          "kind": "turn",
+          "occurrence": "21",
+          "reason": "no_body_visual_in_this_pass"
+        },
+        {
+          "kind": "turn",
+          "occurrence": "25",
           "reason": "no_body_visual_in_this_pass"
         },
         {
           "kind": "spatial",
-          "occurrence": "db7b02a4-fd31-4be7-bf18-ba1fc6efc3cd",
-          "reason": "no_body_visual_in_this_pass"
-        },
-        {
-          "kind": "spatial",
-          "occurrence": "312b438d-fc40-49fd-b963-b58e71d40745",
-          "reason": "no_body_visual_in_this_pass"
-        },
-        {
-          "kind": "spatial",
-          "occurrence": "79ec6ede-e7ac-4866-8df0-c57c53e9fead",
-          "reason": "no_body_visual_in_this_pass"
-        },
-        {
-          "kind": "sensory",
-          "occurrence": "f10858a8-b45b-418c-938c-66759dac4dd0",
-          "reason": "no_body_visual_in_this_pass"
-        },
-        {
-          "kind": "spatial",
-          "occurrence": "88960d86-b092-429d-bff6-2decaf149093",
-          "reason": "no_body_visual_in_this_pass"
-        },
-        {
-          "kind": "spatial",
-          "occurrence": "93f828bc-db2c-46ae-9797-17faf24b8dda",
-          "reason": "no_body_visual_in_this_pass"
-        },
-        {
-          "kind": "sensory",
-          "occurrence": "01d0e9b9-5fcd-46e2-9800-109f250bff38",
-          "reason": "no_body_visual_in_this_pass"
-        },
-        {
-          "kind": "spatial",
-          "occurrence": "bcdfa5b2-a674-4fae-a960-ef681ef6b968",
-          "reason": "no_body_visual_in_this_pass"
-        },
-        {
-          "kind": "sensory",
-          "occurrence": "b2628125-c3c8-48cf-b998-0dd5c663534f",
-          "reason": "no_body_visual_in_this_pass"
-        },
-        {
-          "kind": "spatial",
-          "occurrence": "246e8b23-57b7-4a29-9b8d-6ddc26cbc724",
+          "occurrence": "33",
           "reason": "no_body_visual_in_this_pass"
         },
         {
           "kind": "undisclosed",
-          "occurrence": "e547fbc4-d13f-4cd9-b2df-9744204f1b10",
+          "occurrence": "40",
           "reason": "no_body_visual_in_this_pass"
         },
         {
-          "kind": "damage",
-          "occurrence": "9991697d-324b-4895-b508-0a8127ebaffa",
-          "reason": "no_body_visual_in_this_pass"
-        },
-        {
-          "kind": "spatial",
-          "occurrence": "aca59a35-3e81-458b-beb4-c43fdb4964ef",
+          "kind": "sensory",
+          "occurrence": "43",
           "reason": "no_body_visual_in_this_pass"
         },
         {
           "kind": "spatial",
-          "occurrence": "2d72167e-fbfa-4432-832c-c07e4b942d53",
+          "occurrence": "37",
+          "reason": "no_body_visual_in_this_pass"
+        },
+        {
+          "kind": "sensory",
+          "occurrence": "53",
+          "reason": "no_body_visual_in_this_pass"
+        },
+        {
+          "kind": "spatial",
+          "occurrence": "50",
+          "reason": "no_body_visual_in_this_pass"
+        },
+        {
+          "kind": "spatial",
+          "occurrence": "61",
+          "reason": "no_body_visual_in_this_pass"
+        },
+        {
+          "kind": "undisclosed",
+          "occurrence": "68",
+          "reason": "no_body_visual_in_this_pass"
+        },
+        {
+          "kind": "sensory",
+          "occurrence": "71",
+          "reason": "no_body_visual_in_this_pass"
+        },
+        {
+          "kind": "spatial",
+          "occurrence": "65",
+          "reason": "no_body_visual_in_this_pass"
+        },
+        {
+          "kind": "spatial",
+          "occurrence": "76",
+          "reason": "no_body_visual_in_this_pass"
+        },
+        {
+          "kind": "undisclosed",
+          "occurrence": "83",
+          "reason": "no_body_visual_in_this_pass"
+        },
+        {
+          "kind": "sensory",
+          "occurrence": "86",
+          "reason": "no_body_visual_in_this_pass"
+        },
+        {
+          "kind": "spatial",
+          "occurrence": "80",
+          "reason": "no_body_visual_in_this_pass"
+        },
+        {
+          "kind": "spatial",
+          "occurrence": "91",
+          "reason": "no_body_visual_in_this_pass"
+        },
+        {
+          "kind": "undisclosed",
+          "occurrence": "98",
+          "reason": "no_body_visual_in_this_pass"
+        },
+        {
+          "kind": "sensory",
+          "occurrence": "101",
+          "reason": "no_body_visual_in_this_pass"
+        },
+        {
+          "kind": "spatial",
+          "occurrence": "95",
           "reason": "no_body_visual_in_this_pass"
         },
         {
           "kind": "turn",
-          "occurrence": "a00dcd25-46b9-4c64-aa0a-ee0a43555fce",
+          "occurrence": "106",
           "reason": "no_body_visual_in_this_pass"
         },
         {
           "kind": "turn",
-          "occurrence": "2dc4559e-2b76-4cf3-a160-202ea79f09d7",
+          "occurrence": "110",
+          "reason": "no_body_visual_in_this_pass"
+        },
+        {
+          "kind": "turn",
+          "occurrence": "114",
+          "reason": "no_body_visual_in_this_pass"
+        },
+        {
+          "kind": "turn",
+          "occurrence": "115",
+          "reason": "no_body_visual_in_this_pass"
+        },
+        {
+          "kind": "turn",
+          "occurrence": "119",
+          "reason": "no_body_visual_in_this_pass"
+        },
+        {
+          "kind": "turn",
+          "occurrence": "123",
+          "reason": "no_body_visual_in_this_pass"
+        },
+        {
+          "kind": "spatial",
+          "occurrence": "131",
+          "reason": "no_body_visual_in_this_pass"
+        },
+        {
+          "kind": "undisclosed",
+          "occurrence": "138",
+          "reason": "no_body_visual_in_this_pass"
+        },
+        {
+          "kind": "sensory",
+          "occurrence": "141",
+          "reason": "no_body_visual_in_this_pass"
+        },
+        {
+          "kind": "spatial",
+          "occurrence": "135",
+          "reason": "no_body_visual_in_this_pass"
+        },
+        {
+          "kind": "sensory",
+          "occurrence": "151",
+          "reason": "no_body_visual_in_this_pass"
+        },
+        {
+          "kind": "spatial",
+          "occurrence": "148",
+          "reason": "no_body_visual_in_this_pass"
+        },
+        {
+          "kind": "spatial",
+          "occurrence": "159",
+          "reason": "no_body_visual_in_this_pass"
+        },
+        {
+          "kind": "undisclosed",
+          "occurrence": "166",
+          "reason": "no_body_visual_in_this_pass"
+        },
+        {
+          "kind": "sensory",
+          "occurrence": "169",
+          "reason": "no_body_visual_in_this_pass"
+        },
+        {
+          "kind": "spatial",
+          "occurrence": "163",
+          "reason": "no_body_visual_in_this_pass"
+        },
+        {
+          "kind": "spatial",
+          "occurrence": "174",
+          "reason": "no_body_visual_in_this_pass"
+        },
+        {
+          "kind": "undisclosed",
+          "occurrence": "181",
+          "reason": "no_body_visual_in_this_pass"
+        },
+        {
+          "kind": "sensory",
+          "occurrence": "184",
+          "reason": "no_body_visual_in_this_pass"
+        },
+        {
+          "kind": "spatial",
+          "occurrence": "178",
           "reason": "no_body_visual_in_this_pass"
         }
       ],
-      "skipped_count": 17,
-      "waiting_for_media": false
+      "skipped_count": 2,
+      "waiting_for_media": false,
+      "waiting_for_world": false
     },
     "unresolved": []
   },
   "rendered_motion": [
     {
       "actor": {
-        "clip": "Rolling",
+        "clip": "Run",
         "facing": "SE",
         "height": 0.0,
         "position": [
-          4.5,
+          6.5,
           6.0
         ],
-        "rendered_height": 0.8838834971192806,
+        "rendered_height": 0.0,
         "rendered_position": [
-          4.5,
+          6.5,
           6.0
         ],
         "rig": "neuroclient.modular",
         "source_paths": [
-          "/media/smallscale/modular/NakedBody/Rolling.png",
-          "/media/smallscale/modular/Legs6/Rolling.png",
-          "/media/smallscale/modular/Shoes1/Rolling.png",
-          "/media/smallscale/modular/Chest14/Rolling.png",
-          "/media/smallscale/modular/Belt1/Rolling.png",
-          "/media/smallscale/modular/Melee1/Rolling.png",
-          "/media/smallscale/modular/Head9/Rolling.png"
+          "res://assets/art/media/smallscale/modular/NakedBody/Run.png",
+          "res://assets/art/media/smallscale/modular/Legs7/Run.png",
+          "res://assets/art/media/smallscale/modular/Shoes2/Run.png",
+          "res://assets/art/media/smallscale/modular/Chest7/Run.png",
+          "res://assets/art/media/smallscale/modular/Belt1/Run.png",
+          "res://assets/art/media/smallscale/modular/Shield5/Run.png",
+          "res://assets/art/media/smallscale/modular/Melee2/Run.png",
+          "res://assets/art/media/smallscale/modular/Head2/Run.png",
+          "res://assets/art/media/smallscale/modular/Head10/Run.png",
+          "res://assets/art/media/smallscale/modular/Head13/Run.png"
         ],
-        "source_seconds": 0.3125,
-        "visible_layers": 8,
+        "source_seconds": 0.208333320915699,
+        "visible_layers": 10,
         "visible_slots": [
-          "shadow",
           "body",
           "legs",
           "shoes",
           "chest",
           "belt",
+          "offhand",
           "weapon",
-          "head"
+          "beard",
+          "head",
+          "helmet"
         ]
       },
-      "at_ms": 212.5
+      "at_ms": 508.33333333333337
     },
     {
       "actor": {
-        "clip": "Rolling",
+        "clip": "Run",
         "facing": "SE",
         "height": 0.0,
         "position": [
-          5.5,
+          7.5,
           6.0
         ],
-        "rendered_height": 0.8838834971192806,
+        "rendered_height": 0.0,
         "rendered_position": [
-          5.5,
+          7.5,
           6.0
         ],
         "rig": "neuroclient.modular",
         "source_paths": [
-          "/media/smallscale/modular/NakedBody/Rolling.png",
-          "/media/smallscale/modular/Legs6/Rolling.png",
-          "/media/smallscale/modular/Shoes1/Rolling.png",
-          "/media/smallscale/modular/Chest14/Rolling.png",
-          "/media/smallscale/modular/Belt1/Rolling.png",
-          "/media/smallscale/modular/Melee1/Rolling.png",
-          "/media/smallscale/modular/Head9/Rolling.png"
+          "res://assets/art/media/smallscale/modular/NakedBody/Run.png",
+          "res://assets/art/media/smallscale/modular/Legs7/Run.png",
+          "res://assets/art/media/smallscale/modular/Shoes2/Run.png",
+          "res://assets/art/media/smallscale/modular/Chest7/Run.png",
+          "res://assets/art/media/smallscale/modular/Belt1/Run.png",
+          "res://assets/art/media/smallscale/modular/Shield5/Run.png",
+          "res://assets/art/media/smallscale/modular/Melee2/Run.png",
+          "res://assets/art/media/smallscale/modular/Head2/Run.png",
+          "res://assets/art/media/smallscale/modular/Head10/Run.png",
+          "res://assets/art/media/smallscale/modular/Head13/Run.png"
         ],
-        "source_seconds": 0.9375,
-        "visible_layers": 8,
+        "source_seconds": 0.208333320915699,
+        "visible_layers": 10,
         "visible_slots": [
-          "shadow",
           "body",
           "legs",
           "shoes",
           "chest",
           "belt",
+          "offhand",
           "weapon",
-          "head"
+          "beard",
+          "head",
+          "helmet"
         ]
       },
-      "at_ms": 637.5
+      "at_ms": 2175.0
+    },
+    {
+      "actor": {
+        "clip": "Run",
+        "facing": "SE",
+        "height": 0.0,
+        "position": [
+          8.5,
+          6.0
+        ],
+        "rendered_height": 0.0,
+        "rendered_position": [
+          8.5,
+          6.0
+        ],
+        "rig": "neuroclient.modular",
+        "source_paths": [
+          "res://assets/art/media/smallscale/modular/NakedBody/Run.png",
+          "res://assets/art/media/smallscale/modular/Legs7/Run.png",
+          "res://assets/art/media/smallscale/modular/Shoes2/Run.png",
+          "res://assets/art/media/smallscale/modular/Chest7/Run.png",
+          "res://assets/art/media/smallscale/modular/Belt1/Run.png",
+          "res://assets/art/media/smallscale/modular/Shield5/Run.png",
+          "res://assets/art/media/smallscale/modular/Melee2/Run.png",
+          "res://assets/art/media/smallscale/modular/Head2/Run.png",
+          "res://assets/art/media/smallscale/modular/Head10/Run.png",
+          "res://assets/art/media/smallscale/modular/Head13/Run.png"
+        ],
+        "source_seconds": 0.625,
+        "visible_layers": 10,
+        "visible_slots": [
+          "body",
+          "legs",
+          "shoes",
+          "chest",
+          "belt",
+          "offhand",
+          "weapon",
+          "beard",
+          "head",
+          "helmet"
+        ]
+      },
+      "at_ms": 2591.666666666667
+    },
+    {
+      "actor": {
+        "clip": "Run",
+        "facing": "SE",
+        "height": 0.0,
+        "position": [
+          9.5,
+          6.0
+        ],
+        "rendered_height": 0.0,
+        "rendered_position": [
+          9.5,
+          6.0
+        ],
+        "rig": "neuroclient.modular",
+        "source_paths": [
+          "res://assets/art/media/smallscale/modular/NakedBody/Run.png",
+          "res://assets/art/media/smallscale/modular/Legs7/Run.png",
+          "res://assets/art/media/smallscale/modular/Shoes2/Run.png",
+          "res://assets/art/media/smallscale/modular/Chest7/Run.png",
+          "res://assets/art/media/smallscale/modular/Belt1/Run.png",
+          "res://assets/art/media/smallscale/modular/Shield5/Run.png",
+          "res://assets/art/media/smallscale/modular/Melee2/Run.png",
+          "res://assets/art/media/smallscale/modular/Head2/Run.png",
+          "res://assets/art/media/smallscale/modular/Head10/Run.png",
+          "res://assets/art/media/smallscale/modular/Head13/Run.png"
+        ],
+        "source_seconds": 1.041666641831398,
+        "visible_layers": 10,
+        "visible_slots": [
+          "body",
+          "legs",
+          "shoes",
+          "chest",
+          "belt",
+          "offhand",
+          "weapon",
+          "beard",
+          "head",
+          "helmet"
+        ]
+      },
+      "at_ms": 3008.3333333333335
+    },
+    {
+      "actor": {
+        "clip": "Run",
+        "facing": "SE",
+        "height": 0.0,
+        "position": [
+          10.5,
+          6.0
+        ],
+        "rendered_height": 0.0,
+        "rendered_position": [
+          10.5,
+          6.0
+        ],
+        "rig": "neuroclient.modular",
+        "source_paths": [
+          "res://assets/art/media/smallscale/modular/NakedBody/Run.png",
+          "res://assets/art/media/smallscale/modular/Legs7/Run.png",
+          "res://assets/art/media/smallscale/modular/Shoes2/Run.png",
+          "res://assets/art/media/smallscale/modular/Chest7/Run.png",
+          "res://assets/art/media/smallscale/modular/Belt1/Run.png",
+          "res://assets/art/media/smallscale/modular/Shield5/Run.png",
+          "res://assets/art/media/smallscale/modular/Melee2/Run.png",
+          "res://assets/art/media/smallscale/modular/Head2/Run.png",
+          "res://assets/art/media/smallscale/modular/Head10/Run.png",
+          "res://assets/art/media/smallscale/modular/Head13/Run.png"
+        ],
+        "source_seconds": 0.208333320915699,
+        "visible_layers": 10,
+        "visible_slots": [
+          "body",
+          "legs",
+          "shoes",
+          "chest",
+          "belt",
+          "offhand",
+          "weapon",
+          "beard",
+          "head",
+          "helmet"
+        ]
+      },
+      "at_ms": 3425.0050000000015
+    },
+    {
+      "actor": {
+        "clip": "Run",
+        "facing": "SE",
+        "height": 0.0,
+        "position": [
+          11.5,
+          6.0
+        ],
+        "rendered_height": 0.0,
+        "rendered_position": [
+          11.5,
+          6.0
+        ],
+        "rig": "neuroclient.modular",
+        "source_paths": [
+          "res://assets/art/media/smallscale/modular/NakedBody/Run.png",
+          "res://assets/art/media/smallscale/modular/Legs7/Run.png",
+          "res://assets/art/media/smallscale/modular/Shoes2/Run.png",
+          "res://assets/art/media/smallscale/modular/Chest7/Run.png",
+          "res://assets/art/media/smallscale/modular/Belt1/Run.png",
+          "res://assets/art/media/smallscale/modular/Shield5/Run.png",
+          "res://assets/art/media/smallscale/modular/Melee2/Run.png",
+          "res://assets/art/media/smallscale/modular/Head2/Run.png",
+          "res://assets/art/media/smallscale/modular/Head10/Run.png",
+          "res://assets/art/media/smallscale/modular/Head13/Run.png"
+        ],
+        "source_seconds": 0.208333320915699,
+        "visible_layers": 10,
+        "visible_slots": [
+          "body",
+          "legs",
+          "shoes",
+          "chest",
+          "belt",
+          "offhand",
+          "weapon",
+          "beard",
+          "head",
+          "helmet"
+        ]
+      },
+      "at_ms": 5091.671666666668
+    },
+    {
+      "actor": {
+        "clip": "Run",
+        "facing": "SE",
+        "height": 0.0,
+        "position": [
+          12.5,
+          6.0
+        ],
+        "rendered_height": 0.0,
+        "rendered_position": [
+          12.5,
+          6.0
+        ],
+        "rig": "neuroclient.modular",
+        "source_paths": [
+          "res://assets/art/media/smallscale/modular/NakedBody/Run.png",
+          "res://assets/art/media/smallscale/modular/Legs7/Run.png",
+          "res://assets/art/media/smallscale/modular/Shoes2/Run.png",
+          "res://assets/art/media/smallscale/modular/Chest7/Run.png",
+          "res://assets/art/media/smallscale/modular/Belt1/Run.png",
+          "res://assets/art/media/smallscale/modular/Shield5/Run.png",
+          "res://assets/art/media/smallscale/modular/Melee2/Run.png",
+          "res://assets/art/media/smallscale/modular/Head2/Run.png",
+          "res://assets/art/media/smallscale/modular/Head10/Run.png",
+          "res://assets/art/media/smallscale/modular/Head13/Run.png"
+        ],
+        "source_seconds": 0.625,
+        "visible_layers": 10,
+        "visible_slots": [
+          "body",
+          "legs",
+          "shoes",
+          "chest",
+          "belt",
+          "offhand",
+          "weapon",
+          "beard",
+          "head",
+          "helmet"
+        ]
+      },
+      "at_ms": 5508.338333333335
     }
   ],
   "sampled": {
     "actors": {
-      "378c7a39-f2bc-4058-a8da-e6ef9e0b1061": {
+      "78a905ca-2891-4fb6-b655-dbd88025cce0": {
+        "clip": "Idle",
+        "facing": "SW",
+        "height": 0,
+        "position": [
+          6,
+          6
+        ],
+        "rendered_height": 0.0,
+        "rendered_position": [
+          6.0,
+          6.0
+        ],
+        "rig": "neuroclient.modular",
+        "source_paths": [
+          "res://assets/art/media/smallscale/modular/NakedBody/Idle.png",
+          "res://assets/art/media/smallscale/modular/Legs7/Idle.png",
+          "res://assets/art/media/smallscale/modular/Shoes2/Idle.png",
+          "res://assets/art/media/smallscale/modular/Chest7/Idle.png",
+          "res://assets/art/media/smallscale/modular/Belt1/Idle.png",
+          "res://assets/art/media/smallscale/modular/Shield5/Idle.png",
+          "res://assets/art/media/smallscale/modular/Melee2/Idle.png",
+          "res://assets/art/media/smallscale/modular/Head2/Idle.png",
+          "res://assets/art/media/smallscale/modular/Head10/Idle.png",
+          "res://assets/art/media/smallscale/modular/Head13/Idle.png"
+        ],
+        "source_seconds": 0.30000001192092896,
+        "visible_layers": 10,
+        "visible_slots": [
+          "body",
+          "legs",
+          "shoes",
+          "chest",
+          "belt",
+          "offhand",
+          "weapon",
+          "beard",
+          "head",
+          "helmet"
+        ]
+      },
+      "ebec3351-c9b1-4311-a2d3-32185be4dbf7": {
         "clip": "Idle",
         "facing": "SW",
         "height": 0,
         "position": [
           5,
-          7
-        ],
-        "rendered_height": 0.0,
-        "rendered_position": [
-          5.0,
-          7.0
-        ],
-        "rig": "neuroclient.modular",
-        "source_paths": [
-          "/media/smallscale/modular/NakedBody/Idle.png",
-          "/media/smallscale/modular/Legs9/Idle.png",
-          "/media/smallscale/modular/Shoes2/Idle.png",
-          "/media/smallscale/modular/Chest6/Idle.png",
-          "/media/smallscale/modular/Melee14/Idle.png",
-          "/media/smallscale/modular/Head17/Idle.png"
-        ],
-        "source_seconds": 0.0,
-        "visible_layers": 7,
-        "visible_slots": [
-          "shadow",
-          "body",
-          "legs",
-          "shoes",
-          "chest",
-          "weapon",
-          "head"
-        ]
-      },
-      "bd0bd82c-a957-432e-9015-7c1552272b39": {
-        "clip": "Idle",
-        "facing": "SW",
-        "height": 0,
-        "position": [
-          4,
           6
         ],
         "rendered_height": 0.0,
         "rendered_position": [
-          4.0,
+          5.0,
           6.0
         ],
         "rig": "neuroclient.modular",
         "source_paths": [
-          "/media/smallscale/modular/NakedBody/Idle.png",
-          "/media/smallscale/modular/Legs6/Idle.png",
-          "/media/smallscale/modular/Shoes1/Idle.png",
-          "/media/smallscale/modular/Chest14/Idle.png",
-          "/media/smallscale/modular/Belt1/Idle.png",
-          "/media/smallscale/modular/Melee1/Idle.png",
-          "/media/smallscale/modular/Head9/Idle.png"
+          "res://assets/art/media/smallscale/modular/NakedBody/Idle.png",
+          "res://assets/art/media/smallscale/modular/Legs1/Idle.png",
+          "res://assets/art/media/smallscale/modular/Shoes1/Idle.png",
+          "res://assets/art/media/smallscale/modular/Chest14/Idle.png",
+          "res://assets/art/media/smallscale/modular/Belt2/Idle.png",
+          "res://assets/art/media/smallscale/modular/Melee1/Idle.png",
+          "res://assets/art/media/smallscale/modular/Head22/Idle.png",
+          "res://assets/art/media/smallscale/modular/Head15/Idle.png"
         ],
-        "source_seconds": 0.0,
+        "source_seconds": 0.30000001192092896,
         "visible_layers": 8,
         "visible_slots": [
-          "shadow",
           "body",
           "legs",
           "shoes",
           "chest",
           "belt",
           "weapon",
-          "head"
+          "head",
+          "helmet"
         ]
       }
     },
     "errors": [],
     "media": {
-      "budget_bytes": 536870912,
-      "decode_ms": 557.773,
-      "decoded": 70,
-      "estimated_bytes": 597688320,
+      "accounting": "Decoded CPU bytes plus conservative RGBA8 GPU estimate; not measured VRAM/RSS; combined environment and character budget.",
+      "budget_bytes": 17179869184,
+      "combined_estimated_bytes": 2197159936,
+      "consumers": 1,
+      "cpu_bytes": 658636800,
+      "cpu_release_pending": 78,
+      "cpu_released_bytes_this_frame": 15728640,
+      "cpu_released_this_frame": 2,
+      "decode_jobs": 4,
+      "decode_ms": 1659.4909999999993,
+      "decode_worker_limit": 8,
+      "decoded": 247,
+      "demand_counts": {
+        "affected": 0,
+        "consumers": 1,
+        "records_added": 0,
+        "records_removed": 0,
+        "records_retained": 108,
+        "required": 244,
+        "source_role_entries_visited": 0,
+        "source_roles_visited": 0
+      },
+      "demand_noops": 5,
+      "demand_phases": {
+        "family_handoff": 0.005,
+        "interest_updates": 0.001,
+        "pending": 0.002,
+        "readiness": 0.004,
+        "record_delta": 0.065,
+        "required": 0.066,
+        "total": 0.077
+      },
+      "demand_runs": 6,
+      "estimated_bytes": 2019164160,
       "evicted": 0,
+      "eviction_pending_bytes": 0,
       "failed": {},
-      "metadata_jobs": 3,
-      "metadata_ms": 298.621,
-      "pending": 138,
-      "pinned_bytes": 597688320,
-      "pinned_over_budget_bytes": 60817408,
-      "resident_sheets": 62
+      "gpu_estimated_bytes": 1360527360,
+      "metadata_jobs": 4,
+      "metadata_ms": 634.9190000000001,
+      "metadata_optional_pending": false,
+      "metadata_phases": {
+        "optional": {
+          "estimates": 33.58,
+          "families": 9.547,
+          "source_files": 0.487
+        },
+        "required": {
+          "characters": 107.253,
+          "environment": 197.163,
+          "environment_all_paths": 0.068,
+          "environment_commit_updates": 0.0,
+          "environment_initial_update": 172.255,
+          "environment_tail": 0.001,
+          "roles": 0.207,
+          "source_files": 0.036,
+          "source_headers_cached_count": 346,
+          "source_headers_selected_count": 346,
+          "source_publications": 2.511,
+          "source_sizes": 0.317
+        }
+      },
+      "pending": 252,
+      "pinned_bytes": 1635778560,
+      "pinned_over_budget_bytes": 0,
+      "publication": {
+        "budget_ms": 2.0,
+        "count": 1,
+        "elapsed_ms": 0.108,
+        "frame": 70,
+        "optional": 1,
+        "required": 0,
+        "uploads": [
+          {
+            "create_ms": 0.001,
+            "created": true,
+            "decode_ms": 4.643,
+            "decode_phases_ms": {
+              "accounting": 0.003,
+              "fixture": 0.001,
+              "load": 4.639
+            },
+            "gpu_estimated_bytes": 7864320,
+            "height": 1024,
+            "path": "res://assets/art/geometry/modular/NakedBody/AttackRun/raw-support.png",
+            "width": 1920,
+            "worker_clock_us": {
+              "dispatched": 4073129,
+              "loaded": 4077792,
+              "queued": 3958459,
+              "started": 4073153,
+              "upload_finished": 4077982,
+              "upload_started": 4077800
+            },
+            "worker_upload_ms": 0.182
+          }
+        ]
+      },
+      "resident_sheets": 173,
+      "selection_jobs": 0,
+      "selection_pending": true,
+      "source_revision": 0
     },
     "quarter": 0,
-    "received": 2,
-    "static_draws": 1,
+    "received": 13,
+    "retiring_nodes": 0,
+    "retiring_views": 0,
+    "static_draws": 77,
     "timeline": {
       "active_group": "",
-      "completed_groups": 1,
-      "completed_retained": 1,
-      "display_ms": 0.0,
+      "completed_groups": 2,
+      "completed_retained": 2,
+      "display_ms": 300.0,
       "paused": true,
-      "queued_groups": 3,
-      "revision": 4,
-      "sequence": 1,
+      "pending_world_key": [],
+      "queued_groups": 0,
+      "revision": 7,
+      "sequence": 2,
       "skipped": [
         {
           "kind": "turn",
-          "occurrence": "e1122f38-21d6-404c-8111-3f0ee9a217a5",
+          "occurrence": "17",
+          "reason": "no_body_visual_in_this_pass"
+        },
+        {
+          "kind": "turn",
+          "occurrence": "21",
+          "reason": "no_body_visual_in_this_pass"
+        },
+        {
+          "kind": "turn",
+          "occurrence": "25",
           "reason": "no_body_visual_in_this_pass"
         },
         {
           "kind": "spatial",
-          "occurrence": "db7b02a4-fd31-4be7-bf18-ba1fc6efc3cd",
-          "reason": "no_body_visual_in_this_pass"
-        },
-        {
-          "kind": "spatial",
-          "occurrence": "312b438d-fc40-49fd-b963-b58e71d40745",
-          "reason": "no_body_visual_in_this_pass"
-        },
-        {
-          "kind": "spatial",
-          "occurrence": "79ec6ede-e7ac-4866-8df0-c57c53e9fead",
-          "reason": "no_body_visual_in_this_pass"
-        },
-        {
-          "kind": "sensory",
-          "occurrence": "f10858a8-b45b-418c-938c-66759dac4dd0",
-          "reason": "no_body_visual_in_this_pass"
-        },
-        {
-          "kind": "spatial",
-          "occurrence": "88960d86-b092-429d-bff6-2decaf149093",
-          "reason": "no_body_visual_in_this_pass"
-        },
-        {
-          "kind": "spatial",
-          "occurrence": "93f828bc-db2c-46ae-9797-17faf24b8dda",
-          "reason": "no_body_visual_in_this_pass"
-        },
-        {
-          "kind": "sensory",
-          "occurrence": "01d0e9b9-5fcd-46e2-9800-109f250bff38",
-          "reason": "no_body_visual_in_this_pass"
-        },
-        {
-          "kind": "spatial",
-          "occurrence": "bcdfa5b2-a674-4fae-a960-ef681ef6b968",
-          "reason": "no_body_visual_in_this_pass"
-        },
-        {
-          "kind": "sensory",
-          "occurrence": "b2628125-c3c8-48cf-b998-0dd5c663534f",
-          "reason": "no_body_visual_in_this_pass"
-        },
-        {
-          "kind": "spatial",
-          "occurrence": "246e8b23-57b7-4a29-9b8d-6ddc26cbc724",
+          "occurrence": "33",
           "reason": "no_body_visual_in_this_pass"
         },
         {
           "kind": "undisclosed",
-          "occurrence": "e547fbc4-d13f-4cd9-b2df-9744204f1b10",
+          "occurrence": "40",
           "reason": "no_body_visual_in_this_pass"
         },
         {
-          "kind": "damage",
-          "occurrence": "9991697d-324b-4895-b508-0a8127ebaffa",
-          "reason": "no_body_visual_in_this_pass"
-        },
-        {
-          "kind": "spatial",
-          "occurrence": "aca59a35-3e81-458b-beb4-c43fdb4964ef",
+          "kind": "sensory",
+          "occurrence": "43",
           "reason": "no_body_visual_in_this_pass"
         },
         {
           "kind": "spatial",
-          "occurrence": "2d72167e-fbfa-4432-832c-c07e4b942d53",
+          "occurrence": "37",
+          "reason": "no_body_visual_in_this_pass"
+        },
+        {
+          "kind": "sensory",
+          "occurrence": "53",
+          "reason": "no_body_visual_in_this_pass"
+        },
+        {
+          "kind": "spatial",
+          "occurrence": "50",
+          "reason": "no_body_visual_in_this_pass"
+        },
+        {
+          "kind": "spatial",
+          "occurrence": "61",
+          "reason": "no_body_visual_in_this_pass"
+        },
+        {
+          "kind": "undisclosed",
+          "occurrence": "68",
+          "reason": "no_body_visual_in_this_pass"
+        },
+        {
+          "kind": "sensory",
+          "occurrence": "71",
+          "reason": "no_body_visual_in_this_pass"
+        },
+        {
+          "kind": "spatial",
+          "occurrence": "65",
+          "reason": "no_body_visual_in_this_pass"
+        },
+        {
+          "kind": "spatial",
+          "occurrence": "76",
+          "reason": "no_body_visual_in_this_pass"
+        },
+        {
+          "kind": "undisclosed",
+          "occurrence": "83",
+          "reason": "no_body_visual_in_this_pass"
+        },
+        {
+          "kind": "sensory",
+          "occurrence": "86",
+          "reason": "no_body_visual_in_this_pass"
+        },
+        {
+          "kind": "spatial",
+          "occurrence": "80",
+          "reason": "no_body_visual_in_this_pass"
+        },
+        {
+          "kind": "spatial",
+          "occurrence": "91",
+          "reason": "no_body_visual_in_this_pass"
+        },
+        {
+          "kind": "undisclosed",
+          "occurrence": "98",
+          "reason": "no_body_visual_in_this_pass"
+        },
+        {
+          "kind": "sensory",
+          "occurrence": "101",
+          "reason": "no_body_visual_in_this_pass"
+        },
+        {
+          "kind": "spatial",
+          "occurrence": "95",
           "reason": "no_body_visual_in_this_pass"
         },
         {
           "kind": "turn",
-          "occurrence": "a00dcd25-46b9-4c64-aa0a-ee0a43555fce",
+          "occurrence": "106",
           "reason": "no_body_visual_in_this_pass"
         },
         {
           "kind": "turn",
-          "occurrence": "2dc4559e-2b76-4cf3-a160-202ea79f09d7",
+          "occurrence": "110",
+          "reason": "no_body_visual_in_this_pass"
+        },
+        {
+          "kind": "turn",
+          "occurrence": "114",
+          "reason": "no_body_visual_in_this_pass"
+        },
+        {
+          "kind": "turn",
+          "occurrence": "115",
+          "reason": "no_body_visual_in_this_pass"
+        },
+        {
+          "kind": "turn",
+          "occurrence": "119",
+          "reason": "no_body_visual_in_this_pass"
+        },
+        {
+          "kind": "turn",
+          "occurrence": "123",
+          "reason": "no_body_visual_in_this_pass"
+        },
+        {
+          "kind": "spatial",
+          "occurrence": "131",
+          "reason": "no_body_visual_in_this_pass"
+        },
+        {
+          "kind": "undisclosed",
+          "occurrence": "138",
+          "reason": "no_body_visual_in_this_pass"
+        },
+        {
+          "kind": "sensory",
+          "occurrence": "141",
+          "reason": "no_body_visual_in_this_pass"
+        },
+        {
+          "kind": "spatial",
+          "occurrence": "135",
+          "reason": "no_body_visual_in_this_pass"
+        },
+        {
+          "kind": "sensory",
+          "occurrence": "151",
+          "reason": "no_body_visual_in_this_pass"
+        },
+        {
+          "kind": "spatial",
+          "occurrence": "148",
+          "reason": "no_body_visual_in_this_pass"
+        },
+        {
+          "kind": "spatial",
+          "occurrence": "159",
+          "reason": "no_body_visual_in_this_pass"
+        },
+        {
+          "kind": "undisclosed",
+          "occurrence": "166",
+          "reason": "no_body_visual_in_this_pass"
+        },
+        {
+          "kind": "sensory",
+          "occurrence": "169",
+          "reason": "no_body_visual_in_this_pass"
+        },
+        {
+          "kind": "spatial",
+          "occurrence": "163",
+          "reason": "no_body_visual_in_this_pass"
+        },
+        {
+          "kind": "spatial",
+          "occurrence": "174",
+          "reason": "no_body_visual_in_this_pass"
+        },
+        {
+          "kind": "undisclosed",
+          "occurrence": "181",
+          "reason": "no_body_visual_in_this_pass"
+        },
+        {
+          "kind": "sensory",
+          "occurrence": "184",
+          "reason": "no_body_visual_in_this_pass"
+        },
+        {
+          "kind": "spatial",
+          "occurrence": "178",
           "reason": "no_body_visual_in_this_pass"
         }
       ],
-      "skipped_count": 17,
-      "waiting_for_media": true
+      "skipped_count": 2,
+      "waiting_for_media": false,
+      "waiting_for_world": false
     },
     "unresolved": []
   }

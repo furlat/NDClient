@@ -1,38 +1,38 @@
 {
   "checks": 35,
-  "command": "--headless --script res://tests/studio_native_condition_checks.gd -- --recording=res://.runtime/studio-cases/hide-seed3-v3/amber/journal",
+  "command": "--headless --script res://tests/studio_native_condition_checks.gd -- --recording=res://tests/fixtures/schema16/scenarios/hide/amber",
   "evidence": [
+    {
+      "activity": "idle",
+      "at_ms": 1091.66666666667,
+      "clip": "CrouchIdle",
+      "frame": 2,
+      "owner_start_ms": 916.666666666667,
+      "source": "res://authoring/abilities/conditions/condition.hidden.tres::poses/0"
+    },
+    {
+      "activity": "move",
+      "at_ms": 1475.0,
+      "clip": "CrouchRun",
+      "frame": 2,
+      "owner_start_ms": 916.666666666667,
+      "source": "res://authoring/abilities/conditions/condition.hidden.tres::poses/1"
+    },
     {
       "activity": "idle",
       "at_ms": 1858.33333333333,
       "clip": "CrouchIdle",
-      "frame": 2,
-      "owner_start_ms": 1683.33333333333,
-      "source": "res://authoring/presentation/conditions/hidden.tres::activity_poses/0"
-    },
-    {
-      "activity": "move",
-      "at_ms": 2241.66666666667,
-      "clip": "CrouchRun",
-      "frame": 2,
-      "owner_start_ms": 1683.33333333333,
-      "source": "res://authoring/presentation/conditions/hidden.tres::activity_poses/1"
-    },
-    {
-      "activity": "idle",
-      "at_ms": 2625.0,
-      "clip": "CrouchIdle",
       "frame": 11,
-      "owner_start_ms": 1683.33333333333,
-      "source": "res://authoring/presentation/conditions/hidden.tres::activity_poses/0"
+      "owner_start_ms": 916.666666666667,
+      "source": "res://authoring/abilities/conditions/condition.hidden.tres::poses/0"
     },
     {
       "activity": "idle",
-      "at_ms": 4118.84214274089,
+      "at_ms": 4194.44444444445,
       "clip": "CrouchIdle",
-      "frame": 14,
-      "owner_start_ms": 1683.33333333333,
-      "source": "res://authoring/presentation/conditions/hidden.tres::activity_poses/0"
+      "frame": 9,
+      "owner_start_ms": 916.666666666667,
+      "source": "res://authoring/abilities/conditions/condition.hidden.tres::poses/0"
     }
   ],
   "failures": [],

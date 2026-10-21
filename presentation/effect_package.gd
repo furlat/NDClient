@@ -10,7 +10,7 @@ extends RefCounted
 const Baked=preload("res://presentation/baked_effect.gd")
 const Admission=preload("res://presentation/native_source_admission.gd")
 const Native=preload("res://presentation/native_effects.gd")
-const SOURCE_TABLE:="res://assets/vfx/format/spirit-runtime-20261021-source-resources.json"
+const SOURCE_TABLE:="res://assets/vfx/format/speed-completion-20261021-source-resources.json"
 const INDEX:="res://assets/vfx/index.json"
 ## Conditions whose package lifecycle the client keeps from playing.
 const LIFECYCLES:="condition_lifecycles.json"
@@ -214,6 +214,7 @@ static func key(value:Dictionary)->String:
     var identity:Array=[str(value.get("id","")),selected.kind,sources,str(value.get("opacity_uniform",""))]
     if not str(value.get("immutable_preparation","")).is_empty():identity.append(value.immutable_preparation)
     if value.get("preparation_inputs","construction")!="construction":identity.append(value.preparation_inputs)
+    if not str(value.get("construction_argument","")).is_empty():identity.append(value.construction_argument)
     return JSON.stringify(identity)
 
 static func occurrence_clip(component:Dictionary)->Dictionary:
@@ -226,6 +227,8 @@ static func occurrence_clip(component:Dictionary)->Dictionary:
     if component.has("native_constructor_inputs"):
         result.construction_inputs=component.native_constructor_inputs
         result.preparation_owner=component.id
+    var argument:String=str(component.get("native_cue",{}).get("constructor_input",{}).get("argument",""))
+    if not argument.is_empty():result.construction_argument=argument
     if component.get("native_cue",{}).get("sampling")=="absolute":result.absolute_sampling=true
     if component.get("native_cue",{}).has("opacity_uniform"):result.opacity_uniform=component.native_cue.opacity_uniform
     return result
@@ -248,9 +251,15 @@ static func resource_paths(value:Dictionary)->Array:
 ## A recording's `warm` list names live materials. Its actual scene/prototype
 ## programs use the same worker admission; native first-draw pipelines still
 ## belong to native_source_startup.gd and the actual drawing viewport.
-static func prepare(clips:Array,cache:Dictionary,urgent:bool=true)->Dictionary:
+static func prepare(clips:Array,cache:Dictionary,urgent:bool=true,interests:Array=[])->Dictionary:
+    # Incremental consumers retain their full current request, including sibling
+    # optional calls. Abandoned work drains before any later loading can enter.
+    retain_source_preparation(cache,interests if not interests.is_empty() else clips)
     # No occurrence or package program is requested by an empty consumer set.
     if clips.is_empty():return {"ready":true,"pending":0,"errors":[]}
+    # A retained source already owns admission. Let that exact owner finish
+    # its current unit before a newly required sibling adds uncached paths.
+    var continued:Dictionary=Admission.step_owned_source(cache,urgent)
     _ensure_clock()
     var pending:int=0;var errors:Array=[];var paths:Dictionary={};var live:Array=[]
     for value in clips:
@@ -261,7 +270,7 @@ static func prepare(clips:Array,cache:Dictionary,urgent:bool=true)->Dictionary:
             var bundle:Variant=Baked.ready_for(value,0,urgent)
             if bundle==null:pending+=1
             elif not bundle is Resource:errors.append("Recording cannot be loaded: "+str(value.id))
-            elif not Admission.prepare_materials(bundle,Baked.material_programs(bundle),cache):pending+=1
+            elif not Admission.prepare_materials(bundle,Baked.material_programs(bundle),cache,urgent):pending+=1
             continue
         var approach:Dictionary=chosen.approaches[0]
         live.append(approach)
@@ -277,15 +286,15 @@ static func prepare(clips:Array,cache:Dictionary,urgent:bool=true)->Dictionary:
                 cache.effect_package_phase_paths[phase]=found.keys()
             for path in cache.effect_package_phase_paths[phase]:paths[path]=true
     if not live.is_empty():
-        var loading:Dictionary=Admission.prepare(paths.keys(),cache)
+        var loading:Dictionary=Admission.prepare(paths.keys(),cache,false,urgent)
         pending+=loading.pending;errors.append_array(loading.errors)
         if loading.pending==0 and loading.errors.is_empty():
             for approach in live:
                 var materials:Array[Material]=[]
                 for path in approach.warm:
                     if cache.get(path) is Material:materials.append(cache[path])
-                if not Admission.prepare_materials(cache[approach.path],materials,cache):pending+=1
-            var prepared:Dictionary=_prepare_immutable(clips,cache)
+                if not Admission.prepare_materials(cache[approach.path],materials,cache,urgent):pending+=1
+            var prepared:Dictionary=_prepare_immutable(clips,cache,urgent,bool(continued.get("stepped",false)))
             pending+=prepared.pending;errors.append_array(prepared.errors)
     if not clips.is_empty() and not Admission.can_mutate():pending+=1
     return {"ready":pending==0 and errors.is_empty(),"pending":pending,"errors":errors}
@@ -293,11 +302,10 @@ static func prepare(clips:Array,cache:Dictionary,urgent:bool=true)->Dictionary:
 ## Source-owned bounded resource discovery. This cache belongs to the existing
 ## preparation consumer; completed jobs retain resource paths, never facts or
 ## sampled prototypes. The Factory owns the shared immutable resource bank.
-static func _prepare_immutable(clips:Array,cache:Dictionary)->Dictionary:
+static func _prepare_immutable(clips:Array,cache:Dictionary,urgent:bool,stepped:bool=false)->Dictionary:
     if not cache.has("native_immutable_jobs"):cache.native_immutable_jobs={}
     var jobs:Dictionary=cache.native_immutable_jobs
     var pending:int=0;var errors:Array=[]
-    var stepped:bool=false
     for value in clips:
         var selected:Dictionary=choice(value)
         if selected.kind=="recorded" or selected.approaches.is_empty():continue
@@ -307,7 +315,7 @@ static func _prepare_immutable(clips:Array,cache:Dictionary)->Dictionary:
         var preparation_path:String=str(value.get("immutable_preparation",_immutable_preparation))
         if preparation_path.is_empty():continue
         var preparation:Script=cache[preparation_path]
-        var identity:String=key(value)+"|"+str(selected.approaches[0].path)+"|"+str(value.get("preparation_owner","source"))
+        var identity:String=_preparation_identity(value,selected)
         if not jobs.has(identity):
             var phase:Resource=cache[selected.approaches[0].source_phase]
             var actual:Dictionary=Constructed.clip_with_inputs(phase,value.construction_inputs) if value.has("construction_inputs") and value.get("preparation_inputs","construction")=="construction" else phase.to_clip()
@@ -315,16 +323,39 @@ static func _prepare_immutable(clips:Array,cache:Dictionary)->Dictionary:
             jobs[identity].preparation_owner=str(value.get("preparation_owner",""))
         var job:Dictionary=jobs[identity]
         if not job.complete and job.error.is_empty() and not stepped:
-            preparation.step(job);stepped=true
+            var progress:Dictionary=Admission.step_source(preparation,job,cache,urgent)
+            stepped=bool(progress.get("stepped",false))
         if not job.error.is_empty():errors.append(job.error)
         elif not job.complete:pending+=1
     return {"pending":pending,"errors":errors}
+
+static func _preparation_identity(value:Dictionary,selected:Dictionary)->String:
+    return key(value)+"|"+str(selected.approaches[0].path)+"|"+str(value.get("preparation_owner","source"))
+
+## Completed immutable discovery remains reusable. Only abandoned unfinished
+## jobs are discarded locally; Admission retains an active job through drain.
+static func retain_source_preparation(cache:Dictionary,clips:Array)->void:
+    var jobs:Dictionary=cache.get("native_immutable_jobs",{})
+    if jobs.is_empty():return
+    var retained:Dictionary={}
+    for value in clips:
+        var selected:Dictionary=choice(value)
+        if selected.kind=="recorded" or selected.approaches.is_empty():continue
+        if requires_construction(value) and not value.has("construction_inputs"):continue
+        if str(value.get("immutable_preparation",_immutable_preparation)).is_empty():continue
+        retained[_preparation_identity(value,selected)]=true
+    for identity in jobs.keys():
+        if jobs[identity].complete or retained.has(identity):continue
+        Admission.cancel_source(jobs[identity])
+        jobs.erase(identity)
 
 static func retain_preparation(cache:Dictionary,owners:Dictionary)->void:
     var jobs:Dictionary=cache.get("native_immutable_jobs",{})
     for id in jobs.keys():
         var owner:String=jobs[id].get("preparation_owner","")
-        if not owner.is_empty() and not owners.has(owner):jobs.erase(id)
+        if not owner.is_empty() and not owners.has(owner):
+            Admission.cancel_source(jobs[id])
+            jobs.erase(id)
 
 static func _resource_values(value:Variant,result:Dictionary)->void:
     if value is Dictionary:
@@ -390,6 +421,18 @@ static func _live(parent:Node3D,value:Dictionary,approach:Dictionary,layer_mask:
     if direct_operands:
         var actual:Dictionary={"layer_mask":layer_mask,"operands":value.get("construction_inputs",[])}
         if bound_constructor:actual.phase=source_phase
+        var argument:String=str(value.get("construction_argument",""))
+        if not argument.is_empty():
+            var operands:Array=value.get("construction_inputs",[])
+            var fields:Array=source_phase.options.get("construction_operands",[]) if source_phase!=null else []
+            if argument in ["layer_mask","phase","operands","clip"] or operands.size()!=1 \
+                or operands[0].get("component_path")!=[argument] or operands[0].get("input_field","")!="" \
+                or not operands[0].get("values") is Dictionary or fields.is_empty() \
+                or operands[0].values.size()!=fields.size() or not fields.all(func(field):return operands[0].values.has(field)):
+                handle.error="Native constructor argument operands unavailable: "+argument;return handle
+            # The selected public constructor owns semantic value validation.
+            # Copy only its admitted factual operand; shared phase data stays immutable.
+            actual[argument]=operands[0].values.duplicate(true)
         occurrence=script.make_component(actual)
     elif bind_phase:
         occurrence=constructed.make_component({"layer_mask":layer_mask,"phase":source_phase,"operands":value.get("construction_inputs",[])})
@@ -603,13 +646,14 @@ static func set_layer(handle:Dictionary,mask:int)->void:
 
 ## Loads what hit_material reads: the clip's recording when it has one, else
 ## its playing live approach.
-static func prepare_hits(clips:Array,cache:Dictionary)->Dictionary:
+static func prepare_hits(clips:Array,cache:Dictionary,interests:Array=[],urgent:bool=true)->Dictionary:
+    retain_source_preparation(cache,interests if not interests.is_empty() else clips)
     var live:Array=[];var pending:int=0
     for value in clips:
         var bundle:Variant=Baked.ready_for(value,0,true)
         if bundle==null:pending+=1
         elif not bundle is Resource:live.append(value)
-    var result:Dictionary=prepare(live,cache) if not live.is_empty() else {"ready":true,"pending":0,"errors":[]}
+    var result:Dictionary=prepare(live,cache,urgent,interests if not interests.is_empty() else clips) if not live.is_empty() else {"ready":true,"pending":0,"errors":[]}
     result.pending+=pending;result.ready=result.ready and pending==0
     return result
 

@@ -1,9 +1,102 @@
 {
-  "checks": 1,
-  "evidence": {},
-  "failures": [
-    "Usage: --state=<recorded canonical state.json>"
-  ],
+  "checks": 50,
+  "evidence": {
+    "metadata_phases": {
+      "optional": {
+        "estimates": 12.156,
+        "families": 3.476,
+        "source_files": 0.147
+      },
+      "required": {
+        "characters": 1.964,
+        "environment": 166.495,
+        "environment_all_paths": 0.016,
+        "environment_commit_updates": 0.0,
+        "environment_initial_update": 158.409,
+        "environment_tail": 0.002,
+        "roles": 0.104,
+        "source_files": 2.724,
+        "source_headers_cached_count": 156,
+        "source_headers_selected_count": 156,
+        "source_publications": 0.954,
+        "source_sizes": 0.124
+      }
+    },
+    "publication": {
+      "budget_ms": 2.0,
+      "count": 3,
+      "elapsed_ms": 0.167,
+      "frame": 57,
+      "optional": 0,
+      "required": 3,
+      "uploads": [
+        {
+          "create_ms": 0.011,
+          "created": true,
+          "decode_ms": 1.328,
+          "decode_phases_ms": {
+            "accounting": 0.005,
+            "fixture": 0.001,
+            "load": 1.322
+          },
+          "gpu_estimated_bytes": 262144,
+          "height": 256,
+          "path": "res://assets/art/media/environment/terrain/geometry/terrain.stone.e/ground-d1-e-geometry.png",
+          "width": 256,
+          "worker_clock_us": {
+            "dispatched": 4842583,
+            "loaded": 4843905,
+            "queued": 4842583,
+            "started": 4842583
+          },
+          "worker_upload_ms": 0.0
+        },
+        {
+          "create_ms": 0.002,
+          "created": true,
+          "decode_ms": 1.644,
+          "decode_phases_ms": {
+            "accounting": 0.004,
+            "fixture": 0.001,
+            "load": 1.639
+          },
+          "gpu_estimated_bytes": 262144,
+          "height": 256,
+          "path": "res://assets/art/geometry/environment-quality/inferred/fantasy.ground.d1/quality-15-e.png",
+          "width": 256,
+          "worker_clock_us": {
+            "dispatched": 4842583,
+            "loaded": 4844222,
+            "queued": 4842583,
+            "started": 4842583
+          },
+          "worker_upload_ms": 0.0
+        },
+        {
+          "create_ms": 0.002,
+          "created": true,
+          "decode_ms": 1.673,
+          "decode_phases_ms": {
+            "accounting": 0.006,
+            "fixture": 0.001,
+            "load": 1.666
+          },
+          "gpu_estimated_bytes": 262144,
+          "height": 256,
+          "path": "res://assets/art/media/environment/terrain/ground-d1-s.png",
+          "width": 256,
+          "worker_clock_us": {
+            "dispatched": 4842594,
+            "loaded": 4844260,
+            "queued": 4842594,
+            "started": 4842594
+          },
+          "worker_upload_ms": 0.0
+        }
+      ]
+    }
+  },
+  "failures": [],
   "scope": "Original source closure parity, required-before-optional metadata readiness, immutable input snapshots, stale epochs/requests and real PNG publication order/bytes. Headless texture adapter only; native upload/frame timing requires live acceptance.",
-  "state": ""
+  "state": "res://tests/fixtures/schema16/scenarios/gallery/amber"
 }

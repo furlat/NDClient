@@ -1,7 +1,63 @@
 # Gallery issued-command and Studio profile — 20 October
 
-The entries below are chronological evidence. The latest e102 ownership repeat
-is in the final section; the original c494 header describes only its baseline.
+The entries below are chronological evidence. The 21 October Door response
+review follows this introduction; the original c494 header describes only its
+baseline, and the later e102 sections retain their original source boundaries.
+
+## Door response review — 21 October, saved traces only
+
+The earlier fast Door result was real, but measured **packet arrival to first
+body animation**, not the complete user command. The three original quiet
+18 October routes still contain **216.453 / 201.389 / 256.168 ms** from the full
+gesture to that animation. Their client packet-to-animation portions were
+**60.772 / 62.854 / 56.165 ms**. The original traces are in
+`.runtime/player-runs/20261018T002837.316130Z`, `20261018T002918.136874Z` and
+`20261018T003012.749641Z`.
+
+There is nevertheless a real increase in client time in the latest available
+quiet 21 October receipts, before the installed82a receiving batch:
+
+| Same client-clock interval | Earlier18October, three routes | Latest21October, three routes |
+|---|---:|---:|
+| Packet framing start → first body animation |60.772 /62.854 /56.165ms|149.001 /201.968 /141.714ms|
+| Actual command submit → first body animation |198.427 /186.851 /236.064ms|203.888 /266.445 /190.565ms|
+| Packet admission CPU |19.087 /23.545 /17.950ms|5.981 /8.718 /5.752ms|
+| Canonical fold |15.015 /15.535 /16.495ms|26.486 /28.247 /24.737ms|
+| Presentation compiler |4.343 /4.406 /4.776ms|8.687 /11.019 /9.688ms|
+| Opening metadata ready → first body animation |18.305 /15.442 /12.493ms|103.773 /146.343 /97.345ms|
+
+The main new measured wait is after the opening is prepared. Saved selection
+jobs show cancelled offered-choice body metadata continuing for
+**102.772 /130.127 /97.998 ms**. The actual selected Door metadata job costs
+only **1.089 /1.716 /1.019 ms**, but waits **111.974 /170.299 /102.414 ms**
+behind that same worker. In routes1/2, cancellation occurs before the aggregate
+body-path call starts; the old branch omitted a cancellation check there. This
+is a client preparation/cancellation defect, not evidence of a new backend or
+Factory defect. The queue interval overlaps transport/folding and must not be
+added to the end-to-end total. It does not exclusively account for the whole
+opening-to-animation interval.
+
+Existing cancellation checks now run between behavior descriptors and before
+the aggregate body-path call in `presentation/selection_media.gd`. They cannot
+interrupt a leaf already running, as in route3. No new quiet profile has yet
+established their latency benefit. Fold and compiler time also increased; those
+are distinct remaining client costs, with no single change causally attributed
+by these different-content revisions. The 18October runs use camera18 and an
+older producer/package; 21October uses camera12 and current integrated content.
+This is evidence of increased client time, not a matched-revision benchmark.
+
+The separately removed209–212ms `native_prepare_resources` leaf was a startup
+stall. Its removal did not establish a low total Door response. Current
+comparable old→new21October submit-to-body results are
+193.257→203.888 /189.252→266.445 /190.125→190.565ms. Preserve both the slower
+middle trial and the nearly unchanged third trial.
+
+[Latest quiet source/package identities, raw paths and exact job clocks](../.runtime/tests/20261021T175335.405738Z-r6-current-three/quiet-r6-comparison.json)
+remain authoritative. No runtime job was launched for this review, no quiet82a
+performance pass is claimed, and the shared scheduler/publication/lighting and
+private animation clocks remain the production paths.
+
+## Original20October baseline
 
 Baseline runtime010343ab, sole `codex-authoring-schemabump` branch, installed
 Factory `production-bindings-c494177f9ef03e3d`, frozen engine211b71134/schema16.

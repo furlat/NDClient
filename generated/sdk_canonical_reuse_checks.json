@@ -1,107 +1,61 @@
 {
-  "checks": 59,
+  "checks": 86,
   "failures": [],
   "measurements": [
     {
-      "elapsed_ms": 0.084,
+      "elapsed_ms": 0.091,
       "phases_ms": {
-        "actor_inputs": 0.003,
-        "captures": 0.006,
-        "copy": 0.013,
-        "fact_turn": 0.006,
-        "facts": 0.003,
-        "finalize": 0.029,
-        "world": 0.001
+        "facts": 0.004,
+        "world": 0.011
       },
       "sequence": 1
     },
     {
-      "elapsed_ms": 17.502,
+      "elapsed_ms": 23.251,
       "phases_ms": {
-        "actor_inputs": 0.012,
-        "captures": 1.713,
-        "copy": 0.019,
-        "fact_action": 0.006,
-        "fact_sensory": 8.604,
-        "fact_spatial": 0.017,
-        "facts": 8.624,
-        "finalize": 0.058,
-        "world": 6.849
+        "facts": 3.674,
+        "world": 14.191
       },
       "sequence": 2
     },
     {
-      "elapsed_ms": 14.453,
+      "elapsed_ms": 32.341,
       "phases_ms": {
-        "actor_inputs": 0.058,
-        "captures": 0.987,
-        "copy": 0.431,
-        "fact_movement": 0.003,
-        "fact_sensory": 7.83,
-        "fact_spatial": 0.125,
-        "fact_step": 0.013,
-        "facts": 7.956,
-        "finalize": 0.062,
-        "world": 4.785
+        "facts": 16.364,
+        "world": 10.731
       },
       "sequence": 3
     },
     {
-      "elapsed_ms": 0.949,
+      "elapsed_ms": 1.252,
       "phases_ms": {
-        "actor_inputs": 0.011,
-        "captures": 0.027,
-        "copy": 0.518,
-        "fact_action": 0.003,
-        "fact_condition": 0.03,
-        "fact_item_charge": 0.029,
-        "facts": 0.06,
-        "finalize": 0.068,
-        "world": 0.002
+        "facts": 0.015,
+        "world": 0.02
       },
       "sequence": 4
     },
     {
-      "elapsed_ms": 2.471,
+      "elapsed_ms": 1.143,
       "phases_ms": {
-        "actor_inputs": 0.118,
-        "captures": 0.419,
-        "copy": 0.442,
-        "fact_area_reach": 0.003,
-        "fact_damage": 0.029,
-        "fact_object_damage": 0.012,
-        "fact_object_destroyed": 0.009,
-        "fact_saving_throw": 0.01,
-        "fact_spatial": 0.021,
-        "fact_spell": 0.022,
-        "facts": 0.125,
-        "finalize": 0.054,
-        "world": 0.880000000000001
+        "facts": 0.011,
+        "world": 0.02
       },
       "sequence": 5
     },
     {
-      "elapsed_ms": 2.972,
+      "elapsed_ms": 1.205,
       "phases_ms": {
-        "actor_inputs": 0.0880000000000001,
-        "captures": 0.243,
-        "copy": 0.45,
-        "fact_area_reach": 0.003,
-        "fact_damage": 0.03,
-        "fact_life": 0.015,
-        "fact_object_damage": 0.006,
-        "fact_object_destroyed": 0.007,
-        "fact_saving_throw": 0.01,
-        "fact_sensory": 1.272,
-        "fact_spatial": 0.016,
-        "fact_spell": 0.014,
-        "facts": 1.372,
-        "finalize": 0.056,
-        "world": 0.479
+        "facts": 0.012,
+        "world": 0.02
       },
       "sequence": 6
     }
   ],
-  "recording": "res://.runtime/player-runs/20261016T121313.010271Z/journal",
-  "scope": "Six actual Gallery operations; exact canonical/event-time parity and prior-state, input and public-result isolation. Isolated CPU timings only."
+  "public_mutation_boundary": "Journal.snapshot(): the actual complete detached caller snapshot",
+  "recording": "res://tests/fixtures/schema16/scenarios/gallery/amber",
+  "retired_subchecks": [
+    "Mutating a private admitted packet after its immutable ownership transfer",
+    "Mutating a private reducer result, including shared read-only masks"
+  ],
+  "scope": "Six actual Gallery operations; exact canonical/event-time parity, reducer input/prior-cut immutability, and detached public Journal.snapshot isolation. Accepted private packets/results are immutable borrowed ownership, not a post-transfer mutation API. Isolated CPU timings only."
 }

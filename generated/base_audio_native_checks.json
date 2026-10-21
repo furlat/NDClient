@@ -1,152 +1,878 @@
 {
-  "audio_driver": "WASAPI",
-  "checks": 71,
+  "audio_driver": "Dummy",
+  "checks": 78,
   "evidence": [
     {
       "clip": "res://assets/audio/kenney/impact/impactPunch_medium_000.ogg",
       "cue": "physical_impact",
-      "pcm_frames": 25088,
-      "peak": 0.158261343836784,
-      "source_event_uuid": "8307200c-d69d-4dda-8486-6094de652064",
-      "source_marker": "attack.contact"
+      "duration_ms": 430.544,
+      "final": {
+        "counters": {
+          "crossed": 5,
+          "expired": 0,
+          "limited": 0,
+          "loops": 0,
+          "missing": 0,
+          "muted": 3,
+          "shots": 2,
+          "started": 2
+        },
+        "enabled": true,
+        "errors": [],
+        "rows": {
+          "2:36:audio:physical_impact:3": {
+            "attachment": "target_body",
+            "bus": "SFX",
+            "cue_id": "physical_impact",
+            "display_ms": 1167.66666666667,
+            "enabled": true,
+            "gain_db": -12.0,
+            "id": "2:36:audio:physical_impact:3",
+            "native_playing": false,
+            "offset_s": null,
+            "paused": false,
+            "reason": "seek_inside",
+            "source_ready": true,
+            "starts": 1,
+            "state": "skipped"
+          }
+        }
+      },
+      "initial": {
+        "counters": {
+          "crossed": 5,
+          "expired": 0,
+          "limited": 0,
+          "loops": 0,
+          "missing": 0,
+          "muted": 3,
+          "shots": 2,
+          "started": 2
+        },
+        "enabled": true,
+        "errors": [],
+        "rows": {
+          "2:36:audio:physical_impact:3": {
+            "attachment": "target_body",
+            "bus": "SFX",
+            "cue_id": "physical_impact",
+            "display_ms": 1167.66666666667,
+            "enabled": true,
+            "gain_db": -12.0,
+            "id": "2:36:audio:physical_impact:3",
+            "native_playing": true,
+            "offset_s": 0.001,
+            "paused": false,
+            "reason": "",
+            "source_ready": true,
+            "starts": 1,
+            "state": "started"
+          }
+        }
+      },
+      "paused_observations": 0,
+      "pcm_frames": 20480,
+      "peak": 0.158213391900063,
+      "physics_frames": 32,
+      "playing_observations": 25,
+      "process_frames": 74,
+      "source_event_uuid": "36",
+      "source_marker": "attack.contact",
+      "source_sync_s": 0.0,
+      "stream_s": 0.430544227361679
     },
     {
       "clip": "res://assets/audio/kenney/rpg/knifeSlice2.ogg",
       "cue": "weapon_swing",
+      "duration_ms": 568.792,
+      "final": {
+        "counters": {
+          "crossed": 6,
+          "expired": 0,
+          "limited": 0,
+          "loops": 0,
+          "missing": 0,
+          "muted": 3,
+          "shots": 3,
+          "started": 3
+        },
+        "enabled": true,
+        "errors": [],
+        "rows": {
+          "2:39:audio:weapon_swing:5": {
+            "attachment": "weapon",
+            "bus": "SFX",
+            "cue_id": "weapon_swing",
+            "display_ms": 1167.66666666667,
+            "enabled": true,
+            "gain_db": -14.0,
+            "id": "2:39:audio:weapon_swing:5",
+            "native_playing": false,
+            "offset_s": null,
+            "paused": false,
+            "reason": "seek_inside",
+            "source_ready": true,
+            "starts": 1,
+            "state": "skipped"
+          }
+        }
+      },
+      "initial": {
+        "counters": {
+          "crossed": 6,
+          "expired": 0,
+          "limited": 0,
+          "loops": 0,
+          "missing": 0,
+          "muted": 3,
+          "shots": 3,
+          "started": 3
+        },
+        "enabled": true,
+        "errors": [],
+        "rows": {
+          "2:39:audio:weapon_swing:5": {
+            "attachment": "weapon",
+            "bus": "SFX",
+            "cue_id": "weapon_swing",
+            "display_ms": 1167.66666666667,
+            "enabled": true,
+            "gain_db": -14.0,
+            "id": "2:39:audio:weapon_swing:5",
+            "native_playing": true,
+            "offset_s": 0.001,
+            "paused": false,
+            "reason": "",
+            "source_ready": true,
+            "starts": 1,
+            "state": "started"
+          }
+        }
+      },
+      "paused_observations": 0,
       "pcm_frames": 32768,
-      "peak": 0.0677548944950104,
-      "source_event_uuid": "5605c8fb-e56c-40f7-b07e-6166ac81d932",
-      "source_marker": "attack.release"
-    },
-    {
-      "clip": "res://assets/audio/kenney/impact/impactSoft_heavy_000.ogg",
-      "cue": "body_fall",
-      "pcm_frames": 28672,
-      "peak": 0.116504639387131,
-      "source_event_uuid": "b1f0142e-3576-4693-8218-df1d0fc751f1",
-      "source_marker": "life.body_end"
-    },
-    {
-      "clip": "res://assets/audio/battle/Bow.wav",
-      "cue": "projectile_release",
-      "pcm_frames": 31232,
-      "peak": 0.0619743913412094,
-      "source_event_uuid": "94ba1e11-30c5-4836-8ed1-b84c51cf1daa",
-      "source_marker": "attack.release"
+      "peak": 0.0677128881216049,
+      "physics_frames": 40,
+      "playing_observations": 34,
+      "process_frames": 97,
+      "source_event_uuid": "39",
+      "source_marker": "attack.release",
+      "source_sync_s": 0.0,
+      "stream_s": 0.568791687488556
     },
     {
       "clip": "res://assets/audio/kenney/rpg/cloth2.ogg",
       "cue": "jump_takeoff",
-      "pcm_frames": 25088,
-      "peak": 0.0377649515867233,
-      "source_event_uuid": "a67ca160-9fbc-48a2-8a77-732ee150893a",
-      "source_marker": "jump.takeoff"
+      "duration_ms": 415.063,
+      "final": {
+        "counters": {
+          "crossed": 7,
+          "expired": 0,
+          "limited": 0,
+          "loops": 0,
+          "missing": 0,
+          "muted": 3,
+          "shots": 4,
+          "started": 4
+        },
+        "enabled": true,
+        "errors": [],
+        "rows": {
+          "2:65:audio:jump_takeoff:1": {
+            "attachment": "body",
+            "bus": "SFX",
+            "cue_id": "jump_takeoff",
+            "display_ms": 2417.66666666667,
+            "enabled": true,
+            "gain_db": -18.0,
+            "id": "2:65:audio:jump_takeoff:1",
+            "native_playing": false,
+            "offset_s": null,
+            "paused": false,
+            "reason": "seek_inside",
+            "source_ready": true,
+            "starts": 1,
+            "state": "skipped"
+          }
+        }
+      },
+      "initial": {
+        "counters": {
+          "crossed": 7,
+          "expired": 0,
+          "limited": 0,
+          "loops": 0,
+          "missing": 0,
+          "muted": 3,
+          "shots": 4,
+          "started": 4
+        },
+        "enabled": true,
+        "errors": [],
+        "rows": {
+          "2:65:audio:jump_takeoff:1": {
+            "attachment": "body",
+            "bus": "SFX",
+            "cue_id": "jump_takeoff",
+            "display_ms": 2417.66666666667,
+            "enabled": true,
+            "gain_db": -18.0,
+            "id": "2:65:audio:jump_takeoff:1",
+            "native_playing": true,
+            "offset_s": 0.001,
+            "paused": false,
+            "reason": "",
+            "source_ready": true,
+            "starts": 1,
+            "state": "started"
+          }
+        }
+      },
+      "paused_observations": 0,
+      "pcm_frames": 20480,
+      "peak": 0.0378308221697807,
+      "physics_frames": 32,
+      "playing_observations": 25,
+      "process_frames": 77,
+      "source_event_uuid": "65",
+      "source_marker": "jump.takeoff",
+      "source_sync_s": 0.0,
+      "stream_s": 0.415062487125397
     },
     {
       "clip": "res://assets/audio/jump-landing/jumpland.wav",
       "cue": "landing",
-      "pcm_frames": 25088,
-      "peak": 0.217329874634743,
-      "source_event_uuid": "a1e0d653-29b3-46fe-a007-0b7e447defb0",
-      "source_marker": "jump.landing"
+      "duration_ms": 408.396,
+      "final": {
+        "counters": {
+          "crossed": 8,
+          "expired": 0,
+          "limited": 0,
+          "loops": 0,
+          "missing": 0,
+          "muted": 3,
+          "shots": 5,
+          "started": 5
+        },
+        "enabled": true,
+        "errors": [],
+        "rows": {
+          "2:88:audio:landing:2": {
+            "attachment": "ground",
+            "bus": "SFX",
+            "cue_id": "landing",
+            "display_ms": 3187.66666666667,
+            "enabled": true,
+            "gain_db": -10.0,
+            "id": "2:88:audio:landing:2",
+            "native_playing": false,
+            "offset_s": null,
+            "paused": false,
+            "reason": "seek_inside",
+            "source_ready": true,
+            "starts": 1,
+            "state": "skipped"
+          }
+        }
+      },
+      "initial": {
+        "counters": {
+          "crossed": 8,
+          "expired": 0,
+          "limited": 0,
+          "loops": 0,
+          "missing": 0,
+          "muted": 3,
+          "shots": 5,
+          "started": 5
+        },
+        "enabled": true,
+        "errors": [],
+        "rows": {
+          "2:88:audio:landing:2": {
+            "attachment": "ground",
+            "bus": "SFX",
+            "cue_id": "landing",
+            "display_ms": 3187.66666666667,
+            "enabled": true,
+            "gain_db": -10.0,
+            "id": "2:88:audio:landing:2",
+            "native_playing": true,
+            "offset_s": 0.001,
+            "paused": false,
+            "reason": "",
+            "source_ready": true,
+            "starts": 1,
+            "state": "started"
+          }
+        }
+      },
+      "paused_observations": 0,
+      "pcm_frames": 24576,
+      "peak": 0.217327103018761,
+      "physics_frames": 31,
+      "playing_observations": 23,
+      "process_frames": 75,
+      "source_event_uuid": "88",
+      "source_marker": "jump.landing",
+      "source_sync_s": 0.08,
+      "stream_s": 0.408395833333333
     },
     {
-      "clip": "res://assets/audio/kenney/impact/impactWood_heavy_000.ogg",
-      "cue": "wood_impact",
-      "pcm_frames": 19968,
-      "peak": 0.0545461289584637,
-      "source_event_uuid": "bb299d25-0816-4801-a067-4a97a036b9a8",
-      "source_marker": "attack.contact"
-    },
-    {
-      "clip": "res://assets/audio/breaking/bfh1_wood_breaking_01.ogg",
-      "cue": "wood_break",
-      "pcm_frames": 19456,
-      "peak": 0.0237389989197254,
-      "source_event_uuid": "2ce6436e-8d19-41ca-80d0-ea52c328cf56",
-      "source_marker": "object.destroyed"
-    },
-    {
-      "clip": "res://assets/audio/kenney/rpg/cloth3.ogg",
-      "cue": "stand_up",
-      "pcm_frames": 27648,
-      "peak": 0.0242931488901377,
-      "source_event_uuid": "33425b35-9935-42f6-aab9-e6d5ee6e0d23",
-      "source_marker": "body.start"
-    },
-    {
-      "clip": "res://assets/audio/kenney/impact/footstep_concrete_001.ogg",
-      "cue": "footstep",
-      "pcm_frames": 9728,
-      "peak": 0.0112060522660613,
-      "source_event_uuid": "5586f641-6d2e-41fd-9ef2-70fb6b9944f9",
-      "source_marker": "movement.foot_contact"
-    },
-    {
-      "clip": "res://assets/audio/kenney/rpg/cloth3.ogg",
-      "cue": "stance_transition",
-      "pcm_frames": 27648,
-      "peak": 0.0215826891362667,
-      "source_event_uuid": "498cbe25-ae01-4076-8e82-ccb8a893b4dd",
-      "source_marker": "action.effect"
-    },
-    {
-      "clip": "res://assets/audio/kenney/rpg/doorOpen_1.ogg",
-      "cue": "door_open",
-      "pcm_frames": 49152,
-      "peak": 0.105105258524418,
-      "source_event_uuid": "9b8d9002-43df-414d-9dc7-c4b5989d2180",
-      "source_marker": "action.effect"
-    },
-    {
-      "clip": "res://assets/audio/bottle-drink/swallow-01.wav",
-      "cue": "potion_drink",
-      "pcm_frames": 21504,
-      "peak": 0.0128965405747294,
-      "source_event_uuid": "c8c4d266-1ccb-46e9-b303-ee0da6f4272a",
-      "source_marker": "action.effect"
+      "clip": "res://assets/audio/kenney/impact/impactSoft_heavy_000.ogg",
+      "cue": "body_fall",
+      "duration_ms": 505.102,
+      "final": {
+        "counters": {
+          "crossed": 9,
+          "expired": 0,
+          "limited": 0,
+          "loops": 0,
+          "missing": 0,
+          "muted": 3,
+          "shots": 6,
+          "started": 6
+        },
+        "enabled": true,
+        "errors": [],
+        "rows": {
+          "2:48:audio:body_fall:5": {
+            "attachment": "ground",
+            "bus": "SFX",
+            "cue_id": "body_fall",
+            "display_ms": 2452.75438596491,
+            "enabled": true,
+            "gain_db": -13.0,
+            "id": "2:48:audio:body_fall:5",
+            "native_playing": false,
+            "offset_s": null,
+            "paused": false,
+            "reason": "seek_inside",
+            "source_ready": true,
+            "starts": 1,
+            "state": "skipped"
+          }
+        }
+      },
+      "initial": {
+        "counters": {
+          "crossed": 9,
+          "expired": 0,
+          "limited": 0,
+          "loops": 0,
+          "missing": 0,
+          "muted": 3,
+          "shots": 6,
+          "started": 6
+        },
+        "enabled": true,
+        "errors": [],
+        "rows": {
+          "2:48:audio:body_fall:5": {
+            "attachment": "ground",
+            "bus": "SFX",
+            "cue_id": "body_fall",
+            "display_ms": 2452.75438596491,
+            "enabled": true,
+            "gain_db": -13.0,
+            "id": "2:48:audio:body_fall:5",
+            "native_playing": true,
+            "offset_s": 0.001,
+            "paused": false,
+            "reason": "",
+            "source_ready": true,
+            "starts": 1,
+            "state": "started"
+          }
+        }
+      },
+      "paused_observations": 0,
+      "pcm_frames": 24576,
+      "peak": 0.0966072529554367,
+      "physics_frames": 37,
+      "playing_observations": 30,
+      "process_frames": 89,
+      "source_event_uuid": "48",
+      "source_marker": "life.body_end",
+      "source_sync_s": 0.0,
+      "stream_s": 0.505102038383484
     },
     {
       "clip": "res://assets/audio/battle/swish_2.wav",
       "cue": "weapon_swing_heavy",
-      "pcm_frames": 22528,
-      "peak": 0.144664734601974,
-      "source_event_uuid": "861682c7-c225-40ad-9e3b-955417655eb1",
-      "source_marker": "attack.release"
+      "duration_ms": 370.816,
+      "final": {
+        "counters": {
+          "crossed": 10,
+          "expired": 0,
+          "limited": 0,
+          "loops": 0,
+          "missing": 0,
+          "muted": 3,
+          "shots": 7,
+          "started": 7
+        },
+        "enabled": true,
+        "errors": [],
+        "rows": {
+          "2:53:audio:weapon_swing_heavy:6": {
+            "attachment": "weapon",
+            "bus": "SFX",
+            "cue_id": "weapon_swing_heavy",
+            "display_ms": 1202.75438596491,
+            "enabled": true,
+            "gain_db": -13.0,
+            "id": "2:53:audio:weapon_swing_heavy:6",
+            "native_playing": false,
+            "offset_s": null,
+            "paused": false,
+            "reason": "seek_inside",
+            "source_ready": true,
+            "starts": 1,
+            "state": "skipped"
+          }
+        }
+      },
+      "initial": {
+        "counters": {
+          "crossed": 10,
+          "expired": 0,
+          "limited": 0,
+          "loops": 0,
+          "missing": 0,
+          "muted": 3,
+          "shots": 7,
+          "started": 7
+        },
+        "enabled": true,
+        "errors": [],
+        "rows": {
+          "2:53:audio:weapon_swing_heavy:6": {
+            "attachment": "weapon",
+            "bus": "SFX",
+            "cue_id": "weapon_swing_heavy",
+            "display_ms": 1202.75438596491,
+            "enabled": true,
+            "gain_db": -13.0,
+            "id": "2:53:audio:weapon_swing_heavy:6",
+            "native_playing": true,
+            "offset_s": 0.001,
+            "paused": false,
+            "reason": "",
+            "source_ready": true,
+            "starts": 1,
+            "state": "started"
+          }
+        }
+      },
+      "paused_observations": 0,
+      "pcm_frames": 24576,
+      "peak": 0.144873470067978,
+      "physics_frames": 29,
+      "playing_observations": 16,
+      "process_frames": 70,
+      "source_event_uuid": "53",
+      "source_marker": "attack.release",
+      "source_sync_s": 0.0,
+      "stream_s": 0.370816326530612
     },
     {
-      "clip": "res://assets/audio/battle/swish_2.wav",
-      "cue": "unarmed_swing",
-      "pcm_frames": 22528,
-      "peak": 0.0644394382834435,
-      "source_event_uuid": "946c676a-4c9a-420b-b579-09214c81868d",
-      "source_marker": "attack.release"
+      "clip": "res://assets/audio/kenney/rpg/cloth3.ogg",
+      "cue": "stance_transition",
+      "duration_ms": 476.563,
+      "final": {
+        "counters": {
+          "crossed": 11,
+          "expired": 0,
+          "limited": 0,
+          "loops": 0,
+          "missing": 0,
+          "muted": 3,
+          "shots": 8,
+          "started": 8
+        },
+        "enabled": true,
+        "errors": [],
+        "rows": {
+          "2:23:audio:stance_transition:1": {
+            "attachment": "body",
+            "bus": "SFX",
+            "cue_id": "stance_transition",
+            "display_ms": 501.0,
+            "enabled": true,
+            "gain_db": -20.0,
+            "id": "2:23:audio:stance_transition:1",
+            "native_playing": false,
+            "offset_s": null,
+            "paused": false,
+            "reason": "seek_inside",
+            "source_ready": true,
+            "starts": 1,
+            "state": "skipped"
+          }
+        }
+      },
+      "initial": {
+        "counters": {
+          "crossed": 11,
+          "expired": 0,
+          "limited": 0,
+          "loops": 0,
+          "missing": 0,
+          "muted": 3,
+          "shots": 8,
+          "started": 8
+        },
+        "enabled": true,
+        "errors": [],
+        "rows": {
+          "2:23:audio:stance_transition:1": {
+            "attachment": "body",
+            "bus": "SFX",
+            "cue_id": "stance_transition",
+            "display_ms": 501.0,
+            "enabled": true,
+            "gain_db": -20.0,
+            "id": "2:23:audio:stance_transition:1",
+            "native_playing": true,
+            "offset_s": 0.001,
+            "paused": false,
+            "reason": "",
+            "source_ready": true,
+            "starts": 1,
+            "state": "started"
+          }
+        }
+      },
+      "paused_observations": 0,
+      "pcm_frames": 24576,
+      "peak": 0.0216113701462746,
+      "physics_frames": 35,
+      "playing_observations": 28,
+      "process_frames": 85,
+      "source_event_uuid": "23",
+      "source_marker": "action.effect",
+      "source_sync_s": 0.0,
+      "stream_s": 0.4765625
     },
     {
-      "clip": "res://assets/audio/kenney/rpg/beltHandle1.ogg",
-      "cue": "equipment_handle",
-      "pcm_frames": 18432,
-      "peak": 0.00318715255707502,
-      "source_event_uuid": "ab854fa6-128f-4260-b57f-5fc266afd7a0",
-      "source_marker": "equipment.commit"
+      "clip": "res://assets/audio/kenney/impact/footstep_concrete_000.ogg",
+      "cue": "footstep",
+      "duration_ms": 105.918,
+      "final": {
+        "counters": {
+          "crossed": 12,
+          "expired": 0,
+          "limited": 0,
+          "loops": 0,
+          "missing": 0,
+          "muted": 3,
+          "shots": 9,
+          "started": 9
+        },
+        "enabled": true,
+        "errors": [],
+        "rows": {
+          "3:65:audio:footstep:3": {
+            "attachment": "ground",
+            "bus": "SFX",
+            "cue_id": "footstep",
+            "display_ms": 3017.66666666667,
+            "enabled": true,
+            "gain_db": -12.0,
+            "id": "3:65:audio:footstep:3",
+            "native_playing": false,
+            "offset_s": null,
+            "paused": false,
+            "reason": "seek_inside",
+            "source_ready": true,
+            "starts": 1,
+            "state": "skipped"
+          }
+        }
+      },
+      "initial": {
+        "counters": {
+          "crossed": 12,
+          "expired": 0,
+          "limited": 0,
+          "loops": 0,
+          "missing": 0,
+          "muted": 3,
+          "shots": 9,
+          "started": 9
+        },
+        "enabled": true,
+        "errors": [],
+        "rows": {
+          "3:65:audio:footstep:3": {
+            "attachment": "ground",
+            "bus": "SFX",
+            "cue_id": "footstep",
+            "display_ms": 3017.66666666667,
+            "enabled": true,
+            "gain_db": -12.0,
+            "id": "3:65:audio:footstep:3",
+            "native_playing": true,
+            "offset_s": 0.001,
+            "paused": false,
+            "reason": "",
+            "source_ready": true,
+            "starts": 1,
+            "state": "started"
+          }
+        }
+      },
+      "paused_observations": 0,
+      "pcm_frames": 8192,
+      "peak": 0.0121651347726583,
+      "physics_frames": 13,
+      "playing_observations": 6,
+      "process_frames": 31,
+      "source_event_uuid": "65",
+      "source_marker": "movement.foot_contact",
+      "source_sync_s": 0.0,
+      "stream_s": 0.105918370187283
     },
     {
       "clip": "res://assets/audio/kenney/rpg/knifeSlice2.ogg",
       "cue": "hide_transition",
+      "duration_ms": 568.792,
+      "final": {
+        "counters": {
+          "crossed": 13,
+          "expired": 0,
+          "limited": 0,
+          "loops": 0,
+          "missing": 0,
+          "muted": 3,
+          "shots": 10,
+          "started": 10
+        },
+        "enabled": true,
+        "errors": [],
+        "rows": {
+          "3:39:audio:hide_transition:1": {
+            "attachment": "body",
+            "bus": "SFX",
+            "cue_id": "hide_transition",
+            "display_ms": 917.666666666667,
+            "enabled": true,
+            "gain_db": -24.0,
+            "id": "3:39:audio:hide_transition:1",
+            "native_playing": false,
+            "offset_s": null,
+            "paused": false,
+            "reason": "seek_inside",
+            "source_ready": true,
+            "starts": 1,
+            "state": "skipped"
+          }
+        }
+      },
+      "initial": {
+        "counters": {
+          "crossed": 13,
+          "expired": 0,
+          "limited": 0,
+          "loops": 0,
+          "missing": 0,
+          "muted": 3,
+          "shots": 10,
+          "started": 10
+        },
+        "enabled": true,
+        "errors": [],
+        "rows": {
+          "3:39:audio:hide_transition:1": {
+            "attachment": "body",
+            "bus": "SFX",
+            "cue_id": "hide_transition",
+            "display_ms": 917.666666666667,
+            "enabled": true,
+            "gain_db": -24.0,
+            "id": "3:39:audio:hide_transition:1",
+            "native_playing": true,
+            "offset_s": 0.001,
+            "paused": false,
+            "reason": "",
+            "source_ready": true,
+            "starts": 1,
+            "state": "started"
+          }
+        }
+      },
+      "paused_observations": 0,
       "pcm_frames": 32768,
-      "peak": 0.0201011188328266,
-      "source_event_uuid": "5df3443e-68ee-4567-8527-4de0c6e4faed",
-      "source_marker": "action.effect"
+      "peak": 0.0201097708195448,
+      "physics_frames": 40,
+      "playing_observations": 33,
+      "process_frames": 97,
+      "source_event_uuid": "39",
+      "source_marker": "action.effect",
+      "source_sync_s": 0.0,
+      "stream_s": 0.568791687488556
     },
     {
       "clip": "res://assets/audio/torch-ignition/ignition.wav",
       "cue": "torch_ignite",
-      "pcm_frames": 60928,
-      "peak": 0.0231508258730173,
-      "source_event_uuid": "9ff0aa5c-9764-467b-8350-65023e30f55b",
-      "source_marker": "action.effect"
+      "duration_ms": 1169.116,
+      "final": {
+        "counters": {
+          "crossed": 14,
+          "expired": 0,
+          "limited": 0,
+          "loops": 0,
+          "missing": 0,
+          "muted": 3,
+          "shots": 11,
+          "started": 11
+        },
+        "enabled": true,
+        "errors": [],
+        "rows": {
+          "7:61:audio:torch_ignite:0": {
+            "attachment": "body",
+            "bus": "SFX",
+            "cue_id": "torch_ignite",
+            "display_ms": 1267.66666666667,
+            "enabled": true,
+            "gain_db": -22.0,
+            "id": "7:61:audio:torch_ignite:0",
+            "native_playing": false,
+            "offset_s": null,
+            "paused": false,
+            "reason": "seek_inside",
+            "source_ready": true,
+            "starts": 1,
+            "state": "skipped"
+          }
+        }
+      },
+      "initial": {
+        "counters": {
+          "crossed": 14,
+          "expired": 0,
+          "limited": 0,
+          "loops": 0,
+          "missing": 0,
+          "muted": 3,
+          "shots": 11,
+          "started": 11
+        },
+        "enabled": true,
+        "errors": [],
+        "rows": {
+          "7:61:audio:torch_ignite:0": {
+            "attachment": "body",
+            "bus": "SFX",
+            "cue_id": "torch_ignite",
+            "display_ms": 1267.66666666667,
+            "enabled": true,
+            "gain_db": -22.0,
+            "id": "7:61:audio:torch_ignite:0",
+            "native_playing": true,
+            "offset_s": 0.001,
+            "paused": false,
+            "reason": "",
+            "source_ready": true,
+            "starts": 1,
+            "state": "started"
+          }
+        }
+      },
+      "paused_observations": 0,
+      "pcm_frames": 53248,
+      "peak": 0.0232615042477846,
+      "physics_frames": 76,
+      "playing_observations": 70,
+      "process_frames": 184,
+      "source_event_uuid": "61",
+      "source_marker": "action.effect",
+      "source_sync_s": 0.0,
+      "stream_s": 1.1691156462585
+    },
+    {
+      "clip": "res://assets/audio/kenney/rpg/doorOpen_1.ogg",
+      "cue": "door_open",
+      "duration_ms": 918.958,
+      "final": {
+        "counters": {
+          "crossed": 15,
+          "expired": 0,
+          "limited": 0,
+          "loops": 0,
+          "missing": 0,
+          "muted": 3,
+          "shots": 12,
+          "started": 12
+        },
+        "enabled": true,
+        "errors": [],
+        "rows": {
+          "2:24:audio:door_open:0": {
+            "attachment": "body",
+            "bus": "SFX",
+            "cue_id": "door_open",
+            "display_ms": 501.0,
+            "enabled": true,
+            "gain_db": -17.0,
+            "id": "2:24:audio:door_open:0",
+            "native_playing": false,
+            "offset_s": null,
+            "paused": false,
+            "reason": "seek_inside",
+            "source_ready": true,
+            "starts": 1,
+            "state": "skipped"
+          }
+        }
+      },
+      "initial": {
+        "counters": {
+          "crossed": 15,
+          "expired": 0,
+          "limited": 0,
+          "loops": 0,
+          "missing": 0,
+          "muted": 3,
+          "shots": 12,
+          "started": 12
+        },
+        "enabled": true,
+        "errors": [],
+        "rows": {
+          "2:24:audio:door_open:0": {
+            "attachment": "body",
+            "bus": "SFX",
+            "cue_id": "door_open",
+            "display_ms": 501.0,
+            "enabled": true,
+            "gain_db": -17.0,
+            "id": "2:24:audio:door_open:0",
+            "native_playing": true,
+            "offset_s": 0.001,
+            "paused": false,
+            "reason": "",
+            "source_ready": true,
+            "starts": 1,
+            "state": "started"
+          }
+        }
+      },
+      "paused_observations": 0,
+      "pcm_frames": 49152,
+      "peak": 0.105141706764698,
+      "physics_frames": 62,
+      "playing_observations": 51,
+      "process_frames": 150,
+      "source_event_uuid": "24",
+      "source_marker": "action.effect",
+      "source_sync_s": 0.0,
+      "stream_s": 0.918958306312561
     }
   ],
   "failures": [],
+  "output_latency": 0.0,
   "scope": "Original sounds selected by actual server journals, native AudioStreamPlayer3D handles, listener and SFX bus PCM; no claim of human listening or final professional mix."
 }

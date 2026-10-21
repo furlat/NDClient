@@ -1,0 +1,50 @@
+[gd_resource type="Resource" format=3]
+
+[ext_resource type="Script" path="res://assets/vfx/sources/d60670fa4c3a03cc8f3a/component.gd" id="1_r3y0x"]
+[ext_resource type="Script" path="res://assets/vfx/sources/67ebe8ef4f358cad6a4b/phase.gd" id="2_gje71"]
+
+[sub_resource type="Resource" id="Resource_fh28u"]
+script = ExtResource("1_r3y0x")
+component_id = "assembly"
+constructor_script = "res://assets/vfx/extensions/speed-completion-20261021/sources/6d60a32ff7fdc84a19fa/field.gd"
+input = {
+"macro_mix": 0.0,
+&"owner_lifetime_policy": "actual_spatial_owner",
+&"prepared_cloud_bank": "res://assets/vfx/extensions/speed-completion-20261021/sources/42a5149e20ae8231e7e7/darkness-bank.tres",
+"scene": "res://assets/vfx/sources/e61d478d2aa397acda47/poison_cloud_vfx_02.tscn",
+"seed": 47291,
+"settings": {
+"animation": "",
+"carrier_feather_uv": 0.16,
+"retire_begin_seconds": 10.40972222222222,
+"retire_seconds": 1.15,
+"spell": "darkness",
+"volume_shader": "res://assets/vfx/sources/98211f897bdaf59e6d96/ShortCloud32V1_darkness_color.gdshader"
+},
+"side": "full",
+"simulation_hz": 144
+}
+provenance = "Pinned native selection; recipes/spells/darkness.json; prepared native cloud hierarchy and private occurrence materials; ART REVISION stable paired-cohort sorting +0.0001; raw original parity not claimed; human review required; explicit real spatial owner lifetime, unchanged prepared bank/art"
+
+[resource]
+script = ExtResource("2_gje71")
+clip_id = "review/darkness/volume/lifecycle"
+label = "Lifecycle"
+phase = "lifecycle"
+variant = "native_shader_worker"
+source_recipe = "recipes/spells/darkness.json"
+components = Array[Resource]([SubResource("Resource_fh28u")])
+bindings = [{
+"component": "assembly",
+"kind": "sample",
+"offset_seconds": 0.0,
+"rate": 1.0
+}]
+seconds = 11.65972222222222
+simulation_hz = 144.0
+options = {
+"immutable_preparation": "res://assets/vfx/extensions/speed-completion-20261021/sources/0a2e4c03a47f2ffa18de/source_readiness.gd",
+"opacity_uniform": "factory_occurrence_alpha",
+&"owner_driven": true,
+"qualification": "Source/API candidate; original stabilized art and native history limits retained"
+}

@@ -1,5 +1,124 @@
 {
-  "checks": 23,
+  "checks": 41,
   "failures": [],
-  "scope": "Actual recorded state: static forecast versus ordinary rows/support/sources/residue output; no native allocation during forecasting; exact prepared-result adoption and fresh Run actor clock/material inputs on promotion. No live latency or framebuffer claim."
+  "scope": "Actual recorded state: static forecast versus ordinary rows/support/sources/residue output; no native allocation during forecasting; exact prepared-result adoption and fresh Run actor clock/material inputs on promotion. Cold/warm worker source admission and shared physical Resource identity. No live latency or framebuffer claim.",
+  "source_admission": {
+    "cold_loads": 16,
+    "cold_paths": {
+      "res://build/presentation/characters/body-sources/neuroclient.modular--Belt2--Run.res": {
+        "calls": 1,
+        "native_read_usec": 1364,
+        "thread_start_usec": 43,
+        "thread_total_usec": 1534,
+        "usec": 1541
+      },
+      "res://build/presentation/characters/body-sources/neuroclient.modular--Belt2.res": {
+        "calls": 1,
+        "native_read_usec": 3006,
+        "thread_start_usec": 38,
+        "thread_total_usec": 6736,
+        "usec": 6744
+      },
+      "res://build/presentation/characters/body-sources/neuroclient.modular--Chest14--Run.res": {
+        "calls": 1,
+        "native_read_usec": 1334,
+        "thread_start_usec": 35,
+        "thread_total_usec": 1526,
+        "usec": 1534
+      },
+      "res://build/presentation/characters/body-sources/neuroclient.modular--Chest14.res": {
+        "calls": 1,
+        "native_read_usec": 1223,
+        "thread_start_usec": 38,
+        "thread_total_usec": 2674,
+        "usec": 2681
+      },
+      "res://build/presentation/characters/body-sources/neuroclient.modular--Head15--Run.res": {
+        "calls": 1,
+        "native_read_usec": 1432,
+        "thread_start_usec": 37,
+        "thread_total_usec": 1589,
+        "usec": 1596
+      },
+      "res://build/presentation/characters/body-sources/neuroclient.modular--Head15.res": {
+        "calls": 1,
+        "native_read_usec": 1304,
+        "thread_start_usec": 46,
+        "thread_total_usec": 1484,
+        "usec": 1492
+      },
+      "res://build/presentation/characters/body-sources/neuroclient.modular--Head22--Run.res": {
+        "calls": 1,
+        "native_read_usec": 2207,
+        "thread_start_usec": 44,
+        "thread_total_usec": 2376,
+        "usec": 2383
+      },
+      "res://build/presentation/characters/body-sources/neuroclient.modular--Head22.res": {
+        "calls": 1,
+        "native_read_usec": 1658,
+        "thread_start_usec": 39,
+        "thread_total_usec": 1847,
+        "usec": 1854
+      },
+      "res://build/presentation/characters/body-sources/neuroclient.modular--Legs1--Run.res": {
+        "calls": 1,
+        "native_read_usec": 2085,
+        "thread_start_usec": 36,
+        "thread_total_usec": 4131,
+        "usec": 4141
+      },
+      "res://build/presentation/characters/body-sources/neuroclient.modular--Legs1.res": {
+        "calls": 1,
+        "native_read_usec": 1383,
+        "thread_start_usec": 50,
+        "thread_total_usec": 1566,
+        "usec": 1579
+      },
+      "res://build/presentation/characters/body-sources/neuroclient.modular--Melee1--Run.res": {
+        "calls": 1,
+        "native_read_usec": 1299,
+        "thread_start_usec": 36,
+        "thread_total_usec": 1453,
+        "usec": 1459
+      },
+      "res://build/presentation/characters/body-sources/neuroclient.modular--Melee1.res": {
+        "calls": 1,
+        "native_read_usec": 1428,
+        "thread_start_usec": 40,
+        "thread_total_usec": 1622,
+        "usec": 1629
+      },
+      "res://build/presentation/characters/body-sources/neuroclient.modular--NakedBody--Run.res": {
+        "calls": 1,
+        "native_read_usec": 1433,
+        "thread_start_usec": 39,
+        "thread_total_usec": 1613,
+        "usec": 1619
+      },
+      "res://build/presentation/characters/body-sources/neuroclient.modular--NakedBody.res": {
+        "calls": 1,
+        "native_read_usec": 2064,
+        "thread_start_usec": 51,
+        "thread_total_usec": 2283,
+        "usec": 2292
+      },
+      "res://build/presentation/characters/body-sources/neuroclient.modular--Shoes1--Run.res": {
+        "calls": 1,
+        "native_read_usec": 1573,
+        "thread_start_usec": 39,
+        "thread_total_usec": 1747,
+        "usec": 1754
+      },
+      "res://build/presentation/characters/body-sources/neuroclient.modular--Shoes1.res": {
+        "calls": 1,
+        "native_read_usec": 2170,
+        "thread_start_usec": 37,
+        "thread_total_usec": 4443,
+        "usec": 4450
+      }
+    },
+    "warm_loads": 0,
+    "warm_shared_hits": 16
+  }
 }

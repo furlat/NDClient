@@ -3,6 +3,7 @@ extends SceneTree
 ## Whole-batch source pixels and canonical parity have their own finite tests.
 const Studio=preload("res://studio/studio.gd")
 const Thumbnails=preload("res://studio/thumbnail_cache.gd")
+const Recording=preload("res://studio/recording.gd")
 const CAPTURES="res://.captures/native-spell-library"
 const CASES=[
     {"spell":"spell.fireball","case":"spell.fireball/baseline","role":"area","condition_phase":""},
@@ -86,10 +87,8 @@ func open_case(spec:Dictionary)->bool:
     studio.loop_enabled=false;studio.loop_button.set_pressed_no_signal(false)
     studio._show_study_library()
     var panel:Window=studio.study_library
-    var deadline:int=Time.get_ticks_msec()+60000
-    while not panel.is_prepared() and Time.get_ticks_msec()<deadline:await process_frame
-    check(panel.is_prepared() and panel.error.is_empty(),spell+": actual capability Library is ready")
-    if not panel.is_prepared():return false
+    check(panel.visible and not panel.report.get("entries",[]).is_empty(),spell+": actual capability Library has its current catalog")
+    if not panel.visible or panel.report.get("entries",[]).is_empty():return false
     var id:String=spec.case
     var item:TreeItem=find_item(panel.tree.get_root(),id)
     check(item!=null,spell+": Library contains the exact recorded scenario")
@@ -128,10 +127,20 @@ func prepare_previews(label:String)->bool:
     var diagnostic_at:int=Time.get_ticks_msec()+10000
     var peak:int=0;var private_worlds:bool=true;var exact_steps:bool=true;var ages:Dictionary={}
     var state:Dictionary=studio.tracks.prepare_visible(true)
-    while state.pending>0 and state.errors.is_empty() and Time.get_ticks_msec()<deadline:
+    var composed_contexts:int=0;var exact_context:bool=true
+    while not state.ready and state.errors.is_empty() and Time.get_ticks_msec()<deadline:
         await process_frame;state=studio.tracks.prepare_visible(true)
         var worlds:Dictionary={}
         peak=maxi(peak,studio.tracks.thumbnails.native_composites.size())
+        var cache:RefCounted=studio.tracks.thumbnails
+        if not cache.composed_active.is_empty() and not cache.composed_pane.is_empty():
+            var owner:Node3D=cache.composed_pane.world
+            private_worlds=private_worlds and owner.get_world_3d()!=studio.world.get_world_3d() and cache.composed_pane.viewport.own_world_3d
+            if owner.playback_prepared() and not owner.rotation_pending():
+                var job:Dictionary=cache.composed_active.job
+                composed_contexts+=1
+                exact_context=(exact_context and is_same(job.recording,studio.index) and owner.timeline.display_ms==job.sample_ms
+                    and owner.quarter==job.quarter and owner.timeline.paused and not owner.component_renderer.audio.enabled)
         for composite in studio.tracks.thumbnails.native_composites:
             var node= composite.node
             var source_world:World3D=node.camera.get_world_3d()
@@ -148,18 +157,22 @@ func prepare_previews(label:String)->bool:
             var details:Dictionary={"stage":label,"pending":state.pending,"samples":state.samples,"errors":state.errors,"batch":studio.tracks.thumbnails.native_composites.size(),"active_kind":active.get("kind",""),"active_key":active.get("job",{}).get("key",""),"target_ms":active.get("job",{}).get("native_age_ms",0),"draws":active.get("draws",0),"suspended":studio.tracks.thumbnails.suspended}
             if active.get("kind")=="native_effect" and active.job.component.get("native_spell",false):
                 details.sampled=active.node.sampled;details.drawn=active.node.drawn;details.source_age=active.node.handle.get("age",-1)
+            details.composed_worker=studio.tracks.thumbnails.composed_worker!=null
+            details.composed_job=studio.tracks.thumbnails.composed_active.get("job",{}).get("key","")
             print("SPELL_LIBRARY_PREVIEWS ",JSON.stringify(details))
-    check(state.pending==0 and state.errors.is_empty(),label+": visible timeline source previews complete: "+str(state.errors))
+    check(state.ready and state.pending==0 and state.errors.is_empty(),label+": visible timeline source previews complete: "+str(state.errors))
     check(peak<=Thumbnails.NATIVE_BATCH_LIMIT and private_worlds,label+": bounded native previews use independent world owners")
-    check(exact_steps,label+": batching never skips a native60Hz source-history step")
+    check(exact_steps,label+": isolated source batching never skips a native60Hz history step")
+    check(exact_context,label+": composed samples retain the exact recording/cut/quarter and muted private production owner")
     preview_measurements[label]={"elapsed_ms":Time.get_ticks_msec()-started,"samples":state.samples,"peak_native_previews":peak,
+        "composed_context_observations":composed_contexts,"composed_scope":"Exact recorded full context, not isolated source pixels",
         "native_store_hits":studio.tracks.thumbnails.native_store.hits,"native_store_misses":studio.tracks.thumbnails.native_store.misses,
         "native_disk_loads":studio.tracks.thumbnails.native_store.disk_loads,
         "native_descriptor_ms":studio.tracks.thumbnails.native_store.descriptor_usec/1000.0,
         "native_resource_load_ms":studio.tracks.thumbnails.native_store.resource_load_usec/1000.0,
         "native_store_issues":studio.tracks.thumbnails.native_store.issues.duplicate(true)}
     await frame()
-    return state.pending==0 and state.errors.is_empty()
+    return state.ready and state.pending==0 and state.errors.is_empty()
 
 func row_y(row:Dictionary)->float:
     var y:float=studio.tracks.RULER-studio.tracks.published_layout.get("scroll_y",0.0)
@@ -198,8 +211,10 @@ func source_pixels(row:Dictionary,spell:String)->Dictionary:
         if pixels>0:
             if count==0:image.save_png(CAPTURES+"/"+spell+"-selected-source.png")
             count+=1;coloured+=pixels
-    check(count>0 and coloured>0,spell+": selected native row has actual nonblank rendered source previews")
-    return {"textures":count,"rgb_pixels":coloured}
+    var composed:bool=Thumbnails._composed_row(row)
+    check(count>0 and coloured>0,spell+": selected native row has actual nonblank "+("recorded-context" if composed else "isolated source")+" previews")
+    return {"textures":count,"rgb_pixels":coloured,"scope":"recorded_composed_context" if composed else "isolated_source",
+        "note":"Scene pixels are not isolated-effect evidence" if composed else "Exact source swatch"}
 
 func active_phase(row:Dictionary,label:String)->void:
     var native=studio.world.component_renderer.native_spells
@@ -213,7 +228,7 @@ func active_phase(row:Dictionary,label:String)->void:
 func inspect_case(spec:Dictionary)->void:
     var spell:String=spec.spell
     if not await open_case(spec):return
-    var rows:Array=studio.index.rows.filter(func(row):return row.kind=="native_effect" and row.get("visible_here",true) and row.get("component",{}).get("native_spell",false) and row.component.spell_id==spell and row.component.native_cue.role==spec.role and row.get("condition_phase","")==spec.condition_phase and row.end_ms>row.start_ms)
+    var rows:Array=studio.index.rows.filter(func(row):return row.kind=="native_effect" and row.get("visible_here",true) and row.get("component",{}).get("native_spell",false) and row.component.get("spell_id")==spell and row.component.native_cue.role==spec.role and row.get("condition_phase","")==spec.condition_phase and row.end_ms>row.start_ms)
     check(not rows.is_empty(),spell+": actual index exposes the requested native family")
     if rows.is_empty():return
     var row:Dictionary=rows[0]
@@ -235,7 +250,10 @@ func inspect_case(spec:Dictionary)->void:
     # The actual gutter click invokes Studio's selected-clip loop. A prepared
     # hidden replay must only replace the visible prefix at its Out boundary.
     await click_phase(row,at,true)
-    check(studio.loop_enabled and is_equal_approx(studio.loop_start,row.start_ms) and is_equal_approx(studio.loop_end,row.end_ms),spell+": native clip control sets the exact row loop interval")
+    var expected_in:float=maxf(0.0,float(row.start_ms)-Recording.PREVIEW_LEAD_IN_MS)
+    var expected_out:float=minf(float(studio.index.presentation_end_ms),float(row.end_ms)+Recording.PREVIEW_OPERATION_GAP_MS)
+    check(studio.loop_enabled and studio.loop_start==expected_in and studio.loop_end==expected_out,
+        spell+": native clip control retains exact source timing plus ordinary admission/restoration context")
     var deadline:int=Time.get_ticks_msec()+120000
     var previous:float=studio.world.timeline.display_ms
     var entered:bool=false;var wrapped:bool=false;var maximum:float=-1.0
@@ -243,32 +261,48 @@ func inspect_case(spec:Dictionary)->void:
         await process_frame
         var now:float=studio.world.timeline.display_ms
         if now>float(row.start_ms)+minf(10.0,(row.end_ms-row.start_ms)*.1):entered=true;maximum=maxf(maximum,now)
-        if entered and now+0.001<previous and previous>=float(row.end_ms)-0.01:wrapped=true
+        if entered and now+0.001<previous and previous>=expected_out-0.01:wrapped=true
         previous=now
     check(wrapped,spell+": shared display clock crosses the actual loop Out and returns to In")
     studio.loop_enabled=false;studio.loop_button.set_pressed_no_signal(false);studio.world.timeline.paused=true
     await process_frame
     studio._seek(at)
     if await settle(spell+" after loop"):active_phase(row,spell+" after loop")
-    observations.append({"spell":spell,"case":studio.active_case.id,"journal":studio.active_directory,"row":row.id,"condition_phase":row.get("condition_phase",""),"source":row.component.native_clip.id,"at_ms":at,"loop_start_ms":row.start_ms,"loop_end_ms":row.end_ms,"loop_wrapped":wrapped,"maximum_observed_ms":maximum,"previews":pixels,"preview_preparation":preview_measurements.get(spell,{}),"library_selection":selection_measurements.get(studio.active_case.id,{}),"paired":false})
+    observations.append({"spell":spell,"case":studio.active_case.id,"journal":studio.active_directory,"row":row.id,"condition_phase":row.get("condition_phase",""),"source":row.component.native_clip.id,"at_ms":at,"source_start_ms":row.start_ms,"source_end_ms":row.end_ms,"loop_start_ms":expected_in,"loop_end_ms":expected_out,"loop_wrapped":wrapped,"maximum_observed_ms":maximum,"previews":pixels,"preview_preparation":preview_measurements.get(spell,{}),"library_selection":selection_measurements.get(studio.active_case.id,{}),"paired":false})
     print("SPELL_LIBRARY_CASE ",JSON.stringify(observations.back()))
     await cancel_previews(row,at)
 
 func cancel_previews(row:Dictionary,at:float)->void:
     var cache=Thumbnails.new();cache.host=root;cache.cache=Thumbnails.Catalog.source_snapshot(studio.index.cache)
+    cache.recording=studio.index;cache.reference_world=studio.world;cache.set_displayed_world(studio.world)
     var keys:Dictionary={}
     for quarter in 4:keys[cache.request(row,at,quarter,false)]=true
     cache.set_demand(keys);cache.poll();await frame();cache.poll()
-    check(cache.native_composites.size()+cache.textures.size()==4,"Four requested native views are either exact baked resources or bounded live jobs")
-    if cache.native_composites.is_empty():
-        check(cache.native_store.hits==4 and cache.native_store.issues.is_empty(),"Baked cancellation fixture loads all four exact native resources without native jobs")
+    var composed:bool=Thumbnails._composed_row(row)
+    check(keys.size()==4 and keys.keys().all(func(key):return cache.requested.has(key) or cache.textures.has(key) or cache.baked_requests.has(key)),
+        "All four exact requested views retain their current queued, active or published ownership")
+    if composed:
+        check(cache.native_composites.is_empty() and cache.native_store.hits==0 and cache.errors.is_empty(),
+            "Input-bearing recorded views use the production composed path, never isolated baked-source substitution")
+        check(cache.pending.all(func(job):return job.composed and is_same(job.recording,studio.index) and job.component.id==row.component.id and job.sample_ms==at),
+            "Queued composed views retain this actual recording, occurrence and sample")
+    else:
+        check(cache.native_composites.size()+cache.textures.size()+cache.baked_requests.size()+cache.pending.size()==4,
+            "Source-only views retain exact baked Resources or bounded isolated jobs")
     var nodes:Array=cache.native_composites.map(func(value):return value.node)
+    if not cache.composed_pane.is_empty():nodes.append(cache.composed_pane.viewport)
     var ages:Array=cache.native_composites.map(func(value):return value.node.sampled)
+    var published:Array=cache.textures.keys()
+    var recorded_at:float=cache.composed_pane.world.timeline.display_ms if not cache.composed_pane.is_empty() else -1.0
     cache.suspended=true
     for _i in 3:await frame();cache.poll()
-    check(ages==cache.native_composites.map(func(value):return value.node.sampled),"Suspended cache advances no source history, including the baked zero-job path")
+    check(ages==cache.native_composites.map(func(value):return value.node.sampled) and (not composed or cache.textures.keys()==published),
+        "Suspended previews neither advance isolated history nor publish a composed restore")
+    if recorded_at>=0.0:check(cache.composed_pane.world.timeline.display_ms==recorded_at,"Suspension preserves the exact restored source clock")
     cache.reset();await frame()
-    check(cache.native_composites.is_empty() and cache.textures.is_empty() and cache.requested.is_empty() and nodes.all(func(node):return not is_instance_valid(node)),"Reset retires every private native source and forbids old-generation publication")
+    check(cache.native_composites.is_empty() and cache.composed_active.is_empty() and cache.composed_pane.is_empty()
+        and cache.textures.is_empty() and cache.requested.is_empty() and nodes.all(func(node):return not is_instance_valid(node)),
+        "Reset retires private source/pane owners and forbids old-generation publication")
     cache.close()
 
 func run()->void:

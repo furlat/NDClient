@@ -1,55 +1,39 @@
 {
   "cases": [
     {
-      "atlas_size": [
-        8192,
-        1024
-      ],
       "delta": {
         "alpha": 0,
-        "changed": 297686,
-        "maximum": 145
+        "changed": 341678,
+        "maximum": 119
       },
-      "native_2d_gpu_ms": 0.0120000001043081,
+      "lights": 8,
       "quarter": 0
     },
     {
-      "atlas_size": [
-        8192,
-        1024
-      ],
       "delta": {
         "alpha": 0,
-        "changed": 288467,
-        "maximum": 143
+        "changed": 295471,
+        "maximum": 120
       },
-      "native_2d_gpu_ms": 0.0120000001043081,
+      "lights": 8,
       "quarter": 1
     },
     {
-      "atlas_size": [
-        8192,
-        2048
-      ],
       "delta": {
         "alpha": 0,
-        "changed": 282252,
-        "maximum": 142
+        "changed": 276984,
+        "maximum": 113
       },
-      "native_2d_gpu_ms": 0.0280000008642673,
+      "lights": 8,
       "quarter": 2
     },
     {
-      "atlas_size": [
-        8192,
-        2048
-      ],
       "delta": {
         "alpha": 0,
-        "changed": 301036,
-        "maximum": 148
+        "changed": 389670,
+        "maximum": 113
       },
-      "native_2d_gpu_ms": 0.0199999995529652,
+      "lights": 8,
       "quarter": 3
     }
   ],
@@ -59,53 +43,91 @@
   "lighting": {
     "actors": [
       {
-        "id": "ea489443-e110-4f27-b8d0-37d6b6310ad9",
-        "name": "Shield Fighter",
+        "id": "78a905ca-2891-4fb6-b655-dbd88025cce0",
+        "name": "Amber caster",
         "position": [
-          3,
-          5
+          13,
+          6
         ],
         "torches": [
           {
-            "id": "8688915d-aec3-4a04-ac61-66bdd164b954",
+            "id": "8008f524-bd44-46b8-9282-14ed3f3eedd3",
             "is_lit": true,
             "name": "Torch"
           }
         ]
       },
       {
-        "id": "4b4090e8-3c0d-4e72-b925-b35ea769539e",
-        "name": "Draconic Sorcerer",
+        "id": "ebec3351-c9b1-4311-a2d3-32185be4dbf7",
+        "name": "Amber ally",
         "position": [
-          4,
-          5
+          5,
+          6
         ],
         "torches": [
           {
-            "id": "8b3e08da-2aee-401c-8118-840bc8c9571c",
+            "id": "71d8dbc8-f7f5-486d-8f27-2fe90dcb5232",
             "is_lit": true,
             "name": "Torch"
           }
         ]
       }
     ],
-    "light_strength": 0.41,
+    "light_strength": 0.43,
     "resolved_sources": [
       {
-        "actor_id": "ea489443-e110-4f27-b8d0-37d6b6310ad9",
+        "actor_id": "ebec3351-c9b1-4311-a2d3-32185be4dbf7",
+        "anchor_item_uuid": "",
         "enabled": true,
-        "id": "8688915d-aec3-4a04-ac61-66bdd164b954",
-        "name": "Shield Fighter",
+        "id": "51bd3e67-f090-4829-a984-3dcb58ff4e9f",
+        "name": "Amber ally",
         "position": [
-          3.0,
+          5.0,
           2.04124140739441,
-          5.0
+          6.0
+        ]
+      },
+      {
+        "actor_id": "78a905ca-2891-4fb6-b655-dbd88025cce0",
+        "anchor_item_uuid": "",
+        "enabled": true,
+        "id": "5e40f859-ebaf-4aa5-ab96-b38d864fe786",
+        "name": "Amber caster",
+        "position": [
+          13.0,
+          2.04124140739441,
+          6.0
         ]
       },
       {
         "actor_id": "",
+        "anchor_item_uuid": "56a4b5c4-0e6a-4b2b-a7a3-f7d4377d68e9",
         "enabled": true,
-        "id": "88985999-fdfa-410f-a415-8e77ec670e5e",
+        "id": "786ff52e-e10e-4b5e-a734-46bd46e1c7b8",
+        "name": "Wall Torch",
+        "position": [
+          19.0,
+          0.816496610641479,
+          3.0
+        ]
+      },
+      {
+        "actor_id": "",
+        "anchor_item_uuid": "aca0a97e-7a43-48c4-afed-66709ff015b2",
+        "enabled": true,
+        "id": "9ac338b6-94d1-4fc5-ae31-e4f4420723f9",
+        "name": "Wall Torch",
+        "position": [
+          13.0,
+          0.816496610641479,
+          3.0
+        ]
+      },
+      {
+        "actor_id": "",
+        "anchor_item_uuid": "8cf21f47-2f6b-4050-a224-ce276e2f02c6",
+        "enabled": true,
+        "id": "9e2ec3db-f70d-4249-b0d0-4f962dcf2f9d",
         "name": "Wall Torch",
         "position": [
           2.0,
@@ -114,30 +136,45 @@
         ]
       },
       {
-        "actor_id": "4b4090e8-3c0d-4e72-b925-b35ea769539e",
-        "enabled": true,
-        "id": "8b3e08da-2aee-401c-8118-840bc8c9571c",
-        "name": "Draconic Sorcerer",
-        "position": [
-          4.0,
-          2.04124140739441,
-          5.0
-        ]
-      },
-      {
         "actor_id": "",
+        "anchor_item_uuid": "58147718-bf10-4cef-bafc-8c92d78083c1",
         "enabled": true,
-        "id": "c66b835b-e7a6-4ac3-b9ed-9e0126001382",
+        "id": "afc771c9-c0a7-4f84-a0ca-50221c46b8ff",
         "name": "Wall Torch",
         "position": [
           6.0,
           0.816496610641479,
           3.0
         ]
+      },
+      {
+        "actor_id": "",
+        "anchor_item_uuid": "6019b16f-9fa4-4a7b-a985-717571cdd40a",
+        "enabled": true,
+        "id": "b0587d18-c007-45d0-834d-d123dc5b6e98",
+        "name": "Wall Torch",
+        "position": [
+          19.0,
+          0.816496610641479,
+          9.0
+        ]
+      },
+      {
+        "actor_id": "",
+        "anchor_item_uuid": "22b54b5d-5b3e-4af0-80e7-7fad87ffe23f",
+        "enabled": true,
+        "id": "c10ead59-a24d-4ac4-abcf-d2073edd6aa3",
+        "name": "Wall Torch",
+        "position": [
+          10.0,
+          0.816496610641479,
+          5.0
+        ]
       }
     ],
-    "sequence": 0,
+    "sequence": 13,
     "source_override": false,
+    "table_lights": 8,
     "wall_mode": "hidden"
   },
   "renderer": "forward_plus",

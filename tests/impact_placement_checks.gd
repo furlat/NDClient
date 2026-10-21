@@ -134,6 +134,8 @@ func _typed_boundaries(actor:Dictionary,rig:Dictionary,host:Node,cache:Dictionar
     var isolated:Dictionary=cache.duplicate()
     isolated[BodySources.KEY]={"index":private_index,"loaded":admitted.loaded}
     var selected:Dictionary=Impact.Authoring.rigs(isolated)[source.source_rig]
+    selected.pose_sockets=selected.get("pose_sockets",{})
+    selected.pose_sockets.body_center=selected.pose_sockets.get("body_center",{})
     if not selected.pose_sockets.body_center.has("Run"):selected.pose_sockets.body_center.Run={}
     selected.pose_sockets.body_center.Run.erase("SW")
     var fallback=Impact.with_direction(source,[],isolated)

@@ -5,7 +5,7 @@
 
 [ext_resource type="Script" path="res://presentation/source/effect_use.gd" id="owner_field_use"]
 
-[ext_resource type="Resource" path="res://assets/vfx/extensions/material-runtime-20261021/sources/ed0cae71b5191d0c812e/cloudkill-phase.tres" id="OwnerFieldPhase0"]
+[ext_resource type="Resource" path="res://assets/vfx/extensions/speed-completion-20261021/sources/f77d3bcc7ad87bd54956/cloudkill-phase.tres" id="OwnerFieldPhase0"]
 
 [sub_resource type="Resource" id="operations_0"]
 script = ExtResource("1_wnisq")
@@ -15,7 +15,7 @@ operation = "disperse"
 script = ExtResource("owner_field_use")
 clip = "review/cloudkill/volume/lifecycle"
 source_phase = ExtResource("OwnerFieldPhase0")
-immutable_preparation = "res://assets/vfx/extensions/production-review-20261020/sources/7dd1897cdd5ee8a903b9/source_readiness.gd"
+immutable_preparation = "res://assets/vfx/extensions/speed-completion-20261021/sources/0a2e4c03a47f2ffa18de/source_readiness.gd"
 source_inputs = {"owner_state": "set_owner_state", "targets": "set_targets"}
 role = "attached"
 scope = "spatial"
@@ -26,7 +26,7 @@ area_mask = true
 light_multiplier = 0.0
 constructor_input = {"kind": "spatial_owner", "component_path": ["assembly"], "input_field": "", "cell_input": "owned_field", "content_id": "spatial_effect.environment.poison_gas", "anchor_policy": "disclosed_cell"}
 extra = {"live_endpoints": [{"cue_point": "source"}]}
-staging_from = "factory@runtime-spike-seed-20261021-7ca62e2877bf5156"
+staging_from = "factory@runtime-speed-completion-20261021-82a271b677ff9604"
 
 [resource]
 script = ExtResource("2_vjlqs")
@@ -37,4 +37,4 @@ art = PackedStringArray()
 lasting = SubResource("OwnerField0")
 native_staging = true
 status = "partial"
-notes = "Environmental poison gas explicitly reuses Cloudkill artwork through the same actual-owner source. Its optical frame is one actually disclosed coverage cell with its same-cut public terrain elevation; no caster, vent, hidden center, radius, density or lease is inferred. Actual coverage/suppression feeds the existing AreaMask and actual absence removes the owner. Exposure/Poisoned outcomes remain separate. All artwork remains unreviewed; source assignment is not rendered/readiness/performance qualification."
+notes = "Explicitly selects the delivered speed-completion Cloud worker and its actual progressive preparer. Environmental poison gas explicitly reuses Cloudkill artwork through the same actual-owner source. Its optical frame is one actually disclosed coverage cell with its same-cut public terrain elevation; no caster, vent, hidden center, radius, density or lease is inferred. Actual coverage/suppression feeds the existing AreaMask and actual absence removes the owner. Exposure/Poisoned outcomes remain separate. All artwork remains unreviewed; source assignment is not rendered/readiness/performance qualification."

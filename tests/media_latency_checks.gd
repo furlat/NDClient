@@ -195,6 +195,7 @@ func publication(environment: Dictionary) -> void:
     var family:Dictionary={"paths":optional_paths,"environment":optional_paths,"cpu_required":optional_paths,
         "estimates":Encounter.estimates(optional_paths,optional_paths,{},{}),"errors":[]}
     Media.adopt_encounter(player.media_warmup,family,1)
+    Media.adopt_source_sizes(player.media_warmup,Encounter.source_sizes(wanted,{}),1)
     Media.demand(player.media_warmup,wanted,wanted)
     var selection_until:int=Time.get_ticks_msec()+10000
     while Media.diagnostics(player.media_warmup).selection_pending and Time.get_ticks_msec()<selection_until:

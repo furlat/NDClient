@@ -1,37 +1,156 @@
 {
   "authoring_gaps": [
     {
-      "recording": "res://.runtime/studio-cases/hide-light-schema9-seed3/amber/journal",
+      "recording": "res://tests/fixtures/schema16/scenarios/hide-light/amber",
       "source": "audio/bindings.json:/actions/action.item.torch.extinguish"
     },
     {
-      "recording": "res://.runtime/studio-cases/hide-light-schema9-seed3/amber/journal",
+      "recording": "res://tests/fixtures/schema16/scenarios/hide-light/amber",
+      "source": "audio/bindings.json:/actions/action.item.torch.extinguish"
+    },
+    {
+      "recording": "res://tests/fixtures/schema16/scenarios/hide-light/blue",
+      "source": "audio/bindings.json:/actions/action.item.torch.extinguish"
+    },
+    {
+      "recording": "res://tests/fixtures/schema16/scenarios/hide-light/blue",
       "source": "audio/bindings.json:/actions/action.item.torch.extinguish"
     }
   ],
-  "checks": 128,
+  "checks": 1438,
   "cues": [
+    "footstep",
     "physical_impact",
     "weapon_swing",
-    "body_fall",
     "equipment_handle",
+    "unarmed_swing",
+    "potion_drink",
+    "projectile_release",
+    "jump_takeoff",
+    "landing",
+    "wood_break",
+    "body_fall",
+    "stand_up",
     "hide_transition",
+    "action_surge",
+    "door_open",
+    "stance_transition",
     "torch_ignite",
-    "footstep"
+    "weapon_swing_heavy"
   ],
   "failures": [],
   "recordings": [
     {
+      "audio_components": 1,
+      "recording": "res://tests/fixtures/schema16/scenarios/move/amber"
+    },
+    {
+      "audio_components": 1,
+      "recording": "res://tests/fixtures/schema16/scenarios/move/blue"
+    },
+    {
       "audio_components": 2,
-      "recording": "res://.runtime/studio-cases/melee-seed3/amber/journal"
+      "recording": "res://tests/fixtures/schema16/scenarios/melee/amber"
+    },
+    {
+      "audio_components": 2,
+      "recording": "res://tests/fixtures/schema16/scenarios/melee/blue"
+    },
+    {
+      "audio_components": 7,
+      "recording": "res://tests/fixtures/schema16/scenarios/interaction-media/amber"
+    },
+    {
+      "audio_components": 7,
+      "recording": "res://tests/fixtures/schema16/scenarios/interaction-media/blue"
     },
     {
       "audio_components": 3,
-      "recording": "res://.runtime/studio-cases/dying-seed5/amber/journal"
+      "recording": "res://tests/fixtures/schema16/scenarios/jump/amber"
     },
     {
-      "audio_components": 12,
-      "recording": "res://.runtime/studio-cases/hide-light-schema9-seed3/amber/journal"
+      "audio_components": 3,
+      "recording": "res://tests/fixtures/schema16/scenarios/jump/blue"
+    },
+    {
+      "audio_components": 3,
+      "recording": "res://tests/fixtures/schema16/scenarios/window-break/amber"
+    },
+    {
+      "audio_components": 3,
+      "recording": "res://tests/fixtures/schema16/scenarios/window-break/blue"
+    },
+    {
+      "audio_components": 2,
+      "recording": "res://tests/fixtures/schema16/scenarios/death-save/amber"
+    },
+    {
+      "audio_components": 2,
+      "recording": "res://tests/fixtures/schema16/scenarios/death-save/blue"
+    },
+    {
+      "audio_components": 4,
+      "recording": "res://tests/fixtures/schema16/scenarios/prone/amber"
+    },
+    {
+      "audio_components": 4,
+      "recording": "res://tests/fixtures/schema16/scenarios/prone/blue"
+    },
+    {
+      "audio_components": 2,
+      "recording": "res://tests/fixtures/schema16/scenarios/hide/amber"
+    },
+    {
+      "audio_components": 2,
+      "recording": "res://tests/fixtures/schema16/scenarios/hide/blue"
+    },
+    {
+      "audio_components": 9,
+      "recording": "res://tests/fixtures/schema16/scenarios/action-surge/amber"
+    },
+    {
+      "audio_components": 9,
+      "recording": "res://tests/fixtures/schema16/scenarios/action-surge/blue"
+    },
+    {
+      "audio_components": 8,
+      "recording": "res://tests/fixtures/schema16/scenarios/door/amber"
+    },
+    {
+      "audio_components": 3,
+      "recording": "res://tests/fixtures/schema16/scenarios/door/blue"
+    },
+    {
+      "audio_components": 4,
+      "recording": "res://tests/fixtures/schema16/scenarios/stairs/amber"
+    },
+    {
+      "audio_components": 4,
+      "recording": "res://tests/fixtures/schema16/scenarios/stairs/blue"
+    },
+    {
+      "audio_components": 4,
+      "recording": "res://tests/fixtures/schema16/scenarios/dash/amber"
+    },
+    {
+      "audio_components": 4,
+      "recording": "res://tests/fixtures/schema16/scenarios/dash/blue"
+    },
+    {
+      "audio_components": 9,
+      "recording": "res://tests/fixtures/schema16/scenarios/hide-light/amber"
+    },
+    {
+      "audio_components": 8,
+      "recording": "res://tests/fixtures/schema16/scenarios/hide-light/blue"
+    },
+    {
+      "audio_components": 11,
+      "recording": "res://tests/fixtures/schema16/scenarios/intrinsic-weapon-arcane-staff/amber"
+    },
+    {
+      "audio_components": 11,
+      "recording": "res://tests/fixtures/schema16/scenarios/intrinsic-weapon-arcane-staff/blue"
     }
   ],
   "scope": "Actual shared-compiler cue assignments, disclosed owners, authored markers and source availability; native audible output is separately checked."

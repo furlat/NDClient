@@ -1,6 +1,17 @@
 # Factory source/runtime delegation — reconciled21 October2026
 
-**Current complete delivery installed and source-published,21 October16:11 UTC:**
+**New complete delivery received21October20:01UTC:**
+`runtime-speed-completion-20261021-82a271b677ff9604` includes the requested
+five Cloud/three Patches alternatives, Wind mask-compatible source and both
+Freezing immutable-noise resource corrections. Its1,246 IDs/504 default
+selections remain unchanged; typed choices extend62→71. Complete namespace
+intake/editor import is underway with8dd preserved; receiving integration,
+explicit client selections, publication and affected runtime qualification
+remain pending. Source cost flags and shutdown diagnostics remain explicit.
+[Current complete handoff](/mnt/c/Users/tommaso/Documents/assets/VFXFactory/docs/MATERIAL_RUNTIME_HANDOFF_2026-10-21.md),
+[offline intake](../.runtime/vfx-successor-82a/staging-complete.json).
+
+**Previous complete delivery installed and source-published,21 October16:11 UTC:**
 `runtime-call-heavy-defaults-20261021-8dd103fb92174541`, through the
 [Material/runtime handoff](/mnt/c/Users/tommaso/Documents/assets/VFXFactory/docs/MATERIAL_RUNTIME_HANDOFF_2026-10-21.md).
 Its22,847 files retain1,246 clip IDs,504 default selections and155 condition
@@ -33,28 +44,22 @@ ordinary recorded default.
 5,132 assertions; intrinsic weapons70,695/0, six coating families37,740/0,
 Basic Poison runtime5,536/0, Ember delivery/contact20/0 and Poison contacts19/0
 also pass. These are selected client runtime controls, not approval of artwork
-or every equipment combination. The package gate retains one alias failure
-among6,402 assertions; a client correction is applied and five-approach proof
-is pending. No failed receipt is replaced by its source fix.
+or every equipment combination. The latest whole installed8dd package gate passes6,402 assertions with exit0;
+the earlier alias failure remains preserved. This is functional source-contract
+qualification, not artwork acceptance or a complete live checkpoint.
 
-**§§21–22: Factory source repairs supplied; complete-package delivery pending.**
-The latest [runtime-cost handoff](/mnt/c/Users/tommaso/Documents/assets/VFXFactory/docs/RUNTIME_COST_CONTINUATION_RESULTS_2026-10-21.md)
-now supplies compatible Wind materials and offline immutable Freezing noise.
-Their exact scoped evidence and retained failures are recorded under each
-section below. Complete8dd remains installed, so both original client failures
-remain reproducible until successor intake and affected qualification. Do not
-request these source repairs again or infer a client pass from Factory evidence.
+**§§21–22 and the worker complete-package intake are DELIVERED in82a.**
+The latest complete handoff above supersedes the earlier source-only delivery.
+Client receiving/publication/qualification are underway; no new Factory source
+or packaging request is needed for these supplied repairs. Keep the original8dd
+Wind UI and Freezing10s gate failures at their actual package/source cutoffs.
+Factory's scoped source proof does not replace the affected client rerun.
 
-The [runtime-cost continuation handoff](/mnt/c/Users/tommaso/Documents/assets/VFXFactory/docs/RUNTIME_COST_CONTINUATION_RESULTS_2026-10-21.md)
-has been received. Its optional Shader-worker and Patches changes remain
-outside complete8dd; receiving integration and assessment are client work.
-Their historical cost flags remain evidence, but this intake does not create
-another missing-API request or reopen already delivered source repairs.
-The separate [optional worker package intake](FACTORY_SHADER_WORKER_INTAKE_2026-10-21.md)
-now identifies the exact five Cloud/three Patches closures needed in a complete
-successor. This is a delivery prerequisite for adopting the new candidates,
-alongside packaging the supplied §§21–22 repairs. Current defaults and the
-still-reviewed client receiving patch remain unchanged by that request.
+The [worker package intake](FACTORY_SHADER_WORKER_INTAKE_2026-10-21.md) now
+records delivery and preserves the exact original request as history. The
+nine optional choices retain their exact packaged preparation and setter
+mapping. The existing52 cost flags, first main-device pipeline span and raw
+shutdown diagnostics remain distinct from delivery and human review.
 
 **Electric simplification applied:** all six temporary client bank overrides
 and their now-unused five-file transport/validation extension are removed

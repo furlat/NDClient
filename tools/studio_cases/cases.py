@@ -225,7 +225,7 @@ def first_cohort():
                   {'do':'action.move','by':'caster','target':[11,6]},
                   {'do':'action.environment.directional_door.open','by':'caster','target':{'object':'Burial hall'}},
                   {'do':'action.move','by':'caster','target':[13,6]}],
-         'required_behaviors':['action.environment.directional_door.open'],'required_facts':['movement']}, gallery_sorcerer(), equipped_weapon_study(), poison_weapon_contact_study(), poison_weapon_runtime_study(), water_create_dry_study(), *glyph_warding_trigger_studies(), power_word_heal_poison_study(), goodberry_consumption_study(), shillelagh_equipped_move_study(), flaming_sphere_lifecycle_study()] + interaction_cohort() + traversal_and_utility_cohort() + survival_cohort() + perspective_and_reaction_cohort() + direct_character_cohort() + passive_handler_cohort() + [interaction_media_study(), vampiric_positive_study(), banishment_departure_study()] + native_persistent_studio_studies() + option_identity_studies() + intrinsic_weapon_studies() + [flame_blade_weapon_study(subjects)] + coating_weapon_studies() + event_family_studies(actors, subjects) + projectile_variant_studies(actors, subjects) + production_review_studies(actors, subjects) + legacy_six_studies(subjects) + [skeleton_mark_lifecycle_study()] + coating_slot_lifecycle_studies() + class_held_lifecycle_studies() + elemental_body_lifecycle_studies() + [false_life_grant_study()]
+         'required_behaviors':['action.environment.directional_door.open'],'required_facts':['movement']}, gallery_sorcerer(), equipped_weapon_study(), poison_weapon_contact_study(), poison_weapon_runtime_study(), water_create_dry_study(), *glyph_warding_trigger_studies(), power_word_heal_poison_study(), goodberry_consumption_study(), shillelagh_equipped_move_study(), flaming_sphere_lifecycle_study()] + interaction_cohort() + traversal_and_utility_cohort() + survival_cohort() + perspective_and_reaction_cohort() + direct_character_cohort() + passive_handler_cohort() + [interaction_media_study(), vampiric_positive_study(), banishment_departure_study()] + native_persistent_studio_studies() + option_identity_studies() + intrinsic_weapon_studies() + [flame_blade_weapon_study(subjects)] + coating_weapon_studies() + event_family_studies(actors, subjects) + projectile_variant_studies(actors, subjects) + production_review_studies(actors, subjects) + legacy_six_studies(subjects) + [skeleton_mark_lifecycle_study()] + coating_slot_lifecycle_studies() + class_held_lifecycle_studies() + elemental_body_lifecycle_studies() + [false_life_grant_study()] + [shield_ranged_lifecycle_study()]
     cohort += hardware_studies(subjects)
     return [repair_item_owner_requirements(case) for case in cohort]
 
@@ -1925,3 +1925,53 @@ def false_life_grant_study():
                 'all artwork remains unreviewed. The preserved first generic-caster attempt autoaccepted '
                 'its real Shield and blocked all missiles; it remains a failed original, not a backend '
                 'defect or reason to disable reactions.'}
+
+
+def shield_ranged_lifecycle_study():
+    """One fixed Fighter attack exchange; an absent Shield witness stays failed."""
+    return {'id': 'spell.shield/ranged_attack_lifecycle',
+     'title': 'Shield: real Fighter ranged Attack and Extra Attack, next-turn end and walk',
+     'kind': 'spell',
+     'seed': 2,
+     'subjects': {'spell': ['spell.shield'],
+                  'action': ['action.attack', 'action.feature.extra_attack', 'action.move'],
+                  'condition': ['condition.spell.shield'],
+                  'creature': [],
+                  'environment_object': [],
+                  'spatial_effect': [],
+                  'residue': [],
+                  'item': []},
+     'actors': [{'role': 'caster', 'side': 'amber', 'premade': 'spellblade', 'at': [4, 6]},
+                {'role': 'archer', 'side': 'blue', 'premade': 'fighter', 'at': [9, 6]}],
+     'steps': [{'do': 'action.attack',
+                'by': 'archer',
+                'target': 'caster',
+                'weapon_slot': 'RANGED_MAIN',
+                'track': True,
+                'track_condition': 'condition.spell.shield',
+                'capture_choices': True},
+               {'do': 'action.feature.extra_attack',
+                'by': 'archer',
+                'target': 'caster',
+                'weapon_slot': 'RANGED_MAIN',
+                'track': True,
+                'track_condition': 'condition.spell.shield',
+                'capture_choices': True},
+               {'do': 'end_tracked', 'prefer_turns': True, 'max_turns': 4},
+               {'do': 'tail_walk', 'by': 'caster', 'offset': [-1, 0]}],
+     'required_behaviors': ['action.attack',
+                            'action.feature.extra_attack',
+                            'reaction.spell.shield',
+                            'action.move'],
+     'required_facts': ['attack', 'actor_change', 'movement'],
+     'required_conditions': ['condition.spell.shield'],
+     'required_condition_ends': ['condition.spell.shield'],
+     'purpose': 'One fixed, ordinary level5 Fighter Attack exchange against the original native Spellblade: '
+                'offered longbow Attack followed by its earned RANGED_MAIN Extra Attack in the same actual '
+                'turn, regardless of either result. The first preserved single-attack original naturally '
+                'missed AC18 and remains failed. Original seed2, both actors, native equipment/stats/Shield '
+                'source and spell slots are unchanged. A genuine own-UUID ranged Shield interception, '
+                'next-turn expiration and restored walk remain required; neither attack is conditional and '
+                'there is no repeat-until-outcome, seed search, grant/stat edit or forced roll. If neither '
+                'native attack supplies the required reaction, the complete fixed exchange remains a failed '
+                'original.'}

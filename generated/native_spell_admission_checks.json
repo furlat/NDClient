@@ -1,127 +1,755 @@
 {
-  "checks": 368,
+  "checks": 1512,
   "failures": [],
-  "scope": "All 30 current client-approved spell definitions, phases, receiver treatments and existing baked variants; no native framebuffer or live latency claim.",
+  "scope": "Every natively staged spell of the abilities source: definitions, phases, receiver treatments and requirements as built; no native framebuffer or live latency claim.",
   "warm_lookup_samples": [
     {
+      "spell": "spell.acid_arrow",
+      "warm_selection_usec": 1.407
+    },
+    {
+      "spell": "spell.acid_flask",
+      "warm_selection_usec": 1.401
+    },
+    {
       "spell": "spell.acid_splash",
-      "warm_selection_usec": 0.849
+      "warm_selection_usec": 1.398
+    },
+    {
+      "spell": "spell.aid",
+      "warm_selection_usec": 1.447
+    },
+    {
+      "spell": "spell.animal_friendship",
+      "warm_selection_usec": 1.432
+    },
+    {
+      "spell": "spell.antilife_shell",
+      "warm_selection_usec": 1.435
+    },
+    {
+      "spell": "spell.antimagic_field",
+      "warm_selection_usec": 1.431
+    },
+    {
+      "spell": "spell.arcane_sword",
+      "warm_selection_usec": 1.391
+    },
+    {
+      "spell": "spell.aura_of_life",
+      "warm_selection_usec": 1.543
     },
     {
       "spell": "spell.bane",
-      "warm_selection_usec": 0.85
+      "warm_selection_usec": 1.399
+    },
+    {
+      "spell": "spell.banishment",
+      "warm_selection_usec": 1.463
+    },
+    {
+      "spell": "spell.barkskin",
+      "warm_selection_usec": 1.392
+    },
+    {
+      "spell": "spell.beacon_of_hope",
+      "warm_selection_usec": 1.42
+    },
+    {
+      "spell": "spell.bestow_curse",
+      "warm_selection_usec": 1.429
+    },
+    {
+      "spell": "spell.blade_barrier",
+      "warm_selection_usec": 1.421
+    },
+    {
+      "spell": "spell.bless",
+      "warm_selection_usec": 1.39
+    },
+    {
+      "spell": "spell.blight",
+      "warm_selection_usec": 1.419
+    },
+    {
+      "spell": "spell.blindness_deafness",
+      "warm_selection_usec": 1.403
+    },
+    {
+      "spell": "spell.blur",
+      "warm_selection_usec": 1.399
+    },
+    {
+      "spell": "spell.branding_smite",
+      "warm_selection_usec": 1.432
     },
     {
       "spell": "spell.burning_hands",
-      "warm_selection_usec": 0.856
+      "warm_selection_usec": 1.405
+    },
+    {
+      "spell": "spell.call_lightning",
+      "warm_selection_usec": 1.408
+    },
+    {
+      "spell": "spell.calm_emotions",
+      "warm_selection_usec": 1.394
+    },
+    {
+      "spell": "spell.chain_lightning",
+      "warm_selection_usec": 1.403
+    },
+    {
+      "spell": "spell.charm_monster",
+      "warm_selection_usec": 1.447
+    },
+    {
+      "spell": "spell.charm_person",
+      "warm_selection_usec": 1.446
     },
     {
       "spell": "spell.chill_touch",
-      "warm_selection_usec": 0.854
+      "warm_selection_usec": 1.449
+    },
+    {
+      "spell": "spell.chromatic_orb",
+      "warm_selection_usec": 1.446
+    },
+    {
+      "spell": "spell.circle_of_death",
+      "warm_selection_usec": 1.438
+    },
+    {
+      "spell": "spell.cloudkill",
+      "warm_selection_usec": 1.392
+    },
+    {
+      "spell": "spell.color_spray",
+      "warm_selection_usec": 1.408
     },
     {
       "spell": "spell.command",
-      "warm_selection_usec": 0.841
+      "warm_selection_usec": 1.411
+    },
+    {
+      "spell": "spell.cone_of_cold",
+      "warm_selection_usec": 1.435
+    },
+    {
+      "spell": "spell.conjure_animals",
+      "warm_selection_usec": 1.528
+    },
+    {
+      "spell": "spell.conjure_elemental",
+      "warm_selection_usec": 1.475
+    },
+    {
+      "spell": "spell.conjure_fey",
+      "warm_selection_usec": 1.416
+    },
+    {
+      "spell": "spell.conjure_fiend",
+      "warm_selection_usec": 1.507
+    },
+    {
+      "spell": "spell.continual_flame",
+      "warm_selection_usec": 1.429
+    },
+    {
+      "spell": "spell.counterspell",
+      "warm_selection_usec": 1.429
+    },
+    {
+      "spell": "spell.create_or_destroy_water",
+      "warm_selection_usec": 1.446
     },
     {
       "spell": "spell.cure_wounds",
-      "warm_selection_usec": 0.85
+      "warm_selection_usec": 1.441
+    },
+    {
+      "spell": "spell.dancing_lights",
+      "warm_selection_usec": 1.443
+    },
+    {
+      "spell": "spell.darkness",
+      "warm_selection_usec": 1.431
+    },
+    {
+      "spell": "spell.darkvision",
+      "warm_selection_usec": 1.41
+    },
+    {
+      "spell": "spell.daylight",
+      "warm_selection_usec": 1.418
+    },
+    {
+      "spell": "spell.death_ward",
+      "warm_selection_usec": 1.49
+    },
+    {
+      "spell": "spell.delayed_blast_fireball",
+      "warm_selection_usec": 1.467
+    },
+    {
+      "spell": "spell.dimension_door",
+      "warm_selection_usec": 1.5
+    },
+    {
+      "spell": "spell.disintegrate",
+      "warm_selection_usec": 1.438
+    },
+    {
+      "spell": "spell.dispel_evil_and_good",
+      "warm_selection_usec": 1.42
+    },
+    {
+      "spell": "spell.dissonant_whispers",
+      "warm_selection_usec": 1.416
+    },
+    {
+      "spell": "spell.divine_favor",
+      "warm_selection_usec": 1.407
+    },
+    {
+      "spell": "spell.divine_smite",
+      "warm_selection_usec": 1.414
+    },
+    {
+      "spell": "spell.divine_word",
+      "warm_selection_usec": 1.417
+    },
+    {
+      "spell": "spell.dragons_breath",
+      "warm_selection_usec": 1.543
     },
     {
       "spell": "spell.eldritch_blast",
-      "warm_selection_usec": 0.864
+      "warm_selection_usec": 1.441
+    },
+    {
+      "spell": "spell.enhance_ability",
+      "warm_selection_usec": 1.414
+    },
+    {
+      "spell": "spell.enlarge_reduce",
+      "warm_selection_usec": 1.434
+    },
+    {
+      "spell": "spell.ensnaring_strike",
+      "warm_selection_usec": 1.44
+    },
+    {
+      "spell": "spell.expeditious_retreat",
+      "warm_selection_usec": 1.409
+    },
+    {
+      "spell": "spell.eyebite",
+      "warm_selection_usec": 1.465
+    },
+    {
+      "spell": "spell.faerie_fire",
+      "warm_selection_usec": 1.405
+    },
+    {
+      "spell": "spell.false_life",
+      "warm_selection_usec": 1.422
+    },
+    {
+      "spell": "spell.fear",
+      "warm_selection_usec": 1.397
+    },
+    {
+      "spell": "spell.feeblemind",
+      "warm_selection_usec": 1.421
+    },
+    {
+      "spell": "spell.finger_of_death",
+      "warm_selection_usec": 1.455
     },
     {
       "spell": "spell.fire_bolt",
-      "warm_selection_usec": 0.851
+      "warm_selection_usec": 1.423
+    },
+    {
+      "spell": "spell.fire_shield",
+      "warm_selection_usec": 1.492
     },
     {
       "spell": "spell.fireball",
-      "warm_selection_usec": 0.852
+      "warm_selection_usec": 1.404
+    },
+    {
+      "spell": "spell.flame_blade",
+      "warm_selection_usec": 1.427
+    },
+    {
+      "spell": "spell.flame_strike",
+      "warm_selection_usec": 1.477
+    },
+    {
+      "spell": "spell.flaming_sphere",
+      "warm_selection_usec": 1.414
+    },
+    {
+      "spell": "spell.flesh_to_stone",
+      "warm_selection_usec": 1.397
+    },
+    {
+      "spell": "spell.fly",
+      "warm_selection_usec": 1.406
+    },
+    {
+      "spell": "spell.fog_cloud",
+      "warm_selection_usec": 1.425
+    },
+    {
+      "spell": "spell.forcecage",
+      "warm_selection_usec": 1.484
+    },
+    {
+      "spell": "spell.foresight",
+      "warm_selection_usec": 1.412
+    },
+    {
+      "spell": "spell.freedom_of_movement",
+      "warm_selection_usec": 1.474
+    },
+    {
+      "spell": "spell.freezing_sphere",
+      "warm_selection_usec": 1.403
+    },
+    {
+      "spell": "spell.globe_of_invulnerability",
+      "warm_selection_usec": 1.447
+    },
+    {
+      "spell": "spell.glyph_of_warding",
+      "warm_selection_usec": 1.404
+    },
+    {
+      "spell": "spell.goodberry",
+      "warm_selection_usec": 1.409
+    },
+    {
+      "spell": "spell.grease",
+      "warm_selection_usec": 1.413
+    },
+    {
+      "spell": "spell.greater_invisibility",
+      "warm_selection_usec": 1.511
+    },
+    {
+      "spell": "spell.greater_restoration",
+      "warm_selection_usec": 1.459
+    },
+    {
+      "spell": "spell.guardian_of_faith",
+      "warm_selection_usec": 1.449
     },
     {
       "spell": "spell.guidance",
-      "warm_selection_usec": 0.886
+      "warm_selection_usec": 1.453
     },
     {
       "spell": "spell.guiding_bolt",
-      "warm_selection_usec": 0.857
+      "warm_selection_usec": 1.474
+    },
+    {
+      "spell": "spell.gust_of_wind",
+      "warm_selection_usec": 1.455
+    },
+    {
+      "spell": "spell.harm",
+      "warm_selection_usec": 1.431
+    },
+    {
+      "spell": "spell.haste",
+      "warm_selection_usec": 1.44
+    },
+    {
+      "spell": "spell.heal",
+      "warm_selection_usec": 1.443
     },
     {
       "spell": "spell.healing_word",
-      "warm_selection_usec": 0.861
+      "warm_selection_usec": 1.461
+    },
+    {
+      "spell": "spell.hellish_rebuke",
+      "warm_selection_usec": 1.471
+    },
+    {
+      "spell": "spell.heroes_feast",
+      "warm_selection_usec": 1.554
+    },
+    {
+      "spell": "spell.heroism",
+      "warm_selection_usec": 1.604
+    },
+    {
+      "spell": "spell.hex",
+      "warm_selection_usec": 1.456
+    },
+    {
+      "spell": "spell.hideous_laughter",
+      "warm_selection_usec": 1.495
+    },
+    {
+      "spell": "spell.hold_monster",
+      "warm_selection_usec": 1.455
+    },
+    {
+      "spell": "spell.hold_person",
+      "warm_selection_usec": 1.468
+    },
+    {
+      "spell": "spell.holy_aura",
+      "warm_selection_usec": 1.507
+    },
+    {
+      "spell": "spell.hunters_mark",
+      "warm_selection_usec": 1.462
+    },
+    {
+      "spell": "spell.hypnotic_pattern",
+      "warm_selection_usec": 1.493
     },
     {
       "spell": "spell.ice_knife",
-      "warm_selection_usec": 0.885
+      "warm_selection_usec": 1.489
+    },
+    {
+      "spell": "spell.ice_storm",
+      "warm_selection_usec": 1.48
+    },
+    {
+      "spell": "spell.incendiary_cloud",
+      "warm_selection_usec": 1.478
+    },
+    {
+      "spell": "spell.inflict_wounds",
+      "warm_selection_usec": 1.618
+    },
+    {
+      "spell": "spell.insect_plague",
+      "warm_selection_usec": 1.459
+    },
+    {
+      "spell": "spell.invisibility",
+      "warm_selection_usec": 1.452
+    },
+    {
+      "spell": "spell.irresistible_dance",
+      "warm_selection_usec": 1.463
+    },
+    {
+      "spell": "spell.jump",
+      "warm_selection_usec": 1.444
+    },
+    {
+      "spell": "spell.lesser_restoration",
+      "warm_selection_usec": 1.457
     },
     {
       "spell": "spell.light",
-      "warm_selection_usec": 0.845
+      "warm_selection_usec": 1.484
+    },
+    {
+      "spell": "spell.lightning_bolt",
+      "warm_selection_usec": 1.482
+    },
+    {
+      "spell": "spell.longstrider",
+      "warm_selection_usec": 1.462
     },
     {
       "spell": "spell.mage_armor",
-      "warm_selection_usec": 0.867
+      "warm_selection_usec": 1.479
     },
     {
       "spell": "spell.magic_missile",
-      "warm_selection_usec": 0.858
+      "warm_selection_usec": 1.499
+    },
+    {
+      "spell": "spell.magic_weapon",
+      "warm_selection_usec": 1.468
+    },
+    {
+      "spell": "spell.mass_cure_wounds",
+      "warm_selection_usec": 1.492
+    },
+    {
+      "spell": "spell.mass_heal",
+      "warm_selection_usec": 1.494
+    },
+    {
+      "spell": "spell.mass_healing_word",
+      "warm_selection_usec": 1.508
+    },
+    {
+      "spell": "spell.mirror_image",
+      "warm_selection_usec": 1.478
+    },
+    {
+      "spell": "spell.misty_step",
+      "warm_selection_usec": 1.458
+    },
+    {
+      "spell": "spell.moonbeam",
+      "warm_selection_usec": 1.474
+    },
+    {
+      "spell": "spell.pass_without_trace",
+      "warm_selection_usec": 1.519
+    },
+    {
+      "spell": "spell.phantasmal_force",
+      "warm_selection_usec": 1.467
+    },
+    {
+      "spell": "spell.phantasmal_killer",
+      "warm_selection_usec": 1.457
+    },
+    {
+      "spell": "spell.planar_ally",
+      "warm_selection_usec": 1.514
+    },
+    {
+      "spell": "spell.plant_growth",
+      "warm_selection_usec": 1.444
     },
     {
       "spell": "spell.poison_spray",
-      "warm_selection_usec": 0.854
+      "warm_selection_usec": 1.447
+    },
+    {
+      "spell": "spell.power_word_heal",
+      "warm_selection_usec": 1.507
+    },
+    {
+      "spell": "spell.power_word_kill",
+      "warm_selection_usec": 1.491
+    },
+    {
+      "spell": "spell.power_word_stun",
+      "warm_selection_usec": 1.492
+    },
+    {
+      "spell": "spell.prayer_of_healing",
+      "warm_selection_usec": 1.45
+    },
+    {
+      "spell": "spell.prismatic_spray",
+      "warm_selection_usec": 1.433
     },
     {
       "spell": "spell.produce_flame",
-      "warm_selection_usec": 0.853
+      "warm_selection_usec": 1.44
+    },
+    {
+      "spell": "spell.protection_from_energy",
+      "warm_selection_usec": 1.44
+    },
+    {
+      "spell": "spell.protection_from_evil_and_good",
+      "warm_selection_usec": 1.467
+    },
+    {
+      "spell": "spell.protection_from_poison",
+      "warm_selection_usec": 1.458
     },
     {
       "spell": "spell.ray_of_frost",
-      "warm_selection_usec": 0.86
+      "warm_selection_usec": 1.441
+    },
+    {
+      "spell": "spell.ray_of_sickness",
+      "warm_selection_usec": 1.44
+    },
+    {
+      "spell": "spell.regenerate",
+      "warm_selection_usec": 1.448
+    },
+    {
+      "spell": "spell.remove_curse",
+      "warm_selection_usec": 1.47
+    },
+    {
+      "spell": "spell.resilient_sphere",
+      "warm_selection_usec": 1.446
     },
     {
       "spell": "spell.resistance",
-      "warm_selection_usec": 0.851
+      "warm_selection_usec": 1.527
+    },
+    {
+      "spell": "spell.revivify",
+      "warm_selection_usec": 1.571
+    },
+    {
+      "spell": "spell.sacred_flame",
+      "warm_selection_usec": 1.52
     },
     {
       "spell": "spell.sanctuary",
-      "warm_selection_usec": 0.844
+      "warm_selection_usec": 1.481
     },
     {
       "spell": "spell.scorching_ray",
-      "warm_selection_usec": 0.871
+      "warm_selection_usec": 1.491
+    },
+    {
+      "spell": "spell.searing_smite",
+      "warm_selection_usec": 1.438
+    },
+    {
+      "spell": "spell.see_invisibility",
+      "warm_selection_usec": 1.478
+    },
+    {
+      "spell": "spell.shatter",
+      "warm_selection_usec": 1.437
     },
     {
       "spell": "spell.shield",
-      "warm_selection_usec": 0.848
+      "warm_selection_usec": 1.455
     },
     {
       "spell": "spell.shield_of_faith",
-      "warm_selection_usec": 0.862
+      "warm_selection_usec": 1.468
+    },
+    {
+      "spell": "spell.shillelagh",
+      "warm_selection_usec": 1.429
     },
     {
       "spell": "spell.shocking_grasp",
-      "warm_selection_usec": 0.856
+      "warm_selection_usec": 1.487
+    },
+    {
+      "spell": "spell.silence",
+      "warm_selection_usec": 1.443
     },
     {
       "spell": "spell.sleep",
-      "warm_selection_usec": 0.842
+      "warm_selection_usec": 1.444
+    },
+    {
+      "spell": "spell.sleet_storm",
+      "warm_selection_usec": 1.43
+    },
+    {
+      "spell": "spell.slow",
+      "warm_selection_usec": 1.507
+    },
+    {
+      "spell": "spell.sorcerous_burst",
+      "warm_selection_usec": 1.502
+    },
+    {
+      "spell": "spell.spare_the_dying",
+      "warm_selection_usec": 1.471
+    },
+    {
+      "spell": "spell.spike_growth",
+      "warm_selection_usec": 1.542
+    },
+    {
+      "spell": "spell.spirit_guardians",
+      "warm_selection_usec": 1.452
+    },
+    {
+      "spell": "spell.spiritual_weapon",
+      "warm_selection_usec": 1.517
+    },
+    {
+      "spell": "spell.starry_wisp",
+      "warm_selection_usec": 1.467
+    },
+    {
+      "spell": "spell.stinking_cloud",
+      "warm_selection_usec": 1.632
+    },
+    {
+      "spell": "spell.stoneskin",
+      "warm_selection_usec": 1.456
+    },
+    {
+      "spell": "spell.summon_dragon",
+      "warm_selection_usec": 1.453
+    },
+    {
+      "spell": "spell.sunbeam",
+      "warm_selection_usec": 1.448
+    },
+    {
+      "spell": "spell.sunburst",
+      "warm_selection_usec": 1.45
+    },
+    {
+      "spell": "spell.telekinesis",
+      "warm_selection_usec": 1.443
     },
     {
       "spell": "spell.thaumaturgy",
-      "warm_selection_usec": 0.853
+      "warm_selection_usec": 1.427
     },
     {
       "spell": "spell.thunderwave",
-      "warm_selection_usec": 0.85
+      "warm_selection_usec": 1.443
+    },
+    {
+      "spell": "spell.true_seeing",
+      "warm_selection_usec": 1.455
     },
     {
       "spell": "spell.true_strike",
-      "warm_selection_usec": 0.848
+      "warm_selection_usec": 1.472
+    },
+    {
+      "spell": "spell.vampiric_touch",
+      "warm_selection_usec": 1.462
+    },
+    {
+      "spell": "spell.vicious_mockery",
+      "warm_selection_usec": 1.457
+    },
+    {
+      "spell": "spell.vitriolic_sphere",
+      "warm_selection_usec": 1.457
+    },
+    {
+      "spell": "spell.wall_of_fire",
+      "warm_selection_usec": 1.48
+    },
+    {
+      "spell": "spell.wall_of_force",
+      "warm_selection_usec": 1.474
+    },
+    {
+      "spell": "spell.wall_of_ice",
+      "warm_selection_usec": 1.481
+    },
+    {
+      "spell": "spell.wall_of_stone",
+      "warm_selection_usec": 1.446
+    },
+    {
+      "spell": "spell.wall_of_thorns",
+      "warm_selection_usec": 1.443
     },
     {
       "spell": "spell.web",
-      "warm_selection_usec": 0.841
+      "warm_selection_usec": 1.46
+    },
+    {
+      "spell": "spell.weird",
+      "warm_selection_usec": 1.441
+    },
+    {
+      "spell": "spell.wind_wall",
+      "warm_selection_usec": 1.436
     }
   ]
 }

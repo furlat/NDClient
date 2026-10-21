@@ -1,7 +1,7 @@
 {
-  "authoritative_receiving_tiles": 18,
-  "checks": 69,
-  "event_uuid": "4d29af4b-b4b9-4744-93de-26736b15c1c5",
+  "authoritative_receiving_tiles": 20,
+  "checks": 84,
+  "event_uuid": "36",
   "evidence": [
     {
       "air_components": 1,
@@ -28,20 +28,26 @@
       "residue_tracks": 0
     },
     {
-      "air_components": 0,
+      "air_components": 1,
       "case": "bone release",
-      "ground_components": 0,
-      "residue_tracks": 0
+      "ground_components": 1,
+      "residue_tracks": 1
     },
     {
-      "air_components": 0,
+      "air_components": 1,
       "case": "corrosive release",
-      "ground_components": 0,
-      "residue_tracks": 0
+      "ground_components": 1,
+      "residue_tracks": 1
+    },
+    {
+      "air_components": 1,
+      "case": "dread release",
+      "ground_components": 1,
+      "residue_tracks": 1
     },
     {
       "air_components": 0,
-      "case": "dread release",
+      "case": "unassigned release",
       "ground_components": 0,
       "residue_tracks": 0
     },
@@ -60,10 +66,10 @@
   ],
   "failures": [],
   "invocation": [
-    "--recording=res://.runtime/studio-cases/hide-seed3-v3/amber/journal",
-    "--sequence=9"
+    "--recording=res://tests/fixtures/schema16/scenarios/melee/amber",
+    "--sequence=2"
   ],
-  "recording": "res://.runtime/studio-cases/hide-seed3-v3/amber/journal",
-  "scope": "Real raw Hide damage plus explicitly labeled passive boundary variants. Public compiler and Studio index only; native appearance is qualified separately by studio_blood_residue_checks.",
-  "sequence": 9
+  "recording": "res://tests/fixtures/schema16/scenarios/melee/amber",
+  "scope": "Original schema16 melee damage plus explicitly labeled private presentation-boundary variants. Public compiler and Studio index only; native appearance is qualified separately by studio_blood_residue_checks.",
+  "sequence": 2
 }

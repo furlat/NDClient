@@ -1,90 +1,178 @@
 {
-  "checks": 677,
+  "checks": 382,
   "failures": [],
   "scope": "Actual Crypt recording initialization, displayed actor/source rows, four3D camera quarters, three delivered normal profiles, native settings and original source/painter invariants. No canonical edits or geometry fixtures. Large-map timing is a separate lane.",
   "views": [
     {
       "actor_sample_pixels": 256,
-      "original_reference_changed_samples": 209,
+      "original_reference_changed_samples": 129,
       "quarter": 0,
       "shadows": {
         "actors": 2,
         "caster_triangles_before_native_shadow_passes": 589824,
         "casters": 18,
+        "cookie_images": 2,
+        "footprint_pixels": 419328,
         "last_render_cpu_ms": 0.0,
         "last_render_gpu_ms": 0.0,
+        "phase_accounting": "Cookie pack/upload are nested inside sources and update_* inside update; other named phases are disjoint.",
+        "promotions": 0,
+        "rank_revision": 1,
         "selected_sources": {
-          "6615387d-bc56-459b-958d-d953b54ebedf": "4857c4d9-0185-48e8-8564-d63f56e6ee11",
-          "78dc6e12-3472-4d8d-a940-d4ad60b7752e": "4857c4d9-0185-48e8-8564-d63f56e6ee11"
+          "78a905ca-2891-4fb6-b655-dbd88025cce0": "5e40f859-ebaf-4aa5-ab96-b38d864fe786",
+          "ebec3351-c9b1-4311-a2d3-32185be4dbf7": "51bd3e67-f090-4829-a984-3dcb58ff4e9f"
         },
+        "source_revision": 1,
         "sources": 4,
-        "sync_cpu_ms": 0.242,
-        "target_pixels": 788800,
+        "spare_casters": 80,
+        "spare_helpers": 8,
+        "sync_counts": {
+          "evaluated_actors": 0,
+          "new_actors": 0,
+          "new_casters": 0,
+          "new_meshes": 0,
+          "removed_actors": 0,
+          "retained_actors": 2,
+          "updated_actors": 0
+        },
+        "sync_cpu_ms": 0.009,
+        "sync_phases_ms": {
+          "retire": 0.001,
+          "sources": 0.002
+        },
+        "target_pixels": 1048576,
         "updates": 2,
-        "wide_depth_bounds": 2
+        "wide_depth_bounds": 0,
+        "writes": 248
       }
     },
     {
       "actor_sample_pixels": 301,
-      "original_reference_changed_samples": 229,
+      "original_reference_changed_samples": 180,
       "quarter": 1,
       "shadows": {
         "actors": 2,
         "caster_triangles_before_native_shadow_passes": 589824,
         "casters": 18,
+        "cookie_images": 2,
+        "footprint_pixels": 419328,
         "last_render_cpu_ms": 0.0,
         "last_render_gpu_ms": 0.0,
+        "phase_accounting": "Cookie pack/upload are nested inside sources and update_* inside update; other named phases are disjoint.",
+        "promotions": 0,
+        "rank_revision": 2,
         "selected_sources": {
-          "6615387d-bc56-459b-958d-d953b54ebedf": "4857c4d9-0185-48e8-8564-d63f56e6ee11",
-          "78dc6e12-3472-4d8d-a940-d4ad60b7752e": "4857c4d9-0185-48e8-8564-d63f56e6ee11"
+          "78a905ca-2891-4fb6-b655-dbd88025cce0": "5e40f859-ebaf-4aa5-ab96-b38d864fe786",
+          "ebec3351-c9b1-4311-a2d3-32185be4dbf7": "51bd3e67-f090-4829-a984-3dcb58ff4e9f"
         },
+        "source_revision": 2,
         "sources": 4,
-        "sync_cpu_ms": 0.224,
-        "target_pixels": 788800,
+        "spare_casters": 80,
+        "spare_helpers": 8,
+        "sync_counts": {
+          "evaluated_actors": 0,
+          "new_actors": 0,
+          "new_casters": 0,
+          "new_meshes": 0,
+          "removed_actors": 0,
+          "retained_actors": 2,
+          "updated_actors": 0
+        },
+        "sync_cpu_ms": 0.014,
+        "sync_phases_ms": {
+          "retire": 0.0,
+          "sources": 0.003
+        },
+        "target_pixels": 1048576,
         "updates": 4,
-        "wide_depth_bounds": 2
+        "wide_depth_bounds": 0,
+        "writes": 486
       }
     },
     {
       "actor_sample_pixels": 255,
-      "original_reference_changed_samples": 179,
+      "original_reference_changed_samples": 210,
       "quarter": 2,
       "shadows": {
         "actors": 2,
         "caster_triangles_before_native_shadow_passes": 589824,
         "casters": 18,
+        "cookie_images": 2,
+        "footprint_pixels": 419328,
         "last_render_cpu_ms": 0.0,
         "last_render_gpu_ms": 0.0,
+        "phase_accounting": "Cookie pack/upload are nested inside sources and update_* inside update; other named phases are disjoint.",
+        "promotions": 0,
+        "rank_revision": 3,
         "selected_sources": {
-          "6615387d-bc56-459b-958d-d953b54ebedf": "4857c4d9-0185-48e8-8564-d63f56e6ee11",
-          "78dc6e12-3472-4d8d-a940-d4ad60b7752e": "4857c4d9-0185-48e8-8564-d63f56e6ee11"
+          "78a905ca-2891-4fb6-b655-dbd88025cce0": "5e40f859-ebaf-4aa5-ab96-b38d864fe786",
+          "ebec3351-c9b1-4311-a2d3-32185be4dbf7": "51bd3e67-f090-4829-a984-3dcb58ff4e9f"
         },
+        "source_revision": 3,
         "sources": 4,
-        "sync_cpu_ms": 0.18,
-        "target_pixels": 788800,
+        "spare_casters": 80,
+        "spare_helpers": 8,
+        "sync_counts": {
+          "evaluated_actors": 0,
+          "new_actors": 0,
+          "new_casters": 0,
+          "new_meshes": 0,
+          "removed_actors": 0,
+          "retained_actors": 2,
+          "updated_actors": 0
+        },
+        "sync_cpu_ms": 0.01,
+        "sync_phases_ms": {
+          "retire": 0.001,
+          "sources": 0.002
+        },
+        "target_pixels": 1048576,
         "updates": 6,
-        "wide_depth_bounds": 2
+        "wide_depth_bounds": 0,
+        "writes": 724
       }
     },
     {
       "actor_sample_pixels": 252,
-      "original_reference_changed_samples": 185,
+      "original_reference_changed_samples": 223,
       "quarter": 3,
       "shadows": {
         "actors": 2,
         "caster_triangles_before_native_shadow_passes": 589824,
         "casters": 18,
+        "cookie_images": 2,
+        "footprint_pixels": 419328,
         "last_render_cpu_ms": 0.0,
         "last_render_gpu_ms": 0.0,
+        "phase_accounting": "Cookie pack/upload are nested inside sources and update_* inside update; other named phases are disjoint.",
+        "promotions": 0,
+        "rank_revision": 4,
         "selected_sources": {
-          "6615387d-bc56-459b-958d-d953b54ebedf": "4857c4d9-0185-48e8-8564-d63f56e6ee11",
-          "78dc6e12-3472-4d8d-a940-d4ad60b7752e": "4857c4d9-0185-48e8-8564-d63f56e6ee11"
+          "78a905ca-2891-4fb6-b655-dbd88025cce0": "5e40f859-ebaf-4aa5-ab96-b38d864fe786",
+          "ebec3351-c9b1-4311-a2d3-32185be4dbf7": "51bd3e67-f090-4829-a984-3dcb58ff4e9f"
         },
+        "source_revision": 4,
         "sources": 4,
-        "sync_cpu_ms": 0.167,
-        "target_pixels": 788800,
+        "spare_casters": 80,
+        "spare_helpers": 8,
+        "sync_counts": {
+          "evaluated_actors": 0,
+          "new_actors": 0,
+          "new_casters": 0,
+          "new_meshes": 0,
+          "removed_actors": 0,
+          "retained_actors": 2,
+          "updated_actors": 0
+        },
+        "sync_cpu_ms": 0.008,
+        "sync_phases_ms": {
+          "retire": 0.0,
+          "sources": 0.002
+        },
+        "target_pixels": 1048576,
         "updates": 8,
-        "wide_depth_bounds": 2
+        "wide_depth_bounds": 0,
+        "writes": 962
       }
     }
   ]

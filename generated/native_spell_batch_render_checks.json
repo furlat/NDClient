@@ -1,308 +1,135 @@
 {
-  "scope": "Per-spell native frame contribution and seek. Initial whole-batch pass plus explicit focused retries; not one all-green single invocation.",
+  "cases": [],
+  "checks": 145,
+  "factory_version": "runtime-speed-completion-20261021-82a271b677ff9604",
+  "failures": [
+    "spell.acid_splash: Studio exposes native source tracks",
+    "spell.chill_touch: Studio exposes native source tracks",
+    "spell.eldritch_blast: Studio exposes native source tracks",
+    "spell.fire_bolt: Studio exposes native source tracks",
+    "spell.fireball: Studio exposes native source tracks",
+    "spell.guiding_bolt: Studio exposes native source tracks",
+    "spell.ice_knife: Studio exposes native source tracks",
+    "spell.magic_missile: Studio exposes native source tracks",
+    "spell.poison_spray: Studio exposes native source tracks",
+    "spell.produce_flame: Studio exposes native source tracks",
+    "spell.ray_of_frost: Studio exposes native source tracks",
+    "spell.scorching_ray: Studio exposes native source tracks",
+    "spell.sleep: Studio exposes native source tracks",
+    "spell.web: Studio exposes native source tracks",
+    "spell.bane: Studio exposes native source tracks",
+    "spell.command: Studio exposes native source tracks",
+    "spell.mage_armor: Studio exposes native source tracks",
+    "spell.sanctuary: Studio exposes native source tracks",
+    "spell.shield: Studio exposes native source tracks",
+    "spell.shocking_grasp: Studio exposes native source tracks",
+    "spell.burning_hands: Studio exposes native source tracks",
+    "spell.thunderwave: Studio exposes native source tracks",
+    "spell.cure_wounds: Studio exposes native source tracks",
+    "spell.healing_word: Studio exposes native source tracks",
+    "spell.guidance: Studio exposes native source tracks",
+    "spell.resistance: Studio exposes native source tracks",
+    "spell.light: Studio exposes native source tracks",
+    "spell.thaumaturgy: Studio exposes native source tracks",
+    "spell.shield_of_faith: Studio exposes native source tracks",
+    "spell.true_strike: Studio exposes native source tracks",
+    "spell.aid: Studio exposes native source tracks",
+    "spell.bless: Studio exposes native source tracks",
+    "spell.false_life: Studio exposes native source tracks",
+    "spell.sacred_flame: Studio exposes native source tracks",
+    "native-spell-shield-ranged: the actual original and both independent seats are available",
+    "spell.shield: Studio exposes native source tracks",
+    "spell.shield: Studio exposes native source tracks"
+  ],
+  "missing_original_controls": [
+    "native-spell-shield-ranged"
+  ],
   "renderer": "forward_plus",
-  "cases": [
-    {
-      "errors": [],
-      "intervals": {
-        "projectile-windups/acid_splash/default/cast/windup:cast:false:": 2,
-        "spells/acid_splash/default/impact:impact:false:": 2,
-        "spells/acid_splash/default/travel:flight:false:": 1
-      },
-      "native_pixels": 141,
-      "spell": "acid_splash"
-    },
-    {
-      "errors": [],
-      "intervals": {
-        "spells/chill_touch/impact/impact:strike:false:": 1
-      },
-      "native_pixels": 754,
-      "spell": "chill_touch"
-    },
-    {
-      "errors": [],
-      "intervals": {
-        "spells/eldritch_blast/default/cast:cast:false:": 3,
-        "spells/eldritch_blast/default/impact:impact:false:": 4,
-        "spells/eldritch_blast/default/travel:flight:false:": 2
-      },
-      "native_pixels": 1437,
-      "spell": "eldritch_blast"
-    },
-    {
-      "errors": [],
-      "intervals": {
-        "spells/fire_bolt/default/cast:cast:false:": 2,
-        "spells/fire_bolt/default/impact:impact:false:": 1,
-        "spells/fire_bolt/default/travel:flight:false:": 1
-      },
-      "native_pixels": 546,
-      "spell": "fire_bolt"
-    },
-    {
-      "errors": [],
-      "intervals": {
-        "projectile-windups/fireball/default/cast/windup:cast:false:": 2,
-        "projectile-windups/fireball_travel/default/cast/travel:flight:false:": 2,
-        "spells/fireball/fire/lifecycle:area:false:": 3
-      },
-      "native_pixels": 181610,
-      "spell": "fireball"
-    },
-    {
-      "errors": [],
-      "intervals": {
-        "spells/guiding_bolt/default/cast:cast:false:": 2,
-        "spells/guiding_bolt/default/impact:impact:false:": 1,
-        "spells/guiding_bolt/default/travel:flight:false:": 1
-      },
-      "native_pixels": 762,
-      "spell": "guiding_bolt"
-    },
-    {
-      "errors": [],
-      "intervals": {
-        "projectile-windups/ice_knife/default/cast/windup:cast:false:": 2,
-        "spells/ice_knife/impact/impact:area:false:": 2,
-        "spells/ice_knife/travel/travel:flight:false:": 1
-      },
-      "native_pixels": 593,
-      "spell": "ice_knife"
-    },
-    {
-      "errors": [],
-      "intervals": {
-        "spells/magic_missile/default/cast:cast:false:": 4,
-        "spells/magic_missile/default/impact:impact:false:": 4,
-        "spells/magic_missile/default/travel:flight:false:": 4
-      },
-      "native_pixels": 1165,
-      "spell": "magic_missile"
-    },
-    {
-      "errors": [],
-      "intervals": {
-        "projectile-windups/poison_spray/default/cast/windup:cast:false:": 2,
-        "spells/poison_spray/full/lifecycle:spray:false:": 2
-      },
-      "native_pixels": 1933,
-      "spell": "poison_spray"
-    },
-    {
-      "errors": [],
-      "intervals": {
-        "spells/produce_flame/impact_back/impact:impact:false:": 2,
-        "spells/produce_flame/travel_back/travel:flight:false:": 1
-      },
-      "native_pixels": 579,
-      "spell": "produce_flame"
-    },
-    {
-      "errors": [],
-      "intervals": {
-        "projectile-windups/ray_of_frost/default/cast/windup:cast:false:": 3,
-        "recovered/travel:flight:false:": 2,
-        "recovered/travelIce:flight:false:": 2,
-        "spells/ray_of_frost/impact/impact:impact:false:": 2
-      },
-      "native_pixels": 2476,
-      "spell": "ray_of_frost"
-    },
-    {
-      "errors": [],
-      "intervals": {
-        "native/scorching_ray/impact:impact:false:": 5,
-        "projectile-windups/scorching_ray/default/cast/windup:cast:false:": 3,
-        "spells/scorching_ray/back/lifecycle:flight:false:": 3
-      },
-      "native_pixels": 2889,
-      "spell": "scorching_ray"
-    },
-    {
-      "errors": [],
-      "intervals": {
-        "projectile-windups/sleep/default/cast/windup:cast:false:": 2,
-        "recovered/travel:flight:false:": 1,
-        "spells/sleep/default/lifecycle:area:false:": 1
-      },
-      "native_pixels": 232091,
-      "spell": "sleep"
-    },
-    {
-      "errors": [],
-      "intervals": {
-        "projectile-windups/web/default/cast/windup:cast:false:": 3,
-        "spells/web/ground/lifecycle:area:true:": 3,
-        "spells/web/projectile/lifecycle:flight:false:": 2
-      },
-      "native_pixels": 5583,
-      "spell": "web"
-    },
-    {
-      "errors": [],
-      "intervals": {
-        "spells/bane/back/lifecycle:attached:true:condition": 1,
-        "spells/bane/back/lifecycle:attached:true:condition_exit": 1
-      },
-      "native_pixels": 2003,
-      "spell": "bane"
-    },
-    {
-      "errors": [],
-      "intervals": {
-        "spells/command/back/lifecycle:attached:true:condition": 1,
-        "spells/command/back/lifecycle:attached:true:condition_exit": 1
-      },
-      "native_pixels": 96,
-      "spell": "command"
-    },
-    {
-      "errors": [],
-      "intervals": {
-        "spells/mage_armor/back/lifecycle:attached:true:condition": 1,
-        "spells/mage_armor/back/lifecycle:attached:true:condition_exit": 1
-      },
-      "native_pixels": 4366,
-      "spell": "mage_armor"
-    },
-    {
-      "errors": [],
-      "intervals": {
-        "spells/sanctuary/back/lifecycle:attached:true:condition": 1,
-        "spells/sanctuary/back/lifecycle:attached:true:condition_exit": 1
-      },
-      "native_pixels": 268,
-      "spell": "sanctuary"
-    },
-    {
-      "errors": [],
-      "intervals": {
-        "spells/shield/back/hit_E:attached:false:": 4,
-        "spells/shield/back/lifecycle:attached:true:condition": 3,
-        "spells/shield/back/lifecycle:attached:true:condition_exit": 4
-      },
-      "native_pixels": 5930,
-      "spell": "shield"
-    },
-    {
-      "errors": [],
-      "intervals": {
-        "spells/shocking_grasp/back/lifecycle:attached:false:": 1,
-        "spells/shocking_grasp/back/lifecycle:cast:false:": 1
-      },
-      "native_pixels": 739,
-      "spell": "shocking_grasp"
-    },
-    {
-      "errors": [],
-      "intervals": {
-        "spells/burning_hands_production_xyz/whole/lifecycle:attached:false:": 1
-      },
-      "native_pixels": 5255,
-      "spell": "burning_hands"
-    },
-    {
-      "errors": [],
-      "intervals": {
-        "spells/thunderwave_production_xyz/whole/lifecycle:attached:false:": 1
-      },
-      "native_pixels": 11031,
-      "spell": "thunderwave"
-    },
-    {
-      "errors": [],
-      "intervals": {
-        "spells/cure_wounds/back/lifecycle:attached:false:": 1
-      },
-      "native_pixels": 37,
-      "spell": "cure_wounds"
-    },
-    {
-      "errors": [],
-      "intervals": {
-        "spells/healing_word/back/lifecycle:attached:false:": 1
-      },
-      "native_pixels": 60,
-      "spell": "healing_word"
-    },
-    {
-      "errors": [],
-      "intervals": {
-        "spells/guidance/back/lifecycle:attached:true:condition": 1,
-        "spells/guidance/back/lifecycle:attached:true:condition_exit": 1
-      },
-      "native_pixels": 131,
-      "spell": "guidance"
-    },
-    {
-      "errors": [],
-      "intervals": {
-        "spells/resistance/back/lifecycle:attached:true:condition": 1,
-        "spells/resistance/back/lifecycle:attached:true:condition_exit": 1
-      },
-      "native_pixels": 509,
-      "spell": "resistance"
-    },
-    {
-      "errors": [],
-      "intervals": {
-        "spells/light/back/lifecycle:attached:true:condition": 1,
-        "spells/light/back/lifecycle:attached:true:condition_exit": 1
-      },
-      "native_pixels": 78,
-      "spell": "light"
-    },
-    {
-      "errors": [],
-      "intervals": {
-        "spells/thaumaturgy/back/lifecycle:attached:false:": 1
-      },
-      "native_pixels": 24,
-      "spell": "thaumaturgy"
-    },
-    {
-      "errors": [],
-      "intervals": {
-        "spells/shield_of_faith/back/lifecycle:attached:true:condition": 1,
-        "spells/shield_of_faith/back/lifecycle:attached:true:condition_exit": 1
-      },
-      "native_pixels": 47,
-      "spell": "shield_of_faith"
-    },
-    {
-      "errors": [],
-      "intervals": {
-        "spells/true_strike/back/lifecycle:attached:false:": 1
-      },
-      "native_pixels": 37,
-      "spell": "true_strike"
-    }
+  "scope": "Selected original baseline/control cohort through ordinary Studio restore/Play, representative phase samples, native scene pixels, reverse seek and source retirement. Shield controls require exact original own-UUID incoming attribution, real movement and retirement in both independent seats, plus selected Shield output. Missing or nonmatching originals remain failures. A requested subset does not qualify all-spell safety or art acceptance.",
+  "selected_current_cases": [
+    "spell.acid_splash/baseline",
+    "spell.chill_touch/baseline",
+    "spell.eldritch_blast/baseline",
+    "spell.fire_bolt/baseline",
+    "spell.fireball/baseline",
+    "spell.guiding_bolt/baseline",
+    "spell.ice_knife/baseline",
+    "spell.magic_missile/baseline",
+    "spell.poison_spray/baseline",
+    "spell.produce_flame/baseline",
+    "spell.ray_of_frost/baseline",
+    "spell.scorching_ray/baseline",
+    "spell.sleep/baseline",
+    "spell.web/baseline",
+    "spell.bane/baseline",
+    "spell.command/baseline",
+    "spell.mage_armor/baseline",
+    "spell.sanctuary/baseline",
+    "spell.shield/baseline",
+    "spell.shocking_grasp/baseline",
+    "spell.burning_hands/baseline",
+    "spell.thunderwave/baseline",
+    "spell.cure_wounds/baseline",
+    "spell.healing_word/baseline",
+    "spell.guidance/baseline",
+    "spell.resistance/baseline",
+    "spell.light/baseline",
+    "spell.thaumaturgy/baseline",
+    "spell.shield_of_faith/baseline",
+    "spell.true_strike/baseline",
+    "spell.aid/baseline",
+    "spell.bless/baseline",
+    "spell.false_life/baseline",
+    "spell.sacred_flame/baseline",
+    "interaction.gallery/sorcerer"
   ],
-  "unresolved_failures": [],
-  "history": [
+  "shield_control_evidence": [
     {
-      "report": ".runtime/native-spell-batch-midpoint-results.json",
-      "checks": 1144,
-      "failures": [
-        "thaumaturgy: source contributes actual framebuffer pixels"
+      "case": "interaction.gallery/sorcerer",
+      "control": "native-spell-shield-walk",
+      "duties": [
+        {
+          "actor_uuid": "f4ee1931-e16b-414d-974c-9da3924352d0",
+          "application_occurrence": 505,
+          "attack_behavior_id": "reaction.opportunity_attack",
+          "attack_lineage": 449,
+          "attack_occurrence": 508,
+          "attack_sequence": 46,
+          "condition_uuid": "105bdb7e-6d7c-458a-ae36-e3cfca660d0b",
+          "journal": "res://.runtime/studio-current-7ca-20261021/part-2/cases/interaction.gallery__sorcerer/20261021T094132.401041Z/amber/journal",
+          "movement_occurrence": 523,
+          "perspective": "amber",
+          "ready": true,
+          "removal_occurrence": 578,
+          "source_item_uuid": "29aee3b1-1ae5-48fb-baea-721b43890fff",
+          "step_occurrence": 522,
+          "weapon_slot": "MELEE_MAIN"
+        },
+        {
+          "actor_uuid": "f4ee1931-e16b-414d-974c-9da3924352d0",
+          "application_occurrence": 530,
+          "attack_behavior_id": "reaction.opportunity_attack",
+          "attack_lineage": 474,
+          "attack_occurrence": 533,
+          "attack_sequence": 45,
+          "condition_uuid": "105bdb7e-6d7c-458a-ae36-e3cfca660d0b",
+          "journal": "res://.runtime/studio-current-7ca-20261021/part-2/cases/interaction.gallery__sorcerer/20261021T094132.401041Z/blue/journal",
+          "movement_occurrence": 548,
+          "perspective": "blue",
+          "ready": true,
+          "removal_occurrence": 603,
+          "source_item_uuid": "29aee3b1-1ae5-48fb-baea-721b43890fff",
+          "step_occurrence": 547,
+          "weapon_slot": "MELEE_MAIN"
+        }
       ],
-      "resolution": "Thaumaturgy closes before midpoint. Default sampler now observes authored opening; focused source result passes."
-    },
-    {
-      "report": ".runtime/native-spell-batch-thaumaturgy-final-results.json",
-      "checks": 20,
-      "failures": []
-    },
-    {
-      "report": ".runtime/native-spell-tail-families-final-results.json",
-      "checks": 146,
-      "failures": []
+      "engine": {
+        "commit": "0c2e5a0d74919402c6e528f40c580b7ca3c22e93",
+        "path": "/home/tommaso/.cache/ndclient/dnd_engine-0c2e5a0d7",
+        "player_schema_version": 16.0,
+        "protocol_version": 1.0,
+        "schema_digest": "2c11d7a9919c8aa9b1490628fff224627f19d6388c3884171d14a4a5cbecea22"
+      }
     }
-  ],
-  "limitations": [
-    "A positive framebuffer difference proves source submission at inspected moments, not artistic approval or all gameplay variants.",
-    "Initial batch exit reported12ObjectDB instances; focused tail-family retry reported3. Resource cleanup is not certified clean.",
-    "Fireball corrected tail and parallel thumbnails are separately qualified by actual Studio controls."
   ]
 }

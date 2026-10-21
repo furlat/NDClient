@@ -1,1365 +1,1866 @@
 {
   "cases": [
     {
-      "condition_lifecycle": {},
-      "facts": {
-        "damage": 2.0,
-        "saving_throw": 1.0,
-        "spell": 2.0,
-        "turn": 1.0
-      },
-      "perspectives": [
-        {
-          "duration_ms": 3333.33333333333,
-          "id": "amber",
-          "native_samples": 3,
-          "operations": 2,
-          "persistent_instances": [],
-          "roles": {
-            "cast": 1,
-            "flight": 1,
-            "impact": 1
-          },
-          "rows": 58,
-          "sources": [
-            "spell.acid_splash.native.flight",
-            "spell.acid_splash.native.impact",
-            "spell.acid_splash.native.cast"
-          ]
-        },
-        {
-          "duration_ms": 3333.33333333333,
-          "id": "blue",
-          "native_samples": 3,
-          "operations": 2,
-          "persistent_instances": [],
-          "roles": {
-            "cast": 1,
-            "flight": 1,
-            "impact": 1
-          },
-          "rows": 58,
-          "sources": [
-            "spell.acid_splash.native.flight",
-            "spell.acid_splash.native.impact",
-            "spell.acid_splash.native.cast"
-          ]
-        }
+      "approval_status": "needs_review",
+      "case": "spell.acid_splash/baseline",
+      "duration_ms": 2866.66666666667,
+      "gaps": [],
+      "native_rows": 3,
+      "native_sources": [
+        "spell.acid_splash.native.flight",
+        "spell.acid_splash.native.impact",
+        "spell.acid_splash.native.cast"
       ],
-      "spell_id": "acid_splash"
+      "operations": 8,
+      "persistent_instances": {},
+      "perspective": "amber",
+      "presentation_status": "native_pixels_checked",
+      "roles": {
+        "cast": 1,
+        "flight": 1,
+        "impact": 1
+      },
+      "scenario_status": "recorded",
+      "source_status": "actual_installed_sources_checked",
+      "spell_id": "spell.acid_splash"
     },
     {
-      "condition_lifecycle": {
-        "condition_application": 2.0,
-        "condition_removal": 2.0
-      },
-      "facts": {
-        "condition": 4.0,
-        "damage": 2.0,
-        "spell": 1.0,
-        "turn": 7.0
-      },
-      "perspectives": [
-        {
-          "duration_ms": 2683.33333333333,
-          "id": "amber",
-          "native_samples": 1,
-          "operations": 6,
-          "persistent_instances": [],
-          "roles": {
-            "strike": 1
-          },
-          "rows": 66,
-          "sources": [
-            "spell.chill_touch.native.strike"
-          ]
-        },
-        {
-          "duration_ms": 2683.33333333333,
-          "id": "blue",
-          "native_samples": 1,
-          "operations": 6,
-          "persistent_instances": [],
-          "roles": {
-            "strike": 1
-          },
-          "rows": 66,
-          "sources": [
-            "spell.chill_touch.native.strike"
-          ]
-        }
+      "approval_status": "needs_review",
+      "case": "spell.acid_splash/baseline",
+      "duration_ms": 2866.66666666667,
+      "gaps": [],
+      "native_rows": 3,
+      "native_sources": [
+        "spell.acid_splash.native.flight",
+        "spell.acid_splash.native.impact",
+        "spell.acid_splash.native.cast"
       ],
-      "spell_id": "chill_touch"
+      "operations": 8,
+      "persistent_instances": {},
+      "perspective": "blue",
+      "presentation_status": "native_pixels_checked",
+      "roles": {
+        "cast": 1,
+        "flight": 1,
+        "impact": 1
+      },
+      "scenario_status": "recorded",
+      "source_status": "actual_installed_sources_checked",
+      "spell_id": "spell.acid_splash"
     },
     {
-      "condition_lifecycle": {},
-      "facts": {
-        "damage": 4.0,
-        "spell": 3.0,
-        "turn": 1.0
-      },
-      "perspectives": [
-        {
-          "duration_ms": 4271.11111111111,
-          "id": "amber",
-          "native_samples": 5,
-          "operations": 2,
-          "persistent_instances": [],
-          "roles": {
-            "cast": 1,
-            "flight": 2,
-            "impact": 2
-          },
-          "rows": 92,
-          "sources": [
-            "spell.eldritch_blast.native.flight",
-            "spell.eldritch_blast.native.cast",
-            "spell.eldritch_blast.native.impact"
-          ]
-        },
-        {
-          "duration_ms": 4271.11111111111,
-          "id": "blue",
-          "native_samples": 5,
-          "operations": 2,
-          "persistent_instances": [],
-          "roles": {
-            "cast": 1,
-            "flight": 2,
-            "impact": 2
-          },
-          "rows": 92,
-          "sources": [
-            "spell.eldritch_blast.native.flight",
-            "spell.eldritch_blast.native.cast",
-            "spell.eldritch_blast.native.impact"
-          ]
-        }
+      "approval_status": "needs_review",
+      "case": "spell.chill_touch/baseline",
+      "duration_ms": 7377.77784135606,
+      "gaps": [],
+      "native_rows": 1,
+      "native_sources": [
+        "spell.chill_touch.native.strike"
       ],
-      "spell_id": "eldritch_blast"
+      "operations": 8,
+      "persistent_instances": {},
+      "perspective": "amber",
+      "presentation_status": "native_pixels_checked",
+      "roles": {
+        "strike": 1
+      },
+      "scenario_status": "recorded",
+      "source_status": "actual_installed_sources_checked",
+      "spell_id": "spell.chill_touch"
     },
     {
-      "condition_lifecycle": {},
-      "facts": {
-        "damage": 2.0,
-        "spell": 1.0,
-        "turn": 1.0
-      },
-      "perspectives": [
-        {
-          "duration_ms": 4126.11111111111,
-          "id": "amber",
-          "native_samples": 3,
-          "operations": 2,
-          "persistent_instances": [],
-          "roles": {
-            "cast": 1,
-            "flight": 1,
-            "impact": 1
-          },
-          "rows": 51,
-          "sources": [
-            "spell.fire_bolt.native.cast",
-            "spell.fire_bolt.native.flight",
-            "spell.fire_bolt.native.impact"
-          ]
-        },
-        {
-          "duration_ms": 4126.11111111111,
-          "id": "blue",
-          "native_samples": 3,
-          "operations": 2,
-          "persistent_instances": [],
-          "roles": {
-            "cast": 1,
-            "flight": 1,
-            "impact": 1
-          },
-          "rows": 51,
-          "sources": [
-            "spell.fire_bolt.native.cast",
-            "spell.fire_bolt.native.flight",
-            "spell.fire_bolt.native.impact"
-          ]
-        }
+      "approval_status": "needs_review",
+      "case": "spell.chill_touch/baseline",
+      "duration_ms": 7377.77784135606,
+      "gaps": [],
+      "native_rows": 1,
+      "native_sources": [
+        "spell.chill_touch.native.strike"
       ],
-      "spell_id": "fire_bolt"
+      "operations": 8,
+      "persistent_instances": {},
+      "perspective": "blue",
+      "presentation_status": "native_pixels_checked",
+      "roles": {
+        "strike": 1
+      },
+      "scenario_status": "recorded",
+      "source_status": "actual_installed_sources_checked",
+      "spell_id": "spell.chill_touch"
     },
     {
-      "condition_lifecycle": {},
-      "facts": {
-        "area_reach": 1.0,
-        "damage": 2.0,
-        "saving_throw": 1.0,
-        "spell": 2.0,
-        "turn": 1.0
-      },
-      "perspectives": [
-        {
-          "duration_ms": 3222.22222222222,
-          "id": "amber",
-          "native_samples": 3,
-          "operations": 2,
-          "persistent_instances": [],
-          "roles": {
-            "area": 1,
-            "cast": 1,
-            "flight": 1
-          },
-          "rows": 112,
-          "sources": [
-            "spell.fireball.native.area",
-            "spell.fireball.native.cast",
-            "spell.fireball.native.flight"
-          ]
-        },
-        {
-          "duration_ms": 3222.22222222222,
-          "id": "blue",
-          "native_samples": 3,
-          "operations": 2,
-          "persistent_instances": [],
-          "roles": {
-            "area": 1,
-            "cast": 1,
-            "flight": 1
-          },
-          "rows": 112,
-          "sources": [
-            "spell.fireball.native.area",
-            "spell.fireball.native.cast",
-            "spell.fireball.native.flight"
-          ]
-        }
+      "approval_status": "needs_review",
+      "case": "spell.eldritch_blast/baseline",
+      "duration_ms": 3502.22222222222,
+      "gaps": [],
+      "native_rows": 9,
+      "native_sources": [
+        "spell.eldritch_blast.native.flight",
+        "spell.eldritch_blast.native.cast",
+        "spell.eldritch_blast.native.impact"
       ],
-      "spell_id": "fireball"
+      "operations": 8,
+      "persistent_instances": {},
+      "perspective": "amber",
+      "presentation_status": "native_pixels_checked",
+      "roles": {
+        "cast": 1,
+        "flight": 4,
+        "impact": 4
+      },
+      "scenario_status": "recorded",
+      "source_status": "actual_installed_sources_checked",
+      "spell_id": "spell.eldritch_blast"
     },
     {
-      "condition_lifecycle": {
-        "condition_application": 1.0,
-        "condition_removal": 1.0,
-        "condition_state_changed": 1.0
-      },
-      "facts": {
-        "condition": 3.0,
-        "damage": 2.0,
-        "spell": 1.0,
-        "turn": 9.0
-      },
-      "perspectives": [
-        {
-          "duration_ms": 4111.11111111111,
-          "id": "amber",
-          "native_samples": 3,
-          "operations": 8,
-          "persistent_instances": [],
-          "roles": {
-            "cast": 1,
-            "flight": 1,
-            "impact": 1
-          },
-          "rows": 65,
-          "sources": [
-            "spell.guiding_bolt.native.flight",
-            "spell.guiding_bolt.native.cast",
-            "spell.guiding_bolt.native.impact"
-          ]
-        },
-        {
-          "duration_ms": 4111.11111111111,
-          "id": "blue",
-          "native_samples": 3,
-          "operations": 8,
-          "persistent_instances": [],
-          "roles": {
-            "cast": 1,
-            "flight": 1,
-            "impact": 1
-          },
-          "rows": 65,
-          "sources": [
-            "spell.guiding_bolt.native.flight",
-            "spell.guiding_bolt.native.cast",
-            "spell.guiding_bolt.native.impact"
-          ]
-        }
+      "approval_status": "needs_review",
+      "case": "spell.eldritch_blast/baseline",
+      "duration_ms": 3502.22222222222,
+      "gaps": [],
+      "native_rows": 9,
+      "native_sources": [
+        "spell.eldritch_blast.native.flight",
+        "spell.eldritch_blast.native.cast",
+        "spell.eldritch_blast.native.impact"
       ],
-      "spell_id": "guiding_bolt"
+      "operations": 8,
+      "persistent_instances": {},
+      "perspective": "blue",
+      "presentation_status": "native_pixels_checked",
+      "roles": {
+        "cast": 1,
+        "flight": 4,
+        "impact": 4
+      },
+      "scenario_status": "recorded",
+      "source_status": "actual_installed_sources_checked",
+      "spell_id": "spell.eldritch_blast"
     },
     {
-      "condition_lifecycle": {},
-      "facts": {
-        "damage": 2.0,
-        "saving_throw": 1.0,
-        "spell": 3.0,
-        "turn": 1.0
-      },
-      "perspectives": [
-        {
-          "duration_ms": 3222.22222222222,
-          "id": "amber",
-          "native_samples": 3,
-          "operations": 2,
-          "persistent_instances": [],
-          "roles": {
-            "area": 1,
-            "cast": 1,
-            "flight": 1
-          },
-          "rows": 72,
-          "sources": [
-            "spell.ice_knife.native.flight",
-            "spell.ice_knife.native.cast",
-            "spell.ice_knife.native.area"
-          ]
-        },
-        {
-          "duration_ms": 3222.22222222222,
-          "id": "blue",
-          "native_samples": 3,
-          "operations": 2,
-          "persistent_instances": [],
-          "roles": {
-            "area": 1,
-            "cast": 1,
-            "flight": 1
-          },
-          "rows": 72,
-          "sources": [
-            "spell.ice_knife.native.flight",
-            "spell.ice_knife.native.cast",
-            "spell.ice_knife.native.area"
-          ]
-        }
+      "approval_status": "needs_review",
+      "case": "spell.fire_bolt/baseline",
+      "duration_ms": 3037.22222222222,
+      "gaps": [],
+      "native_rows": 3,
+      "native_sources": [
+        "spell.fire_bolt.native.cast",
+        "spell.fire_bolt.native.flight",
+        "spell.fire_bolt.native.impact"
       ],
-      "spell_id": "ice_knife"
+      "operations": 8,
+      "persistent_instances": {},
+      "perspective": "amber",
+      "presentation_status": "native_pixels_checked",
+      "roles": {
+        "cast": 1,
+        "flight": 1,
+        "impact": 1
+      },
+      "scenario_status": "recorded",
+      "source_status": "actual_installed_sources_checked",
+      "spell_id": "spell.fire_bolt"
     },
     {
-      "condition_lifecycle": {},
-      "facts": {
-        "damage": 6.0,
-        "spell": 4.0,
-        "turn": 1.0
-      },
-      "perspectives": [
-        {
-          "duration_ms": 2893.33333333333,
-          "id": "amber",
-          "native_samples": 7,
-          "operations": 2,
-          "persistent_instances": [],
-          "roles": {
-            "cast": 1,
-            "flight": 3,
-            "impact": 3
-          },
-          "rows": 133,
-          "sources": [
-            "spell.magic_missile.native.cast",
-            "spell.magic_missile.native.flight",
-            "spell.magic_missile.native.impact"
-          ]
-        },
-        {
-          "duration_ms": 2893.33333333333,
-          "id": "blue",
-          "native_samples": 7,
-          "operations": 2,
-          "persistent_instances": [],
-          "roles": {
-            "cast": 1,
-            "flight": 3,
-            "impact": 3
-          },
-          "rows": 133,
-          "sources": [
-            "spell.magic_missile.native.cast",
-            "spell.magic_missile.native.flight",
-            "spell.magic_missile.native.impact"
-          ]
-        }
+      "approval_status": "needs_review",
+      "case": "spell.fire_bolt/baseline",
+      "duration_ms": 3037.22222222222,
+      "gaps": [],
+      "native_rows": 3,
+      "native_sources": [
+        "spell.fire_bolt.native.cast",
+        "spell.fire_bolt.native.flight",
+        "spell.fire_bolt.native.impact"
       ],
-      "spell_id": "magic_missile"
+      "operations": 8,
+      "persistent_instances": {},
+      "perspective": "blue",
+      "presentation_status": "native_pixels_checked",
+      "roles": {
+        "cast": 1,
+        "flight": 1,
+        "impact": 1
+      },
+      "scenario_status": "recorded",
+      "source_status": "actual_installed_sources_checked",
+      "spell_id": "spell.fire_bolt"
     },
     {
-      "condition_lifecycle": {},
-      "facts": {
-        "damage": 2.0,
-        "saving_throw": 1.0,
-        "spell": 1.0,
-        "turn": 1.0
-      },
-      "perspectives": [
-        {
-          "duration_ms": 2333.33333333333,
-          "id": "amber",
-          "native_samples": 2,
-          "operations": 2,
-          "persistent_instances": [],
-          "roles": {
-            "cast": 1,
-            "spray": 1
-          },
-          "rows": 49,
-          "sources": [
-            "spell.poison_spray.native.spray",
-            "spell.poison_spray.native.cast"
-          ]
-        },
-        {
-          "duration_ms": 2333.33333333333,
-          "id": "blue",
-          "native_samples": 2,
-          "operations": 2,
-          "persistent_instances": [],
-          "roles": {
-            "cast": 1,
-            "spray": 1
-          },
-          "rows": 49,
-          "sources": [
-            "spell.poison_spray.native.spray",
-            "spell.poison_spray.native.cast"
-          ]
-        }
+      "approval_status": "needs_review",
+      "case": "spell.fireball/baseline",
+      "duration_ms": 5616.66666666667,
+      "gaps": [],
+      "native_rows": 3,
+      "native_sources": [
+        "spell.fireball.native.area",
+        "spell.fireball.native.cast",
+        "spell.fireball.native.flight"
       ],
-      "spell_id": "poison_spray"
+      "operations": 8,
+      "persistent_instances": {},
+      "perspective": "amber",
+      "presentation_status": "native_pixels_checked",
+      "roles": {
+        "area": 1,
+        "cast": 1,
+        "flight": 1
+      },
+      "scenario_status": "recorded",
+      "source_status": "actual_installed_sources_checked",
+      "spell_id": "spell.fireball"
     },
     {
-      "condition_lifecycle": {},
-      "facts": {
-        "damage": 2.0,
-        "spell": 1.0,
-        "turn": 1.0
-      },
-      "perspectives": [
-        {
-          "duration_ms": 3044.44444444444,
-          "id": "amber",
-          "native_samples": 2,
-          "operations": 2,
-          "persistent_instances": [],
-          "roles": {
-            "flight": 1,
-            "impact": 1
-          },
-          "rows": 49,
-          "sources": [
-            "spell.produce_flame.native.flight",
-            "spell.produce_flame.native.impact"
-          ]
-        },
-        {
-          "duration_ms": 3044.44444444444,
-          "id": "blue",
-          "native_samples": 2,
-          "operations": 2,
-          "persistent_instances": [],
-          "roles": {
-            "flight": 1,
-            "impact": 1
-          },
-          "rows": 49,
-          "sources": [
-            "spell.produce_flame.native.flight",
-            "spell.produce_flame.native.impact"
-          ]
-        }
+      "approval_status": "needs_review",
+      "case": "spell.fireball/baseline",
+      "duration_ms": 5616.66666666667,
+      "gaps": [],
+      "native_rows": 3,
+      "native_sources": [
+        "spell.fireball.native.area",
+        "spell.fireball.native.cast",
+        "spell.fireball.native.flight"
       ],
-      "spell_id": "produce_flame"
+      "operations": 8,
+      "persistent_instances": {},
+      "perspective": "blue",
+      "presentation_status": "native_pixels_checked",
+      "roles": {
+        "area": 1,
+        "cast": 1,
+        "flight": 1
+      },
+      "scenario_status": "recorded",
+      "source_status": "actual_installed_sources_checked",
+      "spell_id": "spell.fireball"
     },
     {
-      "condition_lifecycle": {
-        "condition_application": 1.0,
-        "condition_removal": 1.0
-      },
-      "facts": {
-        "condition": 2.0,
-        "damage": 2.0,
-        "spell": 1.0,
-        "turn": 7.0
-      },
-      "perspectives": [
-        {
-          "duration_ms": 3445.2380952381,
-          "id": "amber",
-          "native_samples": 4,
-          "operations": 6,
-          "persistent_instances": [],
-          "roles": {
-            "cast": 1,
-            "flight": 2,
-            "impact": 1
-          },
-          "rows": 66,
-          "sources": [
-            "spell.ray_of_frost.native.impact",
-            "spell.ray_of_frost.native.flight",
-            "spell.ray_of_frost.native.cast"
-          ]
-        },
-        {
-          "duration_ms": 3445.2380952381,
-          "id": "blue",
-          "native_samples": 4,
-          "operations": 6,
-          "persistent_instances": [],
-          "roles": {
-            "cast": 1,
-            "flight": 2,
-            "impact": 1
-          },
-          "rows": 66,
-          "sources": [
-            "spell.ray_of_frost.native.impact",
-            "spell.ray_of_frost.native.flight",
-            "spell.ray_of_frost.native.cast"
-          ]
-        }
+      "approval_status": "needs_review",
+      "case": "spell.guiding_bolt/baseline",
+      "duration_ms": 3022.22222222222,
+      "gaps": [],
+      "native_rows": 3,
+      "native_sources": [
+        "spell.guiding_bolt.native.flight",
+        "spell.guiding_bolt.native.cast",
+        "spell.guiding_bolt.native.impact"
       ],
-      "spell_id": "ray_of_frost"
+      "operations": 8,
+      "persistent_instances": {},
+      "perspective": "amber",
+      "presentation_status": "native_pixels_checked",
+      "roles": {
+        "cast": 1,
+        "flight": 1,
+        "impact": 1
+      },
+      "scenario_status": "recorded",
+      "source_status": "actual_installed_sources_checked",
+      "spell_id": "spell.guiding_bolt"
     },
     {
-      "condition_lifecycle": {},
-      "facts": {
-        "damage": 6.0,
-        "spell": 4.0,
-        "turn": 1.0
-      },
-      "perspectives": [
-        {
-          "duration_ms": 3537.22222222222,
-          "id": "amber",
-          "native_samples": 7,
-          "operations": 2,
-          "persistent_instances": [],
-          "roles": {
-            "cast": 1,
-            "flight": 3,
-            "impact": 3
-          },
-          "rows": 127,
-          "sources": [
-            "spell.scorching_ray.native.flight",
-            "spell.scorching_ray.native.cast",
-            "spell.scorching_ray.native.impact"
-          ]
-        },
-        {
-          "duration_ms": 3537.22222222222,
-          "id": "blue",
-          "native_samples": 7,
-          "operations": 2,
-          "persistent_instances": [],
-          "roles": {
-            "cast": 1,
-            "flight": 3,
-            "impact": 3
-          },
-          "rows": 127,
-          "sources": [
-            "spell.scorching_ray.native.flight",
-            "spell.scorching_ray.native.cast",
-            "spell.scorching_ray.native.impact"
-          ]
-        }
+      "approval_status": "needs_review",
+      "case": "spell.guiding_bolt/baseline",
+      "duration_ms": 3022.22222222222,
+      "gaps": [],
+      "native_rows": 3,
+      "native_sources": [
+        "spell.guiding_bolt.native.flight",
+        "spell.guiding_bolt.native.cast",
+        "spell.guiding_bolt.native.impact"
       ],
-      "spell_id": "scorching_ray"
+      "operations": 8,
+      "persistent_instances": {},
+      "perspective": "blue",
+      "presentation_status": "native_pixels_checked",
+      "roles": {
+        "cast": 1,
+        "flight": 1,
+        "impact": 1
+      },
+      "scenario_status": "recorded",
+      "source_status": "actual_installed_sources_checked",
+      "spell_id": "spell.guiding_bolt"
     },
     {
-      "condition_lifecycle": {
-        "condition_application": 1.0,
-        "condition_removal": 1.0
-      },
-      "facts": {
-        "condition": 2.0,
-        "damage": 2.0,
-        "life": 1.0,
-        "spell": 3.0,
-        "turn": 7.0
-      },
-      "perspectives": [
-        {
-          "duration_ms": 7365.0,
-          "id": "amber",
-          "native_samples": 3,
-          "operations": 6,
-          "persistent_instances": [],
-          "roles": {
-            "area": 1,
-            "cast": 1,
-            "flight": 1
-          },
-          "rows": 131,
-          "sources": [
-            "spell.sleep.native.area",
-            "spell.sleep.native.flight",
-            "spell.sleep.native.cast"
-          ]
-        },
-        {
-          "duration_ms": 4405.55555555556,
-          "id": "blue",
-          "native_samples": 3,
-          "operations": 5,
-          "persistent_instances": [],
-          "roles": {
-            "area": 1,
-            "cast": 1,
-            "flight": 1
-          },
-          "rows": 108,
-          "sources": [
-            "spell.sleep.native.area",
-            "spell.sleep.native.flight",
-            "spell.sleep.native.cast"
-          ]
-        }
+      "approval_status": "needs_review",
+      "case": "spell.ice_knife/baseline",
+      "duration_ms": 4981.11111111111,
+      "gaps": [],
+      "native_rows": 3,
+      "native_sources": [
+        "spell.ice_knife.native.flight",
+        "spell.ice_knife.native.cast",
+        "spell.ice_knife.native.area"
       ],
-      "spell_id": "sleep"
+      "operations": 8,
+      "persistent_instances": {},
+      "perspective": "amber",
+      "presentation_status": "native_pixels_checked",
+      "roles": {
+        "area": 1,
+        "cast": 1,
+        "flight": 1
+      },
+      "scenario_status": "recorded",
+      "source_status": "actual_installed_sources_checked",
+      "spell_id": "spell.ice_knife"
     },
     {
-      "condition_lifecycle": {
-        "condition_application": 3.0,
-        "condition_removal": 3.0,
-        "condition_state_changed": 1.0
-      },
-      "facts": {
-        "action": 1.0,
-        "condition": 7.0,
-        "saving_throw": 1.0,
-        "sensory": 32.0,
-        "spatial_effect_state": 2.0,
-        "spell": 1.0,
-        "turn": 1.0
-      },
-      "perspectives": [
-        {
-          "duration_ms": 2322.22222222222,
-          "id": "amber",
-          "native_samples": 56,
-          "operations": 3,
-          "persistent_instances": [
-            "spatial:405f20a6-f5a4-4b98-9c54-52aa2f1acb54:native:0"
-          ],
-          "roles": {
-            "cast": 1,
-            "flight": 1
-          },
-          "rows": 95,
-          "sources": [
-            "spell.web.native.area",
-            "spell.web.native.flight",
-            "spell.web.native.cast"
-          ]
-        },
-        {
-          "duration_ms": 2322.22222222222,
-          "id": "blue",
-          "native_samples": 39,
-          "operations": 3,
-          "persistent_instances": [
-            "spatial:405f20a6-f5a4-4b98-9c54-52aa2f1acb54:native:0"
-          ],
-          "roles": {
-            "cast": 1,
-            "flight": 1
-          },
-          "rows": 96,
-          "sources": [
-            "spell.web.native.area",
-            "spell.web.native.flight",
-            "spell.web.native.cast"
-          ]
-        }
+      "approval_status": "needs_review",
+      "case": "spell.ice_knife/baseline",
+      "duration_ms": 4981.11111111111,
+      "gaps": [],
+      "native_rows": 3,
+      "native_sources": [
+        "spell.ice_knife.native.flight",
+        "spell.ice_knife.native.cast",
+        "spell.ice_knife.native.area"
       ],
-      "spell_id": "web"
+      "operations": 8,
+      "persistent_instances": {},
+      "perspective": "blue",
+      "presentation_status": "native_pixels_checked",
+      "roles": {
+        "area": 1,
+        "cast": 1,
+        "flight": 1
+      },
+      "scenario_status": "recorded",
+      "source_status": "actual_installed_sources_checked",
+      "spell_id": "spell.ice_knife"
     },
     {
-      "condition_lifecycle": {
-        "condition_application": 2.0,
-        "condition_removal": 2.0,
-        "condition_state_changed": 1.0
-      },
-      "facts": {
-        "action": 1.0,
-        "condition": 5.0,
-        "saving_throw": 1.0,
-        "spell": 2.0,
-        "turn": 1.0
-      },
-      "perspectives": [
-        {
-          "duration_ms": 2100.0,
-          "id": "amber",
-          "native_samples": 11,
-          "operations": 3,
-          "persistent_instances": [
-            "condition:661aba25-9705-48bb-a04c-3c0c83b86d98:native:0"
-          ],
-          "roles": {},
-          "rows": 37,
-          "sources": [
-            "spell.bane.native.attached"
-          ]
-        },
-        {
-          "duration_ms": 2100.0,
-          "id": "blue",
-          "native_samples": 11,
-          "operations": 3,
-          "persistent_instances": [
-            "condition:661aba25-9705-48bb-a04c-3c0c83b86d98:native:0"
-          ],
-          "roles": {},
-          "rows": 37,
-          "sources": [
-            "spell.bane.native.attached"
-          ]
-        }
+      "approval_status": "needs_review",
+      "case": "spell.magic_missile/baseline",
+      "duration_ms": 2393.33333333333,
+      "gaps": [],
+      "native_rows": 7,
+      "native_sources": [
+        "spell.magic_missile.native.cast",
+        "spell.magic_missile.native.flight",
+        "spell.magic_missile.native.impact"
       ],
-      "spell_id": "bane"
+      "operations": 8,
+      "persistent_instances": {},
+      "perspective": "amber",
+      "presentation_status": "native_pixels_checked",
+      "roles": {
+        "cast": 1,
+        "flight": 3,
+        "impact": 3
+      },
+      "scenario_status": "recorded",
+      "source_status": "actual_installed_sources_checked",
+      "spell_id": "spell.magic_missile"
     },
     {
-      "condition_lifecycle": {
-        "condition_application": 2.0,
-        "condition_removal": 2.0
-      },
-      "facts": {
-        "condition": 4.0,
-        "saving_throw": 1.0,
-        "spell": 1.0,
-        "turn": 9.0
-      },
-      "perspectives": [
-        {
-          "duration_ms": 3953.6231884058,
-          "id": "amber",
-          "native_samples": 24,
-          "operations": 7,
-          "persistent_instances": [
-            "condition:748a7e8d-08b9-42f0-94fd-e941f83081db:native:0"
-          ],
-          "roles": {},
-          "rows": 78,
-          "sources": [
-            "spell.command.native.attached"
-          ]
-        },
-        {
-          "duration_ms": 3953.6231884058,
-          "id": "blue",
-          "native_samples": 24,
-          "operations": 7,
-          "persistent_instances": [
-            "condition:748a7e8d-08b9-42f0-94fd-e941f83081db:native:0"
-          ],
-          "roles": {},
-          "rows": 78,
-          "sources": [
-            "spell.command.native.attached"
-          ]
-        }
+      "approval_status": "needs_review",
+      "case": "spell.magic_missile/baseline",
+      "duration_ms": 2393.33333333333,
+      "gaps": [],
+      "native_rows": 7,
+      "native_sources": [
+        "spell.magic_missile.native.cast",
+        "spell.magic_missile.native.flight",
+        "spell.magic_missile.native.impact"
       ],
-      "spell_id": "command"
+      "operations": 8,
+      "persistent_instances": {},
+      "perspective": "blue",
+      "presentation_status": "native_pixels_checked",
+      "roles": {
+        "cast": 1,
+        "flight": 3,
+        "impact": 3
+      },
+      "scenario_status": "recorded",
+      "source_status": "actual_installed_sources_checked",
+      "spell_id": "spell.magic_missile"
     },
     {
-      "condition_lifecycle": {
-        "condition_application": 1.0,
-        "condition_removal": 1.0
-      },
-      "facts": {
-        "condition": 2.0,
-        "equipment": 4.0,
-        "spell": 1.0,
-        "turn": 7.0
-      },
-      "perspectives": [
-        {
-          "duration_ms": 3766.66666666667,
-          "id": "amber",
-          "native_samples": 30,
-          "operations": 7,
-          "persistent_instances": [
-            "condition:015300f6-32e1-47b0-b998-6a34b7d0c73b:native:0"
-          ],
-          "roles": {},
-          "rows": 89,
-          "sources": [
-            "spell.mage_armor.native.attached"
-          ]
-        },
-        {
-          "duration_ms": 3766.66666666667,
-          "id": "blue",
-          "native_samples": 30,
-          "operations": 7,
-          "persistent_instances": [
-            "condition:015300f6-32e1-47b0-b998-6a34b7d0c73b:native:0"
-          ],
-          "roles": {},
-          "rows": 89,
-          "sources": [
-            "spell.mage_armor.native.attached"
-          ]
-        }
+      "approval_status": "needs_review",
+      "case": "spell.poison_spray/baseline",
+      "duration_ms": 3353.33333333333,
+      "gaps": [],
+      "native_rows": 2,
+      "native_sources": [
+        "spell.poison_spray.native.spray",
+        "spell.poison_spray.native.cast"
       ],
-      "spell_id": "mage_armor"
+      "operations": 8,
+      "persistent_instances": {},
+      "perspective": "amber",
+      "presentation_status": "native_pixels_checked",
+      "roles": {
+        "cast": 1,
+        "spray": 1
+      },
+      "scenario_status": "recorded",
+      "source_status": "actual_installed_sources_checked",
+      "spell_id": "spell.poison_spray"
     },
     {
-      "condition_lifecycle": {
-        "condition_application": 1.0,
-        "condition_removal": 1.0
-      },
-      "facts": {
-        "condition": 2.0,
-        "damage": 2.0,
-        "spell": 2.0,
-        "turn": 1.0
-      },
-      "perspectives": [
-        {
-          "duration_ms": 5726.11111111111,
-          "id": "amber",
-          "native_samples": 18,
-          "operations": 3,
-          "persistent_instances": [
-            "condition:398b1cf6-1459-4fb7-826a-03d429ce5eda:native:0"
-          ],
-          "roles": {},
-          "rows": 78,
-          "sources": [
-            "spell.sanctuary.native.attached"
-          ]
-        },
-        {
-          "duration_ms": 5726.11111111111,
-          "id": "blue",
-          "native_samples": 18,
-          "operations": 3,
-          "persistent_instances": [
-            "condition:398b1cf6-1459-4fb7-826a-03d429ce5eda:native:0"
-          ],
-          "roles": {},
-          "rows": 78,
-          "sources": [
-            "spell.sanctuary.native.attached"
-          ]
-        }
+      "approval_status": "needs_review",
+      "case": "spell.poison_spray/baseline",
+      "duration_ms": 3353.33333333333,
+      "gaps": [],
+      "native_rows": 2,
+      "native_sources": [
+        "spell.poison_spray.native.spray",
+        "spell.poison_spray.native.cast"
       ],
-      "spell_id": "sanctuary"
+      "operations": 8,
+      "persistent_instances": {},
+      "perspective": "blue",
+      "presentation_status": "native_pixels_checked",
+      "roles": {
+        "cast": 1,
+        "spray": 1
+      },
+      "scenario_status": "recorded",
+      "source_status": "actual_installed_sources_checked",
+      "spell_id": "spell.poison_spray"
     },
     {
-      "condition_lifecycle": {
-        "condition_application": 1.0,
-        "condition_removal": 1.0
-      },
-      "facts": {
-        "condition": 2.0,
-        "spell": 4.0,
-        "turn": 7.0
-      },
-      "perspectives": [
-        {
-          "duration_ms": 2063.04347826087,
-          "id": "amber",
-          "native_samples": 30,
-          "operations": 6,
-          "persistent_instances": [
-            "condition:46f1467a-6c17-46f4-bbb9-8c4c0323ed20:native:0"
-          ],
-          "roles": {
-            "attached": 3
-          },
-          "rows": 79,
-          "sources": [
-            "spell.shield.native.attached"
-          ]
-        },
-        {
-          "duration_ms": 2063.04347826087,
-          "id": "blue",
-          "native_samples": 30,
-          "operations": 6,
-          "persistent_instances": [
-            "condition:46f1467a-6c17-46f4-bbb9-8c4c0323ed20:native:0"
-          ],
-          "roles": {
-            "attached": 3
-          },
-          "rows": 79,
-          "sources": [
-            "spell.shield.native.attached"
-          ]
-        }
+      "approval_status": "needs_review",
+      "case": "spell.produce_flame/baseline",
+      "duration_ms": 2946.66666666667,
+      "gaps": [],
+      "native_rows": 2,
+      "native_sources": [
+        "spell.produce_flame.native.flight",
+        "spell.produce_flame.native.impact"
       ],
-      "spell_id": "shield"
+      "operations": 8,
+      "persistent_instances": {},
+      "perspective": "amber",
+      "presentation_status": "native_pixels_checked",
+      "roles": {
+        "flight": 1,
+        "impact": 1
+      },
+      "scenario_status": "recorded",
+      "source_status": "actual_installed_sources_checked",
+      "spell_id": "spell.produce_flame"
     },
     {
-      "condition_lifecycle": {
-        "condition_application": 1.0,
-        "condition_removal": 1.0
-      },
-      "facts": {
-        "condition": 2.0,
-        "damage": 2.0,
-        "spell": 1.0,
-        "turn": 7.0
-      },
-      "perspectives": [
-        {
-          "duration_ms": 2250.0,
-          "id": "amber",
-          "native_samples": 2,
-          "operations": 6,
-          "persistent_instances": [],
-          "roles": {
-            "attached": 1,
-            "cast": 1
-          },
-          "rows": 64,
-          "sources": [
-            "spell.shocking_grasp.native.cast",
-            "spell.shocking_grasp.native.attached"
-          ]
-        },
-        {
-          "duration_ms": 2250.0,
-          "id": "blue",
-          "native_samples": 2,
-          "operations": 6,
-          "persistent_instances": [],
-          "roles": {
-            "attached": 1,
-            "cast": 1
-          },
-          "rows": 64,
-          "sources": [
-            "spell.shocking_grasp.native.cast",
-            "spell.shocking_grasp.native.attached"
-          ]
-        }
+      "approval_status": "needs_review",
+      "case": "spell.produce_flame/baseline",
+      "duration_ms": 2946.66666666667,
+      "gaps": [],
+      "native_rows": 2,
+      "native_sources": [
+        "spell.produce_flame.native.flight",
+        "spell.produce_flame.native.impact"
       ],
-      "spell_id": "shocking_grasp"
+      "operations": 8,
+      "persistent_instances": {},
+      "perspective": "blue",
+      "presentation_status": "native_pixels_checked",
+      "roles": {
+        "flight": 1,
+        "impact": 1
+      },
+      "scenario_status": "recorded",
+      "source_status": "actual_installed_sources_checked",
+      "spell_id": "spell.produce_flame"
     },
     {
-      "condition_lifecycle": {},
-      "facts": {
-        "damage": 2.0,
-        "saving_throw": 1.0,
-        "spell": 2.0,
-        "turn": 1.0
-      },
-      "perspectives": [
-        {
-          "duration_ms": 2250.0,
-          "id": "amber",
-          "native_samples": 1,
-          "operations": 2,
-          "persistent_instances": [],
-          "roles": {
-            "attached": 1
-          },
-          "rows": 58,
-          "sources": [
-            "spell.burning_hands.native.attached"
-          ]
-        },
-        {
-          "duration_ms": 2250.0,
-          "id": "blue",
-          "native_samples": 1,
-          "operations": 2,
-          "persistent_instances": [],
-          "roles": {
-            "attached": 1
-          },
-          "rows": 58,
-          "sources": [
-            "spell.burning_hands.native.attached"
-          ]
-        }
+      "approval_status": "needs_review",
+      "case": "spell.ray_of_frost/baseline",
+      "duration_ms": 2819.04761904762,
+      "gaps": [],
+      "native_rows": 4,
+      "native_sources": [
+        "spell.ray_of_frost.native.impact",
+        "spell.ray_of_frost.native.flight",
+        "spell.ray_of_frost.native.cast"
       ],
-      "spell_id": "burning_hands"
+      "operations": 8,
+      "persistent_instances": {},
+      "perspective": "amber",
+      "presentation_status": "native_pixels_checked",
+      "roles": {
+        "cast": 1,
+        "flight": 2,
+        "impact": 1
+      },
+      "scenario_status": "recorded",
+      "source_status": "actual_installed_sources_checked",
+      "spell_id": "spell.ray_of_frost"
     },
     {
-      "condition_lifecycle": {},
-      "facts": {
-        "damage": 2.0,
-        "forced_movement": 1.0,
-        "saving_throw": 1.0,
-        "sensory": 2.0,
-        "spatial": 4.0,
-        "spell": 2.0,
-        "turn": 1.0
-      },
-      "perspectives": [
-        {
-          "duration_ms": 2666.66666666667,
-          "id": "amber",
-          "native_samples": 1,
-          "operations": 2,
-          "persistent_instances": [],
-          "roles": {
-            "attached": 1
-          },
-          "rows": 78,
-          "sources": [
-            "spell.thunderwave.native.attached"
-          ]
-        },
-        {
-          "duration_ms": 2666.66666666667,
-          "id": "blue",
-          "native_samples": 1,
-          "operations": 2,
-          "persistent_instances": [],
-          "roles": {
-            "attached": 1
-          },
-          "rows": 78,
-          "sources": [
-            "spell.thunderwave.native.attached"
-          ]
-        }
+      "approval_status": "needs_review",
+      "case": "spell.ray_of_frost/baseline",
+      "duration_ms": 2819.04761904762,
+      "gaps": [],
+      "native_rows": 4,
+      "native_sources": [
+        "spell.ray_of_frost.native.impact",
+        "spell.ray_of_frost.native.flight",
+        "spell.ray_of_frost.native.cast"
       ],
-      "spell_id": "thunderwave"
+      "operations": 8,
+      "persistent_instances": {},
+      "perspective": "blue",
+      "presentation_status": "native_pixels_checked",
+      "roles": {
+        "cast": 1,
+        "flight": 2,
+        "impact": 1
+      },
+      "scenario_status": "recorded",
+      "source_status": "actual_installed_sources_checked",
+      "spell_id": "spell.ray_of_frost"
     },
     {
-      "condition_lifecycle": {},
-      "facts": {
-        "heal": 1.0,
-        "spell": 1.0,
-        "turn": 1.0
-      },
-      "perspectives": [
-        {
-          "duration_ms": 1750.0,
-          "id": "amber",
-          "native_samples": 1,
-          "operations": 2,
-          "persistent_instances": [],
-          "roles": {
-            "attached": 1
-          },
-          "rows": 22,
-          "sources": [
-            "spell.cure_wounds.native.attached"
-          ]
-        },
-        {
-          "duration_ms": 1750.0,
-          "id": "blue",
-          "native_samples": 1,
-          "operations": 2,
-          "persistent_instances": [],
-          "roles": {
-            "attached": 1
-          },
-          "rows": 22,
-          "sources": [
-            "spell.cure_wounds.native.attached"
-          ]
-        }
+      "approval_status": "needs_review",
+      "case": "spell.scorching_ray/baseline",
+      "duration_ms": 2826.11111111111,
+      "gaps": [],
+      "native_rows": 7,
+      "native_sources": [
+        "spell.scorching_ray.native.flight",
+        "spell.scorching_ray.native.cast",
+        "spell.scorching_ray.native.impact"
       ],
-      "spell_id": "cure_wounds"
+      "operations": 8,
+      "persistent_instances": {},
+      "perspective": "amber",
+      "presentation_status": "native_pixels_checked",
+      "roles": {
+        "cast": 1,
+        "flight": 3,
+        "impact": 3
+      },
+      "scenario_status": "recorded",
+      "source_status": "actual_installed_sources_checked",
+      "spell_id": "spell.scorching_ray"
     },
     {
-      "condition_lifecycle": {},
-      "facts": {
-        "heal": 1.0,
-        "spell": 1.0,
-        "turn": 1.0
-      },
-      "perspectives": [
-        {
-          "duration_ms": 1586.95652173913,
-          "id": "amber",
-          "native_samples": 1,
-          "operations": 2,
-          "persistent_instances": [],
-          "roles": {
-            "attached": 1
-          },
-          "rows": 21,
-          "sources": [
-            "spell.healing_word.native.attached"
-          ]
-        },
-        {
-          "duration_ms": 1586.95652173913,
-          "id": "blue",
-          "native_samples": 1,
-          "operations": 2,
-          "persistent_instances": [],
-          "roles": {
-            "attached": 1
-          },
-          "rows": 21,
-          "sources": [
-            "spell.healing_word.native.attached"
-          ]
-        }
+      "approval_status": "needs_review",
+      "case": "spell.scorching_ray/baseline",
+      "duration_ms": 2826.11111111111,
+      "gaps": [],
+      "native_rows": 7,
+      "native_sources": [
+        "spell.scorching_ray.native.flight",
+        "spell.scorching_ray.native.cast",
+        "spell.scorching_ray.native.impact"
       ],
-      "spell_id": "healing_word"
+      "operations": 8,
+      "persistent_instances": {},
+      "perspective": "blue",
+      "presentation_status": "native_pixels_checked",
+      "roles": {
+        "cast": 1,
+        "flight": 3,
+        "impact": 3
+      },
+      "scenario_status": "recorded",
+      "source_status": "actual_installed_sources_checked",
+      "spell_id": "spell.scorching_ray"
     },
     {
-      "condition_lifecycle": {
-        "condition_application": 2.0,
-        "condition_removal": 2.0,
-        "condition_state_changed": 1.0
-      },
-      "facts": {
-        "action": 1.0,
-        "condition": 5.0,
-        "spell": 1.0,
-        "turn": 5.0
-      },
-      "perspectives": [
-        {
-          "duration_ms": 2100.0,
-          "id": "amber",
-          "native_samples": 11,
-          "operations": 7,
-          "persistent_instances": [
-            "condition:a3a8c576-cfaa-49fd-9a88-54192c66c38c:native:0"
-          ],
-          "roles": {},
-          "rows": 39,
-          "sources": [
-            "spell.guidance.native.attached"
-          ]
-        },
-        {
-          "duration_ms": 2100.0,
-          "id": "blue",
-          "native_samples": 11,
-          "operations": 7,
-          "persistent_instances": [
-            "condition:a3a8c576-cfaa-49fd-9a88-54192c66c38c:native:0"
-          ],
-          "roles": {},
-          "rows": 39,
-          "sources": [
-            "spell.guidance.native.attached"
-          ]
-        }
+      "approval_status": "needs_review",
+      "case": "spell.sleep/baseline",
+      "duration_ms": 3616.66666666667,
+      "gaps": [],
+      "native_rows": 3,
+      "native_sources": [
+        "spell.sleep.native.area",
+        "spell.sleep.native.flight",
+        "spell.sleep.native.cast"
       ],
-      "spell_id": "guidance"
+      "operations": 8,
+      "persistent_instances": {},
+      "perspective": "amber",
+      "presentation_status": "native_pixels_checked",
+      "roles": {
+        "area": 1,
+        "cast": 1,
+        "flight": 1
+      },
+      "scenario_status": "recorded",
+      "source_status": "actual_installed_sources_checked",
+      "spell_id": "spell.sleep"
     },
     {
-      "condition_lifecycle": {
-        "condition_application": 2.0,
-        "condition_removal": 2.0,
-        "condition_state_changed": 1.0
-      },
-      "facts": {
-        "action": 1.0,
-        "condition": 5.0,
-        "spell": 1.0,
-        "turn": 1.0
-      },
-      "perspectives": [
-        {
-          "duration_ms": 2100.0,
-          "id": "amber",
-          "native_samples": 10,
-          "operations": 3,
-          "persistent_instances": [
-            "condition:62a803ff-dff5-4aec-9397-a4418bdef7fc:native:0"
-          ],
-          "roles": {},
-          "rows": 35,
-          "sources": [
-            "spell.resistance.native.attached"
-          ]
-        },
-        {
-          "duration_ms": 2100.0,
-          "id": "blue",
-          "native_samples": 10,
-          "operations": 3,
-          "persistent_instances": [
-            "condition:62a803ff-dff5-4aec-9397-a4418bdef7fc:native:0"
-          ],
-          "roles": {},
-          "rows": 35,
-          "sources": [
-            "spell.resistance.native.attached"
-          ]
-        }
+      "approval_status": "needs_review",
+      "case": "spell.sleep/baseline",
+      "duration_ms": 3616.66666666667,
+      "gaps": [],
+      "native_rows": 3,
+      "native_sources": [
+        "spell.sleep.native.area",
+        "spell.sleep.native.flight",
+        "spell.sleep.native.cast"
       ],
-      "spell_id": "resistance"
+      "operations": 8,
+      "persistent_instances": {},
+      "perspective": "blue",
+      "presentation_status": "native_pixels_checked",
+      "roles": {
+        "area": 1,
+        "cast": 1,
+        "flight": 1
+      },
+      "scenario_status": "recorded",
+      "source_status": "actual_installed_sources_checked",
+      "spell_id": "spell.sleep"
     },
     {
-      "condition_lifecycle": {
-        "condition_application": 2.0,
-        "condition_removal": 2.0,
-        "condition_state_changed": 1.0
-      },
-      "facts": {
-        "action": 1.0,
-        "condition": 5.0,
-        "sensory": 4.0,
-        "spell": 1.0,
-        "turn": 5.0
-      },
-      "perspectives": [
-        {
-          "duration_ms": 2100.0,
-          "id": "amber",
-          "native_samples": 13,
-          "operations": 7,
-          "persistent_instances": [
-            "condition:fabfce50-6bdb-4ab1-9074-fc73591963b5:native:0"
-          ],
-          "roles": {},
-          "rows": 46,
-          "sources": [
-            "spell.light.native.attached"
-          ]
-        },
-        {
-          "duration_ms": 2100.0,
-          "id": "blue",
-          "native_samples": 12,
-          "operations": 7,
-          "persistent_instances": [
-            "condition:fabfce50-6bdb-4ab1-9074-fc73591963b5:native:0"
-          ],
-          "roles": {},
-          "rows": 44,
-          "sources": [
-            "spell.light.native.attached"
-          ]
-        }
+      "approval_status": "needs_review",
+      "case": "spell.web/baseline",
+      "duration_ms": 3016.66666666667,
+      "gaps": [],
+      "native_rows": 3,
+      "native_sources": [
+        "spell.web.native.flight",
+        "spell.web.native.cast",
+        "spatial_web_persistent"
       ],
-      "spell_id": "light"
+      "operations": 8,
+      "persistent_instances": {
+        "spatial:e87580a2-b3ca-47e4-af98-bd80961bc2a8:lifecycle:spatial_web_persistent": "e87580a2-b3ca-47e4-af98-bd80961bc2a8"
+      },
+      "perspective": "amber",
+      "presentation_status": "native_pixels_checked",
+      "roles": {
+        "attached": 1,
+        "cast": 1,
+        "flight": 1
+      },
+      "scenario_status": "recorded",
+      "source_status": "actual_installed_sources_checked",
+      "spell_id": "spell.web"
     },
     {
-      "condition_lifecycle": {},
-      "facts": {
-        "spell": 1.0,
-        "turn": 1.0
-      },
-      "perspectives": [
-        {
-          "duration_ms": 1750.0,
-          "id": "amber",
-          "native_samples": 1,
-          "operations": 2,
-          "persistent_instances": [],
-          "roles": {
-            "attached": 1
-          },
-          "rows": 19,
-          "sources": [
-            "spell.thaumaturgy.native.attached"
-          ]
-        },
-        {
-          "duration_ms": 1750.0,
-          "id": "blue",
-          "native_samples": 1,
-          "operations": 2,
-          "persistent_instances": [],
-          "roles": {
-            "attached": 1
-          },
-          "rows": 19,
-          "sources": [
-            "spell.thaumaturgy.native.attached"
-          ]
-        }
+      "approval_status": "needs_review",
+      "case": "spell.web/baseline",
+      "duration_ms": 3016.66666666667,
+      "gaps": [],
+      "native_rows": 3,
+      "native_sources": [
+        "spell.web.native.flight",
+        "spell.web.native.cast",
+        "spatial_web_persistent"
       ],
-      "spell_id": "thaumaturgy"
+      "operations": 8,
+      "persistent_instances": {
+        "spatial:e87580a2-b3ca-47e4-af98-bd80961bc2a8:lifecycle:spatial_web_persistent": "e87580a2-b3ca-47e4-af98-bd80961bc2a8"
+      },
+      "perspective": "blue",
+      "presentation_status": "native_pixels_checked",
+      "roles": {
+        "attached": 1,
+        "cast": 1,
+        "flight": 1
+      },
+      "scenario_status": "recorded",
+      "source_status": "actual_installed_sources_checked",
+      "spell_id": "spell.web"
     },
     {
-      "condition_lifecycle": {
-        "condition_application": 2.0,
-        "condition_removal": 2.0,
-        "condition_state_changed": 1.0
-      },
-      "facts": {
-        "action": 1.0,
-        "condition": 5.0,
-        "spell": 1.0,
-        "turn": 1.0
-      },
-      "perspectives": [
-        {
-          "duration_ms": 2100.0,
-          "id": "amber",
-          "native_samples": 11,
-          "operations": 3,
-          "persistent_instances": [
-            "condition:a35820fb-ae78-4b3b-b067-425f541251c5:native:0"
-          ],
-          "roles": {},
-          "rows": 38,
-          "sources": [
-            "spell.shield_of_faith.native.attached"
-          ]
-        },
-        {
-          "duration_ms": 2100.0,
-          "id": "blue",
-          "native_samples": 11,
-          "operations": 3,
-          "persistent_instances": [
-            "condition:a35820fb-ae78-4b3b-b067-425f541251c5:native:0"
-          ],
-          "roles": {},
-          "rows": 38,
-          "sources": [
-            "spell.shield_of_faith.native.attached"
-          ]
-        }
+      "approval_status": "needs_review",
+      "case": "spell.bane/baseline",
+      "duration_ms": 2816.66666666667,
+      "gaps": [],
+      "native_rows": 6,
+      "native_sources": [
+        "condition_bane_native",
+        "condition_bane_retained_native"
       ],
-      "spell_id": "shield_of_faith"
+      "operations": 8,
+      "persistent_instances": {
+        "condition:a2d2ed8a-5d0a-4be4-ba43-b787892201b5:lifecycle:condition_bane_native": "a2d2ed8a-5d0a-4be4-ba43-b787892201b5",
+        "condition:a2d2ed8a-5d0a-4be4-ba43-b787892201b5:lifecycle:condition_bane_retained_native": "a2d2ed8a-5d0a-4be4-ba43-b787892201b5"
+      },
+      "perspective": "amber",
+      "presentation_status": "native_pixels_checked",
+      "roles": {
+        "attached": 6
+      },
+      "scenario_status": "recorded",
+      "source_status": "actual_installed_sources_checked",
+      "spell_id": "spell.bane"
     },
     {
-      "condition_lifecycle": {},
-      "facts": {
-        "attack": 1.0,
-        "damage": 2.0,
-        "spell": 1.0,
-        "turn": 1.0
-      },
-      "perspectives": [
-        {
-          "duration_ms": 2333.33333333333,
-          "id": "amber",
-          "native_samples": 1,
-          "operations": 2,
-          "persistent_instances": [],
-          "roles": {
-            "attached": 1
-          },
-          "rows": 55,
-          "sources": [
-            "spell.true_strike.native.attached"
-          ]
-        },
-        {
-          "duration_ms": 2333.33333333333,
-          "id": "blue",
-          "native_samples": 1,
-          "operations": 2,
-          "persistent_instances": [],
-          "roles": {
-            "attached": 1
-          },
-          "rows": 55,
-          "sources": [
-            "spell.true_strike.native.attached"
-          ]
-        }
+      "approval_status": "needs_review",
+      "case": "spell.bane/baseline",
+      "duration_ms": 2816.66666666667,
+      "gaps": [],
+      "native_rows": 6,
+      "native_sources": [
+        "condition_bane_native",
+        "condition_bane_retained_native"
       ],
-      "spell_id": "true_strike"
+      "operations": 8,
+      "persistent_instances": {
+        "condition:a2d2ed8a-5d0a-4be4-ba43-b787892201b5:lifecycle:condition_bane_native": "a2d2ed8a-5d0a-4be4-ba43-b787892201b5",
+        "condition:a2d2ed8a-5d0a-4be4-ba43-b787892201b5:lifecycle:condition_bane_retained_native": "a2d2ed8a-5d0a-4be4-ba43-b787892201b5"
+      },
+      "perspective": "blue",
+      "presentation_status": "native_pixels_checked",
+      "roles": {
+        "attached": 6
+      },
+      "scenario_status": "recorded",
+      "source_status": "actual_installed_sources_checked",
+      "spell_id": "spell.bane"
+    },
+    {
+      "approval_status": "needs_review",
+      "case": "spell.command/baseline",
+      "duration_ms": 4507.24637681159,
+      "gaps": [],
+      "native_rows": 1,
+      "native_sources": [
+        "spell.command.native.attached"
+      ],
+      "operations": 8,
+      "persistent_instances": {},
+      "perspective": "amber",
+      "presentation_status": "native_pixels_checked",
+      "roles": {
+        "attached": 1
+      },
+      "scenario_status": "recorded",
+      "source_status": "actual_installed_sources_checked",
+      "spell_id": "spell.command"
+    },
+    {
+      "approval_status": "needs_review",
+      "case": "spell.command/baseline",
+      "duration_ms": 4507.24637681159,
+      "gaps": [],
+      "native_rows": 1,
+      "native_sources": [
+        "spell.command.native.attached"
+      ],
+      "operations": 8,
+      "persistent_instances": {},
+      "perspective": "blue",
+      "presentation_status": "native_pixels_checked",
+      "roles": {
+        "attached": 1
+      },
+      "scenario_status": "recorded",
+      "source_status": "actual_installed_sources_checked",
+      "spell_id": "spell.command"
+    },
+    {
+      "approval_status": "needs_review",
+      "case": "spell.mage_armor/baseline",
+      "duration_ms": 1750.0,
+      "gaps": [],
+      "native_rows": 2,
+      "native_sources": [
+        "condition_mage_armor_retained_native"
+      ],
+      "operations": 8,
+      "persistent_instances": {
+        "condition:4c7d9b6b-d0e5-4832-bf8b-5b6760017307:lifecycle:condition_mage_armor_retained_native": "4c7d9b6b-d0e5-4832-bf8b-5b6760017307"
+      },
+      "perspective": "amber",
+      "presentation_status": "native_pixels_checked",
+      "roles": {
+        "attached": 2
+      },
+      "scenario_status": "recorded",
+      "source_status": "actual_installed_sources_checked",
+      "spell_id": "spell.mage_armor"
+    },
+    {
+      "approval_status": "needs_review",
+      "case": "spell.mage_armor/baseline",
+      "duration_ms": 1750.0,
+      "gaps": [],
+      "native_rows": 2,
+      "native_sources": [
+        "condition_mage_armor_retained_native"
+      ],
+      "operations": 8,
+      "persistent_instances": {
+        "condition:4c7d9b6b-d0e5-4832-bf8b-5b6760017307:lifecycle:condition_mage_armor_retained_native": "4c7d9b6b-d0e5-4832-bf8b-5b6760017307"
+      },
+      "perspective": "blue",
+      "presentation_status": "native_pixels_checked",
+      "roles": {
+        "attached": 2
+      },
+      "scenario_status": "recorded",
+      "source_status": "actual_installed_sources_checked",
+      "spell_id": "spell.mage_armor"
+    },
+    {
+      "approval_status": "needs_review",
+      "case": "spell.sanctuary/baseline",
+      "duration_ms": 1750.0,
+      "gaps": [],
+      "native_rows": 2,
+      "native_sources": [
+        "condition_sanctuary_retained_native"
+      ],
+      "operations": 8,
+      "persistent_instances": {
+        "condition:fbd6d84d-48e2-471c-8f73-18499bc95eb9:lifecycle:condition_sanctuary_retained_native": "fbd6d84d-48e2-471c-8f73-18499bc95eb9"
+      },
+      "perspective": "amber",
+      "presentation_status": "native_pixels_checked",
+      "roles": {
+        "attached": 2
+      },
+      "scenario_status": "recorded",
+      "source_status": "actual_installed_sources_checked",
+      "spell_id": "spell.sanctuary"
+    },
+    {
+      "approval_status": "needs_review",
+      "case": "spell.sanctuary/baseline",
+      "duration_ms": 1750.0,
+      "gaps": [],
+      "native_rows": 2,
+      "native_sources": [
+        "condition_sanctuary_retained_native"
+      ],
+      "operations": 8,
+      "persistent_instances": {
+        "condition:fbd6d84d-48e2-471c-8f73-18499bc95eb9:lifecycle:condition_sanctuary_retained_native": "fbd6d84d-48e2-471c-8f73-18499bc95eb9"
+      },
+      "perspective": "blue",
+      "presentation_status": "native_pixels_checked",
+      "roles": {
+        "attached": 2
+      },
+      "scenario_status": "recorded",
+      "source_status": "actual_installed_sources_checked",
+      "spell_id": "spell.sanctuary"
+    },
+    {
+      "approval_status": "needs_review",
+      "case": "spell.shield/baseline",
+      "duration_ms": 2393.33333333333,
+      "gaps": [],
+      "native_rows": 6,
+      "native_sources": [
+        "spell.shield.native.attached",
+        "condition_shield_retained_native"
+      ],
+      "operations": 6,
+      "persistent_instances": {
+        "condition:128e0798-39dc-474d-9090-1470829a15ef:lifecycle:condition_shield_retained_native": "128e0798-39dc-474d-9090-1470829a15ef"
+      },
+      "perspective": "amber",
+      "presentation_status": "native_pixels_checked",
+      "roles": {
+        "attached": 6
+      },
+      "scenario_status": "recorded",
+      "source_status": "actual_installed_sources_checked",
+      "spell_id": "spell.shield"
+    },
+    {
+      "approval_status": "needs_review",
+      "case": "spell.shield/baseline",
+      "duration_ms": 2393.33333333333,
+      "gaps": [],
+      "native_rows": 6,
+      "native_sources": [
+        "spell.shield.native.attached",
+        "condition_shield_retained_native"
+      ],
+      "operations": 6,
+      "persistent_instances": {
+        "condition:128e0798-39dc-474d-9090-1470829a15ef:lifecycle:condition_shield_retained_native": "128e0798-39dc-474d-9090-1470829a15ef"
+      },
+      "perspective": "blue",
+      "presentation_status": "native_pixels_checked",
+      "roles": {
+        "attached": 6
+      },
+      "scenario_status": "recorded",
+      "source_status": "actual_installed_sources_checked",
+      "spell_id": "spell.shield"
+    },
+    {
+      "approval_status": "needs_review",
+      "case": "spell.shocking_grasp/baseline",
+      "duration_ms": 2583.33333333333,
+      "gaps": [],
+      "native_rows": 2,
+      "native_sources": [
+        "spell.shocking_grasp.native.cast",
+        "spell.shocking_grasp.native.attached"
+      ],
+      "operations": 8,
+      "persistent_instances": {},
+      "perspective": "amber",
+      "presentation_status": "native_pixels_checked",
+      "roles": {
+        "attached": 1,
+        "cast": 1
+      },
+      "scenario_status": "recorded",
+      "source_status": "actual_installed_sources_checked",
+      "spell_id": "spell.shocking_grasp"
+    },
+    {
+      "approval_status": "needs_review",
+      "case": "spell.shocking_grasp/baseline",
+      "duration_ms": 2583.33333333333,
+      "gaps": [],
+      "native_rows": 2,
+      "native_sources": [
+        "spell.shocking_grasp.native.cast",
+        "spell.shocking_grasp.native.attached"
+      ],
+      "operations": 8,
+      "persistent_instances": {},
+      "perspective": "blue",
+      "presentation_status": "native_pixels_checked",
+      "roles": {
+        "attached": 1,
+        "cast": 1
+      },
+      "scenario_status": "recorded",
+      "source_status": "actual_installed_sources_checked",
+      "spell_id": "spell.shocking_grasp"
+    },
+    {
+      "approval_status": "needs_review",
+      "case": "spell.burning_hands/baseline",
+      "duration_ms": 2583.33333333333,
+      "gaps": [],
+      "native_rows": 1,
+      "native_sources": [
+        "spell.burning_hands.native.attached"
+      ],
+      "operations": 8,
+      "persistent_instances": {},
+      "perspective": "amber",
+      "presentation_status": "native_pixels_checked",
+      "roles": {
+        "attached": 1
+      },
+      "scenario_status": "recorded",
+      "source_status": "actual_installed_sources_checked",
+      "spell_id": "spell.burning_hands"
+    },
+    {
+      "approval_status": "needs_review",
+      "case": "spell.burning_hands/baseline",
+      "duration_ms": 2583.33333333333,
+      "gaps": [],
+      "native_rows": 1,
+      "native_sources": [
+        "spell.burning_hands.native.attached"
+      ],
+      "operations": 8,
+      "persistent_instances": {},
+      "perspective": "blue",
+      "presentation_status": "native_pixels_checked",
+      "roles": {
+        "attached": 1
+      },
+      "scenario_status": "recorded",
+      "source_status": "actual_installed_sources_checked",
+      "spell_id": "spell.burning_hands"
+    },
+    {
+      "approval_status": "needs_review",
+      "case": "spell.thunderwave/baseline",
+      "duration_ms": 3000.0,
+      "gaps": [],
+      "native_rows": 1,
+      "native_sources": [
+        "spell.thunderwave.native.attached"
+      ],
+      "operations": 8,
+      "persistent_instances": {},
+      "perspective": "amber",
+      "presentation_status": "native_pixels_checked",
+      "roles": {
+        "attached": 1
+      },
+      "scenario_status": "recorded",
+      "source_status": "actual_installed_sources_checked",
+      "spell_id": "spell.thunderwave"
+    },
+    {
+      "approval_status": "needs_review",
+      "case": "spell.thunderwave/baseline",
+      "duration_ms": 3000.0,
+      "gaps": [],
+      "native_rows": 1,
+      "native_sources": [
+        "spell.thunderwave.native.attached"
+      ],
+      "operations": 8,
+      "persistent_instances": {},
+      "perspective": "blue",
+      "presentation_status": "native_pixels_checked",
+      "roles": {
+        "attached": 1
+      },
+      "scenario_status": "recorded",
+      "source_status": "actual_installed_sources_checked",
+      "spell_id": "spell.thunderwave"
+    },
+    {
+      "approval_status": "needs_review",
+      "case": "spell.cure_wounds/baseline",
+      "duration_ms": 4083.33333333333,
+      "gaps": [],
+      "native_rows": 1,
+      "native_sources": [
+        "spell.cure_wounds.native.attached"
+      ],
+      "operations": 8,
+      "persistent_instances": {},
+      "perspective": "amber",
+      "presentation_status": "native_pixels_checked",
+      "roles": {
+        "attached": 1
+      },
+      "scenario_status": "recorded",
+      "source_status": "actual_installed_sources_checked",
+      "spell_id": "spell.cure_wounds"
+    },
+    {
+      "approval_status": "needs_review",
+      "case": "spell.cure_wounds/baseline",
+      "duration_ms": 4083.33333333333,
+      "gaps": [],
+      "native_rows": 1,
+      "native_sources": [
+        "spell.cure_wounds.native.attached"
+      ],
+      "operations": 8,
+      "persistent_instances": {},
+      "perspective": "blue",
+      "presentation_status": "native_pixels_checked",
+      "roles": {
+        "attached": 1
+      },
+      "scenario_status": "recorded",
+      "source_status": "actual_installed_sources_checked",
+      "spell_id": "spell.cure_wounds"
+    },
+    {
+      "approval_status": "needs_review",
+      "case": "spell.healing_word/baseline",
+      "duration_ms": 4173.91637681159,
+      "gaps": [],
+      "native_rows": 1,
+      "native_sources": [
+        "spell.healing_word.native.attached"
+      ],
+      "operations": 8,
+      "persistent_instances": {},
+      "perspective": "amber",
+      "presentation_status": "native_pixels_checked",
+      "roles": {
+        "attached": 1
+      },
+      "scenario_status": "recorded",
+      "source_status": "actual_installed_sources_checked",
+      "spell_id": "spell.healing_word"
+    },
+    {
+      "approval_status": "needs_review",
+      "case": "spell.healing_word/baseline",
+      "duration_ms": 4173.91637681159,
+      "gaps": [],
+      "native_rows": 1,
+      "native_sources": [
+        "spell.healing_word.native.attached"
+      ],
+      "operations": 8,
+      "persistent_instances": {},
+      "perspective": "blue",
+      "presentation_status": "native_pixels_checked",
+      "roles": {
+        "attached": 1
+      },
+      "scenario_status": "recorded",
+      "source_status": "actual_installed_sources_checked",
+      "spell_id": "spell.healing_word"
+    },
+    {
+      "approval_status": "needs_review",
+      "case": "spell.guidance/baseline",
+      "duration_ms": 2483.33333333333,
+      "gaps": [],
+      "native_rows": 2,
+      "native_sources": [
+        "condition_guidance_retained_native"
+      ],
+      "operations": 8,
+      "persistent_instances": {
+        "condition:f5143cd1-776c-4af3-b4d6-00e709b1ca85:lifecycle:condition_guidance_retained_native": "f5143cd1-776c-4af3-b4d6-00e709b1ca85"
+      },
+      "perspective": "amber",
+      "presentation_status": "native_pixels_checked",
+      "roles": {
+        "attached": 2
+      },
+      "scenario_status": "recorded",
+      "source_status": "actual_installed_sources_checked",
+      "spell_id": "spell.guidance"
+    },
+    {
+      "approval_status": "needs_review",
+      "case": "spell.guidance/baseline",
+      "duration_ms": 2483.33333333333,
+      "gaps": [],
+      "native_rows": 2,
+      "native_sources": [
+        "condition_guidance_retained_native"
+      ],
+      "operations": 8,
+      "persistent_instances": {
+        "condition:f5143cd1-776c-4af3-b4d6-00e709b1ca85:lifecycle:condition_guidance_retained_native": "f5143cd1-776c-4af3-b4d6-00e709b1ca85"
+      },
+      "perspective": "blue",
+      "presentation_status": "native_pixels_checked",
+      "roles": {
+        "attached": 2
+      },
+      "scenario_status": "recorded",
+      "source_status": "actual_installed_sources_checked",
+      "spell_id": "spell.guidance"
+    },
+    {
+      "approval_status": "needs_review",
+      "case": "spell.resistance/baseline",
+      "duration_ms": 2483.33333333333,
+      "gaps": [],
+      "native_rows": 2,
+      "native_sources": [
+        "condition_resistance_retained_native"
+      ],
+      "operations": 8,
+      "persistent_instances": {
+        "condition:c8ecf42a-a250-4af0-a4e0-4ba04ce8553b:lifecycle:condition_resistance_retained_native": "c8ecf42a-a250-4af0-a4e0-4ba04ce8553b"
+      },
+      "perspective": "amber",
+      "presentation_status": "native_pixels_checked",
+      "roles": {
+        "attached": 2
+      },
+      "scenario_status": "recorded",
+      "source_status": "actual_installed_sources_checked",
+      "spell_id": "spell.resistance"
+    },
+    {
+      "approval_status": "needs_review",
+      "case": "spell.resistance/baseline",
+      "duration_ms": 2483.33333333333,
+      "gaps": [],
+      "native_rows": 2,
+      "native_sources": [
+        "condition_resistance_retained_native"
+      ],
+      "operations": 8,
+      "persistent_instances": {
+        "condition:c8ecf42a-a250-4af0-a4e0-4ba04ce8553b:lifecycle:condition_resistance_retained_native": "c8ecf42a-a250-4af0-a4e0-4ba04ce8553b"
+      },
+      "perspective": "blue",
+      "presentation_status": "native_pixels_checked",
+      "roles": {
+        "attached": 2
+      },
+      "scenario_status": "recorded",
+      "source_status": "actual_installed_sources_checked",
+      "spell_id": "spell.resistance"
+    },
+    {
+      "approval_status": "needs_review",
+      "case": "spell.light/baseline",
+      "duration_ms": 2483.33333333333,
+      "gaps": [],
+      "native_rows": 2,
+      "native_sources": [
+        "condition_light_retained_native"
+      ],
+      "operations": 8,
+      "persistent_instances": {
+        "condition:ee684065-d8e6-454c-a7e6-80278efe1861:lifecycle:condition_light_retained_native": "ee684065-d8e6-454c-a7e6-80278efe1861"
+      },
+      "perspective": "amber",
+      "presentation_status": "native_pixels_checked",
+      "roles": {
+        "attached": 2
+      },
+      "scenario_status": "recorded",
+      "source_status": "actual_installed_sources_checked",
+      "spell_id": "spell.light"
+    },
+    {
+      "approval_status": "needs_review",
+      "case": "spell.light/baseline",
+      "duration_ms": 2483.33333333333,
+      "gaps": [],
+      "native_rows": 2,
+      "native_sources": [
+        "condition_light_retained_native"
+      ],
+      "operations": 8,
+      "persistent_instances": {
+        "condition:ee684065-d8e6-454c-a7e6-80278efe1861:lifecycle:condition_light_retained_native": "ee684065-d8e6-454c-a7e6-80278efe1861"
+      },
+      "perspective": "blue",
+      "presentation_status": "native_pixels_checked",
+      "roles": {
+        "attached": 2
+      },
+      "scenario_status": "recorded",
+      "source_status": "actual_installed_sources_checked",
+      "spell_id": "spell.light"
+    },
+    {
+      "approval_status": "needs_review",
+      "case": "spell.thaumaturgy/baseline",
+      "duration_ms": 3766.66666666667,
+      "gaps": [],
+      "native_rows": 1,
+      "native_sources": [
+        "spell.thaumaturgy.native.attached"
+      ],
+      "operations": 8,
+      "persistent_instances": {},
+      "perspective": "amber",
+      "presentation_status": "native_pixels_checked",
+      "roles": {
+        "attached": 1
+      },
+      "scenario_status": "recorded",
+      "source_status": "actual_installed_sources_checked",
+      "spell_id": "spell.thaumaturgy"
+    },
+    {
+      "approval_status": "needs_review",
+      "case": "spell.thaumaturgy/baseline",
+      "duration_ms": 3766.66666666667,
+      "gaps": [],
+      "native_rows": 1,
+      "native_sources": [
+        "spell.thaumaturgy.native.attached"
+      ],
+      "operations": 8,
+      "persistent_instances": {},
+      "perspective": "blue",
+      "presentation_status": "native_pixels_checked",
+      "roles": {
+        "attached": 1
+      },
+      "scenario_status": "recorded",
+      "source_status": "actual_installed_sources_checked",
+      "spell_id": "spell.thaumaturgy"
+    },
+    {
+      "approval_status": "needs_review",
+      "case": "spell.shield_of_faith/baseline",
+      "duration_ms": 2483.33333333333,
+      "gaps": [],
+      "native_rows": 2,
+      "native_sources": [
+        "condition_shield_of_faith_retained_native"
+      ],
+      "operations": 8,
+      "persistent_instances": {
+        "condition:9ab134a1-b869-472d-8f09-fb5885012d50:lifecycle:condition_shield_of_faith_retained_native": "9ab134a1-b869-472d-8f09-fb5885012d50"
+      },
+      "perspective": "amber",
+      "presentation_status": "native_pixels_checked",
+      "roles": {
+        "attached": 2
+      },
+      "scenario_status": "recorded",
+      "source_status": "actual_installed_sources_checked",
+      "spell_id": "spell.shield_of_faith"
+    },
+    {
+      "approval_status": "needs_review",
+      "case": "spell.shield_of_faith/baseline",
+      "duration_ms": 2483.33333333333,
+      "gaps": [],
+      "native_rows": 2,
+      "native_sources": [
+        "condition_shield_of_faith_retained_native"
+      ],
+      "operations": 8,
+      "persistent_instances": {
+        "condition:9ab134a1-b869-472d-8f09-fb5885012d50:lifecycle:condition_shield_of_faith_retained_native": "9ab134a1-b869-472d-8f09-fb5885012d50"
+      },
+      "perspective": "blue",
+      "presentation_status": "native_pixels_checked",
+      "roles": {
+        "attached": 2
+      },
+      "scenario_status": "recorded",
+      "source_status": "actual_installed_sources_checked",
+      "spell_id": "spell.shield_of_faith"
+    },
+    {
+      "approval_status": "needs_review",
+      "case": "spell.true_strike/baseline",
+      "duration_ms": 2483.33333333333,
+      "gaps": [],
+      "native_rows": 1,
+      "native_sources": [
+        "spell.true_strike.native.attached"
+      ],
+      "operations": 8,
+      "persistent_instances": {},
+      "perspective": "amber",
+      "presentation_status": "native_pixels_checked",
+      "roles": {
+        "attached": 1
+      },
+      "scenario_status": "recorded",
+      "source_status": "actual_installed_sources_checked",
+      "spell_id": "spell.true_strike"
+    },
+    {
+      "approval_status": "needs_review",
+      "case": "spell.true_strike/baseline",
+      "duration_ms": 2483.33333333333,
+      "gaps": [],
+      "native_rows": 1,
+      "native_sources": [
+        "spell.true_strike.native.attached"
+      ],
+      "operations": 8,
+      "persistent_instances": {},
+      "perspective": "blue",
+      "presentation_status": "native_pixels_checked",
+      "roles": {
+        "attached": 1
+      },
+      "scenario_status": "recorded",
+      "source_status": "actual_installed_sources_checked",
+      "spell_id": "spell.true_strike"
+    },
+    {
+      "approval_status": "needs_review",
+      "case": "spell.aid/baseline",
+      "duration_ms": 2816.66666666667,
+      "gaps": [],
+      "native_rows": 2,
+      "native_sources": [
+        "condition_aid_retained_native"
+      ],
+      "operations": 8,
+      "persistent_instances": {
+        "condition:2a5ff98a-450f-47d8-b312-b30119757b4f:lifecycle:condition_aid_retained_native": "2a5ff98a-450f-47d8-b312-b30119757b4f"
+      },
+      "perspective": "amber",
+      "presentation_status": "native_pixels_checked",
+      "roles": {
+        "attached": 2
+      },
+      "scenario_status": "recorded",
+      "source_status": "actual_installed_sources_checked",
+      "spell_id": "spell.aid"
+    },
+    {
+      "approval_status": "needs_review",
+      "case": "spell.aid/baseline",
+      "duration_ms": 2816.66666666667,
+      "gaps": [],
+      "native_rows": 2,
+      "native_sources": [
+        "condition_aid_retained_native"
+      ],
+      "operations": 8,
+      "persistent_instances": {
+        "condition:2a5ff98a-450f-47d8-b312-b30119757b4f:lifecycle:condition_aid_retained_native": "2a5ff98a-450f-47d8-b312-b30119757b4f"
+      },
+      "perspective": "blue",
+      "presentation_status": "native_pixels_checked",
+      "roles": {
+        "attached": 2
+      },
+      "scenario_status": "recorded",
+      "source_status": "actual_installed_sources_checked",
+      "spell_id": "spell.aid"
+    },
+    {
+      "approval_status": "needs_review",
+      "case": "spell.bless/baseline",
+      "duration_ms": 2816.66666666667,
+      "gaps": [],
+      "native_rows": 2,
+      "native_sources": [
+        "condition_bless_retained_native"
+      ],
+      "operations": 8,
+      "persistent_instances": {
+        "condition:d08b7e71-aa52-4e7c-8448-f9b84b5e6af0:lifecycle:condition_bless_retained_native": "d08b7e71-aa52-4e7c-8448-f9b84b5e6af0"
+      },
+      "perspective": "amber",
+      "presentation_status": "native_pixels_checked",
+      "roles": {
+        "attached": 2
+      },
+      "scenario_status": "recorded",
+      "source_status": "actual_installed_sources_checked",
+      "spell_id": "spell.bless"
+    },
+    {
+      "approval_status": "needs_review",
+      "case": "spell.bless/baseline",
+      "duration_ms": 2816.66666666667,
+      "gaps": [],
+      "native_rows": 2,
+      "native_sources": [
+        "condition_bless_retained_native"
+      ],
+      "operations": 8,
+      "persistent_instances": {
+        "condition:d08b7e71-aa52-4e7c-8448-f9b84b5e6af0:lifecycle:condition_bless_retained_native": "d08b7e71-aa52-4e7c-8448-f9b84b5e6af0"
+      },
+      "perspective": "blue",
+      "presentation_status": "native_pixels_checked",
+      "roles": {
+        "attached": 2
+      },
+      "scenario_status": "recorded",
+      "source_status": "actual_installed_sources_checked",
+      "spell_id": "spell.bless"
+    },
+    {
+      "approval_status": "needs_review",
+      "case": "spell.false_life/baseline",
+      "duration_ms": 3416.66666666667,
+      "gaps": [],
+      "native_rows": 1,
+      "native_sources": [
+        "spell.false_life.native.attached"
+      ],
+      "operations": 8,
+      "persistent_instances": {},
+      "perspective": "amber",
+      "presentation_status": "native_pixels_checked",
+      "roles": {
+        "attached": 1
+      },
+      "scenario_status": "recorded",
+      "source_status": "actual_installed_sources_checked",
+      "spell_id": "spell.false_life"
+    },
+    {
+      "approval_status": "needs_review",
+      "case": "spell.false_life/baseline",
+      "duration_ms": 3416.66666666667,
+      "gaps": [],
+      "native_rows": 1,
+      "native_sources": [
+        "spell.false_life.native.attached"
+      ],
+      "operations": 8,
+      "persistent_instances": {},
+      "perspective": "blue",
+      "presentation_status": "native_pixels_checked",
+      "roles": {
+        "attached": 1
+      },
+      "scenario_status": "recorded",
+      "source_status": "actual_installed_sources_checked",
+      "spell_id": "spell.false_life"
+    },
+    {
+      "approval_status": "needs_review",
+      "case": "spell.sacred_flame/baseline",
+      "duration_ms": 6416.66666666667,
+      "gaps": [],
+      "native_rows": 1,
+      "native_sources": [
+        "spell.sacred_flame.native.attached"
+      ],
+      "operations": 8,
+      "persistent_instances": {},
+      "perspective": "amber",
+      "presentation_status": "native_pixels_checked",
+      "roles": {
+        "attached": 1
+      },
+      "scenario_status": "recorded",
+      "source_status": "actual_installed_sources_checked",
+      "spell_id": "spell.sacred_flame"
+    },
+    {
+      "approval_status": "needs_review",
+      "case": "spell.sacred_flame/baseline",
+      "duration_ms": 6416.66666666667,
+      "gaps": [],
+      "native_rows": 1,
+      "native_sources": [
+        "spell.sacred_flame.native.attached"
+      ],
+      "operations": 8,
+      "persistent_instances": {},
+      "perspective": "blue",
+      "presentation_status": "native_pixels_checked",
+      "roles": {
+        "attached": 1
+      },
+      "scenario_status": "recorded",
+      "source_status": "actual_installed_sources_checked",
+      "spell_id": "spell.sacred_flame"
+    },
+    {
+      "approval_status": "needs_review",
+      "case": "spell.shield/reaction",
+      "duration_ms": 2393.33333333333,
+      "gaps": [],
+      "native_rows": 6,
+      "native_sources": [
+        "spell.shield.native.attached",
+        "condition_shield_retained_native"
+      ],
+      "operations": 6,
+      "persistent_instances": {
+        "condition:dafe9aec-1b1b-4eb2-9e50-6a11ccc573cd:lifecycle:condition_shield_retained_native": "dafe9aec-1b1b-4eb2-9e50-6a11ccc573cd"
+      },
+      "perspective": "amber",
+      "presentation_status": "native_pixels_checked",
+      "roles": {
+        "attached": 6
+      },
+      "scenario_status": "recorded",
+      "source_status": "actual_installed_sources_checked",
+      "spell_id": "spell.shield"
+    },
+    {
+      "approval_status": "needs_review",
+      "case": "spell.shield/reaction",
+      "duration_ms": 2393.33333333333,
+      "gaps": [],
+      "native_rows": 6,
+      "native_sources": [
+        "spell.shield.native.attached",
+        "condition_shield_retained_native"
+      ],
+      "operations": 6,
+      "persistent_instances": {
+        "condition:dafe9aec-1b1b-4eb2-9e50-6a11ccc573cd:lifecycle:condition_shield_retained_native": "dafe9aec-1b1b-4eb2-9e50-6a11ccc573cd"
+      },
+      "perspective": "blue",
+      "presentation_status": "native_pixels_checked",
+      "roles": {
+        "attached": 6
+      },
+      "scenario_status": "recorded",
+      "source_status": "actual_installed_sources_checked",
+      "spell_id": "spell.shield"
     }
   ],
-  "checks": 3387,
+  "checks": 6675,
+  "complete_baseline_cohort": true,
+  "factory_version": "runtime-spike-seed-20261021-7ca62e2877bf5156",
   "failures": [],
-  "scope": "30 real SDK recordings, two independently admitted audiences, actual Studio source/owner indexing and canonical commit parity. No native rendering or artistic approval claim."
+  "legacy_scope_gaps": [
+    "Old native-spell-shield-ranged and native-spell-shield-walk IDs are absent from the current Library; current spell.shield/baseline and /reaction both prove real Magic Missile interruption, not a new ranged-attack/movement recording."
+  ],
+  "requested_case": "",
+  "sample_fractions": [
+    0.1,
+    0.35,
+    0.65
+  ],
+  "scope": "Explicit original34 spell baseline cohort plus actual Shield reaction; independent original faction journals/canonical commits/source UUID ownership and each indexed native source's actual Play output. Current role counts are reported from actual cases rather than frozen old-export handcounts. All189 live/native safety remains separate; neither source presence nor this technical gate accepts artwork.",
+  "selected_cases": [
+    "spell.acid_splash/baseline",
+    "spell.chill_touch/baseline",
+    "spell.eldritch_blast/baseline",
+    "spell.fire_bolt/baseline",
+    "spell.fireball/baseline",
+    "spell.guiding_bolt/baseline",
+    "spell.ice_knife/baseline",
+    "spell.magic_missile/baseline",
+    "spell.poison_spray/baseline",
+    "spell.produce_flame/baseline",
+    "spell.ray_of_frost/baseline",
+    "spell.scorching_ray/baseline",
+    "spell.sleep/baseline",
+    "spell.web/baseline",
+    "spell.bane/baseline",
+    "spell.command/baseline",
+    "spell.mage_armor/baseline",
+    "spell.sanctuary/baseline",
+    "spell.shield/baseline",
+    "spell.shocking_grasp/baseline",
+    "spell.burning_hands/baseline",
+    "spell.thunderwave/baseline",
+    "spell.cure_wounds/baseline",
+    "spell.healing_word/baseline",
+    "spell.guidance/baseline",
+    "spell.resistance/baseline",
+    "spell.light/baseline",
+    "spell.thaumaturgy/baseline",
+    "spell.shield_of_faith/baseline",
+    "spell.true_strike/baseline",
+    "spell.aid/baseline",
+    "spell.bless/baseline",
+    "spell.false_life/baseline",
+    "spell.sacred_flame/baseline",
+    "spell.shield/reaction"
+  ],
+  "source_filter": [],
+  "unexercised_current_cases": [
+    "combat.fire/immunity",
+    "spell.acid_arrow/baseline",
+    "spell.acid_arrow/dodge_seed_7",
+    "spell.acid_arrow/miss_original",
+    "spell.aegis_spark/baseline",
+    "spell.antilife_shell/baseline",
+    "spell.banishment/departure_and_return",
+    "spell.beacon_of_hope/baseline",
+    "spell.bestow_curse/option_2_original",
+    "spell.blindness_deafness/deafened_original",
+    "spell.blur/baseline",
+    "spell.call_lightning/baseline",
+    "spell.charm_monster/baseline",
+    "spell.chromatic_orb/acid_original",
+    "spell.chromatic_orb/baseline",
+    "spell.chromatic_orb/lightning_original",
+    "spell.color_spray/baseline",
+    "spell.conjure_animals/baseline",
+    "spell.conjure_fiend/baseline",
+    "spell.create_or_destroy_water/baseline",
+    "spell.darkness/baseline",
+    "spell.death_ward/baseline",
+    "spell.delayed_blast_fireball/concentration_end_detonation",
+    "spell.disintegrate/baseline",
+    "spell.dissonant_whispers/deva_saving_throws",
+    "spell.divine_favor/baseline",
+    "spell.divine_word/blinded_deafened_stunned_outcome",
+    "spell.dragons_breath/baseline",
+    "spell.dragons_breath/cold_grant_exhale_end",
+    "spell.dragons_breath/poison_grant_exhale_end",
+    "spell.enhance_ability/dexterity_lifecycle",
+    "spell.enlarge_reduce/baseline",
+    "spell.enlarge_reduce/enlarge_lifecycle",
+    "spell.eyebite/baseline",
+    "spell.fear/baseline",
+    "spell.fixture.test_bless/baseline",
+    "spell.flaming_sphere/baseline",
+    "spell.flesh_to_stone/petrification_restoration",
+    "spell.fly/lifecycle",
+    "spell.fog_cloud/baseline",
+    "spell.freedom_of_movement/baseline",
+    "spell.glyph_of_warding/baseline",
+    "spell.greater_invisibility/baseline",
+    "spell.harm/baseline",
+    "spell.heroism/baseline",
+    "spell.hold_monster/baseline",
+    "spell.hold_person/agency_restoration",
+    "spell.hunters_mark/baseline",
+    "spell.ice_storm/baseline",
+    "spell.insect_plague/baseline",
+    "spell.jump/baseline",
+    "spell.light/studio_uuid_lifecycle",
+    "spell.lightning_bolt/baseline",
+    "spell.magic_missile/split_recipients",
+    "spell.magic_weapon/equipped_use_retire_replace",
+    "spell.mass_heal/baseline",
+    "spell.misty_step/baseline",
+    "spell.pass_without_trace/baseline",
+    "spell.planar_ally/baseline",
+    "spell.power_word_heal/baseline",
+    "spell.prayer_of_healing/baseline",
+    "spell.protection_from_energy/baseline",
+    "spell.protection_from_energy/lightning_original",
+    "spell.remove_curse/baseline",
+    "spell.revivify/baseline",
+    "spell.sanctuary/studio_uuid_lifecycle",
+    "spell.shatter/baseline",
+    "spell.shield_of_faith/defend_then_remove",
+    "spell.shillelagh/baseline",
+    "spell.shillelagh/equipped_move_release_reequip_replace",
+    "spell.sorcerous_burst/baseline",
+    "spell.sorcerous_burst/cold_original",
+    "spell.sorcerous_burst/poison_original",
+    "spell.spirit_guardians/baseline",
+    "spell.stinking_cloud/baseline",
+    "spell.sunbeam/baseline",
+    "spell.vitriolic_sphere/baseline",
+    "spell.web/studio_uuid_lifecycle",
+    "combat.fire/vulnerability",
+    "spell.acid_arrow/dodge_seed_3",
+    "spell.acid_flask/baseline",
+    "spell.arcane_sword/baseline",
+    "spell.bane/studio_uuid_lifecycle",
+    "spell.banishment/baseline",
+    "spell.bestow_curse/baseline",
+    "spell.bestow_curse/option_3_original",
+    "spell.blight/baseline",
+    "spell.blur/defend_then_remove",
+    "spell.branding_smite/baseline",
+    "spell.calm_emotions/baseline",
+    "spell.charm_person/baseline",
+    "spell.chromatic_orb/cold_original",
+    "spell.chromatic_orb/poison_original",
+    "spell.circle_of_death/baseline",
+    "spell.command/studio_uuid_lifecycle",
+    "spell.conjure_elemental/baseline",
+    "spell.continual_flame/baseline",
+    "spell.darkvision/baseline",
+    "spell.delayed_blast_fireball/baseline",
+    "spell.dispel_evil_and_good/baseline",
+    "spell.dissonant_whispers/modular_cleric_saves",
+    "spell.divine_smite/baseline",
+    "spell.divine_word/deafened_outcome",
+    "spell.divine_word/death_outcome",
+    "spell.dragons_breath/fire_grant_exhale_end",
+    "spell.enhance_ability/charisma_lifecycle",
+    "spell.enhance_ability/intelligence_lifecycle",
+    "spell.enlarge_reduce/reduce_lifecycle",
+    "spell.ensnaring_strike/baseline",
+    "spell.faerie_fire/baseline",
+    "spell.feeblemind/baseline",
+    "spell.fire_bolt/hit",
+    "spell.fire_shield/baseline",
+    "spell.flame_blade/baseline",
+    "spell.flame_blade/equipped_reequip_expire_replace",
+    "spell.flaming_sphere/summon_move_ram_retire",
+    "spell.flesh_to_stone/baseline",
+    "spell.forcecage/baseline",
+    "spell.freezing_sphere/baseline",
+    "spell.freezing_sphere/launch_detonation",
+    "spell.goodberry/baseline",
+    "spell.greater_restoration/baseline",
+    "spell.haste/baseline",
+    "spell.hellish_rebuke/baseline",
+    "spell.hex/baseline",
+    "spell.hold_person/baseline",
+    "spell.hypnotic_pattern/baseline",
+    "spell.incendiary_cloud/baseline",
+    "spell.invisibility/attack_breaks",
+    "spell.invisibility/baseline",
+    "spell.lesser_restoration/baseline",
+    "spell.longstrider/baseline",
+    "spell.magic_weapon/baseline",
+    "spell.magic_weapon/wield_attack_remove",
+    "spell.mass_healing_word/baseline",
+    "spell.moonbeam/baseline",
+    "spell.phantasmal_force/baseline",
+    "spell.plant_growth/baseline",
+    "spell.power_word_heal/ray_poisoned_restore_move",
+    "spell.power_word_kill/baseline",
+    "spell.prismatic_spray/baseline",
+    "spell.protection_from_energy/acid_original",
+    "spell.protection_from_energy/thunder_original",
+    "spell.protection_from_evil_and_good/baseline",
+    "spell.ray_of_sickness/baseline",
+    "spell.resilient_sphere/baseline",
+    "spell.resistance/studio_uuid_lifecycle",
+    "spell.saved_head_programs/cleric_resistance",
+    "spell.scorching_ray/split_recipients",
+    "spell.searing_smite/baseline",
+    "spell.shillelagh/equipped_use_retire_replace",
+    "spell.sleet_storm/baseline",
+    "spell.sorcerous_burst/fire_original",
+    "spell.sorcerous_burst/psychic_original",
+    "spell.spare_the_dying/baseline",
+    "spell.spiritual_weapon/baseline",
+    "spell.stoneskin/baseline",
+    "spell.sunburst/baseline",
+    "spell.vampiric_touch/baseline",
+    "spell.vitriolic_sphere/delayed_end_results",
+    "spell.wall_of_fire/baseline",
+    "spell.weird/baseline",
+    "combat.fire/resistance",
+    "spell.acid_arrow/dodge_seed_5",
+    "spell.animal_friendship/baseline",
+    "spell.aura_of_life/baseline",
+    "spell.barkskin/baseline",
+    "spell.bestow_curse/option_4_original",
+    "spell.blade_barrier/baseline",
+    "spell.blindness_deafness/baseline",
+    "spell.chain_lightning/baseline",
+    "spell.chain_lightning/three_recipients",
+    "spell.chromatic_orb/fire_original",
+    "spell.chromatic_orb/thunder_original",
+    "spell.cloudkill/baseline",
+    "spell.cone_of_cold/baseline",
+    "spell.conjure_fey/baseline",
+    "spell.continual_flame/held_club_move_unequip_reequip",
+    "spell.counterspell/baseline",
+    "spell.create_or_destroy_water/create_move_dry",
+    "spell.dancing_lights/baseline",
+    "spell.daylight/baseline",
+    "spell.dimension_door/baseline",
+    "spell.dissonant_whispers/baseline",
+    "spell.divine_favor/equipped_use_retire_replace",
+    "spell.divine_word/baseline",
+    "spell.divine_word/blinded_deafened_outcome",
+    "spell.dragons_breath/acid_grant_exhale_end",
+    "spell.dragons_breath/lightning_grant_exhale_end",
+    "spell.enhance_ability/baseline",
+    "spell.enhance_ability/constitution_lifecycle",
+    "spell.enhance_ability/wisdom_lifecycle",
+    "spell.expeditious_retreat/baseline",
+    "spell.finger_of_death/baseline",
+    "spell.fireball/area",
+    "spell.flame_strike/baseline",
+    "spell.fly/baseline",
+    "spell.foresight/baseline",
+    "spell.freezing_sphere/portable_detonation",
+    "spell.globe_of_invulnerability/baseline",
+    "spell.goodberry/create_eat_blocked_restore",
+    "spell.grease/baseline",
+    "spell.greater_invisibility/failed_stealth_reveals",
+    "spell.guardian_of_faith/baseline",
+    "spell.guidance/studio_uuid_lifecycle",
+    "spell.gust_of_wind/baseline",
+    "spell.haste/lifecycle",
+    "spell.heal/baseline",
+    "spell.heroes_feast/baseline",
+    "spell.hideous_laughter/baseline",
+    "spell.holy_aura/baseline",
+    "spell.inflict_wounds/baseline",
+    "spell.irresistible_dance/baseline",
+    "spell.mage_armor/studio_uuid_lifecycle",
+    "spell.mass_cure_wounds/baseline",
+    "spell.mirror_image/baseline",
+    "spell.necrotic_bless/baseline",
+    "spell.phantasmal_killer/baseline",
+    "spell.power_word_stun/baseline",
+    "spell.protection_from_energy/cold_original",
+    "spell.protection_from_poison/baseline",
+    "spell.ray_of_sickness/observed-miss",
+    "spell.regenerate/baseline",
+    "spell.see_invisibility/baseline",
+    "spell.shield/studio_uuid_lifecycle",
+    "spell.silence/baseline",
+    "spell.sleep/shake_awake",
+    "spell.slow/baseline",
+    "spell.slow/movement_and_restore",
+    "spell.sorcerous_burst/acid_original",
+    "spell.sorcerous_burst/lightning_original",
+    "spell.sorcerous_burst/thunder_original",
+    "spell.spike_growth/baseline",
+    "spell.starry_wisp/baseline",
+    "spell.summon_dragon/baseline",
+    "spell.telekinesis/baseline",
+    "spell.true_seeing/baseline",
+    "spell.vampiric_touch/positive_healing_lifecycle",
+    "spell.vicious_mockery/baseline",
+    "spell.wall_of_thorns/baseline",
+    "spell.wind_wall/baseline",
+    "spell.blur/history_damage_material_overlap_seed_2",
+    "spell.blur/history_damage_material_overlap_seed_3",
+    "spell.blur/history_damage_material_overlap_seed_5",
+    "spell.glyph_of_warding/acid_observed_contact",
+    "spell.glyph_of_warding/arm_move_enter_trigger",
+    "spell.glyph_of_warding/cold_observed_contact",
+    "spell.glyph_of_warding/lightning_observed_contact",
+    "spell.glyph_of_warding/thunder_observed_contact",
+    "spell.wall_of_force/baseline",
+    "spell.wall_of_ice/baseline",
+    "spell.wall_of_stone/baseline"
+  ]
 }

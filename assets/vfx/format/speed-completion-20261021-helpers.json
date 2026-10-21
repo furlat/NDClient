@@ -1,0 +1,30 @@
+{
+  "version": "runtime-speed-completion-20261021-82a271b677ff9604",
+  "paths": {
+    "res://factory/packaging/source_readiness.gd": "res://assets/vfx/extensions/production-review-20261020/sources/7dd1897cdd5ee8a903b9/source_readiness.gd",
+    "res://factory/components/patches_observed_normals/producer.gd": "res://assets/vfx/extensions/speed-completion-20261021/sources/b63627d0df7d43063e63/producer.gd",
+    "res://factory/components/patches_image_witness/preparation.gd": "res://assets/vfx/extensions/speed-completion-20261021/sources/f8697ca59e2b25e03d67/preparation.gd"
+  },
+  "qualification": {
+    "res://factory/components/patches_observed_normals/producer.gd": {
+      "path": "authoring/production-review-repair-20261021/patches_observed_normals/v1/qualification-native-v1.json",
+      "sha256": "f93e3a3d7d807de144d4fef7856bcdf292c823f532e2f7a168b4e9ee4a9fbada",
+      "optional_helper_only": true,
+      "runtime_budget_pass": false,
+      "consumer_installed": false
+    },
+    "res://factory/components/patches_image_witness/preparation.gd": {
+      "path": "authoring/production-review-repair-20261021/patches_image_witness/v1/qualification.json",
+      "sha256": "cd05267aaae62ca66c0ad9808235d06ccded543d3a8c1cd755d5e6f60c0f74fb",
+      "optional_helper_only": true,
+      "runtime_budget_pass": false,
+      "consumer_installed": false
+    },
+    "res://factory/packaging/source_readiness.gd": {
+      "source_sha256": "9321995d3d4cc2e5ddc98cdf6b805685dc43a952589056654d9c6b0070c1a76a",
+      "qualification": "Exact progressive helper used by both frozen Cloud/Patches worker qualifications; old synchronous default helper remains unchanged."
+    }
+  },
+  "optional_only": true,
+  "client_provider_or_admission_installed": false
+}

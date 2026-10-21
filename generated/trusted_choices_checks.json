@@ -1,13 +1,13 @@
 {
-  "checks": 118,
-  "choices": "C:/Users/tommaso/Documents/Dev/dnd_engine/.runtime/server-latency/checkpoint34-repeat/choices-55.json",
-  "command": "Godot --headless --path \"C:/Users/tommaso/Documents/Dev/NDClientGodot/\" --script res://tests/trusted_choices_checks.gd -- --choices=\"C:/Users/tommaso/Documents/Dev/dnd_engine/.runtime/server-latency/checkpoint34-repeat/choices-55.json\"",
+  "checks": 122,
+  "choices": "res://tests/fixtures/schema16/recording-boundary-failures/help_envelope/choices-response.json",
+  "command": "Godot --headless --path \"C:/Users/tommaso/Documents/Dev/NDClientGodot/\" --script res://tests/trusted_choices_checks.gd -- --choices=\"res://tests/fixtures/schema16/recording-boundary-failures/help_envelope/choices-response.json\"",
   "failures": [],
-  "payload_bytes": 267835,
-  "scope": "Schema8 actual compact payload strict/native JSON equality without normalization; once-per-domain structure/reference admission; sparse defaults, safe integer coordinates and native indices. Real loopback HTTP default strict and explicit trusted metadata preserve identity/scope/correlation and reject unsafe references. Native JSON intentionally cannot distinguish integer versus integral-real tokens. Single-call diagnostic timings are not live-frame performance claims.",
+  "payload_bytes": 182083,
+  "scope": "Schema16 actual scoped native payload strict/current-producer JSON value equality without defaults or normalization. Strict public decoder/defaultHTTP reject malformed envelope/schema/references/UTF8; explicit current-producer trust borrows nested typed metadata and HTTP still enforces game/epoch/audience/actor/revision/correlation/force scope. No recursive schema/reference/UTF8 revalidation claim on the opted producer path. Diagnostic call timings are not live-frame acceptance.",
   "timings": {
-    "native_decode_structure_references_ms": 67.4,
-    "references_only_ms": 5.219,
-    "strict_decode_ms": 138.265
+    "native_decode_structure_references_ms": 3.913,
+    "references_only_ms": 1.466,
+    "strict_decode_ms": 26.428
   }
 }

@@ -1,103 +1,77 @@
 {
-  "checks": 153,
+  "checks": 131,
   "evidence": [
     {
       "action": "dash",
+      "condition_uuid": "c7ed291e-1402-49e3-94a5-d7b0f00625f8",
+      "outline": "explicitly absent in source",
+      "source": "res://authoring/abilities/conditions/condition.dashing.tres"
+    },
+    {
+      "action": "dodge",
       "at_ms": 650.0,
-      "changed_pixels": 304,
-      "condition_uuid": "50793331-349b-4662-a7c0-cddd1dca4fd4",
+      "changed_pixels": 255,
+      "condition_uuid": "ad76e81c-4357-4cdb-bd11-5d9fe9123470",
       "quarter": 0,
-      "source": "res://authoring/presentation/conditions/dashing.tres::body_outline"
-    },
-    {
-      "action": "dash",
-      "at_ms": 650.0,
-      "changed_pixels": 376,
-      "condition_uuid": "50793331-349b-4662-a7c0-cddd1dca4fd4",
-      "quarter": 1,
-      "source": "res://authoring/presentation/conditions/dashing.tres::body_outline"
-    },
-    {
-      "action": "dash",
-      "at_ms": 650.0,
-      "changed_pixels": 308,
-      "condition_uuid": "50793331-349b-4662-a7c0-cddd1dca4fd4",
-      "quarter": 2,
-      "source": "res://authoring/presentation/conditions/dashing.tres::body_outline"
-    },
-    {
-      "action": "dash",
-      "at_ms": 650.0,
-      "changed_pixels": 402,
-      "condition_uuid": "50793331-349b-4662-a7c0-cddd1dca4fd4",
-      "quarter": 3,
-      "source": "res://authoring/presentation/conditions/dashing.tres::body_outline"
+      "source": "res://authoring/abilities/conditions/condition.dodging.tres::look"
     },
     {
       "action": "dodge",
       "at_ms": 650.0,
-      "changed_pixels": 304,
-      "condition_uuid": "6593af48-b05b-4e15-8004-e9b5d8553013",
+      "changed_pixels": 329,
+      "condition_uuid": "ad76e81c-4357-4cdb-bd11-5d9fe9123470",
+      "quarter": 1,
+      "source": "res://authoring/abilities/conditions/condition.dodging.tres::look"
+    },
+    {
+      "action": "dodge",
+      "at_ms": 650.0,
+      "changed_pixels": 248,
+      "condition_uuid": "ad76e81c-4357-4cdb-bd11-5d9fe9123470",
+      "quarter": 2,
+      "source": "res://authoring/abilities/conditions/condition.dodging.tres::look"
+    },
+    {
+      "action": "dodge",
+      "at_ms": 650.0,
+      "changed_pixels": 365,
+      "condition_uuid": "ad76e81c-4357-4cdb-bd11-5d9fe9123470",
+      "quarter": 3,
+      "source": "res://authoring/abilities/conditions/condition.dodging.tres::look"
+    },
+    {
+      "action": "disengage",
+      "at_ms": 650.0,
+      "changed_pixels": 254,
+      "condition_uuid": "fe480175-dc2b-4f87-9daf-287d779c3594",
       "quarter": 0,
-      "source": "res://authoring/presentation/conditions/dodging.tres::body_outline"
+      "source": "res://authoring/abilities/conditions/condition.disengaging.tres::look"
     },
     {
-      "action": "dodge",
+      "action": "disengage",
       "at_ms": 650.0,
-      "changed_pixels": 370,
-      "condition_uuid": "6593af48-b05b-4e15-8004-e9b5d8553013",
+      "changed_pixels": 325,
+      "condition_uuid": "fe480175-dc2b-4f87-9daf-287d779c3594",
       "quarter": 1,
-      "source": "res://authoring/presentation/conditions/dodging.tres::body_outline"
+      "source": "res://authoring/abilities/conditions/condition.disengaging.tres::look"
     },
     {
-      "action": "dodge",
+      "action": "disengage",
       "at_ms": 650.0,
-      "changed_pixels": 300,
-      "condition_uuid": "6593af48-b05b-4e15-8004-e9b5d8553013",
+      "changed_pixels": 254,
+      "condition_uuid": "fe480175-dc2b-4f87-9daf-287d779c3594",
       "quarter": 2,
-      "source": "res://authoring/presentation/conditions/dodging.tres::body_outline"
+      "source": "res://authoring/abilities/conditions/condition.disengaging.tres::look"
     },
     {
-      "action": "dodge",
+      "action": "disengage",
       "at_ms": 650.0,
-      "changed_pixels": 408,
-      "condition_uuid": "6593af48-b05b-4e15-8004-e9b5d8553013",
+      "changed_pixels": 359,
+      "condition_uuid": "fe480175-dc2b-4f87-9daf-287d779c3594",
       "quarter": 3,
-      "source": "res://authoring/presentation/conditions/dodging.tres::body_outline"
-    },
-    {
-      "action": "disengage",
-      "at_ms": 650.0,
-      "changed_pixels": 308,
-      "condition_uuid": "32a11144-b8b5-4aba-8759-acb7285a7c5e",
-      "quarter": 0,
-      "source": "res://authoring/presentation/conditions/disengaging.tres::body_outline"
-    },
-    {
-      "action": "disengage",
-      "at_ms": 650.0,
-      "changed_pixels": 363,
-      "condition_uuid": "32a11144-b8b5-4aba-8759-acb7285a7c5e",
-      "quarter": 1,
-      "source": "res://authoring/presentation/conditions/disengaging.tres::body_outline"
-    },
-    {
-      "action": "disengage",
-      "at_ms": 650.0,
-      "changed_pixels": 309,
-      "condition_uuid": "32a11144-b8b5-4aba-8759-acb7285a7c5e",
-      "quarter": 2,
-      "source": "res://authoring/presentation/conditions/disengaging.tres::body_outline"
-    },
-    {
-      "action": "disengage",
-      "at_ms": 650.0,
-      "changed_pixels": 402,
-      "condition_uuid": "32a11144-b8b5-4aba-8759-acb7285a7c5e",
-      "quarter": 3,
-      "source": "res://authoring/presentation/conditions/disengaging.tres::body_outline"
+      "source": "res://authoring/abilities/conditions/condition.disengaging.tres::look"
     }
   ],
   "failures": [],
-  "scope": "Native production Studio, three real action recordings, four views, visible shared contour and exact mute restoration, actual application/removal/reverse seek. These are new explicit Resource indicator choices, not recovered per-action source artwork."
+  "scope": "Native production Studio, three real action recordings, four views, exact current Dash no-contour source; Dodge/Disengage visible shared contours and exact mute restoration, actual application/removal/reverse seek. No new source artwork is invented."
 }

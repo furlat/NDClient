@@ -467,13 +467,26 @@ func _visible_rows()->Array:
         result.append(displayed)
     return result
 
+func _publish_visible_layout(signature:Array,visible:Array)->bool:
+    if drag_playhead:return false
+    if published_layout.get("signature",[])==signature and published_layout.get("preview_keys",{})==preview_keys:return false
+    published_layout={"signature":signature.duplicate(),"rows":rows.duplicate(),"visible_rows":visible,"collapsed":collapsed.duplicate(),"scroll_y":scroll_y,"origin_ms":origin_ms,"pixels_per_second":pixels_per_second,"gutter":gutter,"quarter":quarter,"preview_keys":preview_keys.duplicate(),"extent":size}
+    queue_redraw()
+    return true
+
 func prepare_visible(all_quarters:bool=false)->Dictionary:
-    if not _preparation_available():return {"ready":false,"settled":false,"pending":preview_demand.size(),"errors":[],"samples":preview_demand.size()}
+    var signature=[thumbnails.generation,thumbnails.suspended,rows_revision,size,scroll_y,origin_ms,pixels_per_second,gutter,quarter,all_quarters]
+    if not _preparation_available():
+        # Row geometry and hit-testing follow the displayed clock even when
+        # source work spent this frame's budget. Only already known exact cell
+        # keys are reusable; cold source samples still await ordinary admission.
+        if published_layout.get("signature",[])!=signature:_publish_visible_layout(signature,_visible_rows())
+        return {"ready":false,"settled":false,"pending":preview_demand.size(),"errors":[],"samples":preview_demand.size()}
     var started:int=Time.get_ticks_usec()
     # Staging works while this Control is invisible. Both demand and drawing
     # use _sample_cells, so readiness never depends on a hidden _draw callback.
-    var signature=[thumbnails.generation,thumbnails.suspended,rows_revision,size,scroll_y,origin_ms,pixels_per_second,gutter,quarter,all_quarters]
-    if signature!=preview_signature:
+    var demand_changed:bool=signature!=preview_signature
+    if demand_changed:
         preview_signature=signature;preview_keys={};preview_demand={};preview_request_errors=[]
         var samples:Array=[]
         preview_visible_rows=_visible_rows()
@@ -506,12 +519,9 @@ func prepare_visible(all_quarters:bool=false)->Dictionary:
             var issue:String=thumbnails.errors[key]
             if issue not in issues:issues.append(issue)
         elif not thumbnails.textures.has(key) and not thumbnails.inactive.has(key):remaining+=1
-    # Row geometry and hit-testing follow immediately. Cold swatches fill their
-    # own cells when ready; they must not hold the visible timeline on an old row.
-    if not drag_playhead and published_layout.get("signature",[])!=preview_signature:
-        published_layout={"signature":preview_signature.duplicate(),"rows":rows.duplicate(),"visible_rows":preview_visible_rows,"collapsed":collapsed.duplicate(),"scroll_y":scroll_y,"origin_ms":origin_ms,"pixels_per_second":pixels_per_second,"gutter":gutter,"quarter":quarter,"preview_keys":preview_keys.duplicate(),"extent":size}
-        thumbnails.set_demand(preview_demand)
-        queue_redraw()
+    # Cold swatches fill their own cells without holding row navigation.
+    # Also publish newly admitted keys if layout already advanced without them.
+    if _publish_visible_layout(signature,preview_visible_rows):thumbnails.set_demand(preview_demand)
     _charge_preparation(started)
     return {"ready":remaining==0 and issues.is_empty(),"settled":remaining==0,"pending":remaining,"errors":issues,"samples":preview_demand.size()}
 
@@ -698,14 +708,15 @@ func _draw_preview_cells(row:Dictionary,cells:Array,y:float,height:float,layout:
     var error_shown=false
     for cell in cells:
         var x:float=cell.x;var spacing:float=cell.spacing
-        var key:String=layout.preview_keys.get(_cell_key(row,cell.sample_ms,layout.quarter),"")
+        var cell_key:String=_cell_key(row,cell.sample_ms,layout.quarter)
+        var key:String=layout.preview_keys.get(cell_key,"")
         if thumbnails.textures.has(key):
             var texture:Texture2D=thumbnails.textures[key]
             draw_texture_rect(texture,preview_rect(texture.get_size(),cell,y,height),false)
         elif thumbnails.errors.has(key) and not error_shown:
             draw_string(font,Vector2(x+3,y+height/2),"Source error",HORIZONTAL_ALIGNMENT_LEFT,spacing-4,10,Color("f4b1a7"));error_shown=true
         elif thumbnails.inactive.has(key):draw_line(Vector2(x+spacing*.5-3,y+height*.5),Vector2(x+spacing*.5+3,y+height*.5),Color("94a6b6"),1)
-        elif key.is_empty() and not error_shown:
+        elif key.is_empty() and layout.preview_keys.has(cell_key) and not error_shown:
             draw_string(font,Vector2(x+3,y+height/2),"Source unavailable",HORIZONTAL_ALIGNMENT_LEFT,spacing-4,10,Color("f4b1a7"));error_shown=true
         else:draw_arc(Vector2(x+spacing*.5,y+height*.5),3.5,0,TAU,12,Color("94a6b6"),1)
 

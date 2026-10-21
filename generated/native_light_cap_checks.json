@@ -1,11 +1,12 @@
 {
   "cases": [
     {
-      "alpha_examples": [],
       "baseline": {
         "alpha_mismatches": 0,
         "changed_pixels": 0,
-        "maximum_byte_error": 0
+        "examples": [],
+        "maximum_byte_error": 0,
+        "pixels_over_one_byte": 0
       },
       "id": "Chest14-r0-reference warm 0 lights",
       "native_hdr_alpha_mismatches": 0,
@@ -17,26 +18,34 @@
       "order": {
         "alpha_mismatches": 0,
         "changed_pixels": 0,
-        "maximum_byte_error": 0
+        "examples": [],
+        "maximum_byte_error": 0,
+        "pixels_over_one_byte": 0
       },
       "over_cap_pixels": 0,
       "scalar_oracle": {
         "alpha_mismatches": 0,
         "changed_pixels": 0,
-        "maximum_byte_error": 0
+        "examples": [],
+        "maximum_byte_error": 0,
+        "pixels_over_one_byte": 0
       },
       "toggle_off": {
+        "alpha_half_byte_flips": 0,
         "alpha_mismatches": 0,
         "changed_pixels": 0,
-        "maximum_byte_error": 0
+        "examples": [],
+        "maximum_byte_error": 0,
+        "pixels_over_one_byte": 0
       }
     },
     {
-      "alpha_examples": [],
       "baseline": {
         "alpha_mismatches": 0,
-        "changed_pixels": 24,
-        "maximum_byte_error": 1
+        "changed_pixels": 33,
+        "examples": [],
+        "maximum_byte_error": 1,
+        "pixels_over_one_byte": 0
       },
       "id": "Chest14-r0-reference warm 1 lights",
       "native_hdr_alpha_mismatches": 0,
@@ -48,26 +57,143 @@
       "order": {
         "alpha_mismatches": 0,
         "changed_pixels": 0,
-        "maximum_byte_error": 0
+        "examples": [],
+        "maximum_byte_error": 0,
+        "pixels_over_one_byte": 0
       },
       "over_cap_pixels": 0,
       "scalar_oracle": {
         "alpha_mismatches": 0,
-        "changed_pixels": 0,
-        "maximum_byte_error": 0
+        "changed_pixels": 9,
+        "examples": [],
+        "maximum_byte_error": 1,
+        "pixels_over_one_byte": 0
       },
       "toggle_off": {
+        "alpha_half_byte_flips": 0,
         "alpha_mismatches": 0,
-        "changed_pixels": 0,
-        "maximum_byte_error": 0
+        "changed_pixels": 33,
+        "examples": [],
+        "maximum_byte_error": 1,
+        "pixels_over_one_byte": 0
       }
     },
     {
-      "alpha_examples": [],
       "baseline": {
         "alpha_mismatches": 0,
         "changed_pixels": 361,
-        "maximum_byte_error": 175
+        "examples": [
+          {
+            "actual": [
+              99,
+              72,
+              56,
+              186
+            ],
+            "at": [
+              66,
+              50
+            ],
+            "expected": [
+              222,
+              210,
+              164,
+              186
+            ]
+          },
+          {
+            "actual": [
+              99,
+              72,
+              57,
+              186
+            ],
+            "at": [
+              64,
+              51
+            ],
+            "expected": [
+              222,
+              184,
+              145,
+              186
+            ]
+          },
+          {
+            "actual": [
+              99,
+              71,
+              54,
+              186
+            ],
+            "at": [
+              65,
+              51
+            ],
+            "expected": [
+              222,
+              222,
+              194,
+              186
+            ]
+          },
+          {
+            "actual": [
+              99,
+              71,
+              54,
+              186
+            ],
+            "at": [
+              66,
+              51
+            ],
+            "expected": [
+              222,
+              222,
+              211,
+              186
+            ]
+          },
+          {
+            "actual": [
+              89,
+              63,
+              48,
+              186
+            ],
+            "at": [
+              67,
+              51
+            ],
+            "expected": [
+              222,
+              222,
+              194,
+              186
+            ]
+          },
+          {
+            "actual": [
+              99,
+              73,
+              57,
+              186
+            ],
+            "at": [
+              63,
+              52
+            ],
+            "expected": [
+              222,
+              174,
+              137,
+              186
+            ]
+          }
+        ],
+        "maximum_byte_error": 175,
+        "pixels_over_one_byte": 361
       },
       "id": "Chest14-r0-reference warm 2 lights",
       "native_hdr_alpha_mismatches": 0,
@@ -79,26 +205,143 @@
       "order": {
         "alpha_mismatches": 0,
         "changed_pixels": 0,
-        "maximum_byte_error": 0
+        "examples": [],
+        "maximum_byte_error": 0,
+        "pixels_over_one_byte": 0
       },
       "over_cap_pixels": 361,
       "scalar_oracle": {
         "alpha_mismatches": 0,
-        "changed_pixels": 58,
-        "maximum_byte_error": 1
+        "changed_pixels": 70,
+        "examples": [],
+        "maximum_byte_error": 1,
+        "pixels_over_one_byte": 0
       },
       "toggle_off": {
+        "alpha_half_byte_flips": 0,
         "alpha_mismatches": 0,
-        "changed_pixels": 0,
-        "maximum_byte_error": 0
+        "changed_pixels": 55,
+        "examples": [],
+        "maximum_byte_error": 1,
+        "pixels_over_one_byte": 0
       }
     },
     {
-      "alpha_examples": [],
       "baseline": {
         "alpha_mismatches": 0,
         "changed_pixels": 361,
-        "maximum_byte_error": 200
+        "examples": [
+          {
+            "actual": [
+              99,
+              69,
+              52,
+              186
+            ],
+            "at": [
+              66,
+              50
+            ],
+            "expected": [
+              222,
+              222,
+              222,
+              186
+            ]
+          },
+          {
+            "actual": [
+              99,
+              69,
+              52,
+              186
+            ],
+            "at": [
+              64,
+              51
+            ],
+            "expected": [
+              222,
+              222,
+              222,
+              186
+            ]
+          },
+          {
+            "actual": [
+              99,
+              68,
+              51,
+              186
+            ],
+            "at": [
+              65,
+              51
+            ],
+            "expected": [
+              222,
+              222,
+              222,
+              186
+            ]
+          },
+          {
+            "actual": [
+              99,
+              68,
+              51,
+              186
+            ],
+            "at": [
+              66,
+              51
+            ],
+            "expected": [
+              222,
+              222,
+              222,
+              186
+            ]
+          },
+          {
+            "actual": [
+              89,
+              61,
+              46,
+              186
+            ],
+            "at": [
+              67,
+              51
+            ],
+            "expected": [
+              222,
+              222,
+              222,
+              186
+            ]
+          },
+          {
+            "actual": [
+              99,
+              69,
+              52,
+              186
+            ],
+            "at": [
+              63,
+              52
+            ],
+            "expected": [
+              222,
+              222,
+              222,
+              186
+            ]
+          }
+        ],
+        "maximum_byte_error": 200,
+        "pixels_over_one_byte": 361
       },
       "id": "Chest14-r0-reference warm 8 lights",
       "native_hdr_alpha_mismatches": 0,
@@ -110,26 +353,34 @@
       "order": {
         "alpha_mismatches": 0,
         "changed_pixels": 0,
-        "maximum_byte_error": 0
+        "examples": [],
+        "maximum_byte_error": 0,
+        "pixels_over_one_byte": 0
       },
       "over_cap_pixels": 361,
       "scalar_oracle": {
         "alpha_mismatches": 0,
-        "changed_pixels": 1,
-        "maximum_byte_error": 1
+        "changed_pixels": 3,
+        "examples": [],
+        "maximum_byte_error": 1,
+        "pixels_over_one_byte": 0
       },
       "toggle_off": {
+        "alpha_half_byte_flips": 0,
         "alpha_mismatches": 0,
         "changed_pixels": 0,
-        "maximum_byte_error": 0
+        "examples": [],
+        "maximum_byte_error": 0,
+        "pixels_over_one_byte": 0
       }
     },
     {
-      "alpha_examples": [],
       "baseline": {
         "alpha_mismatches": 0,
         "changed_pixels": 0,
-        "maximum_byte_error": 0
+        "examples": [],
+        "maximum_byte_error": 0,
+        "pixels_over_one_byte": 0
       },
       "id": "Chest14-r0-reference mixed 0 lights",
       "native_hdr_alpha_mismatches": 0,
@@ -141,26 +392,34 @@
       "order": {
         "alpha_mismatches": 0,
         "changed_pixels": 0,
-        "maximum_byte_error": 0
+        "examples": [],
+        "maximum_byte_error": 0,
+        "pixels_over_one_byte": 0
       },
       "over_cap_pixels": 0,
       "scalar_oracle": {
         "alpha_mismatches": 0,
         "changed_pixels": 0,
-        "maximum_byte_error": 0
+        "examples": [],
+        "maximum_byte_error": 0,
+        "pixels_over_one_byte": 0
       },
       "toggle_off": {
+        "alpha_half_byte_flips": 0,
         "alpha_mismatches": 0,
         "changed_pixels": 0,
-        "maximum_byte_error": 0
+        "examples": [],
+        "maximum_byte_error": 0,
+        "pixels_over_one_byte": 0
       }
     },
     {
-      "alpha_examples": [],
       "baseline": {
         "alpha_mismatches": 0,
-        "changed_pixels": 24,
-        "maximum_byte_error": 1
+        "changed_pixels": 33,
+        "examples": [],
+        "maximum_byte_error": 1,
+        "pixels_over_one_byte": 0
       },
       "id": "Chest14-r0-reference mixed 1 lights",
       "native_hdr_alpha_mismatches": 0,
@@ -172,26 +431,143 @@
       "order": {
         "alpha_mismatches": 0,
         "changed_pixels": 0,
-        "maximum_byte_error": 0
+        "examples": [],
+        "maximum_byte_error": 0,
+        "pixels_over_one_byte": 0
       },
       "over_cap_pixels": 0,
       "scalar_oracle": {
         "alpha_mismatches": 0,
-        "changed_pixels": 0,
-        "maximum_byte_error": 0
+        "changed_pixels": 9,
+        "examples": [],
+        "maximum_byte_error": 1,
+        "pixels_over_one_byte": 0
       },
       "toggle_off": {
+        "alpha_half_byte_flips": 0,
         "alpha_mismatches": 0,
-        "changed_pixels": 0,
-        "maximum_byte_error": 0
+        "changed_pixels": 33,
+        "examples": [],
+        "maximum_byte_error": 1,
+        "pixels_over_one_byte": 0
       }
     },
     {
-      "alpha_examples": [],
       "baseline": {
         "alpha_mismatches": 0,
         "changed_pixels": 361,
-        "maximum_byte_error": 154
+        "examples": [
+          {
+            "actual": [
+              80,
+              116,
+              153,
+              186
+            ],
+            "at": [
+              66,
+              50
+            ],
+            "expected": [
+              176,
+              222,
+              222,
+              186
+            ]
+          },
+          {
+            "actual": [
+              99,
+              111,
+              129,
+              186
+            ],
+            "at": [
+              64,
+              51
+            ],
+            "expected": [
+              187,
+              209,
+              222,
+              186
+            ]
+          },
+          {
+            "actual": [
+              99,
+              122,
+              150,
+              186
+            ],
+            "at": [
+              65,
+              51
+            ],
+            "expected": [
+              222,
+              222,
+              222,
+              186
+            ]
+          },
+          {
+            "actual": [
+              92,
+              120,
+              153,
+              186
+            ],
+            "at": [
+              66,
+              51
+            ],
+            "expected": [
+              222,
+              222,
+              222,
+              186
+            ]
+          },
+          {
+            "actual": [
+              87,
+              110,
+              137,
+              186
+            ],
+            "at": [
+              67,
+              51
+            ],
+            "expected": [
+              222,
+              222,
+              222,
+              186
+            ]
+          },
+          {
+            "actual": [
+              99,
+              106,
+              120,
+              186
+            ],
+            "at": [
+              63,
+              52
+            ],
+            "expected": [
+              182,
+              195,
+              220,
+              186
+            ]
+          }
+        ],
+        "maximum_byte_error": 154,
+        "pixels_over_one_byte": 361
       },
       "id": "Chest14-r0-reference mixed 2 lights",
       "native_hdr_alpha_mismatches": 0,
@@ -203,26 +579,143 @@
       "order": {
         "alpha_mismatches": 0,
         "changed_pixels": 0,
-        "maximum_byte_error": 0
+        "examples": [],
+        "maximum_byte_error": 0,
+        "pixels_over_one_byte": 0
       },
       "over_cap_pixels": 361,
       "scalar_oracle": {
         "alpha_mismatches": 0,
-        "changed_pixels": 89,
-        "maximum_byte_error": 1
+        "changed_pixels": 20,
+        "examples": [],
+        "maximum_byte_error": 1,
+        "pixels_over_one_byte": 0
       },
       "toggle_off": {
+        "alpha_half_byte_flips": 0,
         "alpha_mismatches": 0,
-        "changed_pixels": 0,
-        "maximum_byte_error": 0
+        "changed_pixels": 38,
+        "examples": [],
+        "maximum_byte_error": 1,
+        "pixels_over_one_byte": 0
       }
     },
     {
-      "alpha_examples": [],
       "baseline": {
         "alpha_mismatches": 0,
         "changed_pixels": 361,
-        "maximum_byte_error": 192
+        "examples": [
+          {
+            "actual": [
+              72,
+              111,
+              153,
+              186
+            ],
+            "at": [
+              66,
+              50
+            ],
+            "expected": [
+              222,
+              222,
+              222,
+              186
+            ]
+          },
+          {
+            "actual": [
+              99,
+              115,
+              137,
+              186
+            ],
+            "at": [
+              64,
+              51
+            ],
+            "expected": [
+              222,
+              222,
+              222,
+              186
+            ]
+          },
+          {
+            "actual": [
+              95,
+              121,
+              153,
+              186
+            ],
+            "at": [
+              65,
+              51
+            ],
+            "expected": [
+              222,
+              222,
+              222,
+              186
+            ]
+          },
+          {
+            "actual": [
+              87,
+              118,
+              153,
+              186
+            ],
+            "at": [
+              66,
+              51
+            ],
+            "expected": [
+              222,
+              222,
+              222,
+              186
+            ]
+          },
+          {
+            "actual": [
+              83,
+              108,
+              137,
+              186
+            ],
+            "at": [
+              67,
+              51
+            ],
+            "expected": [
+              222,
+              222,
+              222,
+              186
+            ]
+          },
+          {
+            "actual": [
+              99,
+              109,
+              126,
+              186
+            ],
+            "at": [
+              63,
+              52
+            ],
+            "expected": [
+              222,
+              222,
+              222,
+              186
+            ]
+          }
+        ],
+        "maximum_byte_error": 192,
+        "pixels_over_one_byte": 361
       },
       "id": "Chest14-r0-reference mixed 8 lights",
       "native_hdr_alpha_mismatches": 0,
@@ -234,135 +727,143 @@
       "order": {
         "alpha_mismatches": 0,
         "changed_pixels": 0,
-        "maximum_byte_error": 0
+        "examples": [],
+        "maximum_byte_error": 0,
+        "pixels_over_one_byte": 0
       },
       "over_cap_pixels": 361,
       "scalar_oracle": {
         "alpha_mismatches": 0,
-        "changed_pixels": 88,
-        "maximum_byte_error": 1
+        "changed_pixels": 14,
+        "examples": [],
+        "maximum_byte_error": 1,
+        "pixels_over_one_byte": 0
       },
       "toggle_off": {
+        "alpha_half_byte_flips": 0,
         "alpha_mismatches": 0,
         "changed_pixels": 0,
-        "maximum_byte_error": 0
+        "examples": [],
+        "maximum_byte_error": 0,
+        "pixels_over_one_byte": 0
       }
     },
     {
-      "alpha_examples": [
-        {
-          "hdr_atlas": 0.8095703125,
-          "new_final": 206,
-          "old_atlas": 0.811764717102051,
-          "old_final": 207,
-          "raw_source_alpha": 0.810000002384186,
-          "x": 129,
-          "y": 47
-        },
-        {
-          "hdr_atlas": 0.8095703125,
-          "new_final": 206,
-          "old_atlas": 0.811764717102051,
-          "old_final": 207,
-          "raw_source_alpha": 0.810000002384186,
-          "x": 128,
-          "y": 48
-        },
-        {
-          "hdr_atlas": 0.8095703125,
-          "new_final": 206,
-          "old_atlas": 0.811764717102051,
-          "old_final": 207,
-          "raw_source_alpha": 0.810000002384186,
-          "x": 129,
-          "y": 48
-        },
-        {
-          "hdr_atlas": 0.8095703125,
-          "new_final": 206,
-          "old_atlas": 0.811764717102051,
-          "old_final": 207,
-          "raw_source_alpha": 0.810000002384186,
-          "x": 130,
-          "y": 48
-        },
-        {
-          "hdr_atlas": 0.8095703125,
-          "new_final": 206,
-          "old_atlas": 0.811764717102051,
-          "old_final": 207,
-          "raw_source_alpha": 0.810000002384186,
-          "x": 131,
-          "y": 48
-        },
-        {
-          "hdr_atlas": 0.8095703125,
-          "new_final": 206,
-          "old_atlas": 0.811764717102051,
-          "old_final": 207,
-          "raw_source_alpha": 0.810000002384186,
-          "x": 132,
-          "y": 48
-        },
-        {
-          "hdr_atlas": 0.8095703125,
-          "new_final": 206,
-          "old_atlas": 0.811764717102051,
-          "old_final": 207,
-          "raw_source_alpha": 0.810000002384186,
-          "x": 133,
-          "y": 48
-        },
-        {
-          "hdr_atlas": 0.8095703125,
-          "new_final": 206,
-          "old_atlas": 0.811764717102051,
-          "old_final": 207,
-          "raw_source_alpha": 0.810000002384186,
-          "x": 128,
-          "y": 49
-        },
-        {
-          "hdr_atlas": 0.8095703125,
-          "new_final": 206,
-          "old_atlas": 0.811764717102051,
-          "old_final": 207,
-          "raw_source_alpha": 0.810000002384186,
-          "x": 129,
-          "y": 49
-        },
-        {
-          "hdr_atlas": 0.8095703125,
-          "new_final": 206,
-          "old_atlas": 0.811764717102051,
-          "old_final": 207,
-          "raw_source_alpha": 0.810000002384186,
-          "x": 130,
-          "y": 49
-        },
-        {
-          "hdr_atlas": 0.8095703125,
-          "new_final": 206,
-          "old_atlas": 0.811764717102051,
-          "old_final": 207,
-          "raw_source_alpha": 0.810000002384186,
-          "x": 131,
-          "y": 49
-        },
-        {
-          "hdr_atlas": 0.8095703125,
-          "new_final": 206,
-          "old_atlas": 0.811764717102051,
-          "old_final": 207,
-          "raw_source_alpha": 0.810000002384186,
-          "x": 132,
-          "y": 49
-        }
-      ],
       "baseline": {
         "alpha_mismatches": 14218,
         "changed_pixels": 14218,
-        "maximum_byte_error": 1
+        "examples": [
+          {
+            "actual": [
+              9,
+              10,
+              10,
+              206
+            ],
+            "at": [
+              129,
+              47
+            ],
+            "expected": [
+              9,
+              10,
+              10,
+              207
+            ]
+          },
+          {
+            "actual": [
+              9,
+              10,
+              10,
+              206
+            ],
+            "at": [
+              128,
+              48
+            ],
+            "expected": [
+              9,
+              10,
+              10,
+              207
+            ]
+          },
+          {
+            "actual": [
+              9,
+              10,
+              10,
+              206
+            ],
+            "at": [
+              129,
+              48
+            ],
+            "expected": [
+              9,
+              10,
+              10,
+              207
+            ]
+          },
+          {
+            "actual": [
+              9,
+              10,
+              10,
+              206
+            ],
+            "at": [
+              130,
+              48
+            ],
+            "expected": [
+              9,
+              10,
+              10,
+              207
+            ]
+          },
+          {
+            "actual": [
+              9,
+              10,
+              10,
+              206
+            ],
+            "at": [
+              131,
+              48
+            ],
+            "expected": [
+              9,
+              10,
+              10,
+              207
+            ]
+          },
+          {
+            "actual": [
+              9,
+              10,
+              10,
+              206
+            ],
+            "at": [
+              132,
+              48
+            ],
+            "expected": [
+              9,
+              10,
+              10,
+              207
+            ]
+          }
+        ],
+        "maximum_byte_error": 1,
+        "pixels_over_one_byte": 0
       },
       "id": "corner-q1-remembered warm 0 lights",
       "native_hdr_alpha_mismatches": 0,
@@ -374,26 +875,143 @@
       "order": {
         "alpha_mismatches": 0,
         "changed_pixels": 0,
-        "maximum_byte_error": 0
+        "examples": [],
+        "maximum_byte_error": 0,
+        "pixels_over_one_byte": 0
       },
       "over_cap_pixels": 0,
       "scalar_oracle": {
         "alpha_mismatches": 0,
         "changed_pixels": 0,
-        "maximum_byte_error": 0
+        "examples": [],
+        "maximum_byte_error": 0,
+        "pixels_over_one_byte": 0
       },
       "toggle_off": {
+        "alpha_half_byte_flips": 0,
         "alpha_mismatches": 0,
-        "changed_pixels": 0,
-        "maximum_byte_error": 0
+        "changed_pixels": 575,
+        "examples": [],
+        "maximum_byte_error": 1,
+        "pixels_over_one_byte": 0
       }
     },
     {
-      "alpha_examples": [],
       "baseline": {
         "alpha_mismatches": 14218,
         "changed_pixels": 14218,
-        "maximum_byte_error": 1
+        "examples": [
+          {
+            "actual": [
+              9,
+              10,
+              10,
+              206
+            ],
+            "at": [
+              129,
+              47
+            ],
+            "expected": [
+              9,
+              10,
+              10,
+              207
+            ]
+          },
+          {
+            "actual": [
+              9,
+              10,
+              10,
+              206
+            ],
+            "at": [
+              128,
+              48
+            ],
+            "expected": [
+              9,
+              10,
+              10,
+              207
+            ]
+          },
+          {
+            "actual": [
+              9,
+              10,
+              10,
+              206
+            ],
+            "at": [
+              129,
+              48
+            ],
+            "expected": [
+              9,
+              10,
+              10,
+              207
+            ]
+          },
+          {
+            "actual": [
+              9,
+              10,
+              10,
+              206
+            ],
+            "at": [
+              130,
+              48
+            ],
+            "expected": [
+              9,
+              10,
+              10,
+              207
+            ]
+          },
+          {
+            "actual": [
+              9,
+              10,
+              10,
+              206
+            ],
+            "at": [
+              131,
+              48
+            ],
+            "expected": [
+              9,
+              10,
+              10,
+              207
+            ]
+          },
+          {
+            "actual": [
+              9,
+              10,
+              10,
+              206
+            ],
+            "at": [
+              132,
+              48
+            ],
+            "expected": [
+              9,
+              10,
+              10,
+              207
+            ]
+          }
+        ],
+        "maximum_byte_error": 1,
+        "pixels_over_one_byte": 0
       },
       "id": "corner-q1-remembered warm 1 lights",
       "native_hdr_alpha_mismatches": 0,
@@ -405,26 +1023,143 @@
       "order": {
         "alpha_mismatches": 0,
         "changed_pixels": 0,
-        "maximum_byte_error": 0
+        "examples": [],
+        "maximum_byte_error": 0,
+        "pixels_over_one_byte": 0
       },
       "over_cap_pixels": 0,
       "scalar_oracle": {
         "alpha_mismatches": 0,
-        "changed_pixels": 0,
-        "maximum_byte_error": 0
+        "changed_pixels": 166,
+        "examples": [],
+        "maximum_byte_error": 1,
+        "pixels_over_one_byte": 0
       },
       "toggle_off": {
+        "alpha_half_byte_flips": 0,
         "alpha_mismatches": 0,
-        "changed_pixels": 0,
-        "maximum_byte_error": 0
+        "changed_pixels": 3549,
+        "examples": [],
+        "maximum_byte_error": 1,
+        "pixels_over_one_byte": 0
       }
     },
     {
-      "alpha_examples": [],
       "baseline": {
         "alpha_mismatches": 14218,
         "changed_pixels": 14219,
-        "maximum_byte_error": 187
+        "examples": [
+          {
+            "actual": [
+              9,
+              10,
+              10,
+              206
+            ],
+            "at": [
+              129,
+              47
+            ],
+            "expected": [
+              9,
+              10,
+              10,
+              207
+            ]
+          },
+          {
+            "actual": [
+              9,
+              10,
+              10,
+              206
+            ],
+            "at": [
+              128,
+              48
+            ],
+            "expected": [
+              9,
+              10,
+              10,
+              207
+            ]
+          },
+          {
+            "actual": [
+              9,
+              10,
+              10,
+              206
+            ],
+            "at": [
+              129,
+              48
+            ],
+            "expected": [
+              9,
+              10,
+              10,
+              207
+            ]
+          },
+          {
+            "actual": [
+              9,
+              10,
+              10,
+              206
+            ],
+            "at": [
+              130,
+              48
+            ],
+            "expected": [
+              9,
+              10,
+              10,
+              207
+            ]
+          },
+          {
+            "actual": [
+              9,
+              10,
+              10,
+              206
+            ],
+            "at": [
+              131,
+              48
+            ],
+            "expected": [
+              9,
+              10,
+              10,
+              207
+            ]
+          },
+          {
+            "actual": [
+              9,
+              10,
+              10,
+              206
+            ],
+            "at": [
+              132,
+              48
+            ],
+            "expected": [
+              9,
+              10,
+              10,
+              207
+            ]
+          }
+        ],
+        "maximum_byte_error": 187,
+        "pixels_over_one_byte": 11979
       },
       "id": "corner-q1-remembered warm 2 lights",
       "native_hdr_alpha_mismatches": 0,
@@ -436,26 +1171,143 @@
       "order": {
         "alpha_mismatches": 0,
         "changed_pixels": 0,
-        "maximum_byte_error": 0
+        "examples": [],
+        "maximum_byte_error": 0,
+        "pixels_over_one_byte": 0
       },
       "over_cap_pixels": 12045,
       "scalar_oracle": {
         "alpha_mismatches": 0,
-        "changed_pixels": 2057,
-        "maximum_byte_error": 1
+        "changed_pixels": 164,
+        "examples": [],
+        "maximum_byte_error": 1,
+        "pixels_over_one_byte": 0
       },
       "toggle_off": {
+        "alpha_half_byte_flips": 0,
         "alpha_mismatches": 0,
-        "changed_pixels": 0,
-        "maximum_byte_error": 0
+        "changed_pixels": 4142,
+        "examples": [],
+        "maximum_byte_error": 1,
+        "pixels_over_one_byte": 0
       }
     },
     {
-      "alpha_examples": [],
       "baseline": {
         "alpha_mismatches": 14218,
         "changed_pixels": 14219,
-        "maximum_byte_error": 220
+        "examples": [
+          {
+            "actual": [
+              9,
+              10,
+              10,
+              206
+            ],
+            "at": [
+              129,
+              47
+            ],
+            "expected": [
+              9,
+              10,
+              10,
+              207
+            ]
+          },
+          {
+            "actual": [
+              9,
+              10,
+              10,
+              206
+            ],
+            "at": [
+              128,
+              48
+            ],
+            "expected": [
+              9,
+              10,
+              10,
+              207
+            ]
+          },
+          {
+            "actual": [
+              9,
+              10,
+              10,
+              206
+            ],
+            "at": [
+              129,
+              48
+            ],
+            "expected": [
+              9,
+              10,
+              10,
+              207
+            ]
+          },
+          {
+            "actual": [
+              9,
+              10,
+              10,
+              206
+            ],
+            "at": [
+              130,
+              48
+            ],
+            "expected": [
+              9,
+              10,
+              10,
+              207
+            ]
+          },
+          {
+            "actual": [
+              9,
+              10,
+              10,
+              206
+            ],
+            "at": [
+              131,
+              48
+            ],
+            "expected": [
+              9,
+              10,
+              10,
+              207
+            ]
+          },
+          {
+            "actual": [
+              9,
+              10,
+              10,
+              206
+            ],
+            "at": [
+              132,
+              48
+            ],
+            "expected": [
+              9,
+              10,
+              10,
+              207
+            ]
+          }
+        ],
+        "maximum_byte_error": 220,
+        "pixels_over_one_byte": 13102
       },
       "id": "corner-q1-remembered warm 8 lights",
       "native_hdr_alpha_mismatches": 0,
@@ -467,135 +1319,143 @@
       "order": {
         "alpha_mismatches": 0,
         "changed_pixels": 0,
-        "maximum_byte_error": 0
+        "examples": [],
+        "maximum_byte_error": 0,
+        "pixels_over_one_byte": 0
       },
       "over_cap_pixels": 13113,
       "scalar_oracle": {
         "alpha_mismatches": 0,
-        "changed_pixels": 2181,
-        "maximum_byte_error": 1
+        "changed_pixels": 120,
+        "examples": [],
+        "maximum_byte_error": 1,
+        "pixels_over_one_byte": 0
       },
       "toggle_off": {
+        "alpha_half_byte_flips": 0,
         "alpha_mismatches": 0,
-        "changed_pixels": 0,
-        "maximum_byte_error": 0
+        "changed_pixels": 1966,
+        "examples": [],
+        "maximum_byte_error": 1,
+        "pixels_over_one_byte": 0
       }
     },
     {
-      "alpha_examples": [
-        {
-          "hdr_atlas": 0.8095703125,
-          "new_final": 206,
-          "old_atlas": 0.811764717102051,
-          "old_final": 207,
-          "raw_source_alpha": 0.810000002384186,
-          "x": 129,
-          "y": 47
-        },
-        {
-          "hdr_atlas": 0.8095703125,
-          "new_final": 206,
-          "old_atlas": 0.811764717102051,
-          "old_final": 207,
-          "raw_source_alpha": 0.810000002384186,
-          "x": 128,
-          "y": 48
-        },
-        {
-          "hdr_atlas": 0.8095703125,
-          "new_final": 206,
-          "old_atlas": 0.811764717102051,
-          "old_final": 207,
-          "raw_source_alpha": 0.810000002384186,
-          "x": 129,
-          "y": 48
-        },
-        {
-          "hdr_atlas": 0.8095703125,
-          "new_final": 206,
-          "old_atlas": 0.811764717102051,
-          "old_final": 207,
-          "raw_source_alpha": 0.810000002384186,
-          "x": 130,
-          "y": 48
-        },
-        {
-          "hdr_atlas": 0.8095703125,
-          "new_final": 206,
-          "old_atlas": 0.811764717102051,
-          "old_final": 207,
-          "raw_source_alpha": 0.810000002384186,
-          "x": 131,
-          "y": 48
-        },
-        {
-          "hdr_atlas": 0.8095703125,
-          "new_final": 206,
-          "old_atlas": 0.811764717102051,
-          "old_final": 207,
-          "raw_source_alpha": 0.810000002384186,
-          "x": 132,
-          "y": 48
-        },
-        {
-          "hdr_atlas": 0.8095703125,
-          "new_final": 206,
-          "old_atlas": 0.811764717102051,
-          "old_final": 207,
-          "raw_source_alpha": 0.810000002384186,
-          "x": 133,
-          "y": 48
-        },
-        {
-          "hdr_atlas": 0.8095703125,
-          "new_final": 206,
-          "old_atlas": 0.811764717102051,
-          "old_final": 207,
-          "raw_source_alpha": 0.810000002384186,
-          "x": 128,
-          "y": 49
-        },
-        {
-          "hdr_atlas": 0.8095703125,
-          "new_final": 206,
-          "old_atlas": 0.811764717102051,
-          "old_final": 207,
-          "raw_source_alpha": 0.810000002384186,
-          "x": 129,
-          "y": 49
-        },
-        {
-          "hdr_atlas": 0.8095703125,
-          "new_final": 206,
-          "old_atlas": 0.811764717102051,
-          "old_final": 207,
-          "raw_source_alpha": 0.810000002384186,
-          "x": 130,
-          "y": 49
-        },
-        {
-          "hdr_atlas": 0.8095703125,
-          "new_final": 206,
-          "old_atlas": 0.811764717102051,
-          "old_final": 207,
-          "raw_source_alpha": 0.810000002384186,
-          "x": 131,
-          "y": 49
-        },
-        {
-          "hdr_atlas": 0.8095703125,
-          "new_final": 206,
-          "old_atlas": 0.811764717102051,
-          "old_final": 207,
-          "raw_source_alpha": 0.810000002384186,
-          "x": 132,
-          "y": 49
-        }
-      ],
       "baseline": {
         "alpha_mismatches": 14218,
         "changed_pixels": 14218,
-        "maximum_byte_error": 1
+        "examples": [
+          {
+            "actual": [
+              9,
+              10,
+              10,
+              206
+            ],
+            "at": [
+              129,
+              47
+            ],
+            "expected": [
+              9,
+              10,
+              10,
+              207
+            ]
+          },
+          {
+            "actual": [
+              9,
+              10,
+              10,
+              206
+            ],
+            "at": [
+              128,
+              48
+            ],
+            "expected": [
+              9,
+              10,
+              10,
+              207
+            ]
+          },
+          {
+            "actual": [
+              9,
+              10,
+              10,
+              206
+            ],
+            "at": [
+              129,
+              48
+            ],
+            "expected": [
+              9,
+              10,
+              10,
+              207
+            ]
+          },
+          {
+            "actual": [
+              9,
+              10,
+              10,
+              206
+            ],
+            "at": [
+              130,
+              48
+            ],
+            "expected": [
+              9,
+              10,
+              10,
+              207
+            ]
+          },
+          {
+            "actual": [
+              9,
+              10,
+              10,
+              206
+            ],
+            "at": [
+              131,
+              48
+            ],
+            "expected": [
+              9,
+              10,
+              10,
+              207
+            ]
+          },
+          {
+            "actual": [
+              9,
+              10,
+              10,
+              206
+            ],
+            "at": [
+              132,
+              48
+            ],
+            "expected": [
+              9,
+              10,
+              10,
+              207
+            ]
+          }
+        ],
+        "maximum_byte_error": 1,
+        "pixels_over_one_byte": 0
       },
       "id": "corner-q1-remembered mixed 0 lights",
       "native_hdr_alpha_mismatches": 0,
@@ -607,26 +1467,143 @@
       "order": {
         "alpha_mismatches": 0,
         "changed_pixels": 0,
-        "maximum_byte_error": 0
+        "examples": [],
+        "maximum_byte_error": 0,
+        "pixels_over_one_byte": 0
       },
       "over_cap_pixels": 0,
       "scalar_oracle": {
         "alpha_mismatches": 0,
         "changed_pixels": 0,
-        "maximum_byte_error": 0
+        "examples": [],
+        "maximum_byte_error": 0,
+        "pixels_over_one_byte": 0
       },
       "toggle_off": {
+        "alpha_half_byte_flips": 0,
         "alpha_mismatches": 0,
-        "changed_pixels": 0,
-        "maximum_byte_error": 0
+        "changed_pixels": 575,
+        "examples": [],
+        "maximum_byte_error": 1,
+        "pixels_over_one_byte": 0
       }
     },
     {
-      "alpha_examples": [],
       "baseline": {
         "alpha_mismatches": 14218,
         "changed_pixels": 14218,
-        "maximum_byte_error": 1
+        "examples": [
+          {
+            "actual": [
+              9,
+              10,
+              10,
+              206
+            ],
+            "at": [
+              129,
+              47
+            ],
+            "expected": [
+              9,
+              10,
+              10,
+              207
+            ]
+          },
+          {
+            "actual": [
+              9,
+              10,
+              10,
+              206
+            ],
+            "at": [
+              128,
+              48
+            ],
+            "expected": [
+              9,
+              10,
+              10,
+              207
+            ]
+          },
+          {
+            "actual": [
+              9,
+              10,
+              10,
+              206
+            ],
+            "at": [
+              129,
+              48
+            ],
+            "expected": [
+              9,
+              10,
+              10,
+              207
+            ]
+          },
+          {
+            "actual": [
+              9,
+              10,
+              10,
+              206
+            ],
+            "at": [
+              130,
+              48
+            ],
+            "expected": [
+              9,
+              10,
+              10,
+              207
+            ]
+          },
+          {
+            "actual": [
+              9,
+              10,
+              10,
+              206
+            ],
+            "at": [
+              131,
+              48
+            ],
+            "expected": [
+              9,
+              10,
+              10,
+              207
+            ]
+          },
+          {
+            "actual": [
+              9,
+              10,
+              10,
+              206
+            ],
+            "at": [
+              132,
+              48
+            ],
+            "expected": [
+              9,
+              10,
+              10,
+              207
+            ]
+          }
+        ],
+        "maximum_byte_error": 1,
+        "pixels_over_one_byte": 0
       },
       "id": "corner-q1-remembered mixed 1 lights",
       "native_hdr_alpha_mismatches": 0,
@@ -638,26 +1615,143 @@
       "order": {
         "alpha_mismatches": 0,
         "changed_pixels": 0,
-        "maximum_byte_error": 0
+        "examples": [],
+        "maximum_byte_error": 0,
+        "pixels_over_one_byte": 0
       },
       "over_cap_pixels": 0,
       "scalar_oracle": {
         "alpha_mismatches": 0,
-        "changed_pixels": 0,
-        "maximum_byte_error": 0
+        "changed_pixels": 166,
+        "examples": [],
+        "maximum_byte_error": 1,
+        "pixels_over_one_byte": 0
       },
       "toggle_off": {
+        "alpha_half_byte_flips": 0,
         "alpha_mismatches": 0,
-        "changed_pixels": 0,
-        "maximum_byte_error": 0
+        "changed_pixels": 3549,
+        "examples": [],
+        "maximum_byte_error": 1,
+        "pixels_over_one_byte": 0
       }
     },
     {
-      "alpha_examples": [],
       "baseline": {
         "alpha_mismatches": 14218,
         "changed_pixels": 14219,
-        "maximum_byte_error": 165
+        "examples": [
+          {
+            "actual": [
+              9,
+              10,
+              10,
+              206
+            ],
+            "at": [
+              129,
+              47
+            ],
+            "expected": [
+              9,
+              10,
+              10,
+              207
+            ]
+          },
+          {
+            "actual": [
+              9,
+              10,
+              10,
+              206
+            ],
+            "at": [
+              128,
+              48
+            ],
+            "expected": [
+              9,
+              10,
+              10,
+              207
+            ]
+          },
+          {
+            "actual": [
+              9,
+              10,
+              10,
+              206
+            ],
+            "at": [
+              129,
+              48
+            ],
+            "expected": [
+              9,
+              10,
+              10,
+              207
+            ]
+          },
+          {
+            "actual": [
+              9,
+              10,
+              10,
+              206
+            ],
+            "at": [
+              130,
+              48
+            ],
+            "expected": [
+              9,
+              10,
+              10,
+              207
+            ]
+          },
+          {
+            "actual": [
+              9,
+              10,
+              10,
+              206
+            ],
+            "at": [
+              131,
+              48
+            ],
+            "expected": [
+              9,
+              10,
+              10,
+              207
+            ]
+          },
+          {
+            "actual": [
+              9,
+              10,
+              10,
+              206
+            ],
+            "at": [
+              132,
+              48
+            ],
+            "expected": [
+              9,
+              10,
+              10,
+              207
+            ]
+          }
+        ],
+        "maximum_byte_error": 165,
+        "pixels_over_one_byte": 11560
       },
       "id": "corner-q1-remembered mixed 2 lights",
       "native_hdr_alpha_mismatches": 0,
@@ -669,26 +1763,143 @@
       "order": {
         "alpha_mismatches": 0,
         "changed_pixels": 0,
-        "maximum_byte_error": 0
+        "examples": [],
+        "maximum_byte_error": 0,
+        "pixels_over_one_byte": 0
       },
       "over_cap_pixels": 11710,
       "scalar_oracle": {
         "alpha_mismatches": 0,
-        "changed_pixels": 2055,
-        "maximum_byte_error": 1
+        "changed_pixels": 291,
+        "examples": [],
+        "maximum_byte_error": 1,
+        "pixels_over_one_byte": 0
       },
       "toggle_off": {
+        "alpha_half_byte_flips": 0,
         "alpha_mismatches": 0,
-        "changed_pixels": 0,
-        "maximum_byte_error": 0
+        "changed_pixels": 4214,
+        "examples": [],
+        "maximum_byte_error": 1,
+        "pixels_over_one_byte": 0
       }
     },
     {
-      "alpha_examples": [],
       "baseline": {
         "alpha_mismatches": 14218,
         "changed_pixels": 14219,
-        "maximum_byte_error": 214
+        "examples": [
+          {
+            "actual": [
+              9,
+              10,
+              10,
+              206
+            ],
+            "at": [
+              129,
+              47
+            ],
+            "expected": [
+              9,
+              10,
+              10,
+              207
+            ]
+          },
+          {
+            "actual": [
+              9,
+              10,
+              10,
+              206
+            ],
+            "at": [
+              128,
+              48
+            ],
+            "expected": [
+              9,
+              10,
+              10,
+              207
+            ]
+          },
+          {
+            "actual": [
+              9,
+              10,
+              10,
+              206
+            ],
+            "at": [
+              129,
+              48
+            ],
+            "expected": [
+              9,
+              10,
+              10,
+              207
+            ]
+          },
+          {
+            "actual": [
+              9,
+              10,
+              10,
+              206
+            ],
+            "at": [
+              130,
+              48
+            ],
+            "expected": [
+              9,
+              10,
+              10,
+              207
+            ]
+          },
+          {
+            "actual": [
+              9,
+              10,
+              10,
+              206
+            ],
+            "at": [
+              131,
+              48
+            ],
+            "expected": [
+              9,
+              10,
+              10,
+              207
+            ]
+          },
+          {
+            "actual": [
+              9,
+              10,
+              10,
+              206
+            ],
+            "at": [
+              132,
+              48
+            ],
+            "expected": [
+              9,
+              10,
+              10,
+              207
+            ]
+          }
+        ],
+        "maximum_byte_error": 214,
+        "pixels_over_one_byte": 13058
       },
       "id": "corner-q1-remembered mixed 8 lights",
       "native_hdr_alpha_mismatches": 0,
@@ -700,135 +1911,143 @@
       "order": {
         "alpha_mismatches": 0,
         "changed_pixels": 0,
-        "maximum_byte_error": 0
+        "examples": [],
+        "maximum_byte_error": 0,
+        "pixels_over_one_byte": 0
       },
       "over_cap_pixels": 13066,
       "scalar_oracle": {
         "alpha_mismatches": 0,
-        "changed_pixels": 1980,
-        "maximum_byte_error": 1
+        "changed_pixels": 287,
+        "examples": [],
+        "maximum_byte_error": 1,
+        "pixels_over_one_byte": 0
       },
       "toggle_off": {
+        "alpha_half_byte_flips": 0,
         "alpha_mismatches": 0,
-        "changed_pixels": 0,
-        "maximum_byte_error": 0
+        "changed_pixels": 1631,
+        "examples": [],
+        "maximum_byte_error": 1,
+        "pixels_over_one_byte": 0
       }
     },
     {
-      "alpha_examples": [
-        {
-          "hdr_atlas": 0.8056640625,
-          "new_final": 205,
-          "old_atlas": 0.807843148708344,
-          "old_final": 206,
-          "raw_source_alpha": 0.8056640625,
-          "x": 109,
-          "y": 230
-        },
-        {
-          "hdr_atlas": 0.8056640625,
-          "new_final": 205,
-          "old_atlas": 0.807843148708344,
-          "old_final": 206,
-          "raw_source_alpha": 0.8056640625,
-          "x": 110,
-          "y": 230
-        },
-        {
-          "hdr_atlas": 0.8056640625,
-          "new_final": 205,
-          "old_atlas": 0.807843148708344,
-          "old_final": 206,
-          "raw_source_alpha": 0.8056640625,
-          "x": 111,
-          "y": 230
-        },
-        {
-          "hdr_atlas": 0.8056640625,
-          "new_final": 205,
-          "old_atlas": 0.807843148708344,
-          "old_final": 206,
-          "raw_source_alpha": 0.8056640625,
-          "x": 112,
-          "y": 230
-        },
-        {
-          "hdr_atlas": 0.8056640625,
-          "new_final": 205,
-          "old_atlas": 0.807843148708344,
-          "old_final": 206,
-          "raw_source_alpha": 0.8056640625,
-          "x": 113,
-          "y": 230
-        },
-        {
-          "hdr_atlas": 0.8056640625,
-          "new_final": 205,
-          "old_atlas": 0.807843148708344,
-          "old_final": 206,
-          "raw_source_alpha": 0.8056640625,
-          "x": 114,
-          "y": 230
-        },
-        {
-          "hdr_atlas": 0.8056640625,
-          "new_final": 205,
-          "old_atlas": 0.807843148708344,
-          "old_final": 206,
-          "raw_source_alpha": 0.8056640625,
-          "x": 115,
-          "y": 230
-        },
-        {
-          "hdr_atlas": 0.8056640625,
-          "new_final": 205,
-          "old_atlas": 0.807843148708344,
-          "old_final": 206,
-          "raw_source_alpha": 0.8056640625,
-          "x": 116,
-          "y": 230
-        },
-        {
-          "hdr_atlas": 0.8056640625,
-          "new_final": 205,
-          "old_atlas": 0.807843148708344,
-          "old_final": 206,
-          "raw_source_alpha": 0.8056640625,
-          "x": 117,
-          "y": 230
-        },
-        {
-          "hdr_atlas": 0.8056640625,
-          "new_final": 205,
-          "old_atlas": 0.807843148708344,
-          "old_final": 206,
-          "raw_source_alpha": 0.8056640625,
-          "x": 118,
-          "y": 230
-        },
-        {
-          "hdr_atlas": 0.8056640625,
-          "new_final": 205,
-          "old_atlas": 0.807843148708344,
-          "old_final": 206,
-          "raw_source_alpha": 0.8056640625,
-          "x": 119,
-          "y": 230
-        },
-        {
-          "hdr_atlas": 0.8056640625,
-          "new_final": 205,
-          "old_atlas": 0.807843148708344,
-          "old_final": 206,
-          "raw_source_alpha": 0.8056640625,
-          "x": 120,
-          "y": 230
-        }
-      ],
       "baseline": {
         "alpha_mismatches": 38,
-        "changed_pixels": 1120,
-        "maximum_byte_error": 1
+        "changed_pixels": 1390,
+        "examples": [
+          {
+            "actual": [
+              3,
+              16,
+              23,
+              205
+            ],
+            "at": [
+              109,
+              230
+            ],
+            "expected": [
+              3,
+              16,
+              24,
+              206
+            ]
+          },
+          {
+            "actual": [
+              3,
+              16,
+              23,
+              205
+            ],
+            "at": [
+              110,
+              230
+            ],
+            "expected": [
+              3,
+              16,
+              24,
+              206
+            ]
+          },
+          {
+            "actual": [
+              3,
+              16,
+              24,
+              205
+            ],
+            "at": [
+              111,
+              230
+            ],
+            "expected": [
+              3,
+              16,
+              24,
+              206
+            ]
+          },
+          {
+            "actual": [
+              3,
+              16,
+              24,
+              205
+            ],
+            "at": [
+              112,
+              230
+            ],
+            "expected": [
+              3,
+              16,
+              24,
+              206
+            ]
+          },
+          {
+            "actual": [
+              3,
+              16,
+              24,
+              205
+            ],
+            "at": [
+              113,
+              230
+            ],
+            "expected": [
+              3,
+              16,
+              24,
+              206
+            ]
+          },
+          {
+            "actual": [
+              3,
+              17,
+              24,
+              205
+            ],
+            "at": [
+              114,
+              230
+            ],
+            "expected": [
+              3,
+              16,
+              24,
+              206
+            ]
+          }
+        ],
+        "maximum_byte_error": 1,
+        "pixels_over_one_byte": 0
       },
       "id": "water-authored warm 0 lights",
       "native_hdr_alpha_mismatches": 0,
@@ -840,26 +2059,143 @@
       "order": {
         "alpha_mismatches": 0,
         "changed_pixels": 0,
-        "maximum_byte_error": 0
+        "examples": [],
+        "maximum_byte_error": 0,
+        "pixels_over_one_byte": 0
       },
       "over_cap_pixels": 0,
       "scalar_oracle": {
         "alpha_mismatches": 0,
-        "changed_pixels": 368,
-        "maximum_byte_error": 1
+        "changed_pixels": 1174,
+        "examples": [],
+        "maximum_byte_error": 1,
+        "pixels_over_one_byte": 0
       },
       "toggle_off": {
+        "alpha_half_byte_flips": 94,
         "alpha_mismatches": 0,
-        "changed_pixels": 0,
-        "maximum_byte_error": 0
+        "changed_pixels": 1399,
+        "examples": [],
+        "maximum_byte_error": 1,
+        "pixels_over_one_byte": 0
       }
     },
     {
-      "alpha_examples": [],
       "baseline": {
         "alpha_mismatches": 38,
-        "changed_pixels": 588,
-        "maximum_byte_error": 1
+        "changed_pixels": 891,
+        "examples": [
+          {
+            "actual": [
+              6,
+              24,
+              32,
+              205
+            ],
+            "at": [
+              109,
+              230
+            ],
+            "expected": [
+              6,
+              24,
+              32,
+              206
+            ]
+          },
+          {
+            "actual": [
+              6,
+              24,
+              32,
+              205
+            ],
+            "at": [
+              110,
+              230
+            ],
+            "expected": [
+              6,
+              24,
+              32,
+              206
+            ]
+          },
+          {
+            "actual": [
+              6,
+              25,
+              32,
+              205
+            ],
+            "at": [
+              111,
+              230
+            ],
+            "expected": [
+              6,
+              25,
+              32,
+              206
+            ]
+          },
+          {
+            "actual": [
+              6,
+              25,
+              32,
+              205
+            ],
+            "at": [
+              112,
+              230
+            ],
+            "expected": [
+              6,
+              25,
+              32,
+              206
+            ]
+          },
+          {
+            "actual": [
+              6,
+              25,
+              32,
+              205
+            ],
+            "at": [
+              113,
+              230
+            ],
+            "expected": [
+              6,
+              25,
+              32,
+              206
+            ]
+          },
+          {
+            "actual": [
+              6,
+              25,
+              32,
+              205
+            ],
+            "at": [
+              114,
+              230
+            ],
+            "expected": [
+              6,
+              25,
+              32,
+              206
+            ]
+          }
+        ],
+        "maximum_byte_error": 1,
+        "pixels_over_one_byte": 0
       },
       "id": "water-authored warm 1 lights",
       "native_hdr_alpha_mismatches": 0,
@@ -871,26 +2207,143 @@
       "order": {
         "alpha_mismatches": 0,
         "changed_pixels": 0,
-        "maximum_byte_error": 0
+        "examples": [],
+        "maximum_byte_error": 0,
+        "pixels_over_one_byte": 0
       },
       "over_cap_pixels": 0,
       "scalar_oracle": {
         "alpha_mismatches": 0,
-        "changed_pixels": 290,
-        "maximum_byte_error": 1
+        "changed_pixels": 650,
+        "examples": [],
+        "maximum_byte_error": 1,
+        "pixels_over_one_byte": 0
       },
       "toggle_off": {
+        "alpha_half_byte_flips": 94,
         "alpha_mismatches": 0,
-        "changed_pixels": 0,
-        "maximum_byte_error": 0
+        "changed_pixels": 881,
+        "examples": [],
+        "maximum_byte_error": 1,
+        "pixels_over_one_byte": 0
       }
     },
     {
-      "alpha_examples": [],
       "baseline": {
         "alpha_mismatches": 38,
         "changed_pixels": 4096,
-        "maximum_byte_error": 187
+        "examples": [
+          {
+            "actual": [
+              6,
+              46,
+              45,
+              207
+            ],
+            "at": [
+              127,
+              176
+            ],
+            "expected": [
+              31,
+              214,
+              212,
+              207
+            ]
+          },
+          {
+            "actual": [
+              6,
+              46,
+              45,
+              207
+            ],
+            "at": [
+              128,
+              176
+            ],
+            "expected": [
+              28,
+              212,
+              211,
+              207
+            ]
+          },
+          {
+            "actual": [
+              4,
+              45,
+              44,
+              207
+            ],
+            "at": [
+              125,
+              177
+            ],
+            "expected": [
+              20,
+              209,
+              208,
+              207
+            ]
+          },
+          {
+            "actual": [
+              5,
+              45,
+              45,
+              207
+            ],
+            "at": [
+              126,
+              177
+            ],
+            "expected": [
+              23,
+              210,
+              209,
+              207
+            ]
+          },
+          {
+            "actual": [
+              4,
+              45,
+              44,
+              207
+            ],
+            "at": [
+              127,
+              177
+            ],
+            "expected": [
+              20,
+              209,
+              208,
+              207
+            ]
+          },
+          {
+            "actual": [
+              5,
+              45,
+              45,
+              207
+            ],
+            "at": [
+              128,
+              177
+            ],
+            "expected": [
+              25,
+              211,
+              210,
+              207
+            ]
+          }
+        ],
+        "maximum_byte_error": 187,
+        "pixels_over_one_byte": 4096
       },
       "id": "water-authored warm 2 lights",
       "native_hdr_alpha_mismatches": 0,
@@ -902,26 +2355,143 @@
       "order": {
         "alpha_mismatches": 0,
         "changed_pixels": 0,
-        "maximum_byte_error": 0
+        "examples": [],
+        "maximum_byte_error": 0,
+        "pixels_over_one_byte": 0
       },
       "over_cap_pixels": 4096,
       "scalar_oracle": {
         "alpha_mismatches": 0,
-        "changed_pixels": 249,
-        "maximum_byte_error": 1
+        "changed_pixels": 1402,
+        "examples": [],
+        "maximum_byte_error": 1,
+        "pixels_over_one_byte": 0
       },
       "toggle_off": {
+        "alpha_half_byte_flips": 94,
         "alpha_mismatches": 0,
-        "changed_pixels": 0,
-        "maximum_byte_error": 0
+        "changed_pixels": 694,
+        "examples": [],
+        "maximum_byte_error": 1,
+        "pixels_over_one_byte": 0
       }
     },
     {
-      "alpha_examples": [],
       "baseline": {
         "alpha_mismatches": 38,
         "changed_pixels": 4096,
-        "maximum_byte_error": 222
+        "examples": [
+          {
+            "actual": [
+              6,
+              45,
+              43,
+              207
+            ],
+            "at": [
+              127,
+              176
+            ],
+            "expected": [
+              120,
+              233,
+              233,
+              207
+            ]
+          },
+          {
+            "actual": [
+              6,
+              44,
+              43,
+              207
+            ],
+            "at": [
+              128,
+              176
+            ],
+            "expected": [
+              107,
+              233,
+              233,
+              207
+            ]
+          },
+          {
+            "actual": [
+              4,
+              43,
+              42,
+              207
+            ],
+            "at": [
+              125,
+              177
+            ],
+            "expected": [
+              78,
+              233,
+              233,
+              207
+            ]
+          },
+          {
+            "actual": [
+              5,
+              44,
+              42,
+              207
+            ],
+            "at": [
+              126,
+              177
+            ],
+            "expected": [
+              87,
+              233,
+              233,
+              207
+            ]
+          },
+          {
+            "actual": [
+              4,
+              43,
+              42,
+              207
+            ],
+            "at": [
+              127,
+              177
+            ],
+            "expected": [
+              78,
+              233,
+              233,
+              207
+            ]
+          },
+          {
+            "actual": [
+              5,
+              44,
+              42,
+              207
+            ],
+            "at": [
+              128,
+              177
+            ],
+            "expected": [
+              93,
+              233,
+              233,
+              207
+            ]
+          }
+        ],
+        "maximum_byte_error": 222,
+        "pixels_over_one_byte": 4096
       },
       "id": "water-authored warm 8 lights",
       "native_hdr_alpha_mismatches": 0,
@@ -933,135 +2503,143 @@
       "order": {
         "alpha_mismatches": 0,
         "changed_pixels": 0,
-        "maximum_byte_error": 0
+        "examples": [],
+        "maximum_byte_error": 0,
+        "pixels_over_one_byte": 0
       },
       "over_cap_pixels": 4096,
       "scalar_oracle": {
         "alpha_mismatches": 0,
-        "changed_pixels": 258,
-        "maximum_byte_error": 1
+        "changed_pixels": 996,
+        "examples": [],
+        "maximum_byte_error": 1,
+        "pixels_over_one_byte": 0
       },
       "toggle_off": {
+        "alpha_half_byte_flips": 94,
         "alpha_mismatches": 0,
-        "changed_pixels": 0,
-        "maximum_byte_error": 0
+        "changed_pixels": 215,
+        "examples": [],
+        "maximum_byte_error": 1,
+        "pixels_over_one_byte": 0
       }
     },
     {
-      "alpha_examples": [
-        {
-          "hdr_atlas": 0.8056640625,
-          "new_final": 205,
-          "old_atlas": 0.807843148708344,
-          "old_final": 206,
-          "raw_source_alpha": 0.8056640625,
-          "x": 109,
-          "y": 230
-        },
-        {
-          "hdr_atlas": 0.8056640625,
-          "new_final": 205,
-          "old_atlas": 0.807843148708344,
-          "old_final": 206,
-          "raw_source_alpha": 0.8056640625,
-          "x": 110,
-          "y": 230
-        },
-        {
-          "hdr_atlas": 0.8056640625,
-          "new_final": 205,
-          "old_atlas": 0.807843148708344,
-          "old_final": 206,
-          "raw_source_alpha": 0.8056640625,
-          "x": 111,
-          "y": 230
-        },
-        {
-          "hdr_atlas": 0.8056640625,
-          "new_final": 205,
-          "old_atlas": 0.807843148708344,
-          "old_final": 206,
-          "raw_source_alpha": 0.8056640625,
-          "x": 112,
-          "y": 230
-        },
-        {
-          "hdr_atlas": 0.8056640625,
-          "new_final": 205,
-          "old_atlas": 0.807843148708344,
-          "old_final": 206,
-          "raw_source_alpha": 0.8056640625,
-          "x": 113,
-          "y": 230
-        },
-        {
-          "hdr_atlas": 0.8056640625,
-          "new_final": 205,
-          "old_atlas": 0.807843148708344,
-          "old_final": 206,
-          "raw_source_alpha": 0.8056640625,
-          "x": 114,
-          "y": 230
-        },
-        {
-          "hdr_atlas": 0.8056640625,
-          "new_final": 205,
-          "old_atlas": 0.807843148708344,
-          "old_final": 206,
-          "raw_source_alpha": 0.8056640625,
-          "x": 115,
-          "y": 230
-        },
-        {
-          "hdr_atlas": 0.8056640625,
-          "new_final": 205,
-          "old_atlas": 0.807843148708344,
-          "old_final": 206,
-          "raw_source_alpha": 0.8056640625,
-          "x": 116,
-          "y": 230
-        },
-        {
-          "hdr_atlas": 0.8056640625,
-          "new_final": 205,
-          "old_atlas": 0.807843148708344,
-          "old_final": 206,
-          "raw_source_alpha": 0.8056640625,
-          "x": 117,
-          "y": 230
-        },
-        {
-          "hdr_atlas": 0.8056640625,
-          "new_final": 205,
-          "old_atlas": 0.807843148708344,
-          "old_final": 206,
-          "raw_source_alpha": 0.8056640625,
-          "x": 118,
-          "y": 230
-        },
-        {
-          "hdr_atlas": 0.8056640625,
-          "new_final": 205,
-          "old_atlas": 0.807843148708344,
-          "old_final": 206,
-          "raw_source_alpha": 0.8056640625,
-          "x": 119,
-          "y": 230
-        },
-        {
-          "hdr_atlas": 0.8056640625,
-          "new_final": 205,
-          "old_atlas": 0.807843148708344,
-          "old_final": 206,
-          "raw_source_alpha": 0.8056640625,
-          "x": 120,
-          "y": 230
-        }
-      ],
       "baseline": {
         "alpha_mismatches": 38,
-        "changed_pixels": 1120,
-        "maximum_byte_error": 1
+        "changed_pixels": 1390,
+        "examples": [
+          {
+            "actual": [
+              3,
+              16,
+              23,
+              205
+            ],
+            "at": [
+              109,
+              230
+            ],
+            "expected": [
+              3,
+              16,
+              24,
+              206
+            ]
+          },
+          {
+            "actual": [
+              3,
+              16,
+              23,
+              205
+            ],
+            "at": [
+              110,
+              230
+            ],
+            "expected": [
+              3,
+              16,
+              24,
+              206
+            ]
+          },
+          {
+            "actual": [
+              3,
+              16,
+              24,
+              205
+            ],
+            "at": [
+              111,
+              230
+            ],
+            "expected": [
+              3,
+              16,
+              24,
+              206
+            ]
+          },
+          {
+            "actual": [
+              3,
+              16,
+              24,
+              205
+            ],
+            "at": [
+              112,
+              230
+            ],
+            "expected": [
+              3,
+              16,
+              24,
+              206
+            ]
+          },
+          {
+            "actual": [
+              3,
+              16,
+              24,
+              205
+            ],
+            "at": [
+              113,
+              230
+            ],
+            "expected": [
+              3,
+              16,
+              24,
+              206
+            ]
+          },
+          {
+            "actual": [
+              3,
+              17,
+              24,
+              205
+            ],
+            "at": [
+              114,
+              230
+            ],
+            "expected": [
+              3,
+              16,
+              24,
+              206
+            ]
+          }
+        ],
+        "maximum_byte_error": 1,
+        "pixels_over_one_byte": 0
       },
       "id": "water-authored mixed 0 lights",
       "native_hdr_alpha_mismatches": 0,
@@ -1073,26 +2651,143 @@
       "order": {
         "alpha_mismatches": 0,
         "changed_pixels": 0,
-        "maximum_byte_error": 0
+        "examples": [],
+        "maximum_byte_error": 0,
+        "pixels_over_one_byte": 0
       },
       "over_cap_pixels": 0,
       "scalar_oracle": {
         "alpha_mismatches": 0,
-        "changed_pixels": 368,
-        "maximum_byte_error": 1
+        "changed_pixels": 1174,
+        "examples": [],
+        "maximum_byte_error": 1,
+        "pixels_over_one_byte": 0
       },
       "toggle_off": {
+        "alpha_half_byte_flips": 94,
         "alpha_mismatches": 0,
-        "changed_pixels": 0,
-        "maximum_byte_error": 0
+        "changed_pixels": 1399,
+        "examples": [],
+        "maximum_byte_error": 1,
+        "pixels_over_one_byte": 0
       }
     },
     {
-      "alpha_examples": [],
       "baseline": {
         "alpha_mismatches": 38,
-        "changed_pixels": 588,
-        "maximum_byte_error": 1
+        "changed_pixels": 891,
+        "examples": [
+          {
+            "actual": [
+              6,
+              24,
+              32,
+              205
+            ],
+            "at": [
+              109,
+              230
+            ],
+            "expected": [
+              6,
+              24,
+              32,
+              206
+            ]
+          },
+          {
+            "actual": [
+              6,
+              24,
+              32,
+              205
+            ],
+            "at": [
+              110,
+              230
+            ],
+            "expected": [
+              6,
+              24,
+              32,
+              206
+            ]
+          },
+          {
+            "actual": [
+              6,
+              25,
+              32,
+              205
+            ],
+            "at": [
+              111,
+              230
+            ],
+            "expected": [
+              6,
+              25,
+              32,
+              206
+            ]
+          },
+          {
+            "actual": [
+              6,
+              25,
+              32,
+              205
+            ],
+            "at": [
+              112,
+              230
+            ],
+            "expected": [
+              6,
+              25,
+              32,
+              206
+            ]
+          },
+          {
+            "actual": [
+              6,
+              25,
+              32,
+              205
+            ],
+            "at": [
+              113,
+              230
+            ],
+            "expected": [
+              6,
+              25,
+              32,
+              206
+            ]
+          },
+          {
+            "actual": [
+              6,
+              25,
+              32,
+              205
+            ],
+            "at": [
+              114,
+              230
+            ],
+            "expected": [
+              6,
+              25,
+              32,
+              206
+            ]
+          }
+        ],
+        "maximum_byte_error": 1,
+        "pixels_over_one_byte": 0
       },
       "id": "water-authored mixed 1 lights",
       "native_hdr_alpha_mismatches": 0,
@@ -1104,26 +2799,143 @@
       "order": {
         "alpha_mismatches": 0,
         "changed_pixels": 0,
-        "maximum_byte_error": 0
+        "examples": [],
+        "maximum_byte_error": 0,
+        "pixels_over_one_byte": 0
       },
       "over_cap_pixels": 0,
       "scalar_oracle": {
         "alpha_mismatches": 0,
-        "changed_pixels": 290,
-        "maximum_byte_error": 1
+        "changed_pixels": 650,
+        "examples": [],
+        "maximum_byte_error": 1,
+        "pixels_over_one_byte": 0
       },
       "toggle_off": {
+        "alpha_half_byte_flips": 94,
         "alpha_mismatches": 0,
-        "changed_pixels": 0,
-        "maximum_byte_error": 0
+        "changed_pixels": 881,
+        "examples": [],
+        "maximum_byte_error": 1,
+        "pixels_over_one_byte": 0
       }
     },
     {
-      "alpha_examples": [],
       "baseline": {
         "alpha_mismatches": 38,
         "changed_pixels": 4096,
-        "maximum_byte_error": 168
+        "examples": [
+          {
+            "actual": [
+              6,
+              76,
+              128,
+              207
+            ],
+            "at": [
+              127,
+              176
+            ],
+            "expected": [
+              19,
+              233,
+              233,
+              207
+            ]
+          },
+          {
+            "actual": [
+              5,
+              75,
+              127,
+              207
+            ],
+            "at": [
+              128,
+              176
+            ],
+            "expected": [
+              17,
+              233,
+              233,
+              207
+            ]
+          },
+          {
+            "actual": [
+              3,
+              74,
+              125,
+              207
+            ],
+            "at": [
+              125,
+              177
+            ],
+            "expected": [
+              13,
+              233,
+              233,
+              207
+            ]
+          },
+          {
+            "actual": [
+              4,
+              74,
+              126,
+              207
+            ],
+            "at": [
+              126,
+              177
+            ],
+            "expected": [
+              14,
+              233,
+              233,
+              207
+            ]
+          },
+          {
+            "actual": [
+              3,
+              74,
+              125,
+              207
+            ],
+            "at": [
+              127,
+              177
+            ],
+            "expected": [
+              13,
+              233,
+              233,
+              207
+            ]
+          },
+          {
+            "actual": [
+              4,
+              74,
+              126,
+              207
+            ],
+            "at": [
+              128,
+              177
+            ],
+            "expected": [
+              14,
+              233,
+              233,
+              207
+            ]
+          }
+        ],
+        "maximum_byte_error": 168,
+        "pixels_over_one_byte": 4096
       },
       "id": "water-authored mixed 2 lights",
       "native_hdr_alpha_mismatches": 0,
@@ -1135,26 +2947,143 @@
       "order": {
         "alpha_mismatches": 0,
         "changed_pixels": 0,
-        "maximum_byte_error": 0
+        "examples": [],
+        "maximum_byte_error": 0,
+        "pixels_over_one_byte": 0
       },
       "over_cap_pixels": 4096,
       "scalar_oracle": {
         "alpha_mismatches": 0,
-        "changed_pixels": 487,
-        "maximum_byte_error": 1
+        "changed_pixels": 1096,
+        "examples": [],
+        "maximum_byte_error": 1,
+        "pixels_over_one_byte": 0
       },
       "toggle_off": {
+        "alpha_half_byte_flips": 94,
         "alpha_mismatches": 0,
-        "changed_pixels": 0,
-        "maximum_byte_error": 0
+        "changed_pixels": 397,
+        "examples": [],
+        "maximum_byte_error": 1,
+        "pixels_over_one_byte": 0
       }
     },
     {
-      "alpha_examples": [],
       "baseline": {
         "alpha_mismatches": 38,
         "changed_pixels": 4096,
-        "maximum_byte_error": 218
+        "examples": [
+          {
+            "actual": [
+              5,
+              75,
+              128,
+              207
+            ],
+            "at": [
+              127,
+              176
+            ],
+            "expected": [
+              72,
+              233,
+              233,
+              207
+            ]
+          },
+          {
+            "actual": [
+              5,
+              74,
+              127,
+              207
+            ],
+            "at": [
+              128,
+              176
+            ],
+            "expected": [
+              65,
+              233,
+              233,
+              207
+            ]
+          },
+          {
+            "actual": [
+              3,
+              73,
+              125,
+              207
+            ],
+            "at": [
+              125,
+              177
+            ],
+            "expected": [
+              47,
+              233,
+              233,
+              207
+            ]
+          },
+          {
+            "actual": [
+              4,
+              73,
+              126,
+              207
+            ],
+            "at": [
+              126,
+              177
+            ],
+            "expected": [
+              53,
+              233,
+              233,
+              207
+            ]
+          },
+          {
+            "actual": [
+              3,
+              73,
+              125,
+              207
+            ],
+            "at": [
+              127,
+              177
+            ],
+            "expected": [
+              47,
+              233,
+              233,
+              207
+            ]
+          },
+          {
+            "actual": [
+              4,
+              73,
+              126,
+              207
+            ],
+            "at": [
+              128,
+              177
+            ],
+            "expected": [
+              57,
+              233,
+              233,
+              207
+            ]
+          }
+        ],
+        "maximum_byte_error": 218,
+        "pixels_over_one_byte": 4096
       },
       "id": "water-authored mixed 8 lights",
       "native_hdr_alpha_mismatches": 0,
@@ -1166,26 +3095,34 @@
       "order": {
         "alpha_mismatches": 0,
         "changed_pixels": 0,
-        "maximum_byte_error": 0
+        "examples": [],
+        "maximum_byte_error": 0,
+        "pixels_over_one_byte": 0
       },
       "over_cap_pixels": 4096,
       "scalar_oracle": {
         "alpha_mismatches": 0,
-        "changed_pixels": 465,
-        "maximum_byte_error": 1
+        "changed_pixels": 1092,
+        "examples": [],
+        "maximum_byte_error": 1,
+        "pixels_over_one_byte": 0
       },
       "toggle_off": {
+        "alpha_half_byte_flips": 94,
         "alpha_mismatches": 0,
-        "changed_pixels": 0,
-        "maximum_byte_error": 0
+        "changed_pixels": 363,
+        "examples": [],
+        "maximum_byte_error": 1,
+        "pixels_over_one_byte": 0
       }
     },
     {
-      "alpha_examples": [],
       "baseline": {
         "alpha_mismatches": 0,
         "changed_pixels": 0,
-        "maximum_byte_error": 0
+        "examples": [],
+        "maximum_byte_error": 0,
+        "pixels_over_one_byte": 0
       },
       "id": "typed-black-and-dark-source warm 0 lights",
       "native_hdr_alpha_mismatches": 0,
@@ -1197,26 +3134,34 @@
       "order": {
         "alpha_mismatches": 0,
         "changed_pixels": 0,
-        "maximum_byte_error": 0
+        "examples": [],
+        "maximum_byte_error": 0,
+        "pixels_over_one_byte": 0
       },
       "over_cap_pixels": 0,
       "scalar_oracle": {
         "alpha_mismatches": 0,
         "changed_pixels": 0,
-        "maximum_byte_error": 0
+        "examples": [],
+        "maximum_byte_error": 0,
+        "pixels_over_one_byte": 0
       },
       "toggle_off": {
+        "alpha_half_byte_flips": 0,
         "alpha_mismatches": 0,
         "changed_pixels": 0,
-        "maximum_byte_error": 0
+        "examples": [],
+        "maximum_byte_error": 0,
+        "pixels_over_one_byte": 0
       }
     },
     {
-      "alpha_examples": [],
       "baseline": {
         "alpha_mismatches": 0,
         "changed_pixels": 0,
-        "maximum_byte_error": 0
+        "examples": [],
+        "maximum_byte_error": 0,
+        "pixels_over_one_byte": 0
       },
       "id": "typed-black-and-dark-source warm 1 lights",
       "native_hdr_alpha_mismatches": 0,
@@ -1228,26 +3173,143 @@
       "order": {
         "alpha_mismatches": 0,
         "changed_pixels": 0,
-        "maximum_byte_error": 0
+        "examples": [],
+        "maximum_byte_error": 0,
+        "pixels_over_one_byte": 0
       },
       "over_cap_pixels": 0,
       "scalar_oracle": {
         "alpha_mismatches": 0,
         "changed_pixels": 0,
-        "maximum_byte_error": 0
+        "examples": [],
+        "maximum_byte_error": 0,
+        "pixels_over_one_byte": 0
       },
       "toggle_off": {
+        "alpha_half_byte_flips": 0,
         "alpha_mismatches": 0,
         "changed_pixels": 0,
-        "maximum_byte_error": 0
+        "examples": [],
+        "maximum_byte_error": 0,
+        "pixels_over_one_byte": 0
       }
     },
     {
-      "alpha_examples": [],
       "baseline": {
         "alpha_mismatches": 0,
         "changed_pixels": 24,
-        "maximum_byte_error": 131
+        "examples": [
+          {
+            "actual": [
+              0,
+              4,
+              12,
+              63
+            ],
+            "at": [
+              4,
+              1
+            ],
+            "expected": [
+              2,
+              40,
+              85,
+              63
+            ]
+          },
+          {
+            "actual": [
+              0,
+              4,
+              12,
+              63
+            ],
+            "at": [
+              5,
+              1
+            ],
+            "expected": [
+              2,
+              40,
+              85,
+              63
+            ]
+          },
+          {
+            "actual": [
+              0,
+              4,
+              12,
+              63
+            ],
+            "at": [
+              6,
+              1
+            ],
+            "expected": [
+              2,
+              40,
+              85,
+              63
+            ]
+          },
+          {
+            "actual": [
+              0,
+              4,
+              12,
+              63
+            ],
+            "at": [
+              7,
+              1
+            ],
+            "expected": [
+              2,
+              40,
+              84,
+              63
+            ]
+          },
+          {
+            "actual": [
+              1,
+              13,
+              27,
+              194
+            ],
+            "at": [
+              4,
+              2
+            ],
+            "expected": [
+              8,
+              72,
+              144,
+              194
+            ]
+          },
+          {
+            "actual": [
+              1,
+              13,
+              27,
+              194
+            ],
+            "at": [
+              5,
+              2
+            ],
+            "expected": [
+              8,
+              72,
+              144,
+              194
+            ]
+          }
+        ],
+        "maximum_byte_error": 131,
+        "pixels_over_one_byte": 24
       },
       "id": "typed-black-and-dark-source warm 2 lights",
       "native_hdr_alpha_mismatches": 0,
@@ -1259,26 +3321,143 @@
       "order": {
         "alpha_mismatches": 0,
         "changed_pixels": 0,
-        "maximum_byte_error": 0
+        "examples": [],
+        "maximum_byte_error": 0,
+        "pixels_over_one_byte": 0
       },
       "over_cap_pixels": 48,
       "scalar_oracle": {
         "alpha_mismatches": 0,
         "changed_pixels": 8,
-        "maximum_byte_error": 1
+        "examples": [],
+        "maximum_byte_error": 1,
+        "pixels_over_one_byte": 0
       },
       "toggle_off": {
+        "alpha_half_byte_flips": 0,
         "alpha_mismatches": 0,
-        "changed_pixels": 0,
-        "maximum_byte_error": 0
+        "changed_pixels": 6,
+        "examples": [],
+        "maximum_byte_error": 1,
+        "pixels_over_one_byte": 0
       }
     },
     {
-      "alpha_examples": [],
       "baseline": {
         "alpha_mismatches": 0,
         "changed_pixels": 24,
-        "maximum_byte_error": 239
+        "examples": [
+          {
+            "actual": [
+              0,
+              4,
+              11,
+              63
+            ],
+            "at": [
+              4,
+              1
+            ],
+            "expected": [
+              16,
+              136,
+              136,
+              63
+            ]
+          },
+          {
+            "actual": [
+              0,
+              4,
+              11,
+              63
+            ],
+            "at": [
+              5,
+              1
+            ],
+            "expected": [
+              16,
+              136,
+              136,
+              63
+            ]
+          },
+          {
+            "actual": [
+              0,
+              4,
+              11,
+              63
+            ],
+            "at": [
+              6,
+              1
+            ],
+            "expected": [
+              16,
+              136,
+              136,
+              63
+            ]
+          },
+          {
+            "actual": [
+              0,
+              4,
+              11,
+              63
+            ],
+            "at": [
+              7,
+              1
+            ],
+            "expected": [
+              16,
+              136,
+              136,
+              63
+            ]
+          },
+          {
+            "actual": [
+              1,
+              13,
+              26,
+              194
+            ],
+            "at": [
+              4,
+              2
+            ],
+            "expected": [
+              33,
+              226,
+              226,
+              194
+            ]
+          },
+          {
+            "actual": [
+              1,
+              13,
+              26,
+              194
+            ],
+            "at": [
+              5,
+              2
+            ],
+            "expected": [
+              33,
+              226,
+              226,
+              194
+            ]
+          }
+        ],
+        "maximum_byte_error": 239,
+        "pixels_over_one_byte": 24
       },
       "id": "typed-black-and-dark-source warm 8 lights",
       "native_hdr_alpha_mismatches": 0,
@@ -1290,26 +3469,34 @@
       "order": {
         "alpha_mismatches": 0,
         "changed_pixels": 0,
-        "maximum_byte_error": 0
+        "examples": [],
+        "maximum_byte_error": 0,
+        "pixels_over_one_byte": 0
       },
       "over_cap_pixels": 48,
       "scalar_oracle": {
         "alpha_mismatches": 0,
         "changed_pixels": 8,
-        "maximum_byte_error": 1
+        "examples": [],
+        "maximum_byte_error": 1,
+        "pixels_over_one_byte": 0
       },
       "toggle_off": {
+        "alpha_half_byte_flips": 0,
         "alpha_mismatches": 0,
         "changed_pixels": 0,
-        "maximum_byte_error": 0
+        "examples": [],
+        "maximum_byte_error": 0,
+        "pixels_over_one_byte": 0
       }
     },
     {
-      "alpha_examples": [],
       "baseline": {
         "alpha_mismatches": 0,
         "changed_pixels": 0,
-        "maximum_byte_error": 0
+        "examples": [],
+        "maximum_byte_error": 0,
+        "pixels_over_one_byte": 0
       },
       "id": "typed-black-and-dark-source mixed 0 lights",
       "native_hdr_alpha_mismatches": 0,
@@ -1321,26 +3508,34 @@
       "order": {
         "alpha_mismatches": 0,
         "changed_pixels": 0,
-        "maximum_byte_error": 0
+        "examples": [],
+        "maximum_byte_error": 0,
+        "pixels_over_one_byte": 0
       },
       "over_cap_pixels": 0,
       "scalar_oracle": {
         "alpha_mismatches": 0,
         "changed_pixels": 0,
-        "maximum_byte_error": 0
+        "examples": [],
+        "maximum_byte_error": 0,
+        "pixels_over_one_byte": 0
       },
       "toggle_off": {
+        "alpha_half_byte_flips": 0,
         "alpha_mismatches": 0,
         "changed_pixels": 0,
-        "maximum_byte_error": 0
+        "examples": [],
+        "maximum_byte_error": 0,
+        "pixels_over_one_byte": 0
       }
     },
     {
-      "alpha_examples": [],
       "baseline": {
         "alpha_mismatches": 0,
         "changed_pixels": 0,
-        "maximum_byte_error": 0
+        "examples": [],
+        "maximum_byte_error": 0,
+        "pixels_over_one_byte": 0
       },
       "id": "typed-black-and-dark-source mixed 1 lights",
       "native_hdr_alpha_mismatches": 0,
@@ -1352,26 +3547,143 @@
       "order": {
         "alpha_mismatches": 0,
         "changed_pixels": 0,
-        "maximum_byte_error": 0
+        "examples": [],
+        "maximum_byte_error": 0,
+        "pixels_over_one_byte": 0
       },
       "over_cap_pixels": 0,
       "scalar_oracle": {
         "alpha_mismatches": 0,
         "changed_pixels": 0,
-        "maximum_byte_error": 0
+        "examples": [],
+        "maximum_byte_error": 0,
+        "pixels_over_one_byte": 0
       },
       "toggle_off": {
+        "alpha_half_byte_flips": 0,
         "alpha_mismatches": 0,
         "changed_pixels": 0,
-        "maximum_byte_error": 0
+        "examples": [],
+        "maximum_byte_error": 0,
+        "pixels_over_one_byte": 0
       }
     },
     {
-      "alpha_examples": [],
       "baseline": {
         "alpha_mismatches": 0,
         "changed_pixels": 24,
-        "maximum_byte_error": 164
+        "examples": [
+          {
+            "actual": [
+              0,
+              9,
+              45,
+              63
+            ],
+            "at": [
+              4,
+              1
+            ],
+            "expected": [
+              1,
+              50,
+              136,
+              63
+            ]
+          },
+          {
+            "actual": [
+              0,
+              9,
+              45,
+              63
+            ],
+            "at": [
+              5,
+              1
+            ],
+            "expected": [
+              1,
+              50,
+              136,
+              63
+            ]
+          },
+          {
+            "actual": [
+              0,
+              9,
+              45,
+              63
+            ],
+            "at": [
+              6,
+              1
+            ],
+            "expected": [
+              1,
+              49,
+              136,
+              63
+            ]
+          },
+          {
+            "actual": [
+              0,
+              9,
+              45,
+              63
+            ],
+            "at": [
+              7,
+              1
+            ],
+            "expected": [
+              1,
+              49,
+              136,
+              63
+            ]
+          },
+          {
+            "actual": [
+              1,
+              23,
+              80,
+              194
+            ],
+            "at": [
+              4,
+              2
+            ],
+            "expected": [
+              5,
+              88,
+              226,
+              194
+            ]
+          },
+          {
+            "actual": [
+              1,
+              23,
+              80,
+              194
+            ],
+            "at": [
+              5,
+              2
+            ],
+            "expected": [
+              5,
+              88,
+              226,
+              194
+            ]
+          }
+        ],
+        "maximum_byte_error": 164,
+        "pixels_over_one_byte": 24
       },
       "id": "typed-black-and-dark-source mixed 2 lights",
       "native_hdr_alpha_mismatches": 0,
@@ -1383,26 +3695,143 @@
       "order": {
         "alpha_mismatches": 0,
         "changed_pixels": 0,
-        "maximum_byte_error": 0
+        "examples": [],
+        "maximum_byte_error": 0,
+        "pixels_over_one_byte": 0
       },
       "over_cap_pixels": 48,
       "scalar_oracle": {
         "alpha_mismatches": 0,
         "changed_pixels": 8,
-        "maximum_byte_error": 1
+        "examples": [],
+        "maximum_byte_error": 1,
+        "pixels_over_one_byte": 0
       },
       "toggle_off": {
+        "alpha_half_byte_flips": 0,
         "alpha_mismatches": 0,
-        "changed_pixels": 0,
-        "maximum_byte_error": 0
+        "changed_pixels": 6,
+        "examples": [],
+        "maximum_byte_error": 1,
+        "pixels_over_one_byte": 0
       }
     },
     {
-      "alpha_examples": [],
       "baseline": {
         "alpha_mismatches": 0,
         "changed_pixels": 24,
-        "maximum_byte_error": 228
+        "examples": [
+          {
+            "actual": [
+              0,
+              9,
+              45,
+              63
+            ],
+            "at": [
+              4,
+              1
+            ],
+            "expected": [
+              7,
+              136,
+              136,
+              63
+            ]
+          },
+          {
+            "actual": [
+              0,
+              9,
+              45,
+              63
+            ],
+            "at": [
+              5,
+              1
+            ],
+            "expected": [
+              7,
+              136,
+              136,
+              63
+            ]
+          },
+          {
+            "actual": [
+              0,
+              9,
+              45,
+              63
+            ],
+            "at": [
+              6,
+              1
+            ],
+            "expected": [
+              7,
+              136,
+              136,
+              63
+            ]
+          },
+          {
+            "actual": [
+              0,
+              9,
+              45,
+              63
+            ],
+            "at": [
+              7,
+              1
+            ],
+            "expected": [
+              7,
+              136,
+              136,
+              63
+            ]
+          },
+          {
+            "actual": [
+              1,
+              23,
+              80,
+              194
+            ],
+            "at": [
+              4,
+              2
+            ],
+            "expected": [
+              20,
+              226,
+              226,
+              194
+            ]
+          },
+          {
+            "actual": [
+              1,
+              23,
+              80,
+              194
+            ],
+            "at": [
+              5,
+              2
+            ],
+            "expected": [
+              20,
+              226,
+              226,
+              194
+            ]
+          }
+        ],
+        "maximum_byte_error": 228,
+        "pixels_over_one_byte": 24
       },
       "id": "typed-black-and-dark-source mixed 8 lights",
       "native_hdr_alpha_mismatches": 0,
@@ -1414,138 +3843,304 @@
       "order": {
         "alpha_mismatches": 0,
         "changed_pixels": 0,
-        "maximum_byte_error": 0
+        "examples": [],
+        "maximum_byte_error": 0,
+        "pixels_over_one_byte": 0
       },
       "over_cap_pixels": 48,
       "scalar_oracle": {
         "alpha_mismatches": 0,
         "changed_pixels": 8,
-        "maximum_byte_error": 1
+        "examples": [],
+        "maximum_byte_error": 1,
+        "pixels_over_one_byte": 0
       },
       "toggle_off": {
+        "alpha_half_byte_flips": 0,
         "alpha_mismatches": 0,
         "changed_pixels": 0,
-        "maximum_byte_error": 0
+        "examples": [],
+        "maximum_byte_error": 0,
+        "pixels_over_one_byte": 0
       }
     },
     {
       "comparison": {
         "alpha_mismatches": 0,
-        "changed_pixels": 344,
-        "maximum_byte_error": 8
+        "changed_pixels": 343,
+        "examples": [
+          {
+            "actual": [
+              19,
+              24,
+              27,
+              186
+            ],
+            "at": [
+              66,
+              50
+            ],
+            "expected": [
+              25,
+              27,
+              30,
+              186
+            ]
+          },
+          {
+            "actual": [
+              27,
+              30,
+              32,
+              186
+            ],
+            "at": [
+              65,
+              51
+            ],
+            "expected": [
+              29,
+              31,
+              32,
+              186
+            ]
+          },
+          {
+            "actual": [
+              26,
+              29,
+              31,
+              186
+            ],
+            "at": [
+              66,
+              51
+            ],
+            "expected": [
+              29,
+              31,
+              32,
+              186
+            ]
+          },
+          {
+            "actual": [
+              25,
+              27,
+              29,
+              186
+            ],
+            "at": [
+              67,
+              51
+            ],
+            "expected": [
+              27,
+              28,
+              29,
+              186
+            ]
+          },
+          {
+            "actual": [
+              29,
+              31,
+              32,
+              186
+            ],
+            "at": [
+              65,
+              52
+            ],
+            "expected": [
+              31,
+              32,
+              32,
+              186
+            ]
+          },
+          {
+            "actual": [
+              30,
+              32,
+              32,
+              186
+            ],
+            "at": [
+              66,
+              52
+            ],
+            "expected": [
+              32,
+              32,
+              33,
+              186
+            ]
+          }
+        ],
+        "maximum_byte_error": 8,
+        "pixels_over_one_byte": 318
       },
       "id": "height20-vs56"
     },
     {
-      "comparison": {
+      "cap_bypass": {
         "alpha_mismatches": 0,
         "changed_pixels": 0,
-        "maximum_byte_error": 0
+        "examples": [],
+        "maximum_byte_error": 0,
+        "pixels_over_one_byte": 0
       },
-      "id": "modular-normals"
+      "id": "modular-normals",
+      "independent_normals": {
+        "alpha_mismatches": 0,
+        "changed_pixels": 120,
+        "examples": [],
+        "maximum_byte_error": 1,
+        "pixels_over_one_byte": 0
+      }
     },
     {
-      "comparison": {
+      "cap_bypass": {
         "alpha_mismatches": 0,
         "changed_pixels": 0,
-        "maximum_byte_error": 0
+        "examples": [],
+        "maximum_byte_error": 0,
+        "pixels_over_one_byte": 0
       },
-      "id": "environment-normals"
+      "id": "environment-normals",
+      "independent_normals": {
+        "alpha_mismatches": 0,
+        "changed_pixels": 4227,
+        "examples": [],
+        "maximum_byte_error": 1,
+        "pixels_over_one_byte": 0
+      }
     },
     {
-      "alpha_examples": [
-        {
-          "hdr_atlas": 0.54296875,
-          "new_final": 138,
-          "old_atlas": 0.545098066329956,
-          "old_final": 139,
-          "raw_source_alpha": 0.54330712556839,
-          "x": 131,
-          "y": 100
-        },
-        {
-          "hdr_atlas": 0.546875,
-          "new_final": 139,
-          "old_atlas": 0.549019634723663,
-          "old_final": 140,
-          "raw_source_alpha": 0.547244131565094,
-          "x": 123,
-          "y": 105
-        },
-        {
-          "hdr_atlas": 0.53515625,
-          "new_final": 136,
-          "old_atlas": 0.537254929542542,
-          "old_final": 137,
-          "raw_source_alpha": 0.535433113574982,
-          "x": 134,
-          "y": 110
-        },
-        {
-          "hdr_atlas": 0.5546875,
-          "new_final": 141,
-          "old_atlas": 0.556862771511078,
-          "old_final": 142,
-          "raw_source_alpha": 0.555118143558502,
-          "x": 134,
-          "y": 111
-        },
-        {
-          "hdr_atlas": 0.54296875,
-          "new_final": 138,
-          "old_atlas": 0.545098066329956,
-          "old_final": 139,
-          "raw_source_alpha": 0.54330712556839,
-          "x": 122,
-          "y": 112
-        },
-        {
-          "hdr_atlas": 0.5546875,
-          "new_final": 141,
-          "old_atlas": 0.556862771511078,
-          "old_final": 142,
-          "raw_source_alpha": 0.555118143558502,
-          "x": 122,
-          "y": 113
-        },
-        {
-          "hdr_atlas": 0.55859375,
-          "new_final": 142,
-          "old_atlas": 0.560784339904785,
-          "old_final": 143,
-          "raw_source_alpha": 0.559055149555206,
-          "x": 122,
-          "y": 114
-        },
-        {
-          "hdr_atlas": 0.55859375,
-          "new_final": 142,
-          "old_atlas": 0.560784339904785,
-          "old_final": 143,
-          "raw_source_alpha": 0.559055149555206,
-          "x": 122,
-          "y": 115
-        },
-        {
-          "hdr_atlas": 0.5546875,
-          "new_final": 141,
-          "old_atlas": 0.556862771511078,
-          "old_final": 142,
-          "raw_source_alpha": 0.555118143558502,
-          "x": 125,
-          "y": 123
-        }
-      ],
       "comparison": {
         "alpha_mismatches": 9,
-        "changed_pixels": 3168,
-        "maximum_byte_error": 1
+        "changed_pixels": 647,
+        "examples": [
+          {
+            "actual": [
+              173,
+              126,
+              0,
+              139
+            ],
+            "at": [
+              131,
+              100
+            ],
+            "expected": [
+              173,
+              126,
+              0,
+              138
+            ]
+          },
+          {
+            "actual": [
+              173,
+              126,
+              0,
+              140
+            ],
+            "at": [
+              123,
+              105
+            ],
+            "expected": [
+              173,
+              126,
+              0,
+              139
+            ]
+          },
+          {
+            "actual": [
+              170,
+              131,
+              1,
+              137
+            ],
+            "at": [
+              134,
+              110
+            ],
+            "expected": [
+              169,
+              131,
+              0,
+              136
+            ]
+          },
+          {
+            "actual": [
+              172,
+              133,
+              0,
+              142
+            ],
+            "at": [
+              134,
+              111
+            ],
+            "expected": [
+              172,
+              133,
+              0,
+              141
+            ]
+          },
+          {
+            "actual": [
+              171,
+              131,
+              0,
+              139
+            ],
+            "at": [
+              122,
+              112
+            ],
+            "expected": [
+              170,
+              131,
+              0,
+              138
+            ]
+          },
+          {
+            "actual": [
+              172,
+              133,
+              0,
+              142
+            ],
+            "at": [
+              122,
+              113
+            ],
+            "expected": [
+              172,
+              132,
+              0,
+              141
+            ]
+          }
+        ],
+        "maximum_byte_error": 1,
+        "pixels_over_one_byte": 0
       },
       "id": "original-torch-flame",
       "native_hdr_reference": {
         "alpha_mismatches": 0,
         "changed_pixels": 173,
-        "maximum_byte_error": 1
+        "examples": [],
+        "maximum_byte_error": 1,
+        "pixels_over_one_byte": 0
       },
       "native_hdr_vs_ldr_alpha": {
         "coverage_changes": 0,
@@ -1553,126 +4148,129 @@
       }
     },
     {
-      "alpha_examples": [
-        {
-          "hdr_atlas": 0.8095703125,
-          "new_final": 206,
-          "old_atlas": 0.811764717102051,
-          "old_final": 207,
-          "raw_source_alpha": 1.0,
-          "x": 129,
-          "y": 47
-        },
-        {
-          "hdr_atlas": 0.8095703125,
-          "new_final": 206,
-          "old_atlas": 0.811764717102051,
-          "old_final": 207,
-          "raw_source_alpha": 1.0,
-          "x": 128,
-          "y": 48
-        },
-        {
-          "hdr_atlas": 0.8095703125,
-          "new_final": 206,
-          "old_atlas": 0.811764717102051,
-          "old_final": 207,
-          "raw_source_alpha": 1.0,
-          "x": 129,
-          "y": 48
-        },
-        {
-          "hdr_atlas": 0.8095703125,
-          "new_final": 206,
-          "old_atlas": 0.811764717102051,
-          "old_final": 207,
-          "raw_source_alpha": 1.0,
-          "x": 130,
-          "y": 48
-        },
-        {
-          "hdr_atlas": 0.8095703125,
-          "new_final": 206,
-          "old_atlas": 0.811764717102051,
-          "old_final": 207,
-          "raw_source_alpha": 1.0,
-          "x": 131,
-          "y": 48
-        },
-        {
-          "hdr_atlas": 0.8095703125,
-          "new_final": 206,
-          "old_atlas": 0.811764717102051,
-          "old_final": 207,
-          "raw_source_alpha": 1.0,
-          "x": 132,
-          "y": 48
-        },
-        {
-          "hdr_atlas": 0.8095703125,
-          "new_final": 206,
-          "old_atlas": 0.811764717102051,
-          "old_final": 207,
-          "raw_source_alpha": 1.0,
-          "x": 133,
-          "y": 48
-        },
-        {
-          "hdr_atlas": 0.8095703125,
-          "new_final": 206,
-          "old_atlas": 0.811764717102051,
-          "old_final": 207,
-          "raw_source_alpha": 1.0,
-          "x": 128,
-          "y": 49
-        },
-        {
-          "hdr_atlas": 0.8095703125,
-          "new_final": 206,
-          "old_atlas": 0.811764717102051,
-          "old_final": 207,
-          "raw_source_alpha": 1.0,
-          "x": 129,
-          "y": 49
-        },
-        {
-          "hdr_atlas": 0.8095703125,
-          "new_final": 206,
-          "old_atlas": 0.811764717102051,
-          "old_final": 207,
-          "raw_source_alpha": 1.0,
-          "x": 130,
-          "y": 49
-        },
-        {
-          "hdr_atlas": 0.8095703125,
-          "new_final": 206,
-          "old_atlas": 0.811764717102051,
-          "old_final": 207,
-          "raw_source_alpha": 1.0,
-          "x": 131,
-          "y": 49
-        },
-        {
-          "hdr_atlas": 0.8095703125,
-          "new_final": 206,
-          "old_atlas": 0.811764717102051,
-          "old_final": 207,
-          "raw_source_alpha": 1.0,
-          "x": 132,
-          "y": 49
-        }
-      ],
       "comparison": {
         "alpha_mismatches": 14218,
         "changed_pixels": 14218,
-        "maximum_byte_error": 1
+        "examples": [
+          {
+            "actual": [
+              0,
+              0,
+              0,
+              207
+            ],
+            "at": [
+              129,
+              47
+            ],
+            "expected": [
+              0,
+              0,
+              0,
+              206
+            ]
+          },
+          {
+            "actual": [
+              0,
+              0,
+              0,
+              207
+            ],
+            "at": [
+              128,
+              48
+            ],
+            "expected": [
+              0,
+              0,
+              0,
+              206
+            ]
+          },
+          {
+            "actual": [
+              0,
+              0,
+              0,
+              207
+            ],
+            "at": [
+              129,
+              48
+            ],
+            "expected": [
+              0,
+              0,
+              0,
+              206
+            ]
+          },
+          {
+            "actual": [
+              0,
+              0,
+              0,
+              207
+            ],
+            "at": [
+              130,
+              48
+            ],
+            "expected": [
+              0,
+              0,
+              0,
+              206
+            ]
+          },
+          {
+            "actual": [
+              0,
+              0,
+              0,
+              207
+            ],
+            "at": [
+              131,
+              48
+            ],
+            "expected": [
+              0,
+              0,
+              0,
+              206
+            ]
+          },
+          {
+            "actual": [
+              0,
+              0,
+              0,
+              207
+            ],
+            "at": [
+              132,
+              48
+            ],
+            "expected": [
+              0,
+              0,
+              0,
+              206
+            ]
+          }
+        ],
+        "maximum_byte_error": 1,
+        "pixels_over_one_byte": 0
       },
       "id": "original-wall-shadow",
       "native_hdr_reference": {
         "alpha_mismatches": 0,
         "changed_pixels": 0,
-        "maximum_byte_error": 0
+        "examples": [],
+        "maximum_byte_error": 0,
+        "pixels_over_one_byte": 0
       },
       "native_hdr_vs_ldr_alpha": {
         "coverage_changes": 0,
@@ -1680,9 +4278,9 @@
       }
     }
   ],
-  "checks": 270,
+  "checks": 272,
   "driver": "vulkan",
   "failures": [],
   "renderer": "forward_plus",
-  "scope": "Actual modular/wall/water. Independent oldLDR native Canvas normals oracle plus frozen542303f water graph/output; source-black/scalar cap, alpha,0/1/2/8 warm/mixed overlaps, below-cap fidelity, native order, off restoration, normal-height response, wall opacity, Normals bypass. RGB comparison bound1; capped alpha exactly matches original-source nativeHDR; oldLDR storage difference separately bounded1alpha byte with exact coverage. Normals nativeLDR byteexact."
+  "scope": "Actual modular/wall/water through the lit sprite shaders with light_cap on/off. Independent oldLDR native Canvas references (CPU-decoded normals; frozen542303f water/flame receivers) composited analytically in linear alpha, plus uncapped native HDR pages for the irradiance field and alpha. Source-black/scalar cap, alpha,0/1/2/8 warm/mixed overlaps, below-cap fidelity, light table order, off restoration, normal-height response, wall opacity, Normals bypass and independent normals, flame/shadow bypass. RGB comparison bound1; capped alpha exactly matches original-source nativeHDR; oldLDR storage difference separately bounded1alpha byte with exact coverage."
 }

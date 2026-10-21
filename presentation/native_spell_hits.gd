@@ -10,6 +10,8 @@ var active:Dictionary={}
 var ready=true
 var issues:Array=[]
 var pending_occurrences:Array=[]
+# Preparation is owned by this existing hit consumer, including private history.
+var _resource_cache:Dictionary={}
 const MAX_TEMPLATES=64
 # Age-zero materials are immutable sources. Each occurrence still owns its
 # Surface, shader parameters and clock; no rendered texture is shared.
@@ -24,7 +26,7 @@ static func _issue(component:Dictionary,status:String,reason:String)->Dictionary
     return {"id":component.id,"actor_uuid":component.actor_uuid,
         "spell_id":component.native_hit.get("spell_id",""),"status":status,"reason":reason}
 
-func prepare(world:Node,components:Array,cache:Dictionary,prefetch:Array=[],budget:Dictionary={},allow_optional:bool=true)->Dictionary:
+func prepare(world:Node,components:Array,_cache:Dictionary,prefetch:Array=[],budget:Dictionary={},allow_optional:bool=true)->Dictionary:
     var admission_started:int=Time.get_ticks_usec();var charged_before:int=budget.get("used_usec",0)
     admitted.clear()
     var candidates:Array=[];var optional:Array=[];var clips:Array=[];var required:Dictionary={}
@@ -36,13 +38,19 @@ func prepare(world:Node,components:Array,cache:Dictionary,prefetch:Array=[],budg
         required[_key(component)]=true
         var hit:Dictionary=component.native_hit
         if not records.has(_key(component)) and hit.get("definition",{}).get("status")=="available" and hit.has("clip"):clips.append(hit.clip)
+    var resource_interests:Array=clips.duplicate()
+    if clips.is_empty() and allow_optional:
+        for component in optional:
+            var hit:Dictionary=component.native_hit
+            if hit.get("definition",{}).get("status")=="available" and hit.has("clip"):resource_interests.append(hit.clip)
+    Effects.retain_source_preparation(_resource_cache,resource_interests)
     _retire()
     var started:int=Time.get_ticks_usec()
     var loading:Dictionary
     if not clips.is_empty() and not budget.is_empty() and budget.used_usec>=budget.limit_usec:
         Effects.Admission.can_mutate() # Poll existing work without admitting a new source.
         loading={"ready":false,"pending":clips.size(),"errors":[]}
-    else:loading=Effects.prepare_hits(clips,cache)
+    else:loading=Effects.prepare_hits(clips,_resource_cache,resource_interests)
     if not budget.is_empty():budget.used_usec+=maxi(0,Time.get_ticks_usec()-admission_started-(budget.used_usec-charged_before))
     issues=[]
     for error in loading.errors:issues.append({"status":"missing","reason":error})
@@ -61,6 +69,7 @@ func prepare(world:Node,components:Array,cache:Dictionary,prefetch:Array=[],budg
         if record.has("issue"):issues.append(record.issue)
         elif not record.surface.ready:pending+=1
     ready=pending==0 and not issues.any(func(issue):return issue.status=="missing")
+    if not ready:Effects.retain_source_preparation(_resource_cache,clips)
     if allow_optional and ready:
         for component in optional:
             var key=_key(component)
@@ -68,7 +77,7 @@ func prepare(world:Node,components:Array,cache:Dictionary,prefetch:Array=[],budg
             if not budget.is_empty() and budget.used_usec>=budget.limit_usec:break
             var hit:Dictionary=component.native_hit
             if hit.get("definition",{}).get("status")!="available" or not hit.has("clip"):continue
-            started=Time.get_ticks_usec();var source=Effects.prepare_hits([hit.clip],cache)
+            started=Time.get_ticks_usec();var source=Effects.prepare_hits([hit.clip],_resource_cache,resource_interests,false)
             if not budget.is_empty():budget.used_usec+=Time.get_ticks_usec()-started
             if not source.ready:continue
             if not budget.is_empty() and budget.used_usec>=budget.limit_usec:break
@@ -158,6 +167,8 @@ func _retire()->void:
         records.erase(key)
 
 func close()->void:
+    Effects.Admission.cancel_source_cache(_resource_cache)
+    _resource_cache.erase("native_immutable_jobs")
     for record in records.values():
         if record.has("surface"):Surface.close(record.surface)
     for parked in spare_surfaces:

@@ -12,12 +12,12 @@ at = "owner_start"
 attachment = "recipient_ground"
 scale = 0.471404520693175
 orientation = "world"
-approach = "runtime-prepared-wall-child-v3-20261021"
+approach = "runtime-prepared-speed-completion-20261021"
 sampling = "absolute"
 fade_out = 0.6
-immutable_preparation = "res://assets/vfx/extensions/production-review-20261020/sources/7dd1897cdd5ee8a903b9/source_readiness.gd"
-constructor_input = {"kind": "spatial_owner", "component_path": ["wall"], "input_field": "", "cell_input": "wall_assembly", "content_id": "spatial_effect.spell.wind_wall", "contact_behavior_id": "spell.wind_wall"}
-staging_from = "factory@runtime-wall-child-v3-20261021-8b695014a812da72"
+immutable_preparation = "res://assets/vfx/extensions/speed-completion-20261021/sources/2fb1a6e6023628bc23a1/readiness.gd"
+constructor_input = {"kind": "spatial_owner", "argument": "wall", "component_path": ["wall"], "input_field": "", "cell_input": "wall_assembly", "content_id": "spatial_effect.spell.wind_wall", "contact_behavior_id": "spell.wind_wall"}
+staging_from = "factory@runtime-speed-completion-20261021-82a271b677ff9604"
 extra = {"wall_forms": ["segment", "polyline"]}
 
 [resource]
@@ -26,4 +26,4 @@ id = "spatial_effect.spell.wind_wall"
 disposition = "authored"
 effects = Array[ExtResource("effect")]([SubResource("Wall0")])
 status = "partial"
-notes = "Actual spatial UUID/anchor/wall_assembly and absolute owner age drive the explicit selective-readiness successor of the original Wind controller. Current optical occupants never assert contact. Only exact native contact ancestry supplies named pulses; visibility loss and real removal remain distinct. This retains the source's documented indivisible readiness publication tail; whole-game performance is not qualified by this assignment. Native output and human visual acceptance require original-case evidence."
+notes = "Actual spatial UUID/anchor/wall_assembly and absolute owner age drive the explicitly selected speed-completion successor of the original Wind controller. Current optical occupants never assert contact. Only exact native contact ancestry supplies named pulses; visibility loss and real removal remain distinct. The original private debris geometry and Color writer use the delivered mask-compatible material. Actual current-cell coverage remains enabled, and the public constructor retains its WallInput validation. The delivered progressive preparer owns immutable work; whole-game performance is not qualified by this assignment. Native output and human visual acceptance require original-case evidence."

@@ -1,22 +1,31 @@
 {
-  "checks": 47,
-  "command": "--headless --script res://tests/studio_missing_lanes_checks.gd -- --recording=res://.runtime/studio-cases/rage-seed3-v3/amber/journal --recording=res://.runtime/studio-cases/ranged-seed3/amber/journal --recording=res://.runtime/studio-cases/hide-seed3-v3/amber/journal --recording=res://.runtime/studio-cases/hold_person-seed3/amber/journal",
+  "checks": 520,
+  "command": "--headless --script res://tests/studio_missing_lanes_checks.gd -- --recording=res://tests/fixtures/schema16/scenarios/hold-person/amber --recording=res://tests/fixtures/schema16/scenarios/interaction-media/amber --recording=res://tests/fixtures/schema16/scenarios/gallery/amber",
   "evidence": [
-    {
-      "end_ms": 500.0,
-      "label": "Missing inspection · appearance transition",
-      "reason": "Current state is rendered; the operation has no separate inspection track.",
-      "recording": "res://.runtime/studio-cases/hide-seed3-v3/amber/journal",
-      "source": "res://sdk/player-api-v1.schema.json:/$defs/PlayerNode/properties/fact/anyOf/0/discriminator/mapping/equipment",
-      "start_ms": 500.0,
-      "timing": "unresolved"
-    },
     {
       "end_ms": 1083.33333333333,
       "label": "Unassessed · factual save; optional authored avoidance",
       "reason": "Selected operation requires source-to-renderer assessment.",
-      "recording": "res://.runtime/studio-cases/hold_person-seed3/amber/journal",
+      "recording": "res://tests/fixtures/schema16/scenarios/hold-person/amber",
       "source": "res://sdk/player-api-v1.schema.json:/$defs/PlayerNode/properties/fact/anyOf/0/discriminator/mapping/saving_throw",
+      "start_ms": 1083.33333333333,
+      "timing": "unresolved"
+    },
+    {
+      "end_ms": 1083.33333333333,
+      "label": "Missing · condition",
+      "reason": "native_source_not_authored",
+      "recording": "res://tests/fixtures/schema16/scenarios/hold-person/amber",
+      "source": "catalog/condition_recipes.json:/condition.spell.hold_person/persistent/layers",
+      "start_ms": 1083.33333333333,
+      "timing": "unresolved"
+    },
+    {
+      "end_ms": 1083.33333333333,
+      "label": "Missing · condition",
+      "reason": "native_source_not_authored",
+      "recording": "res://tests/fixtures/schema16/scenarios/hold-person/amber",
+      "source": "catalog/condition_recipes.json:/condition.spell.hold_person/persistent/layers",
       "start_ms": 1083.33333333333,
       "timing": "unresolved"
     },
@@ -24,8 +33,26 @@
       "end_ms": 500.0,
       "label": "Missing inspection · Cast equipment · hidden",
       "reason": "Current state is rendered; the operation has no separate inspection track.",
-      "recording": "res://.runtime/studio-cases/hold_person-seed3/amber/journal",
+      "recording": "res://tests/fixtures/schema16/scenarios/hold-person/amber",
       "source": "spells/spell.hold_person.json:/cast/equipment",
+      "start_ms": 500.0,
+      "timing": "unresolved"
+    },
+    {
+      "end_ms": 500.0,
+      "label": "Unassessed · Condition effect/feedback policy",
+      "reason": "This selected source controls an existing causal consequence; verify its fields against the shared compiler rather than create another effect or assume generic timing is equivalent.",
+      "recording": "res://tests/fixtures/schema16/scenarios/hold-person/amber",
+      "source": "spells/spell.hold_person.json:/condition",
+      "start_ms": 500.0,
+      "timing": "unresolved"
+    },
+    {
+      "end_ms": 500.0,
+      "label": "Unassessed · Authored delivery/contact policy",
+      "reason": "This selected source controls an existing causal consequence; verify its fields against the shared compiler rather than create another effect or assume generic timing is equivalent.",
+      "recording": "res://tests/fixtures/schema16/scenarios/hold-person/amber",
+      "source": "spells/spell.hold_person.json:/contact",
       "start_ms": 500.0,
       "timing": "unresolved"
     },
@@ -33,9 +60,504 @@
       "end_ms": 1750.0,
       "label": "Unassessed · factual save; optional authored avoidance",
       "reason": "Selected operation requires source-to-renderer assessment.",
-      "recording": "res://.runtime/studio-cases/hold_person-seed3/amber/journal",
+      "recording": "res://tests/fixtures/schema16/scenarios/hold-person/amber",
       "source": "res://sdk/player-api-v1.schema.json:/$defs/PlayerNode/properties/fact/anyOf/0/discriminator/mapping/saving_throw",
       "start_ms": 1750.0,
+      "timing": "unresolved"
+    },
+    {
+      "end_ms": 8196.39849804697,
+      "label": "Missing inspection · Cast equipment · hidden",
+      "reason": "Current state is rendered; the operation has no separate inspection track.",
+      "recording": "res://tests/fixtures/schema16/scenarios/interaction-media/amber",
+      "source": "spells/spell.protection_from_poison.json:/cast/equipment",
+      "start_ms": 8196.39849804697,
+      "timing": "unresolved"
+    },
+    {
+      "end_ms": 8196.39849804697,
+      "label": "Unassessed · Condition effect/feedback policy",
+      "reason": "This selected source controls an existing causal consequence; verify its fields against the shared compiler rather than create another effect or assume generic timing is equivalent.",
+      "recording": "res://tests/fixtures/schema16/scenarios/interaction-media/amber",
+      "source": "spells/spell.protection_from_poison.json:/condition",
+      "start_ms": 8196.39849804697,
+      "timing": "unresolved"
+    },
+    {
+      "end_ms": 8196.39849804697,
+      "label": "Unassessed · Authored delivery/contact policy",
+      "reason": "This selected source controls an existing causal consequence; verify its fields against the shared compiler rather than create another effect or assume generic timing is equivalent.",
+      "recording": "res://tests/fixtures/schema16/scenarios/interaction-media/amber",
+      "source": "spells/spell.protection_from_poison.json:/contact",
+      "start_ms": 8196.39849804697,
+      "timing": "unresolved"
+    },
+    {
+      "end_ms": 3700.0,
+      "label": "Unassessed · Condition effect/feedback policy",
+      "reason": "This selected source controls an existing causal consequence; verify its fields against the shared compiler rather than create another effect or assume generic timing is equivalent.",
+      "recording": "res://tests/fixtures/schema16/scenarios/gallery/amber",
+      "source": "spells/.json:/condition",
+      "start_ms": 3700.0,
+      "timing": "unresolved"
+    },
+    {
+      "end_ms": 3700.0,
+      "label": "Unassessed · Condition effect/feedback policy",
+      "reason": "This selected source controls an existing causal consequence; verify its fields against the shared compiler rather than create another effect or assume generic timing is equivalent.",
+      "recording": "res://tests/fixtures/schema16/scenarios/gallery/amber",
+      "source": "spells/.json:/condition",
+      "start_ms": 3700.0,
+      "timing": "unresolved"
+    },
+    {
+      "end_ms": 3700.0,
+      "label": "Unassessed · Condition effect/feedback policy",
+      "reason": "This selected source controls an existing causal consequence; verify its fields against the shared compiler rather than create another effect or assume generic timing is equivalent.",
+      "recording": "res://tests/fixtures/schema16/scenarios/gallery/amber",
+      "source": "spells/.json:/condition",
+      "start_ms": 3700.0,
+      "timing": "unresolved"
+    },
+    {
+      "end_ms": 3700.0,
+      "label": "Missing inspection · Cast equipment · hidden",
+      "reason": "Current state is rendered; the operation has no separate inspection track.",
+      "recording": "res://tests/fixtures/schema16/scenarios/gallery/amber",
+      "source": "spells/spell.magic_missile.json:/cast/equipment",
+      "start_ms": 3700.0,
+      "timing": "unresolved"
+    },
+    {
+      "end_ms": 3700.0,
+      "label": "Unassessed · Condition effect/feedback policy",
+      "reason": "This selected source controls an existing causal consequence; verify its fields against the shared compiler rather than create another effect or assume generic timing is equivalent.",
+      "recording": "res://tests/fixtures/schema16/scenarios/gallery/amber",
+      "source": "spells/spell.magic_missile.json:/condition",
+      "start_ms": 3700.0,
+      "timing": "unresolved"
+    },
+    {
+      "end_ms": 5533.04347826087,
+      "label": "Missing inspection · Cast equipment · hidden",
+      "reason": "Current state is rendered; the operation has no separate inspection track.",
+      "recording": "res://tests/fixtures/schema16/scenarios/gallery/amber",
+      "source": "spells/spell.ray_of_frost.json:/cast/equipment",
+      "start_ms": 5533.04347826087,
+      "timing": "unresolved"
+    },
+    {
+      "end_ms": 5533.04347826087,
+      "label": "Unassessed · Condition effect/feedback policy",
+      "reason": "This selected source controls an existing causal consequence; verify its fields against the shared compiler rather than create another effect or assume generic timing is equivalent.",
+      "recording": "res://tests/fixtures/schema16/scenarios/gallery/amber",
+      "source": "spells/spell.ray_of_frost.json:/condition",
+      "start_ms": 5533.04347826087,
+      "timing": "unresolved"
+    },
+    {
+      "end_ms": 10865.1562620221,
+      "label": "Unassessed · Condition effect/feedback policy",
+      "reason": "This selected source controls an existing causal consequence; verify its fields against the shared compiler rather than create another effect or assume generic timing is equivalent.",
+      "recording": "res://tests/fixtures/schema16/scenarios/gallery/amber",
+      "source": "spells/.json:/condition",
+      "start_ms": 10865.1562620221,
+      "timing": "unresolved"
+    },
+    {
+      "end_ms": 10865.1562620221,
+      "label": "Unassessed · Condition effect/feedback policy",
+      "reason": "This selected source controls an existing causal consequence; verify its fields against the shared compiler rather than create another effect or assume generic timing is equivalent.",
+      "recording": "res://tests/fixtures/schema16/scenarios/gallery/amber",
+      "source": "spells/.json:/condition",
+      "start_ms": 10865.1562620221,
+      "timing": "unresolved"
+    },
+    {
+      "end_ms": 10865.1562620221,
+      "label": "Unassessed · Condition effect/feedback policy",
+      "reason": "This selected source controls an existing causal consequence; verify its fields against the shared compiler rather than create another effect or assume generic timing is equivalent.",
+      "recording": "res://tests/fixtures/schema16/scenarios/gallery/amber",
+      "source": "spells/.json:/condition",
+      "start_ms": 10865.1562620221,
+      "timing": "unresolved"
+    },
+    {
+      "end_ms": 10865.1562620221,
+      "label": "Missing inspection · Cast equipment · hidden",
+      "reason": "Current state is rendered; the operation has no separate inspection track.",
+      "recording": "res://tests/fixtures/schema16/scenarios/gallery/amber",
+      "source": "spells/spell.scorching_ray.json:/cast/equipment",
+      "start_ms": 10865.1562620221,
+      "timing": "unresolved"
+    },
+    {
+      "end_ms": 10865.1562620221,
+      "label": "Unassessed · Condition effect/feedback policy",
+      "reason": "This selected source controls an existing causal consequence; verify its fields against the shared compiler rather than create another effect or assume generic timing is equivalent.",
+      "recording": "res://tests/fixtures/schema16/scenarios/gallery/amber",
+      "source": "spells/spell.scorching_ray.json:/condition",
+      "start_ms": 10865.1562620221,
+      "timing": "unresolved"
+    },
+    {
+      "end_ms": 18046.2956046745,
+      "label": "Unassessed · factual save; optional authored avoidance",
+      "reason": "Selected operation requires source-to-renderer assessment.",
+      "recording": "res://tests/fixtures/schema16/scenarios/gallery/amber",
+      "source": "res://sdk/player-api-v1.schema.json:/$defs/PlayerNode/properties/fact/anyOf/0/discriminator/mapping/saving_throw",
+      "start_ms": 18046.2956046745,
+      "timing": "unresolved"
+    },
+    {
+      "end_ms": 16020.7417742099,
+      "label": "Unassessed · Condition effect/feedback policy",
+      "reason": "This selected source controls an existing causal consequence; verify its fields against the shared compiler rather than create another effect or assume generic timing is equivalent.",
+      "recording": "res://tests/fixtures/schema16/scenarios/gallery/amber",
+      "source": "spells/.json:/condition",
+      "start_ms": 16020.7417742099,
+      "timing": "unresolved"
+    },
+    {
+      "end_ms": 16020.7417742099,
+      "label": "Missing inspection · Cast equipment · hidden",
+      "reason": "Current state is rendered; the operation has no separate inspection track.",
+      "recording": "res://tests/fixtures/schema16/scenarios/gallery/amber",
+      "source": "spells/spell.acid_splash.json:/cast/equipment",
+      "start_ms": 16020.7417742099,
+      "timing": "unresolved"
+    },
+    {
+      "end_ms": 16020.7417742099,
+      "label": "Unassessed · Condition effect/feedback policy",
+      "reason": "This selected source controls an existing causal consequence; verify its fields against the shared compiler rather than create another effect or assume generic timing is equivalent.",
+      "recording": "res://tests/fixtures/schema16/scenarios/gallery/amber",
+      "source": "spells/spell.acid_splash.json:/condition",
+      "start_ms": 16020.7417742099,
+      "timing": "unresolved"
+    },
+    {
+      "end_ms": 23611.4541420359,
+      "label": "Unassessed · factual save; optional authored avoidance",
+      "reason": "Selected operation requires source-to-renderer assessment.",
+      "recording": "res://tests/fixtures/schema16/scenarios/gallery/amber",
+      "source": "res://sdk/player-api-v1.schema.json:/$defs/PlayerNode/properties/fact/anyOf/0/discriminator/mapping/saving_throw",
+      "start_ms": 23611.4541420359,
+      "timing": "unresolved"
+    },
+    {
+      "end_ms": 23611.4541420359,
+      "label": "Unassessed · Condition effect/feedback policy",
+      "reason": "This selected source controls an existing causal consequence; verify its fields against the shared compiler rather than create another effect or assume generic timing is equivalent.",
+      "recording": "res://tests/fixtures/schema16/scenarios/gallery/amber",
+      "source": "spells/.json:/condition",
+      "start_ms": 23611.4541420359,
+      "timing": "unresolved"
+    },
+    {
+      "end_ms": 23611.4541420359,
+      "label": "Missing · Area · surfaceReveal",
+      "reason": "Authored operation has no shared renderer consumer.",
+      "recording": "res://tests/fixtures/schema16/scenarios/gallery/amber",
+      "source": "spells/.json:/area/surfaceReveal",
+      "start_ms": 23611.4541420359,
+      "timing": "unresolved"
+    },
+    {
+      "end_ms": 23611.4541420359,
+      "label": "Missing inspection · witnessed destruction and remnant",
+      "reason": "Current state is rendered; the operation has no separate inspection track.",
+      "recording": "res://tests/fixtures/schema16/scenarios/gallery/amber",
+      "source": "res://sdk/player-api-v1.schema.json:/$defs/PlayerNode/properties/fact/anyOf/0/discriminator/mapping/object_destroyed",
+      "start_ms": 23611.4541420359,
+      "timing": "unresolved"
+    },
+    {
+      "end_ms": 23611.4541420359,
+      "label": "Missing inspection · Environment Prop · environment.furniture.slender_monument",
+      "reason": "Observed-state selection exists; finite transition and source-phase inspection are not established by the final sprite.",
+      "recording": "res://tests/fixtures/schema16/scenarios/gallery/amber",
+      "source": "authoring/environment/objects/environment.furniture.slender_monument.tres",
+      "start_ms": 23611.4541420359,
+      "timing": "unresolved"
+    },
+    {
+      "end_ms": 23611.4541420359,
+      "label": "Unassessed · confirmed object damage response",
+      "reason": "Selected operation requires source-to-renderer assessment.",
+      "recording": "res://tests/fixtures/schema16/scenarios/gallery/amber",
+      "source": "res://sdk/player-api-v1.schema.json:/$defs/PlayerNode/properties/fact/anyOf/0/discriminator/mapping/object_damage",
+      "start_ms": 23611.4541420359,
+      "timing": "unresolved"
+    },
+    {
+      "end_ms": 23611.4541420359,
+      "label": "Unassessed · Condition effect/feedback policy",
+      "reason": "This selected source controls an existing causal consequence; verify its fields against the shared compiler rather than create another effect or assume generic timing is equivalent.",
+      "recording": "res://tests/fixtures/schema16/scenarios/gallery/amber",
+      "source": "spells/.json:/condition",
+      "start_ms": 23611.4541420359,
+      "timing": "unresolved"
+    },
+    {
+      "end_ms": 23611.4541420359,
+      "label": "Missing · Area · surfaceReveal",
+      "reason": "Authored operation has no shared renderer consumer.",
+      "recording": "res://tests/fixtures/schema16/scenarios/gallery/amber",
+      "source": "spells/.json:/area/surfaceReveal",
+      "start_ms": 23611.4541420359,
+      "timing": "unresolved"
+    },
+    {
+      "end_ms": 23611.4541420359,
+      "label": "Missing inspection · witnessed destruction and remnant",
+      "reason": "Current state is rendered; the operation has no separate inspection track.",
+      "recording": "res://tests/fixtures/schema16/scenarios/gallery/amber",
+      "source": "res://sdk/player-api-v1.schema.json:/$defs/PlayerNode/properties/fact/anyOf/0/discriminator/mapping/object_destroyed",
+      "start_ms": 23611.4541420359,
+      "timing": "unresolved"
+    },
+    {
+      "end_ms": 23611.4541420359,
+      "label": "Unassessed · confirmed object damage response",
+      "reason": "Selected operation requires source-to-renderer assessment.",
+      "recording": "res://tests/fixtures/schema16/scenarios/gallery/amber",
+      "source": "res://sdk/player-api-v1.schema.json:/$defs/PlayerNode/properties/fact/anyOf/0/discriminator/mapping/object_damage",
+      "start_ms": 23611.4541420359,
+      "timing": "unresolved"
+    },
+    {
+      "end_ms": 23611.4541420359,
+      "label": "Unassessed · Condition effect/feedback policy",
+      "reason": "This selected source controls an existing causal consequence; verify its fields against the shared compiler rather than create another effect or assume generic timing is equivalent.",
+      "recording": "res://tests/fixtures/schema16/scenarios/gallery/amber",
+      "source": "spells/.json:/condition",
+      "start_ms": 23611.4541420359,
+      "timing": "unresolved"
+    },
+    {
+      "end_ms": 23611.4541420359,
+      "label": "Missing · Area · surfaceReveal",
+      "reason": "Authored operation has no shared renderer consumer.",
+      "recording": "res://tests/fixtures/schema16/scenarios/gallery/amber",
+      "source": "spells/.json:/area/surfaceReveal",
+      "start_ms": 23611.4541420359,
+      "timing": "unresolved"
+    },
+    {
+      "end_ms": 23611.4541420359,
+      "label": "Missing inspection · witnessed destruction and remnant",
+      "reason": "Current state is rendered; the operation has no separate inspection track.",
+      "recording": "res://tests/fixtures/schema16/scenarios/gallery/amber",
+      "source": "res://sdk/player-api-v1.schema.json:/$defs/PlayerNode/properties/fact/anyOf/0/discriminator/mapping/object_destroyed",
+      "start_ms": 23611.4541420359,
+      "timing": "unresolved"
+    },
+    {
+      "end_ms": 23611.4541420359,
+      "label": "Missing inspection · Environment Prop · environment.furniture.writing_desk",
+      "reason": "Observed-state selection exists; finite transition and source-phase inspection are not established by the final sprite.",
+      "recording": "res://tests/fixtures/schema16/scenarios/gallery/amber",
+      "source": "authoring/environment/objects/environment.furniture.writing_desk.tres",
+      "start_ms": 23611.4541420359,
+      "timing": "unresolved"
+    },
+    {
+      "end_ms": 23611.4541420359,
+      "label": "Unassessed · confirmed object damage response",
+      "reason": "Selected operation requires source-to-renderer assessment.",
+      "recording": "res://tests/fixtures/schema16/scenarios/gallery/amber",
+      "source": "res://sdk/player-api-v1.schema.json:/$defs/PlayerNode/properties/fact/anyOf/0/discriminator/mapping/object_damage",
+      "start_ms": 23611.4541420359,
+      "timing": "unresolved"
+    },
+    {
+      "end_ms": 23611.4541420359,
+      "label": "Unassessed · Condition effect/feedback policy",
+      "reason": "This selected source controls an existing causal consequence; verify its fields against the shared compiler rather than create another effect or assume generic timing is equivalent.",
+      "recording": "res://tests/fixtures/schema16/scenarios/gallery/amber",
+      "source": "spells/.json:/condition",
+      "start_ms": 23611.4541420359,
+      "timing": "unresolved"
+    },
+    {
+      "end_ms": 23611.4541420359,
+      "label": "Missing · Area · surfaceReveal",
+      "reason": "Authored operation has no shared renderer consumer.",
+      "recording": "res://tests/fixtures/schema16/scenarios/gallery/amber",
+      "source": "spells/.json:/area/surfaceReveal",
+      "start_ms": 23611.4541420359,
+      "timing": "unresolved"
+    },
+    {
+      "end_ms": 23611.4541420359,
+      "label": "Missing inspection · witnessed destruction and remnant",
+      "reason": "Current state is rendered; the operation has no separate inspection track.",
+      "recording": "res://tests/fixtures/schema16/scenarios/gallery/amber",
+      "source": "res://sdk/player-api-v1.schema.json:/$defs/PlayerNode/properties/fact/anyOf/0/discriminator/mapping/object_destroyed",
+      "start_ms": 23611.4541420359,
+      "timing": "unresolved"
+    },
+    {
+      "end_ms": 23611.4541420359,
+      "label": "Missing inspection · Environment Prop · environment.furniture.wooden_chair",
+      "reason": "Observed-state selection exists; finite transition and source-phase inspection are not established by the final sprite.",
+      "recording": "res://tests/fixtures/schema16/scenarios/gallery/amber",
+      "source": "authoring/environment/objects/environment.furniture.wooden_chair.tres",
+      "start_ms": 23611.4541420359,
+      "timing": "unresolved"
+    },
+    {
+      "end_ms": 23611.4541420359,
+      "label": "Unassessed · confirmed object damage response",
+      "reason": "Selected operation requires source-to-renderer assessment.",
+      "recording": "res://tests/fixtures/schema16/scenarios/gallery/amber",
+      "source": "res://sdk/player-api-v1.schema.json:/$defs/PlayerNode/properties/fact/anyOf/0/discriminator/mapping/object_damage",
+      "start_ms": 23611.4541420359,
+      "timing": "unresolved"
+    },
+    {
+      "end_ms": 23611.4541420359,
+      "label": "Unassessed · Condition effect/feedback policy",
+      "reason": "This selected source controls an existing causal consequence; verify its fields against the shared compiler rather than create another effect or assume generic timing is equivalent.",
+      "recording": "res://tests/fixtures/schema16/scenarios/gallery/amber",
+      "source": "spells/.json:/condition",
+      "start_ms": 23611.4541420359,
+      "timing": "unresolved"
+    },
+    {
+      "end_ms": 23611.4541420359,
+      "label": "Missing · Area · surfaceReveal",
+      "reason": "Authored operation has no shared renderer consumer.",
+      "recording": "res://tests/fixtures/schema16/scenarios/gallery/amber",
+      "source": "spells/.json:/area/surfaceReveal",
+      "start_ms": 23611.4541420359,
+      "timing": "unresolved"
+    },
+    {
+      "end_ms": 23611.4541420359,
+      "label": "Unassessed · factual save; optional authored avoidance",
+      "reason": "Selected operation requires source-to-renderer assessment.",
+      "recording": "res://tests/fixtures/schema16/scenarios/gallery/amber",
+      "source": "res://sdk/player-api-v1.schema.json:/$defs/PlayerNode/properties/fact/anyOf/0/discriminator/mapping/saving_throw",
+      "start_ms": 23611.4541420359,
+      "timing": "unresolved"
+    },
+    {
+      "end_ms": 23611.4541420359,
+      "label": "Unassessed · Condition effect/feedback policy",
+      "reason": "This selected source controls an existing causal consequence; verify its fields against the shared compiler rather than create another effect or assume generic timing is equivalent.",
+      "recording": "res://tests/fixtures/schema16/scenarios/gallery/amber",
+      "source": "spells/.json:/condition",
+      "start_ms": 23611.4541420359,
+      "timing": "unresolved"
+    },
+    {
+      "end_ms": 23611.4541420359,
+      "label": "Missing · Area · surfaceReveal",
+      "reason": "Authored operation has no shared renderer consumer.",
+      "recording": "res://tests/fixtures/schema16/scenarios/gallery/amber",
+      "source": "spells/.json:/area/surfaceReveal",
+      "start_ms": 23611.4541420359,
+      "timing": "unresolved"
+    },
+    {
+      "end_ms": 23611.4541420359,
+      "label": "Unassessed · area propagation and structural clearance",
+      "reason": "Selected operation requires source-to-renderer assessment.",
+      "recording": "res://tests/fixtures/schema16/scenarios/gallery/amber",
+      "source": "res://sdk/player-api-v1.schema.json:/$defs/PlayerNode/properties/fact/anyOf/0/discriminator/mapping/area_reach",
+      "start_ms": 23611.4541420359,
+      "timing": "unresolved"
+    },
+    {
+      "end_ms": 21835.5512455787,
+      "label": "Missing inspection · Cast equipment · hidden",
+      "reason": "Current state is rendered; the operation has no separate inspection track.",
+      "recording": "res://tests/fixtures/schema16/scenarios/gallery/amber",
+      "source": "spells/spell.fireball.json:/cast/equipment",
+      "start_ms": 21835.5512455787,
+      "timing": "unresolved"
+    },
+    {
+      "end_ms": 21835.5512455787,
+      "label": "Unassessed · Condition effect/feedback policy",
+      "reason": "This selected source controls an existing causal consequence; verify its fields against the shared compiler rather than create another effect or assume generic timing is equivalent.",
+      "recording": "res://tests/fixtures/schema16/scenarios/gallery/amber",
+      "source": "spells/spell.fireball.json:/condition",
+      "start_ms": 21835.5512455787,
+      "timing": "unresolved"
+    },
+    {
+      "end_ms": 21835.5512455787,
+      "label": "Missing · Area · surfaceReveal",
+      "reason": "Authored operation has no shared renderer consumer.",
+      "recording": "res://tests/fixtures/schema16/scenarios/gallery/amber",
+      "source": "spells/spell.fireball.json:/area/surfaceReveal",
+      "start_ms": 21835.5512455787,
+      "timing": "unresolved"
+    },
+    {
+      "end_ms": 27817.3764496067,
+      "label": "Unassessed · Condition effect/feedback policy",
+      "reason": "This selected source controls an existing causal consequence; verify its fields against the shared compiler rather than create another effect or assume generic timing is equivalent.",
+      "recording": "res://tests/fixtures/schema16/scenarios/gallery/amber",
+      "source": "spells/.json:/condition",
+      "start_ms": 27817.3764496067,
+      "timing": "unresolved"
+    },
+    {
+      "end_ms": 27817.3764496067,
+      "label": "Unassessed · Condition effect/feedback policy",
+      "reason": "This selected source controls an existing causal consequence; verify its fields against the shared compiler rather than create another effect or assume generic timing is equivalent.",
+      "recording": "res://tests/fixtures/schema16/scenarios/gallery/amber",
+      "source": "spells/.json:/condition",
+      "start_ms": 27817.3764496067,
+      "timing": "unresolved"
+    },
+    {
+      "end_ms": 27817.3764496067,
+      "label": "Unassessed · Condition effect/feedback policy",
+      "reason": "This selected source controls an existing causal consequence; verify its fields against the shared compiler rather than create another effect or assume generic timing is equivalent.",
+      "recording": "res://tests/fixtures/schema16/scenarios/gallery/amber",
+      "source": "spells/.json:/condition",
+      "start_ms": 27817.3764496067,
+      "timing": "unresolved"
+    },
+    {
+      "end_ms": 27817.3764496067,
+      "label": "Missing inspection · Cast equipment · hidden",
+      "reason": "Current state is rendered; the operation has no separate inspection track.",
+      "recording": "res://tests/fixtures/schema16/scenarios/gallery/amber",
+      "source": "spells/spell.magic_missile.json:/cast/equipment",
+      "start_ms": 27817.3764496067,
+      "timing": "unresolved"
+    },
+    {
+      "end_ms": 27817.3764496067,
+      "label": "Unassessed · Condition effect/feedback policy",
+      "reason": "This selected source controls an existing causal consequence; verify its fields against the shared compiler rather than create another effect or assume generic timing is equivalent.",
+      "recording": "res://tests/fixtures/schema16/scenarios/gallery/amber",
+      "source": "spells/spell.magic_missile.json:/condition",
+      "start_ms": 27817.3764496067,
+      "timing": "unresolved"
+    },
+    {
+      "end_ms": 30320.70978294,
+      "label": "Missing inspection · Cast equipment · hidden",
+      "reason": "Current state is rendered; the operation has no separate inspection track.",
+      "recording": "res://tests/fixtures/schema16/scenarios/gallery/amber",
+      "source": "spells/spell.chill_touch.json:/cast/equipment",
+      "start_ms": 30320.70978294,
+      "timing": "unresolved"
+    },
+    {
+      "end_ms": 30320.70978294,
+      "label": "Unassessed · Condition effect/feedback policy",
+      "reason": "This selected source controls an existing causal consequence; verify its fields against the shared compiler rather than create another effect or assume generic timing is equivalent.",
+      "recording": "res://tests/fixtures/schema16/scenarios/gallery/amber",
+      "source": "spells/spell.chill_touch.json:/condition",
+      "start_ms": 30320.70978294,
       "timing": "unresolved"
     }
   ],
@@ -43,11 +565,11 @@
   "observed": {
     "authored_timing": 0,
     "condition_lifecycle": 4,
-    "inspection_gaps": 2,
-    "missing_audio": 0,
-    "requirements": 4,
-    "unassessed_operations": 2,
-    "unresolved_timing": 4
+    "inspection_gaps": 16,
+    "missing_audio": 2,
+    "requirements": 62,
+    "unassessed_operations": 37,
+    "unresolved_timing": 62
   },
   "scope": "Normative authored omissions and actual compiled missing sources remain visible independently of available renderer components. No invented clocks or preview images."
 }

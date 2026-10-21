@@ -1,18 +1,18 @@
 {
-  "checks": 769,
+  "checks": 473,
   "evidence": {
     "empty_typed_cases": 6,
-    "groups": 86,
-    "multi_lineage_operations": 5,
-    "null_operations": 22,
-    "own_operations": 10,
-    "session_messages": 35
+    "groups": 50,
+    "multi_lineage_operations": 3,
+    "null_operations": 11,
+    "own_operations": 5,
+    "session_messages": 19
   },
   "failures": [],
   "recordings": [
-    "C:/Users/tommaso/AppData/Local/Temp/ndclient-sdk-ranged-exact/amber/journal",
-    "C:/Users/tommaso/AppData/Local/Temp/ndclient-sdk-ranged-exact/blue/journal",
-    "C:/Users/tommaso/AppData/Local/Temp/ndclient-presentation-oa-jump-late-lethal/amber/journal"
+    "res://tests/fixtures/schema16/scenarios/dash/amber",
+    "res://tests/fixtures/schema16/scenarios/dash/blue",
+    "res://tests/fixtures/schema16/scenarios/oa-jump-late-lethal/amber"
   ],
-  "scope": "Real two-seat ranged and lethal jump/OA recordings through strict historical admission, compiler and bounded session; explicitly typed empty-operation cases. Full identity survives every group/message without changing original packets or reducer state."
+  "scope": "Real two-seat Dash/movement/OA and lethal jump/OA recordings through strict historical admission, compiler and bounded session; explicitly typed empty-operation cases. Full identity survives every group/message without changing original packets or reducer state."
 }

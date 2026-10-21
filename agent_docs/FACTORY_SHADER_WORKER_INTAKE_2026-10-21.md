@@ -1,4 +1,15 @@
-# Optional Shader worker sources: complete-package intake
+# Optional Shader worker sources: complete-package intake — delivered
+
+**Delivered21October20:01UTC:** complete
+`runtime-speed-completion-20261021-82a271b677ff9604` supplies all requested
+five Cloud/three Patches closures, Wind coverage and both Freezing resource
+corrections. [Current complete handoff](/mnt/c/Users/tommaso/Documents/assets/VFXFactory/docs/MATERIAL_RUNTIME_HANDOFF_2026-10-21.md).
+The full archive is CRC-extracted; client namespace/editor intake is underway,
+with8dd preserved. Receiving bridge, explicit resource choices, publication,
+actual client output/cancellation and performance qualification remain client
+work. **Do not resubmit the packaging request below.** It is retained as the
+exact original intake scope; Factory's52 cost flags and raw shutdown diagnostics
+remain open evidence, not delivery failures or art approval.
 
 Please provide a complete successor to `runtime-call-heavy-defaults-20261021-8dd103fb92174541` that retains its full installed source namespace, current clip defaults and public contracts, and adds the eight existing positive worker candidates below as explicit opt-ins. Include the already supplied Wind current-cell material and Freezing immutable-noise repairs from production §§21–22 in that same complete successor. This is a packaging and client-adoption prerequisite for supplied source capabilities and repairs, not another request to implement them, a missing API, artwork request or backend request.
 

@@ -4,78 +4,54 @@
       "capture": "q0-blood-hit_a1",
       "id": "blood.hit_a1",
       "quarter": 0,
-      "source_covered_pixels": 733
+      "source_covered_pixels": 691
     },
     {
       "capture": "q0-blood-hit_a2",
       "id": "blood.hit_a2",
       "quarter": 0,
-      "source_covered_pixels": 2098
-    },
-    {
-      "capture": "q0-blood-deposit_a1",
-      "id": "blood.deposit_a1",
-      "quarter": 0,
-      "source_covered_pixels": 41042
+      "source_covered_pixels": 1899
     },
     {
       "capture": "q1-blood-hit_a1",
       "id": "blood.hit_a1",
       "quarter": 1,
-      "source_covered_pixels": 738
+      "source_covered_pixels": 637
     },
     {
       "capture": "q1-blood-hit_a2",
       "id": "blood.hit_a2",
       "quarter": 1,
-      "source_covered_pixels": 1963
-    },
-    {
-      "capture": "q1-blood-deposit_a1",
-      "id": "blood.deposit_a1",
-      "quarter": 1,
-      "source_covered_pixels": 40975
+      "source_covered_pixels": 1707
     },
     {
       "capture": "q2-blood-hit_a1",
       "id": "blood.hit_a1",
       "quarter": 2,
-      "source_covered_pixels": 718
+      "source_covered_pixels": 627
     },
     {
       "capture": "q2-blood-hit_a2",
       "id": "blood.hit_a2",
       "quarter": 2,
-      "source_covered_pixels": 2115
-    },
-    {
-      "capture": "q2-blood-deposit_a1",
-      "id": "blood.deposit_a1",
-      "quarter": 2,
-      "source_covered_pixels": 41042
+      "source_covered_pixels": 2085
     },
     {
       "capture": "q3-blood-hit_a1",
       "id": "blood.hit_a1",
       "quarter": 3,
-      "source_covered_pixels": 779
+      "source_covered_pixels": 683
     },
     {
       "capture": "q3-blood-hit_a2",
       "id": "blood.hit_a2",
       "quarter": 3,
-      "source_covered_pixels": 2084
-    },
-    {
-      "capture": "q3-blood-deposit_a1",
-      "id": "blood.deposit_a1",
-      "quarter": 3,
-      "source_covered_pixels": 40975
+      "source_covered_pixels": 1822
     }
   ],
   "failed": 0,
   "failures": [],
-  "passed": 124,
+  "passed": 84,
   "renderer": "forward_plus",
-  "scope": "Selected native blood sources with controlled native2D lights and explicit flat support planes; original shader colour/coverage/normal/roughness, no donor light. Composition-normal/Canvas specular is an explicit receiving adaptation, not donor3D PBR equivalence."
+  "scope": "Current native A1/A2 blood sprays with controlled native2D lights; strict original shader colour/coverage/normal/roughness and alpha, no donor light. Retired client-invented deposits are refused; actual ground field/landing pixels belong to studio_blood_residue_checks and blood_world_preparation_checks, with CPU authority/kernel proof in blood_residue_checks and blood_kernel_cache_checks. Composition-normal/Canvas specular is a receiving adaptation, not donor3D PBR equivalence."
 }
