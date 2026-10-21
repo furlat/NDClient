@@ -61,14 +61,14 @@ static func suppressed(condition: Dictionary) -> bool:
     return state!=null and not state.get("suppression_provider_uuids",[]).is_empty()
 
 static func fade_ms(condition: Dictionary, cache: Dictionary) -> float:
-    return _fade_ms(condition,recipe(condition,cache),NativePersistent.lifecycles(condition),cache)
+    return _fade_ms(condition,recipe(condition,cache),NativePersistent.lifecycles(condition,cache),cache)
 
 static func _fade_ms(condition:Dictionary,config:Dictionary,lifecycles:Array,cache:Dictionary)->float:
     var persistent:Dictionary=config.get("persistent",{})
     var fade=maxf(float(persistent.get("bodyRamp",{}).get("removalMs",0)),NativePersistent.removal_ms(lifecycles))
     fade=maxf(fade,NativePersistent.authored_removal_ms(config))
     var media: Dictionary=Authoring.load_data("catalog/condition_media.json",cache)
-    var replaced:Array=NativePersistent.replaced_media(condition,config)
+    var replaced:Array=NativePersistent.replaced_media(condition,config,cache)
     for layer in persistent.get("layers",[]):
         if layer.get("assetId","") in replaced:continue
         var metadata:Dictionary=media.get(layer.assetId,{})
@@ -85,7 +85,10 @@ static func samples(owners: Dictionary, at_ms: float, cache: Dictionary, activit
     for owner_id in owners.keys():
         var owner: Dictionary=owners[owner_id]
         var config=recipe(owner.condition,cache)
-        var lifecycles:Array=NativePersistent.lifecycles(owner.condition)
+        if config.get("ownerKind","condition")!="condition":
+            if not is_inf(owner.end_ms):owners.erase(owner_id)
+            continue
+        var lifecycles:Array=NativePersistent.lifecycles(owner.condition,cache)
         var fade=0.0 if is_inf(owner.end_ms) else _fade_ms(owner.condition,config,lifecycles,cache)
         if at_ms>=owner.end_ms+fade:owners.erase(owner_id);continue
         if (config.is_empty() or config.get("disposition")=="state_only") and lifecycles.is_empty(): continue
@@ -111,7 +114,7 @@ static func samples(owners: Dictionary, at_ms: float, cache: Dictionary, activit
         # selection below; only audio and native layer construction are skipped.
         if native_only and not include_legacy:continue
         var natives: Dictionary=Authoring.load_data("native_effects/index.json",cache).sources
-        var replaced:Array=NativePersistent.replaced_media(owner.condition,config)
+        var replaced:Array=NativePersistent.replaced_media(owner.condition,config,cache)
         for layer in persistent.get("layers",[]):
             if layer.get("assetId","") in replaced:continue
             var row=common.duplicate();row.id+=":"+layer.id;row.layer=layer;row.attachment=layer.attachment

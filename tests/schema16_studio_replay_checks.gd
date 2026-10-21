@@ -9,6 +9,8 @@ const COHORT=["action.move/ordinary","spell.haste/lifecycle","spell.fire_bolt/hi
 func run()->void:
     root.unfocusable=true;root.position=Vector2i(-16000,-16000);root.size=Vector2i(1600,900)
     report_path="res://.runtime/schema16-studio-replay.json"
+    require_body_geometry="--require-body-geometry" in OS.get_cmdline_user_args()
+    require_authored_action_bodies="--require-authored-action-bodies" in OS.get_cmdline_user_args()
     DirAccess.make_dir_recursive_absolute("res://.captures/studio/replay-comparison")
     var records:Array=CaseLibrary.read();var wanted:Array=COHORT.duplicate()
     var all_spells:bool="--all-spells" in OS.get_cmdline_user_args()
@@ -63,6 +65,7 @@ func run()->void:
     await finish(studio)
 
 func replay_case(studio:Control,record:Dictionary,all_spells:bool)->bool:
+    body_geometry_rows={}
     studio.loop_enabled=false
     var initial_perspective:Dictionary=record.perspectives[0]
     var directory:String=initial_perspective.journal
@@ -100,7 +103,11 @@ func replay_case(studio:Control,record:Dictionary,all_spells:bool)->bool:
         # rear/front alias. Require that exact selected authored assignment,
         # never another action using the same source and socket.
         if not source_uses.any(func(existing):return existing.source_id==use.source_id and existing.attachment==use.attachment):source_uses.append(use)
-    await play_once(studio,record.id,source_uses)
+    var scenario:Dictionary=JSON.parse_string(FileAccess.get_file_as_string(str(record.descriptor)))
+    var item_effects:Array=scenario.get("required_item_effects",[])
+    required_grant_sources=scenario.get("required_grant_sources",[])
+    required_action_bodies=authored_action_bodies(studio.index,scenario,record.id) if require_authored_action_bodies else []
+    await play_once(studio,record.id,source_uses,item_effects)
     if record.id=="action.class.cleric.preserve_life/recipients":
         var observed:Dictionary=evidence.back().get("observed_native",{})
         check(observed.values().filter(func(row):return row.evidence.get("outcome")=="cast").size()==1,"Preserve Life: one native source has a submitted draw witness")

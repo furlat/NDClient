@@ -119,9 +119,9 @@ static func documents(entries: Dictionary, paths: Dictionary = {}) -> Dictionary
     var suppressed: Array = []
     for id in _sorted(conditions):
         var e: Resource = conditions[id]
-        if not e.disposition.is_empty() or not e.creation_source_id.is_empty() or not e.effects.is_empty() or not e.responses.is_empty() or not e.lifecycle_opt_in.is_empty():
+        if not e.disposition.is_empty() or not e.creation_source_id.is_empty() or not e.effects.is_empty() or not e.responses.is_empty() or not e.lifecycle_opt_in.is_empty() or not e.lifecycle_selections.is_empty() or not e.surface.is_empty():
             var record:Dictionary=R.condition_recipe(e)
-            if not e.effects.is_empty() or not e.responses.is_empty() or not e.lifecycle_opt_in.is_empty():record._resource_source=paths.get("conditions",{}).get(id,"")
+            if not e.effects.is_empty() or not e.responses.is_empty() or not e.lifecycle_opt_in.is_empty() or not e.lifecycle_selections.is_empty() or not e.surface.is_empty():record._resource_source=paths.get("conditions",{}).get(id,"")
             if not e.lifecycle_opt_in.is_empty():
                 F.put(record,"persistent/lifecycleOptIns",_condition_lifecycle_opt_ins(e))
                 F.put(record,"persistent/lifecycleOptInSource",e.lifecycle_opt_in)
@@ -320,6 +320,7 @@ static func provenance(record: Dictionary, entry: String) -> Dictionary:
     record["_resource_source"] = entry
     var fields: Dictionary = record.get("_source_fields", {})
     for key in fields:
+        if not str(fields[key]).begins_with("res://"):continue # Preserved raw document pointers keep their actual owner.
         var property: String = str(fields[key]).get_slice("::", 1)
         for pair in PROVENANCE:
             if property == pair[0] or property.begins_with(pair[0] + "/"):
@@ -548,6 +549,7 @@ static func _validate(entries: Dictionary, report: Dictionary) -> void:
             Common.error(report,where,"measured weapon trail needs a finite authored contact/end window inside its source")
     _check_appearance_definitions(entries.get("conditions",{}),report)
     _check_departure_definitions(entries.get("conditions",{}),clips,report)
+    _check_lifecycle_selections(entries.get("conditions",{}),package,clips,report)
     for id in entries.get("conditions", {}):
         var e: Resource = entries.conditions[id]
         for use in e.effects+e.responses:
@@ -591,6 +593,8 @@ static func _validate(entries: Dictionary, report: Dictionary) -> void:
     for id in entries.get("actions", {}):
         var e: Resource = entries.actions[id]
         var where: String = "abilities/actions/" + id
+        if e.body!=null and e.body.enabled and not e.body.clip.is_empty() and e.disposition.is_empty():
+            Common.error(report,where,"selected enabled body requires an explicit disposition; otherwise its recipe is not emitted")
         for outcome in e.reaction_feedback:
             var feedback:Resource=e.reaction_feedback[outcome]
             if outcome not in ["succeeded","failed"] or feedback==null or feedback.enabled and feedback.text.is_empty():
@@ -618,6 +622,7 @@ static func _validate(entries: Dictionary, report: Dictionary) -> void:
             if sound.at != "effect":_check_binding(report, where, bindings.get("actions", {}).get(id), sound)
     for id in entries.get("contexts",{}):
         var context:Resource=entries.contexts[id]
+        _check_context_inactive_fields(context,"abilities/contexts/"+str(id),report)
         for use in context.impact_effects:
             var where:String="abilities/contexts/"+id+"/impact_effects"
             _check_constructor(use,where,clips,report)
@@ -678,6 +683,13 @@ static func _validate(entries: Dictionary, report: Dictionary) -> void:
 ## effect_id is an opaque disclosed option identity, never a parsed spell name.
 const VARIANT_FIELDS={"attack_outcome":["Hit","Miss","Crit","Crit Miss"],"target_kind":["creature","object"],"save_succeeded":[true,false],"effect_id":[],
     "damage_types":[]}
+static func _check_context_inactive_fields(context:Resource,where:String,report:Dictionary)->void:
+    var seen:Dictionary={}
+    for field in context.inactive_legacy_fields:
+        if field not in ["silhouetteDust","movementLeadInMs"] or seen.has(field) or not context.unported.has(field):
+            Common.error(report,where,"inactive legacy field must name one exact existing top-level unported field: "+field)
+        seen[field]=true
+
 static func _check_variants(e:Resource,where:String,report:Dictionary,damage_types:Array=[])->void:
     var active:Array=[];var identities:Dictionary={}
     for variant in e.variants:
@@ -1445,7 +1457,7 @@ static func drawn_media(entries: Dictionary) -> Dictionary:
 ## sprite layers, or a zone whose surface draws it, is partial.
 static func condition_coverage(e: Resource, lifecycle: bool, drawn: Dictionary) -> String:
     if e.status == "internal":return "internal"
-    if (lifecycle and e.play_package_lifecycle) or not e.poses.is_empty() or _visible_look(e.look):return "ready"
+    if ((lifecycle or not e.lifecycle_selections.is_empty()) and e.play_package_lifecycle) or not e.poses.is_empty() or _visible_look(e.look):return "ready"
     for use in e.effects+e.responses:
         if use.unbound_constructor_inputs.is_empty() and not Effects.for_cue(R.cue_from_effect(use,-1),use.selection,use.role).is_empty():return "ready"
     if e.layers.any(func(layer): return layer is Dictionary and drawn.has(str(layer.get("assetId", "")))):return "ready"
@@ -1453,6 +1465,52 @@ static func condition_coverage(e: Resource, lifecycle: bool, drawn: Dictionary) 
     if not e.effects.is_empty() or not e.responses.is_empty():return "partial"
     if (not e.disposition.is_empty() and e.disposition != "state_only") or not e.surface.is_empty():return "partial"
     return "missing"
+
+## Reuse a declared condition source without changing its package owner_ids.
+## The explicit assignment must still supply the same real member/recipient
+## lifecycle inputs as the ordinary owner-indexed route.
+static func _check_lifecycle_selections(conditions:Dictionary,package:Dictionary,clips:Dictionary,report:Dictionary)->void:
+    for id in conditions:
+        var entry:Resource=conditions[id]
+        var keys:Array=Array(entry.lifecycle_selections)
+        if entry.owner_kind not in ["condition","temporary_hp_grant"]:
+            Common.error(report,"abilities/conditions/"+str(id),"unknown actual lifetime owner kind")
+        if entry.owner_kind=="temporary_hp_grant" and (entry.id.is_empty() or keys.is_empty() or entry.disposition!="authored" \
+            or not entry.effects.is_empty() or not entry.responses.is_empty() or not entry.appearance_layers.is_empty()):
+            Common.error(report,"abilities/conditions/"+str(id),"temporary-HP grant source needs its exact source_id and selected lifecycle, without condition-only phases/appearance")
+        if keys.is_empty():continue
+        var where:String="abilities/conditions/"+str(id)
+        if not entry.play_package_lifecycle or not entry.lifecycle_opt_in.is_empty():
+            Common.error(report,where,"explicit lifecycle selections require package playback and cannot replace a public lifecycle opt-in")
+        var seen:Dictionary={}
+        for key in keys:
+            if str(key).is_empty() or seen.has(key):
+                Common.error(report,where,"lifecycle selection keys must be nonempty and unique");continue
+            seen[key]=true
+            var matches:Array=package.get("selections",[]).filter(func(selection):return selection.get("key")==key)
+            if matches.size()!=1:
+                Common.error(report,where,"lifecycle selection is not an exact unique package key: "+str(key));continue
+            var lifecycle:Dictionary=matches[0].get("condition",{})
+            if entry.owner_kind=="temporary_hp_grant" and (not lifecycle.get("when",{}).is_empty() or not lifecycle.get("marker",{}).is_empty()):
+                Common.error(report,where,"grant lifecycle requires a generic recipient body source without condition-state predicates/marker ownership")
+            var registration:Dictionary=lifecycle.get("registration",{})
+            var attachment:String=str(registration.get("attachment",""))
+            var anchor:String=str(registration.get("anchor","ground" if registration.get("attachment")=="recipient_ground" else ""))
+            var recipient_mount:bool=(attachment=="recipient_body" and anchor in ["head","body_center"]) \
+                or (attachment=="recipient_head" and anchor=="head") or (attachment=="recipient_ground" and anchor=="ground")
+            if lifecycle.get("schema")!="vfxfactory.condition_lifecycle.v1" or lifecycle.get("owner_kind")!="condition" \
+                or not recipient_mount or lifecycle.get("phases",{}).size()!=3:
+                Common.error(report,where,"explicit selection needs its declared recipient condition lifecycle contract: "+str(key));continue
+            for phase in ["application","sustain","removal"]:
+                var clip:Dictionary=clips.get(str(lifecycle.phases.get(phase,"")),{})
+                var inputs:Array=clip.get("inputs",[])
+                var mounted:bool=(attachment=="recipient_body" and "targets" in inputs) \
+                    or (attachment=="recipient_head" and "root_path" in inputs) \
+                    or (attachment=="recipient_ground" and ("targets" in inputs or "root_path" in inputs))
+                if clip.is_empty() or float(clip.get("seconds",0.0))<=0.0 or "owner_state" not in inputs or not mounted:
+                    Common.error(report,where,"explicit lifecycle phase needs its real owner clock and declared recipient mount input: "+str(key)+"/"+phase)
+                if "appearance_provider" in inputs and entry.appearance_layers.is_empty():
+                    Common.error(report,where,"explicit appearance lifecycle needs its actual recipient outfit declaration: "+str(key)+"/"+phase)
 
 ## This delivered table is authoring input only. Runtime recipes retain the
 ## explicit public gate/direct-constructor pairing; no second runtime loader.

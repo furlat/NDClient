@@ -93,7 +93,7 @@ func set_index(value: Dictionary) -> void:
         if _environment_light(row):environment_lights[row.id]=true
         if row.kind in ["light","native_light"] and row.get("status")!="missing":lighting_rows[row.id]=true
         if row.get("visible_here",true) and row.get("status")!="missing" and row.kind!="part" and (row.kind in PREVIEW_KINDS or row.kind in ["native_light","light"]):follow_rows.append(row)
-        if row.kind in ["event","parts","condition","condition_exit"] or row.get("source_kind") in ["parts","condition","condition_exit"]:collapsed[row.id]=true
+        if row.kind in ["event","parts","condition","condition_exit","temporary_hp_grant"] or row.get("source_kind") in ["parts","condition","condition_exit","temporary_hp_grant"]:collapsed[row.id]=true
         if first_body.is_empty() and row.kind=="body":first_body=row
     for row in index.get("rows",[]):
         if row.kind!="event":continue
@@ -151,7 +151,7 @@ func rebuild_rows() -> void:
         # Unseen factions do not acquire placeholders in the visible timeline.
         if row.kind=="other_view" and (row.end_ms<=row.start_ms or row.get("timing_status")=="other_perspective" or not branch.get("disclosed",false)):continue
         if branch.get("kind")=="perspective" and not branch.get("disclosed",false):continue
-        if row.kind in ["parts","condition","condition_exit","condition_state"] and row.get("status")!="missing":continue
+        if row.kind in ["parts","condition","condition_exit","condition_state","temporary_hp_grant"] and row.get("status")!="missing":continue
         seeds[row.id]=true;direct[row.parent]=true
         if branch.get("kind")=="perspective" and row.end_ms>row.start_ms and row.get("status")!="missing":
             if not useful_views.has(branch.parent):useful_views[branch.parent]={}

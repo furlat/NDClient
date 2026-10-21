@@ -92,6 +92,7 @@ var retained_components: Array = []
 var retained_directions: Dictionary = {}
 var resolved_impacts: Dictionary = {}
 var condition_owners: Dictionary = {}
+var temporary_hp_owners:Dictionary={}
 ## Small disclosed draw cuts for authored rolling actor histories. No Nodes,
 ## full-world snapshots or independent reducer/clock live in this table.
 var actor_history_cuts:Dictionary={}
@@ -124,12 +125,13 @@ func accept(message: Dictionary) -> void:
         if not current.is_empty(): previous.push_front(current)
         current = {}; commit_index = 0; group_start_ms = display_ms
         retained_components=[]; retained_directions={}; resolved_impacts={}
-        condition_owners={}; actor_history_cuts={}; spatial_effect_owners={}; item_effect_owners={};crossed_audio=[];component_sample_ms=-1.0
+        condition_owners={}; temporary_hp_owners={}; actor_history_cuts={}; spatial_effect_owners={}; item_effect_owners={};crossed_audio=[];component_sample_ms=-1.0
         waiting_for_media = false
         if retire_group.is_valid():
             for group in previous: retire_group.call(group)
         state = message.state
         Conditions.observe(condition_owners,state.actors,display_ms,true)
+        NativePersistent.observe_grants(temporary_hp_owners,state.actors,display_ms,appearance_cache,true)
         _record_history_cut(display_ms,{},display_ms)
         NativeItems.observe(item_effect_owners,state,display_ms,appearance_cache)
         NativePersistent.observe_spatial(spatial_effect_owners,state.senses.get("spatial_effects",{}) if state.senses!=null else {},display_ms,true,[],state.tiles)
@@ -281,7 +283,7 @@ func _advance_immediate(delta_ms: float) -> void:
             _append_membership_order(world_changes.order,delta,state)
             var captures:Dictionary=pose_admissions(commits[commit_index],state,condition_owners,current,group_start_ms,retained_directions,appearance_cache,retained_components)
             Compiler.apply_delta(state,delta)
-            _observe_resource_owners(delta,group_start_ms+commits[commit_index].at_ms,commits[commit_index].get("condition_rows",[]),str(commits[commit_index].get("event_uuid","")),captures,commits[commit_index].get("item_rows",[]),commits[commit_index].get("creation_bindings",{}),commits[commit_index].get("spatial_rows",[]))
+            _observe_resource_owners(delta,group_start_ms+commits[commit_index].at_ms,commits[commit_index].get("condition_rows",[]),str(commits[commit_index].get("event_uuid","")),captures,commits[commit_index].get("item_rows",[]),commits[commit_index].get("creation_bindings",{}),commits[commit_index].get("spatial_rows",[]),commits[commit_index].get("grant_fact",{}))
             _record_history_cut(group_start_ms+commits[commit_index].at_ms,current,group_start_ms)
             if commits[commit_index].has("event_uuid"):
                 EventTrace.commit(trace,int(current.operation_sequence),commits[commit_index].event_uuid)
@@ -353,7 +355,7 @@ static func _history_finite_samples(candidates:Array,at_ms:float)->Array:
         var component:Dictionary=item.component
         if component.kind not in ["material_flash","body_surface","sprite_layer"] or seen.has(component.id):continue
         var begin:float=float(item.group_start_ms)+float(component.start_ms)
-        if at_ms<begin or at_ms>=begin+float(component.duration_ms):continue
+        if at_ms<begin or at_ms>=_component_end_ms(component,float(item.group_start_ms)):continue
         var sample:Dictionary=component.duplicate(false);sample.age_ms=at_ms-begin
         sample.absolute_start_ms=begin;result.append(sample);seen[component.id]=true
     return result
@@ -541,10 +543,11 @@ func _history_capture(cut:Dictionary,owner:Dictionary,at_ms:float)->Dictionary:
     capture.make_read_only()
     return {"ready":true,"capture":capture}
 
-func _observe_resource_owners(delta:Dictionary,at_ms:float,rows:Array=[],event_uuid:String="",captures:Dictionary={},item_rows:Array=[],creation_bindings:Dictionary={},spatial_rows:Array=[])->void:
+func _observe_resource_owners(delta:Dictionary,at_ms:float,rows:Array=[],event_uuid:String="",captures:Dictionary={},item_rows:Array=[],creation_bindings:Dictionary={},spatial_rows:Array=[],grant_fact:Dictionary={})->void:
     # These existing owner updates report actual resource-input changes. HP,
     # logs and ordinary movement still commit without rebuilding presenters.
     var changed:bool=Conditions.observe(condition_owners,delta.get("actors",{}),at_ms,false,rows,captures,creation_bindings)
+    changed=NativePersistent.observe_grants(temporary_hp_owners,delta.get("actors",{}),at_ms,appearance_cache,false,event_uuid,grant_fact) or changed
     if NativeItems.interested(item_effect_owners,delta,appearance_cache):
         changed=NativeItems.observe(item_effect_owners,state,at_ms,appearance_cache,event_uuid,item_rows) or changed
     if delta.get("set",{}).has("senses") or not spatial_rows.is_empty():
@@ -648,7 +651,7 @@ func _appearance_end_between(cursor:float,target:float)->float:
     var next:float=INF
     for owner in condition_owners.values():
         if is_inf(owner.end_ms) or Appearance.declarations(owner.condition,appearance_cache).is_empty():continue
-        var end:float=float(owner.end_ms)+Appearance.removal_ms(owner.condition)
+        var end:float=float(owner.end_ms)+Appearance.removal_ms(owner.condition,appearance_cache)
         if end>cursor and end<=target:next=minf(next,end)
     return next
 
@@ -823,7 +826,7 @@ func _world_candidate(plan: Dictionary) -> Dictionary:
             if _world_delta(delta): next_world_revision += 1
         if segment.complete:
             var completed_at:float=float(segment.start_ms)+float(segment.group.duration_ms)
-            capture_components=capture_components.filter(func(item):return float(item.group_start_ms)+float(item.component.start_ms)+float(item.component.duration_ms)>completed_at)
+            capture_components=capture_components.filter(func(item):return _component_end_ms(item.component,float(item.group_start_ms))>completed_at)
             for component in segment.group.get("components",[]):
                 if component.kind in ["sprite_layer","material_flash","body_surface"] and float(component.start_ms)+float(component.duration_ms)>float(segment.group.duration_ms):capture_components.append({"component":component,"group_start_ms":segment.start_ms})
             _directions(segment.group.get("actor_tracks",[]),INF,capture_directions)
@@ -875,7 +878,7 @@ func _apply_world_plan(plan: Dictionary) -> void:
             Compiler.apply_delta(state,delta)
             FrameProfile.end_phase(profile,"timeline_apply_state",started)
             started=Time.get_ticks_usec()
-            _observe_resource_owners(delta,group_start_ms+commit.at_ms,commit.get("condition_rows",[]),str(commit.get("event_uuid","")),captures,commit.get("item_rows",[]),commit.get("creation_bindings",{}),commit.get("spatial_rows",[]))
+            _observe_resource_owners(delta,group_start_ms+commit.at_ms,commit.get("condition_rows",[]),str(commit.get("event_uuid","")),captures,commit.get("item_rows",[]),commit.get("creation_bindings",{}),commit.get("spatial_rows",[]),commit.get("grant_fact",{}))
             _record_history_cut(group_start_ms+commit.at_ms,current,group_start_ms)
             FrameProfile.end_phase(profile,"timeline_apply_owners",started)
             started=Time.get_ticks_usec()
@@ -936,7 +939,7 @@ static func component_direction(group: Dictionary,component: Dictionary,previous
 func _retain_completed_presentation() -> void:
     for component in current.get("components",[]):
         if component.kind=="audio": crossed_audio.append({"component":component,"group_start_ms":group_start_ms})
-        if group_start_ms+component.start_ms+component.duration_ms>display_ms:
+        if _component_end_ms(component,group_start_ms)>display_ms:
             var item={"component":component,"group_start_ms":group_start_ms}
             if component.has("impact"):item.impact_direction=component_direction(current,component,retained_directions)
             retained_components.append(item)
@@ -948,7 +951,7 @@ func component_samples(cache: Dictionary={}) -> Array:
     var alive: Array=[]
     for item in retained_components:
         var component: Dictionary=item.component
-        if item.group_start_ms+component.start_ms+component.duration_ms>display_ms:
+        if _component_end_ms(component,float(item.group_start_ms))>display_ms:
             alive.append(item)
     if alive.size()!=retained_components.size():resource_revision+=1
     retained_components=alive
@@ -964,7 +967,7 @@ func component_samples(cache: Dictionary={}) -> Array:
         var begin:float=item.group_start_ms+component.start_ms
         var age:float=display_ms-begin
         var crossed=component.kind=="audio" and item.group_start_ms+component.start_ms>=component_sample_ms
-        if display_ms>=begin and (display_ms<begin+component.duration_ms or crossed):
+        if display_ms>=begin and (display_ms<_component_end_ms(component,float(item.group_start_ms)) or crossed):
             var sample=component.duplicate(); sample.age_ms=age; sample.absolute_start_ms=item.group_start_ms+component.start_ms
             if component.has("impact"):
                 active_impacts[component.id]=true
@@ -980,11 +983,16 @@ func component_samples(cache: Dictionary={}) -> Array:
     var activities={}
     var bodies=actor_samples()
     for id in bodies:activities[id]=bodies[id].get("activity","idle")
-    var condition_count:int=condition_owners.size();var spatial_count:int=spatial_effect_owners.size();var item_count:int=item_effect_owners.size()
-    result.append_array(Conditions.samples(condition_owners,display_ms,cache,activities))
+    var condition_count:int=condition_owners.size();var spatial_count:int=spatial_effect_owners.size();var item_count:int=item_effect_owners.size();var grant_count:int=temporary_hp_owners.size()
+    var condition_rows:Array=Conditions.samples(condition_owners,display_ms,cache,activities)
+    result.append_array(condition_rows)
+    var invisible:Dictionary={}
+    for row in condition_rows:
+        if row.kind=="condition" and is_inf(float(row.duration_ms)) and float(row.recipe.get("persistent",{}).get("alphaMultiplier",1.0))<1.0:invisible[row.actor_uuid]=true
     result.append_array(NativePersistent.spatial_samples(spatial_effect_owners,display_ms,cache))
     result.append_array(NativeItems.samples(item_effect_owners,state,display_ms))
-    if condition_count!=condition_owners.size() or spatial_count!=spatial_effect_owners.size() or item_count!=item_effect_owners.size():resource_revision+=1
+    result.append_array(NativePersistent.grant_samples(temporary_hp_owners,display_ms,cache,activities,invisible))
+    if condition_count!=condition_owners.size() or spatial_count!=spatial_effect_owners.size() or item_count!=item_effect_owners.size() or grant_count!=temporary_hp_owners.size():resource_revision+=1
     return result
 
 func staged_tiles() -> Dictionary:
@@ -1044,6 +1052,12 @@ func actor_samples() -> Dictionary:
         _actor_samples=_project_actor_samples(Tracks.samples(current.get("actor_tracks",[]),_actor_samples_at),state.actors,condition_owners)
     return _actor_samples
 
+## The compiler and world planner author local start+duration before adding
+## the group origin. Preserve that same endpoint for every finite membership
+## test: re-association can otherwise retain a completed layer for one ULP.
+static func _component_end_ms(component:Dictionary,start_ms:float)->float:
+    return start_ms+(float(component.start_ms)+float(component.duration_ms))
+
 static func _actor_layers_at(candidates:Array,at_ms:float)->Array:
     var result:Array=[]
     var seen:Dictionary={}
@@ -1054,7 +1068,7 @@ static func _actor_layers_at(candidates:Array,at_ms:float)->Array:
         # Constructor membership and displayed sampling share the exact
         # absolute half-open interval. Subtraction can round an endpoint age
         # below duration even when this cut has completed the component.
-        if at_ms>=begin and at_ms<begin+component.duration_ms:
+        if at_ms>=begin and at_ms<_component_end_ms(component,float(item.group_start_ms)):
             result.append(component);seen[component.id]=true
     return result
 

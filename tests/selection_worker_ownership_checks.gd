@@ -56,6 +56,24 @@ func run()->void:
     for job in readers:job.result.erase("source")
     check(source.get_ref()!=null,"Native source survives short-lived worker shells until source-owner invalidation")
     for clip in output.clips:check(not clip.is_empty(),"Delivered phase has actual source metadata")
+    # A source-operand control on the original actor, not evidence that this
+    # archived initialization disclosed an authoritative Fireball choice.
+    var spell_hint:Dictionary=Selection.create()
+    Selection.request(spell_hint,["spell source candidates"],actor,"",journal.state,16*1024*1024*1024,
+        {},{},[],{},"reference",["spell.fireball"])
+    await settle(spell_hint)
+    var offered:Array=Selection.NativeSpells.effect_clips(Selection.NativeSpells.preparation_selection("spell.fireball",{}))
+    var expected_keys:Dictionary={}
+    for clip in offered+Selection.NativeActions.effect_clips("spell.fireball",{}):expected_keys[Effects.key(clip)]=true
+    var actual_keys:Array=spell_hint.value.get("native_action_clips",[]).map(func(clip):return Effects.key(clip))
+    check(not offered.is_empty() and actual_keys.size()==expected_keys.size()
+        and actual_keys.all(func(key):return expected_keys.has(key))
+        and expected_keys.keys().all(func(key):return key in actual_keys),
+        "Actual recorded actor resolves exact default/eligible native source candidates from an explicit candidate request")
+    check(not spell_hint.value.is_empty() and spell_hint.value.native_selection.is_empty()
+        and spell_hint.value.errors.is_empty() and var_to_bytes(journal.state)==before,
+        "Passive native candidates create neither a selected occurrence nor canonical outcomes")
+    Selection.close(spell_hint)
     var owner:Dictionary=Selection.create()
     var other:Dictionary=Selection.create()
     Selection.request(owner,[1],actor,"spell.fireball",journal.state,16*1024*1024*1024)

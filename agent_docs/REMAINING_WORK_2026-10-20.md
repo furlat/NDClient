@@ -11,6 +11,119 @@ execution order; later sections and appendices hold the exact inventory/evidence
 
 ## 1. The actual situation
 
+
+**Current execution boundary,21October19:32UTC:** complete Factory8dd is committed
+at **`4ac732d3`**; client checkpoint **`5258b326`** is followed by the coherent
+source batch described here. Indexed condition lifecycle selections, real
+class-held owners, ranged/offhand coatings, four elemental own rigs/eight
+intrinsic gestures, distinct temporary-HP grants and their Studio tracks now
+use the existing compiler, preparation, renderer, source clocks and lighting.
+All130 imported alternatives retain explicit dispositions. A source audit found
+no further enabled/nonempty body selections silently omitted after the eight
+intrinsic Action dispositions were corrected. This is a bounded source finding,
+not proof that every legacy method, optional study or artwork is accepted.
+
+**Current native content:** all four unchanged actual elemental originals pass
+**28,661/0**, native exit0, zero engine errors. Movement, ordinary hit/death,
+original-only normals under global Reference preference, known zero ground and
+all eight authored intrinsic gestures have separate compiled-track and actual
+acknowledged original texture/frame-binding evidence. The previous Earth failure
+came from the shared Shield layer's one-ULP absolute endpoint; that arithmetic
+is corrected through the existing Timeline, with no epsilon or added delay.
+The failed original receipt remains preserved.
+[Exact four-body cohort](../.runtime/tests/20261021T192153.111850Z-content-closure-affected/summary.json).
+The same overall ten-invocation batch retains its six original headless failures;
+the passing native row does not turn that whole batch into a pass.
+
+The actual False Life grant lifecycle, unchanged baseline and ordinary Aid
+control pass **4,017/0**, native exit0. Actual grant UUID/source/recipient,
+application/sustain/removal, canonical zero and final owner/handle retirement
+remain in the preserved native evidence. This uses the real temporary-HP grant,
+with no fabricated ConditionRow. Studio now indexes its actual grant root and
+phase children for grouping, navigation, seeking and provenance. The affected
+Studio gate passes **2,516/0**, retaining all ten ordinary condition/spatial
+families. Its initial26 failures were an oracle's generic JSON float conversion;
+the existing exact recorded-packet decoder fixes the carrier without changing
+runtime grant clocks.
+[Native grant cohort](../.runtime/tests/20261021T185249.202269Z-body-grant-current/summary.json),
+[affected source controls](../.runtime/tests/20261021T192631.970433Z-content-closure-headless-repairs/summary.json).
+
+Earlier actual coating/class originals remain **40,502/0**, ordinary Fly
+**3,014/0**, and Marked/GuidingBolt/Bless **2,673/0**, all native exit0. Those
+receipts retain their own source cutoffs. The complete enabled fast-headless
+inventory previously joined to **201/201 passes,250,416 checks** after two narrow
+repairs; this was not rerun wholesale for the latest metadata changes. Current
+affected endpoint, component-trace, native-authoring, grant-Studio, browser and
+provenance controls pass. The final two source-pointer gates also pass: requirements624/0 and
+audit15,563/0. The exact affected-row join is11/11 passing invocations,50,947
+checks, including the four-body native row and ten headless rows. The earlier
+failed receipts remain unchanged. [Exact affected join](../.runtime/material-runtime-integration-20261021/content-checkpoint-affected-joined.json). Native-authoring's two deliberately missing-build diagnostics remain
+explicitly allowed negative controls.
+[Earlier201 join](../.runtime/material-runtime-integration-20261021/content-headless201-joined.json).
+
+**Authoring/Studio closure:** selected enabled bodies now require an explicit
+build disposition, typed body fields retain exact editable source pointers,
+and the audit also inventories the declared typed root so omitted documents
+cannot vanish. Empty disabled declarations are not missing-art requests. The
+actual scheduled Step child Attack uses the existing authored Reaction badge
+on its original attacker/start; no movement hold is added. Imported
+`silhouetteDust` and140ms lead-in retain exact values/pointers as explicit
+inactive studies. Current native Disintegrate/body removal stays selected;
+particle parity and an extra delay are not claimed. All three domains already
+published without authoring errors; the affected abilities publication also
+passes zero errors/two retained warnings and no script/native errors.
+Current Library is **372 cases:369 recorded/3previous failed**, with capture
+provenance unchanged. The evidence browser now joins the grouped runner
+only through explicit preserved-raw links, copying actual body/action/grant/item
+observations and original process exit. Unknown/failed exits stay inspectable
+without counting as successful output. Commit-only engine identity remains
+partial; protocol/schema/digest are never filled from expectations.
+
+**Current actual UI:** the fresh current9f/current8dd188-spell sweep and real
+Preview/input repair join to **187/188 runtime-safe,187 command successes,
+native exit0 and zero native error lines**. Wind Wall reaches its actual
+installed-source mask failure. Lighting passes **113/0**, delayed-server
+**16/0**, wall compositing **28/0**, all exit0. These are selected current UI
+receipts, not a clean complete native/live checkpoint.
+[Exact joined188](../.runtime/material-runtime-integration-20261021/current9f8dd-public188-ui-joined.json).
+
+**Factory status reconciled with the latest handoff:** §§17–20 are delivered
+and installed. The [new runtime-cost continuation](/mnt/c/Users/tommaso/Documents/assets/VFXFactory/docs/RUNTIME_COST_CONTINUATION_RESULTS_2026-10-21.md)
+also supplies source repairs for Wind coverage and Freezing immutable noise.
+They remain outside installed8dd pending a complete successor. Their scoped
+Factory receipts, original fixture failures and cost flags are retained in
+[§§21–22](FACTORY_REVIEW_2026-10-20.md#21-wind-wall-debris-needs-current-observed-cell-coverage).
+Do not ask Factory to implement these repairs again. The remaining forwardable
+[complete-package intake](FACTORY_SHADER_WORKER_INTAKE_2026-10-21.md) includes those
+repairs and the existing five Cloud/three Patches opt-in workers. The receiving
+admission patch is peer-reviewed scratch, still unapplied; delivery and client
+qualification remain separate. No new backend defect is established. The
+intermittent [native-exit investigation](STUDIO_NATIVE_EXIT_2026-10-21.md) remains
+client-owned and unattributed despite current clean affected exits.
+
+**R6 still fails:** three comparable quiet runs each83/0 showed after-ready
+maximum frames **55.680/47.080/50.918ms**, startup maxima
+**73.724/96.531/69.826ms** and Door submit-to-body
+**203.888/266.445/190.565ms**. The previous209–212ms package-resource leaf is
+absent. Private Fireball warming and a canceled offered-body worker were
+identified separately. Actual offered-spell joining/cancellation corrections
+are applied, but no subsequent speedup is claimed. A separate dragon preview
+owns the GPU, so quiet timing waits while source/functional work continues.
+[Quiet comparison](../.runtime/tests/20261021T175335.405738Z-r6-current-three/quiet-r6-comparison.md).
+
+**Assets/backend boundary:** four elemental bodies are delivered, installed
+and now have the bounded native evidence above. Seven own-body commissions
+remain: four Myrmidons,Cambion,Deva,Djinni. Dragon colour/motion is delivered;
+geometry/normals and real per-pose mouth data remain with the user's asset
+work. Current engine9f still exposes one positional anchor/Tile membership;
+the user is coordinating multi-tile convention with backend. The client
+preserves actual anchors and authored/disclosed optical scale, without
+inventing a gameplay footprint or Size-to-art multiplier.
+[Exact asset list](CREATURE_BODY_ASSET_GAPS_2026-10-20.md),
+[elemental/dragon delivery](ELEMENTALS_DRAGONS_PRODUCTION_HANDOFF_2026-10-21.md).
+Earlier receipts below retain their exact source cuts and failures; they do
+not supersede this execution boundary.
+
 **Current artwork-review status — human clarification, 20 October 2026:** all
 artwork and audio remain **UNREVIEWED**. The earlier named four-effect rejection list
 is superseded and must not be treated as current scope or as acceptance of any

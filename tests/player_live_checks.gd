@@ -115,7 +115,9 @@ func movement(behavior: String, required: bool) -> bool:
     if behavior == "action.move": click_grid(target)
     else:
         scene.select_behavior(behavior)
-        if not await until(func():return ready() and not scene.selected_action.is_empty() and not scene.selection_preview.is_empty(),"Native action selection admits target preview"): return false
+        # Region choices already disclose their initial targets. The production
+        # handler requests Preview after choosing the target, not on selection.
+        if not await until(func():return ready() and not scene.selected_action.is_empty() and (scene.selected_action.get("position_region")!=null or not scene.selection_preview.is_empty()),"Native action selection admits its disclosed targets"): return false
         scene.choose_target(target)
     check(scene.command_busy and scene.pending_request.kind == ("command" if behavior=="action.move" else "preview"), "Scene submits complete movement or previews compound action: " + behavior)
     var samples: Array = []

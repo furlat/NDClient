@@ -36,7 +36,7 @@ script = ExtResource("4_e8rml")
 id = "condition.spell.ice_storm.terrain"
 label = "Ice Storm Terrain"
 icon = SubResource("Resource_e8rml")
-disposition = "authored"
+disposition = "state_only"
 surface = "spatial_effect.spell.ice_storm"
 look = SubResource("Resource_82nb7")
 group = "body"
@@ -95,3 +95,5 @@ unported = {
 "effects": []
 }
 }
+play_package_lifecycle = false
+notes = "The exact spatial_effect.spell.ice_storm Ground Resource owns the actual observed terrain field. This rules membership adds no duplicate actor overlay. The public field geometry/lifetime and retained source remain independent from this catalog member; all artwork is unreviewed."

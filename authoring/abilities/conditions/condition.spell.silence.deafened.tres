@@ -36,7 +36,7 @@ script = ExtResource("4_e8g0t")
 id = "condition.spell.silence.deafened"
 label = "Silence Deafened"
 icon = SubResource("Resource_e8g0t")
-disposition = "authored"
+disposition = "state_only"
 look = SubResource("Resource_fchey")
 group = "body"
 priority = 30.0
@@ -95,3 +95,5 @@ unported = {
 "effects": []
 }
 }
+play_package_lifecycle = false
+notes = "The Silence wrapper delegates to actual Deafened membership. The separate observed Silence field owns world presentation. Source ownership decision only; all artwork remains unreviewed."

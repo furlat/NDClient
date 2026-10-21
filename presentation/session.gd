@@ -7,6 +7,7 @@ const Journal = preload("res://sdk/journal.gd")
 const Protocol = preload("res://sdk/protocol.gd")
 const Reducer = preload("res://sdk/reducer.gd")
 const Compiler = preload("res://presentation/compiler.gd")
+const Effects = preload("res://presentation/effect_package.gd")
 const MediaWarmup = preload("res://presentation/media_warmup.gd")
 const Catalog = preload("res://source_catalog.gd")
 var transport = Transport.new()
@@ -276,6 +277,9 @@ func _prepare_operation(next:int,handoff:Dictionary)->void:
         var initial_state: Dictionary = handoff.get("final_state",{})
         result = {"ok":true,"value":initial_state} if not initial_state.is_empty() else Reducer.reduce_initialization(packet.initialization,packet.content_additions)
         if result.ok:
+            # The existing preparer reads passive package metadata before the
+            # scene can publish this world or offer its first action choices.
+            Effects.prepare_metadata()
             preparation_state = result.value
             message = {"kind":"initialization","state":preparation_state.duplicate(true),"sequence":0,
                 "cursor":packet.cursor.duplicate(true),"command_number":null,

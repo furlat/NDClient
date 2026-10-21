@@ -27,7 +27,36 @@ static func difference(actual:Variant,expected:Variant,path:String="$")->String:
         return ""
     return "" if actual==expected else path+" actual "+JSON.stringify(actual)+" expected "+JSON.stringify(expected)
 func fold(state:Dictionary,input:Dictionary)->Dictionary:
-    if input.has("update"):return Reducer.apply_world_update(state,input.update)
+    if input.has("update"):
+        # Preserve the previous full-store diff as an independent test oracle.
+        # Only this oracle copies/scans retained stores; production records the
+        # exact row references at its existing mutation sites.
+        var prior_tiles:Dictionary=state.tiles.duplicate();var prior_objects:Dictionary=state.objects.duplicate()
+        var disclosed:Dictionary={};var result:Dictionary=Reducer.apply_world_update(state,input.update,disclosed)
+        if result.ok:
+            var expected:Dictionary={"tiles":{},"objects":{},"tiles_removed":[],"objects_removed":[]}
+            for key in state.tiles:
+                if not prior_tiles.has(key) or not is_same(prior_tiles[key],state.tiles[key]):expected.tiles[key]=state.tiles[key]
+            for key in prior_tiles:
+                if not state.tiles.has(key):expected.tiles_removed.append(key)
+            for identity in state.objects:
+                if not prior_objects.has(identity) or not is_same(prior_objects[identity],state.objects[identity]):expected.objects[identity]=state.objects[identity]
+            for identity in prior_objects:
+                if not state.objects.has(identity):expected.objects_removed.append(identity)
+            check(disclosed.tiles==expected.tiles and disclosed.objects==expected.objects,"Sparse disclosure equals the previous full-store diff")
+            for family in ["tiles_removed","objects_removed"]:
+                var actual:Array=disclosed[family].duplicate();actual.sort();expected[family].sort()
+                check(actual==expected[family],"Sparse "+family+" equals the exact removed-key set")
+            var changed:Array=disclosed.changes.duplicate();changed.sort()
+            var expected_changed:Array=expected.tiles.keys();expected_changed.sort()
+            check(changed==expected_changed,"Sparse changed tile keys equal the full-store diff")
+            for family in ["tiles","objects"]:
+                var prior:Dictionary=prior_tiles if family=="tiles" else prior_objects
+                var inserted:Array=disclosed[family].keys().filter(func(key):return not prior.has(key))
+                var expected_inserted:Array=expected[family].keys().filter(func(key):return not prior.has(key))
+                check(inserted==expected_inserted,"Sparse "+family+" insertion order preserves the actual canonical mutation order")
+                for key in expected[family]:check(is_same(disclosed[family][key],state[family][key]),"Disclosure owns the exact final "+family+" row reference")
+        return result
     if input.has("sensory_rows"):
         var composed=Audience.composed_values(input.sensory_rows)
         return composed if not composed.ok else Audience.fold(state,input.fact,composed.value)
@@ -84,6 +113,22 @@ func transition_cases()->void:
     next.lineages[0].events[0].fact.actors.append({"actor_uuid":"not-held","rows":[]})
     var frozen=reduced.value.duplicate(true)
     check(not Reducer._reduce_operation_retained(reduced.value,next,true).ok and reduced.value==frozen,"Rejected multi-actor operation leaves committed state unchanged")
+func sparse_disclosure_cases()->void:
+    # Private API controls reuse original complete object rows, not new records.
+    var vector:Dictionary=_document("w3_")
+    var initial_update:Dictionary=vector.steps[0].input.update
+    var state:Dictionary=fold(vector.initial.duplicate(true),vector.steps[0].input).value
+    var identity:String=initial_update.objects.item_uuids[0]
+    var held:Dictionary=state.objects[identity]
+    var frozen:PackedByteArray=var_to_bytes(held)
+    var replacement:Dictionary={"occurrence":1,"objects_removed":[identity],"objects":initial_update.objects,"contents":initial_update.contents}
+    var replaced:Dictionary=fold(state,{"update":replacement})
+    check(replaced.ok and not is_same(replaced.value.objects[identity],held),"Same-update object removal/re-add retains the final replacement row")
+    check(var_to_bytes(held)==frozen,"Repeated object/container replacements leave the original retained row immutable")
+    var disclosed:Dictionary={"sentinel":"unchanged"}
+    var refused:Dictionary=Reducer.apply_world_update(state,{"occurrence":2,"objects_removed":[identity,"not-held"]},disclosed)
+    check(not refused.ok and disclosed=={"sentinel":"unchanged"},"A refused update does not publish a partial sparse disclosure")
+
 func attack_source_cases()->void:
     var document:Dictionary=_document("v1_a_first_record")
     var state:Dictionary=fold(document.initial.duplicate(true),document.steps[0].input).value
@@ -105,5 +150,5 @@ func run()->void:
             check(issue.is_empty(),name+" step "+str(i)+" "+issue)
             if step.input.has("group"):
                 var group:Dictionary=step.input.group;var branch=Reducer.lineage_branch(group,group.events[group.root]);check(branch.ok and branch.value.events.size()>0,name+" chronological branch preserved")
-    error_cases();transition_cases();attack_source_cases()
+    error_cases();transition_cases();attack_source_cases();sparse_disclosure_cases()
     var report={"passed":passed,"failures":failures,"vectors":index.fixtures.size()};print(JSON.stringify(report));quit(0 if failures.is_empty() else 1)

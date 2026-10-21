@@ -43,7 +43,7 @@ static func _motion_assignments(entry:Dictionary,cache:Dictionary)->void:
 static func _indicator_assignment(entry: Dictionary,recipe: Dictionary,cache: Dictionary) -> void:
     var classification:Dictionary=recipe.get("classification",{})
     var domains:Array=classification.get("presentationDomains",[]).filter(func(domain):return domain not in ["none","hud_only"])
-    if recipe.get("disposition")!="authored" or domains.is_empty():return
+    if (recipe.get("disposition")!="authored" or domains.is_empty()) and str(recipe.get("surfaceOwner","")).is_empty():return
     if classification.get("runtimeRole")=="passive_unlock" or classification.get("visualIntensity") in ["state_only","icon_only"]:return
     var persistent:Dictionary=recipe.get("persistent",{})
     if float(persistent.get("alphaMultiplier",1))!=1:return
@@ -52,7 +52,7 @@ static func _indicator_assignment(entry: Dictionary,recipe: Dictionary,cache: Di
     for field in ["equipmentModifiers","appearanceLayers","layers","activityPoses"]:
         if not persistent.get(field,[]).is_empty():return
     if not entry.get("indicator_assignments",[]).is_empty():return
-    if "ground_zone" in domains:
+    if "ground_zone" in domains or not str(recipe.get("surfaceOwner","")).is_empty():
         var spatial:Dictionary=Catalog.environment_index(cache).get("spatial_media",{})
         var triggers:Array=recipe.get("relationships",{}).get("incomingTriggers",[])
         var assignments:Array=[]
@@ -65,7 +65,18 @@ static func _indicator_assignment(entry: Dictionary,recipe: Dictionary,cache: Di
         for owner_id in owner_ids:
             var config:Dictionary=Persistent.spatial_config(str(owner_id),cache)
             var uses:Array=config.get("persistent",{}).get("nativeEffects",[])
-            if uses.is_empty():continue
+            if uses.is_empty():
+                # The ordinary world sampler can select an indexed spatial
+                # condition lifecycle instead of an authored Ground EffectUse.
+                for selection in Persistent.spatial_lifecycles({"content_ref":{"content_id":owner_id}}):
+                    var package_source:String="assets/vfx/index.json#/selections/"+str(selection.key)+"/condition"
+                    assignments.append({"kind":"native_spatial_owner","spatial_content_id":owner_id,"source":package_source,
+                        "declared_owner_source":entry.source+"/surfaceOwner" if owner_id==declared else entry.source+"/relationships/incomingTriggers",
+                        "selection_key":str(selection.key),"when":selection.condition.get("when",{}).duplicate(),
+                        "native_sources":["application","sustain","removal"].map(func(phase):return {
+                            "clip":selection.condition.phases[phase],"source":package_source+"/phases/"+phase,"at":phase}),
+                        "qualification":"The exact indexed spatial lifecycle owns this declared field; actual observed UUID, unsuppressed cells, source inputs and native output remain separate."})
+                continue
             assignments.append({"kind":"native_spatial_owner","spatial_content_id":owner_id,
                 "source":str(config.get("_resource_source",Catalog.source_pointer("catalog/condition_recipes.json",str(owner_id),cache))),
                 "declared_owner_source":entry.source+"/surfaceOwner" if owner_id==declared else entry.source+"/relationships/incomingTriggers",
@@ -92,7 +103,7 @@ static func _indicator_assignment(entry: Dictionary,recipe: Dictionary,cache: Di
         return
     # Assignment and execution are separate. A real package lifecycle or typed
     # held source owns an indicator even when its runtime inputs remain absent.
-    if not persistent.get("nativeEffects",[]).is_empty() or not Effects.conditions(str(entry.id)).is_empty():return
+    if not persistent.get("nativeEffects",[]).is_empty() or not Persistent.lifecycle_candidates(str(entry.id),cache).is_empty():return
     _require(entry,"persistent","persistent_indicator",entry.source+"/persistent",false,
         "persistent_visual_assignment_missing","not_assigned",{
             "gap_kind":"authoring_assignment","implementation":"not_applicable",
@@ -171,11 +182,37 @@ static func _effects(entry: Dictionary,phase: String,effects: Array,pointer: Str
     for i in effects.size():
         if effects[i].get("assetId","") not in replaced:_layer(entry,phase,effects[i],pointer+"/"+str(i),false,cache,availability)
 
+## Inspection has no current actor state. Compare declared conditional media
+## with the exact native predicate instead of treating an empty state as a
+## refusal of every supported branch. Unknown/mismatched predicates stay open.
+static func _inspection_replaced_media(id:String,recipe:Dictionary,cache:Dictionary)->Array:
+    var result:Array=Persistent.replaced_media({"behavior_id":id},recipe,cache)
+    var selectors:Dictionary={"energy_type":"whenEnergyType","enhanced_ability":"whenAbility",
+        "metamagic_mode":"whenMetamagicMode","size_change":"whenSizeChange"}
+    for selection in Persistent.lifecycle_candidates(id,cache):
+        var lifecycle:Dictionary=selection.condition
+        var when:Dictionary=lifecycle.get("when",{})
+        if when.is_empty():continue # Ordinary unconditional lookup already handled it.
+        for layer in recipe.get("persistent",{}).get("layers",[]):
+            if not when.keys().all(func(field):return selectors.has(field) and layer.get(selectors[field])==when[field]):continue
+            var covered:bool=not lifecycle.get("marker",{}).is_empty() if layer.get("markerGroup")!=null else lifecycle.get("body_channel_included",false)
+            var asset:String=str(layer.get("assetId",""))
+            if covered and not asset.is_empty() and asset not in result:result.append(asset)
+        for phase in ["application","removal"]:
+            for effect in recipe.get(phase,{}).get("effects",[]):
+                if not when.keys().all(func(field):return selectors.has(field) and effect.get(selectors[field])==when[field]):continue
+                var asset:String=str(effect.get("assetId",""))
+                if not asset.is_empty() and asset not in result:result.append(asset)
+    return result
+
 ## The package lifecycles of this condition and the spell's contact source.
 static func _native(entry:Dictionary,recipe:Dictionary,selected:Dictionary,cache:Dictionary)->void:
     var common:Dictionary={"id":"condition:"+str(entry.id),"actor_uuid":null,"condition":{"behavior_id":entry.id},"start_ms":0.0,"absolute_start_ms":0.0,
-        "duration_ms":INF,"age_ms":0.0,"removal_age_ms":null,"initial":false}
-    for phase in Persistent.lifecycle_samples(common,Effects.conditions(str(entry.id)),cache):
+        "duration_ms":INF,"age_ms":0.0,"removal_age_ms":null,"initial":false,"recipe":recipe}
+    if recipe.get("ownerKind")=="temporary_hp_grant":
+        common.id="grant-source:"+str(entry.id);common.owner_behavior_id=str(entry.id)
+        common.native_grant=true;common.erase("condition")
+    for phase in Persistent.lifecycle_samples(common,Persistent.lifecycle_candidates(str(entry.id),cache),cache):
         _native_phase(entry,phase,"persistent","native:"+str(phase.source_id))
     for phase in Persistent.authored_phases(recipe,str(entry.id),cache,str(entry.source)):
         _native_phase(entry,phase,"persistent","native_authored:"+str(phase.native_cue.source_index))
@@ -261,13 +298,13 @@ static func build(cache: Dictionary={},recorded_rows: Array=[],condition_ids: Di
         totals.entries+=1
         var recipe:Dictionary=recipes[id]
         var native=NativeSpells.condition(id,cache)
-        var replaced:Array=Persistent.replaced_media({"behavior_id":id},recipe)
+        var replaced:Array=_inspection_replaced_media(str(id),recipe,cache)
         # The spell's native contact source draws an actual interception.
         if not NativeSpells.contact_phases(native).is_empty():
             for effects in recipe.get("interceptionEffectsByDirection",{}).values():replaced.append_array(effects.map(func(effect):return str(effect.get("assetId",""))))
         var source="catalog/condition_recipes.json:/"+id
         var entry={"id":id,"label":recipe.get("label",id),"definition_ref":recipe.get("definitionRef",{}).duplicate(true),
-            "source":source,"disposition":recipe.get("disposition",""),"classification":recipe.get("classification",{}).duplicate(true),"requirements":[],"status":"unexercised"}
+            "source":source,"disposition":recipe.get("disposition",""),"owner_kind":recipe.get("ownerKind","condition"),"classification":recipe.get("classification",{}).duplicate(true),"requirements":[],"status":"unexercised"}
         _motion_assignments(entry,cache)
         _indicator_assignment(entry,recipe,cache)
         _native(entry,recipe,native,cache)
@@ -291,7 +328,7 @@ static func build(cache: Dictionary={},recorded_rows: Array=[],condition_ids: Di
                 "available" if present else "missing",{"mapping":ramp.get("mapping"),"texture_path":path})
         for n in persistent.get("equipmentModifiers",[]).size():
             _require(entry,"persistent","equipmentModifiers:"+str(n),source+"/persistent/equipmentModifiers/"+str(n),false,"condition_equipmentModifiers_not_implemented")
-        var appearance_bound:bool=Persistent.lifecycles({"behavior_id":entry.id}).any(func(selection):return "appearance_provider" in Effects.clip(selection.condition.phases.application).get("inputs",[]))
+        var appearance_bound:bool=Persistent.lifecycles({"behavior_id":entry.id},cache).any(func(selection):return "appearance_provider" in Effects.clip(selection.condition.phases.application).get("inputs",[]))
         for n in persistent.get("appearanceLayers",[]).size():
             _require(entry,"persistent","appearanceLayers:"+str(n),source+"/persistent/appearanceLayers/"+str(n),appearance_bound,
                 "" if appearance_bound else "condition_appearance_provider_not_authored","assigned",

@@ -4,6 +4,9 @@ const Requirements=preload("res://presentation/requirements.gd")
 const Audit=preload("res://studio/authoring_audit.gd")
 const Trace=preload("res://presentation/event_trace.gd")
 const Authoring=preload("res://presentation/authoring.gd")
+const Context=preload("res://presentation/source/abilities/context.gd")
+const Records=preload("res://tools/presentation_build/ability_records.gd")
+const Build=preload("res://tools/presentation_build/abilities.gd")
 var checks=0
 var failures:Array=[]
 var cache={}
@@ -15,7 +18,45 @@ func trace(fact:Dictionary,recipe:Dictionary,components:Array=[],canceled:bool=f
     var group={"operation_sequence":1,"id":"group","duration_ms":100.0,"actor_tracks":[],"components":components,"commits":[{"event_uuid":"1","at_ms":50.0}]}
     var graph={"starts":{"1":0.0},"ends":{"1":100.0},"actor_inputs":{"1":{"actor":{"uuid":"actor","last_visual_position":[0,0]}}},"recipes":{"1":recipe},"condition_cues":{}}
     return Trace.compile_rows({"events":[node],"version_rows":{"occurrences":[1],"lineages":[1]}},group,graph,cache)[0]
+func context_policies()->void:
+    for pair in [["death","silhouetteDust"],["movement_reaction","movementLeadInMs"]]:
+        var resource:String="res://authoring/abilities/contexts/"+str(pair[0])+".tres"
+        var entry:Resource=load(resource)
+        var document:Dictionary=Records.context_document(entry,str(pair[0]))
+        var field:String=str(pair[1])
+        check(document.inactiveLegacyFields==[field] and document[field]==entry.unported[field],"Inactive Context choice retains exact original field/value: "+field)
+        var imported:Resource=Context.new();Records.context_from(imported,str(pair[0]),document)
+        var rebuilt:Dictionary=Records.context_document(imported,str(pair[0]))
+        check(rebuilt.inactiveLegacyFields==document.inactiveLegacyFields and rebuilt[field]==document[field],"Context import/export preserves inactive policy and raw values: "+field)
+        var rows:Array=Requirements.context(document,"catalog/"+str(pair[0])+"_context.json:",str(pair[0])+"_context")
+        var references:Array=rows.filter(func(row):return row.get("legacy_field")==field)
+        check(references.size()==1 and references[0].disposition=="inactive_reference" and references[0].status=="explicit_none" \
+            and references[0].source==resource+"::unported/"+field and references[0].authored_value==document[field] and not references[0].rendered,
+            "Inactive reference remains exact source inspection, not source parity or output: "+field)
+        var valid:Dictionary=Build.Common.report();Build._check_context_inactive_fields(entry,"control",valid)
+        check(valid.errors.is_empty(),"Exact declared legacy field is admitted: "+field)
+        var invalid:Resource=entry.duplicate(true);invalid.inactive_legacy_fields=PackedStringArray([field,"absent_field",field+"/nested",field])
+        var invalid_report:Dictionary=Build.Common.report();Build._check_context_inactive_fields(invalid,"control",invalid_report)
+        check(invalid_report.errors.size()==3,"Unknown, nested and duplicate inactive fields cannot disable other presentation: "+field)
+    var saved:Variant=cache.get("catalog/death_context.json")
+    var death:Dictionary=Records.context_document(load("res://authoring/abilities/contexts/death.tres"),"death")
+    cache["catalog/death_context.json"]=death
+    var life:Dictionary={"kind":"life","entity_uuid":"actor","new_state":"dead","previous_state":"alive","remains_disposition":"disintegrated"}
+    var life_row:Dictionary=trace(life,{})
+    check(not life_row.components.any(func(component):return component.kind=="death_dust") and life_row.inactive_legacy_fields.size()==1,
+        "Actual disintegrated Life exposes the selected inactive dust reference without demanding particles")
+    var active:Dictionary=death.duplicate(true);active.erase("inactiveLegacyFields");cache["catalog/death_context.json"]=active
+    check(trace(life,{}).components.any(func(component):return component.kind=="death_dust" and component.status=="missing"),
+        "Absent explicit disposition still reports the real authored dust consumer gap")
+    var reaction:Resource=load("res://authoring/abilities/contexts/movement_reaction.tres")
+    var unsupported:Resource=reaction.duplicate(true);unsupported.inactive_legacy_fields=PackedStringArray(["recovery"])
+    var unsupported_report:Dictionary=Build.Common.report();Build._check_context_inactive_fields(unsupported,"control",unsupported_report)
+    check(unsupported_report.errors.size()==1,"An existing unrelated raw field cannot silently become an inactive reference")
+    if saved==null:cache.erase("catalog/death_context.json")
+    else:cache["catalog/death_context.json"]=saved
+
 func _initialize()->void:
+    context_policies()
     var report=Audit.build(cache)
     var index={}
     for entry in report.entries:index[entry.id]=entry
@@ -62,12 +103,19 @@ func _initialize()->void:
     check(Requirements.recipe(fireball,"spells/spell.fireball.json:").any(func(r):return r.kind=="area_geometry" and r.status=="explicit_none"),"Explicitly disabled original area geometry is not reported as required rendering")
     var fireball_requirements=Requirements.recipe(fireball,"spells/spell.fireball.json:")
     check(fireball_requirements.any(func(r):return r.kind=="damage_clock" and r.implementation=="implemented" and r.disposition=="parent_owned"),"Existing damage callback overrides remain their actual child's owner, not a second spell effect")
-    check(fireball_requirements.any(func(r):return r.kind=="damage_number" and r.source=="spells/spell.fireball.json:/damage/floatingNumber" \
+    check(fireball_requirements.any(func(r):return r.kind=="damage_number" \
+        and r.source=="res://authoring/abilities/spells/spell.fireball.tres::unported/damage/floatingNumber" \
+        and r.legacy_source=="spells/spell.fireball.json:/damage/floatingNumber" \
         and r.implementation=="implemented" and r.disposition=="parent_owned" and r.authored_policy==fireball.damage.floatingNumber and not r.rendered),
         "Shared damage number support exposes its exact parent policy without claiming recorded output")
     check(fireball_requirements.any(func(r):return r.kind=="damage_death" and r.execution_owner=="fact:life" and r.unused_legacy_fields==["frame"]),
         "Legacy death frame remains inspectable unused metadata beside the actual Life owner, never a new delay")
     check(Requirements.recipe(blight,"spells/spell.blight.json:").any(func(r):return r.kind=="contact_policy" and r.gap_kind=="unassessed"),"Authored non-projectile contact policy is not silently omitted")
+    var source_materials:Array=Requirements.recipe(blight,"spells/spell.blight.json:").filter(func(r):return r.kind=="bodyMaterials")
+    check(source_materials.size()==2 and source_materials[0].source=="spells/spell.blight.json:/bodyMaterials/0" \
+        and source_materials[1].source=="spells/spell.blight.json:/bodyMaterials/1" \
+        and source_materials[0].id!=source_materials[1].id and blight==before,
+        "Fresh typed body provenance preserves both independent raw material owners and immutable recipe values")
     var mechanism_fact={"kind":"mechanism_activation","mechanism_content_id":"spatial_effect.environment.dart_launcher","committed":true}
     var mechanism_requirements:Array=Requirements.occurrence(mechanism_fact,{},"",cache)
     var mechanism_program:Dictionary=environment.spatial_media[mechanism_fact.mechanism_content_id]

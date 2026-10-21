@@ -62,15 +62,18 @@ static func prepare(paths:Array,cache:Dictionary,fresh:bool=false)->Dictionary:
         if cache.has(path):continue
         if cache.get("native_load_errors",{}).has(path):
             errors.append(cache.native_load_errors[path]);continue
-        if not fresh and loading_path.is_empty() and _material_job.is_empty() and not settling and ResourceLoader.has_cached(path):
-            cache[path]=load(path)
-            continue
         pending+=1
         if not loading_path.is_empty() or not _material_job.is_empty() or settling or mutation_frame==Engine.get_process_frames():continue
         var error:Error=ResourceLoader.load_threaded_request(path,"",false,ResourceLoader.CACHE_MODE_IGNORE_DEEP if fresh else ResourceLoader.CACHE_MODE_REUSE)
         if error!=OK:
             errors.append("Native resource preparation failed: "+str(path));continue
         loading_path=path;loading_owner=cache;loading_revision=int(cache.get("native_source_revision",0));loads_started+=1
+        # A globally cached resource may still be loading for another owner.
+        # Join only our requested token after its actual LOADED publication.
+        _poll()
+        if cache.has(path):pending-=1
+        elif cache.get("native_load_errors",{}).has(path):
+            pending-=1;errors.append(cache.native_load_errors[path])
     return {"ready":pending==0 and errors.is_empty(),"pending":pending,"errors":errors,
         "loading":loading_path,"settling":settling}
 

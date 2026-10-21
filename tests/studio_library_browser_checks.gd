@@ -34,7 +34,7 @@ func run()->void:
     check(source_only.inventory_origin=="typed_source" and source_only.engine_inventory=="not_listed" and source_only.runtime_availability=="unknown","A typed class action stays discoverable without claiming server availability or retirement")
     check(source_only.scenario_status=="missing" and source_only.presentation_status=="not_assessed" and source_only.source_path==sources.action[source_only.id].source_path,"Source presence creates neither a recording nor render proof")
     check(joined.by_key["class_feature:class_feature.fighter.indomitable"].category=="Actions","Class feature sources belong in the Actions browser")
-    var receipts={"cases":{"fireball/hit":[{"kind":"native_replay","report":"res://native/actual.json","factory_version":"earlier-package","package_scope":"historical_package","status":"replay_checks_passed","qualifies":"This exact replay only"},{"kind":"audio_playback","report":"res://native/audio.json","status":"playback_observed","rows":{"footstep":{"starts":1}}}],"old":[{"kind":"recording_reader","report":"res://reader/report.json","status":"passed"}]}}
+    var receipts={"cases":{"fireball/hit":[{"kind":"native_replay","process_exit":0,"process_status":"passed","report":"res://native/actual.json","factory_version":"earlier-package","package_scope":"historical_package","status":"replay_checks_passed","qualifies":"This exact replay only"},{"kind":"audio_playback","process_exit":0,"process_status":"passed","report":"res://native/audio.json","status":"playback_observed","rows":{"footstep":{"starts":1}}}],"old":[{"kind":"recording_reader","report":"res://reader/report.json","status":"passed"}]}}
     var witnessed=Library.build(snapshot,coverage,records,false,{},receipts)
     var witness_fire:Dictionary=witnessed.by_key["spell:spell.fireball"]
     check(witness_fire.presentation_status=="evidence_available" and witness_fire.output_witnesses.size()==2,"Actual native/audio receipts are linked separately from unchecked recorder flags")
@@ -45,20 +45,45 @@ func run()->void:
     check(not Library.matches(witness_fire,"","Conditions") and not Library.matches(witness_fire,"","","unwitnessed"),"Category and output-gap filters retain separate facts")
     check(not Library.matches(witnessed.by_key["spell:spell.false_life"],"","","rejected") and Library.matches(witnessed.by_key["spell:spell.false_life"],"","","needs_review") and Library.matches(witnessed.by_key["condition:condition.hidden"],"recorder failure","","recording_failure"),"All current artwork awaits human review independently of actual recorder failures")
     var scoped_receipts={"cases":{"fireball/hit":[
-        {"kind":"native_replay","report":"res://native/current.json","engine":identity,"factory_version":"actual-package","package_scope":"historical_package"},
-        {"kind":"native_replay","report":"res://native/expected-only.json","expected_engine":identity,"factory_version":"actual-package","package_scope":"current_package"},
-        {"kind":"native_replay","report":"res://native/predecessor.json","engine":identity,"factory_version":"predecessor","package_scope":"current_package"},
-        {"kind":"audio_playback","report":"res://native/silent.json","engine":identity,"factory_version":"actual-package","status":"playback_observed","counters":{"started":0},"pcm_frames":0,"pcm_peak":0}]}}
+        {"kind":"native_replay","process_exit":0,"process_status":"passed","report":"res://native/current.json","engine":identity,"factory_version":"actual-package","package_scope":"historical_package"},
+        {"kind":"native_replay","process_exit":0,"process_status":"passed","report":"res://native/expected-only.json","expected_engine":identity,"factory_version":"actual-package","package_scope":"current_package"},
+        {"kind":"native_replay","process_exit":0,"process_status":"passed","report":"res://native/predecessor.json","engine":identity,"factory_version":"predecessor","package_scope":"current_package"},
+        {"kind":"audio_playback","process_exit":0,"process_status":"passed","report":"res://native/silent.json","engine":identity,"factory_version":"actual-package","status":"playback_observed","counters":{"started":0},"pcm_frames":0,"pcm_peak":0}]}}
     var scoped:Dictionary=Library.build(snapshot,coverage,records,false,{},scoped_receipts,"actual-package").by_key["spell:spell.fireball"]
     check(scoped.output_witnesses.size()==3 and scoped.audio_witnesses.size()==1 and scoped.audio_witnesses[0].kind=="audio_transport" and scoped.audio_witnesses[0].reported_kind=="audio_playback","Zero-start/no-PCM audio stays inspectable transport rather than output evidence")
     check(scoped.current_output_witnesses.size()==1 and scoped.current_output_witnesses[0].report=="res://native/current.json","Only the actual matching engine and package qualify current evidence scope")
     check(scoped.witnesses[1].engine_scope=="engine_identity_not_recorded" and scoped.witnesses[1].expected_engine==identity,"A declared expected engine cannot become actual capture provenance")
     check(scoped.witnesses[0].package_scope_at_join=="historical_package" and scoped.witnesses[0].package_scope=="current_package" and scoped.witnesses[2].package_scope_at_join=="current_package" and scoped.witnesses[2].package_scope=="historical_package","Browser recomputes current package scope while retaining each original join classification")
     check(scoped.approval_status=="needs_review" and Library.matches(scoped,"","","current_evidence") and Library.matches(scoped,"","","historical_evidence"),"Current and historical evidence remain reachable without approving artwork")
+    var payload:Dictionary={"actual-owner":{"actor":"actual-recipient","source":"exact-source-property"}}
+    var raw_control:Dictionary={"kind":"native_replay","engine":identity,"factory_version":"actual-package",
+        "status":"replay_checks_passed","report":"raw-without-runner.json","observed_grant_sources":payload,
+        "observed_body_geometry":payload,"observed_action_bodies":payload}
+    var raw_receipts:Dictionary={"cases":{"fireball/hit":[raw_control]}}
+    var unqualified:Dictionary=Library.build(snapshot,coverage,records,false,{},raw_receipts,"actual-package").by_key["spell:spell.fireball"]
+    check(unqualified.output_witnesses.is_empty() and unqualified.witnesses.size()==1 \
+        and unqualified.witnesses[0].observed_grant_sources==payload and unqualified.witnesses[0].observed_body_geometry==payload \
+        and unqualified.witnesses[0].observed_action_bodies==payload \
+        and unqualified.witnesses[0].status=="process_exit_not_recorded" \
+        and unqualified.witnesses[0].reported_status=="replay_checks_passed","Raw positive markers retain exact body/grant/action observations but cannot qualify process output without an actual exit")
+    var failed_control:Dictionary=raw_control.duplicate(true);failed_control.process_exit=1;failed_control.process_status="failed"
+    raw_receipts.cases["fireball/hit"]=[failed_control]
+    var failed_output:Dictionary=Library.build(snapshot,coverage,records,false,{},raw_receipts,"actual-package").by_key["spell:spell.fireball"]
+    check(failed_output.output_witnesses.is_empty() and failed_output.witnesses[0].process_exit==1 \
+        and failed_output.witnesses[0].status=="process_failed" \
+        and failed_output.witnesses[0].reported_status=="replay_checks_passed","A preserved assertion marker cannot erase an actual failed native process")
+    var partial_control:Dictionary=raw_control.duplicate(true);partial_control.process_exit=0;partial_control.process_status="passed"
+    partial_control.engine={"commit":identity.commit};raw_receipts.cases["fireball/hit"]=[partial_control]
+    var partial_output:Dictionary=Library.build(snapshot,coverage,records,false,{},raw_receipts,"actual-package").by_key["spell:spell.fireball"]
+    check(partial_output.output_witnesses.size()==1 and partial_output.current_output_witnesses.is_empty() \
+        and partial_output.witnesses[0].engine_scope=="partial_engine_identity" \
+        and partial_output.witnesses[0].engine=={"commit":identity.commit},"Actual zero exit and producer commit remain partial identity without invented protocol/schema/digest")
+    partial_output.witnesses[0].observed_grant_sources.clear()
+    check(raw_control.observed_grant_sources==payload and not payload.is_empty(),"Browser inspection cannot mutate the retained raw source payload")
     var predecessor:Dictionary=identity.duplicate();predecessor.commit="predecessor"
     var compatible_records:Dictionary=records.duplicate(true);compatible_records.cases[0].engine=predecessor
     var immutable_compatible:PackedByteArray=var_to_bytes(compatible_records)
-    var historical_receipts={"cases":{"fireball/hit":[{"kind":"native_replay","engine":predecessor,"factory_version":"actual-package","report":"res://native/same-wire-historical.json"}]}}
+    var historical_receipts={"cases":{"fireball/hit":[{"kind":"native_replay","process_exit":0,"process_status":"passed","engine":predecessor,"factory_version":"actual-package","report":"res://native/same-wire-historical.json"}]}}
     var compatible:Dictionary=Library.build(snapshot,coverage,compatible_records,false,{},historical_receipts,"actual-package").by_key["spell:spell.fireball"]
     check(compatible.cases[0].ready and compatible.cases[0].scenario_status=="recorded" and compatible.cases[0].recording_status=="recorded","A genuine successful same-wire predecessor remains eligible for ordinary playback")
     check(compatible.cases[0].capture_engine==predecessor and compatible.cases[0].engine_status=="historical_or_unverified" and var_to_bytes(compatible_records)==immutable_compatible,"Playback eligibility preserves the actual historical engine and original metadata")

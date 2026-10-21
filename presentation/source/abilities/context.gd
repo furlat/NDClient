@@ -22,5 +22,8 @@ const Feedback = preload("res://presentation/source/abilities/feedback.gd")
 ## Actual DamageResultFact.body_release identities select only these authored
 ## region source/residue pairs. They do not infer release from species/damage.
 @export var release_sources: Dictionary[String, Dictionary] = {}
+## Exact top-level fields retained in unported as inactive reference studies.
+## Their original values stay inspectable; they select no rendering or timing.
+@export var inactive_legacy_fields: PackedStringArray = PackedStringArray()
 @export var unported: Dictionary = {}
 @export_multiline var notes: String = ""

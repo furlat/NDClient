@@ -3,11 +3,18 @@ const Fixtures=preload("res://tests/recording_fixtures.gd")
 ## Real single-preview replay controls and independently selected faction journals.
 const Studio=preload("res://studio/studio.gd")
 const Recording=preload("res://studio/recording.gd")
+const BodyGeometryProof=preload("res://presentation/character_geometry.gd")
 var checks=0
 var failures:Array=[]
 var evidence:Array=[]
 var prefix_ordinals:Dictionary={}
 var report_path="res://generated/studio_replay_native_checks.json"
+var require_body_geometry:bool=false
+var require_authored_action_bodies:bool=false
+var required_action_bodies:Array=[]
+## Optional requirements from this exact original scenario; ordinary callers stay unchanged.
+var required_grant_sources:Array=[]
+var body_geometry_rows:Dictionary={}
 func _initialize()->void:run.call_deferred()
 func register_case(studio:Control,record:Dictionary)->void:
     # A durable original can share its scenario ID with the Library's later
@@ -198,6 +205,134 @@ func verify_prefix(studio:Control,label:String,allow_atomic_yield:bool=false)->v
         check(owner.static_complete_order.all(func(entry):return is_instance_valid(entry.node) and members.has(entry.node.get_instance_id())),label+": cached order owns only current live members")
     for owner in [studio.candidate_world,studio.spare_world]:
         if owner!=null:check(not owner.component_renderer.audio.enabled,label+": private primary silent")
+    if require_body_geometry:verify_body_geometry(studio,label)
+
+func verify_body_geometry(studio:Control,label:String)->void:
+    var world=studio.world
+    var admission:Dictionary=world.catalog_cache.get(BodyGeometryProof.BodySources.KEY,{})
+    var index:Resource=admission.get("index")
+    check(index!=null,label+": body proof uses the actually admitted source index")
+    if index==null:return
+    check(world.character_light_profile==Studio.Play.RenderSettings.DEFAULT_PROFILE,
+        label+": source geometry remains active under the ordinary default normal profile")
+    var staged:Dictionary=world.timeline.staged_actors()
+    for actor_id in world.visual_actors:
+        var visual:Dictionary=world.visual_actors[actor_id]
+        var rig_id:String=str(visual.row.rig)
+        if rig_id==index.root_rig:continue
+        for entry in visual.entries:
+            if entry.role=="shadow" or entry.actor_layer.slot!="body" \
+                or not entry.actor_layer.get("effect",{}).is_empty() \
+                or not world.component_renderer._entry_visible(world,entry):continue
+            var material:ShaderMaterial=entry.material
+            if float(material.get_shader_parameter("condition_alpha"))<=0.0 or float(material.get_shader_parameter("layer_alpha"))<=0.0:continue
+            var path:String=str(entry.get("texture_path",""))
+            var descriptor:Dictionary=BodyGeometryProof.BodySources.descriptor(path,"body",world.catalog_cache)
+            var source:Dictionary=descriptor.get("geometry",{})
+            # Whole-body source packets declare their own profile table. A
+            # color-only rig or modular part does not acquire invented optics.
+            if source.is_empty() or not source.has("normal_profiles"):continue
+            var owner:Array=index.source_owners.get(path,[])
+            var layer:Resource=BodyGeometryProof.BodySources.prepared_layer(str(owner[0]),world.catalog_cache) if not owner.is_empty() else null
+            var clip:String=str(world.playbacks[actor_id].clip)
+            check((world.timeline.state.actors.has(actor_id) or staged.has(actor_id))
+                and layer!=null and layer.rig_id==rig_id
+                and entry.actor_layer.paths.get(clip,"")==path,
+                label+": actual visible actor/rig/clip owns this exact whole-body source: "+str(actor_id)+" "+rig_id+" "+clip)
+            check(not str(source.get("status","")).is_empty() and entry.get("geometry_status")==source.status
+                and material.get_shader_parameter("has_component_geometry")==true
+                and material.get_shader_parameter("use_component_depth")==true
+                and material.get_shader_parameter("use_component_normals")==true,
+                label+": declared body depth and normals remain enabled: "+rig_id+" "+clip)
+            var profile:String=str(source.get("normal_profile",""))
+            if profile.is_empty():profile=world.character_light_profile
+            var paths:Dictionary={}
+            for field in BodyGeometryProof.PARAMETERS:
+                var texture_path:String=str(descriptor.get("normal_paths",{}).get(profile,"")) if field=="normal" \
+                    else str(source.get("_source_root","res://assets")).path_join(str(source.get("files",{}).get(field,"")))
+                var parameter:String=BodyGeometryProof.PARAMETERS[field]
+                paths[parameter]=texture_path
+                check(not texture_path.is_empty() and world.textures.has(texture_path)
+                    and entry.get("geometry_paths",{}).has(texture_path)
+                    and is_same(material.get_shader_parameter(parameter),world.textures[texture_path]),
+                    label+": actual body material binds its exact admitted "+field+" texture: "+rig_id+" "+clip)
+            var ground:Variant=source.get("optical_ground_pixels")
+            if ground!=null:
+                check(entry.has("geometry_ground_pixels") and is_equal_approx(float(entry.geometry_ground_pixels),float(ground)),
+                    label+": declared optical ground, including zero, survives binding: "+rig_id+" "+clip)
+            var key:String=JSON.stringify([studio.active_perspective,actor_id,rig_id,clip,path,profile])
+            body_geometry_rows[key]={"perspective":studio.active_perspective,"actor_uuid":actor_id,"rig":rig_id,"clip":clip,
+                "path":path,"geometry_status":entry.get("geometry_status"),"global_normal_profile":world.character_light_profile,
+                "source_normal_profile":source.get("normal_profile",""),"effective_normal_profile":profile,
+                "declared_optical_ground_pixels":ground,"bound_optical_ground_pixels":entry.get("geometry_ground_pixels"),
+                "texture_paths":paths,"scope":"Actual visible source-declared whole-body material/companion preservation; not lighting parity, pixel-difference evidence or human artwork approval."}
+
+## Optional proof of the selected rig-specific body assignments in this
+## actual original. Compiled tracks and submitted visible bindings stay distinct.
+func authored_action_bodies(index:Dictionary,scenario:Dictionary,label:String)->Array:
+    var result:Array=[]
+    for behavior in scenario.get("required_behaviors",[]):
+        var recipe:Dictionary=Recording.Compiler.Authoring.action({"kind":"action","behavior_id":behavior},index.cache)
+        if not recipe.get("actor",{}).get("enabled",false) or str(recipe.get("rigId","")).is_empty():continue
+        var source:String=Recording.Compiler.Authoring.recipe_source(recipe,"actor/clip",index.cache)
+        var tracks:Dictionary={};var events:Array=[]
+        for item in index.groups:
+            for event in item.group.events:
+                if event.kind!="action" or event.behavior_id!=behavior or event.phase!="completion" or "canceled" in event.reasons:continue
+                events.append(event.event_uuid)
+                var matching:Array=item.group.actor_tracks.filter(func(track):return track.source_event_uuid==event.event_uuid and track.actor_uuid==event.actor_uuid \
+                    and track.rig==recipe.rigId and track.clip==recipe.actor.clip and track.get("source","")==source and float(track.duration_ms)>0.0)
+                check(not matching.is_empty(),label+": actual intrinsic occurrence compiles its selected own-rig body: "+str(behavior))
+                for track in matching:
+                    tracks[track.trace_track_id]={"source_event_uuid":event.event_uuid,"actor_uuid":event.actor_uuid,
+                        "start_ms":float(item.start_ms)+float(track.start_ms),"duration_ms":track.duration_ms}
+        check(not events.is_empty(),label+": selected authored action has real completed original occurrences: "+str(behavior))
+        result.append({"behavior_id":behavior,"rig":recipe.rigId,"clip":recipe.actor.clip,"source":source,
+            "original_events":events,"compiled_tracks":tracks,"scope":"Compiled original action body selection; native binding is checked separately."})
+    check(not result.is_empty(),label+": optional action-body proof has actual rig-specific selected assignments")
+    return result
+
+func observed_action_bodies(world:Node,required:Array,observed:Dictionary)->void:
+    for requirement in required:
+        if observed.has(requirement.behavior_id):continue
+        for actor_id in world.displayed_samples:
+            var sample:Dictionary=world.displayed_samples[actor_id]
+            var track_id:String=str(sample.get("trace_track_id",""))
+            if not requirement.compiled_tracks.has(track_id) or sample.clip!=requirement.clip or sample.get("source","")!=requirement.source:continue
+            var binding:Dictionary=requirement.compiled_tracks[track_id]
+            if str(binding.actor_uuid)!=str(actor_id) or sample.source_event_uuid!=binding.source_event_uuid or not world.playbacks.has(actor_id):continue
+            var submitted:Array=world.timeline.trace.tracks.get(track_id,[]).filter(func(row):return row.component.kind=="body" and row.component.status=="presented" and row.component.sample_count>0)
+            if submitted.is_empty():continue
+            var visual:Dictionary=world.visual_actors.get(actor_id,{})
+            if visual.is_empty() or not visual.valid or visual.row.rig!=requirement.rig or world.playbacks[actor_id].clip!=requirement.clip:continue
+            var clip:Dictionary=world.rigs[requirement.rig].clips[requirement.clip]
+            var frame:int=mini(int(world.playbacks[actor_id].sample_seconds*clip.fps),int(clip.frames)-1)
+            for entry in visual.entries:
+                if entry.role=="shadow" or entry.actor_layer.slot!="body" or not entry.actor_layer.get("effect",{}).is_empty() or not world.component_renderer._entry_visible(world,entry):continue
+                var material:ShaderMaterial=entry.material
+                var path:String=str(entry.get("texture_path",""));var frame_key:Array=entry.get("bound_frame_key",[])
+                if path.is_empty() or entry.actor_layer.paths.get(requirement.clip,"")!=path or not world.textures.has(path) or not world.source_images.has(path) or frame_key.size()<3:continue
+                if int(frame_key[1])!=frame or not is_same(frame_key[0],world.textures[path]) or not is_same(material.get_shader_parameter("sheet"),world.textures[path]):continue
+                if float(material.get_shader_parameter("condition_alpha"))<=0.0 or float(material.get_shader_parameter("layer_alpha"))<=0.0:continue
+                var rig:Dictionary=world.rigs[requirement.rig];var image:Image=world.source_images[path]
+                var uv:Vector4=material.get_shader_parameter("frame_uv")
+                var expected:=Vector4(float(frame)*rig.cell_width/image.get_width(),float(rig.facing_rows[frame_key[2]])*rig.cell_height/image.get_height(),float(rig.cell_width)/image.get_width(),float(rig.cell_height)/image.get_height())
+                if not uv.is_equal_approx(expected):continue
+                var original:Image=image.get_region(Rect2i(frame*int(rig.cell_width),int(rig.facing_rows[frame_key[2]])*int(rig.cell_height),int(rig.cell_width),int(rig.cell_height)))
+                original.convert(Image.FORMAT_RGBA8)
+                var pixels:int=0;var bytes:PackedByteArray=original.get_data()
+                for at in range(3,bytes.size(),4):
+                    if bytes[at]>0:pixels+=1
+                if pixels==0:continue
+                observed[requirement.behavior_id]={"behavior_id":requirement.behavior_id,"actor_uuid":actor_id,"rig":requirement.rig,
+                    "clip":requirement.clip,"source":requirement.source,"source_event_uuid":sample.source_event_uuid,"trace_track_id":track_id,
+                    "display_ms":world.timeline.display_ms,"bound_frame":frame,"bound_facing":frame_key[2],"source_texture":path,
+                    "frame_uv":[uv.x,uv.y,uv.z,uv.w],"source_opaque_pixels":pixels,
+                    "acknowledged_samples":submitted.map(func(row):return row.component.sample_count).max(),
+                    "last_acknowledged_display_ms":submitted.map(func(row):return row.component.last_sample_ms).max(),
+                    "scope":"Actual selected body track with submitted postdraw acknowledgement and current visible original texture/frame binding. Acknowledged time is separate from current binding time; not isolated scene pixels or artwork approval."}
+                break
+
 func save_capture(studio:Control,label:String)->void:
     await RenderingServer.frame_post_draw
     var path="res://.captures/studio/replay-comparison/"+label
@@ -233,7 +368,89 @@ func socket_operands(world:Node)->Array:
             "component_age_ms":component.age_ms,"cast_recipe":component.get("cast_recipe",{}),"active_body":world.displayed_samples.get(row.id,{})})
     return rows
 
-func play_once(studio:Control,label:String,source_uses:Array=[])->void:
+## Inspect only an already acknowledged item receiver. Public member and
+## equipment rows independently anchor the source packet; no provider is called.
+func item_surface_witness(world:Node,handle:Dictionary)->Dictionary:
+    var component:Dictionary=handle.component
+    if not component.get("native_item",false) or not component.get("dynamic_item_effect",false):return {}
+    var native=world.component_renderer.native_spells
+    if not native.witnesses.any(func(row):return row.id==component.id+":weapon_surface" and row.status=="rendered"):return {}
+    var keys:Array=handle.get("weapon_input_key",[])
+    if keys.is_empty():return {}
+    var binding:Dictionary=keys[0]
+    var item:String=str(component.get("item_owner_uuid",""));var effect:String=str(component.get("item_effect_uuid",""))
+    var actor:String=str(component.get("actor_uuid",""));var behavior:String=str(component.get("item_effect_member",{}).get("behavior_id",""))
+    var members:Array=world.timeline.state.get("items",{}).get(item,{}).get("effects",[]).filter(func(member):return member.get("effect_uuid")==effect and member.get("behavior_id")==behavior)
+    var layers:Array=world.timeline.state.get("actors",{}).get(actor,{}).get("visual_loadout",{}).get("layers",[]).filter(func(layer):return layer.get("item_uuid")==item)
+    if members.size()!=1 or layers.size()!=1:return {}
+    var slot:String=str(layers[0].slot);var render_slot:String="offhand" if slot.ends_with("OFF") else "weapon"
+    if slot not in ["MELEE_MAIN","MELEE_OFF","RANGED_MAIN","RANGED_OFF"] \
+        or binding.get("item_uuid")!=item or binding.get("effect_uuid")!=effect or binding.get("holder_uuid")!=actor \
+        or binding.get("behavior_id")!=behavior or binding.get("equipment_slot")!=slot or binding.get("render_slot")!=render_slot \
+        or not binding.get("present",false) or not binding.get("observed",false) or not binding.get("equipped",false) or binding.get("suppressed",true):return {}
+    var geometry:Dictionary=handle.get("geometry_input_keys",{})
+    if not ["entity_geometry","recipient_geometry"].any(func(channel):return not geometry.get(channel,[]).is_empty()):return {}
+    var measured:bool=native.Inputs.measured_weapon_source(handle)
+    var points:int=0
+    if measured:
+        var receiver:RefCounted=handle.occurrence.receiving
+        var surface:Dictionary=receiver.current_surface
+        if not receiver.admitted_geometry or not surface.get("ready",false) or surface.get("actor")!=actor or surface.get("item_uuid")!=item \
+            or surface.get("points",[]).is_empty() or not surface.points.all(func(point):return point.get("slot")==render_slot):return {}
+        points=surface.points.size()
+    return {"behavior_id":behavior,"item_uuid":item,"effect_uuid":effect,"holder_uuid":actor,
+        "equipment_slot":slot,"render_slot":render_slot,"clip":component.native_clip.id,"source":component.source,
+        "measured_geometry":measured,"measured_points":points,"draw_witness":component.id+":weapon_surface",
+        "scope":"Acknowledged native item draw with exact current public membership/equipment and supplied geometry; not a final-scene pixel difference or art approval."}
+
+## Only the existing native post-draw acknowledgement may qualify this actual
+## grant. Canonical UUID/source/recipient and retained lifecycle are independent
+## evidence; no ConditionRow, receiver/provider call or source sample is made.
+func grant_source_witness(world:Node,index:Dictionary,handle:Dictionary,witness:Dictionary)->Dictionary:
+    var component:Dictionary=handle.component
+    if not component.get("native_grant",false) or not component.has("lifecycle_phases") \
+        or witness.get("status")!="rendered" or witness.get("id")!=component.id: return {}
+    var uuid:String=str(component.get("grant_uuid",""));var source:String=str(component.get("grant_source_id",""))
+    var actor:String=str(component.get("actor_uuid",""))
+    var owner:Dictionary=world.timeline.temporary_hp_owners.get(uuid,{})
+    var recipient:Dictionary=world.timeline.state.actors.get(actor,{})
+    if uuid.is_empty() or source.is_empty() or owner.is_empty() or recipient.is_empty() \
+        or owner.actor_uuid!=actor or component.get("target_uuid")!=actor \
+        or owner.grant.get("instance_uuid")!=uuid or owner.grant.get("source_id")!=source \
+        or component.get("temporary_hp_grant")!=owner.grant: return {}
+    var native=world.component_renderer.native_spells
+    var state:Dictionary=native.Persistent.lifecycle_state(component,float(witness.age_ms)/1000.0)
+    var phase:String=str(state.phase)
+    if not handle.get("rendered_once",false) or int(witness.get("frame",-1))<0 \
+        or handle.get("lifecycle_phase")!=phase or handle.get("owner_state",{}).get("phase")!=phase: return {}
+    var diagnostic:Dictionary=native.diagnostics.get(component.id,{})
+    if diagnostic.get("status")!="rendered" or not diagnostic.get("submitted_bounds",false) \
+        or not handle.root.is_visible_in_tree(): return {}
+    var supplied:Array=diagnostic.get("input_bindings",{}).get("supplied",[])
+    if "owner_state" not in supplied or not supplied.any(func(channel):return channel in ["targets","root_path"]):return {}
+    var current:Variant=recipient.get("temporary_hp_grant")
+    if phase=="removal":
+        if is_inf(float(owner.end_ms)) or component.get("removal_age_ms")==null \
+            or current!=null and current.get("instance_uuid")==uuid: return {}
+    elif not is_inf(float(owner.end_ms)) or current!=owner.grant or float(recipient.temporary_hp)<=0.0:return {}
+    var onset:String=str(owner.source_event_uuid)
+    if not owner.initial:
+        var matches:Array=[]
+        for item in index.groups:
+            for commit in item.group.get("commits",[]):
+                var fact:Dictionary=commit.get("grant_fact",{})
+                if commit.get("event_uuid")==onset and fact.get("kind")=="temporary_hit_points" \
+                    and fact.get("entity_uuid")==actor and fact.get("grant")==owner.grant:matches.append(commit)
+        if matches.size()!=1:return {}
+    return {"grant_uuid":uuid,"grant_source_id":source,"recipient_uuid":actor,"grant":owner.grant,
+        "source_event_uuid":onset,"owner_start_ms":owner.start_ms,"owner_end_ms":null if is_inf(float(owner.end_ms)) else owner.end_ms,
+        "canonical_temporary_hp":recipient.temporary_hp,"canonical_grant":current,"initial":owner.initial,
+        "lifecycle_phase":phase,"source_owner_state":state,"drawn_age_ms":witness.age_ms,"draw_frame":witness.frame,
+        "component_id":component.id,"observer_uuid":world.timeline.state.observer_uuid,"source":component.source,"lifecycle_source":component.get("lifecycle_source",""),
+        "effect_clip":component.lifecycle_phases[phase].id,
+        "scope":"Actual acknowledged bounded native draw with exact canonical grant/recipient and lifecycle phase; not a final-scene pixel difference or artwork approval."}
+
+func play_once(studio:Control,label:String,source_uses:Array=[],item_effects:Array=[])->void:
     var failures_before:int=failures.size()
     studio.loop_enabled=false;studio._play_study()
     if not await settle(studio):return
@@ -243,6 +460,9 @@ func play_once(studio:Control,label:String,source_uses:Array=[])->void:
     var deadline=Time.get_ticks_msec()+expected_play_ms+45000
     var next_sample=0.0;var frames=0;var longest=0.0;var last=Time.get_ticks_usec()
     var observed_native:Dictionary={};var observed_sources:Dictionary={}
+    var observed_items:Dictionary={}
+    var observed_grants:Dictionary={}
+    var observed_action_draws:Dictionary={}
     var atomic_targets:Dictionary={};var atomic_seen:Dictionary={}
     if label=="hide-light":
         for i in range(studio.index.groups.size()-1):
@@ -256,12 +476,27 @@ func play_once(studio:Control,label:String,source_uses:Array=[])->void:
         var now=Time.get_ticks_usec();longest=maxf(longest,(now-last)/1000.0);last=now;frames+=1
         var timeline=studio.world.timeline
         var native=studio.world.component_renderer.native_spells
+        if not required_action_bodies.is_empty():observed_action_bodies(studio.world,required_action_bodies,observed_action_draws)
         for witness in native.witnesses:
             if witness.status!="rendered" or observed_native.has(witness.id) or not native.handles.has(witness.id):continue
             var component:Dictionary=native.handles[witness.id].component
             var actual:Dictionary=component.get("native_constructor_evidence",component.get("native_input_evidence",{}))
             if actual.is_empty():continue
             observed_native[witness.id]={"clip":component.native_clip.id,"evidence":actual}
+        if not required_grant_sources.is_empty():
+            for witness in native.witnesses:
+                if not native.handles.has(witness.id):continue
+                var handle:Dictionary=native.handles[witness.id]
+                if not required_grant_sources.any(func(requirement):return requirement.source_id==handle.component.get("grant_source_id")):continue
+                var observed:Dictionary=grant_source_witness(studio.world,studio.index,handle,witness)
+                if not observed.is_empty():observed_grants[str(observed.component_id)+":"+str(observed.lifecycle_phase)]=observed
+        if not item_effects.is_empty():
+            for handle in native.handles.values():
+                var component:Dictionary=handle.component
+                var behavior:String=str(component.get("item_effect_member",{}).get("behavior_id",""))
+                if behavior not in item_effects or observed_items.has(component.id):continue
+                var observed:Dictionary=item_surface_witness(studio.world,handle)
+                if not observed.is_empty():observed_items[component.id]=observed
         # Use the existing post-draw acknowledgement and exact native output.
         # Only the requested capability's explicit authored uses are required;
         # an incidental out-of-view native component is not a failed witness.
@@ -328,8 +563,27 @@ func play_once(studio:Control,label:String,source_uses:Array=[])->void:
         check(observed_sources.values().any(func(row):return row.source_id==use.source_id and row.attachment==use.attachment \
             and row.assignment_source==use.assignment_source and row.native_source_pixels>0),
             label+": actual submitted positive native source at authored "+str(use.attachment)+": "+str(use.source_id)+" from "+str(use.assignment_source))
+    for behavior in item_effects:
+        check(observed_items.values().any(func(row):return row.behavior_id==behavior),
+            label+": actual item-effect receiver has acknowledged exact membership/holder/slot geometry: "+str(behavior))
+    for requirement in required_grant_sources:
+        var observed:Array=observed_grants.values().filter(func(row):return row.grant_source_id==requirement.source_id)
+        check(not observed.is_empty(),label+": actual grant source has a postdraw UUID/source/recipient witness: "+str(requirement.source_id))
+        for phase in requirement.get("phases",[]):
+            check(observed.any(func(row):return row.lifecycle_phase==phase),label+": actual grant source has acknowledged "+str(phase)+": "+str(requirement.source_id))
+        if requirement.get("retired",false) and not observed.is_empty():
+            var ids:Array=observed.map(func(row):return row.grant_uuid)
+            check(not studio.world.timeline.state.actors.values().any(func(actor):return actor.get("temporary_hp_grant")!=null and actor.temporary_hp_grant.instance_uuid in ids) \
+                and not ids.any(func(uuid):return studio.world.timeline.temporary_hp_owners.has(uuid)) \
+                and not studio.world.component_renderer.native_spells.handles.values().any(func(handle):return handle.component.get("native_grant",false) and handle.component.get("grant_uuid") in ids),
+                label+": depleted grant has no canonical pool owner, retained lifecycle or native handle after its actual source return")
+    for requirement in required_action_bodies:
+        check(observed_action_draws.has(requirement.behavior_id),label+": actual selected intrinsic body reaches a submitted visible original binding: "+str(requirement.behavior_id)+" "+str(requirement.clip))
+    if require_body_geometry:check(not body_geometry_rows.is_empty(),label+": at least one actual visible source-declared body has geometry preservation proof")
     evidence.append({"case":label,"frames":frames,"functional_max_frame_ms_including_oracle":longest,"diagnostics":studio.replay_diagnostics(),"audio_primary":studio.world.component_renderer.audio.diagnostics(),"observed_native":observed_native,
-        "required_native_sources":source_uses,"observed_native_sources":observed_sources,"expected_playback_ms":expected_play_ms,"preparation_allowance_ms":45000})
+        "required_body_geometry":require_body_geometry,"observed_body_geometry":body_geometry_rows.values() if require_body_geometry else [],
+        "required_action_bodies":required_action_bodies,"observed_action_bodies":observed_action_draws,
+        "required_native_sources":source_uses,"observed_native_sources":observed_sources,"required_item_effects":item_effects,"observed_item_surfaces":observed_items,"required_grant_sources":required_grant_sources,"observed_grant_sources":observed_grants,"expected_playback_ms":expected_play_ms,"preparation_allowance_ms":45000})
 func measure_single(studio:Control)->void:
     studio.loop_enabled=false;studio._play_study()
     if not await settle(studio):return

@@ -57,7 +57,7 @@ static func project(source:Array,visible:Dictionary,by_id:Dictionary,preview_kin
         owned[owner].append(row)
         if not visible.has(row.id):continue
         if row.kind in ["event","perspective"]:continue
-        if row.kind in ["parts","part","condition","condition_exit","condition_state"] and row.get("status")!="missing":continue
+        if row.kind in ["parts","part","condition","condition_exit","condition_state","temporary_hp_grant"] and row.get("status")!="missing":continue
         if not actions.has(owner):
             actions[owner]={"raw":[],"lanes":{},"missing":[],"other":[]}
             order.append(owner)
@@ -73,7 +73,7 @@ static func project(source:Array,visible:Dictionary,by_id:Dictionary,preview_kin
             owner_ancestor=by_id[owner_ancestor].parent
         if covered:continue
         var data:Dictionary=actions[owner]
-        if by_id.get(owner,{}).get("kind","") not in ["event","condition","condition_exit"]:
+        if by_id.get(owner,{}).get("kind","") not in ["event","condition","condition_exit","temporary_hp_grant"]:
             for row in data.raw:roots.append(row);display[row.id]=row;raw_to_display[row.id]=row.id
             continue
         var header:Dictionary=by_id.get(owner,data.raw[0]).duplicate()

@@ -36,7 +36,7 @@ script = ExtResource("4_m1mxy")
 id = "condition.spell.prismatic_spray.restrained"
 label = "Prismatic Restrained"
 icon = SubResource("Resource_m1mxy")
-disposition = "authored"
+disposition = "state_only"
 look = SubResource("Resource_qxdlh")
 group = "body"
 priority = 30.0
@@ -94,3 +94,5 @@ unported = {
 "effects": []
 }
 }
+play_package_lifecycle = false
+notes = "The Prismatic result wrapper delegates to the actual Restrained child member; that real recipient owner supplies its presentation. Source ownership decision only; all artwork remains unreviewed."

@@ -94,10 +94,17 @@ static func _check_parts(state: Dictionary) -> void:
             if not Common.asset(report, where, art.path):continue
             var surface: Resource = art.surface
             if surface == null or surface.encoding == "none":continue
+            _check_normal_profile(surface,report,where)
             var size: Dictionary = _header(state, _res(art.path))
             for path in [surface.depth] + surface.normals.values() + surface.masks.values():
                 if Common.asset(report, where, path) and _header(state, _res(path)) != size:Common.error(report, where, "surface size differs from its colour: " + path)
         if not part.measurements.is_empty():Common.asset(report, "parts/" + id, part.measurements)
+
+static func _check_normal_profile(surface:Resource,report:Dictionary,where:String)->void:
+    var profile:String=surface.normal_profile
+    if profile.is_empty():return
+    if profile not in PROFILES or not surface.normals.has(profile) or str(surface.normals[profile]).is_empty():
+        Common.error(report,where,"source normal profile needs its actual registered map: "+profile)
 
 static func _check_rigs(state: Dictionary) -> void:
     var report: Dictionary = state.report
@@ -122,6 +129,7 @@ static func _check_rigs(state: Dictionary) -> void:
                 if clip.markers[marker] < 0 or clip.markers[marker] >= clip.frames:Common.error(report, at, "marker %s outside the clip's %d frames" % [marker, clip.frames])
             for layer in clip.art:Common.asset(report, at, clip.art[layer])
             if clip.surface != null and clip.surface.encoding != "none":
+                _check_normal_profile(clip.surface,report,at)
                 var size: Dictionary = _header(state, _res(clip.art.get("body", "")))
                 for path in [clip.surface.depth] + clip.surface.normals.values() + clip.surface.masks.values():
                     if Common.asset(report, at, path) and not size.has("error") and _header(state, _res(path)) != size:Common.error(report, at, "surface size differs from its colour: " + path)
@@ -307,23 +315,26 @@ static func _part_geometry(part: Resource, action: String, slot: String) -> Dict
     var art: Resource = part.actions.get(action)
     if art == null or art.surface == null or art.surface.encoding == "none" or slot == "shadow" or slot not in part.slots:return {}
     var surface: Resource = art.surface
-    return {"status": surface.status, "role": "body", "category": part.id, "source_action": action, "slots": Array(part.slots), "_source_root": ROOT,
-        "files": {"depth": surface.depth, "normal": surface.normals.original, "support": surface.masks.support, "normal_valid": surface.masks.normal_valid},
+    var record := {"status": surface.status, "role": "body", "category": part.id, "source_action": action, "slots": Array(part.slots), "_source_root": ROOT,
+        "files": {"depth": surface.depth, "normal": surface.normals.get("original" if surface.normal_profile.is_empty() else surface.normal_profile,""), "support": surface.masks.support, "normal_valid": surface.masks.normal_valid},
         "depth_range": Array(surface.depth_limits) if surface.depth_limits.size() == 2 else [surface.depth_range.x, surface.depth_range.y],
         "reference": surface.masks.solid, "solid": surface.masks.solid, "measurements": part.measurements,
         "optical_camera": {"origin": [surface.camera_origin.x, surface.camera_origin.y], "elevation_degrees": art.camera_elevation_degrees, "physical_camera_calibrated": false}}
+    if not surface.normal_profile.is_empty():record.normal_profile=surface.normal_profile
+    return record
 
 static func _body_geometry(rig: Resource, clip: Resource) -> Dictionary:
     var surface: Resource = clip.surface
     if surface == null or surface.encoding == "none":return {}
     var record := {"status": surface.status, "role": "body", "slots": ["body"], "_source_root": ROOT,
-        "files": {"depth": surface.depth, "normal": surface.normals.original, "support": surface.masks.support, "normal_valid": surface.masks.normal_valid},
-        "normal_profiles": {"original": surface.normals.original, "gentle": surface.normals.gentle, "reference": surface.normals.reference},
+        "files": {"depth": surface.depth, "normal": surface.normals.get("original" if surface.normal_profile.is_empty() else surface.normal_profile,""), "support": surface.masks.support, "normal_valid": surface.masks.normal_valid},
+        "normal_profiles": surface.normals.duplicate(),
         "depth_range": Array(surface.depth_limits) if surface.depth_limits.size() == 2 else [surface.depth_range.x, surface.depth_range.y],
         "depth_byte_range": [surface.depth_byte_range.x, surface.depth_byte_range.y],
         "optical_camera": {"origin": [surface.camera_origin.x, surface.camera_origin.y], "elevation_degrees": rig.camera_elevation_degrees, "physical_camera_calibrated": false},
         "cell_size": [rig.cell.x, rig.cell.y], "frames": clip.frames, "source_coverage": surface.coverage}
-    record.optical_ground_pixels = surface.optical_ground_pixels if surface.optical_ground_pixels > 0.0 else null
+    record.optical_ground_pixels = surface.optical_ground_pixels if is_finite(surface.optical_ground_pixels) else null
+    if not surface.normal_profile.is_empty():record.normal_profile=surface.normal_profile
     if clip.art.get("body", "").begins_with("art/geometry/"):record.colour_path = clip.art.body
     return record
 
@@ -339,16 +350,19 @@ static func _descriptor(state: Dictionary, path: String, geometry: Dictionary) -
     var normals := {}
     var optical := {}
     var sockets := {}
+    var fixed_profile:String=str(geometry.get("normal_profile",""))
     if not geometry.is_empty():
         var root: String = geometry._source_root
-        for file in geometry.files.values():companions[root.path_join(file)] = true
+        for field in geometry.files:
+            if field!="normal" or fixed_profile.is_empty():companions[root.path_join(geometry.files[field])] = true
         if geometry.has("normal_profiles"):
-            for profile in PROFILES:normals[profile] = root.path_join(geometry.normal_profiles[profile])
+            for profile in geometry.normal_profiles:normals[profile] = root.path_join(geometry.normal_profiles[profile])
         else:
-            normals.original = root.path_join(geometry.files.normal)
             var part: Resource = state.parts[geometry.category]
-            for profile in ["gentle", "reference"]:normals[profile] = _res(part.actions[geometry.source_action].surface.normals[profile])
-        for file in normals.values():companions[file] = true
+            for profile in part.actions[geometry.source_action].surface.normals:
+                normals[profile] = _res(part.actions[geometry.source_action].surface.normals[profile])
+        for profile in normals:
+            if fixed_profile.is_empty() or profile==fixed_profile:companions[normals[profile]] = true
         if geometry.has("reference"):
             optical = {"colour": path, "depth": root.path_join(geometry.files.depth), "support": root.path_join(geometry.files.support), "solid": root.path_join(geometry.solid)}
             var baked: Dictionary = _measured(state, geometry.measurements).get("actions", {}).get(geometry.source_action, {})
@@ -364,8 +378,9 @@ static func _descriptor(state: Dictionary, path: String, geometry: Dictionary) -
     var sources := {}
     for profile in PROFILES:
         var selected := {path: true}
+        var selected_profile:String=profile if fixed_profile.is_empty() else fixed_profile
         for companion in companions:
-            if companion not in normals.values() or companion == normals.get(profile):selected[companion] = true
+            if companion not in normals.values() or companion == normals.get(selected_profile):selected[companion] = true
         sources[profile] = _role_record(selected, {path: true})
     var native_paths := {}
     var native_cpu := {}
@@ -374,7 +389,7 @@ static func _descriptor(state: Dictionary, path: String, geometry: Dictionary) -
         if channel == "solid" or not sockets.get("valid", false):
             native_paths[optical[channel]] = true
             if not sockets.get("valid", false):native_cpu[optical[channel]] = true
-    return {"path": path, "geometry": geometry, "companions": companions, "normal_paths": normals, "normal_sets": {} if normals.is_empty() else {path: normals},
+    return {"path": path, "geometry": geometry, "companions": companions, "normal_paths": normals, "normal_sets": {} if normals.is_empty() or not fixed_profile.is_empty() else {path: normals},
         "optical_paths": optical, "sockets": sockets, "source_records": sources, "native_record": _role_record(native_paths, native_cpu)}
 
 ## raw (the sheet the key names), colour (the sheet drawn in this slot) and the

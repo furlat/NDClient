@@ -86,6 +86,7 @@ static func read(directory: String, token: Dictionary={}, projection:Dictionary=
     var light_history={}
     var spatial_history={}
     var item_owners:Dictionary={};var item_history:Dictionary={};var item_spans:Array=[]
+    var grant_history:Dictionary={};var grant_parents:Dictionary={}
     var spatial_owners={}
     var condition_parents={}
     var condition_intervals={}
@@ -119,6 +120,7 @@ static func read(directory: String, token: Dictionary={}, projection:Dictionary=
                 "events":Compiler.EventTrace.initialization(admitted.normalized.initialization)}
             _observe_condition_history(condition_history,condition_intervals,condition_parents,journal.state.actors,0.0,"",true)
             preview_state=journal.state.duplicate(true)
+            _observe_grant_history(grant_history,grant_parents,preview_state.actors,0.0,"","",result.cache,true)
             NativeItems.observe(item_owners,preview_state,0.0,result.cache)
             _observe_item_history(item_history,item_spans,item_owners,preview_state,0.0,"",result.cache)
             _preview_states(preview_states,preview_state,preview_state.actors,condition_history,0.0,result.cache)
@@ -176,6 +178,8 @@ static func read(directory: String, token: Dictionary={}, projection:Dictionary=
                         contacts[actor_id]={"known":not actor.is_empty(),"visible":not actor.is_empty() and World.visible_actor(actor,preview_state)}
                     perception[event.event_uuid]=contacts
                 var actors: Dictionary=commit.delta.get("actors",{})
+                _observe_grant_history(grant_history,grant_parents,actors,offset+commit.at_ms,
+                    "%s:%s"%[sequence,commit.get("event_uuid","")],str(commit.get("event_uuid","")),result.cache,false,commit.get("grant_fact",{}))
                 _observe_condition_history(condition_history,condition_intervals,condition_parents,actors,offset+commit.at_ms,
                     "%s:%s"%[sequence,commit.get("event_uuid","")],false,commit.get("condition_rows",[]),captures,commit.get("creation_bindings",{}))
                 _preview_states(preview_states,preview_state,actors,condition_history,offset+commit.at_ms,result.cache,commit.get("event_uuid",""))
@@ -282,6 +286,9 @@ static func read(directory: String, token: Dictionary={}, projection:Dictionary=
         if not is_inf(owner.end_ms):result.presentation_end_ms=maxf(result.presentation_end_ms,owner.end_ms+fade)
     for owner in spatial_owners.values():
         if not is_inf(owner.end_ms):result.presentation_end_ms=maxf(result.presentation_end_ms,owner.end_ms+_spatial_presentation(owner.effect,result.cache).close_ms)
+    for owner in grant_history.values():
+        if not is_inf(float(owner.end_ms)):
+            result.presentation_end_ms=maxf(result.presentation_end_ms,float(owner.end_ms)+NativePersistent.removal_ms(NativePersistent.lifecycle_candidates(str(owner.grant.source_id),result.cache)))
     var condition_ids={}
     for owner in condition_history.values():condition_ids[Compiler.Authoring.Catalog.condition_key(owner.condition)]=true
     var condition_requirements={}
@@ -290,6 +297,7 @@ static func read(directory: String, token: Dictionary={}, projection:Dictionary=
     var occurrence_ids={}
     for row in result.rows:
         if row.kind=="event":occurrence_ids[row.event.event_uuid]=row.id
+    _grant_rows(result,grant_history,grant_parents,occurrence_ids)
     for owner in condition_history.values():
         var recipe=Timeline.Conditions.recipe(owner.condition,result.cache)
         var end: float=result.presentation_end_ms if is_inf(owner.end_ms) else owner.end_ms
@@ -573,17 +581,19 @@ static func _initial_presentation(index:Dictionary)->Dictionary:
     # A replay can differ before its first event. Compare existing rendering
     # projections, never private inventory, HUD resources or audience identity.
     var state:Dictionary=index.initialization.state;var cache:Dictionary=index.cache.duplicate()
-    var actors={};var visible={};var owners={};var rows={}
+    var actors={};var visible={};var owners={};var grants={};var rows={}
     for actor in state.actors.values():
         if not World.visible_actor(actor,state):continue
         var resolved=Characters.resolve(actor,state,cache)
         actors[actor.uuid]=resolved;visible[actor.uuid]=actor
     Timeline.Conditions.observe(owners,visible,0.0,true)
+    NativePersistent.observe_grants(grants,visible,0.0,cache,true)
     for row in World.rows(state,cache).visual_rows:rows[row.id]=row
     var sources={}
     for source in LightTracks.Lighting.resolve(state).sources:sources[source.item_uuid]=source
     return {"world":rows,"visibility":World.visibility(state),"actors":actors,"lights":sources,
-        "conditions":Timeline.Conditions.samples(owners,0.0,cache,{},false)}
+        "conditions":Timeline.Conditions.samples(owners,0.0,cache,{},false),
+        "grants":NativePersistent.grant_samples(grants,0.0,cache,{}, {},false)}
 
 static func _event_rows(index: Dictionary) -> Dictionary:
     if index.has("clock_events"):return index.clock_events
@@ -655,7 +665,8 @@ static func navigation_anchor(index:Dictionary,at_ms:float,selected:Dictionary={
         for n in range(group_position+1,index.groups.size()):boundaries.append({"id":_group_key(index,str(index.groups[n].group.id)),"side":"start"})
     return {"row_key":key,"event_uuid":event_id,"phase":phase,"group_id":group_id,"boundaries":boundaries,
         "event_key":_row_cause(chosen),
-        "condition_uuid":chosen.get("owner",{}).get("id",""),"row_kind":chosen.get("source_kind",chosen.get("kind","")),
+        "condition_uuid":"" if chosen.get("owner",{}).has("grant") else chosen.get("owner",{}).get("id",""),
+        "grant_uuid":chosen.get("grant_uuid",""),"row_kind":chosen.get("source_kind",chosen.get("kind","")),
         "interval_causes":chosen.get("correspondence_causes",chosen.get("interval_causes",[])),
         "source_time_ms":at_ms,"mapped_time_ms":at_ms}
 
@@ -675,6 +686,10 @@ static func anchor_time(index:Dictionary,anchor:Dictionary) -> float:
     if anchor.row_kind in ["condition","condition_exit"] and not anchor.condition_uuid.is_empty():
         for row in index.rows:
             if row.get("visible_here",true) and row.kind==anchor.row_kind and row.get("owner",{}).get("id")==anchor.condition_uuid:
+                return lerpf(row.start_ms,row.end_ms,anchor.phase)
+    if not str(anchor.get("grant_uuid","")).is_empty():
+        for row in index.rows:
+            if row.get("visible_here",true) and row.kind==anchor.row_kind and row.get("grant_uuid")==anchor.grant_uuid:
                 return lerpf(row.start_ms,row.end_ms,anchor.phase)
     if events.has(anchor.get("event_key","")):
         var event:Dictionary=events[anchor.event_key]
@@ -731,6 +746,8 @@ static func switch_time(source: Dictionary, target: Dictionary, at_ms: float, se
 
 static func _row_key(row: Dictionary) -> String:
     if row.kind=="event":return "event:"+_row_cause(row)
+    if row.get("owner",{}).has("grant"):
+        return "grant:%s:%s:%s:%s:%s"%[row.owner.id,row.kind,row.get("source",""),row.get("lifecycle_phase",""),row.get("admission_kind","")]
     if row.has("owner"):
         return "condition:%s:%s:%s:%s:%s:%s"%[row.owner.id,row.kind,row.get("source",""),row.label,
             row.get("condition_phase",""),JSON.stringify(row.get("correspondence_causes",row.get("interval_causes",[])))]
@@ -1043,7 +1060,7 @@ static func _condition_rows(rows: Array, parent: Dictionary, owner: Dictionary, 
                     boundaries.append(at);causes[at]=["track:"+str(track.get("trace_track_id",track.get("source_event_uuid","")))]
         # Each package lifecycle's application ends inside the owner's span.
         if not owner.initial:
-            for selection in NativePersistent.lifecycles(owner.condition):
+            for selection in NativePersistent.lifecycles(owner.condition,cache):
                 var at:float=owner.start_ms+float(NativePersistent.Effects.clip(str(selection.condition.phases.application)).get("seconds",0.0))*1000.0
                 if at>start and at<end and at not in boundaries:boundaries.append(at);causes[at]=["lifecycle:application_end"]
         boundaries.append(end);boundaries.sort()
@@ -1288,6 +1305,65 @@ static func _preview_states(output: Dictionary,state: Dictionary,actors: Diction
             if owners[key].actor_uuid==id:local_owners[key]=owners[key].duplicate()
         if not output.has(id):output[id]=[]
         output[id].append({"at_ms":at_ms,"actor":row,"actor_name":actor.get("name",""),"sampled_pose":pose,"pose_owner":condition.get("condition_uuid",""),"pose_actor":{"life_state":actor.life_state,"conditions":actor.get("conditions",[])},"condition_owners":local_owners,"source_event_uuid":source_event_uuid})
+
+## The same owner fold as Timeline, at the same already-compiled canonical
+## cuts. Inspection retains ended rows; it never invents a ConditionRow or age.
+static func _observe_grant_history(history:Dictionary,parents:Dictionary,actors:Dictionary,at_ms:float,event_id:String,event_uuid:String,cache:Dictionary,initial:bool=false,fact:Dictionary={})->void:
+    var live:Dictionary={}
+    for id in history:
+        if is_inf(float(history[id].end_ms)):live[id]=true
+    NativePersistent.observe_grants(history,actors,at_ms,cache,initial,event_uuid,fact)
+    for id in history:
+        if not parents.has(id):
+            parents[id]={"event_id":event_id,"initial":initial,"admission":"initial" if initial else "reveal" if history[id].initial else "onset"}
+        if live.has(id) and not is_inf(float(history[id].end_ms)):
+            parents[id].removal_event=event_id;parents[id].removal_event_uuid=event_uuid
+
+static func _grant_rows(index:Dictionary,owners:Dictionary,parents:Dictionary,events:Dictionary)->void:
+    for uuid in owners:
+        var owner:Dictionary=owners[uuid]
+        var source_id:String=str(owner.grant.source_id)
+        var recipe:Dictionary=Compiler.Authoring.load_data("catalog/condition_recipes.json",index.cache).get(source_id,{})
+        var origin:Dictionary=parents[uuid]
+        var samples:Array=NativePersistent.grant_samples({uuid:owner.duplicate(false)},float(owner.start_ms),index.cache,{}, {},false)
+        var end:float=minf(index.presentation_end_ms,float(owner.end_ms)+NativePersistent.removal_ms(NativePersistent.lifecycle_candidates(source_id,index.cache)))
+        var parent:String=events.get(str(owner.source_event_uuid),str(origin.event_id)) if origin.admission=="onset" else ""
+        var life:Dictionary={"id":"grant:"+str(uuid),"parent":parent,"kind":"temporary_hp_grant",
+            "label":"Temporary HP · "+str(recipe.get("label",source_id)),"start_ms":owner.start_ms,"end_ms":end,
+            "owner":owner,"grant_uuid":uuid,"grant_source_id":source_id,"recipient_uuid":owner.actor_uuid,
+            "admission_kind":origin.admission,"membership_end_ms":null if is_inf(float(owner.end_ms)) else owner.end_ms,
+            "source_event_uuid":owner.source_event_uuid,"removal_event_uuid":origin.get("removal_event_uuid",""),
+            "source":"PlayerState.actors/"+str(owner.actor_uuid)+"/temporary_hp_grant","status":"state_only",
+            "timing_source":"Actual canonical grant membership; authored source return follows its observed retirement",
+            "markers":[{"kind":"application" if origin.admission=="onset" else "first_disclosure","at_ms":owner.start_ms,"source":"canonical grant commit"}]}
+        if not is_inf(float(owner.end_ms)):life.markers.append({"kind":"retirement","at_ms":owner.end_ms,"source":"canonical grant replacement/null/zero/departure"})
+        index.rows.append(life)
+        for sample in samples:
+            var stop:float=minf(end,float(owner.end_ms)+float(sample.lifecycle_phases.removal.seconds)*1000.0)
+            var boundaries:Array=[float(owner.start_ms),stop]
+            var application_end:float=float(owner.start_ms)+NativePersistent.application_end(sample)*1000.0
+            if application_end>float(owner.start_ms) and application_end<minf(float(owner.end_ms),stop):boundaries.append(application_end)
+            if float(owner.end_ms)>float(owner.start_ms) and float(owner.end_ms)<stop:boundaries.append(float(owner.end_ms))
+            boundaries.sort()
+            for n in boundaries.size()-1:
+                var start:float=boundaries[n];var finish:float=boundaries[n+1]
+                if finish<=start:continue
+                var component:Dictionary=sample.duplicate(false)
+                component.age_ms=start-float(owner.start_ms)
+                component.removal_age_ms=null if start<float(owner.end_ms) else start-float(owner.end_ms)
+                var phase:String=str(NativePersistent.lifecycle_state(component,(start-float(owner.start_ms))/1000.0).phase)
+                var row:Dictionary={"id":life.id+":phase:"+str(sample.source_id)+":"+str(n),"parent":life.id,"kind":"native_effect",
+                    "label":phase.capitalize()+" · "+str(sample.lifecycle_phases[phase].id),"start_ms":start,"end_ms":finish,
+                    "source_start_ms":owner.start_ms,"group_start_ms":owner.start_ms,"owner":owner,"component":component,
+                    "trace_track_id":sample.id,"grant_uuid":uuid,"grant_source_id":source_id,"recipient_uuid":owner.actor_uuid,
+                    "admission_kind":origin.admission,"lifecycle_phase":phase,"effect_clip":str(sample.lifecycle_phases[phase].id),
+                    "source_event_uuid":owner.source_event_uuid,"source":sample.source,"source_fps":sample.sample_hz,"status":sample.status,
+                    "interval_causes":["event:"+str(origin.get("removal_event_uuid",""))] if phase=="removal" else ["event:"+str(owner.source_event_uuid)] if not owner.source_event_uuid.is_empty() else [str(origin.admission)+":"+str(uuid)],
+                    "coverage":{"implementation":"resolved","source":sample.status,"prepared":"not_examined","rendered":"not_witnessed"}}
+                row.merge(_recorded_world_preview(),true)
+                row.preview_reason="Restore this exact recorded grant UUID, recipient, source phase and owner clock through the existing production pane; no ConditionRow, donor or receiving scene is invented. This is inspection, not native output or artwork approval."
+                index.rows.append(row)
+                _persistent_native_channels(index.rows,row,component)
 
 static func _observe_condition_history(history: Dictionary, intervals: Dictionary, parents: Dictionary,
         actors: Dictionary, at_ms: float, event: String, initial: bool=false,rows:Array=[],captures:Dictionary={},creation_bindings:Dictionary={})->void:

@@ -41,6 +41,7 @@ id = "class_feature.sorcerer.elemental_affinity.resistance"
 label = "Elemental Affinity Resistance"
 icon = SubResource("Resource_cmp16")
 disposition = "authored"
+lifecycle_selections = PackedStringArray("condition_dragon_resistance_acid_persistent", "condition_dragon_resistance_cold_persistent", "condition_dragon_resistance_fire_persistent", "condition_dragon_resistance_lightning_persistent", "condition_dragon_resistance_poison_persistent")
 look = SubResource("Resource_exqs5")
 layers = [{
 "activeDuring": ["idle", "move", "jump", "forced_move", "attack", "cast", "act", "hit"],
@@ -493,4 +494,4 @@ unported = {
 "trigger": "damage_received"
 }]
 }
-notes = "Sent by the pinned engine under this id; not a condition id on the modern branch."
+notes = "The real Elemental Affinity resistance member explicitly reuses the delivered five Dragon Resistance body lifecycles. Each source keeps its exact damage_type predicate and calibration; the real alias condition UUID, recipient, public state and application/removal age own playback. The finite affinity action source remains separate. Imported affinity marker/response strips are unselected provenance, not an inferred response event. This is an unqualified source reuse choice; all artwork remains unreviewed."

@@ -41,6 +41,8 @@ id = "class_feature.sorcerer.dragon_wings.active"
 label = "Dragon Wings"
 icon = SubResource("Resource_0h2fl")
 disposition = "authored"
+lifecycle_selections = PackedStringArray("condition_fly_persistent")
+appearance_layers = [{"id": "fly-wings", "slot": "backpack", "category": "Bag8", "priority": 90.0}]
 look = SubResource("Resource_ac655")
 group = "back-adornment"
 exclusive_group = "back-adornment"
@@ -117,4 +119,4 @@ unported = {
 "effects": []
 }
 }
-notes = "Sent by the pinned engine under this id; not a condition id on the modern branch."
+notes = "The real Dragon Wings active member explicitly reuses the delivered Fly lifecycle and its exact fly-wings/Bag8 appearance provider. The same actual actor pose/facing/outfit supplies the leased wings and retained wind; no independent body animation or synthetic Fly condition is created. The earlier finite Wings action accent remains separate. The manifested-flight-wings legacy declaration is retained only as unselected provenance. Actual member removal owns the source tail. All artwork remains unreviewed and native output unqualified."

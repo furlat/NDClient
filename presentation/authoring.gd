@@ -47,12 +47,20 @@ static func action(fact: Dictionary, cache: Dictionary, actor:Dictionary={}) -> 
         selected._legacy_source=path+":/"+key.replace("~","~0").replace("/","~1")
     return selected
 
-static func recipe_source(recipe:Dictionary,field:String,cache:Dictionary)->String:
+static func recipe_source(recipe:Dictionary,field:String,cache:Dictionary,fallback_source:String="")->String:
     if recipe.get("_source_fields",{}).has(field):return str(recipe._source_fields[field])
     var source:String=recipe.get("_legacy_source","")
+    if source.is_empty():source=fallback_source
     if source.is_empty():return ""
+    var suffix:String="/"+field if not field.is_empty() else ""
+    # A document-root carrier ends in ':'; its empty member path is valid.
+    # Resource/opaque carriers keep their own exact spelling instead of being
+    # mistaken for a legacy catalog path at the URI's ':/'.
+    if source.ends_with(":"):return source+"/"+field
+    if source.begins_with("res://") or "::" in source:return source+suffix
     var parts=source.split(":/",true,1)
-    return Catalog.source_pointer(parts[0],parts[1]+("/"+field if not field.is_empty() else ""),cache)
+    if parts.size()!=2:return source+suffix
+    return Catalog.source_pointer(parts[0],parts[1]+suffix,cache)
 
 ## Feedback is selected from the actual disclosed reaction result, never a
 ## canceled child, spell name, later damage or an inferred automatic mode.

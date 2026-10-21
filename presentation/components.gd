@@ -639,6 +639,7 @@ static func compile(group: Dictionary,lineage: Dictionary,graph: Dictionary,cach
         if action_bindings.has(fact.get("behavior_id","")) and action_bindings[fact.behavior_id].has("effect_cues"):
             native_action(group,node,action_bindings[fact.behavior_id],recipe,audio_track,audio_markers,graph,cache,lineage.events)
         if fact.kind=="attack":
+            _movement_reaction_feedback(group,node,graph,cache)
             var attributed:Dictionary=_weapon_result_binding(node,graph,cache,action_bindings)
             if not attributed.is_empty():native_action(group,node,attributed,recipe,audio_track,audio_markers,graph,cache,lineage.events)
             var impact_binding:Dictionary=NativeItems.impact_binding(fact,cache)
@@ -1116,6 +1117,15 @@ static func _feedback_sources(recipe:Dictionary,name:String,policy:Dictionary,ca
         var source:String=Authoring.recipe_source(recipe,"damage/"+name+"/"+str(field),cache)
         if not source.is_empty():sources[field]=source
     return sources
+
+static func _movement_reaction_feedback(group:Dictionary,node:Dictionary,graph:Dictionary,cache:Dictionary)->void:
+    if not Occurrences.pre_motion_attack(node,graph):return
+    var context:Dictionary=Authoring.load_data("catalog/movement_reaction_context.json",cache)
+    if not context.get("feedbackEnabled",false):return
+    var source:String=str(context.get("_resource_source",""))
+    source=source+"::texts/reaction" if not source.is_empty() else "catalog/movement_reaction_context.json:/feedbackEnabled"
+    _feedback(group,node,{"enabled":true,"text":context.label,"color":context.feedbackColor},
+        float(graph.starts[str(node.id)]),str(node.fact.source_entity_uuid),source,cache)
 
 static func _feedback(group: Dictionary,node: Dictionary,feedback: Dictionary,start: float,actor_id: String,source: String,cache: Dictionary) -> void:
     if not feedback.get("enabled",true):return

@@ -260,12 +260,29 @@ static func recipe(value:Dictionary,source:String,events:Array=[],cache:Dictiona
         for item in result:
             item.legacy_source=item.source
             var relative:String=item.source.trim_prefix(source).trim_prefix("/")
-            item.source=Authoring.recipe_source(value,relative,cache);item.source_pointer=item.source
+            item.source=Authoring.recipe_source(value,relative,cache,source);item.source_pointer=item.source
             item.id="operation:"+item.source+":"+item.kind
     return result
 
-static func context(value:Dictionary,source:String,key:String)->Array:
+static func context_field_active(value:Dictionary,field:String)->bool:
+    return field not in value.get("inactiveLegacyFields",[]) and _active(value.get(field))
+
+static func inactive_context_fields(value:Dictionary,source:String)->Array:
     var result:Array=[]
+    for field in value.get("inactiveLegacyFields",[]):
+        if not value.has(field):continue
+        var pointer:String=source+"/"+str(field)
+        if not str(value.get("_resource_source","")).is_empty():pointer=str(value._resource_source)+"::unported/"+str(field)
+        var reference:Dictionary=row("legacy_reference",str(field),pointer,"not_applicable","projected",[],"reference",
+            "Explicit inactive legacy reference; retained values select no rendering or scheduling. No source parity or artwork approval is claimed.")
+        reference.disposition="inactive_reference";reference.legacy_field=field
+        reference.authored_value=value[field].duplicate(true) if value[field] is Dictionary or value[field] is Array else value[field]
+        reference.disposition_source=str(value._resource_source)+"::inactive_legacy_fields" if value.has("_resource_source") else source+"/inactiveLegacyFields"
+        result.append(reference)
+    return result
+
+static func context(value:Dictionary,source:String,key:String)->Array:
+    var result:Array=inactive_context_fields(value,source)
     # Non-media operations with their actual owning fields. Scalar timing and
     # palette parameters remain children of the operation, not pretend effects.
     var fields:Dictionary={
@@ -278,11 +295,19 @@ static func context(value:Dictionary,source:String,key:String)->Array:
         "entity_lifecycle_media":{"arrival":"entity_arrival","bond":"entity_bond","departure":"entity_departure"}
     }.get(key,{})
     for field in fields:
-        if not _active(value.get(field)):continue
+        if not context_field_active(value,field):continue
         var implementation="unassessed"
         if fields[field] in ["body_recovery","reaction_feedback","reaction_lead_in","death_dust","lifecycle_equipment","interruption_effects","entity_arrival","entity_bond","entity_departure"]:implementation="missing"
         if fields[field] in ["connector_registration","lifecycle_pose"]:implementation="implemented"
+        if fields[field]=="reaction_feedback":implementation="implemented"
         _add(result,value[field],fields[field],field.capitalize(),source+"/"+field,implementation)
+        if fields[field]=="reaction_feedback":
+            result[-1].inspection="projected";result[-1].gap_kind="unexercised";result[-1].status="unexercised"
+            result[-1].next_step="Qualify the existing operation on an actual occurrence."
+            if not str(value.get("_resource_source","")).is_empty():
+                result[-1].source=str(value._resource_source)+"::texts/reaction";result[-1].source_pointer=result[-1].source
+                result[-1].id="operation:"+result[-1].source+":reaction_feedback"
+            result[-1].reason="Enabled feedback follows the actual scheduled pre-motion child Attack and attacker through the shared badge emitter; no added movement hold or rendered claim."
     return result
 
 ## The environment source entry that owns a server id (objects or surfaces).

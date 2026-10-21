@@ -554,7 +554,7 @@ func _native_startup_request(at_ms:float,optional:bool=false)->Dictionary:
         # Only observed owners are mandatory now. A selected capability and
         # received future cues prepare ahead without blocking unrelated motion.
         for owner in timeline.condition_owners.values():
-            for lifecycle in Conditions.NativePersistent.lifecycles(owner.condition):
+            for lifecycle in Conditions.NativePersistent.lifecycles(owner.condition,catalog_cache):
                 var clip:Dictionary=NativeStartup.Effects.clip(str(lifecycle.condition.phases.application))
                 if clip.is_empty():continue
                 lifecycles.append(clip);due[NativeStartup.Effects.key(clip)]=-INF
@@ -563,7 +563,7 @@ func _native_startup_request(at_ms:float,optional:bool=false)->Dictionary:
                 var clip:Dictionary=NativeStartup.Effects.clip(str(lifecycle.condition.phases.application))
                 if not clip.is_empty():lifecycles.append(clip);due[NativeStartup.Effects.key(clip)]=-INF
         for id in selected.get("lifecycle",{}).get("owner_ids",[])+selection_media.get("value",{}).get("native_action_conditions",[]):
-            for lifecycle in NativeStartup.Effects.conditions(str(id)):
+            for lifecycle in Conditions.NativePersistent.lifecycle_candidates(str(id),catalog_cache):
                 var clip:Dictionary=NativeStartup.Effects.clip(str(lifecycle.condition.phases.application))
                 if not clip.is_empty():lifecycles.append(clip)
         var groups:Array=timeline.queue.duplicate()
@@ -886,11 +886,17 @@ func _detailed_frame_context(active_motion: bool) -> Dictionary:
             "blood_rows":pending_world.result.get("blood_rows",{}).size(),"blood_handles":pending_world.blood_preparation.handles.size(),
             "retained_lights":pending_world.light_preparation.get("retained",false)} if pending_world!=null else {}),
         "native_startup":{"ready":native_startup.ready,"completed":native_startup.completed,"total":native_startup.total,"elapsed_ms":native_startup.elapsed_ms},
+        "native_startup_owner":NativeStartup.profile_state() if profile.recording else {},
+        "ground_overlay":ground_overlay.profile_state() if profile.recording else {},
         "generated_shadows":generated_shadows.diagnostics(),"light_table":{"lights":light_table.count,"uploads":light_table.uploads},
         "native_spell_render_ms":component_renderer.native_spells.render_timings(),
         "native_support_sync":component_renderer.native_spells._support.last_sync_phases if component_renderer.native_spells._support!=null else {},
         "actor_sample_counts":profile.get("actor_sample_counts",{}),
         "media_settle":_media_settle_diagnostics(),
+        "selection_metadata":{"task_pending":selection_media.task>=0,"request_pending":not selection_media.pending.is_empty(),
+            "jobs":selection_media.jobs,"discarded":selection_media.discarded,
+            "active":selection_media.profile_active_job.duplicate(true),"last":selection_media.profile_last_job.duplicate(true),
+            "last_discarded":selection_media.profile_last_discarded.duplicate(true)},
         "actor_membership_counts":profile.get("actor_membership_counts",{}),
         "scenery_sample_counts":profile.get("scenery_sample_counts",{}),
         "world_prepare_worker_phases":world_prepare_worker_phases,
@@ -1978,7 +1984,7 @@ func _refresh_selection_media() -> void:
             FrameProfile.end_phase(profile,"selection_media_snapshot",snapshot_started)
             var request_started=Time.get_ticks_usec()
             SelectionMedia.request(selection_media,key,available_actions.entity_uuid,selected_action.behavior_id,
-                timeline.state,budget_bytes,sources,preview,eligible,owners,character_light_profile)
+                timeline.state,budget_bytes,sources,preview,eligible,owners,character_light_profile,[],profile.recording)
             FrameProfile.end_phase(profile,"selection_media_request",request_started)
     elif selected_action.is_empty() and not body_choices.is_empty() \
             and timeline.state.get("actors",{}).has(body_choices.get("entity_uuid")):
@@ -1986,17 +1992,17 @@ func _refresh_selection_media() -> void:
         # events will replace it; exact received sources still own every gate.
         var actor_uuid: String=body_choices.entity_uuid
         var actor: Dictionary=timeline.state.actors[actor_uuid]
-        var key=[timeline.initialization_revision,SelectionMedia._outfit(actor),boundary.get("state_revision"),
+        var key=[timeline.initialization_revision,SelectionMedia._outfit(actor,timeline.state),boundary.get("state_revision"),
             actor_uuid,body_choices.discovery_generation,"available_body_actions",character_light_profile]
         if key!=selection_media.key:
             SelectionMedia.cancel(selection_media)
             var behaviors={}
             for action in Choices.all_actions(body_choices):behaviors[action.behavior_id]=true
-            var state={"actors":{actor_uuid:actor},"objects":{},
+            var state={"actors":{actor_uuid:actor},"items":timeline.state.get("items",{}),"objects":{},
                 "senses":timeline.state.senses,"audience":timeline.state.audience}
             var owners={"objects":[],"recipients":[],"object_resources":[],"response_resources":[],"exact":false}
             SelectionMedia.request(selection_media,key,actor_uuid,"",state,_selection_media_budget(),
-                Catalog.source_snapshot(catalog_cache),{},[],owners,character_light_profile,behaviors.keys())
+                Catalog.source_snapshot(catalog_cache),{},[],owners,character_light_profile,behaviors.keys(),profile.recording)
     else: SelectionMedia.cancel(selection_media)
     var adoption_started=Time.get_ticks_usec()
     if SelectionMedia.poll(selection_media) and not selection_media.value.is_empty():

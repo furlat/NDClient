@@ -225,7 +225,7 @@ def first_cohort():
                   {'do':'action.move','by':'caster','target':[11,6]},
                   {'do':'action.environment.directional_door.open','by':'caster','target':{'object':'Burial hall'}},
                   {'do':'action.move','by':'caster','target':[13,6]}],
-         'required_behaviors':['action.environment.directional_door.open'],'required_facts':['movement']}, gallery_sorcerer(), equipped_weapon_study(), poison_weapon_contact_study(), poison_weapon_runtime_study(), water_create_dry_study(), *glyph_warding_trigger_studies(), power_word_heal_poison_study(), goodberry_consumption_study(), shillelagh_equipped_move_study(), flaming_sphere_lifecycle_study()] + interaction_cohort() + traversal_and_utility_cohort() + survival_cohort() + perspective_and_reaction_cohort() + direct_character_cohort() + passive_handler_cohort() + [interaction_media_study(), vampiric_positive_study(), banishment_departure_study()] + native_persistent_studio_studies() + option_identity_studies() + intrinsic_weapon_studies() + [flame_blade_weapon_study(subjects)] + coating_weapon_studies() + event_family_studies(actors, subjects) + projectile_variant_studies(actors, subjects) + production_review_studies(actors, subjects) + legacy_six_studies(subjects)
+         'required_behaviors':['action.environment.directional_door.open'],'required_facts':['movement']}, gallery_sorcerer(), equipped_weapon_study(), poison_weapon_contact_study(), poison_weapon_runtime_study(), water_create_dry_study(), *glyph_warding_trigger_studies(), power_word_heal_poison_study(), goodberry_consumption_study(), shillelagh_equipped_move_study(), flaming_sphere_lifecycle_study()] + interaction_cohort() + traversal_and_utility_cohort() + survival_cohort() + perspective_and_reaction_cohort() + direct_character_cohort() + passive_handler_cohort() + [interaction_media_study(), vampiric_positive_study(), banishment_departure_study()] + native_persistent_studio_studies() + option_identity_studies() + intrinsic_weapon_studies() + [flame_blade_weapon_study(subjects)] + coating_weapon_studies() + event_family_studies(actors, subjects) + projectile_variant_studies(actors, subjects) + production_review_studies(actors, subjects) + legacy_six_studies(subjects) + [skeleton_mark_lifecycle_study()] + coating_slot_lifecycle_studies() + class_held_lifecycle_studies() + elemental_body_lifecycle_studies() + [false_life_grant_study()]
     cohort += hardware_studies(subjects)
     return [repair_item_owner_requirements(case) for case in cohort]
 
@@ -1230,3 +1230,698 @@ def banishment_departure_study():
         'required_condition_ends':['condition.spell.banishment'],
         'required_facts':['spell','movement'],
         'purpose':'Actual two-seat departure/return input for immutable pre-admission pose/outfit capture. The absent actor is never moved or made visible by the recorder; concentration ends through an offered action, then the returned target moves legally. No departure shader/rendering qualification is claimed.'}
+
+
+def skeleton_mark_lifecycle_study():
+    """Native archer intrinsic, exact recipient mark and public concentration end."""
+    action = 'action.creature.skeleton_archer.mark_target'
+    marked = 'trait.skeleton_archer_marked'
+    inventory = subjects(actions=[action, 'action.move', 'action.drop_concentration'],
+                         conditions=[marked, 'condition.concentrating'])
+    inventory['creature'] = ['creature.skeleton_archer']
+    return {
+        'id': action+'/recipient_move_concentration_end',
+        'title': 'Skeleton Archer Mark: actual recipient movement and concentration removal',
+        'kind': 'action', 'seed': 2, 'battlefield': 'battlefield.open_floor_bright',
+        'subjects': inventory,
+        'actors': [{'role': 'caster', 'side': 'amber', 'creature': 'creature.skeleton_archer', 'at': [3, 7]},
+                   {'role': 'target', 'side': 'blue', 'creature': 'creature.knight', 'at': [6, 7]}],
+        'steps': [{'do': action, 'by': 'caster', 'target': 'target', 'track': True,
+                   'track_condition': marked, 'capture_choices': True},
+                  {'do': 'action.move', 'by': 'target', 'target': [6, 8]},
+                  {'do': 'action.drop_concentration', 'by': 'caster', 'target': 'self'},
+                  {'do': 'action.move', 'by': 'target', 'target': [7, 8]}],
+        'required_behaviors': [action, 'action.move', 'action.drop_concentration'],
+        'required_conditions': [marked, 'condition.concentrating'],
+        'required_condition_ends': [marked, 'condition.concentrating'],
+        'required_facts': ['movement'],
+        'purpose': 'Actual Skeleton Archer intrinsic action, visible hostile target within60ft and source-linked concentration. '
+                   'Preserve native action choices/Preview, exact recipient Marked member UUID, held recipient movement and genuine concentration-linked removal. '
+                   'No action/condition grant, setup injection, save/RNG retry or renderer claim. Existing Driver.turn_of follows each actual published input actor.'}
+
+
+def coating_slot_lifecycle_studies():
+    """Repeat the actual9f ranged/offhand inputs without injecting memberships."""
+    return [{'id': 'action.item.ember_quiver/ranged_main_membership_expiry',
+      'title': 'Ember Quiver: actual ranged-main bow, held membership, re-equip and expiry',
+      'kind': 'item',
+      'subjects': {'spell': [],
+                   'action': ['action.item.ember_quiver', 'action.attack', 'action.move'],
+                   'condition': ['condition.consumable.weapon_coat.timed_fire'],
+                   'creature': ['creature.knight'],
+                   'environment_object': [],
+                   'spatial_effect': [],
+                   'residue': [],
+                   'item': ['gear.ember_quiver', 'weapon.shortbow']},
+      'seed': 2,
+      'actors': [{'role': 'caster',
+                  'side': 'amber',
+                  'premade': 'fighter',
+                  'at': [3, 7],
+                  'items': [{'id': 'weapon.shortbow', 'slot': 'RANGED_MAIN'},
+                            {'id': 'gear.ember_quiver', 'slot': 'Backpack'}]},
+                 {'role': 'target', 'side': 'blue', 'creature': 'creature.knight', 'at': [8, 7]}],
+      'steps': [{'do': 'action.attack', 'by': 'caster', 'target': 'target', 'weapon_slot': 'RANGED_MAIN'},
+                {'do': 'end_turn', 'by': 'caster'},
+                {'do': 'action.item.ember_quiver',
+                 'by': 'caster',
+                 'target': 'self',
+                 'item': 'gear.ember_quiver',
+                 'capture_choices': True,
+                 'track': True,
+                 'track_item_effect': 'condition.consumable.weapon_coat.timed_fire'},
+                {'do': 'hold_walk', 'offset': [0, -1]},
+                {'do': 'end_turn', 'by': 'caster'},
+                {'do': 'action.attack', 'by': 'caster', 'target': 'target', 'weapon_slot': 'RANGED_MAIN'},
+                {'do': 'end_turn', 'by': 'caster'},
+                {'do': 'unequip', 'by': 'caster', 'slot': 'RANGED_MAIN'},
+                {'do': 'end_turn', 'by': 'caster'},
+                {'do': 'equip', 'by': 'caster', 'item': 'weapon.shortbow', 'slot': 'RANGED_MAIN'},
+                {'do': 'end_turn', 'by': 'caster'},
+                {'do': 'action.attack', 'by': 'caster', 'target': 'target', 'weapon_slot': 'RANGED_MAIN'},
+                {'do': 'end_tracked', 'strategy': 'turns', 'max_turns': 40},
+                {'do': 'tail_walk', 'by': 'caster', 'offset': [1, 0]}],
+      'required_behaviors': ['action.item.ember_quiver', 'action.attack', 'action.move'],
+      'required_facts': ['attack', 'movement'],
+      'required_item_effects': ['condition.consumable.weapon_coat.timed_fire'],
+      'required_item_effect_ends': ['condition.consumable.weapon_coat.timed_fire'],
+      'purpose': 'The actual equipped Ember Quiver applies its native ten-round TimedFire item effect to the '
+                 'declared RANGED_MAIN bow. The initial ordinary ranged attack selects the real active ranged '
+                 'set; neither a hit nor positive Fire damage is assumed. The same actual item can become '
+                 'unequipped/re-equipped while the original effect ages, then ordinary turns must publish its '
+                 'real removal. Both original human-seat journals remain authoritative; no condition, source '
+                 'UUID, holder, expiry or graphics result is injected.'},
+     {'id': 'consumable.weapon_coat.basic_poison/melee_off_membership_expiry',
+      'title': 'Basic Poison: actual offhand item membership, re-equip and expiry',
+      'kind': 'item',
+      'subjects': {'spell': [],
+                   'action': ['action.item.weapon_coat.apply', 'action.attack', 'action.move'],
+                   'condition': ['condition.consumable.weapon_coat.basic_poison'],
+                   'creature': ['creature.ogre_zombie'],
+                   'environment_object': [],
+                   'spatial_effect': [],
+                   'residue': [],
+                   'item': ['weapon.shortsword', 'weapon.scimitar', 'consumable.weapon_coat.basic_poison']},
+      'seed': 2,
+      'actors': [{'role': 'caster',
+                  'side': 'amber',
+                  'premade': 'fighter',
+                  'at': [5, 6],
+                  'items': [{'id': 'weapon.shortsword', 'slot': 'MELEE_MAIN'},
+                            {'id': 'weapon.scimitar', 'slot': 'MELEE_OFF'},
+                            {'id': 'consumable.weapon_coat.basic_poison', 'placement': 'inventory'}]},
+                 {'role': 'target', 'side': 'blue', 'creature': 'creature.ogre_zombie', 'at': [6, 6]}],
+      'steps': [{'do': 'action.item.weapon_coat.apply',
+                 'by': 'caster',
+                 'target': 'self',
+                 'item': 'consumable.weapon_coat.basic_poison',
+                 'name': 'Coat Off Hand',
+                 'capture_choices': True,
+                 'track': True,
+                 'track_item_effect': 'condition.consumable.weapon_coat.basic_poison'},
+                {'do': 'hold_walk', 'offset': [0, -1]},
+                {'do': 'end_turn', 'by': 'caster'},
+                {'do': 'action.attack', 'by': 'caster', 'target': 'target', 'weapon_slot': 'MELEE_MAIN'},
+                {'do': 'action.attack', 'by': 'caster', 'target': 'target', 'weapon_slot': 'MELEE_OFF'},
+                {'do': 'end_turn', 'by': 'caster'},
+                {'do': 'unequip', 'by': 'caster', 'slot': 'MELEE_OFF'},
+                {'do': 'end_turn', 'by': 'caster'},
+                {'do': 'equip', 'by': 'caster', 'item': 'weapon.scimitar', 'slot': 'MELEE_OFF'},
+                {'do': 'end_turn', 'by': 'caster'},
+                {'do': 'action.attack', 'by': 'caster', 'target': 'target', 'weapon_slot': 'MELEE_MAIN'},
+                {'do': 'action.attack', 'by': 'caster', 'target': 'target', 'weapon_slot': 'MELEE_OFF'},
+                {'do': 'end_tracked', 'strategy': 'turns', 'max_turns': 40},
+                {'do': 'tail_walk', 'by': 'caster', 'offset': [0, 1]}],
+      'required_behaviors': ['action.item.weapon_coat.apply', 'action.attack', 'action.move'],
+      'required_facts': ['attack', 'movement'],
+      'required_item_effects': ['condition.consumable.weapon_coat.basic_poison'],
+      'required_item_effect_ends': ['condition.consumable.weapon_coat.basic_poison'],
+      'purpose': "Select the actual consumable's offered Coat Off Hand action with a real light scimitar in "
+                 'MELEE_OFF and a real light shortsword in MELEE_MAIN. Main and offhand attacks use ordinary '
+                 "action/bonus-action budgets, with no forced Hit/Crit. Ogre Zombie's Poison immunity is "
+                 'retained; Poisoned or positive Poison damage is not a prerequisite. Exact item-effect '
+                 'membership survives the ordinary same-item unequip/re-equip and must end through real native '
+                 'turns. No actor condition, artificial socket, effect UUID, packet, expiry or rendered '
+                 'acceptance is manufactured.'}]
+
+
+def class_held_lifecycle_studies():
+    """Repeat actual paid class-owner originals through the existing saved profile."""
+    return [{'id': 'action.class.sorcerer.distant_spell/held_move_actual_spell_consumption',
+      'title': 'Distant Spell: real pending member, held movement and spell consumption',
+      'kind': 'action',
+      'seed': 2,
+      'subjects': {'spell': ['spell.fire_bolt'],
+                   'action': ['action.class.sorcerer.distant_spell', 'action.move'],
+                   'condition': ['class_feature.sorcerer.metamagic_active'],
+                   'creature': [],
+                   'environment_object': [],
+                   'spatial_effect': [],
+                   'residue': [],
+                   'item': []},
+      'actors': [{'role': 'caster', 'side': 'party'}, {'role': 'ally', 'side': 'party'}],
+      'player_builds_source': 'tools/studio_cases/scenarios/legacy_sorcerer14_fighter17.json',
+      'steps': [{'do': 'action.class.sorcerer.distant_spell',
+                 'by': 'caster',
+                 'target': 'self',
+                 'capture_choices': True},
+                {'do': 'action.move', 'by': 'caster', 'target': [9, 10]},
+                {'do': 'spell.fire_bolt', 'by': 'caster', 'target': 'Goblin 1', 'capture_choices': True},
+                {'do': 'action.move', 'by': 'caster', 'target': [9, 9]}],
+      'required_behaviors': ['action.class.sorcerer.distant_spell', 'action.move', 'spell.fire_bolt'],
+      'required_conditions': ['class_feature.sorcerer.metamagic_active'],
+      'required_condition_ends': ['class_feature.sorcerer.metamagic_active'],
+      'required_facts': ['movement'],
+      'purpose': 'The existing saved Sorcerer14 progression legitimately selected Quickened/Twinned at level3 '
+                 'and Distant at level10. Select its actual distant action, retain its real public '
+                 'metamagic_mode=distant member while moving, then consume it through the ordinary offered Fire '
+                 'Bolt. No successful hit or damage is required, and actual outside-encounter transitions remain '
+                 'ordinary native facts. Exact application and end of the pending class member are hard '
+                 'prerequisites; no fake mode, feature/condition grant, spell target, state override, RNG retry '
+                 'or rendered acceptance is supplied.'},
+     {'id': 'action.class.sorcerer.elemental_affinity.resistance/held_move_native_replacement',
+      'title': 'Elemental Affinity: actual Fire member, movement and genuine replacement',
+      'kind': 'action',
+      'seed': 2,
+      'subjects': {'spell': [],
+                   'action': ['action.class.sorcerer.elemental_affinity.resistance', 'action.move'],
+                   'condition': ['class_feature.sorcerer.elemental_affinity.resistance'],
+                   'creature': [],
+                   'environment_object': [],
+                   'spatial_effect': [],
+                   'residue': [],
+                   'item': []},
+      'actors': [{'role': 'caster', 'side': 'party'}, {'role': 'ally', 'side': 'party'}],
+      'player_builds_source': 'tools/studio_cases/scenarios/legacy_sorcerer14_fighter17.json',
+      'steps': [{'do': 'action.class.sorcerer.elemental_affinity.resistance',
+                 'by': 'caster',
+                 'target': 'self',
+                 'capture_choices': True},
+                {'do': 'action.move', 'by': 'caster', 'target': [9, 10]},
+                {'do': 'action.class.sorcerer.elemental_affinity.resistance',
+                 'by': 'caster',
+                 'target': 'self',
+                 'capture_choices': True},
+                {'do': 'action.move', 'by': 'caster', 'target': [8, 10]}],
+      'required_behaviors': ['action.class.sorcerer.elemental_affinity.resistance', 'action.move'],
+      'required_conditions': ['class_feature.sorcerer.elemental_affinity.resistance'],
+      'required_condition_ends': ['class_feature.sorcerer.elemental_affinity.resistance'],
+      'required_facts': ['movement'],
+      'purpose': 'The existing saved Sorcerer14 character legally chose red Draconic ancestry and owns the '
+                 'native Affinity action and sorcery points. Each ordinary self activation spends one real '
+                 'point. The second activation removes the first exact resistance UUID and creates another real '
+                 'member; it does not pretend the one-hour/600-round owner expired or require 1200 end-turn '
+                 'commands. Frozen source publishes damage_type=Fire for this profile. Preserve the actual '
+                 'state/UUIDs and old-owner removal plus held motion; the second real owner remains active at '
+                 'the original endpoint. No feature/condition grant, damage consequence, roll retry or '
+                 'body/output acceptance is supplied.'},
+     {'id': 'action.class.sorcerer.quickened_spell/held_move_actual_spell_consumption',
+      'title': 'Quickened Spell: real pending member, held movement and spell consumption',
+      'kind': 'action',
+      'seed': 2,
+      'subjects': {'spell': ['spell.fire_bolt'],
+                   'action': ['action.class.sorcerer.quickened_spell', 'action.move'],
+                   'condition': ['class_feature.sorcerer.metamagic_active'],
+                   'creature': [],
+                   'environment_object': [],
+                   'spatial_effect': [],
+                   'residue': [],
+                   'item': []},
+      'actors': [{'role': 'caster', 'side': 'party'}, {'role': 'ally', 'side': 'party'}],
+      'player_builds_source': 'tools/studio_cases/scenarios/legacy_sorcerer14_fighter17.json',
+      'steps': [{'do': 'action.class.sorcerer.quickened_spell',
+                 'by': 'caster',
+                 'target': 'self',
+                 'capture_choices': True},
+                {'do': 'action.move', 'by': 'caster', 'target': [9, 10]},
+                {'do': 'spell.fire_bolt', 'by': 'caster', 'target': 'Goblin 1', 'capture_choices': True},
+                {'do': 'action.move', 'by': 'caster', 'target': [9, 9]}],
+      'required_behaviors': ['action.class.sorcerer.quickened_spell', 'action.move', 'spell.fire_bolt'],
+      'required_conditions': ['class_feature.sorcerer.metamagic_active'],
+      'required_condition_ends': ['class_feature.sorcerer.metamagic_active'],
+      'required_facts': ['movement'],
+      'purpose': 'The existing saved Sorcerer14 progression legitimately selected Quickened/Twinned at level3 '
+                 'and Distant at level10. Select its actual quickened action, retain its real public '
+                 'metamagic_mode=quickened member while moving, then consume it through the ordinary offered '
+                 'Fire Bolt. No successful hit or damage is required, and actual outside-encounter transitions '
+                 'remain ordinary native facts. Exact application and end of the pending class member are hard '
+                 'prerequisites; no fake mode, feature/condition grant, spell target, state override, RNG retry '
+                 'or rendered acceptance is supplied.'},
+     {'id': 'action.class.sorcerer.twinned_spell/held_move_actual_spell_consumption',
+      'title': 'Twinned Spell: real pending member, held movement and spell consumption',
+      'kind': 'action',
+      'seed': 2,
+      'subjects': {'spell': ['spell.fire_bolt'],
+                   'action': ['action.class.sorcerer.twinned_spell', 'action.move'],
+                   'condition': ['class_feature.sorcerer.metamagic_active'],
+                   'creature': [],
+                   'environment_object': [],
+                   'spatial_effect': [],
+                   'residue': [],
+                   'item': []},
+      'actors': [{'role': 'caster', 'side': 'party'}, {'role': 'ally', 'side': 'party'}],
+      'player_builds_source': 'tools/studio_cases/scenarios/legacy_sorcerer14_fighter17.json',
+      'steps': [{'do': 'action.class.sorcerer.twinned_spell',
+                 'by': 'caster',
+                 'target': 'self',
+                 'capture_choices': True},
+                {'do': 'action.move', 'by': 'caster', 'target': [9, 10]},
+                {'do': 'spell.fire_bolt',
+                 'by': 'caster',
+                 'target': 'Goblin 1',
+                 'capture_choices': True,
+                 'recipients': ['Goblin 1', 'Goblin 2']},
+                {'do': 'action.move', 'by': 'caster', 'target': [9, 9]}],
+      'required_behaviors': ['action.class.sorcerer.twinned_spell', 'action.move', 'spell.fire_bolt'],
+      'required_conditions': ['class_feature.sorcerer.metamagic_active'],
+      'required_condition_ends': ['class_feature.sorcerer.metamagic_active'],
+      'required_facts': ['movement'],
+      'purpose': 'The existing saved Sorcerer14 progression legitimately selected Quickened/Twinned at level3 '
+                 'and Distant at level10. Select its actual twinned action, retain its real public '
+                 'metamagic_mode=twinned member while moving, then consume it through the ordinary offered Fire '
+                 'Bolt. Both named living Goblins must be offered by actual Preview; no duplicated or invented '
+                 'recipient is submitted. No successful hit or damage is required, and actual outside-encounter '
+                 'transitions remain ordinary native facts. Exact application and end of the pending class '
+                 'member are hard prerequisites; no fake mode, feature/condition grant, spell target, state '
+                 'override, RNG retry or rendered acceptance is supplied.'}]
+
+
+def elemental_body_lifecycle_studies():
+    """Repeat the four real intrinsic-body/death originals without granting powers."""
+    return [{'id': 'creature.spell.air_elemental/own_body_native_intrinsics_death',
+      'title': 'Air Elemental: real own body, two native intrinsics and ordinary death',
+      'kind': 'creature',
+      'seed': 2,
+      'battlefield': 'battlefield.open_floor_bright',
+      'subjects': {'spell': ['spell.magic_missile', 'spell.power_word_kill'],
+                   'action': ['action.move',
+                              'action.attack',
+                              'action.air_elemental.gushing_air',
+                              'action.air_elemental.primordial_gales',
+                              'action.disengage'],
+                   'condition': [],
+                   'creature': ['creature.spell.air_elemental', 'creature.generic_caster'],
+                   'environment_object': [],
+                   'spatial_effect': [],
+                   'residue': [],
+                   'item': []},
+      'actors': [{'role': 'caster', 'side': 'amber', 'creature': 'creature.spell.air_elemental', 'at': [3, 6]},
+                 {'role': 'target',
+                  'side': 'blue',
+                  'creature': 'creature.generic_caster',
+                  'level': 20,
+                  'caster_level': 20,
+                  'spells': ['spell.magic_missile', 'spell.power_word_kill'],
+                  'at': [4, 5]}],
+      'steps': [{'do': 'action.disengage', 'by': 'caster', 'target': 'self', 'capture_choices': True},
+                {'do': 'action.move', 'by': 'caster', 'target': [2, 6]},
+                {'do': 'action.move', 'by': 'caster', 'target': [3, 6]},
+                {'do': 'end_turn', 'by': 'caster'},
+                {'do': 'action.attack',
+                 'by': 'caster',
+                 'target': 'target',
+                 'weapon_slot': 'MELEE_MAIN',
+                 'capture_choices': True,
+                 'optional': True},
+                {'do': 'end_turn', 'by': 'caster'},
+                {'do': 'action.air_elemental.gushing_air',
+                 'by': 'caster',
+                 'target': 'target',
+                 'capture_choices': True,
+                 'recipients': ['target', 'target']},
+                {'do': 'end_turn', 'by': 'caster'},
+                {'do': 'action.air_elemental.primordial_gales',
+                 'by': 'caster',
+                 'target': [3, 6],
+                 'capture_choices': True},
+                {'do': 'end_turn', 'by': 'caster'},
+                {'do': 'spell.magic_missile',
+                 'by': 'target',
+                 'target': 'caster',
+                 'level': 5,
+                 'recipients': ['caster', 'caster', 'caster', 'caster', 'caster', 'caster', 'caster'],
+                 'capture_choices': True},
+                {'do': 'end_turn', 'by': 'target'},
+                {'do': 'spell.magic_missile',
+                 'by': 'target',
+                 'target': 'caster',
+                 'level': 6,
+                 'recipients': ['caster', 'caster', 'caster', 'caster', 'caster', 'caster', 'caster', 'caster'],
+                 'capture_choices': True},
+                {'do': 'end_turn', 'by': 'target'},
+                {'do': 'spell.power_word_kill',
+                 'by': 'target',
+                 'target': 'caster',
+                 'level': 9,
+                 'capture_choices': True},
+                {'do': 'action.move', 'by': 'target', 'target': [5, 4]}],
+      'required_behaviors': ['action.move',
+                             'action.air_elemental.gushing_air',
+                             'action.air_elemental.primordial_gales',
+                             'spell.magic_missile',
+                             'spell.power_word_kill',
+                             'action.disengage'],
+      'required_facts': ['movement', 'attack', 'damage', 'saving_throw', 'life'],
+      'purpose': 'The frozen native creature factory intrinsically installs both selected elemental actions and '
+                 'its bound natural attack; this setup grants none of those powers. Actual intrinsic Disengage '
+                 'prevents an extra opportunity hit; two ordinary moves restore the same real origin before '
+                 'actual action choices/Preview. The normal bound Attack is optional only if actual public '
+                 'discovery exposes a legal adjacent target; no reach/socket/target is invented (Fire Slam has '
+                 'native4ft reach). Both actual intrinsic actions are mandatory and saves/contacts/riders remain '
+                 'native outcomes. A real level20 opposing caster then spends actual L5/L6 Magic Missile slots '
+                 'on this actor followed by actual L9 Power Word Kill: no initial HP editing, forced hit/save, '
+                 'fabricated removal or spell-shaped elemental action. Native elemental max-HP '
+                 'bonuses90/126/102/114 with no hit dice and the two real 1d4+1 volleys (15 darts,30–75 total '
+                 'Force) provide a bounded legitimate death path, with every refusal retained. The final '
+                 'opponent move publishes the ordinary post-death prefix. Both original seat journals remain '
+                 'independent; source art/scale/geometry/facing/native output and all artwork acceptance remain '
+                 'separate.'},
+     {'id': 'creature.spell.earth_elemental/own_body_native_intrinsics_death',
+      'title': 'Earth Elemental: real own body, two native intrinsics and ordinary death',
+      'kind': 'creature',
+      'seed': 2,
+      'battlefield': 'battlefield.open_floor_bright',
+      'subjects': {'spell': ['spell.magic_missile', 'spell.power_word_kill'],
+                   'action': ['action.move',
+                              'action.attack',
+                              'action.earth_elemental.soil_clogged_slam',
+                              'action.earth_elemental.seismic_strike',
+                              'action.disengage'],
+                   'condition': [],
+                   'creature': ['creature.spell.earth_elemental', 'creature.generic_caster'],
+                   'environment_object': [],
+                   'spatial_effect': [],
+                   'residue': [],
+                   'item': []},
+      'actors': [{'role': 'caster', 'side': 'amber', 'creature': 'creature.spell.earth_elemental', 'at': [3, 6]},
+                 {'role': 'target',
+                  'side': 'blue',
+                  'creature': 'creature.generic_caster',
+                  'level': 20,
+                  'caster_level': 20,
+                  'spells': ['spell.magic_missile', 'spell.power_word_kill'],
+                  'at': [4, 5]}],
+      'steps': [{'do': 'action.disengage', 'by': 'caster', 'target': 'self', 'capture_choices': True},
+                {'do': 'action.move', 'by': 'caster', 'target': [2, 6]},
+                {'do': 'action.move', 'by': 'caster', 'target': [3, 6]},
+                {'do': 'end_turn', 'by': 'caster'},
+                {'do': 'action.attack',
+                 'by': 'caster',
+                 'target': 'target',
+                 'weapon_slot': 'MELEE_MAIN',
+                 'capture_choices': True,
+                 'optional': True},
+                {'do': 'end_turn', 'by': 'caster'},
+                {'do': 'action.earth_elemental.soil_clogged_slam',
+                 'by': 'caster',
+                 'target': [4, 5],
+                 'capture_choices': True},
+                {'do': 'end_turn', 'by': 'caster'},
+                {'do': 'action.earth_elemental.seismic_strike',
+                 'by': 'caster',
+                 'target': [3, 6],
+                 'capture_choices': True},
+                {'do': 'end_turn', 'by': 'caster'},
+                {'do': 'spell.magic_missile',
+                 'by': 'target',
+                 'target': 'caster',
+                 'level': 5,
+                 'recipients': ['caster', 'caster', 'caster', 'caster', 'caster', 'caster', 'caster'],
+                 'capture_choices': True},
+                {'do': 'end_turn', 'by': 'target'},
+                {'do': 'spell.magic_missile',
+                 'by': 'target',
+                 'target': 'caster',
+                 'level': 6,
+                 'recipients': ['caster', 'caster', 'caster', 'caster', 'caster', 'caster', 'caster', 'caster'],
+                 'capture_choices': True},
+                {'do': 'end_turn', 'by': 'target'},
+                {'do': 'spell.power_word_kill',
+                 'by': 'target',
+                 'target': 'caster',
+                 'level': 9,
+                 'capture_choices': True},
+                {'do': 'action.move', 'by': 'target', 'target': [5, 4]}],
+      'required_behaviors': ['action.move',
+                             'action.earth_elemental.soil_clogged_slam',
+                             'action.earth_elemental.seismic_strike',
+                             'spell.magic_missile',
+                             'spell.power_word_kill',
+                             'action.disengage'],
+      'required_facts': ['movement', 'attack', 'damage', 'saving_throw', 'life'],
+      'purpose': 'The frozen native creature factory intrinsically installs both selected elemental actions and '
+                 'its bound natural attack; this setup grants none of those powers. Actual intrinsic Disengage '
+                 'prevents an extra opportunity hit; two ordinary moves restore the same real origin before '
+                 'actual action choices/Preview. The normal bound Attack is optional only if actual public '
+                 'discovery exposes a legal adjacent target; no reach/socket/target is invented (Fire Slam has '
+                 'native4ft reach). Both actual intrinsic actions are mandatory and saves/contacts/riders remain '
+                 'native outcomes. A real level20 opposing caster then spends actual L5/L6 Magic Missile slots '
+                 'on this actor followed by actual L9 Power Word Kill: no initial HP editing, forced hit/save, '
+                 'fabricated removal or spell-shaped elemental action. Native elemental max-HP '
+                 'bonuses90/126/102/114 with no hit dice and the two real 1d4+1 volleys (15 darts,30–75 total '
+                 'Force) provide a bounded legitimate death path, with every refusal retained. The final '
+                 'opponent move publishes the ordinary post-death prefix. Both original seat journals remain '
+                 'independent; source art/scale/geometry/facing/native output and all artwork acceptance remain '
+                 'separate.'},
+     {'id': 'creature.spell.fire_elemental/own_body_native_intrinsics_death',
+      'title': 'Fire Elemental: real own body, two native intrinsics and ordinary death',
+      'kind': 'creature',
+      'seed': 2,
+      'battlefield': 'battlefield.open_floor_bright',
+      'subjects': {'spell': ['spell.magic_missile', 'spell.power_word_kill'],
+                   'action': ['action.move',
+                              'action.attack',
+                              'action.fire_elemental.smouldering_touch',
+                              'action.fire_elemental.cinderous_swipe',
+                              'action.disengage'],
+                   'condition': [],
+                   'creature': ['creature.spell.fire_elemental', 'creature.generic_caster'],
+                   'environment_object': [],
+                   'spatial_effect': [],
+                   'residue': [],
+                   'item': []},
+      'actors': [{'role': 'caster', 'side': 'amber', 'creature': 'creature.spell.fire_elemental', 'at': [3, 6]},
+                 {'role': 'target',
+                  'side': 'blue',
+                  'creature': 'creature.generic_caster',
+                  'level': 20,
+                  'caster_level': 20,
+                  'spells': ['spell.magic_missile', 'spell.power_word_kill'],
+                  'at': [4, 5]}],
+      'steps': [{'do': 'action.disengage', 'by': 'caster', 'target': 'self', 'capture_choices': True},
+                {'do': 'action.move', 'by': 'caster', 'target': [2, 6]},
+                {'do': 'action.move', 'by': 'caster', 'target': [3, 6]},
+                {'do': 'end_turn', 'by': 'caster'},
+                {'do': 'action.attack',
+                 'by': 'caster',
+                 'target': 'target',
+                 'weapon_slot': 'MELEE_MAIN',
+                 'capture_choices': True,
+                 'optional': True},
+                {'do': 'end_turn', 'by': 'caster'},
+                {'do': 'action.fire_elemental.smouldering_touch',
+                 'by': 'caster',
+                 'target': [4, 5],
+                 'capture_choices': True},
+                {'do': 'end_turn', 'by': 'caster'},
+                {'do': 'action.fire_elemental.cinderous_swipe',
+                 'by': 'caster',
+                 'target': [4, 5],
+                 'capture_choices': True},
+                {'do': 'end_turn', 'by': 'caster'},
+                {'do': 'spell.magic_missile',
+                 'by': 'target',
+                 'target': 'caster',
+                 'level': 5,
+                 'recipients': ['caster', 'caster', 'caster', 'caster', 'caster', 'caster', 'caster'],
+                 'capture_choices': True},
+                {'do': 'end_turn', 'by': 'target'},
+                {'do': 'spell.magic_missile',
+                 'by': 'target',
+                 'target': 'caster',
+                 'level': 6,
+                 'recipients': ['caster', 'caster', 'caster', 'caster', 'caster', 'caster', 'caster', 'caster'],
+                 'capture_choices': True},
+                {'do': 'end_turn', 'by': 'target'},
+                {'do': 'spell.power_word_kill',
+                 'by': 'target',
+                 'target': 'caster',
+                 'level': 9,
+                 'capture_choices': True},
+                {'do': 'action.move', 'by': 'target', 'target': [5, 4]}],
+      'required_behaviors': ['action.move',
+                             'action.fire_elemental.smouldering_touch',
+                             'action.fire_elemental.cinderous_swipe',
+                             'spell.magic_missile',
+                             'spell.power_word_kill',
+                             'action.disengage'],
+      'required_facts': ['movement', 'attack', 'damage', 'saving_throw', 'life'],
+      'purpose': 'The frozen native creature factory intrinsically installs both selected elemental actions and '
+                 'its bound natural attack; this setup grants none of those powers. Actual intrinsic Disengage '
+                 'prevents an extra opportunity hit; two ordinary moves restore the same real origin before '
+                 'actual action choices/Preview. The normal bound Attack is optional only if actual public '
+                 'discovery exposes a legal adjacent target; no reach/socket/target is invented (Fire Slam has '
+                 'native4ft reach). Both actual intrinsic actions are mandatory and saves/contacts/riders remain '
+                 'native outcomes. A real level20 opposing caster then spends actual L5/L6 Magic Missile slots '
+                 'on this actor followed by actual L9 Power Word Kill: no initial HP editing, forced hit/save, '
+                 'fabricated removal or spell-shaped elemental action. Native elemental max-HP '
+                 'bonuses90/126/102/114 with no hit dice and the two real 1d4+1 volleys (15 darts,30–75 total '
+                 'Force) provide a bounded legitimate death path, with every refusal retained. The final '
+                 'opponent move publishes the ordinary post-death prefix. Both original seat journals remain '
+                 'independent; source art/scale/geometry/facing/native output and all artwork acceptance remain '
+                 'separate.'},
+     {'id': 'creature.spell.water_elemental/own_body_native_intrinsics_death',
+      'title': 'Water Elemental: real own body, two native intrinsics and ordinary death',
+      'kind': 'creature',
+      'seed': 2,
+      'battlefield': 'battlefield.open_floor_bright',
+      'subjects': {'spell': ['spell.magic_missile', 'spell.power_word_kill'],
+                   'action': ['action.move',
+                              'action.attack',
+                              'action.water_elemental.slam',
+                              'action.water_elemental.winters_breath',
+                              'action.disengage'],
+                   'condition': [],
+                   'creature': ['creature.spell.water_elemental', 'creature.generic_caster'],
+                   'environment_object': [],
+                   'spatial_effect': [],
+                   'residue': [],
+                   'item': []},
+      'actors': [{'role': 'caster', 'side': 'amber', 'creature': 'creature.spell.water_elemental', 'at': [3, 6]},
+                 {'role': 'target',
+                  'side': 'blue',
+                  'creature': 'creature.generic_caster',
+                  'level': 20,
+                  'caster_level': 20,
+                  'spells': ['spell.magic_missile', 'spell.power_word_kill'],
+                  'at': [4, 5]}],
+      'steps': [{'do': 'action.disengage', 'by': 'caster', 'target': 'self', 'capture_choices': True},
+                {'do': 'action.move', 'by': 'caster', 'target': [2, 6]},
+                {'do': 'action.move', 'by': 'caster', 'target': [3, 6]},
+                {'do': 'end_turn', 'by': 'caster'},
+                {'do': 'action.attack',
+                 'by': 'caster',
+                 'target': 'target',
+                 'weapon_slot': 'MELEE_MAIN',
+                 'capture_choices': True,
+                 'optional': True},
+                {'do': 'end_turn', 'by': 'caster'},
+                {'do': 'action.water_elemental.slam', 'by': 'caster', 'target': [4, 5], 'capture_choices': True},
+                {'do': 'end_turn', 'by': 'caster'},
+                {'do': 'action.water_elemental.winters_breath',
+                 'by': 'caster',
+                 'target': [4, 5],
+                 'capture_choices': True},
+                {'do': 'end_turn', 'by': 'caster'},
+                {'do': 'spell.magic_missile',
+                 'by': 'target',
+                 'target': 'caster',
+                 'level': 5,
+                 'recipients': ['caster', 'caster', 'caster', 'caster', 'caster', 'caster', 'caster'],
+                 'capture_choices': True},
+                {'do': 'end_turn', 'by': 'target'},
+                {'do': 'spell.magic_missile',
+                 'by': 'target',
+                 'target': 'caster',
+                 'level': 6,
+                 'recipients': ['caster', 'caster', 'caster', 'caster', 'caster', 'caster', 'caster', 'caster'],
+                 'capture_choices': True},
+                {'do': 'end_turn', 'by': 'target'},
+                {'do': 'spell.power_word_kill',
+                 'by': 'target',
+                 'target': 'caster',
+                 'level': 9,
+                 'capture_choices': True},
+                {'do': 'action.move', 'by': 'target', 'target': [5, 4]}],
+      'required_behaviors': ['action.move',
+                             'action.water_elemental.slam',
+                             'action.water_elemental.winters_breath',
+                             'spell.magic_missile',
+                             'spell.power_word_kill',
+                             'action.disengage'],
+      'required_facts': ['movement', 'attack', 'damage', 'saving_throw', 'life'],
+      'purpose': 'The frozen native creature factory intrinsically installs both selected elemental actions and '
+                 'its bound natural attack; this setup grants none of those powers. Actual intrinsic Disengage '
+                 'prevents an extra opportunity hit; two ordinary moves restore the same real origin before '
+                 'actual action choices/Preview. The normal bound Attack is optional only if actual public '
+                 'discovery exposes a legal adjacent target; no reach/socket/target is invented (Fire Slam has '
+                 'native4ft reach). Both actual intrinsic actions are mandatory and saves/contacts/riders remain '
+                 'native outcomes. A real level20 opposing caster then spends actual L5/L6 Magic Missile slots '
+                 'on this actor followed by actual L9 Power Word Kill: no initial HP editing, forced hit/save, '
+                 'fabricated removal or spell-shaped elemental action. Native elemental max-HP '
+                 'bonuses90/126/102/114 with no hit dice and the two real 1d4+1 volleys (15 darts,30–75 total '
+                 'Force) provide a bounded legitimate death path, with every refusal retained. The final '
+                 'opponent move publishes the ordinary post-death prefix. Both original seat journals remain '
+                 'independent; source art/scale/geometry/facing/native output and all artwork acceptance remain '
+                 'separate.'}]
+
+
+def false_life_grant_study():
+    """Actual distinct grant ownership and real ordinary damage depletion."""
+    return {'id': 'spell.false_life/grant_move_deplete',
+     'title': 'False Life: actual grant UUID, movement, depletion and source return',
+     'kind': 'spell',
+     'seed': 2,
+     'battlefield': 'battlefield.open_floor_bright',
+     'subjects': {'spell': ['spell.false_life', 'spell.magic_missile'],
+                  'action': ['action.move'],
+                  'condition': [],
+                  'creature': ['creature.generic_caster'],
+                  'environment_object': [],
+                  'spatial_effect': [],
+                  'residue': [],
+                  'item': []},
+     'actors': [{'role': 'caster',
+                 'side': 'amber',
+                 'premade': 'sorcerer',
+                 'caster_level': 5,
+                 'spells': ['spell.false_life'],
+                 'at': [3, 7]},
+                {'role': 'target',
+                 'side': 'blue',
+                 'creature': 'creature.generic_caster',
+                 'level': 20,
+                 'caster_level': 20,
+                 'spells': ['spell.magic_missile'],
+                 'at': [8, 7]}],
+     'steps': [{'do': 'spell.false_life',
+                'by': 'caster',
+                'target': 'self',
+                'level': 1,
+                'capture_choices': True},
+               {'do': 'action.move', 'by': 'caster', 'target': [3, 11]},
+               {'do': 'end_turn', 'by': 'caster'},
+               {'do': 'spell.magic_missile',
+                'by': 'target',
+                'target': 'caster',
+                'level': 3,
+                'recipients': ['caster', 'caster', 'caster', 'caster', 'caster'],
+                'capture_choices': True},
+               {'do': 'end_turn', 'by': 'target'},
+               {'do': 'action.move', 'by': 'caster', 'target': [3, 14]}],
+     'required_behaviors': ['spell.false_life', 'spell.magic_missile', 'action.move'],
+     'required_facts': ['temporary_hit_points', 'movement', 'damage'],
+     'required_applied_damage_types': ['Force'],
+     'required_fact_witnesses': [{'kind': 'temporary_hit_points',
+                                  'actor_role': 'caster',
+                                  'actor_field': 'entity_uuid',
+                                  'field': 'grant',
+                                  'when': {'source_id': 'spell.false_life'}}],
+     'required_grant_sources': [{'source_id': 'spell.false_life',
+                                 'phases': ['application', 'sustain', 'removal'],
+                                 'retired': True}],
+     'purpose': 'A real level1 False Life cast creates the public temporary_hp_grant; no ConditionRow is '
+                'requested or invented. Frozen9f rolls1d4+4 (5–8); opposing real Magic Missile level3 '
+                'produces five1d4+1 Force darts (10–25), exhausting that actual pool without forced rolls '
+                'or HP edits. The Amber actor is the existing level5 Sorcerer premade, whose real learned '
+                'progression has no Shield reaction; the same public RosterSpellGrant supplies False Life '
+                'with existing native slots. The opposing native caster20 is unchanged. Native HP/action '
+                'budgets are unmodified. Four ordinary5ft steps after application expose held source age; '
+                'the final three steps expose the real removal return. Actors begin25ft apart and movement '
+                'stays away from melee reach. Driver.turn_of owns actual turns; all native '
+                'discovery/Preview refusals stay failures. required_grant_sources is optional replay output '
+                'evidence, not injected state or a recorder-generated rendered claim. Both original seat '
+                'journals, actual UUID/source/recipient and postdraw lifecycle evidence stay independent; '
+                'all artwork remains unreviewed. The preserved first generic-caster attempt autoaccepted '
+                'its real Shield and blocked all missiles; it remains a failed original, not a backend '
+                'defect or reason to disable reactions.'}

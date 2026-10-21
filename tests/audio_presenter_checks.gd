@@ -50,10 +50,14 @@ func run()->void:
     var owner={"id":"condition-owner","actor_uuid":"actor","start_ms":0.0,"end_ms":INF,"initial":false,"condition":{"condition_uuid":"condition-owner","behavior_id":"condition.concentrating","state":{}}}
     var owners={"condition-owner":owner};var binding_cache={}
     var persistent=Conditions.samples(owners,100,binding_cache).filter(func(sample):return sample.kind=="audio")
-    check(persistent.size()==1 and persistent[0].status=="missing" and persistent[0].reason=="spell_audio_deferred" and not persistent[0].has("clip") and persistent[0].assignment_source=="audio/bindings.json:/conditions/condition.concentrating/persistent","Concentration audio is explicitly unassigned and cannot prepare a stream")
-    check(presenter.prepare(persistent).is_empty() and not presenter.outcomes.has(persistent[0].id),"Disabled concentration assignment never enters native source preparation")
+    check(Conditions.recipe(owner.condition,binding_cache).get("disposition")=="state_only" and persistent.is_empty(),"State-only concentration bookkeeping emits no persistent audio component")
+    var assignment:Dictionary=Cues.Authoring.load_data("audio/bindings.json",binding_cache).conditions["condition.concentrating"].persistent
+    var deferred:Dictionary=Cues.resolve(assignment.cue,"deferred-concentration-binding",0,0,INF,
+        {"actor_uuid":owner.actor_uuid,"assignment_enabled":assignment.enabled,"assignment_reason":assignment.reason},binding_cache)
+    check(deferred.status=="missing" and deferred.reason=="spell_audio_deferred" and not deferred.has("clip"),"The retained authored audio assignment remains explicitly deferred without a substitute stream")
+    check(presenter.prepare([deferred]).is_empty() and not presenter.outcomes.has(deferred.id),"Disabled concentration assignment never enters native source preparation")
     binding_cache["audio/bindings.json"].conditions["condition.concentrating"].erase("persistent")
-    check(Conditions.samples(owners,100,binding_cache).all(func(sample):return sample.kind!="audio"),"Removing the authored persistent binding removes the sound without special condition code")
+    check(Conditions.samples(owners,100,binding_cache).all(func(sample):return sample.kind!="audio"),"State-only bookkeeping remains silent after the optional binding is removed")
     var actor={"uuid":"actor","present":true,"spatial_disposition":"present","last_visual_position":[2,3]}
     var body={"attachment":"body","attachment_source":"disclosed_stationary_body","actor_uuid":"actor",
         "presentation_actor":{"uuid":"actor","appearance":{"visual_scale":1.0,"visual_scale_x":1.0}},

@@ -207,7 +207,59 @@ func damage_feedback_policies(sample:Dictionary)->void:
         "The emitted result exposes the real selected parent policy and typed field provenance")
     check(var_to_bytes(sample.lineage.events)==original,"Shared feedback controls leave every original native fact unchanged")
 
+func movement_reaction_context()->void:
+    # Unchanged original OA lineage; enabled/disabled authoring changes only
+    # the existing badge component, never its actual pre-motion schedule.
+    var found:bool=false
+    var context:Dictionary=Authoring.load_data("catalog/movement_reaction_context.json",cache)
+    var pointer:String=str(context._resource_source)+"::texts/reaction"
+    for sample in observations("oa-jump-lethal"):
+        if sample.fact==null or sample.fact.kind!="attack":continue
+        var nodes:Dictionary={}
+        for node in sample.lineage.events:nodes[node.lineage_id]=node
+        if str(nodes[sample.node.lineage_id].id)!=str(sample.node.id):continue
+        var parent:Dictionary=nodes.get(sample.node.parent_lineage,{})
+        if parent.get("fact")==null or parent.fact.kind!="step" or str(sample.node.lineage_id) not in parent.get("children_lineages",[]):continue
+        var frozen:PackedByteArray=var_to_bytes([sample.packet,sample.transitions,sample.before,sample.after])
+        var enabled:Dictionary=Compiler.compile_recorded(sample.before,sample.packet,cache,sample.after,sample.transitions)
+        var disabled_cache:Dictionary=cache.duplicate();var disabled:Dictionary=context.duplicate(true)
+        disabled.feedbackEnabled=false;disabled_cache["catalog/movement_reaction_context.json"]=disabled
+        var without:Dictionary=Compiler.compile_recorded(sample.before,sample.packet,disabled_cache,sample.after,sample.transitions)
+        check(enabled.ok and without.ok,"Actual OA packet compiles with either explicit badge choice")
+        if not enabled.ok or not without.ok:return
+        var badges:Array=[]
+        check(enabled.value.groups.size()==without.value.groups.size(),"Badge authoring introduces no synthetic operation")
+        for i in enabled.value.groups.size():
+            var group:Dictionary=enabled.value.groups[i];var baseline:Dictionary=without.value.groups[i]
+            check(group.duration_ms==baseline.duration_ms and group.actor_tracks==baseline.actor_tracks and group.commits==baseline.commits,
+                "Enabled Reaction badge preserves every actual motion/attack clock and canonical commit")
+            for component in group.components:
+                if component.kind!="feedback_text" or component.source!=pointer:continue
+                var row:Dictionary=group.events.filter(func(event):return event.event_uuid==component.source_event_uuid)[0]
+                badges.append(component)
+                check(component.actor_uuid==sample.fact.source_entity_uuid and component.source_event_uuid==sample.node.id \
+                    and component.start_ms==row._start_ms and component.text==context.label and component.color==context.feedbackColor,
+                    "Actual pre-motion child Attack owns its original source, attacker, start and authored Reaction badge")
+                check(not row.components.any(func(value):return value.kind=="feedback_text" and value.get("source")==pointer and value.status=="missing") \
+                    and row.inactive_legacy_fields.any(func(value):return value.legacy_field=="movementLeadInMs"),
+                    "Trace retains inactive lead metadata and the real compiled badge separately")
+            check(not baseline.components.any(func(component):return component.kind=="feedback_text" and component.source==pointer),
+                "Explicit disabled context emits no Reaction badge")
+        check(badges.size()==1,"One actual scheduled pre-motion Attack emits one badge")
+        var graph:Dictionary={"nodes":nodes,"starts":{str(sample.node.id):0.0}}
+        check(Occurrences.pre_motion_attack(sample.node,graph),"Original exact Step ancestry admits its scheduled Attack")
+        graph.starts={};check(not Occurrences.pre_motion_attack(sample.node,graph),"Unscheduled versions cannot emit a movement-reaction badge")
+        var unrelated:Dictionary=sample.node.duplicate(false);unrelated.parent_lineage=null
+        graph.starts={str(sample.node.id):0.0}
+        check(not Occurrences.pre_motion_attack(unrelated,graph),"An ordinary or unrelated Attack cannot acquire reaction feedback by name")
+        var canceled:Dictionary=sample.node.duplicate(false);canceled.canceled=true
+        check(not Occurrences.pre_motion_attack(canceled,graph),"Canceled attacks cannot emit the badge")
+        check(var_to_bytes([sample.packet,sample.transitions,sample.before,sample.after])==frozen,"Context controls leave the unchanged original and canonical facts immutable")
+        found=true;break
+    check(found,"Existing original OA corpus exercises the enabled context badge")
+
 func run()->void:
+    movement_reaction_context()
     for seat in ["amber","blue"]:
         hierarchy(select("melee","attack",Callable(),seat),seat)
     var damage=select("melee","damage",func(value):return value.fact.get("stage")=="applied" and value.fact.applied_damage>0)
@@ -300,7 +352,13 @@ func run()->void:
     check(not compile(death,[]).rows[0].components.any(func(c):return c.kind=="death_dust"),"Ordinary death preserves corpse without fabricated disintegration requirement")
     # A private negative requirement control; no recorded disintegration claim.
     death=death.duplicate(true);death.fact.remains_disposition="disintegrated";death.node.fact=death.fact
+    var selected_death_context:Dictionary=Authoring.load_data("catalog/death_context.json",cache)
+    check(not compile(death,[]).rows[0].components.any(func(c):return c.kind=="death_dust"),"Selected inactive silhouette study does not demand particles for the private disintegration control")
+    var active_dust_context:Dictionary=selected_death_context.duplicate(true)
+    active_dust_context.erase("inactiveLegacyFields")
+    cache["catalog/death_context.json"]=active_dust_context
     check(compile(death,[]).rows[0].components.any(func(c):return c.kind=="death_dust" and c.status=="missing"),"Private disintegration requirement control keeps unimplemented authored dust visible")
+    cache["catalog/death_context.json"]=selected_death_context
     var forced=select("thunderwave","forced_movement")
     var still=compile(forced,[])
     check(still.rows[0].components.any(func(c):return c.reason=="authored_forced_movement_not_implemented"),"Stationary body cannot qualify forced displacement")

@@ -59,6 +59,9 @@ static func _witness(original:Dictionary,expected:Dictionary,package:String)->Di
     if value.get("kind")=="audio_transport":
         value.reported_qualifies=value.get("qualifies","")
         value.qualifies="Audio transport diagnostics only. This receipt does not qualify playback, audible output, mix or human approval."
+    if value.get("kind") in ["native_replay","audio_playback"] and not _output_process_passed(value):
+        value.reported_status=value.get("status","")
+        value.status="process_failed" if value.get("process_status")=="failed" else "process_exit_not_recorded" if value.get("process_exit")==null else "process_unqualified"
     var version:String=str(value.get("factory_version","")) if value.get("factory_version")!=null else ""
     value.package_scope_at_join=value.get("package_scope","not_recorded")
     if not package.is_empty():
@@ -71,9 +74,14 @@ static func _witness(original:Dictionary,expected:Dictionary,package:String)->Di
     else:value.engine_scope="partial_engine_identity"
     return value
 
+static func _output_process_passed(value:Dictionary)->bool:
+    var process_exit:Variant=value.get("process_exit")
+    return (process_exit is int or process_exit is float) and process_exit==0 and value.get("process_status")=="passed"
+
 static func _evidence_fields(owner:Dictionary,witnesses:Array)->void:
     owner.witnesses=witnesses
-    owner.output_witnesses=witnesses.filter(func(value):return value.get("kind") in ["native_replay","audio_playback"])
+    owner.output_witnesses=witnesses.filter(func(value):return value.get("kind") in ["native_replay","audio_playback"] \
+        and _output_process_passed(value))
     owner.reader_witnesses=witnesses.filter(func(value):return value.get("kind")=="recording_reader")
     owner.command_witnesses=witnesses.filter(func(value):return value.get("kind")=="issued_command")
     owner.audio_witnesses=witnesses.filter(func(value):return value.get("kind") in ["audio_playback","audio_transport"])

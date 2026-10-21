@@ -65,12 +65,14 @@ func run() -> void:
         scene.select_action(action)
         if not await until(func():return scene.command_ready() and scene.timeline.sequence>sequence and scene.session.status.next_command_number>command,"Native torch operation is displayed"): await finish(); return
         var items: Array = scene.timeline.state.actors[owner].controlled_items
-        var item: Dictionary = items.filter(func(value):return value.item_uuid == torch_id)[0]
-        check(item.is_lit == lit,"Displayed authoritative item activation matches native command")
+        check(torch_id in items,"Activated torch remains in its exact controlled inventory")
+        var item: Dictionary = scene.timeline.state.items[torch_id]
+        check(item.state.is_lit == lit,"Displayed authoritative item activation matches native command")
         # Sensed light sources have their own ids (a new one per ignition) and
         # name the carrying actor, not the item: count the actor's sources.
         var carried: int = scene.source_lighting.sources.filter(func(source):return source.actor_uuid == owner).size()
-        check(carried == items.filter(func(value):return value.get("is_lit") == true).size() and (carried > 0) == lit,"GPU source membership follows displayed activation")
+        var lit_items: int = items.filter(func(identity):return scene.timeline.state.items[identity].state!=null and scene.timeline.state.items[identity].state.get("is_lit")==true).size()
+        check(carried == lit_items and (carried > 0) == lit,"GPU source membership follows displayed activation")
         check(scene.source_lighting.sources.size() == count-(0 if lit else 1),"Only the affected source changes")
         var picture := await capture()
         if not lit:

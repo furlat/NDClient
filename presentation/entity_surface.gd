@@ -36,6 +36,7 @@ var received_scans:int=0
 static func required_paths(path:String,slot:String,cache:Dictionary,profile:String="")->Dictionary:
     var source:Dictionary=Geometry.record(path,slot,cache)
     if source.is_empty():return {}
+    profile=Geometry.effective_profile(source,profile)
     var root:String=Geometry._root(source)
     var result:Dictionary={path:true}
     for name in ["depth","support","normal_valid"]:result[root.path_join(source.files[name])]=true
@@ -206,9 +207,10 @@ static func admitted_images(world:Node,path:String,slot:String)->Dictionary:
     var source:Dictionary=Geometry.record(path,slot,world.catalog_cache)
     if source.is_empty():return {"reason":"source_geometry_not_registered"}
     var normals:Dictionary=Geometry.normal_paths(path,slot,world.catalog_cache).value
-    if not normals.has(world.character_light_profile):return {"reason":"normal_profile_not_registered"}
+    var profile:String=Geometry.effective_profile(source,world.character_light_profile)
+    if not normals.has(profile):return {"reason":"normal_profile_not_registered"}
     var root:String=Geometry._root(source)
-    var paths:Dictionary={"colour":path,"depth":root.path_join(source.files.depth),"support":root.path_join(source.files.support),"normal_valid":root.path_join(source.files.normal_valid),"normal":normals[world.character_light_profile]}
+    var paths:Dictionary={"colour":path,"depth":root.path_join(source.files.depth),"support":root.path_join(source.files.support),"normal_valid":root.path_join(source.files.normal_valid),"normal":normals[profile]}
     var images:Dictionary={}
     var missing:Dictionary={}
     for name in paths:

@@ -17,6 +17,8 @@ const EffectUse = preload("res://presentation/source/effect_use.gd")
 @export var icon: ImageRef
 ## authored or state_only (state only draws nothing).
 @export var disposition: String = ""
+## Actual public lifetime membership; grant UUIDs are never ConditionRows.
+@export_enum("condition", "temporary_hp_grant") var owner_kind: String = "condition"
 
 @export_group("Lifecycle")
 ## The application, sustain and removal effects come from the VFX package:
@@ -26,6 +28,9 @@ const EffectUse = preload("res://presentation/source/effect_use.gd")
 ## the coverage report says whether the installed package has one. False
 ## keeps the package's lifecycle from playing for this condition.
 @export var play_package_lifecycle: bool = true
+## Explicit reuse of exact indexed condition selections. Their source
+## phases/registration stay intact; this Resource owns the actual member.
+@export var lifecycle_selections: PackedStringArray = []
 ## Optional delivered public-admission table, paired with its exact indexed
 ## direct constructors at build time. Defaults remain in the package index.
 @export var lifecycle_opt_in: String = ""

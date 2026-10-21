@@ -28,6 +28,7 @@ static var revision:int=0
 static var _mutex:Mutex=Mutex.new()
 static var _clips:Dictionary={}
 static var _selections:Dictionary={}
+static var _condition_selection_keys:Dictionary={}
 static var _conditions:Dictionary={}
 static var _client:Dictionary={}
 static var _phases:Dictionary={}
@@ -50,7 +51,7 @@ static func set_requested(kind:String)->void:
 ## Reload: the next request reads the package index again.
 static func invalidate()->void:
     _mutex.lock()
-    _loaded=false;_clips={};_selections={};_conditions={};_client={};_phases={};_immutable_preparation=""
+    _loaded=false;_clips={};_selections={};_condition_selection_keys={};_conditions={};_client={};_phases={};_immutable_preparation=""
     _mutex.unlock()
 
 static func _load()->void:
@@ -62,6 +63,7 @@ static func _load()->void:
             for clip in index.get("clips",[]):_clips[clip.clip_id]=clip
             for selection in index.get("selections",[]):
                 _selections[str(selection.get("spell_id",selection.key))]=selection
+                if selection.has("condition"):_condition_selection_keys[str(selection.key)]=selection
                 for id in selection.get("condition",{}).get("owner_ids",[]):
                     if not _conditions.has(id):_conditions[id]=[]
                     _conditions[id].append(selection)
@@ -72,6 +74,11 @@ static func _load()->void:
             _immutable_preparation=str(index.get("runtime",{}).get("production_construction",{}).get("immutable_preparation",""))
         else:push_error("VFX package index cannot be read: "+INDEX)
     _mutex.unlock()
+
+## Passive package metadata only; the Session preparer owns this first read
+## before publishing initialization. Clock textures remain scene-thread work.
+static func prepare_metadata()->void:
+    _load()
 
 ## The shared occurrence clock's texture and global uniform exist before any
 ## package material compiles (its live materials read `vfx_package_clock`).
@@ -135,6 +142,12 @@ static func for_cue(cue:Dictionary,spell:String="",role:String="")->Dictionary:
 static func conditions(condition_id:String)->Array:
     _load()
     return _conditions.get(condition_id,[])
+
+## Exact indexed selection reused by typed condition authoring. This does
+## not add an owner alias to the sealed package or change default selections.
+static func condition_selection(key:String)->Dictionary:
+    _load()
+    return _condition_selection_keys.get(key,{})
 
 ## The clip each package condition lifecycle constructs (its application:
 ## one occurrence plays all three phases).
@@ -236,6 +249,8 @@ static func resource_paths(value:Dictionary)->Array:
 ## programs use the same worker admission; native first-draw pipelines still
 ## belong to native_source_startup.gd and the actual drawing viewport.
 static func prepare(clips:Array,cache:Dictionary,urgent:bool=true)->Dictionary:
+    # No occurrence or package program is requested by an empty consumer set.
+    if clips.is_empty():return {"ready":true,"pending":0,"errors":[]}
     _ensure_clock()
     var pending:int=0;var errors:Array=[];var paths:Dictionary={};var live:Array=[]
     for value in clips:

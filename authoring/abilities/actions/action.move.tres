@@ -25,4 +25,5 @@ family = "core"
 icon = SubResource("Resource_e0whi")
 body = SubResource("Resource_swc7o")
 effect_sources = PackedStringArray()
-notes = "Body role from the server's body kind (move); the rig resolves it to a clip once roles are built (coverage fill)."
+notes = "The actual motion track uses the shared movement Context body/step/connector sampler and its typed native effects. The disabled duplicate Action body is retained; this row does not require a separate action recipe. Source assignments exist, while exact rig/socket/audio coverage and all artwork acceptance remain separate."
+status = "partial"

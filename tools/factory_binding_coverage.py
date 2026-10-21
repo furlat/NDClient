@@ -128,6 +128,7 @@ def typed_source(path: Path, section: str) -> dict:
         "status": value(root.get("status"), "ready" if section == "conditions" else "missing"),
         "disposition": value(root.get("disposition"), ""), "native_staging": value(root.get("native_staging"), False),
         "play_package_lifecycle": value(root.get("play_package_lifecycle"), True),
+        "lifecycle_selections": value(root.get("lifecycle_selections"), []),
         "owner_kind": value(root.get("owner_kind"), ""), "owner_ids": value(root.get("owner_ids"), []),
         "owner_cues": value(root.get("owner_cues"), []), "excluded_cues": value(root.get("excluded_cues"), []),
         "explicit_event_cues": value(root.get("explicit_event_cues"), False),
@@ -232,6 +233,7 @@ def report() -> dict:
     engine = json.loads((ROOT / "authoring/server_ids.json").read_text())
     clips = {c["clip_id"]: c for c in factory["clips"]}
     selections = {s.get("spell_id", s["key"]): s for s in factory["selections"]}
+    condition_selections = {s["key"]: s for s in factory["selections"] if s.get("condition")}
     standalone = json.loads((ROOT / "assets/vfx/format/spirit-runtime-20261021-source-resources.json").read_text()).get("resources", [])
     typed = [typed_source(p, section) for section in ["spells", "conditions", "actions"]
              for p in sorted((ROOT / "authoring/abilities" / section).glob("*.tres"))]
@@ -251,9 +253,17 @@ def report() -> dict:
             owners[owner].append(s)
     for row in typed:
         row["registered"] = "res://" + row["source"] in registered
+        lifecycles = {s["key"]: s for s in owners[row["id"]]} if row["section"] == "conditions" else {}
+        row["unresolved_lifecycle_selections"] = []
+        for key in row["lifecycle_selections"]:
+            if key not in condition_selections:
+                row["unresolved_lifecycle_selections"].append(key)
+            elif row["section"] == "conditions" and key not in lifecycles:
+                lifecycles[key] = condition_selections[key]
         row["factory_lifecycles"] = [{"selection": s["key"], "owner_kind": s["condition"].get("owner_kind"),
+            "assignment": "typed_explicit_selection" if s["key"] in row["lifecycle_selections"] else "package_owner_membership",
             "when": s["condition"].get("when", {}), "phases": s["condition"].get("phases", {})}
-            for s in owners[row["id"]]] if row["section"] == "conditions" else []
+            for s in lifecycles.values()]
         for variant, collection, cues in [("default", "effects", row["effects"]), ("default", "responses", row["responses"])] + [(v["id"], "effects", v["effects"]) for v in row["variants"]]:
             variant_record = next((v for v in row["variants"] if v["id"] == variant), {})
             variant_gap = variant_record.get("dispatch_gap", "") or ("public_fact_predicate_not_authored" if variant != "default" and not variant_record.get("when") else "")
@@ -382,7 +392,7 @@ def main() -> None:
                 return []
             fields = ["source", "native_staging", "play_package_lifecycle", "owner_kind", "owner_ids", "owner_cues", "excluded_cues", "explicit_event_cues", "event_cues"]
             cue_fields = ["clip", "selection", "source_phase", "source_inputs", "input_arguments", "role", "scope", "at", "when", "condition_response", "constructor_input", "unbound_constructor_inputs"]
-            return [dict({k: row[k] for k in fields}, effects=[{k: cue.get(k) for k in cue_fields} for cue in row["effects"]],
+            return [dict({k: row[k] for k in fields}, lifecycle_selections=row.get("lifecycle_selections", []), effects=[{k: cue.get(k) for k in cue_fields} for cue in row["effects"]],
                 responses=[{k: cue.get(k) for k in cue_fields} for cue in row.get("responses", [])],
                 variants=[{"id": v["id"], "when": v.get("when", {}), "dispatch_gap": v.get("dispatch_gap", ""), "effects": [{k: cue.get(k) for k in cue_fields} for cue in v["effects"]]} for v in row["variants"]]) for row in subject["sources"]]
         result["delta"] = [{"id": s["id"], "before": old.get(s["id"]), "after": s} for s in result["subjects"] if bindings(s) != bindings(old.get(s["id"]))]

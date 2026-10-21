@@ -31,10 +31,10 @@ id = "action.monster.multiattack.bandit_captain.melee"
 kind = "action"
 family = "monster"
 icon = SubResource("Resource_wjo31")
-disposition = "authored"
+disposition = "state_only"
 body = SubResource("Resource_oamdp")
 effect_sources = PackedStringArray()
-status = "partial"
+status = "ready"
 unported = {
 "actionFeedback": null,
 "actor": {
@@ -55,3 +55,4 @@ unported = {
 "projectile": null,
 "variants": []
 }
+notes = "This MultiattackAction parent explicitly delegates presentation to its real emitted child Attack facts. The existing disabled parent body and empty media remain intact; no extra swing, gesture, projectile or result is fabricated. Each actual child keeps its own measured body/weapon/result source and independent qualification. Source ownership is assigned; all artwork/audio remain unreviewed."

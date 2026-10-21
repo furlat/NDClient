@@ -38,9 +38,21 @@ static func declarations(condition:Dictionary,cache:Dictionary)->Array:
     if not cache.has(RECIPES):cache[RECIPES]=Documents.read(RECIPES)
     return cache.get(RECIPES,{}).get(Catalog.condition_key(condition),{}).get("persistent",{}).get("appearanceLayers",[])
 
-static func removal_ms(condition:Dictionary)->float:
+static func removal_ms(condition:Dictionary,cache:Dictionary={})->float:
     var result:float=0.0
-    for selection in Effects.conditions(str(condition.get("behavior_id",""))):
+    if not cache.has(RECIPES):cache[RECIPES]=Documents.read(RECIPES)
+    var recipe:Dictionary=cache.get(RECIPES,{}).get(Catalog.condition_key(condition),{})
+    var selections:Array=Effects.conditions(Catalog.condition_key(condition)).duplicate()
+    # Use the same explicit indexed choices as the condition owner. Keep this
+    # passive lookup here: NativePersistent depends on Characters/Appearance.
+    for key in recipe.get("persistent",{}).get("lifecycleSelections",[]):
+        if selections.any(func(selection):return selection.key==key):continue
+        var selection:Dictionary=Effects.condition_selection(str(key))
+        if not selection.is_empty():selections.append(selection)
+    var state:Dictionary=condition.state if condition.get("state") is Dictionary else {}
+    for selection in selections:
+        var when:Dictionary=selection.condition.get("when",{})
+        if not when.keys().all(func(field):return state.get(field)==when[field]):continue
         result=maxf(result,float(Effects.clip(selection.condition.phases.removal).get("seconds",0.0))*1000.0)
     return result
 
@@ -54,7 +66,7 @@ static func components(owners:Dictionary,at_ms:float,cache:Dictionary)->Array:
     for owner in owners.values():
         var layers:Array=declarations(owner.condition,cache)
         if layers.is_empty():continue
-        if at_ms<float(owner.start_ms) or (not is_inf(owner.end_ms) and at_ms>=float(owner.end_ms)+removal_ms(owner.condition)):continue
+        if at_ms<float(owner.start_ms) or (not is_inf(owner.end_ms) and at_ms>=float(owner.end_ms)+removal_ms(owner.condition,cache)):continue
         for authored in layers:
             var key:Array=[owner.actor_uuid,authored]
             if not physical.has(key):

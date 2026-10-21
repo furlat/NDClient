@@ -37,11 +37,24 @@ or every equipment combination. The package gate retains one alias failure
 among6,402 assertions; a client correction is applied and five-approach proof
 is pending. No failed receipt is replaced by its source fix.
 
-**Current source integration request:§21.** Actual Wind debris uses native
-StandardMaterial surfaces that cannot accept the existing current-cell mask.
-The source must preserve actual observed/suppressed-cell coverage; full wall
-geometry and visual state do not prove that subset. The exact request below
-does not reopen delivered§§17–20 or ask for another backend field.
+**§§21–22: Factory source repairs supplied; complete-package delivery pending.**
+The latest [runtime-cost handoff](/mnt/c/Users/tommaso/Documents/assets/VFXFactory/docs/RUNTIME_COST_CONTINUATION_RESULTS_2026-10-21.md)
+now supplies compatible Wind materials and offline immutable Freezing noise.
+Their exact scoped evidence and retained failures are recorded under each
+section below. Complete8dd remains installed, so both original client failures
+remain reproducible until successor intake and affected qualification. Do not
+request these source repairs again or infer a client pass from Factory evidence.
+
+The [runtime-cost continuation handoff](/mnt/c/Users/tommaso/Documents/assets/VFXFactory/docs/RUNTIME_COST_CONTINUATION_RESULTS_2026-10-21.md)
+has been received. Its optional Shader-worker and Patches changes remain
+outside complete8dd; receiving integration and assessment are client work.
+Their historical cost flags remain evidence, but this intake does not create
+another missing-API request or reopen already delivered source repairs.
+The separate [optional worker package intake](FACTORY_SHADER_WORKER_INTAKE_2026-10-21.md)
+now identifies the exact five Cloud/three Patches closures needed in a complete
+successor. This is a delivery prerequisite for adopting the new candidates,
+alongside packaging the supplied §§21–22 repairs. Current defaults and the
+still-reviewed client receiving patch remain unchanged by that request.
 
 **Electric simplification applied:** all six temporary client bank overrides
 and their now-unused five-file transport/validation extension are removed
@@ -948,6 +961,16 @@ removal are complete; affected current-output qualification remains separate.
 
 ## 21. Wind Wall debris needs current observed-cell coverage
 
+**Latest disposition: source repair supplied, complete-package/client adoption
+pending.** [Factory qualification](/mnt/c/Users/tommaso/Documents/assets/VFXFactory/authoring/production-review-repair-20261021/wind_material_coverage/qualification.json)
+retains480 CPU,2,391 primary native and801 diagnostic checks. All twelve debris
+materials support the existing coverage mask with the original wall/owner API.
+The primary receipt retains21 one-byte retirement differences and five fixture
+identity failures; the unchanged-runtime diagnostic has exact retirement
+triplets and resolves those fixture checks. Constructor7,309µs and readiness
+step7,010µs remain flagged; recurring coverage cost is unmeasured. This source
+delivery does not erase the original receipt or qualify the installed client.
+
 **Current8dd integration constraint, distinct from the repaired constructor.**
 The actual `spell.wind_wall/baseline` original now constructs with the correct
 selective-readiness coordinator, then stops near1245.714ms with
@@ -993,7 +1016,30 @@ new artwork, client renderer, global material rewrite or fixture clock is
 requested. Production qualification and human artwork approval remain open.
 
 
+**Fresh ordinary UI confirmation, 21 October17:31UTC:** after the shared compact-
+position/Preview input harness was corrected, the current9f/8dd Wind baseline
+actually submits and reaches the same twelve `WindDebris00`–`11` unsupported-
+material errors. This is no longer hidden by its earlier no-command harness
+failure. Exact current receipt:
+`.runtime/tests/20261021T172924.058522Z-wall-continuation-ui/live-spells/spell.wind_wall__baseline/result.json`.
+The nine-case process exits0 with zero native error lines; eight other actual
+UI cases pass, while Wind retains its real presentation failure. The fresh
+188-case join is187 runtime-safe/188; no whole-library pass is claimed. This
+adds client gameplay reproduction to the existing§21 source request, not a new
+API, backend or artwork request.
+
+
 ## 22. Freezing payload cold-resource initialization exceeds the current gate
+
+**Latest disposition: source repair supplied, complete-package/client adoption
+pending.** [Factory immutable-noise delivery](/mnt/c/Users/tommaso/Documents/assets/VFXFactory/authoring/production-review-repair-20261021/freezing_noise_offline/README.md)
+replaces the32 procedural resources with one immutable exact ImageTexture at
+the original bank/scene addresses. All32 native mip witnesses match;105 capture,
+2,317 storage and384 native checks pass. Actual uncached threaded completion is
+97,821µs, completed get39µs and post-load readiness main maximum1,690µs. The
+earlier32 descriptor-fixture failures and447µs128-cell input flag remain
+preserved. This is separate source evidence, not a paired benchmark or an
+installed-client pass; the observed8dd failure below remains unchanged.
 
 **Measured8dd cold-load review request; no permanent loader deadlock or Blood
 failure established.** The exact isolated Forward+/Vulkan trace is

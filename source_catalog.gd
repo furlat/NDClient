@@ -174,7 +174,7 @@ static func validate_native(cache: Dictionary) -> Array:
             var clip:Dictionary=rigs.get(recipe.rigId,{}).get("clips",{}).get(recipe.actor.clip,{})
             if clip.is_empty():NativeAuthoring._error(cache,"Selected action has no source clip: "+recipe._resource_source)
             else:
-                for marker in recipe.anchors:
+                for marker in recipe.get("anchors",[]):
                     if marker.frame>clip.frames:NativeAuthoring._error(cache,"Selected action marker exceeds source duration: "+recipe._resource_source)
         for recipe in cache["catalog/condition_recipes.json"].values():
             for pose in recipe.get("persistent",{}).get("activityPoses",[]):

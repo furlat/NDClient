@@ -205,12 +205,87 @@ follow = false
 light_multiplier = 0.0
 staging_from = "Factory contact proposal selected only by the actual equipped Hit/Crit item-effect snapshot. No positive elemental damage, Poisoned condition or extra lamp is inferred. Artistic acceptance pending."
 
+[sub_resource type="Resource" id="BasicPoisonMeasured"]
+script = ExtResource("item_effect")
+clip = "conditions/continuation/condition_coating_poison_persistent/application"
+role = "attached"
+at = "owner_start"
+attachment = "recipient_weapon"
+recipient_slots = PackedStringArray("weapon", "offhand")
+item_effect_behavior_id = "condition.consumable.weapon_coat.basic_poison"
+item_effect_damage_type = "Poison"
+follow = true
+light_multiplier = 0.0
+orientation = "world"
+extra = {"equipment_slots": ["weapon_melee_off"], "item_lifecycle": {"application": "conditions/continuation/condition_coating_poison_persistent/application", "sustain": "conditions/continuation/condition_coating_poison_persistent/sustain", "removal": "conditions/continuation/condition_coating_poison_persistent/removal"}}
+staging_from = "Basic Poison offhand: selected delivered measured coating application/hold/removal on the exact disclosed item/effect membership and current item optical points. Actual equipment/render slots and source owner age are preserved; no melee pose-axis profile, invented hand or damage outcome is supplied. Artwork remains unreviewed."
+
+[sub_resource type="Resource" id="FireCoatMeasured"]
+script = ExtResource("item_effect")
+clip = "conditions/continuation/condition_coating_fire_persistent/application"
+role = "attached"
+at = "owner_start"
+attachment = "recipient_weapon"
+recipient_slots = PackedStringArray("weapon", "offhand")
+item_effect_behavior_id = "condition.consumable.weapon_coat.fire"
+item_effect_damage_type = "Fire"
+follow = true
+light_multiplier = 0.0
+orientation = "world"
+extra = {"equipment_slots": ["weapon_melee_off"], "item_lifecycle": {"application": "conditions/continuation/condition_coating_fire_persistent/application", "sustain": "conditions/continuation/condition_coating_fire_persistent/sustain", "removal": "conditions/continuation/condition_coating_fire_persistent/removal"}}
+staging_from = "Fire coat offhand: selected delivered measured coating application/hold/removal on the exact disclosed item/effect membership and current item optical points. Actual equipment/render slots and source owner age are preserved; no melee pose-axis profile, invented hand or damage outcome is supplied. Artwork remains unreviewed."
+
+[sub_resource type="Resource" id="LightningCoatMeasured"]
+script = ExtResource("item_effect")
+clip = "conditions/continuation/condition_coating_lightning_persistent/application"
+role = "attached"
+at = "owner_start"
+attachment = "recipient_weapon"
+recipient_slots = PackedStringArray("weapon", "offhand")
+item_effect_behavior_id = "condition.consumable.weapon_coat.lightning"
+item_effect_damage_type = "Lightning"
+follow = true
+light_multiplier = 0.0
+orientation = "world"
+extra = {"equipment_slots": ["weapon_melee_off"], "item_lifecycle": {"application": "conditions/continuation/condition_coating_lightning_persistent/application", "sustain": "conditions/continuation/condition_coating_lightning_persistent/sustain", "removal": "conditions/continuation/condition_coating_lightning_persistent/removal"}}
+staging_from = "Lightning coat offhand: selected delivered measured coating application/hold/removal on the exact disclosed item/effect membership and current item optical points. Actual equipment/render slots and source owner age are preserved; no melee pose-axis profile, invented hand or damage outcome is supplied. Artwork remains unreviewed."
+
+[sub_resource type="Resource" id="TimedFireCoatMeasured"]
+script = ExtResource("item_effect")
+clip = "conditions/continuation/condition_coating_fire_persistent/application"
+role = "attached"
+at = "owner_start"
+attachment = "recipient_weapon"
+recipient_slots = PackedStringArray("weapon", "offhand")
+item_effect_behavior_id = "condition.consumable.weapon_coat.timed_fire"
+item_effect_damage_type = "Fire"
+follow = true
+light_multiplier = 0.0
+orientation = "world"
+extra = {"equipment_slots": ["weapon_ranged_main"], "item_lifecycle": {"application": "conditions/continuation/condition_coating_fire_persistent/application", "sustain": "conditions/continuation/condition_coating_fire_persistent/sustain", "removal": "conditions/continuation/condition_coating_fire_persistent/removal"}}
+staging_from = "Timed Fire on the actual Ember Quiver ranged weapon: selected delivered measured coating application/hold/removal on the exact disclosed item/effect membership and current item optical points. Actual equipment/render slots and source owner age are preserved; no melee pose-axis profile, invented hand or damage outcome is supplied. Artwork remains unreviewed."
+
+[sub_resource type="Resource" id="AssassinPoisonCoatMeasured"]
+script = ExtResource("item_effect")
+clip = "conditions/continuation/condition_coating_poison_persistent/application"
+role = "attached"
+at = "owner_start"
+attachment = "recipient_weapon"
+recipient_slots = PackedStringArray("weapon", "offhand")
+item_effect_behavior_id = "condition.consumable.weapon_coat.assassin_poison"
+item_effect_damage_type = "Poison"
+follow = true
+light_multiplier = 0.0
+orientation = "world"
+extra = {"equipment_slots": ["weapon_melee_off", "weapon_ranged_main", "weapon_ranged_off"], "item_lifecycle": {"application": "conditions/continuation/condition_coating_poison_persistent/application", "sustain": "conditions/continuation/condition_coating_poison_persistent/sustain", "removal": "conditions/continuation/condition_coating_poison_persistent/removal"}}
+staging_from = "Assassin Poison offhand and ranged weapons: selected delivered measured coating application/hold/removal on the exact disclosed item/effect membership and current item optical points. Actual equipment/render slots and source owner age are preserved; no melee pose-axis profile, invented hand or damage outcome is supplied. Artwork remains unreviewed."
+
 [resource]
 script = ExtResource("1_ijws6")
 id = "item_attachments"
-effects = Array[ExtResource("item_effect")]([SubResource("ContinualFlameHold"), SubResource("MagicWeaponItem"), SubResource("SacredWeaponItem"), SubResource("BasicPoisonSustain"), SubResource("FireCoatSustain"), SubResource("LightningCoatSustain"), SubResource("ConcentrationFireCoatSustain"), SubResource("TimedFireCoatSustain"), SubResource("AssassinPoisonCoatSustain")])
+effects = Array[ExtResource("item_effect")]([SubResource("ContinualFlameHold"), SubResource("MagicWeaponItem"), SubResource("SacredWeaponItem"), SubResource("BasicPoisonSustain"), SubResource("FireCoatSustain"), SubResource("LightningCoatSustain"), SubResource("ConcentrationFireCoatSustain"), SubResource("TimedFireCoatSustain"), SubResource("AssassinPoisonCoatSustain"), SubResource("BasicPoisonMeasured"), SubResource("FireCoatMeasured"), SubResource("LightningCoatMeasured"), SubResource("TimedFireCoatMeasured"), SubResource("AssassinPoisonCoatMeasured")])
 impact_effects = Array[ExtResource("item_effect")]([SubResource("BasicPoisonContact"), SubResource("FireCoatContact"), SubResource("LightningCoatContact"), SubResource("ConcentrationFireCoatContact"), SubResource("TimedFireCoatContact"), SubResource("AssassinPoisonCoatContact")])
-notes = "Exact disclosed item/effect membership owns the bounded source hold and absolute material age. Current holder/optical item root may change; inventory-only and undisclosed members draw nothing. Six temporary coat families use these same exact memberships across currently admitted modular main-hand weapons; their finite contacts select the actual Hit/Crit attack snapshot. Original modular item sheets remain physical output. All artwork and sound choices remain unreviewed."
+notes = "Exact disclosed item/effect membership owns the bounded source hold and absolute material age. Current holder/optical item root may change; inventory-only and undisclosed members draw nothing. Six temporary coat families use exact memberships: current enhanced equipped sources remain on admitted melee-main poses; delivered measured lifecycles cover Basic Poison/Fire/Lightning melee-off, Assassin Poison melee-off/ranged-main/ranged-off, and Timed Fire on the actual Ember Quiver ranged-main weapon. Concentration Fire currently exposes melee-main only. These per-slot choices are disjoint and keep the actual current item geometry; their finite contacts select the actual Hit/Crit attack snapshot. Original modular item sheets remain physical output. All artwork and sound choices remain unreviewed."
 unported = {
 "condition.spell.continual_flame": {
 "fps": 32.0,

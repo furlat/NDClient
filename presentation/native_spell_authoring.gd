@@ -69,8 +69,8 @@ static func miss_impact_authored(selected_value:Dictionary,fact:Dictionary)->boo
     var variant:Dictionary=selected_value.get("variant",{})
     return variant.get("replaces_effects",false) and fact.get("attack_outcome") in variant.get("when",{}).get("attack_outcome",[])
 
-## Only an actively selected capability asks for eligible alternatives. This
-## wrapper is preparation-only; received occurrences borrow their exact choice.
+## A disclosed or selected capability asks for eligible resource alternatives.
+## This is preparation-only; received occurrences borrow their exact choice.
 static func preparation_selection(behavior_id:String,cache:Dictionary)->Dictionary:
     var value:Dictionary=source(behavior_id,cache)
     var alternatives:Array=[]

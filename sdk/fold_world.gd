@@ -119,7 +119,7 @@ static func _merged_faces(prior:Array,current:Array,faces:Array)->Dictionary:
     for identity in keys:result.append(kept[identity])
     return success(result)
 
-static func _object(target:Dictionary,row:Dictionary)->Dictionary:
+static func _object(target:Dictionary,row:Dictionary,prior_objects:Dictionary)->Dictionary:
     var identity:String=row.item_uuid;var previous:Variant=target.objects.get(identity);var members:Variant=row.members
     if members==null:
         if target.audience.observers.size()!=1:return failure("A seat with several observers names the members of each object row")
@@ -138,10 +138,11 @@ static func _object(target:Dictionary,row:Dictionary)->Dictionary:
     for value in previous.item.construction_suppressions if previous!=null else []:
         if not providers.has(value.provider_uuid):suppressions.append(value)
     item.value.construction_suppressions=suppressions
+    if not prior_objects.has(identity):prior_objects[identity]=previous
     target.objects[identity]={"placement":at.value,"item":item.value,"contained_items":previous.contained_items if previous!=null else null};target.object_members[identity]=members
     return success(target)
 
-static func _contents(target:Dictionary,update:Dictionary)->Dictionary:
+static func _contents(target:Dictionary,update:Dictionary,prior_objects:Dictionary)->Dictionary:
     for family in ["contents","contents_changed"]:
         for row in update.get(family,[]):
             var held:Variant=target.objects.get(row.container_uuid)
@@ -158,17 +159,20 @@ static func _contents(target:Dictionary,update:Dictionary)->Dictionary:
                 items[value.item_uuid]=joined.value
             var keys=items.keys();keys.sort();var values:Array=[]
             for identity in keys:values.append(items[identity])
+            if not prior_objects.has(row.container_uuid):prior_objects[row.container_uuid]=held
             var next:Dictionary=held.duplicate();next.contained_items=values;target.objects[row.container_uuid]=next
     return success(target)
 
-static func _tiles(target:Dictionary,update:Dictionary)->Dictionary:
+static func _tiles(target:Dictionary,update:Dictionary,prior_tiles:Dictionary)->Dictionary:
     for row in update.get("tile_changes",[]):
         var key=Cells.key(row.position)
         if not target.tiles.has(key):return failure("Tile field update requires an already known tile")
+        if not prior_tiles.has(key):prior_tiles[key]=target.tiles[key]
         var tile:Dictionary=target.tiles[key].duplicate();tile.merge(row.changes,true);target.tiles[key]=tile
     var light=Cells.values_map(update.get("resolved_light",{}))
     for key in light:
         if not target.tiles.has(key):return failure("Tile field update requires an already known tile")
+        if not prior_tiles.has(key):prior_tiles[key]=target.tiles[key]
         var tile:Dictionary=target.tiles[key].duplicate();tile.resolved_light=light[key];target.tiles[key]=tile
     var own={};var materials={}
     for family in ["tile_conditions","residues","residues_removed"]:
@@ -200,13 +204,19 @@ static func _tiles(target:Dictionary,update:Dictionary)->Dictionary:
     for key in materials:
         var keys=materials[key].keys();keys.sort();var rows:Array=[];var names:Array=own[key].duplicate()
         for identity in keys:rows.append(materials[key][identity]);names.append(target.static.residues[identity].name)
+        if not prior_tiles.has(key):prior_tiles[key]=target.tiles[key]
         var tile:Dictionary=target.tiles[key].duplicate();tile.residues=rows;tile.condition_names=names;target.tiles[key]=tile
     return success(target)
 
-static func fold(target:Dictionary,update:Dictionary)->Dictionary:
+static func fold(target:Dictionary,update:Dictionary,disclosed:Dictionary={})->Dictionary:
+    # Keep only the first value of rows this update actually writes or erases.
+    # Final comparison handles repeated writes and remove/re-add without
+    # copying or diffing the unrelated retained tile/object stores.
+    var prior_tiles:Dictionary={};var prior_objects:Dictionary={}
     var result=static_rows(target,update)
     if not result.ok:return result
     for identity in update.get("objects_removed",[]):
+        if not prior_objects.has(identity):prior_objects[identity]=target.objects.get(identity)
         if not target.objects.erase(identity):return failure("An object removal names an object the client holds")
         target.object_members.erase(identity)
     for identity in update.get("connectors_removed",[]):
@@ -220,18 +230,23 @@ static func fold(target:Dictionary,update:Dictionary)->Dictionary:
             if not target.objects.has(identity):return failure("An unchanged object is one the client holds")
             kept[identity]=true
         for key in entered:
-            if not unchanged.has(key):target.tiles.erase(key)
+            if not unchanged.has(key) and target.tiles.has(key):
+                if not prior_tiles.has(key):prior_tiles[key]=target.tiles[key]
+                target.tiles.erase(key)
         var tiles=tile_columns(update.get("tile_columns"),target.static.tiles,target.static.tile_looks)
         if not tiles.ok:return tiles
         for key in tiles.value:
             if not entered.has(key) or unchanged.has(key):return failure("Tile columns describe entered cells only, none of them unchanged")
+            if not prior_tiles.has(key):prior_tiles[key]=target.tiles.get(key)
             target.tiles[key]=tiles.value[key]
         var resent:Array=update.objects.item_uuids if update.get("objects")!=null else []
         for identity in target.objects.keys():
             var held:Dictionary=target.objects[identity];var touched=false
             for key in support_cells(held.placement):
                 if entered.has(key):touched=true;break
-            if not identity in resent and not kept.has(identity) and touched:target.objects.erase(identity);target.object_members.erase(identity);continue
+            if not identity in resent and not kept.has(identity) and touched:
+                if not prior_objects.has(identity):prior_objects[identity]=held
+                target.objects.erase(identity);target.object_members.erase(identity);continue
             var suppressions:Array=[];var changed=false
             for row in held.item.construction_suppressions:
                 var points:Array=[]
@@ -240,6 +255,7 @@ static func fold(target:Dictionary,update:Dictionary)->Dictionary:
                     else:points.append(point)
                 var next:Dictionary=row.duplicate();next.positions=points;suppressions.append(next)
             if changed:
+                if not prior_objects.has(identity):prior_objects[identity]=held
                 var next:Dictionary=held.duplicate();next.item=held.item.duplicate();next.item.construction_suppressions=suppressions;target.objects[identity]=next
         for identity in target.connectors.keys():
             for point in target.connectors[identity].endpoints:
@@ -247,11 +263,23 @@ static func fold(target:Dictionary,update:Dictionary)->Dictionary:
     var decoded=object_rows(update.get("objects"))
     if not decoded.ok:return decoded
     for row in decoded.value:
-        result=_object(target,row)
+        result=_object(target,row,prior_objects)
         if not result.ok:return result
-    result=_contents(target,update)
+    result=_contents(target,update,prior_objects)
     if not result.ok:return result
-    result=_tiles(target,update)
+    result=_tiles(target,update,prior_tiles)
     if not result.ok:return result
     for row in update.get("connectors",[]):target.connectors[row.connector_uuid]=row
+    disclosed.tiles={};disclosed.tiles_removed=[];disclosed.objects={};disclosed.objects_removed=[]
+    for key in prior_tiles:
+        var current:Variant=target.tiles.get(key)
+        if current==null:
+            if prior_tiles[key]!=null:disclosed.tiles_removed.append(key)
+        elif prior_tiles[key]==null or not is_same(prior_tiles[key],current):disclosed.tiles[key]=current
+    for identity in prior_objects:
+        var current:Variant=target.objects.get(identity)
+        if current==null:
+            if prior_objects[identity]!=null:disclosed.objects_removed.append(identity)
+        elif prior_objects[identity]==null or not is_same(prior_objects[identity],current):disclosed.objects[identity]=current
+    disclosed.changes=disclosed.tiles.keys()
     return success(target)

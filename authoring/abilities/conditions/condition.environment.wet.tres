@@ -38,7 +38,7 @@ script = ExtResource("4_jclky")
 id = "condition.environment.wet"
 label = "Wet"
 icon = SubResource("Resource_jclky")
-disposition = "authored"
+disposition = "state_only"
 look = SubResource("Resource_r17r3")
 group = "body"
 priority = 30.0
@@ -83,4 +83,5 @@ unported = {
 "effects": []
 }
 }
-notes = "Sent by the pinned engine under this id; not a condition id on the modern branch."
+notes = "Historical catalog identity only. Current Wet is the exact nullable-behavior semantic owner unbound:dnd.spatial.environmental_conditions.Wet, authored separately in semantic.wet.tres. This row is not a runtime alias or fallback. Source ownership decision only; all artwork remains unreviewed."
+play_package_lifecycle = false

@@ -719,11 +719,13 @@ static func _native_requirements(before: Dictionary, groups: Array, cache: Dicti
     # Commit clocks are known only after scheduling. Project persistent owners
     # once on this compiler worker; never replay these commits during readiness.
     var owners: Dictionary = {}; var areas: Dictionary = {}
+    var grants:Dictionary={}
     var item_owners:Dictionary={}
     var item_state:Dictionary={"actors":before.actors.duplicate(),"items":before.items.duplicate(),"objects":before.objects.duplicate(),
         "object_members":before.get("object_members",{}),"senses":before.senses,"audience":before.audience,"tiles":before.tiles.duplicate()}
     NativeItems.observe(item_owners,item_state,0.0,cache)
     Conditions.observe(owners,before.actors,0.0,true)
+    Conditions.NativePersistent.observe_grants(grants,before.actors,0.0,cache,true)
     var condition_inputs:Dictionary={}
     for id in before.actors:
         condition_inputs[id]=[before.actors[id].get("conditions",[]),before.actors[id].get("life_state","alive")]
@@ -734,7 +736,7 @@ static func _native_requirements(before: Dictionary, groups: Array, cache: Dicti
     for group in groups:
         group.native_requirements = []
         var previous: Dictionary = {}
-        _native_requirement_cut(group,previous,owners,areas,start,0.0,cache,item_owners,item_state)
+        _native_requirement_cut(group,previous,owners,areas,start,0.0,cache,item_owners,item_state,grants)
         var sampled_at:float=start
         for commit in group.get("commits",[]):
             _interrupted_draw_cut(group,commit,owners,item_state,start,cache)
@@ -756,6 +758,7 @@ static func _native_requirements(before: Dictionary, groups: Array, cache: Dicti
                 changed=changed or condition_inputs.get(id,[])!=selected
                 condition_inputs[id]=selected
             changed=Conditions.observe(owners,delta.get("actors",{}),at,false,commit.get("condition_rows",[]),{},commit.get("creation_bindings",{})) or changed
+            changed=Conditions.NativePersistent.observe_grants(grants,delta.get("actors",{}),at,cache,false,str(commit.get("event_uuid","")),commit.get("grant_fact",{})) or changed
             if delta.get("set",{}).has("senses") or not commit.get("spatial_rows",[]).is_empty():
                 var spatial:Dictionary=item_state.senses.get("spatial_effects",{}) if item_state.senses!=null else {}
                 changed=Conditions.NativePersistent.observe_spatial(areas,spatial,at,false,commit.get("spatial_rows",[]),item_state.tiles) or changed
@@ -764,7 +767,7 @@ static func _native_requirements(before: Dictionary, groups: Array, cache: Dicti
             # They change no persistent constructor operand. Keep all distinct
             # clocks and real condition/life/spatial changes, in source order.
             if not changed and at==sampled_at:continue
-            _native_requirement_cut(group,previous,owners,areas,at,commit.at_ms,cache,item_owners,item_state)
+            _native_requirement_cut(group,previous,owners,areas,at,commit.at_ms,cache,item_owners,item_state,grants)
             sampled_at=at
         start += float(group.duration_ms)
 
@@ -802,10 +805,11 @@ static func _interrupted_draw_cut(group:Dictionary,commit:Dictionary,owners:Dict
         capture.capture_cut="canonical_pre_reaction_commit";capture.source_material=material
 
 static func _native_requirement_cut(group: Dictionary, previous: Dictionary, owners: Dictionary,
-        areas: Dictionary, at_ms: float, local_ms: float, cache: Dictionary,item_owners:Dictionary={},item_state:Dictionary={}) -> void:
+        areas: Dictionary, at_ms: float, local_ms: float, cache: Dictionary,item_owners:Dictionary={},item_state:Dictionary={},grants:Dictionary={}) -> void:
     var samples: Array = Conditions.samples(owners,at_ms,cache,{},false)
     samples.append_array(Conditions.NativePersistent.spatial_samples(areas,at_ms,cache))
     samples.append_array(NativeItems.samples(item_owners,item_state,at_ms))
+    samples.append_array(Conditions.NativePersistent.grant_samples(grants,at_ms,cache,{}, {},false))
     var outlined:Dictionary={}
     var actor_ids:Dictionary={}
     for sample in samples:
@@ -814,7 +818,7 @@ static func _native_requirement_cut(group: Dictionary, previous: Dictionary, own
         for selected in Conditions.select_recipes(actor_id,samples):
             if selected.recipe.get("persistent",{}).has("bodyOutline"):outlined[selected.condition_uuid]=true
     for sample in samples:
-        if sample.get("native_item",false):
+        if sample.get("native_item",false) or sample.get("native_grant",false):
             for event in group.events:
                 if event.event_uuid!=sample.source_event_uuid or event.components.any(func(component):return component.id==sample.id):continue
                 var tracked:Dictionary=sample.duplicate(false)
@@ -927,12 +931,12 @@ static func _actor_structure_requirements(before:Dictionary,groups:Array,cache:D
             _actor_cut(cuts,duration,id,duration)
         for owner in appearance_owners.values():
             if not is_inf(owner.end_ms) and not Appearance.declarations(owner.condition,cache).is_empty():
-                _actor_cut(cuts,float(owner.end_ms)+Appearance.removal_ms(owner.condition)-start,owner.actor_uuid,duration)
+                _actor_cut(cuts,float(owner.end_ms)+Appearance.removal_ms(owner.condition,cache)-start,owner.actor_uuid,duration)
         for commit in group.get("commits",[]):
             for id in commit.delta.get("actors",{}):_actor_cut(cuts,commit.at_ms,id,duration)
             for change in commit.get("condition_rows",[]):
                 if change.after==null and change.before!=null and not Appearance.declarations(change.before,cache).is_empty():
-                    _actor_cut(cuts,float(commit.at_ms)+Appearance.removal_ms(change.before),change.actor_uuid,duration)
+                    _actor_cut(cuts,float(commit.at_ms)+Appearance.removal_ms(change.before,cache),change.actor_uuid,duration)
         for ids in cuts.values():affected.merge(ids)
         # Sensory cuts already require world publication. Updating these cached
         # signatures there keeps a later actor-only cut relative to that view.
@@ -1227,7 +1231,8 @@ static func compile_recorded(before: Dictionary, packet: Dictionary, cache: Dict
                 if contact_source_ids.has(identity) and spatial.has(identity):contact_sources[identity]=spatial[identity]
             group.commits.append({"at_ms":0.0,"source_index":captured.source_index,"event_uuid":node.id,
                 "delta":captured.delta,"condition_rows":captured.get("condition_rows",[]),"item_rows":captured.get("item_rows",[]),
-                "spatial_rows":Conditions.NativePersistent.SpatialInputs.observed_rows(node)})
+                "spatial_rows":Conditions.NativePersistent.SpatialInputs.observed_rows(node),
+                "grant_fact":observed_fact if node.phase=="completion" and not node.get("canceled",false) and observed_fact!=null and observed_fact.get("kind")=="temporary_hit_points" else {}})
         var trailing: Dictionary = recorded.trailing
         apply_delta(target,trailing)
         graph.observed_results=Components.ApplicationResults.observed_index(lineage.events,graph)

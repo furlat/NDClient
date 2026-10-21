@@ -41,6 +41,15 @@ static func spell(node:Dictionary,graph:Dictionary)->Dictionary:
 static func application(node:Dictionary)->bool:
     return node.get("resolution_record",{}).get("application_id")!=null
 
+## Exactly the child Attack the compiler schedules before a native Step.
+## Scheduling identity excludes earlier versions and unrelated reaction names.
+static func pre_motion_attack(node:Dictionary,graph:Dictionary)->bool:
+    if node.get("canceled",false) or node.get("fact")==null or node.fact.get("kind")!="attack" \
+        or not graph.get("starts",{}).has(str(node.id)):return false
+    var parent:Dictionary=graph.get("nodes",{}).get(node.get("parent_lineage"),{})
+    return parent.get("fact")!=null and parent.fact.get("kind")=="step" \
+        and str(node.lineage_id) in parent.get("children_lineages",[])
+
 static func application_index(node:Dictionary,graph:Dictionary)->int:
     var id:Variant=node.get("resolution_record",{}).get("application_id")
     return graph.get("application_indices",{}).get(str(id),0) if id!=null else 0

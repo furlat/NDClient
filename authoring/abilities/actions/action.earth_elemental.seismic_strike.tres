@@ -7,8 +7,9 @@
 
 [sub_resource type="Resource" id="Resource_4f4o1"]
 script = ExtResource("1_tsgem")
-role = "attack"
-enabled = false
+role = "cast"
+clip = "Cast"
+rig = "summon.elemental.earth"
 hidden_slots = PackedStringArray()
 
 [sub_resource type="Resource" id="Resource_k5lep"]
@@ -22,7 +23,9 @@ script = ExtResource("1_6hj8m")
 id = "action.earth_elemental.seismic_strike"
 kind = "action"
 family = "summon_form"
+disposition = "authored"
 icon = SubResource("Resource_k5lep")
 body = SubResource("Resource_4f4o1")
 effect_sources = PackedStringArray()
-notes = "Body role from the server's body kind (area_attack); the rig resolves it to a clip once roles are built (coverage fill)."
+notes = "Select the delivered Earth Cast body on its exact own rig for this actual intrinsic action. Source9-action clock and actor pose/facing remain; no hit, release or mouth/socket timestamp is supplied by the delivery. Existing action/result scheduling and damage/outcome consumers remain separate. Provisional body choice, placement/timing and all artwork remain unreviewed."
+status = "partial"

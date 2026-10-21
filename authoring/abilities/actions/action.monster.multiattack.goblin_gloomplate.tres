@@ -27,4 +27,6 @@ family = "monster"
 icon = SubResource("Resource_dlux0")
 body = SubResource("Resource_21tuw")
 effect_sources = PackedStringArray()
-notes = "Body role from the server's body kind (multiattack); the rig resolves it to a clip once roles are built (coverage fill)."
+notes = "This accepted multiattack parent has no additional body gesture or effect. Actual emitted child attacks retain their own measured body/weapon tracks and committed damage/results. This is a source ownership decision, not native output or human artwork acceptance."
+disposition = "state_only"
+status = "ready"

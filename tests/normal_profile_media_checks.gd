@@ -58,6 +58,21 @@ func run() -> void:
                 var normals=Geometry.normal_paths(path,sheets.geometry_slots[path],cache)
                 check(companions.has(normals.value[profile]),"Renderer readiness retains chosen "+profile+" map")
     check(var_to_bytes(plan)==raw and var_to_bytes(state)==frozen,"Profile projection never mutates neutral metadata or canonical state")
+    # Source metadata control on the delivered original-only body. No actor,
+    # normal map or rendering witness is synthesized by this projection check.
+    var fixed_path:String="res://assets/art/media/elementals/Earth/Idle/color.png"
+    var fixed:Dictionary=Geometry.BodySources.prepare_descriptor(fixed_path,"body",cache)
+    check(not fixed.is_empty() and fixed.geometry.get("normal_profile")=="original"
+        and fixed.normal_paths.keys()==["original"] and fixed.normal_sets.is_empty(),
+        "Explicit original-only source remains an invariant companion, not a forged Reference/Gentle map")
+    if not fixed.is_empty():
+        for profile in Geometry.PROFILES:
+            var required:Dictionary=Geometry.paths(fixed_path,"body",cache,profile)
+            var binding:Dictionary=Geometry.prepare_binding(fixed_path,"body",cache,true,true,profile,1.0,1.0)
+            check(required.has(fixed.normal_paths.original) and fixed.source_records[profile].roles.has(fixed.normal_paths.original)
+                and binding.parameters.get("has_component_geometry",false) and binding.textures.get("component_normal")==fixed.normal_paths.original
+                and binding.key[-1]==profile and binding.get("ground")==0.0,
+                "Explicit source policy retains its actual original map, geometry and known zero ground under global "+profile)
     var scene=ProfilePlayer.new();root.add_child(scene)
     scene.settings_path="user://normal-profile-checks-%s.cfg" % Time.get_ticks_usec()
     Settings.write(Settings.DEFAULT_PROFILE,scene.settings_path)

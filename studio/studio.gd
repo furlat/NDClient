@@ -1287,6 +1287,8 @@ static func provenance_lines(row:Dictionary)->Array[String]:
     var data:Dictionary=row.get("track",row.get("component",{}))
     if not event.is_empty():
         lines.append("Origin: recorded server event; its visual choices and display timing are authored separately.")
+    elif row.get("owner",{}).has("grant"):
+        lines.append("Origin: recorded temporary-HP grant membership; its UUID/source/recipient remain distinct from conditions.")
     elif row.get("kind") in ["condition","condition_state"]:
         lines.append("Origin: recorded condition state/lifetime; its visible mechanisms are separate authored child tracks.")
     elif row.get("kind") in ["spatial_effect","world_animation"]:
@@ -1305,7 +1307,13 @@ static func provenance_lines(row:Dictionary)->Array[String]:
     if data.get("native_spell",false):lines.append_array(effect_lines(data))
     if TimelineView.Thumbnails._composed_row(row):
         lines.append("Composed source preview: exact restored recording, recipient pose, source clock and receiving light/ground cut through the production pane. Requested while playback is paused; the displayed pane is frozen only for the source draw. This thumbnail is not a rendering receipt or artwork approval.")
-    if row.has("owner"):
+    if row.get("owner",{}).has("grant"):
+        var owner:Dictionary=row.owner
+        lines.append("Recorded temporary-HP grant: "+str(owner.id)+" · source "+str(owner.grant.source_id)+" · recipient "+str(owner.actor_uuid))
+        if row.get("admission_kind")=="initial":lines.append("Grant already present at initialization; no application is invented.")
+        elif row.get("admission_kind")=="reveal":lines.append("Grant first disclosed after its onset; the recorded hold starts here without inventing its hidden age.")
+        if not is_inf(float(owner.end_ms)):lines.append("Canonical grant retirement: %.1f ms"%float(owner.end_ms))
+    elif row.has("owner"):
         lines.append(("Recorded spatial owner: " if row.owner.has("effect") else "Recorded condition: ")+str(row.owner.id)+(" (already active at initialization)" if row.owner.get("initial",false) else ""))
     if row.has("render_method"):
         var method:Dictionary=row.render_method

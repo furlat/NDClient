@@ -677,7 +677,7 @@ func _queued_ids(world:Node)->Dictionary:
     # any native instance exists, world commits cannot require a retention scan
     # of every future group and its disclosed condition/area after-values.
     if handles.is_empty():return {}
-    var key:Array=[world.timeline.revision,world.timeline.resource_revision,world.timeline.current.get("id",""),world.timeline.queue.size(),world.timeline.condition_owners.keys(),world.timeline.spatial_effect_owners.keys(),handles.keys()]
+    var key:Array=[world.timeline.revision,world.timeline.resource_revision,world.timeline.current.get("id",""),world.timeline.queue.size(),world.timeline.condition_owners.keys(),world.timeline.spatial_effect_owners.keys(),world.timeline.temporary_hp_owners.keys(),handles.keys()]
     if key==_queued_key:return _queued_cache.duplicate()
     _queued_key=key
     var result:Dictionary={}
@@ -690,6 +690,10 @@ func _queued_ids(world:Node)->Dictionary:
             if not item.is_empty() and NativeItems.active(item,world.timeline.state):
                 result[id]=true;continue
         var owner_id:Variant=component.get("condition_uuid",component.get("spatial_effect_uuid"))
+        if component.get("native_grant",false):
+            owner_id=component.grant_uuid
+            if world.timeline.temporary_hp_owners.has(owner_id):
+                result[id]=true;continue
         if world.timeline.condition_owners.has(owner_id) or world.timeline.spatial_effect_owners.has(owner_id):
             result[id]=true
             continue
@@ -719,6 +723,9 @@ func _queued_ids(world:Node)->Dictionary:
                 for actor in commit.delta.get("actors",{}).values():
                     for condition in actor.get("conditions",[]):
                         _retain_owned(condition.condition_uuid,owners,remaining,result)
+                    var grant:Variant=actor.get("temporary_hp_grant")
+                    if actor.get("present",true) and grant!=null and float(actor.temporary_hp)>0.0:
+                        _retain_owned(grant.instance_uuid,owners,remaining,result)
                 for id in commit.delta.get("set",{}).get("senses",{}).get("spatial_effects",{}):
                     _retain_owned(id,owners,remaining,result)
                 if remaining.is_empty():break

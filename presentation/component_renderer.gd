@@ -185,6 +185,7 @@ func ensure_epoch(world: Node) -> void:
 ## and its removal played): they are not prepared again.
 static func live_requirements(groups:Array,world:Node)->Array:
     var owners:Dictionary=world.timeline.condition_owners;var areas:Dictionary=world.timeline.spatial_effect_owners
+    var grants:Dictionary=world.timeline.temporary_hp_owners
     var start:float=world.timeline.group_start_ms if not world.timeline.current.is_empty() else world.timeline.display_ms
     var result:Array=[]
     for group in groups:
@@ -194,6 +195,8 @@ static func live_requirements(groups:Array,world:Node)->Array:
             if component.has("item_owner_uuid"):
                 var owner:Dictionary=world.timeline.item_effect_owners.get(component.get("item_effect_owner",""),{})
                 return component.has("preparation_key") and at+float(component.preparation_at_ms)<=world.timeline.display_ms and (owner.is_empty() or not NativeItems.active(owner,world.timeline.state))
+            if component.get("native_grant",false):
+                return component.has("preparation_key") and at+float(component.preparation_at_ms)<=world.timeline.display_ms and not grants.has(component.grant_uuid)
             var id:Variant=component.get("condition_uuid",component.get("spatial_effect_uuid"))
             return component.has("preparation_key") and id!=null and at+float(component.preparation_at_ms)<=world.timeline.display_ms and not owners.has(id) and not areas.has(id)
         if group.get("components",[]).any(stale):
@@ -276,6 +279,7 @@ func prepare(groups: Array,cache: Dictionary,world: Node=null,admission:Dictiona
         var persistent:Array=Conditions.samples(world.timeline.condition_owners.duplicate(),world.timeline.display_ms,cache,{},false)
         persistent.append_array(Conditions.NativePersistent.spatial_samples(world.timeline.spatial_effect_owners.duplicate(),world.timeline.display_ms,cache))
         persistent.append_array(NativeItems.samples(world.timeline.item_effect_owners,world.timeline.state,world.timeline.display_ms))
+        persistent.append_array(Conditions.NativePersistent.grant_samples(world.timeline.temporary_hp_owners.duplicate(),world.timeline.display_ms,cache,{}, {},false))
         _native_base_groups=groups.duplicate();_native_persistent=persistent
         var future:Array=live_requirements(preparation_groups(_native_prefetch(required_groups,world),persistent,world),world)
         var required:Array=live_requirements(preparation_groups(required_groups,persistent,world),world)

@@ -48,6 +48,21 @@ var mark_update_us = 0
 var support_geometry_revision = 0
 var support_contact_updates = 0
 
+func _visible_batch_instances(entry:Dictionary)->int:
+    if entry.is_empty() or not entry.node.is_visible_in_tree():return 0
+    var instances:MultiMesh=entry.node.multimesh
+    return instances.visible_instance_count if instances.visible_instance_count>=0 else instances.instance_count
+
+## Recording-only counts of the already owned batches, not a geometry walk.
+func profile_state()->Dictionary:
+    var mark_instances:int=0
+    for entry in mark_batches.values():mark_instances+=_visible_batch_instances(entry)
+    var background_instances:int=_visible_batch_instances(batch)
+    return {"materials":materials.size(),"route_material":route_material!=null,"mark_batches":mark_batches.size(),
+        "marks":marks.size(),"path_points":path.size(),"cell_meshes":cells.size(),"route_meshes":routes.size(),
+        "visible_mark_instances":mark_instances,"visible_background_instances":background_instances,
+        "visible_native_multimesh_instances":mark_instances+background_instances}
+
 func set_preview(value: Dictionary, route: Array = [], colour: Color = Color("70d6be")) -> void:
     # Keys are disclosed tile keys; values {colour:Color,width:float}. The path
     # comes directly from SDK preview.selected_route, never local pathfinding.

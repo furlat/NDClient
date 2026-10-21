@@ -77,22 +77,52 @@ func select_family(behavior:String)->bool:
         if next==null:break
         click(next.get_global_rect().get_center());await process_frame
     return check(false,"No actual action-bar family for "+behavior)
+func ground_target_point(cell:Array)->Vector2:
+    var point:Vector2=grid_screen(cell)
+    if not viewport.get_visible_rect().has_point(point) or scene.hud.pointer_over_controls(point):return Vector2(INF,INF)
+    var hit:Dictionary=scene.pick_world(point)
+    if hit.get("kind")!="ground" or not Play.Interaction.same_position(hit.get("position"),cell) or not Play.Interaction.same_position(scene.pick_cell(point).get("position"),cell):return Vector2(INF,INF)
+    return point
+func target_input_diagnostic(point:Vector2=Vector2(INF,INF))->Dictionary:
+    var preview:Dictionary=scene.selection_preview
+    var next_positions:Array=Choices.preview_positions(preview)
+    var hit:Dictionary=scene.pick_world(point) if point.is_finite() else {}
+    return {"behavior":scene.selected_action.get("behavior_id"),"position_selection":scene.selected_action.get("position_selection"),
+        "position_region":scene.selected_action.get("position_region"),"target_indices":scene.target_selection.get("target_indices",[]).duplicate(),
+        "extra_positions":scene.target_selection.get("extra_target_positions",[]).duplicate(true),"next_positions":next_positions.slice(0,16),"next_position_count":next_positions.size(),
+        "preview_reason":preview.get("reason"),"can_confirm":preview.get("can_confirm"),"action_request":scene.action_request,"command_busy":scene.command_busy,
+        "screen_point":[point.x,point.y] if point.is_finite() else null,"inside_viewport":viewport.get_visible_rect().has_point(point) if point.is_finite() else false,
+        "over_controls":scene.hud.pointer_over_controls(point) if point.is_finite() else false,
+        "world_pick_kind":hit.get("kind"),"world_pick_position":hit.get("position"),"cell_pick":scene.pick_cell(point).get("position") if point.is_finite() else null}
 func target_point(step:Dictionary,names:Dictionary)->Vector2:
     var action:Dictionary=scene.selected_action
     var preview:Dictionary=scene.selection_preview
     var requested:Variant=step.get("target","first_legal")
-    if step.has("then") and not scene.target_selection.target_indices.is_empty() and scene.target_selection.extra_target_positions.is_empty():
-        var allowed:Array=Choices.preview_positions(preview)
-        if allowed.any(func(cell):return Play.Interaction.same_position(cell,step.then)):return grid_screen(step.then)
+    var has_prefix:bool=not scene.target_selection.target_indices.is_empty() or not scene.target_selection.extra_target_positions.is_empty()
+    if step.has("then") and has_prefix:
         # Some native selections offer the destination as another binding,
         # others as a position-only domain. Match the exact authored cell in
         # either public form; do not choose an unrelated first legal target.
         requested=step.then
-    if action.get("position_region")!=null:return grid_screen(step.get("aim",step.get("target",[])))
-    var domains:Dictionary=scene.selection_preview if not scene.target_selection.target_indices.is_empty() else scene.available_actions
+    if action.get("position_region")!=null and not has_prefix:return grid_screen(step.get("aim",step.get("target",[])))
+    # Match production extend_selection: an actual Preview owns continuation,
+    # including a prefix made from extra positions rather than target indices.
+    var domains:Dictionary=scene.available_actions if preview.is_empty() else preview
     var options:Array=Choices.next_options(domains) if domains.has("next_target_set") else Choices.action_options(domains,action)
     var recipients:Array=step.get("recipients",[])
     if scene.target_selection.target_indices.size()<recipients.size():requested=recipients[scene.target_selection.target_indices.size()]
+    var preferred:Variant=step.get("aim") if not has_prefix and requested=="first_legal" else requested
+    # A compact ground table offers exact cells, not screen coordinates. Prefer
+    # the authored aim only when it is actually offered and clickable here.
+    if preferred is Array:
+        for cell in Choices.preview_positions(preview):
+            if Play.Interaction.same_position(cell,preferred):
+                var point:Vector2=ground_target_point(cell)
+                if point.is_finite():return point
+        for option in options:
+            if Choices.binding_subject(domains,option)==null and Play.Interaction.same_position(Choices.binding_position(domains,option),preferred):
+                var point:Vector2=ground_target_point(preferred)
+                if point.is_finite():return point
     if step.get("target")=="first_legal":
         var order=[names.get("target"),names.get("ally"),names.get("caster")]
         options=options.duplicate()
@@ -116,8 +146,14 @@ func target_point(step:Dictionary,names:Dictionary)->Vector2:
             var point=actor_screen(subject.uuid)
             if point.is_finite():return point
         var position:Variant=Choices.binding_position(domains,option)
-        if position!=null and requested is Array and Play.Interaction.same_position(position,requested):return grid_screen(position)
-        if position!=null and step.get("target")=="first_legal" and subject==null:return grid_screen(position)
+        if position!=null and requested is Array and Play.Interaction.same_position(position,requested):return ground_target_point(position)
+        if position!=null and requested=="first_legal" and subject==null:
+            var point:Vector2=ground_target_point(position)
+            if point.is_finite():return point
+    for cell in Choices.preview_positions(preview):
+        if requested=="first_legal" or (requested is Array and Play.Interaction.same_position(cell,requested)):
+            var point:Vector2=ground_target_point(cell)
+            if point.is_finite():return point
     return Vector2(INF,INF)
 func execute(step:Dictionary,names:Dictionary)->bool:
     if not await turn_of(step.get("by","caster"),names):return false
@@ -136,13 +172,16 @@ func execute(step:Dictionary,names:Dictionary)->bool:
                 click(scene.hud.confirm_button.get_global_rect().get_center());break
             var point=target_point(step,names)
             if not check(point.is_finite(),"Requested recipient/cell is actually pickable"):
-                report.target_input={"behavior":scene.selected_action.get("behavior_id"),"target_indices":scene.target_selection.target_indices,
-                    "extra_positions":scene.target_selection.extra_target_positions,"next_positions":Choices.preview_positions(scene.selection_preview),
-                    "preview_reason":scene.selection_preview.get("reason"),"can_confirm":scene.selection_preview.get("can_confirm")}
+                report.target_input=target_input_diagnostic(point)
                 return false
+            var prefix:Dictionary=scene.target_selection.duplicate(true)
             hover(point);await process_frame
             click(point);await process_frame
+            if scene.timeline.sequence==sequence and not scene.command_busy and scene.action_request<0 and not scene.selected_action.is_empty() and scene.target_selection==prefix:
+                report.target_input=target_input_diagnostic(point)
+                return check(false,"Actual target click did not extend the native selection")
     var success=await until(func():return scene.timeline.sequence>sequence and not scene.timeline.busy() and not scene.command_busy,"Real command reduced and rendered to its boundary",90000)
+    if not success and step.do!="end_turn":report.target_input=target_input_diagnostic()
     report.steps.append({"requested":step,"sequence_before":sequence,"sequence_after":scene.timeline.sequence,"ok":success})
     return success
 func opponent(step:Dictionary,names:Dictionary)->bool:

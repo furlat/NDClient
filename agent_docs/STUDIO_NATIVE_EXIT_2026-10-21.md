@@ -1,4 +1,4 @@
-# Studio native exit after successful transport controls
+# Native exit after successful Studio and live controls
 
 Current status: open client runtime investigation, cause unattributed. This is
 not a backend, artwork or established Factory defect. Other integration work
@@ -33,3 +33,29 @@ Next client action: distinguish native teardown/worker/resource retirement
 from a reproducible source defect using the existing bounded transport case.
 Keep actual exit status in qualification; do not turn passing assertions into
 a process pass, suppress the crash, or request backend changes without evidence.
+
+## Subsequent actual delayed-server invocation, 21 October 16:39 UTC
+
+The complete broad batch later encountered another native access violation after
+`player_wait_checks` completed all **16 assertions with zero assertion failures**.
+This invocation used installed `runtime-call-heavy-defaults-20261021-8dd103fb92174541`
+and immutable producer `9f81d52676d4cea78be0be951dfc51a756050032`.
+The actual 2,000 ms delayed-server command, continuing camera input and 305
+animation samples passed; session close took 1 ms and reported no pending
+retirement groups. These functional observations do not qualify native teardown.
+
+- Launcher log: `.runtime/tests/20261021T144622.590398Z-current-checkpoint/player_wait_checks.log`.
+- Native log and original control: `.runtime/player-runs/20261021T163851.617705Z/`.
+- Windows event: `.runtime/material-runtime-integration-20261021/windows-player-wait-native-exit-event.json`.
+- Application Error record **75514**, UTC **16:39:00.9460468**, exception
+  `0xc0000005`, `ntdll.dll`, offset `0x1ceed`, process `0x9E78`, report
+  `edeed91e-7e97-4be9-8447-774b426f65f2`.
+
+`tools/play.py` reports generic launch failure and exits 1 after a nonzero native
+exit; that launcher code is **not** the actual native process status. The
+matching event establishes an access violation for this process. Its module and
+offset match the earlier Studio event, which does not establish a common cause
+or identify a backend, Factory or operating-system defect. Successful intervening
+exits do not explain either crash. The current source-frozen live closure batch
+includes one ordinary existing delayed-server invocation; its result will remain
+a separate receipt.

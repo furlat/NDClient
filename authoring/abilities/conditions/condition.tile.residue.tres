@@ -1,0 +1,23 @@
+[gd_resource type="Resource" script_class="PresentationCondition" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/abilities/condition.gd" id="condition"]
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="image"]
+
+[sub_resource type="Resource" id="context_icon"]
+script = ExtResource("image")
+path = "art/media/ui/icons/smooth48/condition.generic.png"
+native_size = Vector2i(48, 48)
+reuses = "condition.generic"
+status = "stand_in"
+source = "ui/resources.json icon:condition.generic"
+
+[resource]
+script = ExtResource("condition")
+id = "condition.tile.residue"
+label = "Tile residue save context"
+icon = SubResource("context_icon")
+disposition = "state_only"
+play_package_lifecycle = false
+status = "internal"
+unported = {"classification": {"runtimeRole": "context_only", "presentationDomains": ["none"], "visualIntensity": "state_only"}}
+notes = "Frozen producer dnd/residues.py uses this catalog identity as SavingThrowContext.cause_id. No native actor ConditionInstance owner is observed for this definition. Actual disclosed tile residue after-values select the existing retained residue materials; this definition creates no member, body, lifecycle or synthetic source identity. All artwork remains unreviewed."

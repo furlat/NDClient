@@ -1,27 +1,29 @@
-# Creature body artwork still using stand-ins — 20 October 2026
+# Creature body deliveries and remaining asset gaps — 21 October 2026
 
-Source: current `authoring/characters/characters/*.tres`, reconciled 21 October. This is a source-resource inventory, not a rendering test or a request for 63 new bodies. No assets were imported or moved. **All artwork and audio remain UNREVIEWED.**
+Source: current `authoring/characters/characters/*.tres`, reconciled 21 October. This is a source-resource inventory, not a rendering test or a request for63 new bodies. The21October elemental delivery is now installed through existing typed rigs; native qualification and human review remain separate. **All artwork and audio remain UNREVIEWED.**
 
-## Twelve summon bodies with explicit substitute artwork
+## Original twelve summon-body rows: four delivered, eight remain incomplete
 
-These are the concrete summon-art gaps. Each already has a playable substitute rig and an assigned portrait. The body artwork is missing for the named creature itself.
+Air/Earth/Fire/Water own bodies and geometry are delivered and now assigned to their four existing creature IDs. Four Myrmidons, Cambion, Deva and Djinni still need own body artwork. Draconic Spirit colour/motion is delivered; its geometry and real per-pose mouth sockets remain pending, and its current game rig remains the substitute. Each incomplete row retains its existing portrait and playable substitute. All artwork remains UNREVIEWED.
 
-| Creature | Exact owner | Current substitute body |
+| Creature | Exact owner | Current source / remaining boundary |
 |---|---|---|
-| Air Elemental | [`creature.spell.air_elemental`](../authoring/characters/characters/creature.spell.air_elemental.tres) | `smallscale.enemies.11arcane-elemental` |
+| Air Elemental | [`creature.spell.air_elemental`](../authoring/characters/characters/creature.spell.air_elemental.tres) | `summon.elemental.air` — own9clip body/geometry delivered; native movement/intrinsic/hit/death bindings qualified; art/scale review open |
 | Air Myrmidon | [`creature.spell.air_myrmidon`](../authoring/characters/characters/creature.spell.air_myrmidon.tres) | `smallscale.enemies.11arcane-elemental` |
 | Cambion | [`creature.spell.cambion`](../authoring/characters/characters/creature.spell.cambion.tres) | `smallscale.demonelite01` |
 | Deva | [`creature.spell.deva`](../authoring/characters/characters/creature.spell.deva.tres) | `smallscale.characters.4paladin` |
 | Djinni | [`creature.spell.djinni`](../authoring/characters/characters/creature.spell.djinni.tres) | `smallscale.characters.6mage` |
 | Draconic Spirit | [`creature.spell.draconic_spirit`](../authoring/characters/characters/creature.spell.draconic_spirit.tres) | `smallscale.dinosaurs.elite-armored-t-rex` |
-| Earth Elemental | [`creature.spell.earth_elemental`](../authoring/characters/characters/creature.spell.earth_elemental.tres) | `smallscale.enemies.11arcane-elemental` |
+| Earth Elemental | [`creature.spell.earth_elemental`](../authoring/characters/characters/creature.spell.earth_elemental.tres) | `summon.elemental.earth` — own9clip body/geometry delivered; native movement/intrinsic/hit/death bindings qualified; art/scale review open |
 | Earth Myrmidon | [`creature.spell.earth_myrmidon`](../authoring/characters/characters/creature.spell.earth_myrmidon.tres) | `smallscale.enemies.11arcane-elemental` |
-| Fire Elemental | [`creature.spell.fire_elemental`](../authoring/characters/characters/creature.spell.fire_elemental.tres) | `smallscale.enemies.11arcane-elemental` |
+| Fire Elemental | [`creature.spell.fire_elemental`](../authoring/characters/characters/creature.spell.fire_elemental.tres) | `summon.elemental.fire` — own9clip body/geometry delivered; native movement/intrinsic/hit/death bindings qualified; art/scale review open |
 | Fire Myrmidon | [`creature.spell.fire_myrmidon`](../authoring/characters/characters/creature.spell.fire_myrmidon.tres) | `smallscale.enemies.11arcane-elemental` |
-| Water Elemental | [`creature.spell.water_elemental`](../authoring/characters/characters/creature.spell.water_elemental.tres) | `smallscale.enemies.11arcane-elemental` |
+| Water Elemental | [`creature.spell.water_elemental`](../authoring/characters/characters/creature.spell.water_elemental.tres) | `summon.elemental.water` — own9clip body/geometry delivered; native movement/intrinsic/hit/death bindings qualified; art/scale review open |
 | Water Myrmidon | [`creature.spell.water_myrmidon`](../authoring/characters/characters/creature.spell.water_myrmidon.tres) | `smallscale.enemies.11arcane-elemental` |
 
-The five elemental Dragon summon forms share `creature.spell.draconic_spirit`; this is one missing dragon body family, not five independently missing base rigs. The current body is an armoured T-Rex. All eight elemental/Myrmidon creatures currently reuse the same arcane-elemental body. Their existing portraits do not supply animated body art.
+The five elemental Dragon summon forms share `creature.spell.draconic_spirit`; their delivered colour variants are one family, not five missing base rigs. Current game geometry still uses an armoured T-Rex. Only the four Myrmidons continue using the arcane-elemental substitute.
+
+The [elemental/dragon handoff](ELEMENTALS_DRAGONS_PRODUCTION_HANDOFF_2026-10-21.md) identifies the durable packet. Elemental intake copies only144 selected colour/affine-depth/optical-original-normal/support PNGs (44.51MiB), preserving all36banks/4,320poses,192px cells,96/138 fixed contact, eight facing rows and12fps. Canonical RG/BA geometry was not misread as the current affine/RGB format. Exact0 ground registration and original-only normal profiles are explicit schema data; absent alternate profiles retain admission limits. The eight native elemental action bodies are assigned through their existing rig-specific resources without invented hit/release/socket frames. All four unchanged original captures now pass the shared native cohort:28,661 checks, zero failures, native exit0 and no engine errors. Each actual intrinsic Cast/AttackHeavy/Jab/Hook assignment has a separately compiled actor/source track and an acknowledged visible original texture/frame binding. This qualifies those selected recorded paths, not isolated framebuffer parity, lighting acceptance or final scale/placement/artwork review. The initial Earth/Shield one-ULP constructor failure is preserved; the shared endpoint repair has passing current evidence. [Exact four-body cohort](../.runtime/tests/20261021T192153.111850Z-content-closure-affected/summary.json).
 
 ## Other substitutions already recorded in the roster
 
@@ -101,17 +103,17 @@ The original 63-resource snapshot contained **12 summon bodies**, **34 modular-b
 | [`creature.skeleton`](../authoring/characters/characters/creature.skeleton.tres) | `smallscale.undead.6warrior` |
 | [`creature.skeleton_warlock`](../authoring/characters/characters/creature.skeleton_warlock.tres) | `smallscale.undead.8necromancer` |
 | [`creature.skeleton_warrior`](../authoring/characters/characters/creature.skeleton_warrior.tres) | `smallscale.undead.6warrior` — now partial, not a modular body |
-| [`creature.spell.air_elemental`](../authoring/characters/characters/creature.spell.air_elemental.tres) | `smallscale.enemies.11arcane-elemental` |
+| [`creature.spell.air_elemental`](../authoring/characters/characters/creature.spell.air_elemental.tres) | `summon.elemental.air` — delivered own body, partial qualification |
 | [`creature.spell.air_myrmidon`](../authoring/characters/characters/creature.spell.air_myrmidon.tres) | `smallscale.enemies.11arcane-elemental` |
 | [`creature.spell.cambion`](../authoring/characters/characters/creature.spell.cambion.tres) | `smallscale.demonelite01` |
 | [`creature.spell.deva`](../authoring/characters/characters/creature.spell.deva.tres) | `smallscale.characters.4paladin` |
 | [`creature.spell.djinni`](../authoring/characters/characters/creature.spell.djinni.tres) | `smallscale.characters.6mage` |
 | [`creature.spell.draconic_spirit`](../authoring/characters/characters/creature.spell.draconic_spirit.tres) | `smallscale.dinosaurs.elite-armored-t-rex` |
-| [`creature.spell.earth_elemental`](../authoring/characters/characters/creature.spell.earth_elemental.tres) | `smallscale.enemies.11arcane-elemental` |
+| [`creature.spell.earth_elemental`](../authoring/characters/characters/creature.spell.earth_elemental.tres) | `summon.elemental.earth` — delivered own body, partial qualification |
 | [`creature.spell.earth_myrmidon`](../authoring/characters/characters/creature.spell.earth_myrmidon.tres) | `smallscale.enemies.11arcane-elemental` |
-| [`creature.spell.fire_elemental`](../authoring/characters/characters/creature.spell.fire_elemental.tres) | `smallscale.enemies.11arcane-elemental` |
+| [`creature.spell.fire_elemental`](../authoring/characters/characters/creature.spell.fire_elemental.tres) | `summon.elemental.fire` — delivered own body, partial qualification |
 | [`creature.spell.fire_myrmidon`](../authoring/characters/characters/creature.spell.fire_myrmidon.tres) | `smallscale.enemies.11arcane-elemental` |
-| [`creature.spell.water_elemental`](../authoring/characters/characters/creature.spell.water_elemental.tres) | `smallscale.enemies.11arcane-elemental` |
+| [`creature.spell.water_elemental`](../authoring/characters/characters/creature.spell.water_elemental.tres) | `summon.elemental.water` — delivered own body, partial qualification |
 | [`creature.spell.water_myrmidon`](../authoring/characters/characters/creature.spell.water_myrmidon.tres) | `smallscale.enemies.11arcane-elemental` |
 | [`creature.spy`](../authoring/characters/characters/creature.spy.tres) | `neuroclient.modular` |
 | [`creature.thug`](../authoring/characters/characters/creature.thug.tres) | `neuroclient.modular` |

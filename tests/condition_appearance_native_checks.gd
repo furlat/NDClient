@@ -15,10 +15,10 @@ var stall_reported:bool=false
 var appearance_frames:Array=[]
 var failure_reported:bool=false
 
-func play_once(studio:Control,label:String,source_uses:Array=[])->void:
+func play_once(studio:Control,label:String,source_uses:Array=[],item_effects:Array=[])->void:
     observed_studio=studio
     process_frame.connect(observe_preparation)
-    await super.play_once(studio,label,source_uses)
+    await super.play_once(studio,label,source_uses,item_effects)
     process_frame.disconnect(observe_preparation)
     observed_studio=null
 

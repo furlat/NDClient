@@ -123,7 +123,7 @@ static func _persistent_condition(row: Dictionary, condition: Dictionary, persis
     var prefix = Authoring.Catalog.condition_key(condition)+"/persistent/"
     var source = "catalog/condition_recipes.json:/"+prefix.trim_suffix("/")
     var mechanisms: Array=[]
-    var replaced:Array=NativePersistent.replaced_media(condition,{"persistent":persistent})
+    var replaced:Array=NativePersistent.replaced_media(condition,{"persistent":persistent},cache)
     for field in ["bodyColor","bodyRamp","bodyOutline","bodyPose","frozenPose"]:
         if persistent.get(field)!=null:mechanisms.append(field)
     var size_change:Variant=condition.get("state",{}).get("size_change") if condition.get("state")!=null else null
@@ -172,7 +172,7 @@ static func _lifecycle_components(row:Dictionary,condition:Dictionary,actor_uuid
     var common:Dictionary={"id":"condition:"+str(condition.condition_uuid),"condition_uuid":condition.condition_uuid,"actor_uuid":actor_uuid,"condition":condition,
         "start_ms":row.get("_commit_ms",row._admit_ms),"absolute_start_ms":row.get("_commit_ms",row._admit_ms),"duration_ms":INF,"age_ms":0.0,"removal_age_ms":null,"initial":false,
         "recipe":config,"source":"catalog/condition_recipes.json:/"+Authoring.Catalog.condition_key(condition)}
-    var samples:Array=NativePersistent.lifecycle_samples(common,NativePersistent.lifecycles(condition),cache)
+    var samples:Array=NativePersistent.lifecycle_samples(common,NativePersistent.lifecycles(condition,cache),cache)
     samples.append_array(NativePersistent.authored_samples(common,cache))
     for sample in samples:
         var component=_compiled_component(sample,cache)
@@ -294,6 +294,13 @@ static func _requirements(row: Dictionary, node: Dictionary, actor: Dictionary, 
                 missing.asset_ids=[media.assetId];missing.authored_id=media.id
                 row.components.append(missing)
         "attack":
+            if Occurrences.pre_motion_attack(node,graph):
+                var reaction:Dictionary=Authoring.load_data("catalog/movement_reaction_context.json",cache)
+                row.inactive_legacy_fields=Requirements.inactive_context_fields(reaction,"catalog/movement_reaction_context.json:")
+                if reaction.get("feedbackEnabled",false):
+                    var pointer:String=str(reaction.get("_resource_source",""))
+                    pointer=pointer+"::texts/reaction" if not pointer.is_empty() else "catalog/movement_reaction_context.json:/feedbackEnabled"
+                    _need(row,"feedback_text","authored_movement_reaction_feedback_not_implemented",pointer,"source",pointer)
             var recipe = resolved_recipe
             if recipe.is_empty():
                 row.components.append(_component("body","missing_authored_attack_recipe","catalog/attack_recipes.json"))
@@ -350,7 +357,9 @@ static func _requirements(row: Dictionary, node: Dictionary, actor: Dictionary, 
             if body.get("actor",{}).get("enabled",false) and not _has(row,"body"):
                 row.components.append(_component("body","missing_authored_clip","catalog/"+role+"_context.json"))
             if role == "death":
-                if fact.get("remains_disposition","intact")=="disintegrated" and not Authoring.load_data("catalog/death_context.json",cache).get("silhouetteDust",{}).is_empty():
+                var death:Dictionary=Authoring.load_data("catalog/death_context.json",cache)
+                row.inactive_legacy_fields=Requirements.inactive_context_fields(death,"catalog/death_context.json:")
+                if fact.get("remains_disposition","intact")=="disintegrated" and Requirements.context_field_active(death,"silhouetteDust"):
                     row.components.append(_component("death_dust","authored_death_dust_not_implemented","catalog/death_context.json.silhouetteDust"))
             else:
                 var key: String = "revived" if fact.new_state == "alive" else fact.new_state
@@ -545,7 +554,7 @@ static func compile_rows(lineage: Dictionary, group: Dictionary, graph: Dictiona
             var key:String=Authoring.Catalog.condition_key(condition);var recipe:Dictionary=cue.recipe
             var change:Dictionary=recipe.get(cue.phase,{})
             if change.get("feedbackEnabled",false):_need(row,"feedback_text","authored_condition_feedback_not_implemented",Authoring.Catalog.source_pointer("catalog/condition_recipes.json",key+"/"+cue.phase+"/feedbackEnabled",cache))
-            var replaced:Array=NativePersistent.replaced_media(condition,recipe)
+            var replaced:Array=NativePersistent.replaced_media(condition,recipe,cache)
             _media_needed(row,change.get("effects",[]),"catalog/condition_recipes.json:"+key+"."+cue.phase,row._commit_ms,"catalog/condition_recipes.json:/"+key+"/"+cue.phase+"/effects",replaced)
             if cue.phase=="application":
                 var owner:Dictionary=graph.actor_inputs.get(node.id,{}).get(cue.actor_uuid,{})

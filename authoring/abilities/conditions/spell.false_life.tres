@@ -39,6 +39,8 @@ id = "spell.false_life"
 label = "False Life temporary HP"
 icon = SubResource("Resource_f07hf")
 disposition = "authored"
+owner_kind = "temporary_hp_grant"
+lifecycle_selections = PackedStringArray("condition_aid_retained_native")
 look = SubResource("Resource_im1vp")
 layers = [{
 "activeDuring": ["idle", "move", "jump", "forced_move", "attack", "cast", "act", "hit"],
@@ -113,4 +115,4 @@ unported = {
 "effects": []
 }
 }
-notes = "Sent by the pinned engine under this id; not a condition id on the modern branch."
+notes = "The exact canonical temporary_hp_grant.instance_uuid and source_id=spell.false_life own this selected retained Aid vitality artwork. This is explicit source reuse on the actual grant and recipient, not an Aid or False Life ConditionRow. The original public grant start, replacement/zero/null boundary and existing source removal age own its lifecycle; an initially present grant begins at hold. Finite False Life cast artwork remains separate and its optional fitted prototype stays inactive. Original strip metadata does not claim current parity; all artwork remains unreviewed and native output unqualified."

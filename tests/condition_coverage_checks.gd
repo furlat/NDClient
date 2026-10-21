@@ -16,16 +16,25 @@ func run()->void:
     var original=recipes.duplicate(true)
     var report=Coverage.build(cache)
     var declared:Resource=load("res://authoring/abilities.tres")
-    var authored_ids:Array=[];var non_recipe_ids:Array=[];var surfaces:Array=[]
+    var authored_ids:Array=[];var non_recipe_ids:Array=[];var surfaces:Array=[];var internal_surfaces:Array=[]
     for id in declared.sections.conditions:
         var source:Resource=load(declared.sections.conditions[id])
         # Native-only spatial owners and explicit creation sources are real
         # built recipes even when their legacy disposition is empty.
-        if not source.disposition.is_empty() or not source.creation_source_id.is_empty() or not source.effects.is_empty() or not source.responses.is_empty() or not source.lifecycle_opt_in.is_empty():authored_ids.append(id)
+        if not source.disposition.is_empty() or not source.creation_source_id.is_empty() or not source.effects.is_empty() or not source.responses.is_empty() or not source.lifecycle_opt_in.is_empty() or not source.lifecycle_selections.is_empty() or not source.surface.is_empty():authored_ids.append(id)
         else:non_recipe_ids.append(id)
-        if not source.disposition.is_empty() and "ground_zone" in source.unported.get("classification",{}).get("presentationDomains",[]):surfaces.append(id)
+        if not source.surface.is_empty() or not source.disposition.is_empty() and "ground_zone" in source.unported.get("classification",{}).get("presentationDomains",[]):
+            surfaces.append(id)
+            if source.status=="internal":internal_surfaces.append(id)
     authored_ids.sort();var built_ids:Array=recipes.keys();built_ids.sort()
     check(recipes.size()==authored_ids.size() and authored_ids.all(func(id):return recipes.has(id)) and report.entries.size()==recipes.size(),"Every explicitly authored/state-only typed recipe has one coverage entry; package-only/internal declarations are separately counted: "+JSON.stringify({"typed":authored_ids.size(),"built":recipes.size(),"not_built":authored_ids.filter(func(id):return not recipes.has(id))}))
+    # Passive inventory covers every declared branch. The runtime empty-state
+    # lookup intentionally selects none of these conditional source owners.
+    var conditional_states:Dictionary={
+        "condition.spell.enhance_ability":{"field":"enhanced_ability","values":["strength","constitution","dexterity","intelligence","wisdom","charisma"]},
+        "condition.spell.enlarge_reduce":{"field":"size_change","values":["reduce"]},
+        "condition.spell.fire_shield":{"field":"energy_type","values":["Fire","Cold"]},
+        "condition.spell.protection_from_energy":{"field":"energy_type","values":["Acid","Cold","Fire","Lightning","Thunder"]}}
     var entries={};var requirement_count=0
     for entry in report.entries:
         check(not entries.has(entry.id) and recipes.has(entry.id),"Unique real condition identity "+entry.id)
@@ -40,7 +49,13 @@ func run()->void:
                 check(requirement.status=="missing" and not requirement.reason.is_empty(),"Unsupported/missing-source mechanism remains explicit "+requirement.id)
         var recipe:Dictionary=recipes[entry.id]
         var selected=Coverage.NativeSpells.condition(entry.id,cache)
-        var replaced:Array=Coverage.Persistent.replaced_media({"behavior_id":entry.id},recipe)
+        var replaced:Array=Coverage.Persistent.replaced_media({"behavior_id":entry.id},recipe,cache)
+        var conditional_replaced:Array=[]
+        if conditional_states.has(entry.id):
+            var selector:Dictionary=conditional_states[entry.id]
+            for value in selector["values"]:
+                var state:Dictionary={selector.field:value}
+                conditional_replaced.append_array(Coverage.Persistent.replaced_media({"behavior_id":entry.id,"state":state},recipe,cache))
         if not Coverage.NativeSpells.contact_phases(selected).is_empty():
             for effects in recipe.get("interceptionEffectsByDirection",{}).values():replaced.append_array(effects.map(func(effect):return effect.assetId))
         var persistent:Dictionary=recipe.get("persistent",{})
@@ -54,13 +69,16 @@ func run()->void:
                 if recipe[phase].effects[i].get("assetId","") in replaced:
                     check(not entry.requirements.any(func(row):return row.source==pointer),"Explicitly superseded phase media is not a false missing requirement "+pointer)
                 else:check(entry.requirements.any(func(row):return row.source==pointer and row.status=="missing"),"Uncompiled phase media cannot hide behind a working persistent sibling "+pointer)
+        # Conditional native owners replace their declared persistent layers;
+        # unqualified application/removal media retain the base expectations.
+        var persistent_replaced:Array=replaced+conditional_replaced
         for i in persistent.get("layers",[]).size():
             var pointer=Authoring.Catalog.source_pointer("catalog/condition_recipes.json",entry.id+"/persistent/layers/"+str(i),cache)
-            if recipe.persistent.layers[i].assetId in replaced:
+            if recipe.persistent.layers[i].assetId in persistent_replaced:
                 check(not entry.requirements.any(func(row):return row.source==pointer),"Explicitly superseded persistent source is replaced in coverage "+pointer)
             else:check(entry.requirements.any(func(row):return row.source==pointer and row.get("asset_id")==recipe.persistent.layers[i].assetId),"Every retained persistent source is enumerated "+pointer)
         var native_rows=entry.requirements.filter(func(row):return row.mechanism.begins_with("native:"))
-        check(native_rows.size()==Coverage.Effects.conditions(entry.id).size() and native_rows.all(func(row):return row.implementation=="implemented" and row.availability=="available" and row.status=="unexercised"),"Package lifecycles replace media without claiming recorded execution "+entry.id)
+        check(native_rows.size()==Coverage.Persistent.lifecycle_candidates(entry.id,cache).size() and native_rows.all(func(row):return row.implementation=="implemented" and row.availability=="available" and row.status=="unexercised"),"Package lifecycles replace media without claiming recorded execution "+entry.id)
         var authored_native=entry.requirements.filter(func(row):return row.mechanism.begins_with("native_authored:"))
         var source:Resource=load(declared.sections.conditions[entry.id])
         check(authored_native.size()==source.effects.size(),"Every independently authored typed native hold is inventoried "+entry.id)
@@ -81,17 +99,16 @@ func run()->void:
     for entry in report.entries:
         var assignments=entry.requirements.filter(func(row):return row.get("gap_kind")=="authoring_assignment")
         if not assignments.is_empty():authoring_missing.append(entry.id)
-        if entry.classification.get("presentationDomains",[]).has("ground_zone"):
+        if entry.classification.get("presentationDomains",[]).has("ground_zone") or not str(recipes[entry.id].get("surfaceOwner","")).is_empty():
             ground_assigned+=1
-            check(assignments.is_empty() and not entry.get("indicator_assignments",[]).is_empty(),"Actual ground indicator remains owned by existing world authoring "+entry.id)
+            if entry.id in internal_surfaces:
+                check(entry.disposition=="state_only" and entry.status=="state_only" and entry.requirements.is_empty(),"Explicit undisclosed/internal field ledger invents neither an observed footprint nor artwork: "+entry.id)
+            else:check(assignments.is_empty() and not entry.get("indicator_assignments",[]).is_empty(),"Actual ground indicator remains owned by existing world authoring "+entry.id)
         if entry.disposition=="state_only":check(assignments.is_empty(),"Explicit state-only condition does not acquire invented VFX "+entry.id)
-    var expected_unassigned=["class_feature.sorcerer.draconic_presence","condition.concentrating",
-        "condition.environment.wet","condition.spell.blindness_deafness",
-        "condition.spell.color_spray","condition.spell.divine_word",
-        "condition.spell.ice_storm.terrain","condition.spell.prismatic_spray.restrained","condition.spell.silence.deafened",
-        "condition.underwater","trait.skeleton_archer_marked"]
-    authoring_missing.sort();expected_unassigned.sort()
-    check(authoring_missing==expected_unassigned and report.totals.authoring_assignments==expected_unassigned.size() and ground_assigned==surfaces.size(),"Exact remaining unassigned actor indicators stay explicit; every typed ground owner retains its independent surface assignment: "+JSON.stringify({"expected_actor":expected_unassigned,"actual_actor":authoring_missing,"typed_ground":surfaces.size(),"built_ground":ground_assigned}))
+    authoring_missing.sort()
+    check(authoring_missing.is_empty() and report.totals.authoring_assignments==0 and ground_assigned==surfaces.size(),"Actual typed native/delegated decisions leave no invented empty-indicator gap; every typed ground owner retains its independent assignment: "+JSON.stringify({"actual_actor":authoring_missing,"typed_ground":surfaces.size(),"built_ground":ground_assigned}))
+    var web:Dictionary=entries["condition.spell.web.zone"]
+    check(web.indicator_assignments.any(func(row):return row.spatial_content_id=="spatial_effect.spell.web" and row.get("selection_key")=="spatial_web_persistent" and row.source=="assets/vfx/index.json#/selections/spatial_web_persistent/condition" and row.native_sources.size()==3),"Web's exact installed spatial lifecycle is inspectable beside explicitly authored Ground sources")
     var dash:Dictionary=entries["condition.dashing"]
     check(dash.indicator_assignments.size()==6 and dash.indicator_assignments.all(func(row):return row.kind=="movement_media"),"Dash retains its six conditional movement assignments instead of an invented sustained contour")
     check(not dash.requirements.any(func(row):return row.mechanism=="bodyOutline") and dash.requirements.filter(func(row):return row.phase=="movement").all(func(row):return row.implementation=="implemented" and row.status=="unexercised" and not row.rendered and not row.native_sources.is_empty()),"All original Dash assignments delegate to current native movement sources without claiming rendered output")
@@ -100,14 +117,15 @@ func run()->void:
         var outline=entries[id].requirements.filter(func(row):return row.mechanism=="bodyOutline")
         check(outline.size()==1 and outline[0].source=="res://authoring/abilities/conditions/condition."+name+".tres::look" and outline[0].legacy_source=="catalog/condition_recipes.json:/"+id+"/persistent/bodyOutline","Basic indicator has an actual native assignment with precise provenance: "+id)
         check(outline[0].implementation=="implemented" and outline[0].status=="unexercised" and not outline[0].rendered,"Catalog alone does not manufacture recorded/rendered evidence: "+id)
-    for id in ["trait.skeleton_archer_marked","condition.concentrating","condition.underwater"]:
-        var missing:Array=entries[id].requirements.filter(func(row):return row.get("gap_kind")=="authoring_assignment")
-        check(missing.size()==1 and entries[id].status=="missing","Empty authored indicator is visible even with transition feedback "+id)
-        if missing.is_empty():continue
-        check(missing[0].source==entries[id].source+"/persistent" and missing[0].expected_source==missing[0].source,"Unassigned indicator points to exact authoring owner "+id)
-        check(missing[0].implementation=="not_applicable" and missing[0].availability=="not_assigned" and missing[0].status=="missing","Authoring gap does not pretend to be renderer or source-file failure "+id)
+    for id in ["condition.concentrating","condition.underwater","condition.spell.blindness_deafness","condition.spell.color_spray","class_feature.sorcerer.draconic_presence","condition.spell.divine_word","condition.spell.prismatic_spray.restrained","condition.spell.silence.deafened","condition.environment.wet"]:
+        check(recipes[id].get("disposition")=="state_only" and not entries[id].requirements.any(func(row):return row.get("gap_kind")=="authoring_assignment"),"Actual wrapper/ledger delegates preserve a nonvisual decision rather than invent an indicator: "+id)
         if recipes[id].get("application",{}).get("feedbackEnabled",false):
             check(entries[id].requirements.any(func(row):return row.mechanism=="feedback_text" and row.implementation=="implemented"),"Existing application badge remains independently supported "+id)
+    var marked:Dictionary=entries["trait.skeleton_archer_marked"]
+    var marker:Array=marked.requirements.filter(func(row):return row.mechanism=="native:condition_guiding_mark_native")
+    check(marker.size()==1 and marker[0].source=="res://authoring/abilities/conditions/trait.skeleton_archer_marked.tres::lifecycle_selections/0" and marker[0].status=="unexercised" and not marker[0].rendered and marker[0].evidence.is_empty(),"The explicit Marked source assignment is inspectable without manufacturing execution or artwork approval")
+    var terrain:Dictionary=entries["condition.spell.ice_storm.terrain"]
+    check(terrain.indicator_assignments.any(func(row):return row.kind=="native_spatial_owner" and row.spatial_content_id=="spatial_effect.spell.ice_storm"),"Explicit surface ownership survives stale body-domain classification")
     var hidden:Dictionary=entries["condition.hidden"]
     check(not hidden.requirements.any(func(row):return row.get("gap_kind")=="authoring_assignment"),"Native Hidden crouch/opacity is an actual persistent assignment")
     var opacity=hidden.requirements.filter(func(row):return row.mechanism=="alphaMultiplier")
@@ -118,6 +136,7 @@ func run()->void:
     check(hidden.requirements.filter(func(row):return row.phase in ["application","removal"]).all(func(row):return row.mechanism!="material_flash"),"Condition phase badges cannot be mislabeled as material flashes")
     check(entries["condition.spell.darkness.zone"].indicator_assignments.any(func(row):return row.kind=="native_spatial_owner" and row.spatial_content_id=="spatial_effect.spell.darkness" and row.source=="res://authoring/environment/surfaces/spatial_effect.spell.darkness.tres") and not entries["condition.spell.darkness.zone"].indicator_assignments.any(func(row):return row.get("spatial_content_id")=="spatial_effect.spell.daylight"),"Darkness owns its canonical native field; its Daylight removal trigger cannot become the indicator source")
     _assignment_boundaries(cache,recipes)
+    _conditional_lifecycle_boundaries(cache,recipes,entries)
     check(entries["condition.spell.mirror_image"].requirements.any(func(row):return row.mechanism=="liveCopies" and row.status=="missing"),"Lifecycle capture does not pretend Mirror Image copies are implemented")
     check(entries["condition.blinded"].requirements.any(func(row):return row.mechanism=="native:condition_blinded_native" and row.status=="unexercised") and not entries["condition.blinded"].requirements.any(func(row):return row.mechanism.ends_with(":markerGroup")),"Native Blinded lifecycle explicitly replaces the retired grouped sprite marker, without execution evidence")
     check(not entries["condition.poisoned"].requirements.any(func(row):return row.mechanism.ends_with(":markerGroup")) and entries["condition.poisoned"].requirements.any(func(row):return row.mechanism=="native:condition_poisoned_native" and row.status=="unexercised"),"Poisoned's overhead marker is the package lifecycle, not its sprite layer")
@@ -151,6 +170,46 @@ func run()->void:
     var result={"checks":checks,"failures":failures,"totals":report.totals,"typed_declarations":declared.sections.conditions.size(),"non_recipe_ids":non_recipe_ids,"unassigned_actor_indicators":authoring_missing,"ground_indicators_assigned":ground_assigned,"scope":"All explicit typed condition recipes and finite mechanisms; non-recipe package/internal declarations separately counted, not called complete. Exact source/semantic evidence; no preparation/GPU/audio/visual-approval claim"}
     FileAccess.open("res://generated/condition_coverage_checks.json",FileAccess.WRITE).store_string(JSON.stringify(result,"  "))
     print("CONDITION_COVERAGE_CHECKS ",JSON.stringify(result));quit(0 if failures.is_empty() else 1)
+
+func _conditional_lifecycle_boundaries(cache:Dictionary,recipes:Dictionary,entries:Dictionary)->void:
+    # Exact installed branch contracts are independent of the inspection
+    # helper. These are selector unit controls, not observed owner evidence.
+    var cases:Array=[
+        {"id":"condition.spell.enhance_ability","key":"condition_enhance_ability_strength_persistent","field":"enhanced_ability","selector":"whenAbility","value":"strength","asset":"support.enhance_bull.back"},
+        {"id":"condition.spell.enlarge_reduce","key":"condition_reduce_native","field":"size_change","selector":"whenSizeChange","value":"reduce","asset":"condition.marker.reduce.overhead"},
+        {"id":"condition.spell.fire_shield","key":"condition_fire_shield_warm_persistent","field":"energy_type","selector":"whenEnergyType","value":"Fire","asset":"nature.warm.back"},
+        {"id":"condition.spell.protection_from_energy","key":"condition_protection_from_energy_acid_persistent","field":"energy_type","selector":"whenEnergyType","value":"Acid","asset":"persistent.energy.acid.back"}]
+    for example in cases:
+        var recipe:Dictionary=recipes[example.id]
+        var pointer:String=Authoring.Catalog.source_pointer("catalog/condition_recipes.json",example.id+"/persistent/layers/0",cache)
+        var state:Dictionary={example.field:example.value}
+        var selected:Array=Coverage.Persistent.lifecycles({"behavior_id":example.id,"state":state},cache)
+        check(selected.size()==1 and selected[0].key==example.key
+            and recipe.persistent.layers[0].assetId==example.asset
+            and recipe.persistent.layers[0][example.selector]==example.value,
+            "Exact public selector chooses its installed native branch and original layer: "+example.id)
+        check(not entries[example.id].requirements.any(func(row):return row.source==pointer),
+            "Passive inventory replaces the exactly matched conditional source without a current actor state: "+example.id)
+        for unknown_state in [{},{example.field:"not_an_authored_branch"}]:
+            var condition:Dictionary={"behavior_id":example.id,"state":unknown_state}
+            check(Coverage.Persistent.lifecycles(condition,cache).is_empty()
+                and Coverage.Persistent.replaced_media(condition,recipe,cache).is_empty(),
+                "Runtime unknown state cannot select or replace a declared branch: "+example.id+" "+JSON.stringify(unknown_state))
+        for mode in ["unknown_value","wrong_selector"]:
+            var changed:Dictionary=recipe.duplicate(true)
+            if mode=="unknown_value":changed.persistent.layers[0][example.selector]="not_an_authored_branch"
+            else:
+                changed.persistent.layers[0].erase(example.selector)
+                changed.persistent.layers[0].whenMetamagicMode="quickened"
+            var local:Dictionary=cache.duplicate()
+            local["catalog/condition_recipes.json"]={example.id:changed}
+            var row:Dictionary=Coverage.build(local).entries[0]
+            var retained:Array=row.requirements.filter(func(requirement):return requirement.source==pointer and requirement.get("asset_id")==example.asset)
+            check(retained.size()==1 and not retained[0].rendered and retained[0].evidence.is_empty(),
+                "Unknown or mismatched conditional media remains independently inventoried: "+example.id+" "+mode)
+            var native:Array=row.requirements.filter(func(requirement):return requirement.mechanism.begins_with("native:"))
+            check(not native.is_empty() and native.all(func(requirement):return requirement.status=="unexercised" and not requirement.rendered and requirement.evidence.is_empty()),
+                "Available native siblings neither hide unmatched media nor manufacture execution evidence: "+example.id+" "+mode)
 
 func _assignment_boundaries(cache:Dictionary,recipes:Dictionary)->void:
     var source:Dictionary=recipes["condition.hidden"]

@@ -36,7 +36,7 @@ script = ExtResource("4_i13pj")
 id = "condition.spell.divine_word"
 label = "Divine Word"
 icon = SubResource("Resource_i13pj")
-disposition = "authored"
+disposition = "state_only"
 look = SubResource("Resource_u0osa")
 group = "body"
 priority = 30.0
@@ -94,3 +94,5 @@ unported = {
 "effects": []
 }
 }
+play_package_lifecycle = false
+notes = "The wrapper delegates to actual Deafened, Blinded or Stunned child members and the separately committed Life/death result. Wrapper membership does not invent a second indicator. Source ownership decision only; all artwork remains unreviewed."

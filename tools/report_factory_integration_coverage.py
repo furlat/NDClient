@@ -48,6 +48,17 @@ families = defaultdict(list)
 for row in factory['selections']:
     for owner in row.get('condition', {}).get('owner_ids', []):
         families[owner].append(row)
+condition_selections = {row['key']: row for row in factory['selections'] if row.get('condition')}
+
+
+def condition_families(owner):
+    selected = list(families.get(owner, []))
+    seen = {row['key'] for row in selected}
+    for key in catalog['typed']['conditions'].get(owner, {}).get('lifecycle_selections', []):
+        if key in condition_selections and key not in seen:
+            selected.append(condition_selections[key])
+            seen.add(key)
+    return selected
 
 # This status means a producer exists, not that every distinct consumer packet
 # or visual output has been qualified. State/history/geometry remain separate.
@@ -178,7 +189,7 @@ for section, rows in catalog['typed'].items():
                         dispatch = 'excluded_probe'
                     elif i in row['owner_cues'] and (row['owner_kind'] == 'spatial_effect' or any(
                             catalog['typed']['conditions'].get(owner, {}).get('play_package_lifecycle', True)
-                            and any(f.get('condition', {}).get('body_channel_included', False) for f in families.get(owner, []))
+                            and any(f.get('condition', {}).get('body_channel_included', False) for f in condition_families(owner))
                             for owner in row['owner_ids'])):
                         dispatch = 'owner_handover'
                     elif row['explicit_event_cues'] and i not in row['event_cues']:
@@ -210,10 +221,13 @@ for section, rows in catalog['typed'].items():
                                              'constructor_input_gaps': cue.get('unbound_constructor_inputs', [])})
                 if dispatch != 'unbound_constructor_inputs':selected_clip_ids.add(resolved)
             lifecycle = []
-            for selection in families.get(subject, []):
+            explicit_keys = row.get('lifecycle_selections', [])
+            row['unresolved_lifecycle_selections'] = [key for key in explicit_keys if key not in condition_selections]
+            for selection in condition_families(subject):
                 condition = selection['condition']
                 active = row['play_package_lifecycle']
                 lifecycle.append({'selection': selection['key'], 'when': condition.get('when', {}),
+                                  'assignment': 'typed_explicit_selection' if selection['key'] in explicit_keys else 'package_owner_membership',
                                   'dispatch': 'server_owner_candidate_requires_actual_state_selector' if active else 'authored_suppressed',
                                   'registration': condition.get('registration', {}),
                                   'seek': condition.get('seek', {}),
@@ -283,7 +297,11 @@ def native_evidence():
     lines = (ROOT / log_path).read_text().splitlines()
     errors = [line for line in lines if 'SCRIPT ERROR:' in line or line.startswith('ERROR:')]
     warnings = [line for line in lines if line.startswith('WARNING:')]
-    return {'status': 'failed' if result.get('failures') or errors else 'passed_with_warnings' if warnings else 'passed',
+    process_exit = result.get('exit', result.get('native_exit'))
+    known_exit = isinstance(process_exit, int) and not isinstance(process_exit, bool)
+    failed = bool(result.get('failures') or errors or known_exit and process_exit != 0)
+    return {'status': 'failed' if failed else 'process_exit_not_recorded' if not known_exit else 'passed_with_warnings' if warnings else 'passed',
+            'process_exit': process_exit, 'process_status': 'failed' if failed else 'passed' if known_exit else 'unknown',
             'checks': result.get('checks', 0), 'failures': result.get('failures', []),
             'factory_version': result.get('factory_version'),
             'engine': result.get('engine'), 'expected_engine': result.get('expected_engine'),
@@ -503,58 +521,105 @@ for row in live.get('cases', []):
 
 native_reports = list(dict.fromkeys([native_evidence().get('report'),
     '.runtime/shared-providers-second-wind-native.json', '.runtime/native-heavy-effects-render.json', *args.native_report, *args.audio_report]))
+# Expand only the runner's explicit immutable raw-receipt links. A successful
+# assertion marker alone cannot establish a zero native process exit.
+native_receipts = []
 for source in native_reports:
     if not source:continue
-    if not (ROOT / source).exists():
+    source_path = Path(str(source).removeprefix('res://'))
+    if not (ROOT / source_path).is_file():
         unmatched_evidence.append({'report': source, 'reason': 'Requested receipt is unavailable.'})
         continue
-    receipt = read(source)
-    scope = receipt.get('scope', 'Actual Studio native replay and canonical seeking/looping for this recorded cohort; no all-family or human approval claim.')
-    log_path = Path(receipt.get('log') or Path(source).with_suffix('.log'))
-    if str(log_path).startswith('res://'):log_path = ROOT / str(log_path).removeprefix('res://')
-    log_lines = (ROOT / log_path).read_text(errors='replace').splitlines() if (ROOT / log_path).exists() else []
+    receipt = read(source_path)
+    if isinstance(receipt.get('results'), list):
+        for run in receipt['results']:
+            if not isinstance(run, dict) or not run.get('preserved_raw'):continue
+            raw_source = str(run['preserved_raw'])
+            raw_path = Path(raw_source.removeprefix('res://'))
+            if not (ROOT / raw_path).is_file():
+                unmatched_evidence.append({'report': source, 'raw_report': raw_source,
+                                           'reason': 'Explicit preserved raw receipt is unavailable.'})
+                continue
+            native_receipts.append((raw_source, read(raw_path), str(source), receipt, run))
+    else:native_receipts.append((str(source), receipt, '', {}, receipt))
+
+for source, raw, runner_source, runner_receipt, run in native_receipts:
+    receipt = dict(raw)
+    raw_engine = raw.get('engine') if isinstance(raw.get('engine'), dict) else {}
+    runner_engine = runner_receipt.get('engine') if isinstance(runner_receipt.get('engine'), dict) else {}
+    if not runner_engine and runner_receipt.get('engine_producer'):
+        runner_engine = {'commit': runner_receipt['engine_producer']}
+    raw_version, runner_version = raw.get('factory_version'), runner_receipt.get('factory_version')
+    identity_conflicts = []
+    if raw_version and runner_version and raw_version != runner_version:identity_conflicts.append('factory_version')
+    for field in raw_engine.keys() & runner_engine.keys():
+        if raw_engine[field] != runner_engine[field]:identity_conflicts.append('engine.' + field)
+    receipt['factory_version'] = None if 'factory_version' in identity_conflicts else raw_version or runner_version
+    receipt['engine'] = {} if any(field.startswith('engine.') for field in identity_conflicts) else raw_engine or runner_engine
+    scope = raw.get('scope') or runner_receipt.get('scope') or 'Actual Studio native replay and canonical seeking/looping for this recorded cohort; no all-family or human approval claim.'
+    log_value = run.get('log') or raw.get('log') or Path(source).with_suffix('.log')
+    log_path = Path(str(log_value).removeprefix('res://'))
+    log_lines = (ROOT / log_path).read_text(errors='replace').splitlines() if (ROOT / log_path).is_file() else []
     native_errors = [line for line in log_lines if 'SCRIPT ERROR:' in line or line.startswith('ERROR:')]
     log_validation = 'failed' if native_errors else 'passed' if log_lines else 'not_available'
-    passed = receipt.get('checks', 0) > 0 and not receipt.get('failures') and not native_errors
-    rows = receipt.get('cases', []) + receipt.get('evidence', [])
-    if source in args.audio_report and not rows and receipt.get('recording'):
-        rows = [{'recording': receipt['recording'], 'audio_transport_only': True}]
+    process_exit = run.get('exit', run.get('native_exit'))
+    known_exit = isinstance(process_exit, int) and not isinstance(process_exit, bool)
+    process_failed = bool(run.get('failed') or run.get('timed_out') or run.get('script_errors')
+                          or run.get('fatal_log') or run.get('unexpected_errors') or native_errors
+                          or raw.get('failures') or identity_conflicts)
+    passed = known_exit and process_exit == 0 and not process_failed and raw.get('checks', 0) > 0
+    process_status = 'passed' if passed else 'failed' if process_failed or known_exit and process_exit != 0 else 'unknown'
+    receipt_detail = {'process_exit': process_exit, 'process_status': process_status,
+                      'runner_report': runner_source, 'runner_result': run.get('name'),
+                      'runner_timed_out': run.get('timed_out'), 'runner_failed': run.get('failed'),
+                      'runner_script_errors': run.get('script_errors'), 'runner_unexpected_errors': run.get('unexpected_errors'),
+                      'receipt_identity': {'raw_factory_version': raw_version, 'runner_factory_version': runner_version,
+                                           'raw_engine': raw_engine, 'runner_engine': runner_engine,
+                                           'conflicts': identity_conflicts}}
+    rows = raw.get('cases', []) + raw.get('evidence', [])
+    audio_only = source in args.audio_report or runner_source in args.audio_report
+    if audio_only and not rows and raw.get('recording'):
+        rows = [{'recording': raw['recording'], 'audio_transport_only': True}]
     for row in rows:
         if not isinstance(row, dict):continue
         case_id = exact_case(row)
         # Preparation-only diagnostics are not pixel or playback witnesses.
         if row.get('kind') in ['native_preparation_profile', 'native_settle_pending', 'native_settle_failed']:continue
-        if source not in args.audio_report:
-            witness(case_id, 'native_replay', source, receipt,
-                    row.get('presentation_status', 'replay_checks_passed') if passed else 'replay_checks_failed',
-                    qualifies=scope, perspective=row.get('perspective'), failures=receipt.get('failures', []),
+        if not audio_only:
+            output_status = row.get('presentation_status', 'replay_checks_passed') if passed else 'replay_checks_failed' if process_status == 'failed' else 'process_exit_not_recorded' if not known_exit else 'replay_checks_unqualified'
+            payload = {key: row[key] for key in ['required_body_geometry', 'observed_body_geometry',
+                       'required_grant_sources', 'observed_grant_sources', 'required_native_sources', 'observed_native_sources',
+                       'required_item_effects', 'observed_item_surfaces', 'required_action_bodies', 'observed_action_bodies'] if key in row}
+            witness(case_id, 'native_replay', source, receipt, output_status,
+                    qualifies=scope, perspective=row.get('perspective'), failures=raw.get('failures', []),
                     native_sources=row.get('native_sources', []), observed_native=row.get('observed_native', {}),
                     log=str(log_path), log_validation=log_validation, native_errors=native_errors,
                     clip_id=row.get('clip'), seat=row.get('seat'), quarter=row.get('quarter', row.get('published_quarter')),
                     source_event_uuid=row.get('source_event_uuid', row.get('occurrence')),
                     changed_pixels=row.get('changed_pixels', row.get('pixels')),
-                    source_age=row.get('source_age'))
-        audio = row.get('audio_primary', {}) or (row.get('diagnostics', {}) if source in args.audio_report else {})
+                    source_age=row.get('source_age'), **receipt_detail, **payload)
+        audio = row.get('audio_primary', {}) or (row.get('diagnostics', {}) if audio_only else {})
         if audio:
             observed = audio.get('counters', {}).get('started', 0) > 0 or (row.get('pcm_frames', 0) > 0 and row.get('peak', 0) > 0)
             witness(case_id, 'audio_playback' if observed else 'audio_transport', source, receipt,
                     'playback_errors' if audio.get('errors') or native_errors else 'playback_observed' if observed else 'no_playback_observed',
-                    qualifies=(scope if source in args.audio_report else 'Actual authored audio transport starts for these exact rows; sound completeness, mix, timing and artistic acceptance are separate.') if observed else 'No playback was observed. Audio transport diagnostics only; no audible output, mix or human approval is qualified.',
+                    qualifies=(scope if audio_only else 'Actual authored audio transport starts for these exact rows; sound completeness, mix, timing and artistic acceptance are separate.') if observed else 'No playback was observed. Audio transport diagnostics only; no audible output, mix or human approval is qualified.',
                     reported_scope=scope,
                     counters=audio.get('counters', {}), errors=audio.get('errors', []), rows=audio.get('rows', {}),
-                    receipt_failures=receipt.get('failures', []),
+                    receipt_failures=raw.get('failures', []),
                     pcm_frames=row.get('pcm_frames'), pcm_peak=row.get('peak'), pcm_capture=row.get('pcm_capture'),
-                    log=str(log_path), log_validation=log_validation)
+                    log=str(log_path), log_validation=log_validation, **receipt_detail)
         elif row.get('audio_transport_only'):
-            witness(case_id, 'audio_transport', source, receipt, 'transport_checks_passed' if passed else 'transport_checks_failed',
+            witness(case_id, 'audio_transport', source, receipt, 'transport_checks_passed' if passed else 'transport_checks_failed' if process_status == 'failed' else 'process_exit_not_recorded',
                     qualifies='Audio transport diagnostics only; no playback, audible output, mix or human approval is qualified.',
-                    reported_scope=scope, failures=receipt.get('failures', []), log=str(log_path), log_validation=log_validation)
+                    reported_scope=scope, failures=raw.get('failures', []), log=str(log_path), log_validation=log_validation, **receipt_detail)
 
 report['case_evidence'] = dict(case_evidence)
 report['unmatched_evidence'] = unmatched_evidence
 for entry in entries:
     entry['witnesses'] = [value for case_id in entry['case_ids'] for value in case_evidence.get(case_id, [])]
-    entry['output_witnesses'] = [value for value in entry['witnesses'] if value['kind'] in ['native_replay', 'audio_playback']]
+    entry['output_witnesses'] = [value for value in entry['witnesses'] if value['kind'] in ['native_replay', 'audio_playback']
+                                 and value.get('process_status') == 'passed' and value.get('process_exit') == 0]
     if entry['presentation_status'] in ['not_assessed', 'evidence_available']:
         entry['presentation_status'] = 'evidence_available' if entry['output_witnesses'] else 'not_assessed'
 evidence_path = ROOT / 'generated/reports/studio-case-evidence.json'

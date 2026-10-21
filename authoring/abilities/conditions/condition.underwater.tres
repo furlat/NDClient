@@ -36,7 +36,7 @@ script = ExtResource("4_c1xlg")
 id = "condition.underwater"
 label = "Underwater"
 icon = SubResource("Resource_c1xlg")
-disposition = "authored"
+disposition = "state_only"
 look = SubResource("Resource_7elfg")
 group = "body"
 priority = 30.0
@@ -81,3 +81,5 @@ unported = {
 "effects": []
 }
 }
+play_package_lifecycle = false
+notes = "Rules-facing underwater membership, with no authored extra body overlay. Actual movement/world/environment presentation remains independent; a persistent icon or effect is not inferred from this catalog row. Source ownership decision only; all artwork remains unreviewed."

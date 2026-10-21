@@ -26,18 +26,7 @@ static func enter_item(target:Dictionary,record:Dictionary)->Dictionary:return B
 static func apply_actor_change_fact(target:Dictionary,fact:Dictionary,condition_rows:Array=[],item_rows:Array=[])->Dictionary:return Bodies.actor_change(target,fact,condition_rows,item_rows)
 static func clear_unseen_positions(target:Dictionary)->void:Audience.clear_unseen_positions(target)
 static func apply_world_update(target:Dictionary,update:Dictionary,disclosed:Dictionary={})->Dictionary:
-    var prior_tiles:Dictionary=target.tiles.duplicate();var prior_objects:Dictionary=target.objects.duplicate();var result=World.fold(target,update)
-    if not result.ok:return result
-    disclosed.tiles={};disclosed.tiles_removed=[];disclosed.objects={};disclosed.objects_removed=[]
-    for key in target.tiles:
-        if not prior_tiles.has(key) or not is_same(prior_tiles[key],target.tiles[key]):disclosed.tiles[key]=target.tiles[key]
-    for key in prior_tiles:
-        if not target.tiles.has(key):disclosed.tiles_removed.append(key)
-    for key in target.objects:
-        if not prior_objects.has(key) or not is_same(prior_objects[key],target.objects[key]):disclosed.objects[key]=target.objects[key]
-    for key in prior_objects:
-        if not target.objects.has(key):disclosed.objects_removed.append(key)
-    disclosed.changes=disclosed.tiles.keys();return result
+    return World.fold(target,update,disclosed)
 static func stage_actors(target:Dictionary,bodies:Array)->Dictionary:
     var result=_retained_target(target)
     for record in bodies:

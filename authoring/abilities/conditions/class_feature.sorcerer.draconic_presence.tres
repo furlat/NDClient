@@ -38,7 +38,7 @@ script = ExtResource("4_n8m8j")
 id = "class_feature.sorcerer.draconic_presence"
 label = "Concentrating"
 icon = SubResource("Resource_n8m8j")
-disposition = "authored"
+disposition = "state_only"
 look = SubResource("Resource_1n62a")
 group = "body"
 priority = 30.0
@@ -720,4 +720,5 @@ unported = {
 "effects": []
 }
 }
-notes = "Sent by the pinned engine under this id; not a condition id on the modern branch."
+notes = "Concentration bookkeeping only: the actual aura and affected Charmed/Frightened members own their respective field/body presentation. This root is not an additional indicator. Source ownership decision only; all artwork remains unreviewed."
+play_package_lifecycle = false

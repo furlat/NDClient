@@ -243,8 +243,9 @@ async def run(args: argparse.Namespace) -> Path:
                     await asyncio.sleep(0.2)
             if blue_driver is not None and blue_driver.done():
                 await blue_driver
-            if await client.wait() != 0:
-                raise RuntimeError("Godot exited with an error; inspect " + str(output / "godot.log"))
+            native_exit = await client.wait()
+            if native_exit != 0:
+                raise RuntimeError(f"Godot process exited with code {native_exit}; inspect " + str(output / "godot.log"))
             # A parse error can exit Godot with status zero before the polling
             # loop gets its first turn, or be logged during the final frame.
             final_log = (output / "godot.log").read_text(encoding="utf-8", errors="replace")

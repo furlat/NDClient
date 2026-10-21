@@ -22,11 +22,23 @@ static func phase_fade_ms(phases:Array)->float:
 
 ## The package lifecycles this condition plays: each selection naming its id
 ## whose `when` matches the disclosed condition state (Reduce, not Enlarge).
-static func lifecycles(condition:Dictionary)->Array:
+static func lifecycles(condition:Dictionary,cache:Dictionary={})->Array:
     var state:Dictionary=condition.state if condition.get("state") is Dictionary else {}
-    return Effects.conditions(str(condition.get("behavior_id",""))).filter(func(selection):
+    return lifecycle_candidates(Authoring.Catalog.condition_key(condition),cache).filter(func(selection):
         var when:Dictionary=selection.condition.get("when",{})
         return when.keys().all(func(field):return state.get(field)==when[field]))
+
+## Ordinary package owners plus explicit typed source reuse. Candidate
+## enumeration stays independent of current state so inspection can show all
+## declared `when` branches; actual sampling applies that predicate above.
+static func lifecycle_candidates(condition_id:String,cache:Dictionary={})->Array:
+    var result:Array=Effects.conditions(condition_id).duplicate()
+    var recipe:Dictionary=Authoring.load_data("catalog/condition_recipes.json",cache).get(condition_id,{})
+    for key in recipe.get("persistent",{}).get("lifecycleSelections",[]):
+        if result.any(func(selection):return selection.key==key):continue
+        var selection:Dictionary=Effects.condition_selection(str(key))
+        if not selection.is_empty():result.append(selection)
+    return result
 
 ## The longest removal among these lifecycles, in ms.
 static func removal_ms(selections:Array)->float:
@@ -39,8 +51,8 @@ static func removal_ms(selections:Array)->float:
 ## lifecycle takes the marker layers (markerGroup), a lifecycle carrying the
 ## spell's body visual the others. Only a lifecycle selected by this owner's
 ## disclosed state replaces media; a declared but unmatched variant does not.
-static func replaced_media(condition:Dictionary,recipe:Dictionary)->Array:
-    var selections:Array=lifecycles(condition)
+static func replaced_media(condition:Dictionary,recipe:Dictionary,cache:Dictionary={})->Array:
+    var selections:Array=lifecycles(condition,cache)
     var markers:bool=selections.any(func(selection):return not selection.condition.get("marker",{}).is_empty())
     var body:bool=selections.any(func(selection):return selection.condition.get("body_channel_included",false))
     var result:Array=[]
@@ -152,11 +164,65 @@ static func authored_removal_ms(config:Dictionary)->float:
         result=maxf(result,float(cue.get("fade_out_seconds",0.0))*1000.0)
     return result
 
+## Distinct public temporary-HP grants share this sampler, not ConditionRows.
+## Only an explicitly authored source_id opts in; canonical pool/UUID after-values
+## own admission and retirement. No private donor, duration or damage is inferred.
+static func observe_grants(owners:Dictionary,actors:Dictionary,at_ms:float,cache:Dictionary,initial:bool=false,event_uuid:String="",application_fact:Dictionary={})->bool:
+    var recipes:Dictionary=Authoring.load_data("catalog/condition_recipes.json",cache)
+    var changed:bool=false
+    for actor_id in actors:
+        var actor:Dictionary=actors[actor_id]
+        var grant:Dictionary=actor.temporary_hp_grant if actor.get("temporary_hp_grant") is Dictionary else {}
+        var identity:String=str(grant.get("instance_uuid",""))
+        var source_id:String=str(grant.source_id) if grant.get("source_id")!=null else ""
+        var admitted:bool=actor.get("present",true) and not identity.is_empty() and not source_id.is_empty() and float(actor.temporary_hp)>0.0 \
+            and recipes.get(source_id,{}).get("ownerKind")=="temporary_hp_grant"
+        for prior_id in owners:
+            var prior:Dictionary=owners[prior_id]
+            if prior.actor_uuid!=str(actor_id) or not is_inf(prior.end_ms):continue
+            if admitted and prior_id==identity and prior.grant.source_id==source_id:
+                if prior.get("life_state","alive")!=actor.get("life_state","alive"):
+                    var updated:Dictionary=prior.duplicate(false);updated.life_state=actor.get("life_state","alive");owners[prior_id]=updated;changed=true
+                continue
+            var retired:Dictionary=prior.duplicate(false);retired.end_ms=at_ms;owners[prior_id]=retired;changed=true
+        if not admitted:continue
+        if owners.has(identity):
+            # A retained grant UUID identifies one original public membership.
+            # Never revive an ended/foreign grant or retarget its source.
+            continue
+        var witnessed:bool=not initial and application_fact.get("kind")=="temporary_hit_points" \
+            and application_fact.get("entity_uuid")==str(actor_id) and application_fact.get("grant")==grant \
+            and float(application_fact.get("resulting_temporary_hp",0))==float(actor.temporary_hp)
+        owners[identity]={"id":identity,"actor_uuid":str(actor_id),"grant":grant,"start_ms":at_ms,"end_ms":INF,
+            "life_state":actor.get("life_state","alive"),"initial":not witnessed,"source_event_uuid":event_uuid if witnessed else ""}
+        changed=true
+    return changed
+
+static func grant_samples(owners:Dictionary,at_ms:float,cache:Dictionary,activities:Dictionary={},invisible:Dictionary={},select_now:bool=true)->Array:
+    var result:Array=[]
+    for identity in owners.keys():
+        var owner:Dictionary=owners[identity]
+        var source_id:String=str(owner.grant.source_id)
+        var recipe:Dictionary=Authoring.load_data("catalog/condition_recipes.json",cache).get(source_id,{})
+        if recipe.get("ownerKind")!="temporary_hp_grant":continue
+        var selections:Array=lifecycle_candidates(source_id,cache).filter(func(selection):return selection.condition.get("when",{}).is_empty())
+        if not is_inf(owner.end_ms) and at_ms>=float(owner.end_ms)+removal_ms(selections):owners.erase(identity);continue
+        if at_ms<float(owner.start_ms):continue
+        var common:Dictionary={"id":"grant:"+str(identity),"native_grant":true,"grant_uuid":identity,
+            "grant_source_id":source_id,"temporary_hp_grant":owner.grant,"owner_behavior_id":source_id,
+            "actor_uuid":owner.actor_uuid,"start_ms":owner.start_ms,"absolute_start_ms":owner.start_ms,
+            "duration_ms":float(owner.end_ms)-float(owner.start_ms),"age_ms":at_ms-float(owner.start_ms),"initial":owner.initial,
+            "removal_age_ms":null if is_inf(owner.end_ms) else at_ms-float(owner.end_ms),"recipe":recipe,
+            "source_event_uuid":owner.source_event_uuid,"life_state":owner.life_state}
+        result.append_array(lifecycle_samples(common,selections,cache))
+    return select_lifecycles(result,at_ms,activities,invisible) if select_now else result
+
 ## Lifecycle occurrences of one owner. `common` carries the owner's clock
 ## (start, duration up to its removal, age, removal age, initial).
 static func lifecycle_samples(common:Dictionary,selections:Array,cache:Dictionary)->Array:
     var result:Array=[]
-    var spell:Dictionary=common.get("selected_spell",{}) if common.get("spatial_owner",false) else Spells.condition(str(common.condition.behavior_id),cache)
+    var behavior:String=str(common.owner_behavior_id) if common.has("owner_behavior_id") else str(common.get("condition",{}).get("behavior_id",""))
+    var spell:Dictionary=common.get("selected_spell",{}) if common.get("spatial_owner",false) else Spells.condition(behavior,cache)
     for selection in selections:
         var lifecycle:Dictionary=selection.condition
         var opt_ins:Array=common.get("recipe",{}).get("persistent",{}).get("lifecycleOptIns",[])
@@ -178,7 +244,12 @@ static func lifecycle_samples(common:Dictionary,selections:Array,cache:Dictionar
             phases=cache[source_key]
         var key:String=str(selection.key)
         var id:String=str(common.id)+":lifecycle:"+key
-        var source:String="assets/vfx/index.json#/selections/"+key+"/condition"
+        var package_source:String="assets/vfx/index.json#/selections/"+key+"/condition"
+        var source:String=package_source
+        var recipe:Dictionary=common.get("recipe",{})
+        var explicit_keys:Array=recipe.get("persistent",{}).get("lifecycleSelections",[])
+        var explicit:bool=key in explicit_keys
+        if explicit:source=str(recipe.get("_resource_source",""))+"::lifecycle_selections/"+str(explicit_keys.find(key))
         if phases.values().any(func(clip):return clip.is_empty()):
             result.append(common.merged({"id":id,"kind":"native_effect","native_spell":true,"persistent_owner":true,"status":"missing",
                 "reason":"effect_not_in_package","native_cue":{"role":"attached"},"native_clip":{},"source":source,"source_id":key,"trace_keys":[id]},true))
@@ -200,15 +271,22 @@ static func lifecycle_samples(common:Dictionary,selections:Array,cache:Dictionar
         # the spell's body visual and its light: Light's is the server's light.
         var optical:Dictionary={"energy_multiplier":float(selection.get("staging",{}).get("decorative_light_multiplier",0.0))}
         if spell.get("lifecycle",{}).get("optical_owner")=="authoritative_light":optical={"energy_multiplier":0.0,"owner":"authoritative_light"}
+        var marker:Dictionary=lifecycle.get("marker",{})
+        if explicit and not marker.is_empty():
+            marker=marker.duplicate()
+            var composition:Dictionary=recipe.get("composition",{})
+            if not str(composition.get("group","")).is_empty():marker.group=str(composition.group)
+            if composition.has("priority"):marker.priority=float(composition.priority)
         var row:Dictionary=common.duplicate()
         row.merge({"id":id,"kind":"native_effect","native_spell":true,"persistent_owner":true,"status":"available",
             "target_uuid":common.get("actor_uuid"),"cast_recipe":{"enabled":false},"from_position":[0,0],"to_position":common.get("position",[0,0]),
             "from_elevation_feet":common.get("elevation_feet",0),"to_elevation_feet":common.get("elevation_feet",0),"ground_target":common.get("spatial_owner",false),
             "native_cue":cue,"native_clip":phases.application,"lifecycle_phases":phases,"lifecycle_key":key,
             "native_body_owner":lifecycle.get("body_channel_included",false),
-            "lifecycle_marker":lifecycle.get("marker",{}),"lifecycle_visibility":lifecycle.get("visibility",{}),
+            "lifecycle_marker":marker,"lifecycle_visibility":lifecycle.get("visibility",{}),
             "spell_id":str(spell.get("id","")),"finish_profile":spell.get("palette",{}) if lifecycle.get("body_channel_included",false) else {},
             "optical":optical,"native_lights":[],"source":source,"source_id":key,"sample_hz":60.0,"trace_keys":[id]},true)
+        if explicit:row.lifecycle_source=package_source
         if not public_source.is_empty():
             row.native_readiness_gate=public_source.event_gate
             row.native_observation_revision=int(common.get("observation_revision",0))

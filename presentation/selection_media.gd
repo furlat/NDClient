@@ -18,7 +18,8 @@ static func create() -> Dictionary:
         "value":{},"revision":0,"closed":false,"jobs":0,"discarded":0,
         "object_rows":{},"object_contacts":{},"object_cells":{},"disclosed_objects":{},
         "owner_preview":{},"owner_result":{},"owner_rows":{},"owner_contacts":{},"owner_items":{},
-        "actor_sources":{},"object_sources":{},"source_revision":0,"owner_source_revision":-1}
+        "actor_sources":{},"object_sources":{},"source_revision":0,"owner_source_revision":-1,
+        "profile_active_job":{},"profile_last_job":{},"profile_last_discarded":{}}
 
 static func _outfit(actor: Dictionary, state:Dictionary={}) -> Array:
     return [actor.get("creature_content_ref"),actor.get("appearance"),actor.get("visual_loadout"),actor.get("presentation_layers"),actor.get("life_state"),Characters.item_looks(actor,state)]
@@ -77,13 +78,15 @@ static func _cancelled(control: Dictionary) -> bool:
     return value
 
 static func cancel(data: Dictionary) -> void:
+    if not data.profile_active_job.is_empty() and not data.profile_active_job.has("cancelled_usec"):
+        data.profile_active_job.cancelled_usec=Time.get_ticks_usec()
     if not data.control.is_empty():
         data.control.mutex.lock(); data.control.cancelled=true; data.control.mutex.unlock()
     data.pending={}; data.key=[]
     if not data.value.is_empty(): data.value={}; data.revision+=1
 
 static func request(data: Dictionary, key: Array, actor_uuid: String, behavior: String,
-        state: Dictionary, budget_bytes: int, source_files: Dictionary = {}, preview: Dictionary = {}, eligible: Array = [], hints: Dictionary = {}, profile: String = "", behaviors: Array = []) -> void:
+        state: Dictionary, budget_bytes: int, source_files: Dictionary = {}, preview: Dictionary = {}, eligible: Array = [], hints: Dictionary = {}, profile: String = "", behaviors: Array = [], record_profile:bool=false) -> void:
     if data.closed or key==data.key: return
     # A hover refinement replaces only unpublished work. Keep the accepted base
     # closure while the replacement metadata job prepares its exact candidates.
@@ -123,7 +126,8 @@ static func request(data: Dictionary, key: Array, actor_uuid: String, behavior: 
     data.pending={"key":data.key.duplicate(true),"actor_uuid":actor_uuid,"behavior":behavior,
         "state":{"actors":actors,"items":state.get("items",{}).duplicate(),"objects":objects,"tiles":{},"senses":senses},
         "budget_bytes":budget_bytes,"source_files":source_files.duplicate(),"recipients":recipients,"eligible":eligible.duplicate(),"exact_recipients":hints.exact,
-        "disclosed_objects":data.disclosed_objects.duplicate(),"profile":profile,"behaviors":behaviors.duplicate()}
+        "disclosed_objects":data.disclosed_objects.duplicate(),"profile":profile,"behaviors":behaviors.duplicate(),
+        "record_profile":record_profile,"requested_usec":Time.get_ticks_usec() if record_profile else 0}
     _start(data)
 
 static func _start(data: Dictionary) -> void:
@@ -131,6 +135,11 @@ static func _start(data: Dictionary) -> void:
     var pending: Dictionary=data.pending
     data.pending={}; data.result={};data.control={"mutex":Mutex.new(),"cancelled":false}
     data.jobs+=1
+    data.profile_active_job={}
+    if pending.get("record_profile",false):
+        data.profile_active_job={"job":data.jobs,"actor_uuid":pending.actor_uuid,"behavior":pending.behavior,
+            "behavior_count":pending.behaviors.size(),"request_kind":"body_choices" if pending.behavior.is_empty() else "selected_action",
+            "requested_usec":pending.requested_usec,"dispatched_usec":Time.get_ticks_usec(),"dispatched_frame":Engine.get_process_frames()}
     data.task=WorkerThreadPool.add_task(_work.bind(pending,data.result,data.control,data.cache),false,"Selected action media metadata")
 
 static func poll(data: Dictionary) -> bool:
@@ -138,20 +147,28 @@ static func poll(data: Dictionary) -> bool:
     if data.task>=0 and WorkerThreadPool.is_task_completed(data.task):
         WorkerThreadPool.wait_for_task_completion(data.task)
         var result: Dictionary=data.result
-        if result.get("complete",false) and result.key==data.key and not _cancelled(data.control):
+        var accepted:bool=result.get("complete",false) and result.key==data.key and not _cancelled(data.control)
+        if not data.profile_active_job.is_empty():
+            var completed:Dictionary=data.profile_active_job.duplicate()
+            completed.merge(result.get("profile_job",{}));completed.polled_usec=Time.get_ticks_usec()
+            completed.polled_frame=Engine.get_process_frames();completed.accepted=accepted
+            completed.cancelled=_cancelled(data.control);completed.worker_complete=result.get("complete",false)
+            data.profile_last_job=completed
+            if not accepted:data.profile_last_discarded=completed
+        if accepted:
             data.value=result.value;data.revision+=1
             data.actor_sources.merge(result.value.get("actor_sources",{}))
             data.object_sources.merge(result.value.get("object_sources",{}))
             data.source_revision+=1
         else: data.discarded+=1
-        data.task=-1;data.result={};data.control={}
+        data.task=-1;data.result={};data.control={};data.profile_active_job={}
         _start(data)
     return data.revision!=revision
 
 static func close(data: Dictionary) -> void:
     cancel(data);data.closed=true
     if data.task>=0: WorkerThreadPool.wait_for_task_completion(data.task)
-    data.task=-1;data.result={};data.cache.clear();data.control={}
+    data.task=-1;data.result={};data.cache.clear();data.control={};data.profile_active_job={}
     data.object_rows={};data.object_contacts={};data.object_cells={};data.owner_preview={};data.owner_result={}
     data.owner_rows={};data.owner_contacts={};data.owner_items={}
     data.disclosed_objects={};data.actor_sources={};data.object_sources={}
@@ -202,17 +219,20 @@ static func _break_banks(row: Dictionary, cache: Dictionary) -> Array:
                 banks[owner[field][state]]=true
     return banks.keys()
 
-static func plan(request: Dictionary, cache: Dictionary, control: Dictionary) -> Dictionary:
+static func plan(request: Dictionary, cache: Dictionary, control: Dictionary, trace:Dictionary={}) -> Dictionary:
     var result={"paths":{},"cpu_required":{},"gpu_only":{},"environment":{},"source_sizes":{},"source_files":{},
         "errors":[],"skipped":0,"bytes":0,"actors":[],"banks":[],"object_paths":{},"bank_paths":{},"onset_paths":{},"native_selection":{},"native_action_clips":[],"native_action_conditions":[],"actor_sources":{},"object_sources":{},"normal_sets":{}}
     var state: Dictionary=request.state
     var caster: Dictionary=state.actors.get(request.actor_uuid,{})
     if caster.is_empty() or _cancelled(control):return result
+    var phase_started:int=Time.get_ticks_usec() if not trace.is_empty() else 0
     var recipe: Dictionary=NativeSpells.recipe({"behavior_id":request.behavior},cache)
+    if not trace.is_empty():
+        trace.phases_ms.recipe=(Time.get_ticks_usec()-phase_started)/1000.0;phase_started=Time.get_ticks_usec()
     if _cancelled(control):return result
     if recipe.is_empty():
-        # A choice names resources, not a received fact. Resolve only its authored
-        # body clip; never infer conditions, recipients or gameplay outcomes.
+        # A choice names resources, not a received fact. Resolve its authored
+        # body/native candidates without inventing occurrence inputs or outcomes.
         var clips={}
         var behaviors: Array=request.get("behaviors",[])
         if behaviors.is_empty():behaviors=[request.behavior]
@@ -220,6 +240,9 @@ static func plan(request: Dictionary, cache: Dictionary, control: Dictionary) ->
         var native_conditions:Dictionary={}
         var action_bindings:Dictionary=Authoring.load_data("catalog/body_action_bindings.json",cache)
         for behavior in behaviors:
+            if _cancelled(control):return result
+            for clip in NativeSpells.effect_clips(NativeSpells.preparation_selection(str(behavior),cache)):
+                native_clips[Effects.key(clip)]=clip
             for clip in NativeActions.effect_clips(behavior,cache):native_clips[Effects.key(clip)]=clip
             for id in action_bindings.get(behavior,{}).get("applies_conditions",[]):native_conditions[id]=true
             var body: Dictionary=Authoring.action({"kind":"action","behavior_id":behavior},cache,caster).get("actor",{})
@@ -236,11 +259,15 @@ static func plan(request: Dictionary, cache: Dictionary, control: Dictionary) ->
                 if not pose.is_empty():clips[pose.clip]=true
         result.native_action_clips=native_clips.values()
         result.native_action_conditions=native_conditions.keys()
+        if not trace.is_empty():
+            trace.phases_ms.action_descriptors=(Time.get_ticks_usec()-phase_started)/1000.0;phase_started=Time.get_ticks_usec()
+        if _cancelled(control):return result
         if not clips.is_empty():
             _actor_paths(caster,clips.keys(),result,cache,state)
             result.actors.append({"uuid":request.actor_uuid,"clips":clips.keys()})
             result.onset_paths=result.paths.duplicate()
-        return _finish_plan(request,result,{},cache,control)
+        if not trace.is_empty():trace.phases_ms.body_paths=(Time.get_ticks_usec()-phase_started)/1000.0
+        return _finish_plan(request,result,{},cache,control,trace)
     # Admit only the selected passive feedback operand. Its actual release
     # remains exclusively driven by a received authoritative damage fact.
     if recipe.get("damage")!=null and Catalog.residue_asset(cache).is_empty():
@@ -313,9 +340,11 @@ static func plan(request: Dictionary, cache: Dictionary, control: Dictionary) ->
         if _cancelled(control):return result
         if recipe.get("damage")!=null and not request.get("exact_recipients",false) and id not in request.get("recipients",[]) and (request.get("eligible",[]).is_empty() or id in request.eligible):
             _responses(state.actors[id],result,cache,state)
-    return _finish_plan(request,result,bank_paths,cache,control)
+    if not trace.is_empty():trace.phases_ms.spell_candidates=(Time.get_ticks_usec()-phase_started)/1000.0
+    return _finish_plan(request,result,bank_paths,cache,control,trace)
 
-static func _finish_plan(request: Dictionary, result: Dictionary, bank_paths: Dictionary, cache: Dictionary, control: Dictionary) -> Dictionary:
+static func _finish_plan(request: Dictionary, result: Dictionary, bank_paths: Dictionary, cache: Dictionary, control: Dictionary, trace:Dictionary={}) -> Dictionary:
+    var phase_started:int=Time.get_ticks_usec() if not trace.is_empty() else 0
     for path in result.cpu_required:result.gpu_only.erase(path)
     var profile: String=request.get("profile","")
     result.normal_sets.make_read_only()
@@ -323,8 +352,13 @@ static func _finish_plan(request: Dictionary, result: Dictionary, bank_paths: Di
     result.onset_paths=Characters.CharacterGeometry.for_profile(result.onset_paths,result.normal_sets,profile,cache,"selection_onset")
     result.cpu_required=Characters.CharacterGeometry.for_profile(result.cpu_required,result.normal_sets,profile,cache,"selection_cpu")
     result.gpu_only=Characters.CharacterGeometry.for_profile(result.gpu_only,result.normal_sets,profile,cache,"selection_gpu")
+    if not trace.is_empty():
+        trace.phases_ms.profile_paths=(Time.get_ticks_usec()-phase_started)/1000.0;phase_started=Time.get_ticks_usec()
+        trace.candidate_paths=result.paths.size();trace.candidate_onset_paths=result.onset_paths.size()
     var estimates=EncounterMedia.estimates(result.paths,result.cpu_required,result.gpu_only,cache)
     result.source_headers=cache.get("__encounter_headers",{}).duplicate()
+    if not trace.is_empty():
+        trace.phases_ms.headers=(Time.get_ticks_usec()-phase_started)/1000.0;phase_started=Time.get_ticks_usec()
     var accepted={};var cpu={};var gpu={};var environment={}
     for path in result.paths:
         if _cancelled(control):return result
@@ -351,12 +385,22 @@ static func _finish_plan(request: Dictionary, result: Dictionary, bank_paths: Di
         for path in bank_paths[bank]:
             if accepted.has(path):retained_paths[path]=true
         result.bank_paths[bank]=retained_paths
+    if not trace.is_empty():
+        trace.phases_ms.budget_paths=(Time.get_ticks_usec()-phase_started)/1000.0;phase_started=Time.get_ticks_usec()
     result.source_files=Catalog.source_snapshot(cache)
+    if not trace.is_empty():trace.phases_ms.source_snapshot=(Time.get_ticks_usec()-phase_started)/1000.0
     return result
 
 static func _work(request: Dictionary, result: Dictionary, control: Dictionary, cache: Dictionary) -> void:
     var started=Time.get_ticks_usec()
+    var trace:Dictionary={"phases_ms":{},"worker_started_usec":started} if request.get("record_profile",false) else {}
     Catalog.adopt_snapshot(cache,request.source_files)
-    var value=plan(request,cache,control)
+    if not trace.is_empty():trace.phases_ms.adopt_snapshot=(Time.get_ticks_usec()-started)/1000.0
+    var value=plan(request,cache,control,trace)
+    if not trace.is_empty():
+        trace.worker_finished_usec=Time.get_ticks_usec();trace.worker_elapsed_ms=(trace.worker_finished_usec-started)/1000.0
+        trace.accepted_paths=value.paths.size();trace.onset_paths=value.onset_paths.size()
+        trace.source_headers=value.get("source_headers",{}).size();trace.source_files=value.get("source_files",{}).size()
+        result.profile_job=trace
     if _cancelled(control):return
     result.key=request.key;result.value=value;result.elapsed_ms=(Time.get_ticks_usec()-started)/1000.0;result.complete=true

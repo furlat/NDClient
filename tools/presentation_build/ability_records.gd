@@ -60,6 +60,17 @@ static func body_to_actor(record: Dictionary, path: String, body: BodyUse) -> vo
     F.emit(record, path + "/playbackSpeed", body, "playback_speed", "float", true)
     F.emit(record, path + "/hiddenSlots", body, "hidden_slots", "strings", true)
 
+## Typed body fields are editable source operands, including newly authored
+## entries with no imported overlay metadata. Preserve a raw value's existing
+## provenance whenever the emitter leaves that value in place.
+static func _body_sources(record:Dictionary,before:Dictionary,source:String,fields:Dictionary)->void:
+    if source.is_empty():return
+    for field in fields:
+        if F.has_path(before,field) or not F.has_path(record,field):continue
+        record._resource_source=source
+        if not record.has("_source_fields"):record._source_fields={}
+        record._source_fields[field]=source+"::body/"+str(fields[field])
+
 ## Marker order when two share a frame.
 const MARKER_ORDER := ["action_start", "prepare", "release", "contact", "effect", "commit", "recover"]
 
@@ -248,6 +259,14 @@ static func spell_recipe(e: Resource, sockets: Dictionary) -> Dictionary:
         F.emit_item(record, "cast/releaseFrame", e.body, "markers", "release")
         F.emit(record, "cast/enabled", e.body, "enabled", "bool")
         if Array(e.body.hidden_slots) == HIDDEN_SLOTS:cast.equipment = {"kind": "hidden"}
+        _body_sources(record,{"cast":e.body.unported},e.resource_path,{
+            "cast/actionClip":"clip","cast/bodyPlaybackSpeed":"playback_speed"})
+        if e.body.markers.has("release"):
+            _body_sources(record,{},e.resource_path,{"cast/releaseFrame":"markers/release"})
+        if not F.same(e.body.enabled,F.default_of(e.body,"enabled")):
+            _body_sources(record,{},e.resource_path,{"cast/enabled":"enabled"})
+        if Array(e.body.hidden_slots)==HIDDEN_SLOTS:
+            _body_sources(record,{},e.resource_path,{"cast/equipment":"hidden_slots"})
         var effects: Array = []
         for layer in e.hand_layers:
             match layer.place:
@@ -427,8 +446,10 @@ static func condition_from_recipe(e: Resource, recipe: Dictionary) -> void:
     var raw: Dictionary = recipe.duplicate(true)
     F.move(raw, "label", e, "label", "string", true)
     F.move(raw, "disposition", e, "disposition", "string", true)
+    F.move(raw, "ownerKind", e, "owner_kind", "string")
     F.move(raw, "reactionCastBinding", e, "reaction_cast", "string", true)
     F.move(raw, "surfaceOwner", e, "surface", "string")
+    F.move(raw, "persistent/lifecycleSelections", e, "lifecycle_selections", "strings")
     F.move(raw, "persistent/actorHistory/captureDeparture", e, "capture_departure", "bool")
     F.move(raw, "persistent/creationIdentity/source_behavior_id", e, "creation_source_id", "string")
     F.move(raw, "persistent/creationIdentity/item_id", e, "creation_item_id", "string")
@@ -501,8 +522,10 @@ static func condition_recipe(e: Resource) -> Dictionary:
     var record: Dictionary = e.unported.duplicate(true)
     F.emit(record, "label", e, "label", "string", true)
     F.emit(record, "disposition", e, "disposition", "string", true)
+    if e.owner_kind!="condition":F.emit(record, "ownerKind", e, "owner_kind", "string")
     F.emit(record, "reactionCastBinding", e, "reaction_cast", "string")
     F.emit(record, "surfaceOwner", e, "surface", "string")
+    F.emit(record, "persistent/lifecycleSelections", e, "lifecycle_selections", "strings")
     F.emit(record, "persistent/actorHistory/captureDeparture", e, "capture_departure", "bool")
     F.emit(record, "persistent/actorHistory/windowSeconds", e, "history_window_seconds", "float")
     F.emit(record, "persistent/creationIdentity/source_behavior_id", e, "creation_source_id", "string")
@@ -612,7 +635,12 @@ static func action_recipe(e: Resource) -> Dictionary:
         if not e.observed_fact.is_empty():record._source_fields.observedFact=e.resource_path+"::observed_fact"
     body_to_actor(record, "actor", e.body)
     markers_to(record, "anchors", e.body)
-    if e.body != null:F.emit(record, "rigId", e.body, "rig", "string")
+    if e.body != null:
+        F.emit(record, "rigId", e.body, "rig", "string")
+        _body_sources(record,e.unported,e.resource_path,{
+            "actor/enabled":"enabled","actor/clip":"clip","actor/playbackSpeed":"playback_speed",
+            "actor/hiddenSlots":"hidden_slots","anchors":"markers"})
+        if not e.body.rig.is_empty():_body_sources(record,{},e.resource_path,{"rigId":"rig"})
     feedback_to(record, "actionFeedback", e.feedback, ACTION_TEXT)
     if e.feedback != null:record.actionFeedback.enabled=e.feedback.enabled
     for outcome in e.reaction_feedback:
@@ -733,6 +761,8 @@ const CONTEXT_SECONDS := {
 static func context_from(e: Resource, id: String, document: Variant) -> void:
     if not document is Dictionary:e.unported = {"document": document};return
     var raw: Dictionary = document.duplicate(true)
+    F.move(raw,"inactiveLegacyFields",e,"inactive_legacy_fields","strings",true)
+    raw.erase("_resource_source") # Derived export provenance is not legacy authoring.
     if CONTEXT_BODY.has(id):
         var body := BodyUse.new();body.role = id
         for field in CONTEXT_BODY[id]:F.move(raw, field[0], body, field[1], field[2], true)
@@ -754,6 +784,9 @@ static func context_from(e: Resource, id: String, document: Variant) -> void:
 static func context_document(e: Resource, id: String) -> Variant:
     if e.unported.has("document") and e.unported.size() == 1 and not e.unported.document is Dictionary:return F.deep(e.unported.document)
     var record: Dictionary = e.unported.duplicate(true)
+    if not e.inactive_legacy_fields.is_empty():
+        record.inactiveLegacyFields=Array(e.inactive_legacy_fields)
+        if not e.resource_path.is_empty():record._resource_source=e.resource_path
     record.merge(e.release_sources.duplicate(true),true)
     if e.body != null:
         for field in CONTEXT_BODY.get(id, []):F.emit(record, field[0], e.body, field[1], field[2], true)

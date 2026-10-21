@@ -36,7 +36,7 @@ script = ExtResource("4_mdsja")
 id = "condition.spell.color_spray"
 label = "Color Spray"
 icon = SubResource("Resource_mdsja")
-disposition = "authored"
+disposition = "state_only"
 look = SubResource("Resource_0ad3a")
 group = "body"
 priority = 30.0
@@ -94,3 +94,5 @@ unported = {
 "effects": []
 }
 }
+play_package_lifecycle = false
+notes = "The wrapper delegates to its actual Blinded child member. No second persistent Color Spray body marker is prescribed. Source ownership decision only; all artwork remains unreviewed."

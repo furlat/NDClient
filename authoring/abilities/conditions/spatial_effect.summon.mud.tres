@@ -14,3 +14,8 @@ script = ExtResource("1_6t4fp")
 id = "spatial_effect.summon.mud"
 icon = SubResource("Resource_gc6rp")
 surface = "spatial_effect.summon.mud"
+disposition = "state_only"
+play_package_lifecycle = false
+status = "internal"
+unported = {"classification": {"runtimeRole": "internal_ledger", "presentationDomains": ["none"], "visualIntensity": "state_only"}}
+notes = "ElementalMud in frozen dnd/monsters/spell_summon_actions.py is an actual internal AreaCondition but inherits has_visible_presence=false; AreaCondition.get_spatial_observation therefore publishes no visible owner/cells for this field. The corresponding Ground Resource already declares the same internal/no-artwork decision. This definition adds no body, footprint or invented observed owner; actual movement and affected-recipient results retain their own presentation. All artwork remains unreviewed."

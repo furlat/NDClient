@@ -65,7 +65,7 @@ func _start()->void:
     if error!=OK:
         worker=null;build_error="Cannot start authoring audit: "+error_string(error);summary.text=build_error
 static func _gap(requirement:Dictionary)->String:
-    if requirement.has("gap_kind"):return requirement.gap_kind
+    if not str(requirement.get("gap_kind","")).is_empty():return str(requirement.gap_kind)
     if requirement.get("availability")=="missing":return "source"
     if requirement.get("implementation")=="missing":return "renderer"
     if requirement.get("status")=="explicit_none":return "explicit_none"

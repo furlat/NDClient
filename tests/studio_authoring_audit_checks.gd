@@ -23,11 +23,52 @@ func _initialize()->void:
             ids[row.id]=true
             check(not row.rendered and not row.source.is_empty() and not row.next_step.is_empty(),"Assignment is actionable without a false rendering witness: "+entry.id+" / "+str(row))
     check(report.totals.backend_definitions==347,"Current backend definition denominator is independent of replay cases")
-    check(by_id.has("spell.aegis_spark") and by_id["spell.aegis_spark"].requirements.any(func(row):return row.gap_kind=="authoring_review" and row.source=="res://authoring/abilities/spells/spell.aegis_spark.tres::status"),"An actual typed stand-in remains visible for review alongside its authored body")
+    var raw_pointer:String="raw/source.json:/original/field"
+    check(Authoring.recipe_source({"_source_fields":{"actual":raw_pointer}},"actual",cache)==raw_pointer,
+        "An exact raw field pointer stays unchanged rather than becoming a Resource property")
+    check(Authoring.recipe_source({"_legacy_source":"spells/source-control.json:"},"cast/recovery",cache)=="spells/source-control.json:/cast/recovery",
+        "Existing spell document-root source admits a real empty member path")
+    check(Authoring.recipe_source({"_legacy_source":"catalog/source-control.json:/member"},"actor/media",cache)=="catalog/source-control.json:/member/actor/media",
+        "Existing nested legacy document carrier retains its actual member")
+    check(Authoring.recipe_source({"_legacy_source":"res://source-control.tres::unported"},"original",cache)=="res://source-control.tres::unported/original",
+        "A Resource-property carrier is not split at its res URI")
+    check(Authoring.recipe_source({"_legacy_source":"opaque-source-control"},"original",cache)=="opaque-source-control/original" \
+        and Authoring.recipe_source({},"original",cache).is_empty(),"Opaque and missing source carriers are preserved without fabricated paths")
+    var source_only:Dictionary={"_resource_source":"res://source-control.tres","_source_fields":{"actor/clip":"res://source-control.tres::body/clip"}}
+    var source_before:PackedByteArray=var_to_bytes(source_only)
+    check(Authoring.recipe_source(source_only,"bodyMaterials/0",cache,"spells/source-control.json:")=="spells/source-control.json:/bodyMaterials/0" \
+        and var_to_bytes(source_only)==source_before,"A caller's actual document root supplies unmapped raw provenance without mutating the recipe")
+    var catalog_control:Dictionary={"known":{"id":"known","kind":"action","label":"Actual backend label"}}
+    Audit._declared_owners(catalog_control,{"action":{"known":{"source_path":"unchanged"},"typed-only":{"source_path":"exact-resource"}},
+        "spell":{"typed-spell":{"source_path":"exact-spell-resource"}}})
+    check(catalog_control.size()==3 and catalog_control.known.label=="Actual backend label" \
+        and catalog_control["typed-only"].kind=="action" and catalog_control["typed-spell"].kind=="spell",
+        "Existing typed-root declarations join the inventory without replacing actual backend definitions")
+    check(by_id.has("spell.aegis_spark") and by_id["spell.aegis_spark"].requirements.any(func(row):return row.gap_kind=="authoring_review" and row.source==Audit.Library.COVERAGE+"#/coverage/spell/spell.aegis_spark" and row.source_assignment=="res://authoring/abilities/spells/spell.aegis_spark.tres"),"An actual typed stand-in remains visible for review alongside its authored body")
     var absent:Dictionary=cache.duplicate();absent["spells/spell.aegis_spark.json"]={}
     var missing:Dictionary=Audit.build(absent).entries.filter(func(entry):return entry.id=="spell.aegis_spark")[0]
     check(missing.requirements.any(func(row):return row.label=="No spell presentation assignment" and row.gap_kind=="authoring_review" and not row.rendered),"A missing spell draft remains visible although it references no media")
-    check(by_id.has("action.environment.storage_chest.loot") and by_id["action.environment.storage_chest.loot"].requirements[0].gap_kind=="authoring_review","New backend action without a selected recipe remains in the authoring worklist")
+    var loot:Dictionary=Authoring.load_data("catalog/body_action_recipes.json",cache).get("action.environment.storage_chest.loot",{})
+    check(loot.get("disposition")=="state_only" and not by_id["action.environment.storage_chest.loot"].requirements.any(func(row):return row.label=="No action presentation assignment"),"Loot explicitly delegates to its actual inventory/object changes without a fabricated body")
+    var missing_action_cache:Dictionary=cache.duplicate()
+    var action_recipes:Dictionary=Authoring.load_data("catalog/body_action_recipes.json",cache).duplicate()
+    action_recipes.erase("action.environment.storage_chest.loot")
+    missing_action_cache["catalog/body_action_recipes.json"]=action_recipes
+    var missing_action:Dictionary=Audit.build(missing_action_cache).entries.filter(func(entry):return entry.id=="action.environment.storage_chest.loot")[0]
+    check(missing_action.requirements.any(func(row):return row.label=="No action presentation assignment" and not row.rendered),"Genuinely absent action decisions remain visible independently of the current explicit delegation")
+    check(missing_action.source=="res://authoring/abilities/actions/action.environment.storage_chest.loot.tres" \
+        and missing_action.requirements.any(func(row):return row.label=="No action presentation assignment" \
+        and row.source==missing_action.source and row.source_assignment==missing_action.source \
+        and row.document_source=="catalog/body_action_recipes.json:/action.environment.storage_chest.loot" \
+        and row.gap_kind=="authoring_review"),"An omitted document exposes its exact selected resource and expected runtime pointer without inventing active art")
+    var missing_intrinsic_cache:Dictionary=cache.duplicate()
+    var intrinsic_recipes:Dictionary=Authoring.load_data("catalog/body_action_recipes.json",cache).duplicate()
+    var intrinsic_id:String="action.earth_elemental.soil_clogged_slam"
+    intrinsic_recipes.erase(intrinsic_id);missing_intrinsic_cache["catalog/body_action_recipes.json"]=intrinsic_recipes
+    var absent_intrinsic:Array=Audit.build(missing_intrinsic_cache).entries.filter(func(entry):return entry.id==intrinsic_id)
+    check(absent_intrinsic.size()==1 and absent_intrinsic[0].requirements.any(func(row):return row.label=="No action presentation assignment" \
+        and row.source=="res://authoring/abilities/actions/"+intrinsic_id+".tres" \
+        and row.document_source=="catalog/body_action_recipes.json:/"+intrinsic_id),"A real declared intrinsic cannot vanish from inspection when its compiled body row is omitted")
     check(by_id["action.move"].requirements.any(func(row):return row.gap_kind=="unexercised") and by_id["action.move"].source=="catalog/movement_context.json:/walkClip","Existing shared movement context is not reported as an absent action recipe")
     check(not by_id.has("condition.hidden"),"Existing condition lifecycle inventory retains ownership, avoiding duplicate recipe reports")
     var coat:Dictionary=Authoring.load_data("catalog/condition_recipes.json",cache).get("condition.consumable.weapon_coat.basic_poison",{})
@@ -37,7 +78,8 @@ func _initialize()->void:
     var missile:Dictionary=by_id["spell.magic_missile"]
     check(missile.requirements.any(func(row):return row.source=="spells/spell.magic_missile.json:/projectile/impact/assetId" and row.gap_kind=="unexercised"),"Authored impact selection is separately visible from native/source/renderer qualification")
     check(missile.requirements.any(func(row):return row.source=="spells/spell.magic_missile.json:/projectile/prepare" and row.gap_kind=="explicit_none"),"Explicitly disabled prepare phase is not an invented missing effect")
-    check(by_id["spell.fog_cloud"].requirements.any(func(row):return row.source=="spells/spell.fog_cloud.json:/cast/actionClip" and row.gap_kind=="unexercised"),"Active Fog Cloud casting is visible even with recovery explicitly disabled")
+    check(by_id["spell.fog_cloud"].requirements.any(func(row):return row.source=="res://authoring/abilities/spells/spell.fog_cloud.tres::body/clip" \
+        and row.legacy_source=="spells/spell.fog_cloud.json:/cast/actionClip" and row.gap_kind=="unexercised"),"Active Fog Cloud casting exposes its editable typed body even with recovery explicitly disabled")
     var fire:Dictionary=by_id["spell.fire_bolt"]
     var native_fire:Array=fire.requirements.filter(func(row):return row.has("authored_use"))
     check(not native_fire.is_empty(),"Native spell EffectUses remain discoverable independently of legacy projectile slots")
@@ -100,7 +142,8 @@ func _initialize()->void:
     var shoves=Authoring.load_data("catalog/shove_recipes.json",cache)
     for id in shoves:
         var selected=Authoring.action({"kind":"shove","behavior_id":id},cache)
-        check(Authoring.recipe_source(selected,"actor/clip",cache)=="catalog/shove_recipes.json:/"+id+"/actor/clip","Shove source points to its actual catalog: "+id)
+        check(Authoring.recipe_source(selected,"actor/clip",cache)=="res://authoring/abilities/actions/"+id+".tres::body/clip" \
+            and selected._legacy_source=="catalog/shove_recipes.json:/"+id,"Shove body points to its editable typed field while retaining the exact catalog carrier: "+id)
     var reaction:Dictionary=by_id["context:interruptions"]
     check(reaction.requirements.any(func(row):return row.source=="catalog/interruptions.json:/reactions/reaction.spell.counterspell/successByCamera/0" and row.gap_kind=="unexercised"),"Camera-specific source assignments are not lost because their keys lack assetId")
     var original=Authoring.load_data("spells/spell.magic_missile.json",cache)

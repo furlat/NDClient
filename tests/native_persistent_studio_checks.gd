@@ -8,6 +8,7 @@ const Channels=preload("res://presentation/native_spell_channels.gd")
 const Journal=preload("res://sdk/journal.gd")
 const Occurrences=preload("res://presentation/occurrences.gd")
 const Delivery=preload("res://presentation/spell_delivery.gd")
+const Compact=preload("res://studio/timeline_compact.gd")
 const CASES="res://tests/fixtures/schema16/native-persistent-studio/cases.json"
 const FAMILY_OWNERS={
     "bane":["condition.spell.bane"],
@@ -162,9 +163,10 @@ func shield_requirements(index:Dictionary,entry:Dictionary)->void:
 func run()->void:
     held_light_keys()
     cast_ownership_controls()
-    var source:String=CASES
+    var source:String=CASES;var grant_case:String=""
     for argument in OS.get_cmdline_user_args():
         if argument.begins_with("--cases="):source=argument.trim_prefix("--cases=")
+        elif argument.begins_with("--grant-case="):grant_case=argument.trim_prefix("--grant-case=")
     # This durable corpus contains the original current-schema two-seat
     # lifecycles. Cast-only or unrelated families cannot satisfy its contract.
     var inventory:Dictionary={"cases":[]}
@@ -187,9 +189,102 @@ func run()->void:
     var area_before:int=failures.size()
     area_trace(inventory)
     if failures.size()>area_before:unqualified.append("ice_knife_trace")
-    var report={"checks":checks,"failures":failures,"observations":observations,"required_families":wanted,"unqualified_families":unqualified,"inventory":source,"scope":"All ten original spell-family lifecycle contracts remain required. Actual independent current-schema SDK recordings, exact UUID clocks/retirement, canonical restores and source/Studio inspection only; no GPU, native framebuffer or artistic proof. Missing lawful same-family originals fail rather than being replaced with cast-only or unrelated families."}
+    if not grant_case.is_empty():grant_inspection(grant_case)
+    var report={"grant_case":grant_case,"checks":checks,"failures":failures,"observations":observations,"required_families":wanted,"unqualified_families":unqualified,"inventory":source,"scope":"All ten original spell-family lifecycle contracts remain required. Actual independent current-schema SDK recordings, exact UUID clocks/retirement, canonical restores and source/Studio inspection only; no GPU, native framebuffer or artistic proof. Missing lawful same-family originals fail rather than being replaced with cast-only or unrelated families."}
     FileAccess.open("res://.runtime/native-persistent-studio-checks.json",FileAccess.WRITE).store_string(JSON.stringify(report,"  "))
     print("NATIVE_PERSISTENT_STUDIO_CHECKS ",JSON.stringify(report));quit(0 if failures.is_empty() else 1)
+
+## Optional actual-original extension of this existing inspection gate.
+## It does not replace any of the ten required family originals above.
+func grant_inspection(directory:String)->void:
+    var scenario:Variant=JSON.parse_string(FileAccess.get_file_as_string(directory.path_join("scenario.json")))
+    var receipt:Variant=JSON.parse_string(FileAccess.get_file_as_string(directory.path_join("recording.json")))
+    check(scenario is Dictionary and receipt is Dictionary,"Grant study retains its actual scenario and original recording receipt")
+    if not scenario is Dictionary or not receipt is Dictionary:return
+    check(receipt.get("ok")==true and receipt.get("perspectives",[])==["amber","blue"],"Grant study is a successful unchanged two-seat original, not the preserved failed prefix")
+    var required:Array=scenario.get("required_grant_sources",[])
+    check(not required.is_empty(),"Grant study explicitly declares its real source lifecycle obligations")
+    if receipt.get("ok")!=true:return
+    for seat in receipt.get("perspectives",[]):
+        var directory_seat:String=directory.path_join(str(seat)).path_join("journal")
+        var index:Dictionary=Recording.read(directory_seat)
+        var label:String=str(scenario.id)+"/"+str(seat)
+        check(index.ok,label+": unchanged actual grant journal indexes")
+        if not index.ok:continue
+        var frozen:PackedByteArray=var_to_bytes([index.initialization,index.groups,index.rows])
+        var journal=Journal.new();var independently:Dictionary=journal.open(directory_seat,true)
+        check(independently.ok,label+": same original folds independently")
+        if independently.ok:
+            check(Recording.restore(index,index.presentation_end_ms+1000.0).state==journal.state,label+": grant inspection preserves the independent canonical final state")
+        var originals:Dictionary={}
+        for file in DirAccess.get_files_at(directory_seat):
+            if file.get_basename().length()!=16 or not file.get_basename().is_valid_int():continue
+            # Use the original journal's already selected recorded contract.
+            # Generic JSON parsing turns integer fact fields into floats and
+            # cannot be compared as the SDK's exact Dictionary after-value.
+            var decoded:Dictionary=journal.decode_record(int(file.get_basename()),FileAccess.get_file_as_bytes(directory_seat.path_join(file)))
+            check(decoded.ok,label+": original grant packet retains its exact recorded scalar types")
+            if not decoded.ok:continue
+            var packet:Dictionary=decoded.value
+            for lineage in packet.get("lineages",[]):
+                for node in lineage.events:
+                    var fact:Dictionary=node.fact if node.get("fact") is Dictionary else {}
+                    if node.get("phase")!="completion" or fact.get("kind")!="temporary_hit_points" or not fact.get("grant") is Dictionary:continue
+                    originals[str(int(node.occurrence))]=fact
+        for requirement in required:
+            var selected:Array=originals.keys().filter(func(id):return originals[id].grant.get("source_id")==requirement.source_id)
+            check(selected.size()==1,label+": real completed source grant is unique in the unchanged original")
+            if selected.size()!=1:continue
+            var event_uuid:String=selected[0];var fact:Dictionary=originals[event_uuid]
+            var uuid:String=str(fact.grant.instance_uuid);var actor_id:String=str(fact.entity_uuid)
+            var onset:float=INF;var retired:float=INF;var retirement_event:String="";var seen:bool=false
+            for item in index.groups:
+                for commit in item.group.commits:
+                    if commit.get("grant_fact",{})==fact:
+                        check(not seen and str(commit.get("event_uuid",""))==event_uuid,label+": actual completed grant commit keeps its original occurrence")
+                        seen=true;onset=float(item.start_ms)+float(commit.at_ms)
+                    if not seen or not is_inf(retired):continue
+                    var after:Dictionary=commit.delta.get("actors",{}).get(actor_id,{})
+                    if after.is_empty():continue
+                    if not after.get("present",true) or after.temporary_hp_grant!=fact.grant or int(after.temporary_hp)<=0:
+                        retired=float(item.start_ms)+float(commit.at_ms);retirement_event=str(commit.get("event_uuid",""))
+            check(seen and not is_inf(onset),label+": Studio owner onset has an actual compiled grant cut")
+            if requirement.get("retired",false):check(not is_inf(retired),label+": actual later canonical replacement/null/zero/departure retires the grant")
+            var parents:Array=index.rows.filter(func(row):return row.kind=="temporary_hp_grant" and row.get("grant_uuid")==uuid)
+            check(parents.size()==1,label+": one distinct grant metadata owner exists")
+            if parents.size()!=1:continue
+            var parent:Dictionary=parents[0]
+            check(parent.grant_source_id==requirement.source_id and parent.recipient_uuid==actor_id and parent.owner.grant==fact.grant and not parent.owner.has("condition"),label+": grant UUID/source/recipient remain distinct from ConditionRows")
+            check(parent.admission_kind=="onset" and parent.source_event_uuid==event_uuid and parent.start_ms==onset and parent.owner.start_ms==onset,label+": actual grant application uses its original completed cut and clock")
+            check(parent.membership_end_ms==retired and parent.removal_event_uuid==retirement_event,label+": metadata retirement comes from the actual later canonical cut")
+            var rows:Array=index.rows.filter(func(row):return row.kind=="native_effect" and row.get("component",{}).get("native_grant",false) and row.get("grant_uuid")==uuid)
+            var phases:Dictionary={};var by_id:Dictionary={};var visible:Dictionary={}
+            for row in index.rows:by_id[row.id]=row;visible[row.id]=row
+            var projection:Dictionary=Compact.project(index.rows,visible,by_id,["native_effect"],{})
+            for row in rows:
+                var component:Dictionary=row.component;var phase:String=str(row.lifecycle_phase);phases[phase]=true
+                check(row.parent==parent.id and row.end_ms>row.start_ms and component.grant_uuid==uuid and component.grant_source_id==requirement.source_id and component.actor_uuid==actor_id,label+": native inspection span keeps the original owner and recipient")
+                check(row.source_start_ms==onset and component.absolute_start_ms==onset and component.duration_ms==retired-onset,label+": phase splitting never restarts the grant clock")
+                check(not component.has("condition_uuid") and not component.has("condition") and row.coverage.rendered=="not_witnessed",label+": source inspection neither fabricates a condition nor promotes rendered evidence")
+                check(row.effect_clip==component.lifecycle_phases[phase].id and Native.lifecycle_state(component,(row.start_ms-onset)/1000.0).phase==phase,label+": phase and clip use the original selected lifecycle")
+                check(component.removal_age_ms==null if phase!="removal" else component.removal_age_ms==row.start_ms-retired,label+": retirement age is absent before the actual end")
+                var at:float=(float(row.start_ms)+float(row.end_ms))*.5
+                var restored=Recording.restore(index,at)
+                var samples:Array=restored.component_samples(index.cache)
+                var matched:Array=samples.filter(func(sample):return sample.get("native_grant",false) and sample.id==row.trace_track_id and sample.grant_uuid==uuid)
+                check(matched.size()==1 and matched[0].grant_source_id==requirement.source_id and Native.lifecycle_state(matched[0],float(matched[0].age_ms)/1000.0).phase==phase,label+": seek restores the same real grant occurrence and lifecycle phase")
+                if restored.temporary_hp_owners.has(uuid):check(restored.temporary_hp_owners[uuid].start_ms==onset,label+": seek retains the original owner clock")
+                else:check(false,label+": seek retains this active grant lifecycle owner")
+                var anchor:Dictionary=Recording.navigation_anchor(index,at,row)
+                check(anchor.grant_uuid==uuid and anchor.condition_uuid.is_empty() and is_equal_approx(Recording.anchor_time(index,anchor),at),label+": grant navigation roundtrips without a condition alias")
+                check(projection.raw_to_display.has(row.id) and projection.owner_of[row.id]==Compact.action_id(parent,by_id),label+": compact grouping retains the original phase and real ancestry")
+            for phase in requirement.get("phases",[]):check(phases.has(phase),label+": actual original exposes its required "+str(phase)+" inspection span")
+            if requirement.get("retired",false):
+                var final=Recording.restore(index,index.presentation_end_ms+1000.0)
+                var remaining:Array=final.component_samples(index.cache)
+                check(not final.temporary_hp_owners.has(uuid) and not remaining.any(func(sample):return sample.get("grant_uuid")==uuid),label+": original source return ends this owner without a retained native sample")
+            observations.append({"source_id":requirement.source_id,"perspective":seat,"journal":directory_seat,"grant_uuid":uuid,"recipient_uuid":actor_id,"source_event_uuid":event_uuid,"onset_ms":onset,"retirement_ms":retired,"phases":phases.keys(),"scope":"original canonical cuts and Studio inspection only"})
+        check(var_to_bytes([index.initialization,index.groups,index.rows])==frozen,label+": grant inspection and navigation leave the actual immutable index unchanged")
 
 func area_trace(inventory:Dictionary)->void:
     var matches:Array=inventory.cases.filter(func(case):return case.id=="native-spell-ice_knife")

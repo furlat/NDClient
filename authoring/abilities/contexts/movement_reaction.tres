@@ -24,6 +24,8 @@ body = SubResource("Resource_8saym")
 texts = Dictionary[String, ExtResource("3_f7bky")]({
 "reaction": SubResource("Resource_q7bvl")
 })
+inactive_legacy_fields = PackedStringArray("movementLeadInMs")
+notes = "The enabled Reaction badge follows an actual scheduled Attack child of a Step on the existing attack start and actual attacker. No extra body, reaction fact or hold is introduced. The imported 140 ms movementLeadInMs is inactive reference metadata; actual child attack completion already precedes motion."
 unported = {
 "media": [],
 "movementLeadInMs": 140.0,

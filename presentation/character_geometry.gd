@@ -54,6 +54,10 @@ static func profile_normals(paths: Dictionary, normal_sets: Dictionary, profile:
 static func _error(message: String) -> Dictionary:
     return {"ok":false,"error":{"kind":"presentation","message":message}}
 
+static func effective_profile(source:Dictionary,requested:String)->String:
+    var declared:String=str(source.get("normal_profile",""))
+    return requested if declared.is_empty() else declared
+
 static func normal_paths(path:String,slot:String,cache:Dictionary)->Dictionary:
     return {"ok":true,"value":BodySources.descriptor(path,slot,cache).get("normal_paths",{})}
 
@@ -66,6 +70,7 @@ static func prepare_binding(path:String,slot:String,cache:Dictionary,depth:bool,
     # this worker result; actual textures are borrowed by the scene owner later.
     var value:Dictionary={"key":[path,depth,normals,scale,scale_x,profile],"parameters":{},"textures":{},"paths":{},"bounds":PackedVector3Array()}
     var source:Dictionary=record(path,slot,cache)
+    profile=effective_profile(source,profile)
     value.status="unsupported_source" if source.is_empty() else source.status
     if source.is_empty():
         value.parameters.has_component_geometry=false
@@ -129,6 +134,7 @@ static func bind(entry: Dictionary, path: String, cache: Dictionary, loader: Cal
     var key = [path,depth,normals,entry.scale,scale_x,profile]
     if entry.get("geometry_binding",[]) == key: return
     var source = record(path,entry.actor_layer.slot,cache)
+    profile=effective_profile(source,profile)
     if source.is_empty():
         clear(entry)
         entry.geometry_binding=key

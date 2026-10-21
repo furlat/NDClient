@@ -101,6 +101,17 @@ static func status(request:Dictionary={})->Dictionary:
 
 static func _drawn(active:Dictionary)->void:active.drawn=true
 
+## Recording-only scalar ownership at the existing frame-context boundary.
+static func profile_state()->Dictionary:
+    var active:Dictionary=_state.get("active",{})
+    var viewport:Variant=_state.get("viewport")
+    var viewport_valid:bool=is_instance_valid(viewport)
+    return {"active_key":str(active.get("key","")),"settle_frame":int(active.get("settle",-1)),
+        "drawn":bool(active.get("drawn",false)),"ages_remaining":active.get("ages",[]).size(),
+        "private_viewport_valid":viewport_valid,"private_viewport_update_mode":int(viewport.render_target_update_mode) if viewport_valid else -1,
+        "admission_loading_path":Effects.Admission.loading_path,"admission_material_job_active":not Effects.Admission._material_job.is_empty(),
+        "admission_settling":Effects.Admission.settling}
+
 static func _materials(material:Material,result:Dictionary)->void:
     if material==null or result.has(material):return
     result[material]=true

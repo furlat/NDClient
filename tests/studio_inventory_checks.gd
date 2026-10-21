@@ -51,6 +51,13 @@ func run()->void:
     check(not panel.details.visible and not panel.detail_toggle.button_pressed,"No full JSON dump occupies the default worklist")
     var recipes:Dictionary=Catalog.read_file("catalog/condition_recipes.json",{})
     check(panel.report.condition_recipes==recipes.size(),"Every current condition recipe is audited independently of recordings")
+    var movement_owners:Array=["condition.dashing","condition.spell.expeditious_retreat","condition.spell.haste","condition.spell.jump"]
+    var movement_methods:Array=[]
+    for entry in panel.report.entries:
+        if entry.id in movement_owners:movement_methods.append_array(entry.requirements.filter(func(row):return row.get("phase")=="movement"))
+    check(movement_methods.size()==16 and movement_methods.all(func(row):return row.gap_kind=="unexercised" and row.status=="unexercised" and row.implementation=="implemented" and not row.rendered and row.evidence.is_empty()),"Every actual conditional movement assignment reaches the unexercised bucket; an empty optional override is not a category or draw witness")
+    check(Inventory._gap({"gap_kind":"","availability":"missing","implementation":"implemented"})=="source" and Inventory._gap({"gap_kind":"","availability":"available","implementation":"missing"})=="renderer","Empty optional category never hides genuine missing source or renderer facts")
+    check(Inventory._gap({"gap_kind":"authoring_review","implementation":"implemented"})=="authoring_review" and Inventory._gap({"gap_kind":"","status":"explicit_none"})=="explicit_none","Explicit ownership decisions and disabled methods retain their own categories")
     var migration:Dictionary=JSON.parse_string(FileAccess.get_file_as_string("res://generated/native_migration_inventory.json"))
     check(panel.report.referenced_media_identities==migration.assets.size(),"Distinct media identities retain the migration report's exact count")
     check(panel.report.authored_references==migration.totals.authored_references and panel.report.registration_references==migration.totals.registration_references,"Authored and registration references retain separate counts")
@@ -60,12 +67,14 @@ func run()->void:
     for entry in panel.filtered:
         if entry.requirements.any(func(row):return row.get("reason")=="persistent_visual_assignment_missing"):missing.append(entry.id)
     missing.sort()
-    var expected_missing:Array=["condition.spell.blindness_deafness","condition.spell.color_spray","class_feature.sorcerer.draconic_presence",
+    check(missing.is_empty() and assignments.is_empty(),"Actual typed native/delegated decisions are not left in the absent-indicator bucket")
+    var resolved_ids:Array=["condition.spell.blindness_deafness","condition.spell.color_spray","class_feature.sorcerer.draconic_presence",
         "condition.concentrating","condition.spell.divine_word","condition.spell.ice_storm.terrain","trait.skeleton_archer_marked",
         "condition.spell.prismatic_spray.restrained","condition.spell.silence.deafened","condition.underwater","condition.environment.wet"]
-    expected_missing.sort()
-    check(missing==expected_missing and assignments.size()==expected_missing.size(),"Every remaining exact persistent assignment gap is visible; implemented assignments cannot remain listed")
-    check(assignments.all(func(row):return row.source.ends_with("/persistent") and row.availability=="not_assigned" and row.implementation=="not_applicable"),"Persistent gaps retain exact JSON owner, not a claimed missing file or renderer")
+    var decisions:Array=panel.report.entries.filter(func(entry):return entry.group=="Conditions" and entry.id in resolved_ids)
+    check(decisions.size()==resolved_ids.size() and decisions.all(func(entry):return not entry.requirements.any(func(row):return row.get("reason")=="persistent_visual_assignment_missing")),"All eleven existing condition decisions remain in the full browser inventory")
+    var marked:Array=decisions.filter(func(entry):return entry.id=="trait.skeleton_archer_marked")
+    check(marked.size()==1 and marked[0].requirements.any(func(row):return row.get("source_id")=="condition_guiding_mark_native" and row.source=="res://authoring/abilities/conditions/trait.skeleton_archer_marked.tres::lifecycle_selections/0" and not row.rendered and row.evidence.is_empty()),"Browser exposes the real explicit marker method and its owning Resource without rendered evidence")
     check(rows(panel).any(func(row):return row.gap_kind=="authoring_review" and row.label.begins_with("Needs authoring decision")),"Unresolved ownership is explicitly a decision, not an invented missing effect")
     await capture(panel,"missing-authoring")
     var selected=panel.tree.get_root().get_first_child().get_first_child().get_first_child()
@@ -104,9 +113,12 @@ func run()->void:
     for entry in panel.filtered:pairs.append(entry.group+"/"+entry.label)
     var expected=pairs.duplicate();expected.sort_custom(func(a,b):return a.nocasecmp_to(b)<0)
     check(pairs==expected,"Displayed/exported owners are sorted by capability and human label")
-    if not await choose(panel,1,"persistent"):await finish(panel);return
-    check(rows(panel).any(func(row):return row.get("reason")=="persistent_visual_assignment_missing"),"Exact authored pointer search finds persistent omissions")
+    var selected_pointer:String="res://authoring/abilities/conditions/trait.skeleton_archer_marked.tres::lifecycle_selections/0"
+    if not await choose(panel,0,selected_pointer):await finish(panel);return
+    check(not rows(panel).is_empty() and rows(panel).all(func(row):return row.source==selected_pointer) and rows(panel).any(func(row):return row.get("source_id")=="condition_guiding_mark_native" and not row.rendered),"Exact authored pointer search reaches the actual selected marker method without an obsolete missing-source premise")
     await capture(panel,"persistent-assignments")
+    if not await choose(panel,0,selected_pointer+"-not-present"):await finish(panel);return
+    check(rows(panel).is_empty() and panel.filtered.is_empty(),"Absent exact pointer search does not manufacture a matching owner or source")
     if native:
         check(panel.tree.get_rect().size.x<=panel.size.x and panel.tree.get_rect().size.y<=panel.size.y,"Compact audit tree fits the native panel")
     var saved=FileAccess.get_file_as_string("res://generated/studio_authoring_worklist.json")

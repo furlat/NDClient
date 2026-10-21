@@ -154,6 +154,39 @@ func _initialize() -> void:
         var report: Dictionary = Common.report()
         Builder._validate_rigs({"actions": {"action.hide": candidate}}, report)
         check(not report.errors.is_empty(), "The build rejects an invalid source action: "+invalid)
+    # Actual typed body source controls, independent of the current build.
+    # These are publication/inspection operands, not recorded render evidence.
+    var source:Resource=load("res://authoring/abilities/actions/action.earth_elemental.soil_clogged_slam.tres")
+    var body_source:Dictionary=Builder.R.action_recipe(source)
+    check(body_source.actor.enabled and body_source.actor.clip==source.body.clip and body_source.rigId==source.body.rig,
+        "The real intrinsic body emits its exact selected clip and rig")
+    check(body_source._resource_source==source.resource_path and body_source._source_fields["actor/clip"]==source.resource_path+"::body/clip" \
+        and body_source._source_fields.rigId==source.resource_path+"::body/rig",
+        "New typed body fields preserve their editable source without imported overlay metadata")
+    var markerless:Dictionary=Catalog.source_snapshot(action_snapshot)
+    markerless.erase("native_references_validated")
+    markerless["catalog/body_action_recipes.json"]={source.id:Builder.provenance(body_source,source.resource_path)}
+    check(source.body.markers.is_empty() and not body_source.has("anchors") and Catalog.validate_native(markerless).is_empty(),
+        "The actual selected markerless body validates without inventing anchors or changing its source duration")
+    var before:Dictionary=source.unported.duplicate(true)
+    var imported:Resource=source.duplicate(true)
+    imported.unported={"actor":{"clip":"PreservedRawClip"},"_source_fields":{"actor/clip":"exact-original-source:/actor/clip"}}
+    var retained:Dictionary=Builder.R.action_recipe(imported)
+    retained=Builder.provenance(retained,source.resource_path)
+    check(retained.actor.clip=="PreservedRawClip" and retained._source_fields["actor/clip"]=="exact-original-source:/actor/clip" \
+        and source.unported==before,"A retained raw field and source are not relabeled as a typed override")
+    for mode in ["missing_disposition","authored","disabled","empty_clip"]:
+        var candidate:Resource=source.duplicate(true);candidate.disposition="authored" if mode=="authored" else ""
+        if mode=="disabled":candidate.body.enabled=false
+        if mode=="empty_clip":candidate.body.clip="";candidate.body.rig=""
+        var admission:Dictionary=Common.report()
+        Builder._validate({"actions":{candidate.id:candidate}},admission)
+        var omissions:Array=admission.errors.filter(func(error):return "selected enabled body requires an explicit disposition" in error)
+        check(omissions.size()==(1 if mode=="missing_disposition" else 0),"Publication rejects only the actual omitted enabled body decision: "+mode)
+    var spell_source:Resource=load("res://authoring/abilities/spells/spell.fog_cloud.tres")
+    var spell_body:Dictionary=Builder.raw_recipe(spell_source)
+    check(spell_body._source_fields["cast/actionClip"]==spell_source.resource_path+"::body/clip" \
+        and spell_body.cast.actionClip==spell_source.body.clip,"Shared spell cast body retains the exact typed source key")
     ProjectSettings.set_setting("source_data/abilities_build", previous)
     Catalog.invalidate_source_indexes()
     for path in ["catalog/condition_recipes.json", "catalog/body_action_recipes.json"]:

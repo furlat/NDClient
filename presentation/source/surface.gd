@@ -11,6 +11,8 @@ extends Resource
 ## Paths relative to res://assets/. Profiles: original, gentle, reference, quality.
 @export var depth: String = ""
 @export var normals: Dictionary[String, String] = {}
+## Empty follows the global setting; a declared source profile stays exact.
+@export var normal_profile: String = ""
 ## Masks: support, normal_valid, solid, lighting_valid.
 @export var masks: Dictionary[String, String] = {}
 @export var depth_range: Vector2 = Vector2.ZERO
@@ -21,7 +23,8 @@ extends Resource
 ## Reconstruction camera: origin in cell pixels, basis and matrices as delivered.
 @export var camera_origin: Vector2 = Vector2.ZERO
 @export var matrices: Dictionary = {}
-@export var optical_ground_pixels: float = 0.0
+## -INF means unprovided; zero is a real ground-relative calibration.
+@export var optical_ground_pixels: float = -INF
 ## Fraction of source pixels with a surface, frames that failed, rows that repeat one view.
 @export_range(0.0, 1.0) var coverage: float = 1.0
 @export var failed_frames: PackedInt32Array = []

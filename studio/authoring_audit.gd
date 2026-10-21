@@ -165,7 +165,7 @@ static func _recipe(entry:Dictionary,value:Dictionary,path:String,cache:Dictiona
     if value.has("_resource_source"):
         entry.legacy_source=path
         entry.source=value._resource_source
-        for requirement in entry.requirements:
+        for requirement in entry.requirements.slice(first_requirement):
             requirement.legacy_source=requirement.source
             var relative:String=str(requirement.source).trim_prefix(path).trim_prefix("/")
             # Reuse the effective catalog's property mapping, including inherited
@@ -187,6 +187,25 @@ static func _owners(entries:Array,path:String,family:String,cache:Dictionary,sub
         _slots(entry,values[id],source,cache)
         entries.append(entry)
 
+## The existing typed root is also an inventory input. A declaration cannot
+## disappear merely because its document was omitted by an earlier build.
+## Preserve backend definitions/labels and inspect sources without loading each
+## entry or constructing its Resource dependencies in the audit worker.
+static func _declared_owners(expected:Dictionary,declared:Dictionary)->void:
+    for kind in declared:
+        for id in declared[kind]:
+            if not expected.has(id):expected[id]={"id":id,"kind":kind,"label":id}
+
+static func _missing_document(entry:Dictionary,selected_source:String,document_source:String)->void:
+    var requirement:Dictionary=entry.requirements[-1]
+    requirement.document_source=document_source
+    if selected_source.is_empty():return
+    entry.source=selected_source
+    requirement.source=selected_source
+    requirement.id=entry.id+":"+selected_source
+    requirement.source_assignment=selected_source
+    requirement.reason+=" The typed root selects this exact resource, but the current built documents do not supply that assignment. A declaration alone does not establish an enabled body, absent artwork or rendered output."
+
 static func build(cache:Dictionary={})->Dictionary:
     var entries:Array=[]
     var abilities:SourceRoot=load(Library.ABILITIES)
@@ -198,6 +217,7 @@ static func build(cache:Dictionary={})->Dictionary:
     if FileAccess.file_exists(SNAPSHOT):snapshot=JSON.parse_string(FileAccess.get_file_as_string(SNAPSHOT))
     var expected={}
     for definition in snapshot.get("entries",[]):expected[definition.id]=definition
+    _declared_owners(expected,declared)
     var drafts:Dictionary=index.get("drafts",{})
     for id in drafts:
         if not expected.has(id):expected[id]={"id":id,"kind":"spell","label":id}
@@ -218,19 +238,21 @@ static func build(cache:Dictionary={})->Dictionary:
     for id in ids:
         var definition:Dictionary=expected[id]
         var kind:String=definition.kind
-        if kind=="condition" and conditions.has(id):continue # detailed lifecycle inventory owns these
+        var selected_source:String=declared.get(kind,{}).get(id,{}).get("source_path","")
+        if conditions.has(id) and (kind=="condition" or not selected_source.is_empty() and selected_source==abilities.sections.get("conditions",{}).get(id,"")):
+            continue # detailed lifecycle inventory owns actual typed condition aliases too
         var entry={"id":id,"label":definition.get("label",id),"group":"Spells" if kind=="spell" else ("Conditions" if kind=="condition" else "Actions"),
             "source":"","definition_ref":definition.get("definition_ref",{}),"requirements":[]}
-        var selected_source:String=declared.get(kind,{}).get(id,{}).get("source_path","")
         var selected_status:String=coverage.get(kind,{}).get(id,"")
         if selected_status in ["stand_in","partial","missing"]:
-            _require(entry,"Authored source needs review: "+selected_status,selected_source+"::status","authoring_review",
-                "The typed source explicitly declares "+selected_status+". Its current body/effect assignments remain inspectable, not visually accepted.",
+            _require(entry,"Authored source needs review: "+selected_status,Library.COVERAGE+"#/coverage/"+kind+"/"+_pointer(str(id)),"authoring_review",
+                "Build source coverage classifies this entry as "+selected_status+". Its actual selected body/effect/delegation methods remain inspectable; this status alone is not an absent artwork or rendered-output claim.",
                 "Review and complete this existing typed source; a stand-in is not an absent draft or approved art.")
+            entry.requirements.back().source_assignment=selected_source
         if kind=="condition":
             entry.source="catalog/condition_recipes.json:/"+_pointer(id)
             _require(entry,"No condition presentation decision",entry.source,"authoring_review",
-                "The backend defines this condition, but this authoring catalog has no recipe for its identity. A spatial/item owner may already provide its visual.",
+                "The backend catalog lists this condition identity, but this authoring catalog has no member presentation recipe. It may be a cause-only catalog label or have a spatial/item owner; an actual ConditionInstance is not established by catalog membership alone.",
                 "Assign a condition recipe or document its existing visual owner/state-only disposition; do not create duplicate VFX blindly.")
         elif kind=="spell":
             var path:String=drafts.get(id,"spells/"+id+".json")
@@ -240,6 +262,7 @@ static func build(cache:Dictionary={})->Dictionary:
                 _require(entry,"No spell presentation assignment",entry.source,"authoring_review",
                     "This backend spell has no selected draft at this path. A delegated reaction/child effect may own its presentation.",
                     "Add its draft or explicitly connect the existing presentation owner, including any state-only decision.")
+                _missing_document(entry,selected_source,path+":/")
             else:
                 if selected_source.is_empty() and not drafts.has(id):
                     _require(entry,"Draft is not indexed","catalog-index.json:/drafts/"+_pointer(id),"authoring_assignment","The file exists but the authoring index does not select it.","Add the existing draft path to the authoring index.")
@@ -261,6 +284,7 @@ static func build(cache:Dictionary={})->Dictionary:
                 _require(entry,"No action presentation assignment",entry.source,"authoring_review",
                     "The backend action has no direct recipe, selected body recipe or native effect use. Its children may have their own presentations.",
                     "Assign the action's presentation or explicitly declare its child/state-only behavior.")
+                _missing_document(entry,selected_source,entry.source)
             _native_uses(entry,binding.get("effect_cues",[]),str(binding.get("source",entry.source)),str(id))
         entries.append(entry)
     var characters:SourceRoot=load("res://authoring/characters.tres")

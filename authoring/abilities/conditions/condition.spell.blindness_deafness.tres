@@ -36,7 +36,7 @@ script = ExtResource("4_mokam")
 id = "condition.spell.blindness_deafness"
 label = "Blindness/Deafness"
 icon = SubResource("Resource_mokam")
-disposition = "authored"
+disposition = "state_only"
 look = SubResource("Resource_20upj")
 group = "body"
 priority = 30.0
@@ -107,3 +107,5 @@ unported = {
 "effects": []
 }
 }
+play_package_lifecycle = false
+notes = "The wrapper owns no duplicate body indicator: actual Blinded or Deafened child members own their respective presentation and real lifetimes. Source ownership decision only; all artwork remains unreviewed."
