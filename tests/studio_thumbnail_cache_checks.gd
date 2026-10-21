@@ -85,6 +85,7 @@ func run()->void:
     thumb.limit=original_limit
     thumb.close()
     _prewarm_pause(index,body,at)
+    _deferred_composed_foreground()
     if native:await _native(index,body,at)
     evidence.native_swatches_checked=native
     finish()
@@ -110,6 +111,31 @@ func _prewarm_pause(index:Dictionary,body:Dictionary,at:float)->void:
         var prepared=thumb._decode(thumb.pending[0])
         check(not prepared.has("error") and not prepared.parts.is_empty(),"Resumed queued quarter resolves actual source sprite layers")
     thumb.close()
+func _deferred_composed_foreground()->void:
+    var index:Dictionary=Fixtures.read("gallery")
+    check(index.get("ok",false),"Existing actual Gallery original admits for mixed preview queue control")
+    if not index.get("ok",false):return
+    var composed:Array=index.rows.filter(func(row):return Thumbnails._composed_row(row) and row.get("status")!="missing")
+    var audio:Array=index.rows.filter(func(row):return row.kind=="audio" and row.get("status")!="missing")
+    check(not composed.is_empty() and not audio.is_empty(),"Actual Gallery provides both a production-composed source and an ordinary waveform")
+    if composed.is_empty() or audio.is_empty():return
+    var thumb=Thumbnails.new();thumb.host=root;thumb.cache=index.cache;thumb.recording=index
+    thumb.prewarm_suspended=true
+    var source:Dictionary=composed[0];var at:float=(source.start_ms+source.end_ms)*.5
+    var deferred:String=thumb.request(source,at,0,false)
+    var sound:Dictionary=audio[0]
+    var waveform:String=thumb.request(sound,(sound.start_ms+sound.end_ms)*.5,0,false)
+    thumb.set_demand({deferred:true,waveform:true})
+    check(thumb.pending.size()==2 and thumb.pending[0].key==deferred and thumb.pending[0].composed,
+        "Actual visible composed source precedes the waveform while its production pane is deliberately deferred")
+    thumb.poll()
+    check(thumb.textures.has(waveform) and thumb.errors.is_empty(),
+        "An ordinary visible waveform finishes without waiting for the deferred composed recording pane")
+    check(thumb.pending.size()==1 and thumb.pending[0].key==deferred and is_same(thumb.pending[0].row,source) \
+        and thumb.pending[0].sample_ms==at and thumb.composed_worker==null and thumb.composed_pane.is_empty(),
+        "Deferred composed sample retains its actual row, clock and request without an invented host or early restore")
+    thumb.close()
+
 func _native(index:Dictionary,row:Dictionary,at:float)->void:
     var thumb=Thumbnails.new();thumb.cache=index.cache;thumb.host=root
     var keys={0:thumb.request(row,at,0)}

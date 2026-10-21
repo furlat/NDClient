@@ -134,6 +134,21 @@ func native_controls()->void:
         verify(studio,"Faction "+side)
         check(is_equal_approx(studio.world.timeline.display_ms,Recording.anchor_time(studio.index,anchor)),"Faction switch retains the selected recorded event and phase")
         check(studio.tracks.show_lighting_tracks,"Lighting filter survives faction publication")
+    # This actual faction roundtrip supplies a real retained causal coordinate.
+    # A same-frame seek can change navigation intent without rebuilding Play.
+    var held_anchor:Dictionary=studio.retained_view_anchor.duplicate(true)
+    var held_clock:float=studio.world.timeline.display_ms
+    var held_state:PackedByteArray=var_to_bytes(studio.world.timeline.state)
+    var held_generation:int=studio.seek_generation
+    var held_world:Node3D=studio.world
+    check(not held_anchor.is_empty(),"Actual audience navigation retains its real causal anchor")
+    studio._seek(held_clock,false,true)
+    check(studio.retained_view_anchor==held_anchor,"Same-clock audience-preserving seek keeps the actual held anchor")
+    studio._seek(held_clock)
+    check(studio.retained_view_anchor.is_empty() and studio.seek_generation==held_generation \
+        and studio.seeker==null and not studio.installing and is_same(studio.world,held_world) \
+        and studio.world.timeline.display_ms==held_clock and var_to_bytes(studio.world.timeline.state)==held_state,
+        "Explicit same-clock navigation clears the old faction anchor without restoring, retiming or replacing the recorded world")
     for time in [0,at]:
         studio._seek(time)
         if not await settle(studio):await close(studio);return

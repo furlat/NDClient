@@ -617,8 +617,16 @@ func poll() -> bool:
     if worker==null and active.is_empty() and pending.is_empty():_prepare_view()
     if worker==null and active.is_empty() and not pending.is_empty():
         if pending[0].get("composed",false):
-            if composed_worker==null and composed_active.is_empty() and not prewarm_suspended and is_instance_valid(reference_world):_start_composed(pending.pop_front())
-            return changed
+            if composed_worker==null and composed_active.is_empty() and not prewarm_suspended and is_instance_valid(reference_world):
+                _start_composed(pending.pop_front());return changed
+            # A deferred production-pane sample must not hold ordinary visible
+            # waveforms/body sources behind it. Keep that exact request queued;
+            # the first eligible job uses the same existing bounded work paths.
+            var eligible:int=-1
+            for position in pending.size():
+                if not pending[position].get("composed",false):eligible=position;break
+            if eligible<0:return changed
+            pending.push_front(pending.pop_at(eligible))
         while native_composites.size()<clampi(native_batch_size,1,NATIVE_BATCH_LIMIT) and not pending.is_empty() and not pending[0].get("composed",false) and pending[0].row.kind=="native_effect" and pending[0].component.get("native_spell",false):
             var next:Dictionary=pending.pop_front()
             if next.generation!=generation:continue

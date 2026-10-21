@@ -832,12 +832,14 @@ func _seek(time_ms: float, resume: bool=false, keep_view_anchor:bool=false, rebu
     _cancel_loop_preparation()
     var target=clampf(time_ms,0,source.get("presentation_end_ms",source.duration_ms))
     if not tracks.drag_playhead and not is_equal_approx(target,scrub_target):scrub_target=-1.0
+    # Even a same-frame seek is a new explicit navigation intent. Only an
+    # actual audience switch asks to preserve an undisclosed causal anchor.
+    if not keep_view_anchor:retained_view_anchor={}
     if not rebuild and is_same(source,index) and not installing and seeker==null and requested_seek<0 and is_equal_approx(target,world.timeline.display_ms):
         scrub_target=-1.0
         tracks.prepare_visible()
         world.timeline.paused=not resume
         return
-    if not keep_view_anchor:retained_view_anchor={}
     world.timeline.paused=true;_cancel_replay_advance();Recording.cancel(seeker_token)
     seek_generation+=1;_discard_candidate()
     requested_seek=target
