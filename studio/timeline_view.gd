@@ -502,8 +502,11 @@ func prepare_visible(all_quarters:bool=false)->Dictionary:
         if all_quarters:
             for view in 4:
                 if view!=quarter:views.append(view)
-        for view in views:
-            for sample in samples:
+        # Explicit all-view demand keeps each exact cut together so its one
+        # recorded pane can rotate without reinstalling the same Timeline.
+        # Ordinary one-view visible demand retains its original sample order.
+        for sample in samples:
+            for view in views:
                 var key=thumbnails.request(sample.row,sample.sample_ms,view,false)
                 preview_keys[_cell_key(sample.row,sample.sample_ms,view)]=key
                 if key.is_empty():preview_request_errors.append("No source preview: "+str(sample.row.label))

@@ -7,7 +7,82 @@ Authority: [corrected recovery plan](OPUS_RECOVERY_AND_COMPLETION_PLAN_2026-10-2
 The plan-only STOPPED statements describe its earlier preparation, not the current
 human-authorized execution.
 
-## Latest qualified boundary — 22 October
+## Latest qualified boundary — local closures and composed cuts
+
+The preceding recovery is committed at **9dea8d47**, after the initial
+**523d5e02** checkpoint. The next source batch preserves the same installed82a
+package and existing owners. Ordinary residue-free terrain shares its original
+source closure only within one plan/handoff call. Residue-bearing tiles retain
+the original visibility, neighbor and height path. Every tile's support/index,
+removal, reinsertion and earlier-operation requirements still update normally.
+This removes repeated row construction for identical ordinary terrain; it adds
+no retained topology cache.
+
+Composed thumbnails now retain the actual identical paused Timeline across its
+four camera views, avoid preparing a reference quarter immediately replaced by
+the requested quarter, and group explicit all-view requests by exact sample.
+Different cuts still restore/install through the original path. Effects revision,
+reload, source ownership, framing, readiness and actual postdraw checks remain.
+The control requires a real fresh multiview witness of unchanged canonical data
+and initialization epoch; previously cached images cannot satisfy that witness.
+
+The five existing affected controls pass, with natural exits 0, at
+`.runtime/tests/20261021T233131.594014Z-opus-recovery-closure-reuse`:
+environment delta 368, media demand 545, media warmup 87, actual preview
+resources 280 and full native Studio checkpoint 138 checks. These are bounded
+functional checks, not a complete current native suite or a timing acceptance.
+An external art workshop was present during this functional batch. It was no
+longer running when the separate quiet cohort began.
+
+The following three serialized actual UI routes each pass 83 checks and exit 0:
+`.runtime/tests/20261021T233602.460071Z-opus-recovery-quiet`. Exact source is
+9dea8d47 plus saved source.diff; producer, route, camera and installed82a match
+the previous quiet cohort. Definitions and originals remain in
+`closure-reuse-measurements.json` and each full profile.
+
+| Measurement | Latest three runs | Preceding three runs |
+|---|---|---|
+| Door actual submit to first sampled body | 158.434 / 123.822 / 121.063 ms | 127.512 / 114.846 / 108.105 ms |
+| Door environment_commit_updates | 86.103 / 36.645 / 29.881 ms | 77.902 / 85.903 / 69.565 ms |
+| Door total inclusive environment metadata | 135.140 / 79.402 / 66.972 ms | 116.178 / 121.786 / 102.042 ms |
+| Door character metadata | 44.661 / 36.781 / 30.192 ms | 30.626 / 32.288 / 28.255 ms |
+| Door active-group media hold | 103.538 / 60.072 / 0.000 ms | 54.489 / 28.823 / 21.337 ms |
+| Door active-group world hold | 75.537 / 47.154 / 47.921 ms | 47.939 / 39.428 / 32.495 ms |
+| Room Move environment_commit_updates | 16.732 / 11.446 / 11.158 ms | 22.810 / 20.170 / 20.279 ms |
+| Room Move active media/world holds | Both zero in all runs | Both zero in all runs |
+| Maximum frame after initial readiness, whole profile | 42.992 / 36.218 / 61.647 ms | 38.074 / 43.661 / 33.846 ms |
+| Maximum command-window frame | 38.332 / 36.218 / 36.379 ms | 26.935 / 31.123 / 33.846 ms |
+
+These results are uneven. The removed repetition and two faster environment
+results do not establish a uniform response or frame improvement. Door onset
+and whole-profile peaks remain open; the 61.647 ms interval must not be replaced
+by the smaller command-window maximum. After-ready p95 frame intervals are also
+worse in this cohort: 14.364 / 14.499 / 17.222 ms versus 13.370 / 13.418 / 15.148 ms.
+This is an observed deterioration, with exclusive source attribution unproved.
+
+The saved `closure-reuse-peak-analysis.json` and companion Markdown preserve
+exact peak neighbors, owners and full phase maps. The 61.647 ms interval has
+7.050 ms measured Play work, zero compilation deltas and no active startup or
+source-admission work. Frame intervals span trailing callbacks/render/event-loop
+work and the next process callback; measured CPU phases and lagged renderer
+samples cannot assign the remaining wall interval. Pre-ready peaks do contain
+29–43 ms component preparation, with 17–24 ms sources and 12–18 ms persistent
+work, but no exact source IDs. Neither category is tied to a specific delivered
+Factory repair or a proven introducing client change. No new package is installed.
+
+Composed-context timings are 5,377.667 / 305.882 / 5,291.241 ms for initial,
+changed-zoom and reset respectively. They remain above the 200 ms target. The
+retained exact-cut witness proves reuse, not closure of whole-context latency.
+No speedup is claimed from the nonquiet functional timings.
+
+The human's latest bar-only screenshot matches the existing standalone Fireball
+thumbnail-resource control, which intentionally displays that timeline without
+the full Studio layout. Its generic project title made that exposure ambiguous;
+the test now labels itself **NDClient · Fireball thumbnail control · Timeline
+only**. Full Studio already has its own explicit title. This is a test-window
+label, not evidence of missing full Studio content or an old image replay.
+
+## Previous qualified boundary — source demand and terminal ownership
 
 Initial recovery is committed at **523d5e02**; `d5d2ff1d` remains the untouched
 `almost disaster` starting checkpoint. The follow-through below adds exact rest

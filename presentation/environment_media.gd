@@ -91,6 +91,27 @@ static func _collect(state: Dictionary, paths: Dictionary, cache: Dictionary) ->
         # Hidden corners and Ctrl picks use the original straight members.
         for member in row.get("wall_members",[]): paths.merge(row_paths(member,cache))
 
+static func _tile_selector(tile:Dictionary, floor_residues:Dictionary)->String:
+    var residues:Array=[]
+    for residue in tile.get("residues",[]):
+        if floor_residues.has(residue.residue_id) and float(residue.amount)>0.0 and residue.get("condition_uuid")!=null:
+            residues.append(residue.residue_id)
+    return JSON.stringify([tile.surface.base_material,residues])
+
+static func _tile_paths(key:String, tile:Dictionary, selector:String, senses:Variant,
+        cache:Dictionary, closures:Dictionary)->Dictionary:
+    # Share only ordinary terrain's existing selector within this one plan.
+    # Residue-bearing after-values keep the complete collector, including its
+    # actual visibility/neighbor/height checks; no topology is cached here.
+    var ordinary:bool=tile.get("residues",[]).is_empty()
+    if ordinary and closures.has(selector):return closures[selector]
+    var paths:Dictionary={}
+    _collect({"tiles":{key:tile},"objects":{},"senses":senses},paths,cache)
+    if ordinary:
+        paths.make_read_only()
+        closures[selector]=paths
+    return paths
+
 static func _cell(object: Dictionary) -> String:
     return WorldRows.cell_key(object.placement.position)
 
@@ -101,7 +122,7 @@ static func _index(cache: Dictionary) -> Dictionary:
     return cache.__environment_demand_index
 
 static func _update(index: Dictionary, tiles: Dictionary, objects: Dictionary, removed: Array,
-        senses: Variant, cache: Dictionary, tiles_removed:Array=[]) -> Dictionary:
+        senses: Variant, cache: Dictionary, tile_closures:Dictionary, tiles_removed:Array=[]) -> Dictionary:
     var changed_paths = {}
     var contacts: Dictionary = senses.get("objects",{}) if senses != null else {}
     var cells = {}
@@ -115,20 +136,13 @@ static func _update(index: Dictionary, tiles: Dictionary, objects: Dictionary, r
         index.paths_dirty=true
     for key in tiles:
         var tile: Dictionary = tiles[key]
-        var material: String = tile.surface.base_material
         index.tiles[key] = tile
-        var residues:Array=[]
-        for residue in tile.get("residues",[]):
-            if floor_residues.has(residue.residue_id) and float(residue.amount)>0.0 and residue.get("condition_uuid")!=null:
-                residues.append(residue.residue_id)
-        # Terrain and authored residue atlases are selected by actual tile
-        # after-values. Amount, support and neighbor masks change no file path.
-        var selector:String=JSON.stringify([material,residues])
+        # Preserve the exact existing ordered material/residue selector.
+        var selector:String=_tile_selector(tile,floor_residues)
         if index.tile_sources.get(key)==selector: continue
         index.paths_dirty=true
         index.tile_sources[key] = selector
-        var paths = {}
-        _collect({"tiles":{key:tiles[key]},"objects":{},"senses":senses},paths,cache)
+        var paths:Dictionary=_tile_paths(key,tile,selector,senses,cache,tile_closures)
         index.tile_paths[key] = paths
         changed_paths.merge(paths)
         index.changed_row_builds += 1
@@ -281,6 +295,10 @@ static func plan(state: Dictionary, groups: Array, cache: Dictionary, origin_sta
     var phase_started = Time.get_ticks_usec()
     var phases = {"initial_update":0.0,"all_paths":0.0,"commit_updates":0.0}
     var index = _index(cache)
+    # Finite request-local path closures, discarded when this plan returns.
+    # The retained per-position/support index below remains authoritative.
+    var tile_closures:Dictionary={}
+    var floor_residues:Dictionary=Catalog.environment_index(cache).get("floor_residue_sources",{})
     index.plans += 1
     # Only the session's immutable canonical owner can prove continuity. A
     # shallow worker snapshot alone cannot prove the previous full operation
@@ -295,7 +313,7 @@ static func plan(state: Dictionary, groups: Array, cache: Dictionary, origin_sta
         var removed: Array = []
         for id in index.objects:
             if not state.objects.has(id): removed.append(id)
-        _update(index,state.tiles,state.objects,removed,senses,cache,removed_tiles)
+        _update(index,state.tiles,state.objects,removed,senses,cache,tile_closures,removed_tiles)
     phases.initial_update = (Time.get_ticks_usec()-phase_started)/1000.0
     phase_started = Time.get_ticks_usec()
     required = _all_paths(index)
@@ -320,8 +338,8 @@ static func plan(state: Dictionary, groups: Array, cache: Dictionary, origin_sta
             _first_use(initial,first_use,component_paths,float(component.get("start_ms",0.0)))
         for key in group.get("staged_tiles",{}):
             if not index.tiles.has(key):
-                var staged_paths = {}
-                _collect({"tiles":{key:group.staged_tiles[key]},"objects":{},"senses":senses},staged_paths,cache)
+                var tile:Dictionary=group.staged_tiles[key]
+                var staged_paths:Dictionary=_tile_paths(key,tile,_tile_selector(tile,floor_residues),senses,cache,tile_closures)
                 paths=_extend_paths(paths,staged_paths)
                 _first_use(initial,first_use,staged_paths,float(group.get("staged_tile_at_ms",{}).get(key,0.0)))
         for commit in group.get("commits",[]):
@@ -331,7 +349,7 @@ static func plan(state: Dictionary, groups: Array, cache: Dictionary, origin_sta
             senses = delta.get("set",{}).get("senses",senses)
             # Existing paths were included at group entry. Add only changed
             # closures, preserving the exhaustive within-group union.
-            var changed_paths = _update(index,delta.get("tiles",{}),delta.get("objects",{}),delta.get("objects_removed",[]),senses,cache,delta.get("tiles_removed",[]))
+            var changed_paths = _update(index,delta.get("tiles",{}),delta.get("objects",{}),delta.get("objects_removed",[]),senses,cache,tile_closures,delta.get("tiles_removed",[]))
             paths=_extend_paths(paths,changed_paths)
             _first_use(initial,first_use,changed_paths,float(commit.get("at_ms",0.0)))
         if group.has("id"): environment_timeline[group.id] = _timeline(initial,first_use)
@@ -379,6 +397,7 @@ static func finish_handoff(groups:Array,final_state:Dictionary,cache:Dictionary)
     # only remaining authoritative world deltas in this private selector index
     # so the next operation can borrow its exact canonical starting owner.
     var index:Dictionary=_index(cache)
+    var tile_closures:Dictionary={}
     index.erase("final_owner")
     var senses:Variant=index.senses
     for group in groups:
@@ -386,7 +405,7 @@ static func finish_handoff(groups:Array,final_state:Dictionary,cache:Dictionary)
             var delta:Dictionary=commit.delta
             if delta.get("tiles",{}).is_empty() and delta.get("tiles_removed",[]).is_empty() and delta.get("objects",{}).is_empty() and delta.get("objects_removed",[]).is_empty() and not delta.get("set",{}).has("senses"):continue
             senses=delta.get("set",{}).get("senses",senses)
-            _update(index,delta.get("tiles",{}),delta.get("objects",{}),delta.get("objects_removed",[]),senses,cache,delta.get("tiles_removed",[]))
+            _update(index,delta.get("tiles",{}),delta.get("objects",{}),delta.get("objects_removed",[]),senses,cache,tile_closures,delta.get("tiles_removed",[]))
     # Retain the selected final source union with its private canonical owner.
     # The next operation borrows it; it does not rebuild a room-sized union on
     # the opening path merely because this operation changed a few cells.

@@ -311,6 +311,8 @@ func try_reset_hidden_playback(value:RefCounted)->bool:
     if not external_playback or not is_inside_tree() or value==null or not value.paused or value.state.is_empty():return false
     if not timeline.paused or get_viewport().audio_listener_enable_3d:return false
     if not media_issue.is_empty() or not presentation_errors.is_empty():return false
+    # Another view of this exact paused cut keeps its already admitted epoch.
+    if is_same(timeline,value):return true
     install_playback(value)
     # Keep old native membership until the existing full preparation can replace
     # it. An old worker remains owned until its normal epoch gate retires it.

@@ -7,7 +7,8 @@ priority. This update supersedes the historical STOPPED/planning-only and active
 queue statements below; their inventories and receipts remain preserved. The
 old broad queue is not running. The automated heartbeat remains paused.
 
-The initial 17-module restoration plus A10 are committed at **523d5e02**.
+The initial 17-module restoration plus A10 are committed at **523d5e02**;
+subsequent source-demand and ownership recovery is committed at **9dea8d47**.
 Retained-history preparation, exact resting-source demand, unchanged sensory
 columns, same-source pane Resource sharing and Astra's material/cookie terminal
 ownership repairs are applied and have affected passing receipts. Current
@@ -16,14 +17,21 @@ historical receipts with the exact task still unidentified. Library's three
 recorded cases pass pixels/pointer/Follow/loop/cleanup controls. These bounded
 results do not qualify the full native inventory.
 
-Three current82a quiet routes pass 83 checks each: Door submit to first sampled
-body is 108–128 ms, with remaining media holds 21–54 ms and world holds 32–48 ms.
-Move's corresponding holds are zero. Whole-profile maximum frames after initial
-readiness remain 34–44 ms; Door environment-update CPU and composed thumbnails
-(about 4–6 seconds cold/reset) remain recovery work. First body and environment
-update are not further improved over the preceding A10 cut. The subsequent
-profiling-window loading presentation has one separate passing live route; it is
-not substituted into the quiet three-run measurement.
+The latest batch reuses ordinary terrain source closures within each existing
+plan and the actual identical paused composed Timeline across camera views.
+Five affected controls pass with natural exits 0, including full Studio playback.
+The isolated thumbnail-test window now identifies itself explicitly; its bar-only
+layout is intentional and is separate from full Studio.
+
+Three subsequent current82a quiet routes pass 83 checks each. Results are uneven:
+Door submit to first sampled body is 121–158 ms, environment commit 30–86 ms,
+remaining media holds 0–104 ms and world holds 47–76 ms. Move's corresponding
+holds remain zero and its environment commit is 11–17 ms. Whole-profile maximum
+frames after initial readiness are 43 / 36 / 62 ms, not the smaller command-only
+maxima. No uniform onset/frame gain over the previous source cut is established.
+Door costs, full-profile frame spikes and composed thumbnails (about five seconds
+initial/reset) remain recovery work. Exact source and original measurements are
+preserved; no Factory/backend cause is inferred from wall time alone.
 
 This is not clean whole-suite qualification or completion of R1–R8. No new
 assignments precede recovery. See the [current execution record](OPUS_RECOVERY_IMPLEMENTATION_2026-10-22.md)

@@ -281,11 +281,30 @@ static func _restore_composed(job:Dictionary,token:Dictionary)->Dictionary:
 
 func _start_composed(job:Dictionary)->void:
     inactive.erase(job.key)
+    if not composed_pane.is_empty() and is_instance_valid(composed_pane.get("world")) \
+        and is_same(composed_pane.index,job.recording) and not composed_pane.get("frozen",[]).is_empty():
+        var owner:Node3D=composed_pane.world
+        # Keep only this actual unchanged parked Timeline, never a quantized
+        # neighbor, another recording, or a synthetic source-only occurrence.
+        if owner.external_clock and owner.timeline.paused and owner.timeline.display_ms==float(job.sample_ms) \
+            and owner.media_issue.is_empty() and owner.presentation_errors.is_empty():
+            _prepare_composed(job,owner.timeline)
+            return
     composed_job=job
     composed_token=Recording.cancellation();composed_worker=Thread.new()
     var error:Error=composed_worker.start(_restore_composed.bind(job,composed_token))
     if error!=OK:
         composed_worker=null;composed_job={};errors[job.key]="Cannot restore composed recording sample: "+error_string(error);requested.erase(job.key)
+
+func _prepare_composed(job:Dictionary,restored:RefCounted)->void:
+    var budget:int=int(reference_world.media_warmup.budget_bytes)
+    composed_pane=ReplayPanes.prepare(host,restored,job.recording,reference_world,composed_pane,budget,true,true,int(job.quarter))
+    var owner:Node3D=composed_pane.world
+    owner.external_clock=true;owner.timeline.paused=true;owner.publishes_receiving=false
+    owner.native_startup_background=false
+    owner.component_renderer.audio.set_enabled(false);composed_pane.viewport.audio_listener_enable_3d=false
+    owner.presentation_mutes={};owner.presentation_solo={}
+    composed_active={"job":job,"started_ms":Time.get_ticks_msec(),"drawn":false,"framing":false}
 
 func set_displayed_world(value:Node3D)->void:
     var changed:bool=not is_same(displayed_world,value)
@@ -339,15 +358,7 @@ func _poll_composed()->bool:
         if not restored is Dictionary:
             errors[job.key]="Actual recording sample restoration failed";requested.erase(job.key);_finish_composed();return true
         if restored.get("timeline")!=null and is_instance_valid(reference_world):
-            var budget:int=int(reference_world.media_warmup.budget_bytes)
-            composed_pane=ReplayPanes.prepare(host,restored.timeline,job.recording,reference_world,composed_pane,budget,true,true)
-            var owner:Node3D=composed_pane.world
-            owner.external_clock=true;owner.timeline.paused=true;owner.publishes_receiving=false
-            owner.native_startup_background=false
-            owner.component_renderer.audio.set_enabled(false);composed_pane.viewport.audio_listener_enable_3d=false
-            owner.presentation_mutes={};owner.presentation_solo={}
-            owner.request_view(int(job.quarter))
-            composed_active={"job":job,"started_ms":Time.get_ticks_msec(),"drawn":false,"framing":false}
+            _prepare_composed(job,restored.timeline)
         elif job.generation==generation:
             errors[job.key]="Actual recording sample restoration unavailable";requested.erase(job.key)
     if composed_active.is_empty():return false

@@ -21,6 +21,7 @@ var reference:Node3D
 var reference_view:SubViewport
 
 func _initialize()->void:
+    DisplayServer.window_set_title("NDClient · Fireball thumbnail control · Timeline only")
     root.unfocusable=true;root.position=Vector2i(-16000,-16000);root.size=Vector2i(1280,800)
     run.call_deferred()
 
@@ -87,18 +88,30 @@ func source_texture(cache:RefCounted,key:String,label:String,row:Dictionary={},s
     return cache.textures.get(key)
 
 func phase_samples(rows:Array)->Dictionary:
-    var samples:Dictionary={}
+    var samples:Dictionary={};var fresh_multi_view_cuts:int=0
     for row in rows:
         for fraction in [.1,.5,.9,1.0]:
             var at:float=row.end_ms-.001 if fraction==1.0 else lerpf(row.start_ms,row.end_ms,fraction)
+            var cut:RefCounted;var epoch:int=-1;var canonical:Dictionary={};var fresh_views:int=0
             for quarter in 4:
+                var published:Array=tracks.thumbnails.textures.keys()
                 var key:String=tracks.thumbnails.request(row,at,quarter,false)
                 var texture:Texture2D=await source_texture(tracks.thumbnails,key,str(row.component.native_cue.role)+" actual phase/tail "+str(fraction)+" q"+str(quarter),row,at,quarter)
                 if texture!=null:
+                    if Thumbnails._composed_row(row) and key not in published:
+                        fresh_views+=1
+                        var current:RefCounted=tracks.thumbnails.composed_pane.world.timeline
+                        if cut==null:
+                            cut=current;epoch=current.initialization_revision;canonical=current.state.duplicate(true)
+                        else:
+                            check(is_same(current,cut) and current.initialization_revision==epoch and current.state==canonical,
+                                "Another actual view retains the identical canonical cut and admitted Timeline epoch")
                     samples[key]=texture
                     var pending:int=tracks.thumbnails.pending.size()
                     check(tracks.thumbnails.request(row,at,quarter,false)==key and tracks.thumbnails.pending.size()==pending,
                         "Repeated exact recorded source/sample/view reuses its published image without another job")
+            if fresh_views>1:fresh_multi_view_cuts+=1
+    check(fresh_multi_view_cuts>0,"At least one exact composed cut publishes multiple fresh view images from its retained Timeline")
     bounded_sources("actual phase/retained-tail coverage")
     return samples
 

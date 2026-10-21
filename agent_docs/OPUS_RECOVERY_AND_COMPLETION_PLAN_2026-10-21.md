@@ -7,11 +7,15 @@ all the regression gogo”. Recovery is active in this same chat. The plan-prepa
 and STOPPED statements below describe the historical proposal state; they do not
 supersede that instruction. The automated heartbeat remains paused.
 
-The initial 17-module restoration and A10 follow-through are applied. Three
-post-A10 quiet gameplay runs pass 83 checks each, with Door actual submit to first
-body at 105–124 ms and Move active-group media hold at zero. Door holds, frame
-costs and native/Studio failures remain open. Exact source scope, original receipts
-and limitations are in [the execution record](OPUS_RECOVERY_IMPLEMENTATION_2026-10-22.md).
+The initial restoration is committed at523d5e02; source-demand, retained-history
+and terminal task ownership follow-through at9dea8d47. The latest ordinary-terrain
+and composed-cut reuse batch passes five affected controls. Its three quiet
+gameplay runs pass83 checks each, but response/frame results remain uneven:
+Door actual submit to first sampled body121–158ms and whole-profile after-ready
+maxima43/36/62ms. Move's active media/world holds remain zero. Door costs, composed
+thumbnail latency and remaining native duties stay open. Exact source scope,
+original receipts and limitations are in
+[the execution record](OPUS_RECOVERY_IMPLEMENTATION_2026-10-22.md).
 The frozen starting inventory and literal historical/proposed appendices below
 remain preserved. `d5d2ff1d` (`almost disaster`) remains the immutable starting
 checkpoint. This is not complete R1–R8 or full native qualification.

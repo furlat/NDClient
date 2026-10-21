@@ -39,7 +39,8 @@ static func freeze(pane:Dictionary,value:bool)->void:
         pane.frozen=[]
 
 static func prepare(parent:Node,restored:RefCounted,source:Dictionary,reference:Node3D,
-        spare:Dictionary,budget:int,share_sources:bool,retain_view:bool)->Dictionary:
+        spare:Dictionary,budget:int,share_sources:bool,retain_view:bool,target_quarter:int=-1)->Dictionary:
+    var view_quarter:int=reference.quarter if target_quarter<0 else posmod(target_quarter,4)
     var pane={}
     if not spare.is_empty():
         if share_sources and is_same(spare.index,source):
@@ -79,7 +80,7 @@ static func prepare(parent:Node,restored:RefCounted,source:Dictionary,reference:
         owner.presentation_solo=reference.presentation_solo.duplicate()
     # A reused pane still owns its published static quarter. Change it through
     # the ordinary prepared view publication, preserving source/billboard basis.
-    if not reused:owner.quarter=reference.quarter;owner.requested_quarter=reference.quarter
+    if not reused:owner.quarter=view_quarter;owner.requested_quarter=view_quarter
     owner.wall_mode=reference.wall_mode;owner.grid_visible=reference.grid_visible
     if not reused:pane.viewport.add_child(owner)
     owner.native_spell_hit_material=reference.native_spell_hit_material
@@ -89,6 +90,6 @@ static func prepare(parent:Node,restored:RefCounted,source:Dictionary,reference:
     owner.playback_end_ms=source.get("presentation_end_ms",source.duration_ms)
     owner.position_camera()
     if not reused:owner.install_playback(restored)
-    else:owner.request_view(reference.quarter)
+    else:owner.request_view(view_quarter)
     pane.reused=reused
     return pane
