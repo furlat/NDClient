@@ -573,9 +573,7 @@ func _native_startup_request(at_ms:float,optional:bool=false)->Dictionary:
             for component in group.get("components",[])+group.get("native_requirements",[]):
                 var clip:Dictionary={}
                 if component.get("native_spell",false) and component.get("status")!="missing":
-                    clip=component.native_clip.duplicate(false)
-                    if component.has("native_constructor_inputs"):clip.construction_inputs=component.native_constructor_inputs
-                    if component.get("native_cue",{}).has("opacity_uniform"):clip.opacity_uniform=component.native_cue.opacity_uniform
+                    clip=NativeStartup.Effects.occurrence_clip(component)
                     if component.has("lifecycle_phases"):lifecycles.append(clip)
                 elif component.get("kind")=="material_flash" and component.get("native_hit",{}).get("definition",{}).get("status")=="available":clip=component.native_hit.clip
                 if clip.is_empty():continue

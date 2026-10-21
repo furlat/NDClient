@@ -28,10 +28,12 @@ func run() -> void:
     var scene = Player.instantiate(); scene.timeline.paused = true; root.add_child(scene)
     var deadline = Time.get_ticks_msec()+90000
     while not scene.session.recording_ready and scene.session.issue.is_empty() and Time.get_ticks_msec()<deadline: await process_frame
-    scene.session.close(); await scene.presentation_updated
     while not scene._media_ready({}) and scene.media_issue.is_empty() and Time.get_ticks_msec()<deadline: await scene.presentation_updated
     check(scene._media_ready({}) and scene.presentation_errors.is_empty(),"Actual Crypt rest and all exact companion sheets finish preparation")
-    if not scene._media_ready({}): quit(1); return
+    if not scene._media_ready({}):
+        scene.session.close();scene.queue_free();await process_frame;quit(1);return
+    # Keep the producer until its compiled groups' media handoffs are admitted.
+    scene.session.close(); await scene.presentation_updated
     scene._sample_actors(); scene.set_process(false); scene.hud.hide(); scene.grid_visible = false
     scene.update_wall_visibility(); scene._sort_draws()
     DirAccess.make_dir_recursive_absolute("res://.captures/character-geometry")

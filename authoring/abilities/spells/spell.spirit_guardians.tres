@@ -11,6 +11,9 @@
 [ext_resource type="Script" path="res://presentation/source/sound_ref.gd" id="9_mxdow"]
 [ext_resource type="Script" path="res://presentation/source/abilities/spell_variant.gd" id="10_bvtop"]
 
+[ext_resource type="Resource" path="res://assets/vfx/extensions/spirit-runtime-20261021/sources/53af195b70b841a65a63/radiant.tres" id="OptionalSpiritRidRadiant"]
+[ext_resource type="Resource" path="res://assets/vfx/extensions/spirit-runtime-20261021/sources/d08891dcb9d9d4e5e692/necrotic.tres" id="OptionalSpiritRidNecrotic"]
+
 [sub_resource type="Resource" id="Resource_5w3qc"]
 script = ExtResource("1_e8nhc")
 role = "cast"
@@ -197,6 +200,58 @@ staging_from = "factory@20261018-c3c616e88a6b725f"
 status = "partial"
 notes = "The actual spatial owner public energy_type selects the one held Radiant/Necrotic composition through its typed condition resource. Exact applied damage source_condition_uuid independently selects recipient contacts. This bundled finite cast variant is an unselected alternative and cannot duplicate that spatial owner. No alignment or class inference is used; all artwork remains unreviewed."
 
+[sub_resource type="Resource" id="OptionalRidRadiantUse"]
+script = ExtResource("3_i2uxx")
+clip = "assembled/spirit_guardians_radiant_native"
+source_phase = ExtResource("OptionalSpiritRidRadiant")
+source_inputs = {"targets": "set_targets", "owner_state": "set_owner_state"}
+role = "attached"
+scope = "spatial"
+at = "owner_start"
+attachment = "recipient_ground"
+orientation = "world"
+source_end = 1.0
+light_multiplier = 0.0
+constructor_input = {"kind": "spatial_owner", "component_path": ["effect"], "input_field": "", "cell_input": "owned_field", "content_id": "spatial_effect.spell.spirit_guardians"}
+extra = {"live_endpoints": [{"cue_point": "source"}]}
+staging_from = "factory@runtime-call-heavy-defaults-20261021-8dd103fb92174541"
+
+[sub_resource type="Resource" id="OptionalRidRadiantDisposition"]
+script = ExtResource("10_bvtop")
+id = "spirit_rid_queued_radiant"
+kind = "draft"
+dispatch_gap = "explicit_unused_optional_rid_source"
+effects = Array[ExtResource("3_i2uxx")]([SubResource("OptionalRidRadiantUse")])
+staging_from = "factory@runtime-call-heavy-defaults-20261021-8dd103fb92174541"
+status = "partial"
+notes = "Explicitly unused optional source alternative. Its exact mapped phase and privately bound constructor require one real effect/owner_uuid operand, targets and owner_state, followed at sequential144Hz. No predicate opts it into gameplay. Current Spirit field assignment retains the existing source whose actual disclosed-cell AreaMask and submitted-geometry inspection operate on scene geometry; these optional pieces expose sorted RenderingServer RID draws through capture_native_draws instead. Ground-only submission cannot qualify those spirit draws or current-cell clipping. This is an unadopted optional renderer choice, not a required missing content assignment, producer fact or Factory API. Current energy_type owner/contact selections remain unchanged. Source receipts do not qualify current encounter output or human artwork; all artwork remains unreviewed."
+
+[sub_resource type="Resource" id="OptionalRidNecroticUse"]
+script = ExtResource("3_i2uxx")
+clip = "assembled/spirit_guardians_necrotic_native"
+source_phase = ExtResource("OptionalSpiritRidNecrotic")
+source_inputs = {"targets": "set_targets", "owner_state": "set_owner_state"}
+role = "attached"
+scope = "spatial"
+at = "owner_start"
+attachment = "recipient_ground"
+orientation = "world"
+source_end = 1.0
+light_multiplier = 0.0
+constructor_input = {"kind": "spatial_owner", "component_path": ["effect"], "input_field": "", "cell_input": "owned_field", "content_id": "spatial_effect.spell.spirit_guardians"}
+extra = {"live_endpoints": [{"cue_point": "source"}]}
+staging_from = "factory@runtime-call-heavy-defaults-20261021-8dd103fb92174541"
+
+[sub_resource type="Resource" id="OptionalRidNecroticDisposition"]
+script = ExtResource("10_bvtop")
+id = "spirit_rid_queued_necrotic"
+kind = "draft"
+dispatch_gap = "explicit_unused_optional_rid_source"
+effects = Array[ExtResource("3_i2uxx")]([SubResource("OptionalRidNecroticUse")])
+staging_from = "factory@runtime-call-heavy-defaults-20261021-8dd103fb92174541"
+status = "partial"
+notes = "Explicitly unused optional source alternative. Its exact mapped phase and privately bound constructor require one real effect/owner_uuid operand, targets and owner_state, followed at sequential144Hz. No predicate opts it into gameplay. Current Spirit field assignment retains the existing source whose actual disclosed-cell AreaMask and submitted-geometry inspection operate on scene geometry; these optional pieces expose sorted RenderingServer RID draws through capture_native_draws instead. Ground-only submission cannot qualify those spirit draws or current-cell clipping. This is an unadopted optional renderer choice, not a required missing content assignment, producer fact or Factory API. Current energy_type owner/contact selections remain unchanged. Source receipts do not qualify current encounter output or human artwork; all artwork remains unreviewed."
+
 [resource]
 script = ExtResource("8_d5vum")
 id = "spell.spirit_guardians"
@@ -218,7 +273,7 @@ contact_cues = PackedInt32Array()
 light_multiplier = 0.0
 colours = SubResource("Resource_7ojrc")
 feedback_ramp = PackedStringArray()
-variants = Array[ExtResource("10_bvtop")]([SubResource("Resource_m3rpr")])
+variants = Array[ExtResource("10_bvtop")]([SubResource("Resource_m3rpr"), SubResource("OptionalRidRadiantDisposition"), SubResource("OptionalRidNecroticDisposition")])
 applies_conditions = PackedStringArray("condition.spell.spirit_guardians.slowed", "condition.spell.spirit_guardians.zone")
 applies_surfaces = PackedStringArray("spatial_effect.spell.spirit_guardians")
 summons = PackedStringArray()

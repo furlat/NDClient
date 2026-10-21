@@ -65,10 +65,102 @@ func run()->void:
             var directory:String=portable.get("journals",{}).get(seat,"")
             check(not directory.is_empty(),seat+" current portable original journal is explicit")
             if not directory.is_empty():read_case("spell.freezing_sphere__portable_detonation",seat,cache,directory)
+    for seat in ["amber","blue"]:
+        area_support_controls(FIXTURES.path_join("spell.freezing_sphere__launch_detonation").path_join(seat),"immediate_blast",cache,seat)
+        area_support_controls(str(CURRENT_EVENT_FIXTURES["spell.vitriolic_sphere__delayed_end_results"]).path_join(seat),"accepted_area_blast",cache,seat)
     var report:Dictionary={"checks":checks,"failures":failures,"evidence":evidence,"components":totals,
         "scope":"Thirteen preserved archived two-seat families retain their exact positive contacts and unavailable old portable operands. A separate completed current two-seat portable original exercises the public observed-explosion source. Source/setter/ancestry/canonical checks do not qualify native pixels or human approval."}
     FileAccess.open("res://.runtime/event-family-consumers-checks.json",FileAccess.WRITE).store_string(JSON.stringify(report,"  "))
     print("EVENT_FAMILY_CONSUMERS ",JSON.stringify(report));quit(0 if failures.is_empty() else 1)
+
+## An isolated canonical-support API control using unchanged original events.
+## The private raised/unknown terrain cuts are not new recorded encounters.
+func area_support_controls(directory:String,projection:String,cache:Dictionary,seat:String)->void:
+    var label:String=projection+"/"+seat+" private canonical-support control"
+    var journal:RefCounted=Journal.new()
+    var opened:Dictionary=journal.open(directory,true,false)
+    check(opened.ok,label+" original opens")
+    if not opened.ok:return
+    var files:PackedStringArray=DirAccess.get_files_at(directory);files.sort()
+    for file in files:
+        if file.get_basename().length()!=16 or not file.get_basename().is_valid_int():continue
+        var raw:PackedByteArray=FileAccess.get_file_as_bytes(directory.path_join(file))
+        var sequence:int=int(file.get_basename())
+        var decoded:Dictionary=journal.decode_record(sequence,raw)
+        check(decoded.ok,label+" original decode "+str(sequence))
+        if not decoded.ok:return
+        var before:Dictionary=journal.state
+        var folded:Dictionary=journal._consume_admitted(decoded.value,raw,true)
+        check(folded.ok,label+" original fold "+str(sequence))
+        if not folded.ok:return
+        if sequence==0:continue
+        var original:Dictionary=Compiler.compile_recorded(before,folded.normalized,cache,journal.state,folded.transitions)
+        check(original.ok,label+" original compiles")
+        if not original.ok:return
+        var blasts:Array=[]
+        for group in original.value.groups:
+            blasts.append_array(group.components.filter(func(component):return component.get("status")=="available" \
+                and component.get("native_cue",{}).get("constructor_input",{}).get("projection")==projection))
+        if blasts.is_empty():continue
+        check(blasts.size()==1,label+" original supplies one exact blast")
+        if blasts.size()!=1:return
+        var blast:Dictionary=blasts[0]
+        var origin:Array=blast.from_position
+        var caster:Variant=before.actors.get(blast.actor_uuid,{}).get("last_visual_position")
+        check(caster!=null and caster!=origin,label+" real caster and ground aim are distinct")
+        if caster==null or caster==origin:return
+        var origin_key:String=Compiler.Reducer.Audience.point_key(origin)
+        var caster_key:String=Compiler.Reducer.Audience.point_key(caster)
+        check(before.tiles.has(origin_key) and before.tiles.has(caster_key),label+" both supports are actually disclosed")
+        if not before.tiles.has(origin_key) or not before.tiles.has(caster_key):return
+        var immutable:PackedByteArray=var_to_bytes([before,journal.state,folded.normalized,folded.transitions])
+        for ground in ["raised","unknown"]:
+            var control_before:Dictionary=before.duplicate(true)
+            var control_after:Dictionary=journal.state.duplicate(true)
+            var control_transitions:Dictionary=folded.transitions.duplicate(true)
+            for state in [control_before,control_after]:
+                state.tiles[caster_key].elevation_steps=-2
+                if ground=="raised":state.tiles[origin_key].elevation_steps=6
+                else:state.tiles.erase(origin_key)
+            # These immutable after-values carry whole tiles, including height.
+            # Freezing's walking-cost update republishes its target before the
+            # launch; the private terrain control must agree at that cut too.
+            for lineage in control_transitions.lineages:
+                var deltas:Array=[lineage.trailing]
+                for captured in lineage.events:deltas.append(captured.delta)
+                for delta in deltas:
+                    var tiles:Dictionary=delta.get("tiles",{})
+                    if tiles.has(caster_key):tiles[caster_key].elevation_steps=-2
+                    if tiles.has(origin_key):
+                        if ground=="raised":tiles[origin_key].elevation_steps=6
+                        else:tiles.erase(origin_key)
+            var controlled:Dictionary=Compiler.compile_recorded(control_before,folded.normalized,cache,control_after,control_transitions)
+            check(controlled.ok,label+" "+ground+" support compiles through the ordinary capture path")
+            if not controlled.ok:continue
+            var actual:Array=[]
+            for group in controlled.value.groups:
+                actual.append_array(group.components.filter(func(component):return component.get("status")=="available" \
+                    and component.get("native_cue",{}).get("constructor_input",{}).get("projection")==projection))
+            if ground=="unknown":
+                check(actual.is_empty(),label+" undisclosed target ground never borrows the disclosed caster height")
+                continue
+            check(actual.size()==1,label+" raised target admits the actual observed blast")
+            if actual.size()!=1:continue
+            var raised:Dictionary=actual[0]
+            check(raised.from_position==origin and raised.to_position==origin \
+                and raised.from_elevation_feet==30.0 and raised.to_elevation_feet==30.0,
+                label+" blast uses target support30ft instead of caster support-10ft")
+            check(raised.source_event_uuid==blast.source_event_uuid and raised.native_inputs==blast.native_inputs \
+                and raised.native_constructor_inputs==blast.native_constructor_inputs \
+                and raised.start_ms==blast.start_ms and raised.duration_ms==blast.duration_ms,
+                label+" support placement preserves exact original event, operands and observed source interval")
+        check(var_to_bytes([before,journal.state,folded.normalized,folded.transitions])==immutable \
+            and FileAccess.get_file_as_bytes(directory.path_join(file))==raw,label+" canonical/event inputs and original bytes remain unchanged")
+        evidence.append({"kind":"private_canonical_support_api_control","projection":projection,"seat":seat,"journal":directory,
+            "sequence":sequence,"source_event_uuid":blast.source_event_uuid,"origin":origin,"caster":caster,
+            "raised_target_feet":30.0,"caster_feet":-10.0,"private_transition_supports":true,"recorded_raised_terrain":false})
+        return
+    check(false,label+" expected original observed blast was not found")
 
 static func current_portable_original()->Dictionary:
     return current_family_original("spell.freezing_sphere__portable_detonation")

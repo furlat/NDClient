@@ -55,6 +55,8 @@ static func _configure_materials(handle:Dictionary)->void:
         if node.material_override!=null:materials.append(node.material_override)
         elif node is MeshInstance3D and node.mesh!=null:
             for surface in node.mesh.get_surface_count():materials.append(node.get_active_material(surface))
+        elif node is MultiMeshInstance3D and node.multimesh!=null and node.multimesh.mesh!=null:
+            for surface in node.multimesh.mesh.get_surface_count():materials.append(node.multimesh.mesh.surface_get_material(surface))
         elif node is GPUParticles3D:
             for pass_index in node.draw_passes:
                 var mesh:Mesh=node.get_draw_pass_mesh(pass_index)

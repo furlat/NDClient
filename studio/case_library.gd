@@ -55,6 +55,10 @@ static func _witness(original:Dictionary,expected:Dictionary,package:String)->Di
         var pcm:bool=value.get("pcm_frames")!=null and float(value.pcm_frames)>0.0 and value.get("pcm_peak")!=null and float(value.pcm_peak)>0.0
         if value.get("status")=="no_playback_observed" or (counters.has("started") and int(counters.started)<=0 and not pcm):
             value.reported_kind=value.kind;value.kind="audio_transport"
+            value.reported_status=value.get("status","");value.status="no_playback_observed"
+    if value.get("kind")=="audio_transport":
+        value.reported_qualifies=value.get("qualifies","")
+        value.qualifies="Audio transport diagnostics only. This receipt does not qualify playback, audible output, mix or human approval."
     var version:String=str(value.get("factory_version","")) if value.get("factory_version")!=null else ""
     value.package_scope_at_join=value.get("package_scope","not_recorded")
     if not package.is_empty():

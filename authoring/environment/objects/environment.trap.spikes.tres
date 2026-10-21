@@ -10,8 +10,9 @@
 script = ExtResource("3_1dgd5")
 id = "environment.trap.spikes"
 kind = "trap"
+native_owner_contents = PackedStringArray("spatial_effect.environment.spike_trap", "spatial_effect.environment.spike_trap.poisoned", "spatial_effect.environment.spike_trap.poison_damage")
 views = PackedStringArray()
 art = PackedStringArray()
 stand_in = "environment.furniture.loose_floorboards"
-status = "stand_in"
-notes = "No object art; its trap field (spatial_effect.environment.*) carries old pre-rendered sprites in the surfaces section. Drawn with environment.furniture.loose_floorboards."
+status = "partial"
+notes = "The canonical plain, poisoned and poison-damage spike world_media programs draw their actual admitted floor cells. This hardware declares those three exact spatial content IDs; only one current observed owner whose public anchor_item_uuid names this same item can delegate its loose-floorboards housing fallback. No content, position or private fixture guess substitutes for that unique identity link. Delivered2948/9f links close the old backend boundary, and old null-link recordings retain their real values. The ordinary stand-in remains when the actual owner or required admission is absent or ambiguous. All artwork remains unreviewed; source assignment is not native output or art acceptance."

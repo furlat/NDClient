@@ -232,7 +232,7 @@ def report() -> dict:
     engine = json.loads((ROOT / "authoring/server_ids.json").read_text())
     clips = {c["clip_id"]: c for c in factory["clips"]}
     selections = {s.get("spell_id", s["key"]): s for s in factory["selections"]}
-    standalone = json.loads((ROOT / "assets/vfx/format/public-admission-20261020-source-resources.json").read_text()).get("resources", [])
+    standalone = json.loads((ROOT / "assets/vfx/format/spirit-runtime-20261021-source-resources.json").read_text()).get("resources", [])
     typed = [typed_source(p, section) for section in ["spells", "conditions", "actions"]
              for p in sorted((ROOT / "authoring/abilities" / section).glob("*.tres"))]
     by_id = defaultdict(list)

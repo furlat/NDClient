@@ -16,13 +16,66 @@ artwork and audio remain **UNREVIEWED**. The earlier named four-effect rejection
 is superseded and must not be treated as current scope or as acceptance of any
 other artwork.
 
-**Current runtime closing pass, 21 October:** the complete7ca source cohort,
+**Historical7ca publication, retained at its actual source cutoff:** the complete7ca cohort,
 including the six legacy action/passive assignments and the source-owned
 readiness repair, publishes all three domains with zero authoring errors. The
 latest complete publication took65.432s; two retained authoring warnings and45
 known text-resource Unicode warnings remain explicit. The latter are scoped in
 [Factory§18](FACTORY_REVIEW_2026-10-20.md#18-serialize-source-resource-labels-as-literal-utf-8),
 including the independent client-note escapes; they are not45 missing source APIs.
+The subsequent abilities/environment repair publication completed at 15:24 UTC,
+exit 0, zero authoring errors, in 26.671 s. Unchanged coverage subtrees were verified
+and full coverage retained; this was an affected-domain publication, not another
+full-domain or native qualification pass.
+[Exact publication boundary](../.runtime/material-runtime-integration-20261021/publication-spatial-batch.json).
+
+**Current complete Factory successor installed and published,21 October16:11 UTC:**
+`runtime-call-heavy-defaults-20261021-8dd103fb92174541` delivers all source
+corrections in [§§17–20](FACTORY_REVIEW_2026-10-20.md#17-prepare-equipped-weapon-receiver-for-the-current-modular-shader):
+the current equipped receiver,15 literal UTF-8 labels,19 optional Cone identity
+prefixes and the two retained default heavy-electric banks. Full three-domain
+publication passed with zero errors/two retained authoring warnings; Unicode
+warnings are now four, down from45. All six temporary Electric bank overrides
+and47 lines of unused transport/validation are removed; factual inputs and
+damage-policy provenance remain intact. The active source table has62 rows;
+the two added Spirit RID rows have explicit inactive optional dispositions.
+All20 plural object-owner declarations are included. Earlier7ca qualification
+retains its actual cutoff. Installation/publication does not establish full
+client output, clean exit or human art acceptance.
+[Installation receipt](../.runtime/vfx-successor-8dd/installation.json),
+[current source cutoff](../.runtime/material-runtime-integration-20261021/source-cutoff-factory8dd-closing.json).
+
+**Affected8dd receipt at16:33 UTC:** five headless scripts passed;15 native
+invocations completed, **12 passed and three failed**, with wall compositing
+active in that snapshot. Selected passing controls include:
+
+| Affected source/native control | Assertions / failures |
+|---|---:|
+| Appearance / Acid owner |3,012/0;34/0 |
+| Both actual Font originals |13,211/0 |
+| Intrinsic weapon family / Ember receiver |70,695/0;5,132/0 |
+| Six coating families / Basic Poison runtime |37,740/0;5,536/0 |
+| Ember delivery/contact / Poison contacts |20/0;19/0 |
+| Divine Favor / Shillelagh / created-item identity |114/0;192/0;48/0 |
+
+The Event gate is **1,729 assertions/one failure**: its first Freezing source
+admission exceeded the existing10s load deadline; later admission in that same
+run is retained, so this is not a proven permanent deadlock. The repaired
+wall/body/swarm replay has **2,141 assertions/six failures in one Wind case**;
+its actual StandardMaterial debris cannot honor current observed-cell masking.
+The exact source request is [Factory§21](FACTORY_REVIEW_2026-10-20.md#21-wind-wall-debris-needs-current-observed-cell-coverage).
+The package gate has **6,402 assertions/one alias failure**; the source correction
+is applied, with affected five-approach proof pending. No failed invocation is
+rewritten and no whole8dd native pass is claimed. Quiet profiles and remaining
+live qualification are still pending.
+[Current affected receipt](../.runtime/tests/20261021T160607.496849Z-current-source-repairs/summary.json).
+
+The current Factory/source checkpoint is **`4ac732d3`**. The final58-path client
+repair freeze, including the five optional-study disposition corrections, is
+applied; its client checkpoint and remaining affected proof are pending. Those
+dispositions expose inactive Bless/FalseLife fitted alternatives and the optional
+extra-dice accent without dropping strict unknown-option/element refusal guards
+or inventing additional backend work.
 
 The active Studio Library has **357 recorded cases out of360** after the six
 new action/passive originals were imported. The current
@@ -49,13 +102,16 @@ capture recipes remain excluded explicitly. Exact current receipts:
 `.runtime/material-runtime-integration-20261021/template-policy-current/result.json`.
 These receipts are source/compiler/canonical-state evidence, not rendered art.
 
-All **six selected heavy-electric uses** now author the delivered corrected
+The **six selected heavy-electric uses on7ca** authored the delivered corrected
 static source banks through the existing constructor-input schema. Actual
 factual inputs retain precedence, interface/preparation keys remain exact, and
 Studio exposes the static paths through its existing generic inspection DTO.
-Bare original Factory default-bank metadata remains Factory§20; native proof of
-these six assignments is pending. No per-spell renderer or new scheduling clock
-was introduced.
+Complete8dd now corrects the bare default-bank metadata in place; intake and
+override removal are complete, while bare-default proof remains pending. Native proof of
+the actual Call Lightning and Lightning Bolt baseline originals now passes 537
+and 287 assertions respectively, with no plain native errors in that 58-case
+cohort. This does not certify every repeat/action use of the six assignments.
+No per-spell renderer or new scheduling clock was introduced.
 
 The shadow investigation found an actual missing native invalidation: both
 frame-only UV paths changed reconstructed caster geometry without notifying
@@ -66,19 +122,52 @@ actual-owner checks. The patch was applied **before the first native process**
 in the current batch; the headless processes had already loaded prior sources.
 The source cutoff is recorded in
 `.runtime/material-runtime-integration-20261021/source-cutoff-shadow-templates.json`.
-Exact restored-pixel qualification remains pending.
+The current `actor_preparation_native_checks` now passes **9,022 assertions,
+zero failures, exit0**, including the exact restored shadow pixels, in
+`.runtime/tests/20261021T144622.590398Z-current-checkpoint/actor_preparation_native_checks.log`.
+Earlier exact-pixel failures remain preserved at their original source cutoffs;
+this qualifies the selected restoration controls, not all possible body/light
+combinations or artwork.
 
 The current queue serializes **183 enabled native scripts**, two additional
 actual public/class replay rows and11 live scripts plus four independent
-input/material repeats required by the approved plan. Its actual public replay
-resumes57 uncompleted IDs plus Divine Smite; prior131 unique completed originals
-retain their source/error cutoffs and are not misreported as fresh passes. The
-first Acid check still fails both pixel controls. Its new diagnostic proves the
-selected two planes disappear from native draw counts while the unchanged green
-pixels belong to separate real condition droplets. This rules out stale pass
-output and failed parent visibility; selected partition material/occlusion is
-still under investigation. Full native/live/quiet-performance/art acceptance
-remains open.
+input/material repeats required by the approved plan. All **185 native
+invocations completed:171 passed,14 failed**. Seven live invocations completed:
+five passed, two failed (`lighting_live_checks` and `live_all_spells_checks`);
+the remaining live lane is held for the source-repair cohort. This supersedes
+the partial116/185 snapshot and is not a complete passing batch. Failures include
+the initial Acid/Event/class/public processes, appearance, optional Cone,
+wall/created-item and six receiver/weapon gates. The live startup DTO defect is
+source-fixed before8dd publication; its current live qualification is pending.
+Source fixes do not rewrite any failed invocation or native error.
+
+The actual remaining 58-public-spell cohort completed: **54 passed, four failed,
+zero plain native `ERROR` lines**. The failed originals are Wind Wall, Wall of
+Thorns, Guardian of Faith and Insect Plague. Actual 0c/2948/9f producer identities
+remain unchanged; current-client/package replay is not a new 9f producer capture.
+Prior 131 unique completed originals retain their separate source/error cutoffs.
+[Exact58-case result](../.runtime/material-runtime-integration-20261021/public58-completed-results.json).
+
+The applied shared repairs now honor `area_mask=false` during preparation as
+well as sampling, enumerate Insect's actual private MultiMesh surface materials,
+and disable cell masking only for the localized Guardian/Feast bodies whose
+actual disclosed anchors are already required. Wind and both Thorns uses now
+name the exact source-owned preparation Script read by their constructors.
+The reverse presenter retains ready absolute backward samples while pending or
+error samples remain hidden; source clocks and render acknowledgments are
+unchanged. All are applied client repairs, with one grouped affected proof still
+pending for the four failed public cases, fields/Event and both Font sources.
+[Area-mask source cutoff](../.runtime/material-runtime-integration-20261021/source-cutoff-area-mask.json),
+[reverse-source cutoff](../.runtime/material-runtime-integration-20261021/source-cutoff-reverse-optical.json).
+
+The bounded current selected-source audit resolved 595 active EffectUses; 32
+text-selected constructors read immutable preparation dictionaries, with only
+those three wall uses requiring correction. Fifteen playable public lifecycle
+phases add no such requirement. **67 selected compressed phase internals were
+not source-parsed**; this is an explicit audit limit, not a missing asset/API
+claim or a passing qualification. No additional mismatch was proven. Full
+native/live/quiet-performance and human artwork acceptance remain open; quiet
+profiles follow once source work and the active qualification are idle.
 
 **Earlier completed broad qualification:**
 `.runtime/tests/20261021T123511.143023Z/summary.json` records **230/230 headless
@@ -92,9 +181,10 @@ This is not a complete passing native/live checkpoint.
 The subsequent13-script follow-up,
 `.runtime/tests/20261021T131204.311779Z/summary.json`, passed **9/9 headless
 scripts** and **144/144 shadow-preparation assertions**. Actor preparation
-still failed one exact shadow-edge restoration assertion out of7039, despite
-retaining the same helper viewport/World3D/light owners; the cause remains
-open and exact numeric diagnostics are retained. Studio transport completed
+failed one exact shadow-edge restoration assertion out of7039 at that cutoff,
+despite retaining the same helper viewport/World3D/light owners; its cause was
+then unresolved and exact numeric diagnostics remain retained. The current
+9,022/0 restoration result above supersedes that failure's open status. Studio transport completed
 **61 assertions with zero assertion failures**, three loops and two hosts,
 then crashed with **process exit5**. The matching Windows event reports native
 access violation `0xc0000005`; this invocation remains failed, with teardown
@@ -147,7 +237,7 @@ five failed**. Its selected-source results are:
 | Shadow preparation |154 /0| Pass. |
 | History/material transition |16,432 /0| Pass for the selected original/view/seek cohort. |
 | Owner/head/item |468 /0| Pass; preserves signed selected-source contribution controls. |
-| Actor preparation |7,702 /1| Exact shadow-edge restoration remains open. |
+| Actor preparation |7,702 /1| Failed at this cutoff; the later9,022/0 result above qualifies the selected restoration repair. |
 | Acid owner |34 /2| Both isolated seat pixel controls remain zero; packet/owner assertions pass. |
 | Event families |1,741 /14| Output controls and one contextual initial-world preparation stall remain open. |
 | Authored class replay |53,973 /9| Reverse Font conversion failed; the other four actual class/passive cases passed. |
@@ -174,14 +264,23 @@ palettes/envelopes and canonical Life timing remain unchanged; the19 legacy
 death records retain `death.frame` as inspectable-unused metadata. These are client content/schema
 changes, not new Factory APIs or artwork approval.
 
-The Electric bank repair described above is applied using already delivered corrected
-banks; affected native proof remains pending. Both original fatal cases are tracked in [Factory§20](FACTORY_REVIEW_2026-10-20.md#20-re-export-the-default-heavy-electric-bank-metadata).
+The Electric bank repair described above uses already delivered corrected banks;
+the later Call/Lightning baseline passes are recorded above. Remaining repeat
+branches are not inferred from those originals. Both original fatal cases remain
+tracked historically in [Factory§20](FACTORY_REVIEW_2026-10-20.md#20-re-export-the-default-heavy-electric-bank-metadata),
+whose source request is now delivered and installed in8dd; bare-default current
+output proof remains pending.
 The sealed `_ready`/`_construct` backtrace also occurs through the actual
 constructed wrapper; it does not prove missing factual operands or a neutral
 startup-admission bypass. No runtime fix was made for that false inference.
 
-The immutable Factory package has checkpoint commit **`7079505b`**; the client
-code checkpoint is still pending qualification. A checkpoint does not end the
+The immutable Factory package has checkpoint commit **`7079505b`**. Client source
+checkpoint **`291e092c929c1cad943c1ec6fa61b0517d3c9e83`** now records1,786 explicit
+task source paths; runtime/build outputs and artwork binaries are excluded.
+The native/live queue remains in progress, so this is a source checkpoint,
+not a complete passing qualification. Subsequent applied repairs have the
+separate source cutoffs above and await their coherent follow-up checkpoint.
+A checkpoint does not end the
 authorized migration: continue unblocked authoring/content and shared-renderer
 work under the approved plan, with affected checks grouped into coherent batches.
 
@@ -226,8 +325,8 @@ successful actual originals and the failed Extend target admission retained.
 [Current six-original publication](../.runtime/material-runtime-integration-20261021/library-after-six.json).
 [Adoption and original capture](../.runtime/material-runtime-integration-20261021/backend-9f81-adoption.json).
 [Historical diagnosis](BACKEND_REVIEW_2026-10-20.md#current-0c-capture-cure-wounds-discovery-omits-the-stable-zero-hp-recipient).
-Native/live qualification and the client source checkpoint remain in progress;
-they have not passed as a complete current checkpoint. The six named
+Native/live qualification remains in progress; the source checkpoint above
+does not establish a complete passing runtime checkpoint. The six named
 legacy action/passive assignments are now implemented through the existing
 source/compiler/renderer paths and exposed in structured Studio inspection;
 they are no longer postponed content work after that checkpoint. Their actual
@@ -1040,7 +1139,7 @@ to the engine.
 | Dependency | Current disposition | Boundary / handoff |
 |---|---|---|
 | Glyph presence and contacts — assigned | The real disclosed owner explicitly selects existing neutral shell artwork; five elemental contacts consume actual attributed results. Richer armed/payload/hostile-trigger studies remain optional unselected art. | No outstanding backend/Factory request for these optional studies. Delivered2948 attribution and fresh five-form originals are retained separately from native/art acceptance. [Backend content blockers](BACKEND_CONTENT_BLOCKERS_2026-10-20.md). |
-| Backend observed hardware join — delivered |2948 publishes actual observed `anchor_item_uuid` for GasVent, JawTrap, PressurePlate, Tripwire and SpikeTrap. Client exact-link assignments and five native-fixture originals are present. | Source/current-original evidence is separate from rendering acceptance. Old missing-link packets retain their actual null values. Same backend handoff. |
+| Backend observed hardware join — delivered; complete client assignment published |2948 publishes actual observed `anchor_item_uuid` for GasVent, JawTrap, PressurePlate, Tripwire and SpikeTrap. The plural `native_owner_contents` batch is published across20 object declarations:15 migrated singleton owners and five hardware families, including all three Spike forms. Five native-fixture originals are retained. | Affected native qualification is pending. Exact current UUID/content/admitted-cell/placement guards and ambiguity refusal remain unchanged; no housing/body or backend-link gap is invented. Old missing-link packets retain their actual null values. Same backend handoff. |
 | Backend living zero-HP healing / HTTP preview categories — delivered |9f81 repairs healing discovery/preview and invalid-query error classification without changing the wire contract. The unchanged stabilize/heal/move journey now records successfully. | The original0c failure remains preserved. No recorder workaround, invented target or SDK generation. [Adoption and original capture](../.runtime/material-runtime-integration-20261021/backend-9f81-adoption.json). |
 | Backend legal original availability | Voluntary Drop Prone and slot-six Myrmidon discovery remain named limitations. Test Bless has actual native `developer` visibility and is outside production spell-baseline qualification; its failed original remains inspectable. | Developer fixture setup is not a required backend repair and real Bless does not substitute for its test semantics. Keep actual missing cases separate from repaired spell/item/selector/result fields. Same backend handoff. |
 | Factory prepared cloud lifetime — delivered | Five actual-owner source continuations are present in complete7ca; client resource assignments and owner consumption are written and source-published. | No additional API request; startup/history/readiness limits remain in [Factory status](FACTORY_REVIEW_2026-10-20.md). |
@@ -1048,10 +1147,11 @@ to the engine.
 | Factory connected footprint capacity — delivered | Complete7ca supplies genuine full-owner neighbors with disjoint bounded draw subsets, now consumed by the client partition path. | Source publication is separate from output qualification; original same-UUID/clock and seam rules remain. Same reconciled Factory status. |
 | Optional body-UV parity — unselected | Blight/Harm/Cone old actor-UV operations remain explicitly unselected under the supplied compatibility disposition; finite effects stay assigned. | No current missing Factory API request; Circle of Death already has its receiving source. Same reconciled Factory status. |
 | Factory witnessed summon departure — delivered | Complete7ca supplies independent terminal-only sources; client actual-terminal resource/consumer integration is written. | Actual cause/commit/position/support, no birth/body dependency. Source publication/output qualification remain separate. Same reconciled Factory status. |
-| Factory equipped receiver — current§17 | The actual current modular shader has no matching prepared equipped-weapon receiver program. Actual Ember contact draws; its independent equipped sustain refuses the exact current source key. | Prepare that unchanged source through the existing receiver bank; no old-program substitution. [Exact source/key/request](FACTORY_REVIEW_2026-10-20.md#17-prepare-equipped-weapon-receiver-for-the-current-modular-shader). |
-| Factory text-resource labels — current§18 | Fifteen selected readiness-phase labels use escaped Unicode misdecoded by the pinned text-resource loader. Runtime source publication succeeds; this is nonfatal metadata damage. | Literal UTF-8 regeneration preserving text/IDs/operands, through the complete sealed successor. Independent client-note escapes are not attributed to Factory. [Exact request](FACTORY_REVIEW_2026-10-20.md#18-serialize-source-resource-labels-as-literal-utf-8). |
-| Optional Cone native bank — current§19 | The unselected native approach retains pre-relocation preparation identity while its mapped base computes the installed identity. Ordinary recorded Cone remains separate. | Exact packaged-bank identity repair; do not activate the optional approach, normalize its identity or weaken the exhaustive gate. [Source proof](FACTORY_REVIEW_2026-10-20.md#19-rebase-packaged-cone-interface-identities-after-source-relocation). |
-| Default heavy-electric bank — current§20 | Call Lightning and Lightning Bolt default GPU phases name malformed original heavy banks; both actual replay failures are retained. Corrected banks are already delivered, and explicit client resource-operand selection is being completed without modifying the sealed package. | Preserve actual area/contact operands and original source art/material/clock; no automatic fixture-bank override or missing-backend request. [Exact source and same-family scope](FACTORY_REVIEW_2026-10-20.md#20-re-export-the-default-heavy-electric-bank-metadata). |
+| Factory equipped receiver — delivered§17 | Installed/source-published8dd adds the exact current shader root/expanded alias to the retained receiver bank. Current Ember receiver5,132/0 and the named intrinsic/coating gates pass; the original7ca refusal remains preserved. | Selected source/runtime proof does not qualify every equipment combination, clean exit or artwork. [Exact source/key/delivery](FACTORY_REVIEW_2026-10-20.md#17-prepare-equipped-weapon-receiver-for-the-current-modular-shader). |
+| Factory text-resource labels — delivered§18 | Installed/source-published8dd corrects all15 selected Cadence labels to literal UTF-8 without changing runtime operands; current full publication has four Unicode warnings rather than45. | Independent client/transitive strings remain outside those15 files. [Exact scope](FACTORY_REVIEW_2026-10-20.md#18-serialize-source-resource-labels-as-literal-utf-8). |
+| Optional Cone native bank — delivered§19 | Complete8dd corrects19 packaged interface identity prefixes, retaining source bytes and ordinary recorded default. | Client optional-approach qualification pending; no automatic activation or weakened identity assertion. [Source proof/delivery](FACTORY_REVIEW_2026-10-20.md#19-rebase-packaged-cone-interface-identities-after-source-relocation). |
+| Default heavy-electric bank — delivered§20 | Installed/source-published8dd corrects both retained default GPU banks in place. Actual7ca fatal receipts and subsequent override-qualified Call/Bolt passes remain scoped to their own sources. | Six temporary static bank overrides and their unused transport are removed, preserving actual area/contact inputs and source clock/art. Bare-default current client proof remains pending. [Exact scope](FACTORY_REVIEW_2026-10-20.md#20-re-export-the-default-heavy-electric-bank-metadata). |
+| Wind Wall observed-cell coverage — current§21 | The actual8dd retained Wind source constructs, but12 StandardMaterial debris meshes cannot take the existing current-cell mask; visual state/full wall geometry do not supply the missing subset clipping. | Preserve observed/suppressed-cell privacy and original source materials; no whole-field mask opt-out or backend request. [Exact integration request](FACTORY_REVIEW_2026-10-20.md#21-wind-wall-debris-needs-current-observed-cell-coverage). |
 | Art/audio | Twelve real summon bodies, authentic Draconic mouth/pose geometry, missing sound selections and actual human review. | [Body list](CREATURE_BODY_ASSET_GAPS_2026-10-20.md), [audio/art handoff](ASSET_AUDIO_REVIEW_2026-10-20.md). All artwork/audio remains unreviewed. |
 
 Sleep, the GPU Insect Plague owner, general Counterspell inputs, held-item
@@ -1060,6 +1160,9 @@ Prismatic colours and the delivered selector/result families are adopted in
 source. Their older diagnoses remain in the linked historical handoffs; they
 must not be re-forwarded as missing current deliveries. Their complete current
 native/live/seek/performance qualification remains R3/R4/R6/R7 work.
+The same applies to the new8dd source corrections in§§17–20: delivery closes
+those requests. Intake/source publication is complete; affected output proof
+remains separate.
 
 Optional continuing Spirit Guardians orbit/flap is an art/source continuation
 choice. Its deployed-pose hold and actual removal are already authored; no new
@@ -1067,12 +1170,13 @@ client loop is inferred from the review animation.
 
 ### Current complete successor; installation is separate from acceptance
 
-The complete `runtime-spike-seed-20261021-7ca62e2877bf5156` is installed,
-including the wall-child8b, public-admission976 and production-review repairs.
+The complete `runtime-call-heavy-defaults-20261021-8dd103fb92174541` is installed,
+retaining7ca, wall-child8b, public-admission976 and production-review repairs.
 [Current material/runtime handoff](/mnt/c/Users/tommaso/Documents/assets/VFXFactory/docs/MATERIAL_RUNTIME_HANDOFF_2026-10-21.md),
-[installation receipt](../.runtime/vfx-material-install-7ca62e/installation.json).
+[installation receipt](../.runtime/vfx-successor-8dd/installation.json).
 Its1,246 clips,504 unchanged default selections,155 condition lifecycle families
-and60 public typed source rows are the active package. The complete predecessors
+and62 public typed source rows are the active package. The two new Spirit rows
+remain explicitly inactive optional alternatives. The complete predecessors
 remain preserved separately in `NDClientGodot-backups`. Frigid Air, Wind,
 actual-owner fields/connected surfaces and independent terminal sources are
 selected in client resources. Known source readiness/optical limits remain
@@ -1284,19 +1388,23 @@ per-spell screenshot/measurement cycle while migration work remains untouched.
 
 ## 8. R7: the entire test inventory is not green
 
-Current `tests/manifest.json` has 568 rows after the accepted-contact additions:
+Current `tests/manifest.json` has575 rows. The current source-only reconciliation
+of all66 active non-ok entries changes their reason text only; no status,
+argument, mode, tier or timeout is promoted or removed.
 
 | Population | Count | What it means |
 |---|---:|---|
-| Eligible fast headless |185| All pass together, `.runtime/tests/20261020T171550.110627Z/summary.json`, including both accepted-contact cohorts and heavy selection/preparation identity. |
-| Eligible gate |208| 181 GPU + 27 headless. Focused current-cohort output passes are recorded under R2; no claim of a complete final-checkpoint run. |
-| Eligible live |11| One Gallery pass does not cover all 11. |
-| Excluded but executable |86| 53 needs-args, 17 known-red, 16 owned-by-migration. Each needs a current-contract decision, not a blanket exemption. |
-| Retired |52| Historical/removed contracts; not passes. |
+| Enabled headless |230| 199 fast +31 gate. The current full queue completed229 passing and one old-policy oracle failure; its affected migration rerun passed2,015/0. Exact receipts and source cutoff are above. |
+| Enabled native |183| Actual current manifest GPU scripts; two additional public/class replay rows are separate invocations. Current queue is unfinished. |
+| Enabled live |11| The approved plan also requires four additional independent player-interaction repeats; these are invocations, not new manifest rows. |
+| Active non-ok |66| 40 needs-args,17 known-red,9 owned-by-migration;15 headless and51 GPU. None is silently exempted or newly marked passing. |
+| Retired |59| Historical/removed contracts; not passes. |
 | Helpers |25| Not standalone tests. |
 | Other non-executable ok |1| Helper row, not another passed test. |
 
-Latest stored same-mode gate receipts: 191 clean and **2 still red**:
+**Historical20 October receipt snapshot:**191 clean and two red. The current
+qualification and selected package repairs above supersede these failure
+descriptions where their exact affected receipts apply:
 
 - `effect_package_checks`: 3 failures in 3,896 checks, Insect Plague recorded output;
   latest stored receipt `.runtime/tests/20261020T061148.551252Z/`.
@@ -1311,10 +1419,12 @@ qualification. Live receipts: 7 latest clean, `live_all_spells_checks` latest re
 `lighting_live_checks`, `live_gallery_checks`, `player_wait_checks` in the current
 receipt inventory. No stored result is not automatically a code failure.
 
-Finish the 189-ID spell safety matrix: 184 available original baselines and 5 named
-engine/setup failures are not a 189-green live/native sweep. Preserve the exact
-per-ID GUI/target/form/reaction/current-package results; repaired Hellish evidence
-or a small sample cannot retroactively overwrite older broad failures.
+The actual descriptor inventory retains189 spell IDs, including the explicitly
+developer-only TestBless fixture; production selection has188 public spells.
+The old five-unavailable baseline description is superseded by delivered fixes
+and current originals. Preserve the failed developer original and exact per-ID
+GUI/target/form/reaction/source-error cutoffs. The current partial public replay
+and prior reader pass are not a fresh all188 native/live pass.
 
 For excluded tests: provide real supported arguments/originals, repair current
 behavior contracts, or retire only genuinely obsolete wire/API/one-time parity
@@ -1323,8 +1433,24 @@ create a current-code self-golden, revive old per-observer state, drop pixel
 assertions or run argument-required scripts without arguments and count their
 usage exit as a product failure. See the old
 [excluded-test analysis](EXCLUDED_HEADLESS_GATES_2026-10-20.md) for semantics;
-its 33-headless / 89-total numbers are historical. Today's exclusions are 24 headless
-and 62 GPU.
+its33-headless /89-total numbers are historical. Today's active non-ok scope is
+15 headless and51 GPU.
+
+The66-row source reconciliation identifies21 rows with recording arguments
+already configured, nine with existing source/original controls, nine with stale
+failure/dependency prose,17 exact original/oracle duties, five concrete harness
+contract migrations, two corpus selections, two further source-review duties
+and one hosted sandbox invocation. These are applicability groups, not passing
+results. In particular, the old “16 Factory defects” condition label is stale
+after the delivered7ca package, the atlas check already defaults to the real
+Gallery journal, and supplied arguments do not resolve historical exact-oracle
+comparisons automatically. The named missing shield-ranged/shield-walk originals
+and continuous mixed-spell checkpoint corpus are recording duties, not new
+backend APIs or permission to concatenate unrelated journals. Current named
+Factory/body/audio and runtime limits elsewhere remain open. The complete
+source/receipt table is retained in
+`.runtime/closing-repairs/non-ok-manifest/APPLICABILITY.md`; standalone historical
+report counts there are never promoted to current qualification.
 
 Two concrete dispositions make the execution boundary explicit:
 

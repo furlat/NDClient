@@ -53,10 +53,11 @@ const Part = preload("res://presentation/source/environment/object_part.gd")
 @export var measurements: String = ""
 ## Where it has no art of its own: the object whose art draws it instead, silently (status stand_in).
 @export var stand_in: String = ""
-## This exact native spatial content draws an observed object's body only when
-## its current public anchor_item_uuid names this actual object. Otherwise the
-## ordinary states/stand-in remain the authored fallback.
-@export var native_owner_content: String = ""
+## One of these exact native spatial contents draws an observed object's body
+## only when its current public anchor_item_uuid names this actual object.
+## A unique current owner must still satisfy its actual placement/admission;
+## otherwise the ordinary states/stand-in remain the authored fallback.
+@export var native_owner_contents: PackedStringArray = []
 @export var icon: ImageRef
 @export_enum("ready", "partial", "stand_in", "missing", "internal") var status: String = "missing"
 @export_multiline var notes: String = ""

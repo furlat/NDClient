@@ -137,7 +137,9 @@ func family_seat(case_id:String,seat:String)->void:
             handle=native.handles[component.id]
             var capture_bindings:Dictionary=native.diagnostics.get(component.id,{}).get("input_bindings",{})
             check(not capture_bindings.is_empty() and capture_bindings.unavailable.is_empty(),label+" final capture camera has every actual phase input ready")
+            var payload_ready:Dictionary=payload_geometry_diagnostic(native,handle) if component.native_clip.id in [EventChecks.PAYLOAD_COLD,EventChecks.PAYLOAD_FIRE] else {}
             await frame();await frame();world.set_process(false)
+            var payload_present:Dictionary=payload_geometry_diagnostic(native,handle) if not payload_ready.is_empty() else {}
             var original:PackedByteArray=var_to_bytes(world.timeline.state)
             var present:Image=view.get_texture().get_image()
             var present_pass:Image=partition_pass_image(native,handle) if ice else null
@@ -185,6 +187,7 @@ func family_seat(case_id:String,seat:String)->void:
             if pixels==0 and component.native_clip.id in [EventChecks.PAYLOAD_COLD,EventChecks.PAYLOAD_FIRE]:
                 var receivers:Array=handle.occurrence.input_receivers.get("set_damage_event",[])
                 var details:Dictionary={"stage":"restored_after_hide_control","receiver_count":receivers.size(),"sample_time":handle.sample_time,
+                    "ready_picture":payload_ready,"present_picture":payload_present,"restored_picture":payload_geometry_diagnostic(native,handle),
                     "requested_time":handle.requested_time,"drawn_time":handle.drawn_time,"rendered_once":handle.rendered_once,
                     "native_diagnostic":native.diagnostics.get(component.id,{}).duplicate(true),
                     "camera_transform":world.camera.global_transform,"camera_size":world.camera.size,
@@ -234,6 +237,28 @@ func family_seat(case_id:String,seat:String)->void:
     check(native.handles.is_empty() and native.groups.is_empty() and native.prepared_layers.is_empty(),label+" teardown releases private source ownership")
     check(world.presentation_errors.is_empty() and world.media_issue.is_empty(),label+" original replay remains free of presentation/resource errors")
     view.queue_free();await frame();await frame()
+
+# Read exact optical keys already supplied to the common payload recipient
+# source. Never request/poll a measurement or change cache interest here.
+func payload_geometry_diagnostic(native:RefCounted,handle:Dictionary)->Dictionary:
+    var receivers:Array=handle.occurrence.input_receivers.get("set_damage_event",[])
+    if receivers.size()!=1:return {}
+    var source:Node3D=receivers[0]
+    var geometry:Dictionary=source.geometry
+    var surface:RefCounted=native.inputs.surfaces
+    var keys:Array=[]
+    for key in geometry.get("pose_key",[]):
+        var job:Dictionary=surface.jobs.get(key,{})
+        keys.append({"key":key.duplicate(true),"resident":surface.sources.has(key),
+            "cache_order":surface.source_order.find(key),"pending":surface.pending.has(key),
+            "pending_order":surface.pending_order.find(key),"worker":not job.is_empty(),
+            "worker_complete":WorkerThreadPool.is_task_completed(job.task) if not job.is_empty() else false})
+    return {"frame":Engine.get_process_frames(),"native_diagnostic":native.diagnostics.get(handle.component.id,{}).duplicate(true),
+        "point_count":geometry.get("points",[]).size(),"geometry_ready":geometry.get("ready",false),
+        "geometry_reason":geometry.get("reason",""),"geometry_actor":geometry.get("actor_uuid",geometry.get("actor","")),
+        "source_keys":keys,"cache_entries":surface.sources.size(),"cache_capacity":surface.SOURCE_LIMIT,
+        "source_builds":surface.source_builds,"worker_jobs":surface.jobs.size(),"pending_sources":surface.pending.size(),
+        "source_observation":source.capture_observation()}
 
 # Additive failure diagnostics at the existing present/hidden capture points.
 # Read actual source planes and the existing pass; never change its inputs.

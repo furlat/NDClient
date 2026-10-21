@@ -10,7 +10,7 @@ extends RefCounted
 const Baked=preload("res://presentation/baked_effect.gd")
 const Admission=preload("res://presentation/native_source_admission.gd")
 const Native=preload("res://presentation/native_effects.gd")
-const SOURCE_TABLE:="res://assets/vfx/format/spike-seed-20261021-source-resources.json"
+const SOURCE_TABLE:="res://assets/vfx/format/spirit-runtime-20261021-source-resources.json"
 const INDEX:="res://assets/vfx/index.json"
 ## Conditions whose package lifecycle the client keeps from playing.
 const LIFECYCLES:="condition_lifecycles.json"
@@ -201,7 +201,6 @@ static func key(value:Dictionary)->String:
     var identity:Array=[str(value.get("id","")),selected.kind,sources,str(value.get("opacity_uniform",""))]
     if not str(value.get("immutable_preparation","")).is_empty():identity.append(value.immutable_preparation)
     if value.get("preparation_inputs","construction")!="construction":identity.append(value.preparation_inputs)
-    if not value.get("source_resources",{}).is_empty():identity.append(value.source_resources)
     return JSON.stringify(identity)
 
 static func occurrence_clip(component:Dictionary)->Dictionary:
@@ -214,16 +213,6 @@ static func occurrence_clip(component:Dictionary)->Dictionary:
     if component.has("native_constructor_inputs"):
         result.construction_inputs=component.native_constructor_inputs
         result.preparation_owner=component.id
-        # An authored resource choice replaces only existing source-resource
-        # operands. Factual admission remains mandatory and its operands merge
-        # last, so authoring cannot replace an actual occurrence's values.
-        var descriptor:Dictionary=component.get("native_cue",{}).get("constructor_input",{})
-        var resources:Dictionary=descriptor.get("source_resources",{})
-        if not resources.is_empty():
-            result.source_resources=resources.duplicate(true)
-            result.construction_inputs=[{"component_path":descriptor.component_path,"input_field":descriptor.get("input_field",""),
-                "values":resources.duplicate(true)}]
-            result.construction_inputs.append_array(component.native_constructor_inputs)
     if component.get("native_cue",{}).get("sampling")=="absolute":result.absolute_sampling=true
     if component.get("native_cue",{}).has("opacity_uniform"):result.opacity_uniform=component.native_cue.opacity_uniform
     return result
@@ -231,9 +220,6 @@ static func occurrence_clip(component:Dictionary)->Dictionary:
 ## Files this clip's playing approach reads (Studio preview dependencies).
 static func resource_paths(value:Dictionary)->Array:
     var result:Array=[]
-    var selected_resources:Dictionary={}
-    _resource_values(value.get("source_resources",{}),selected_resources)
-    result.append_array(selected_resources.keys())
     if "actor_context" in value.get("inputs",[]):
         result.append("res://assets/vfx/extensions/production-review-20261020/sources/6e2fd9339711629213f5/condition_actor_history.gd")
     if not str(value.get("immutable_preparation","")).is_empty():result.append(value.immutable_preparation)
@@ -439,18 +425,24 @@ static func _staged_paths(cue:Dictionary)->Dictionary:
 ## paths survive beneath their private wrappers. Only that supplied capability
 ## admits a deeper alias, and it still requires one unchanged full relative
 ## path and one actual target inside the occurrence.
-static func _verified_wrapped_path(root:Node,path:String)->Node:
-    var relative:NodePath=NodePath(path)
-    if relative.is_absolute() or relative.get_name_count()<2 or relative.get_subname_count()>0:return null
-    for at in relative.get_name_count():
-        if str(relative.get_name(at)) in [".",".."]:return null
+static func _verified_wrapped_path(root:Node,path:String,canonical:String="")->Node:
+    var paths:Array=[path]
+    if not canonical.is_empty() and canonical!=path:paths.append(canonical)
+    var relatives:Array[NodePath]=[]
+    for actual in paths:
+        var relative:NodePath=NodePath(actual)
+        if relative.is_absolute() or relative.get_name_count()<2 or relative.get_subname_count()>0:return null
+        for at in relative.get_name_count():
+            if str(relative.get_name(at)) in [".",".."]:return null
+        relatives.append(relative)
     var matches:Array=[]
     for wrapper in root.find_children("*","Node3D",true,false):
         if not wrapper.has_method("has_verified_stable_paths") or not wrapper.has_verified_stable_paths():continue
         var prefixes:Array=[wrapper];prefixes.append_array(wrapper.find_children("*","Node",true,false))
         for prefix in prefixes:
-            var target:Node=prefix.get_node_or_null(relative)
-            if target!=null and target not in matches:matches.append(target)
+            for candidate_path in relatives:
+                var target:Node=prefix.get_node_or_null(candidate_path)
+                if target!=null and target not in matches:matches.append(target)
     return matches[0] if matches.size()==1 else null
 
 ## Staged node paths the built effect lacks. Where the package's own staging
@@ -474,7 +466,7 @@ static func resolve_paths(handle:Dictionary,cue:Dictionary,spell:String)->Array:
             if at<other.size() and handle.root.get_node_or_null(NodePath(str(other[at])))!=null:aliases[path]=str(other[at])
             elif within.size()==1:aliases[path]=str(within[0].name)+"/"+path
             elif within.is_empty():
-                var wrapped:Node=_verified_wrapped_path(handle.root,path)
+                var wrapped:Node=_verified_wrapped_path(handle.root,path,str(other[at]) if at<other.size() else "")
                 if wrapped!=null:aliases[path]=str(handle.root.get_path_to(wrapped))
                 else:missing.append(path)
             else:missing.append(path)

@@ -10,8 +10,9 @@
 script = ExtResource("3_cobck")
 id = "environment.trap.gas_vent"
 kind = "trap"
+native_owner_contents = PackedStringArray("spatial_effect.environment.gas_vent")
 views = PackedStringArray()
 art = PackedStringArray()
 stand_in = "environment.furniture.loose_floorboards"
-status = "stand_in"
-notes = "No object art; its trap field (spatial_effect.environment.*) carries old pre-rendered sprites in the surfaces section. Drawn with environment.furniture.loose_floorboards."
+status = "partial"
+notes = "The canonical spatial_effect.environment.gas_vent world_media program owns the workshop device body only through this same currently observed hardware UUID in anchor_item_uuid. Exact declared content, real object placement/orientation and current admitted cells remain required; no nearby or remembered owner substitutes. This explicit object delegation removes the loose-floorboards duplicate when that real linked body is admitted. The stand-in remains the fallback when the actual join or required placement is absent or ambiguous. Delivered2948/9f public links close the former backend boundary; old null-link recordings retain their actual values. All artwork remains unreviewed; source assignment is not native output or art acceptance."

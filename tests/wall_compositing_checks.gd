@@ -38,6 +38,48 @@ func compare(a: Image, b: Image, base: Image = null, opacity: float = 1.0) -> Di
             if delta > .025: bad += 1
     return {"mean":error/maxi(1,samples),"maximum":maximum,"samples":samples,"bad":bad}
 
+func admission_diagnostic(scene:Node)->Dictionary:
+    # Failure-only reads of the same preparation owners as the native gates.
+    # Do not invoke _detailed_frame_context: it consumes profiling counters.
+    var pending:Dictionary={}
+    if scene.pending_world!=null:
+        var candidate=scene.pending_world
+        pending={"phase":candidate.phase,"prepared":candidate.prepared,"admitted":candidate.admitted,"initial":candidate.initial,
+            "epoch":candidate.epoch,"quarter":candidate.quarter,"actor_binding_cursor":candidate.binding_cursor,
+            "actor_binding_total":candidate.actor_bindings.size(),"blocked_actor":candidate.blocked_actor.duplicate(true),
+            "blocked_source":candidate.blocked_source.duplicate(true),"blood_rows":candidate.result.get("blood_rows",{}).size()}
+        if candidate.binding_cursor<candidate.actor_bindings.size():
+            var binding:Dictionary=candidate.actor_bindings[candidate.binding_cursor]
+            var value:Dictionary=binding.value
+            var missing:Array=[]
+            for path in [value.path]+value.get("geometry",{}).get("textures",{}).values():
+                if not scene.textures.has(path) and path not in missing:missing.append(path)
+            pending.binding={"path":value.path,"prepared":not binding.get("prepared",{}).is_empty(),"missing_textures":missing}
+        var blood=scene.component_renderer.blood
+        var waiting:Array=[];var ready:int=0
+        for key in candidate.blood_preparation.handles:
+            var record:Dictionary=candidate.blood_preparation.handles[key]
+            if record.get("removed",false):continue
+            var held:Dictionary=record.get("handle",{})
+            if held.get("ready",false):ready+=1;continue
+            if waiting.size()==4:continue
+            var callback:Callable=held.get("draw_callback",Callable())
+            waiting.append({"key":key,"slot":held.get("slot",-1),"generation":held.get("generation",-1),
+                "borrowed":record.get("borrowed",false),"draw_wait":held.get("draw_wait",-1),
+                "draw_wait_owned":blood._draw_waits.has(held.get("draw_wait",-1)),
+                "callback_connected":callback.is_valid() and RenderingServer.frame_post_draw.is_connected(callback)})
+        var admission=scene.component_renderer.BloodRenderer.Admission
+        pending.blood={"ready":blood.ready,"resources_ready":blood.resources_ready,"ready_handles":ready,
+            "total_handles":candidate.blood_preparation.handles.size(),"pending_examples":waiting,
+            "loading_path":admission.loading_path,"settling":admission.settling,"material_job":not admission._material_job.is_empty()}
+    return {"recording_ready":scene.session.recording_ready,"session_issue":scene.session.issue,"timeline_empty":scene.timeline.state.is_empty(),
+        "waiting_for_world":scene.timeline.waiting_for_world,"sequence":scene.timeline.sequence,"display_ms":scene.timeline.display_ms,
+        "world_revision":scene.world_revision,"timeline_world_revision":scene.timeline.world_revision,
+        "world_epoch":scene.world_prepare_epoch,"timeline_epoch":scene.timeline.initialization_revision,
+        "component_ready":scene.component_renderer.ready,"component_leaves":scene.component_renderer.readiness.duplicate(true),
+        "media_gate":scene.media_gate.duplicate(true),"media_issue":scene.media_issue,"errors":scene.presentation_errors.duplicate(),
+        "native_startup":scene.native_startup.duplicate(true),"pending_world":pending}
+
 func run() -> void:
     # Reproduce the former multisample edge instability separately. The default
     # lane exercises the project's actual nearest sprite rasterization.
@@ -50,7 +92,6 @@ func run() -> void:
     root.add_child(scene)
     var deadline = Time.get_ticks_msec()+60000
     while not scene.session.recording_ready and scene.session.issue.is_empty() and Time.get_ticks_msec()<deadline: await process_frame
-    scene.session.close()
     # Environment textures alone do not admit the initial actor/world source
     # generation. The ordinary Play process must finish that full boundary
     # before this intentionally frozen fixture drives quarter publication.
@@ -58,7 +99,13 @@ func run() -> void:
     await RenderingServer.frame_post_draw
     var prepared:bool=scene.playback_prepared() and scene.presentation_errors.is_empty() and scene.media_issue.is_empty()
     check(prepared,"Actual initial world, actors and selected sources are admitted before freezing wall captures")
-    if not prepared:scene.queue_free();await process_frame;quit(1);return
+    if not prepared:
+        print(JSON.stringify({"checks":checks,"failures":failures,"initial_admission":admission_diagnostic(scene)}))
+        scene.session.close()
+        scene.queue_free();await process_frame;quit(1);return
+    # recording_ready admits the initialization, not every compiled group's
+    # promised media handoff. Keep its producer alive through full admission.
+    scene.session.close()
     scene.set_process(false); scene.hud.hide()
     scene.wall_mode = "translucent"
     check(scene.session.issue.is_empty() and not scene.timeline.state.is_empty(),"Recorded Crypt initializes")

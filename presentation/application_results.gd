@@ -693,6 +693,8 @@ static func _immediate_blast(node:Dictionary,descriptor:Dictionary,graph:Diction
     if launch.is_empty():return []
     var origin:Array=launch.fact.aoe_position
     if fact.get("source_position")!=null and fact.source_position!=origin:return []
+    var support:Dictionary=graph.get("area_contacts",{}).get(str(launch.id),{})
+    if support.get("position")!=origin or not support.has("elevation_steps"):return []
     var origin_occurrence:String=str(node.id) if fact.get("source_position")!=null else str(launch.id)
     var cells:Array=[]
     for cell in fact.resolved_area_positions:
@@ -701,6 +703,7 @@ static func _immediate_blast(node:Dictionary,descriptor:Dictionary,graph:Diction
         "original_caster_uuid":str(fact.source_entity_uuid),"event_uuid":str(node.id),
         "observed":true,"blast_committed":true,"immediate_launch":true,"admitted_cells":cells}
     return [{"node":node,"target_uuid":str(fact.source_entity_uuid),"origin_position":origin,
+        "origin_elevation_feet":float(support.elevation_steps)*5.0,
         "values":{"kind":str(descriptor.payload_kind),"source_owner_uuid":str(node.id),"original_caster_uuid":str(fact.source_entity_uuid),
             "admitted_cells":cells,"immediate_launch":true,"event":{},"item_uuid":"","lifetime_uuid":""},
         "inputs":{"blast_event":packet},"event":packet,
@@ -721,12 +724,15 @@ static func _accepted_area_blast(node:Dictionary,descriptor:Dictionary,graph:Dic
     var geometry:Dictionary=fact.area_geometry if fact.get("area_geometry")!=null else {}
     if geometry.get("shape")!=descriptor.get("area_shape") or geometry.get("center")!=fact.aoe_position:return []
     var origin:Array=fact.aoe_position;var cells:Array=[]
+    var support:Dictionary=graph.get("area_contacts",{}).get(str(node.id),{})
+    if support.get("position")!=origin or not support.has("elevation_steps"):return []
     for cell in fact.resolved_area_positions:cells.append([int(cell[0])-int(origin[0]),int(cell[1])-int(origin[1])])
     var values:Dictionary={"kind":str(descriptor.payload_kind),"source_owner_uuid":str(node.id),"original_caster_uuid":str(fact.source_entity_uuid),
         "admitted_cells":cells,"event":{}}
     var packet:Dictionary=values.duplicate();packet.erase("event")
     packet.merge({"event_uuid":str(node.id),"observed":true,"blast_committed":true})
-    return [{"node":node,"target_uuid":str(fact.source_entity_uuid),"origin_position":origin,"values":values,"inputs":{"blast_event":packet},
+    return [{"node":node,"target_uuid":str(fact.source_entity_uuid),"origin_position":origin,
+        "origin_elevation_feet":float(support.elevation_steps)*5.0,"values":values,"inputs":{"blast_event":packet},
         "evidence":{"source_occurrence":str(node.id),"source_lineage":str(node.lineage_id),"source_uuid":str(fact.source_entity_uuid),
             "source_position":origin,"resolved_area_positions":fact.resolved_area_positions,"source_relative_cells":cells,
             "admission":"completed_direct_cast_resolved_footprint"}}]

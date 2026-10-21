@@ -486,10 +486,13 @@ static func _objects(context: Dictionary, world: Dictionary, index: Dictionary) 
         var where: String = "environment/objects/" + id
         if object.id != id: Common.error(report, where, "id field says " + object.id)
         Common.cover(report, "environment_object", id, object.status)
-        if not object.native_owner_content.is_empty():
-            if not context.entries.surfaces.has(object.native_owner_content):
-                Common.error(report,where,"native object body names no authored spatial owner: "+object.native_owner_content)
-            else:index.native_object_owners[id]=object.native_owner_content
+        if not object.native_owner_contents.is_empty():
+            var contents:Array=[]
+            for content in object.native_owner_contents:
+                if not context.entries.surfaces.has(content):
+                    Common.error(report,where,"native object body names no authored spatial owner: "+content)
+                else:contents.append(content)
+            if not contents.is_empty():index.native_object_owners[id]=contents
         Common.asset(report, where, object.measurements)
         for art in object.art:
             if not context.art.has(art): Common.error(report, where, "art missing: " + art)

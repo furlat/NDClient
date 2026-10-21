@@ -17,10 +17,12 @@ func run() -> void:
     var scene = Player.instantiate(); scene.timeline.paused = true; root.add_child(scene)
     var deadline = Time.get_ticks_msec()+90000
     while not scene.session.recording_ready and scene.session.issue.is_empty() and Time.get_ticks_msec()<deadline: await process_frame
-    scene.session.close(); await scene.presentation_updated
     while not scene._media_ready({}) and scene.media_issue.is_empty() and Time.get_ticks_msec()<deadline: await scene.presentation_updated
     check(scene._media_ready({}) and scene.presentation_errors.is_empty(),"Actual Crypt and exact source companions prepare")
-    if not scene._media_ready({}): quit(1); return
+    if not scene._media_ready({}):
+        scene.session.close();scene.queue_free();await process_frame;quit(1);return
+    # Keep the producer until its compiled groups' media handoffs are admitted.
+    scene.session.close(); await scene.presentation_updated
     scene.set_process(false); scene.hud.hide(); scene.camera_focus = Vector3(4,0,5); scene.camera.size = 4
     scene.position_camera(); scene.wall_mode = "hidden"; scene.update_wall_visibility(); scene._sort_draws(); scene._sample_actors(); scene._sample_fixtures()
     var canonical: Dictionary = scene.timeline.state.duplicate(true)

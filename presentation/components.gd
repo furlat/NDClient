@@ -329,7 +329,6 @@ static func native_spell(group:Dictionary,node:Dictionary,recipe:Dictionary,sele
                     actual.from_position=observation.origin_position;actual.to_position=observation.origin_position
                     if observation.has("origin_elevation_feet"):
                         actual.from_elevation_feet=observation.origin_elevation_feet;actual.to_elevation_feet=observation.origin_elevation_feet
-                    elif constructor.get("projection")=="accepted_area_blast":actual.from_elevation_feet=actual.to_elevation_feet
                 actual.ground_target=false
                 actual.native_constructor_inputs=[{"component_path":constructor.component_path,"input_field":"","values":observation.values}]
                 actual.native_constructor_evidence=observation.evidence

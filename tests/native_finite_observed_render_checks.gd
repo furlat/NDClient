@@ -189,10 +189,17 @@ func settle_diagnostic(world:Node,component_id:String,before_draw:Dictionary)->D
         # Inspect the existing exclusion owner without polling/joining a job,
         # requesting resources or acquiring source mutation from a diagnostic.
         var admission=world.component_renderer.BloodRenderer.Admission
+        var loading_progress:Array=[]
+        var loading_status:int=ResourceLoader.THREAD_LOAD_INVALID_RESOURCE
+        if not admission.loading_path.is_empty():
+            loading_status=ResourceLoader.load_threaded_get_status(admission.loading_path,loading_progress)
         var material_job:Dictionary=admission._material_job
         var receiver_cache:Dictionary=world.component_renderer.native_spells._resource_cache
         var blood_pool:Variant=world.component_renderer.blood._pool_world
         pending.blood.admission={"loading_path":admission.loading_path,"settling":admission.settling,
+            "loading_status":loading_status,"loading_progress":loading_progress,
+            "loading_owner_has_path":admission.loading_owner.has(admission.loading_path),
+            "loading_resource_cached":not admission.loading_path.is_empty() and ResourceLoader.has_cached(admission.loading_path),
             "loading_revision":admission.loading_revision,"loading_owner_revision":admission.loading_owner.get("native_source_revision",0),
             "loading_owner_is_receiver_cache":is_same(admission.loading_owner,receiver_cache),
             "mutation_frame":admission.mutation_frame,"current_frame":Engine.get_process_frames(),

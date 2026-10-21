@@ -6,6 +6,6 @@
 script = ExtResource("object")
 id = "environment.spell_object.guardian_of_faith"
 kind = "spell_object"
-native_owner_content = "spatial_effect.spell.guardian_of_faith"
+native_owner_contents = PackedStringArray("spatial_effect.spell.guardian_of_faith")
 status = "partial"
 notes = "The actual Guardian object delegates its spectral body only to the uniquely observed current spatial owner with this content and exact matching public anchor_item_uuid. The real backend placement/footprint/collision remains unchanged. Missing or ambiguous public linkage remains an unresolved body assignment, never a guessed nearby owner, borrowed actor or substitute sculpture. Its owned finite damage contacts and condition clocks remain independent. All artwork remains unreviewed."

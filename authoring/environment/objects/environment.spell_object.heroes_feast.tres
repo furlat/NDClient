@@ -13,6 +13,6 @@ kind = "spell_object"
 views = PackedStringArray()
 art = PackedStringArray()
 stand_in = "environment.furniture.table"
-native_owner_content = "spatial_effect.spell.heroes_feast"
+native_owner_contents = PackedStringArray("spatial_effect.spell.heroes_feast")
 status = "partial"
 notes = "The exact current public Feast zone whose anchor_item_uuid names this actual object owns its spectral table body. The ordinary furniture table remains the fallback when that exact observed owner link is unavailable; matching content or nearby location alone never suppresses it. All artwork remains unreviewed."

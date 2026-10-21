@@ -24,8 +24,8 @@ def legacy_errors(log, cases):
 
 def join(paths):
     inventory=json.loads((PROJECT/'authoring/server_ids.json').read_text())
-    wanted={identity+'/baseline' for identity in inventory['ids']['spell']}
     scenarios={row['id']:row for row in spell_baselines(inventory)}
+    wanted=set(scenarios)
     case_index=PROJECT/'.runtime/studio-library/index.json'
     recorded=json.loads(case_index.read_text()) if case_index.exists() else {'cases':[]}
     blockers={row['id']:{'status':row['status'],'reason':row.get('reason',''),'source':str(case_index.resolve())}
@@ -33,6 +33,12 @@ def join(paths):
     history={};runs=[]
     for path in paths:
         report=json.loads(path.read_text());log_path=path.parent/'godot.log'
+        cases=[]
+        for row in report['cases']:
+            identity=row['case'] if 'case' in row else row.get('id')
+            if identity not in wanted:raise ValueError('GUI result is outside current inventory: '+str(identity))
+            cases.append({**row,'case':identity})
+        report['cases']=cases
         log=log_path.read_text(errors='replace') if log_path.exists() else ''
         runs.append({'report':str(path.resolve()),'log':str(log_path.resolve()),'native_exit':report.get('native_exit'),
             'expected_cases':report.get('expected_cases'),'completed_cases':len(report['cases']),'complete':report.get('complete',False),
@@ -40,7 +46,6 @@ def join(paths):
         older=legacy_errors(log,report['cases']) if any('native_errors' not in row for row in report['cases']) else {}
         for row in report['cases']:
             identity=row['case']
-            if identity not in wanted:raise ValueError('GUI result is outside current inventory: '+identity)
             errors=row.get('native_errors',older.get(identity,[]))
             result_path=path.parent/identity.replace('/','__')/'result.json'
             raw=json.loads(result_path.read_text()) if result_path.exists() else {}
@@ -50,9 +55,10 @@ def join(paths):
             # unavailable. Every requested recipe step must actually complete.
             completed_command=len(steps)==len(expected) and all(step.get('ok',False) and step.get('requested')==requested
                 for step,requested in zip(steps,expected))
-            attempt={**row,'native_errors':errors,'command_succeeded':completed_command,
+            native_exit=report.get('native_exit')
+            attempt={**row,'native_errors':errors,'command_succeeded':completed_command,'native_exit':native_exit,
                 'expected_steps':len(expected),'completed_steps':sum(bool(step.get('ok',False)) for step in steps),
-                'runtime_safe':bool(row.get('ok') and completed_command and not errors),
+                'runtime_safe':bool(native_exit==0 and row.get('ok') and completed_command and not errors),
                 'render_trace':row.get('render_trace',raw.get('render_trace',{})),
                 'artifact_provenance':{'report':str(path.resolve()),'log':str(log_path.resolve()),
                     'result':str(result_path.resolve()),'native_exit':report.get('native_exit'),

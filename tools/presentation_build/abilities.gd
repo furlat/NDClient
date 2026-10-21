@@ -748,8 +748,6 @@ static func _check_constructor(use:Resource,where:String,clips:Dictionary,report
             or use.role!="attached" or use.at!="owner_start" or use.delay!=0.0:
             Common.error(report,where,"membership input needs a declared boolean setter and actual condition owner_start clock");return
     var binding:Dictionary=use.constructor_input
-    if binding.has("source_resources") and not binding.source_resources is Dictionary:
-        Common.error(report,where,"constructor source resources must be an explicit field-to-resource map");return
     if binding.has("recipient_condition"):
         var predicate:Dictionary=binding.recipient_condition
         if binding.get("projection")!="weapon_component" or str(predicate.get("condition_key","")).is_empty() \
@@ -1036,14 +1034,6 @@ static func _check_constructor(use:Resource,where:String,clips:Dictionary,report
             var selected:Array=components.filter(func(component):return component.id==id)
             if selected.size()!=1:Common.error(report,where,"constructor component path is unavailable: "+str(binding.component_path));return
             component=selected[0];input=component.input;components=input.get("components",[])
-        if not binding.get("source_resources",{}).is_empty():
-            var resource_value:Variant=input if str(binding.get("input_field","")).is_empty() else input.get(str(binding.input_field))
-            if not resource_value is Dictionary:
-                Common.error(report,where,"constructor source resources need an existing input dictionary");return
-            var resource_input:Dictionary=resource_value
-            for field in binding.source_resources:
-                if not resource_input.has(field) or not _matching_source_resources(resource_input[field],binding.source_resources[field]):
-                    Common.error(report,where,"constructor source resources must replace existing sealed resources with the same source interface: "+str(field));return
         if binding.get("kind") in ["application_result","reaction_observation"] and not binding.get("input_field","").is_empty() and not input.get(binding.get("input_field","")) is Dictionary:Common.error(report,where,"constructor input member is not a supplied dictionary: "+str(binding.get("input_field")))
         if binding.get("kind")=="observed_operation":
             if not input.get("state") is Dictionary or not input.has("operation_uuid") or "operation_state" not in clips[use.clip].get("inputs",[]) \
@@ -1216,23 +1206,6 @@ static func _check_constructor(use:Resource,where:String,clips:Dictionary,report
                 Common.error(report,where,"single-link projection must match the delivered endpoint/ribbon/launch/speed contract")
             _check_input_policies(use,component,where,report)
         elif binding.get("kind")=="spell_strike":_check_vampiric_input_policies(use,component,where,report)
-
-## Static constructor resource choices cannot populate factual fields. The
-## selected input must already name the same exported source interface; actual
-## occurrence operands remain the final merge in EffectPackage.
-static func _matching_source_resources(original:Variant,selected:Variant)->bool:
-    if original is Array or selected is Array:
-        if not original is Array or not selected is Array or original.is_empty() or original.size()!=selected.size():return false
-        for index in original.size():
-            if not _matching_source_resources(original[index],selected[index]):return false
-        return true
-    if not original is String or not selected is String:return false
-    for path in [original,selected]:
-        if not path.begins_with("res://assets/vfx/") or path.get_extension() not in ["res","tres"] or not FileAccess.file_exists(path):return false
-    var before:Resource=load(original);var after:Resource=load(selected)
-    if before==null or after==null or before.get_class()!=after.get_class():return false
-    var before_script:Script=before.get_script();var after_script:Script=after.get_script()
-    return before_script!=null and after_script!=null and before_script.source_code==after_script.source_code
 
 ## An explicitly static source pose uses its own sealed field. Its optional
 ## live-event/electric channels are not evidence about a gameplay surface.

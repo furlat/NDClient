@@ -2,8 +2,9 @@
 
 This is a source/code inventory for the approved migration, after the backend
 `9f81d52676d4cea78be0be951dfc51a756050032` (including all earlier 2948/0c and SDK repairs), and complete Factory
-`runtime-spike-seed-20261021-7ca62e2877bf5156` material/runtime handoff, including the complete
-public-admission predecessor. It separates
+`runtime-call-heavy-defaults-20261021-8dd103fb92174541` complete successor,
+installed and source-published21 October16:11 UTC, retaining the7ca material/
+runtime and complete public-admission predecessors. It separates
 assigning existing artwork from finishing shared consumers, missing semantics
 and human art decisions. All artwork remains unreviewed under the latest user direction; historical accept/reject labels are not current acceptance evidence. In-progress assignments below are not completion
 claims. No new rendering system, registry, reducer or gameplay inference is
@@ -21,16 +22,41 @@ authored selectors separated from recorded evidence. These six are no longer
 unassigned content; neither source presence nor the active qualification job
 establishes a pass or artwork approval.
 
-**Current delegation:** Factory needs the exact updated equipped-receiver
-artifact, literal UTF-8 label correction and optional native Cone bank identity
-repair in [§§17–19](FACTORY_REVIEW_2026-10-20.md#17-prepare-equipped-weapon-receiver-for-the-current-modular-shader).
-The earlier owner/geometry/terminal requests are delivered and assigned. Backend
+**Current delegation:** complete8dd delivers the equipped receiver,15 literal
+UTF-8 labels,19 optional Cone bank identities and both retained default Electric
+banks in [§§17–20](FACTORY_REVIEW_2026-10-20.md#17-prepare-equipped-weapon-receiver-for-the-current-modular-shader).
+Client intake and full three-domain publication are complete: zero errors,
+two retained authoring warnings and four Unicode warnings (earlier7ca had45).
+[Installation/publication receipt](../.runtime/vfx-successor-8dd/installation.json).
+Affected qualification remains in progress; older7ca receipts retain their
+actual package. The six temporary Electric bank overrides and their unused
+transport are removed, preserving actual factual inputs. The active table has
+62 rows. The two new Spirit RID rows have explicit inactive optional
+alternatives, not new required artwork or APIs. Earlier owner/geometry/terminal
+requests are delivered and assigned. Backend
 9f is adopted; the unchanged stabilization→healing→movement original succeeds,
 while voluntary Drop Prone and slot-six Myrmidon discovery remain the handoff's
 named limitations. Twelve summon body substitutions, authentic Draconic mouth
 metadata, the remaining authored movement-contact marker and the existing audio
 source/design gaps remain explicit art/data work below. All artwork/audio remain
 UNREVIEWED; no optional body-UV or richer Glyph study is made mandatory.
+
+**Current affected8dd results,16:33 UTC:** five headless scripts pass;15 native
+invocations completed with12 passing/three failed. Appearance3,012/0, Acid34/0,
+both actual Font originals13,211/0, intrinsic weapons70,695/0, Ember receiver
+5,132/0, six coating families37,740/0, Basic Poison runtime5,536/0 and the named
+Ember/Poison contact gates20/0 and19/0 are current selected controls. Event
+retains one initial10s Freezing admission failure among1,729 assertions; the
+same run later admits it, so a permanent deadlock is not proved. One Wind case
+has six failures because actual StandardMaterial debris cannot preserve the
+current-cell mask; [Factory§21](FACTORY_REVIEW_2026-10-20.md#21-wind-wall-debris-needs-current-observed-cell-coverage)
+records that exact source requirement. The package alias failure6,402/1 is
+source-fixed, with five-approach proof pending. The five optional-study Resource
+dispositions are applied, preserving all real selectors and unknown-observation
+refusal guards. Factory/source checkpoint is `4ac732d3`; the58-path client
+repair freeze is applied with its checkpoint pending. Profiles and remaining
+live/affected proof are still pending; no whole-task/native/art pass follows.
+[Affected receipt](../.runtime/tests/20261021T160607.496849Z-current-source-repairs/summary.json).
 
 The latest [Library import receipt](../.runtime/material-runtime-integration-20261021/library-after-six.json)
 contains 360 scenarios and 357 recorded originals. Its three actual failures
@@ -148,10 +174,21 @@ Portal/Hatch programs to the existing environment sprite presenter. Resource
 programs own frame order, observed state changes, activation/contact frames,
 projectile speed/directional art and optional successful-save hops. Actual
 committed facts provide mechanism UUID, origin, independently disclosed end,
-per-cell affected positions and canonical support heights. Thirteen hardware
-object resources delegate only through their real observed object link; five
-producer families still omit that public join and keep their ordinary hardware
-fallback. This is one program consumer, not ten effect-specific renderers.
+per-cell affected positions and canonical support heights. The promoted2948
+repair, retained by9f, supplies exact currently observed `anchor_item_uuid`
+links for Gas Vent, Jaw Trap, Pressure Plate, Tripwire and all three Spike Trap
+forms. `MechanismActivationFact.mechanism_uuid` identifies that same disclosed
+spatial owner, whose current sensory record links its actual hardware object;
+no additional backend join is missing. The existing thirteen hardware mappings
+retain their exact identity guards. The client plural `native_owner_contents`
+batch is now written: all15 former singleton declarations (including Feast and
+Guardian) migrate consistently, and all five hardware families are assigned,
+including the three explicit Spike content IDs. All20 object declarations use
+the same exact current-owner consumer. All20 declarations are included in the
+zero-error8dd publication; affected native qualification remains pending.
+Missing, hidden or ambiguous current
+ownership still retains the ordinary hardware fallback; no nearby or remembered
+owner substitutes. This is one program consumer, not ten effect-specific renderers.
 
 Actual PortalTransfer facts now own entry/arrival body tracks and finite exit
 art, including a disclosed exit when a later paid-entry retreat changes the

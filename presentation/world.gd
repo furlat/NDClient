@@ -31,14 +31,15 @@ static func cell_key(position: Array) -> String:
 ## A body delegation is an exact current public identity join. Content alone,
 ## proximity and remembered placement cannot suppress an unrelated object.
 static func native_object_owner(identity:String,item_id:String,senses:Dictionary,index:Dictionary,placement:Dictionary={})->String:
-    var content:String=str(index.get("native_object_owners",{}).get(item_id,""))
-    if content.is_empty():return ""
+    var contents:Array=index.get("native_object_owners",{}).get(item_id,[])
+    if contents.is_empty():return ""
     var matched:String=""
     for key in senses.get("spatial_effects",{}):
         var effect:Dictionary=senses.spatial_effects[key]
+        var content:String=SpatialInputs.content_id(effect)
         # Current sensory membership admits concealed traps too; their
         # apparent_presence controls absence/memory, not this disclosed cut.
-        if effect.get("anchor_item_uuid")!=identity or SpatialInputs.content_id(effect)!=content \
+        if effect.get("anchor_item_uuid")!=identity or content not in contents \
             or SpatialInputs.admitted_cells(effect).is_empty():continue
         var program:Dictionary=index.get("spatial_media",{}).get(content,{})
         if effect.get("anchor_position")==null and not program.get("native_world_media",false):continue

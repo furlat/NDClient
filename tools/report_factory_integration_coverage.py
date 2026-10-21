@@ -539,14 +539,16 @@ for source in native_reports:
             observed = audio.get('counters', {}).get('started', 0) > 0 or (row.get('pcm_frames', 0) > 0 and row.get('peak', 0) > 0)
             witness(case_id, 'audio_playback' if observed else 'audio_transport', source, receipt,
                     'playback_errors' if audio.get('errors') or native_errors else 'playback_observed' if observed else 'no_playback_observed',
-                    qualifies=scope if source in args.audio_report else 'Actual authored audio transport starts for these exact rows; sound completeness, mix, timing and artistic acceptance are separate.',
+                    qualifies=(scope if source in args.audio_report else 'Actual authored audio transport starts for these exact rows; sound completeness, mix, timing and artistic acceptance are separate.') if observed else 'No playback was observed. Audio transport diagnostics only; no audible output, mix or human approval is qualified.',
+                    reported_scope=scope,
                     counters=audio.get('counters', {}), errors=audio.get('errors', []), rows=audio.get('rows', {}),
                     receipt_failures=receipt.get('failures', []),
                     pcm_frames=row.get('pcm_frames'), pcm_peak=row.get('peak'), pcm_capture=row.get('pcm_capture'),
                     log=str(log_path), log_validation=log_validation)
         elif row.get('audio_transport_only'):
             witness(case_id, 'audio_transport', source, receipt, 'transport_checks_passed' if passed else 'transport_checks_failed',
-                    qualifies=scope, failures=receipt.get('failures', []), log=str(log_path), log_validation=log_validation)
+                    qualifies='Audio transport diagnostics only; no playback, audible output, mix or human approval is qualified.',
+                    reported_scope=scope, failures=receipt.get('failures', []), log=str(log_path), log_validation=log_validation)
 
 report['case_evidence'] = dict(case_evidence)
 report['unmatched_evidence'] = unmatched_evidence

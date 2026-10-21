@@ -1,37 +1,54 @@
 # Factory source/runtime delegation — reconciled21 October2026
 
-**Current complete delivery installed:** `runtime-spike-seed-20261021-7ca62e2877bf5156`.
-The new [Material/runtime handoff](/mnt/c/Users/tommaso/Documents/assets/VFXFactory/docs/MATERIAL_RUNTIME_HANDOFF_2026-10-21.md)
-includes the owner-field/connected-surface, material18, terminal-only, Finger,
-Patches, Sleet and Spike continuations. Installed as one complete archive:
-22,770files,1,246 existing clip IDs,504 unchanged default selections and60 typed
-source rows. The previous complete8b package is preserved in
-`NDClientGodot-backups`; no loose overlay or Factory source edit was made.
-[Installation receipt](../.runtime/vfx-material-install-7ca62e/installation.json).
-The active public source table is
-`res://assets/vfx/format/spike-seed-20261021-source-resources.json`.
+**Current complete delivery installed and source-published,21 October16:11 UTC:**
+`runtime-call-heavy-defaults-20261021-8dd103fb92174541`, through the
+[Material/runtime handoff](/mnt/c/Users/tommaso/Documents/assets/VFXFactory/docs/MATERIAL_RUNTIME_HANDOFF_2026-10-21.md).
+Its22,847 files retain1,246 clip IDs,504 default selections and155 condition
+entrypoints, with62 typed source rows. It delivers all source corrections in
+§§17–20 below and retains the complete7ca owner/geometry/terminal continuations.
+The complete predecessor is preserved separately in `NDClientGodot-backups`;
+no loose source overlay or Factory edit was made.
+[Installation receipt](../.runtime/vfx-successor-8dd/installation.json).
+The active public table is
+`res://assets/vfx/format/spirit-runtime-20261021-source-resources.json`.
+The two added Spirit RID rows have explicit inactive optional dispositions;
+they do not replace current Ground choices or qualify RID cell masking/submission.
+Earlier7ca receipts retain their actual package evidence. Installation/source
+publication, encounter qualification and human artwork review remain separate.
+The current Factory/source checkpoint is `4ac732d3`.
 
 ## Current delegation status
 
-**New current receiver preparation: §17.** The updated client modular shader
-has no matching entry in the installed equipped-weapon receiver program bank.
-The real Ember contact draws; its independent equipped sustain refuses that
-exact program. This does not reopen the delivered owner/geometry interfaces.
+**§§17–20 are DELIVERED, installed and source-published in complete8dd;
+affected qualification remains pending.** The unchanged current receiver bank now
+contains the exact `b61cce83…` program and expanded alias;15 selected Cadence
+labels store literal UTF-8;19 optional Cone interface identities use their
+actual packaged Shader directories; and both retained default heavy-electric
+banks serialize their original five-lane metadata. These are no longer missing
+Factory deliveries. Independent client-note Unicode escapes are outside the
+15-label correction. The optional Cone approach remains separate from its
+ordinary recorded default.
 
-**Nonfatal source-label serialization: §18.** Fifteen delivered public-readiness
-phase labels use escaped Unicode that the pinned Godot text-resource loader
-misdecodes. Request literal UTF-8 serialization with identical text values;
-this is metadata hygiene, not a missing runtime API or artwork request, and it
-does not block the current native qualification batch.
+**Current affected evidence:** on installed8dd the Ember receiver gate passes
+5,132 assertions; intrinsic weapons70,695/0, six coating families37,740/0,
+Basic Poison runtime5,536/0, Ember delivery/contact20/0 and Poison contacts19/0
+also pass. These are selected client runtime controls, not approval of artwork
+or every equipment combination. The package gate retains one alias failure
+among6,402 assertions; a client correction is applied and five-approach proof
+is pending. No failed receipt is replaced by its source fix.
 
-**Optional native Cone preparation: §19.** Its packaged interface bank retains
-pre-relocation identity strings. The exhaustive approach gate exposes this
-native alternative; it is separate from the clip's ordinary recorded default.
+**Current source integration request:§21.** Actual Wind debris uses native
+StandardMaterial surfaces that cannot accept the existing current-cell mask.
+The source must preserve actual observed/suppressed-cell coverage; full wall
+geometry and visual state do not prove that subset. The exact request below
+does not reopen delivered§§17–20 or ask for another backend field.
 
-**Default heavy-electric metadata: §20.** The two original heavy banks omit
-required nondefault metadata. Six selected client uses now explicitly choose
-the delivered corrected banks through existing constructor operands; native
-qualification is pending. Bare package defaults still need re-exporting.
+**Electric simplification applied:** all six temporary client bank overrides
+and their now-unused five-file transport/validation extension are removed
+(47 deletions). Actual factual construction operands, source clocks and
+damage-policy provenance remain unchanged. Existing
+7ca Call/Bolt baseline passes used those overrides and do not qualify the new
+bare defaults. No follow-up approach is substituted.
 
 **Do not resubmit the source-API requests in §§1–14 or16.** Their delivered
 interfaces are present in this complete successor. In particular:
@@ -44,8 +61,12 @@ interfaces are present in this complete successor. In particular:
   Client resource/consumer integration is now written; source publication and
   actual encounter qualification remain separate.
 
-The complete client cohort now publishes with zero authoring errors on 7ca;
-[combined source receipt](../.runtime/material-runtime-integration-20261021/build-final.json).
+The complete client cohort now publishes all three domains with zero errors
+and two retained authoring warnings on8dd. Four Unicode warnings remain,
+down from45 in the earlier7ca publication; independent client/transitive
+strings are not silently included in the15-label Factory repair.
+[Publication log](../.runtime/vfx-successor-8dd/presentation-publication.log),
+[exact source cutoff](../.runtime/material-runtime-integration-20261021/source-cutoff-factory8dd-closing.json).
 Integrated native/live qualification remains open. Installation or
 Factory's isolated positive output does not establish correct client operands,
 encounter output, final timing, shutdown or human artwork approval. Earlier
@@ -679,6 +700,16 @@ All artwork remains unreviewed.
 
 ## 17. Prepare equipped-weapon receiver for the current modular shader
 
+**DELIVERED, installed and source-published in complete8dd; selected receiver proof passes.** The canonical
+`sources/7ea03eda1143a2eb6407/receiver-programs.tres` retains its five prior
+records and adds the exact current `b61cce83…` root and expanded alias for one
+newly prepared program. The handoff preserves aperture clipping, shadow
+exclusion, colour, normals/depth, opacity and lighting; offhand and simultaneous
+treatments remain outside that delivery. Factory's194 native checks/22 image
+pairs are isolated source evidence, not client encounter or clean-exit proof.
+The following diagnosis and request describe the historical7ca failure and
+are fulfilled by this delivery.
+
 **21 October, actual client-native refusal; no new artwork or backend request.**
 The original production Ember case in
 `.runtime/tests/20261021T113049.409957Z/weapon_runtime_delivery_render_checks.log`
@@ -700,7 +731,7 @@ Exact selected chain:
   `assets/vfx/sources/7ea03eda1143a2eb6407/receiver-programs.tres`.
   The installed table has five old keys and no current `b61cce83…` key.
 
-Requested delivery: prepare the existing equipped receiver program from the
+Historical request, fulfilled by8dd: prepare the existing equipped receiver program from the
 actual client `modular.gdshader` and its existing transitive shader includes;
 publish its matching `programs`, `uniforms` and `default_textures` records through
 the same packaged receiver bank. Preserve the client shader's actual
@@ -723,11 +754,20 @@ lower-lip discard before ordinary modular colour evaluation.
 The shared bank also serves the other equipped elemental treatments. Prepare
 this actual receiver once for the family; this receipt proves only the named
 Ember original's current failure. Existing Factory sources remain read-only.
-No replacement artifact, rerun, framebuffer parity or human artwork approval is
-claimed here; all artwork remains UNREVIEWED.
+The old receipt remains unchanged. The current selected receiver rerun passes
+5,132 assertions, alongside the named family controls above; blanket equipment
+parity and human artwork approval are not claimed here.
+All artwork remains UNREVIEWED.
 
 
 ## 18. Serialize source-resource labels as literal UTF-8
+
+**DELIVERED, installed and source-published in complete8dd.** All15 selected
+Cadence labels now store the intended literal UTF-8 middle dot. The handoff
+reports606 checks/30 loads/zero warnings for those exact files, preserving
+their non-label bytes and runtime operands. Independent client-note escapes
+and the unidentified transitive warning are outside this correction. The
+following7ca diagnosis and request are historical and fulfilled.
 
 **21 October, source-proven nonfatal metadata defect.** The complete7ca package
 contains text resources whose labels encode the middle dot as the literal
@@ -760,15 +800,24 @@ the exact delivered labels above, not those independent client note strings.
 The later complete three-domain source publication succeeds with zero schema
 errors; these warnings are separate from the repaired observed-fact validator.
 
-Requested delivery: regenerate the affected `.tres` labels with literal UTF-8
+Historical request, fulfilled by8dd: regenerate the affected `.tres` labels with literal UTF-8
 characters while preserving their intended text, source IDs, phase references,
 operands and runtime behavior. Deliver through the complete sealed successor;
 do not require a client overlay or local edit of packaged Factory sources.
 No new source method, backend fact, artwork, recording or acceptance decision
 is requested. Current qualification continues; all artwork/audio remain
-UNREVIEWED, and this serialization repair has not yet been delivered or rerun.
+UNREVIEWED. Client source publication now records four Unicode warnings rather
+than45; no claim attributes those remaining strings to the15 corrected labels.
 
 ## 19. Rebase packaged Cone interface identities after source relocation
+
+**DELIVERED, installed and source-published in complete8dd; affected qualification pending.** The same
+`sources/c867491c3a554590d04e/immutable.tres` now has19 corrected directory
+prefixes. Shader bytes, expanded source, uniforms, meshes, materials, process
+settings, clocks and phase/default selection are unchanged. Factory reports246
+resource checks and302 native public-constructor checks; this does not activate
+the optional approach or qualify its current client output. The following
+diagnosis/request describes the historical7ca bank and is fulfilled.
 
 **Actual 21 October package-gate failure, source diagnosis confirmed.**
 `.runtime/tests/20261021T123511.143023Z/effect_package_checks.log` asserts
@@ -790,7 +839,7 @@ alone makes the exact `base + newline + shader.code` assertion fail. Example:
 This mismatch exists in the immutable delivered data before construction; it
 is not caused by a prior sampled occurrence or mutable shader contamination.
 
-Requested packaging repair: regenerate these existing interface identity keys
+Historical packaging request, fulfilled by8dd: regenerate these existing interface identity keys
 after namespace relocation, using each actual packaged shader's base and
 unchanged source. Preserve the nineteen shaders, expanded sources, uniform
 lists, particle/pose banks and existing selective readiness API. Do not weaken
@@ -802,15 +851,25 @@ Scope: the whole-approach gate deliberately enumerates this delivered native
 alternative. The typed Cone cue has no forced approach; the ordinary unforced
 preference selects its recorded default. This receipt therefore proves the
 optional native approach's preparation failure, not a failure of every Cone
-output. A forced native selection remains affected. No repair or rerun is
-claimed; all artwork remains UNREVIEWED.
+output. The source identity repair is now delivered; the forced native approach's
+current client qualification remains pending. All artwork remains UNREVIEWED.
 
 
 ## 20. Re-export the default heavy-electric bank metadata
 
-**Actual 21 October selected-production failure; the six selected client uses
-now choose delivered corrected banks. Sealed defaults are unchanged and native
-qualification of that client choice is pending.** The recorded all-public replay reaches
+**DELIVERED, installed and source-published in complete8dd; bare-default
+qualification pending.** Both retained default bank paths below now contain the original
+five-lane metadata, preserving canonical Script identity and full CPU Image
+bytes. Default phases/constructors, source equations/materials and factual
+input contracts are unchanged. Factory reports267 source checks,99 packaged
+Resource checks and149 native Call checks, plus a separate128-check native
+Bolt supplement; these are not current client encounter receipts. All six
+temporary client overrides and their now-unused generic resource-operand
+extension are removed by the exact47-line reversal; factual input admission
+remains intact.
+
+**Historical7ca selected-production failure and fulfilled request:**
+The recorded all-public replay reaches
 `spell.call_lightning/baseline` after130 completed cases, then asserts in
 `assets/vfx/sources/c43d754ae69cc0329592/electric_network.gd:28` during the
 ordinary `NativeSourceStartup` constructor. The exact receipt is
@@ -851,7 +910,7 @@ It therefore ignores this client's actual construction overrides for
 schedule. Selecting that alternative without a compatible override contract
 would change the authored/public-result semantics.
 
-Requested complete-package repair: re-export the two **default** heavy shape
+Historical complete-package request, fulfilled by8dd: re-export the two **default** heavy shape
 banks with their actual original serialized metadata, including5 primary
 lanes, retaining the same default phase/constructor identities, source atlas,
 local ribbon equations, source material/lighting and public construction/input
@@ -859,8 +918,9 @@ contracts. Do not weaken the assertion, modify an installed sealed resource,
 replace actual construction overrides with fixture settings or require a new
 backend fact/artwork/renderer. The explicit client resource choice now uses
 the already-delivered corrected banks through the existing constructor-operand
-seam in the six selected uses below. It is source-published, with native output
-and final readiness qualification pending.
+seam in the six selected uses below. That7ca choice is source-published; its
+actual Call/Bolt baseline passes are537/287 assertions. They do not qualify
+every repeat use or the new8dd bare defaults.
 All artwork remains UNREVIEWED.
 
 
@@ -880,6 +940,98 @@ The existing constructed occurrence inherits the sealed `_ready`/`_construct`
 methods. Its virtual `construction_clip` returns before `Source.make` reaches
 the bank assertion, so that native stack does **not** establish a missing
 constructor operand or neutral-template admission bug. No such bypass was
-found or repaired. The current client authoring transport selects the fixed
-banks only after actual factual constructor admission; normal bare package
-construction remains the explicit default-bank packaging request above.
+found or repaired. The historical7ca client transport selected fixed banks only
+after actual factual admission. Complete8dd now repairs normal bare package
+construction in place, closing that source request. Intake and exact override
+removal are complete; affected current-output qualification remains separate.
+
+
+## 21. Wind Wall debris needs current observed-cell coverage
+
+**Current8dd integration constraint, distinct from the repaired constructor.**
+The actual `spell.wind_wall/baseline` original now constructs with the correct
+selective-readiness coordinator, then stops near1245.714ms with
+`native_area_material_unsupported:wall/WindDebris00` through `WindDebris11`.
+Exact receipt:
+`.runtime/tests/20261021T160607.496849Z-current-source-repairs/schema16_repaired_walls_bodies_swarm.log:7`;
+the following case result retains160checks/six failed terminal controls. Those
+are consequences of this active-source publication error, not evidence of a
+new retirement or source-clock defect. The same invocation separately passes
+Thorns, Guardian, Insect Plague, Feast, Call Lightning and Lightning Bolt.
+
+The selected clip is `wall-native/wind_wall_corner_native/lifecycle`, approach
+`runtime-prepared-wall-child-v3-20261021`. Exact packaged closure:
+
+- Public constructor: `assets/vfx/clips/0104bbdeff25725b6aaceb35/construct.gd`.
+- Phase: `assets/vfx/extensions/wall-child-v3-20261021/sources/452fc1257a14b1c4913e/phase.tres`.
+- Bank: `assets/vfx/extensions/wall-child-v3-20261021/sources/943de46d2f616508fce4/bank.tres`.
+- Prepared adapter: `assets/vfx/extensions/wall-child-v3-20261021/sources/ce163e45f8143a4534e8/wind.gd`.
+- Actual owner controller: `assets/vfx/extensions/production-review-20261020/sources/8cae7b7f38ac851d8084/wind.gd`.
+- Original geometry/material builder: `assets/vfx/sources/3f3d6952a3ea933aca3b/wind_wall.gd:73` duplicates the original `StandardMaterial3D` feed material; line80 assigns it to twelve actual debris meshes.
+
+The client keeps current admitted cells independently from construction:
+`NativePersistent` supplies `resolved_area_positions`, and the existing
+`presentation/native_area_mask.gd` privately clips supported ShaderMaterial
+geometry to that current footprint. Its material guard correctly refuses the
+original StandardMaterial debris. The source controller builds its modules
+from retained actual `wall_geometry` (path/width/height). Its `visual_state`
+consumes exact UUID, current presence/observation, actual removal age, optical
+occupants and named contacts; it has no current-cell subset operand. Full
+retained construction geometry therefore cannot replace current optical cell
+admission. Simply disabling the outer mask could reveal unobserved parts and
+is not the selected repair.
+
+Requested compatible source delivery: preserve the original Wind appearance,
+geometry equations, contacts, source clock, owner/removal semantics and prepared
+bank ownership while supporting actual current observed-cell coverage. Either
+source-supported cell clipping or an explicitly private maskable material with
+preserved original appearance can satisfy the integration constraint; the
+Factory should declare its chosen actual public contract rather than the client
+inventing a mandatory setter name. Retain partial/empty current coverage,
+observation loss and actual retirement as distinct cases. No backend field,
+new artwork, client renderer, global material rewrite or fixture clock is
+requested. Production qualification and human artwork approval remain open.
+
+
+## 22. Freezing payload cold-resource initialization exceeds the current gate
+
+**Measured8dd cold-load review request; no permanent loader deadlock or Blood
+failure established.** The exact isolated Forward+/Vulkan trace is
+[freezing-bank-loader.log](../.runtime/tests/20261021T163525.302959Z-quiet-final-three/freezing-bank-loader.log).
+`load_threaded_request` succeeds with the existing `use_sub_threads=false` and
+`CACHE_MODE_REUSE` policy. Progress reaches50% at71ms, then cached/100% at5601ms
+while the task remains `THREAD_LOAD_IN_PROGRESS`. Actual `THREAD_LOAD_LOADED`
+arrives at11159ms; normal `load_threaded_get` completes at11160ms with a0ms
+join. This11.160s source load alone exceeds the existing10s Event admission
+window. The corresponding native8dd failure remains in
+[native_event_family_render_checks.log](../.runtime/tests/20261021T160607.496849Z-current-source-repairs/native_event_family_render_checks.log):
+its first Freezing preparation failure occurs at10014ms, while shared admission
+owns this bank. The initial world's Blood renderer is ready with zero pending
+handles/draw waits; later Freezing source admission succeeds in the same run.
+
+The exact immutable closure is:
+
+- Bank: `assets/vfx/extensions/late-20261020/sources/85e6b111cbb7a17f6052/freezing-native-source.tres`.
+- PackedScene: `assets/vfx/extensions/late-20261020/sources/396128509aa2e0623060/freezing-native-source.tscn`.
+- Bank schema: `assets/vfx/extensions/late-20261020/sources/820df97b3292c59d68f5/bank.gd`.
+- Actual prepared adapter: `assets/vfx/extensions/late-20261020/sources/e75e11e80c30bcf100c8/freezing.gd`.
+
+The bank and scene each serialize16 procedural `NoiseTexture2D` resources,
+32 in this first-load closure. Pinned Godot's
+[NoiseTexture2D implementation](https://github.com/godotengine/godot/blob/ed1daf0bf/modules/noise/noise_texture_2d.cpp#L186)
+generates each first texture synchronously; its
+[threaded ResourceLoader](https://github.com/godotengine/godot/blob/ed1daf0bf/core/io/resource_loader.cpp#L498)
+flushes loader-local queued work before final task publication. These source
+facts identify work for review; they do not individually attribute every
+millisecond of the measured load to noise generation.
+
+Requested source review: reduce cold immutable-resource initialization while
+preserving exact original source pixels/material channels, sixteen fragment
+layers, public owner/caster/event/footprint inputs and the existing source
+clock. If the source permits, deliver equivalent offline-prepared immutable
+textures or another declared source-owned initialization improvement through
+the complete sealed package. This is not a mandatory new API, backend field,
+new artwork, client renderer or local bank patch request. Keep actual threaded
+completion as the admission boundary: cached/100% is not ready. The client has
+not raised the gate timeout or bypassed loading. Runtime/output qualification,
+performance scope and human review remain separate; all artwork is UNREVIEWED.

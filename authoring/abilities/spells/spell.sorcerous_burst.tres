@@ -344,8 +344,8 @@ kind = "form"
 selection = "sorcerous_burst_extra_dice_native"
 effects = Array[ExtResource("1_v37ej")]([SubResource("Resource_siy30"), SubResource("Resource_10axk")])
 staging_from = "factory@20261018-c3c616e88a6b725f"
-dispatch_gap = "actual_extra_dice_occurrence_not_disclosed"
-notes = "Deliberately unselected optional accent: the selected production element already owns delivery and actual positive contact. The current public applied packet and component attribution do not identify an added-die occurrence or its source clock; aggregate damage or random-face values cannot select this extra Fire accent. This does not block the thirteen actual element/Hit/Miss production assignments or request new artwork."
+dispatch_gap = "unselected_optional_extra_dice_accent"
+notes = "Deliberately unselected optional accent: the selected production element already owns delivery and actual positive contact. The current public applied packet and component attribution do not identify an added-die occurrence or its source clock; aggregate damage or random-face values cannot select this extra Fire accent. This is an explicitly unused optional accent, not a required missing backend field or new artwork request; the current exact element and Hit/Miss production assignments remain independent."
 status = "partial"
 
 [sub_resource type="Resource" id="Resource_tpaom"]
@@ -1077,5 +1077,5 @@ staging_unported = {
 "selection": "sorcerous_burst_native",
 "source": "assets/vfx/index.json:/selections/sorcerous_burst_native/staging"
 }
-notes = "The historical Fire baseline remains unbound when selected-element facts are absent. Current singleton damage_types selects the exact authored element and observed Hit/Crit/Miss delivery; body and attributed HP remain independent.\nCast body is a stand-in (Attack5, release 7, the most common old gesture) until the spell has its own (coverage fill).
+notes = "The historical Fire default is a refusal-only fallback when this particular observation has no selected element; current backend element disclosure is delivered and no new public field is requested. Current singleton damage_types selects the exact authored element and observed Hit/Crit/Miss delivery; body and attributed HP remain independent.\nCast body is a stand-in (Attack5, release 7, the most common old gesture) until the spell has its own (coverage fill).
 Plays its imported Factory staging (coverage fill)."

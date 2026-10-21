@@ -176,7 +176,8 @@ func sample(seconds: float, camera_basis: Basis, world_position: Vector3, source
     for row in views:
         row.camera.basis=camera_basis
         row.camera.position=target+camera_basis.z*12.0
-    if seconds<sampled_age:
+    var backwards:bool=seconds<sampled_age
+    if backwards:
         for row in surfaces:row.node.visible=false
     requested_age=seconds
     if not receiving.is_empty():
@@ -198,6 +199,10 @@ func sample(seconds: float, camera_basis: Basis, world_position: Vector3, source
             var original_basis=Basis.looking_at(Vector3(-6,-sqrt(24.),-6))
             handle.root.basis=camera_basis*original_basis.inverse()
     var result=Sources.sample(handle,seconds,history,receiving_context)
+    # Absolute sources submit decreasing authored windows immediately. Keep
+    # pending/error samples hidden, but do not hide a ready source every frame.
+    if backwards and result.ready:
+        for row in surfaces:row.node.visible=true
     Sources.set_view(handle,camera_basis)
     var render_context=receiving_context.duplicate(true)
     render_context.erase("native_frame_seconds");render_context.erase("native_continuous");render_context.erase("native_transform")

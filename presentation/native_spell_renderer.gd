@@ -172,6 +172,7 @@ func prepare(compiled_groups:Array,cache:Dictionary,world:Node=null,prefetch_gro
         for group in pair[0]:
             for component in group.get("components",[]):
                 if not accepts(component) or not component.get("spatial_owner",false) or component.get("status")=="missing":continue
+                if not component.get("native_cue",{}).get("area_mask",true):continue
                 if "admitted_cells" in component.native_clip.get("inputs",[]):continue
                 var positions:Array=component.get("resolved_area_positions",[])
                 if not mask_interests.has(component.id):mask_interests[component.id]=[]
