@@ -1,0 +1,26 @@
+[gd_resource type="Resource" load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://assets/vfx/sources/67ebe8ef4f358cad6a4b/phase.gd" id="phase"]
+[ext_resource type="Script" path="res://assets/vfx/sources/d60670fa4c3a03cc8f3a/component.gd" id="component"]
+
+[sub_resource type="Resource" id="part"]
+script = ExtResource("component")
+component_id = "effect"
+constructor_script = "res://assets/vfx/extensions/source-preparation-20261020/sources/b591822f9528266545bf/freezing_delivery.gd"
+input = {"kind": "freezing", "caster_uuid": "caster", "acting_holder_uuid": "caster", "cast_or_throw_accepted": true, "release_mode": "supplied_cast_snapshot"}
+options = {}
+provenance = "Exact high-level22 read-only backend; inspected native material layers and supplied causal owner/area facts."
+
+[resource]
+script = ExtResource("phase")
+clip_id = "high-level-22/freezing-sphere/launch_delivery"
+label = "launch_delivery"
+phase = "launch_delivery"
+variant = "freezing"
+source_recipe = "agent_docs/GODOT_HIGH_LEVEL_22_SPELL_HANDOFF_2026-10-15.md#spell.freezing_sphere"
+bindings = [{"component": "effect", "kind": "sample", "rate": 1.0, "offset_seconds": 0.0}]
+emitters = []
+seconds = 0.9
+simulation_hz = 144.0
+components = Array[Resource]([SubResource("part")])
+options = {"qualification": "Source candidate; actual GPU/native integration/human approval pending"}

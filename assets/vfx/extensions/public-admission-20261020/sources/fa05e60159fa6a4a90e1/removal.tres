@@ -1,0 +1,22 @@
+[gd_resource type="Resource" load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://assets/vfx/sources/67ebe8ef4f358cad6a4b/phase.gd" id="phase"]
+[ext_resource type="Script" path="res://assets/vfx/sources/d60670fa4c3a03cc8f3a/component.gd" id="component"]
+
+[sub_resource type="Resource" id="readiness"]
+script = ExtResource("component")
+component_id = "readiness"
+constructor_script = "res://assets/vfx/extensions/public-admission-20261020/sources/52890b5ca3d01a315aa2/removal.gd"
+input = {"scene": "res://assets/vfx/conditions/condition_draconic_breath_cadence_radiant_event/prepared.scn", "geometry": ["effect/NativeReceivingMaterial"], "emitters": [], "application_seconds": 0.08, "removal_seconds": 0.12, "loop_seconds": 4.0, "sustain_gain": 0.16, "adaptive_surface": {"kind": "measured", "settings": {"capacity": 8192.0, "clearance_cells": 0.01, "nodes": ["NativeReceivingMaterial"], "requires_equipped_item": false, "slot": "head"}}, "event_gate": {"schema": "vfxfactory.public_condition_readiness.v1", "kind": "readiness", "api": "set_event_state", "default_active": false, "required_fields": ["observed", "ready", "condition_uuid", "source_actor_uuid", "breath_type", "observation_revision", "owner_age_seconds", "phase_age_seconds", "mouth_surface_revision"], "match": {"breath_type": "Radiant"}, "geometry_scope": "Actual source actor's authentic scoped mouth surface and matching current optical revision", "clock_policy": "Existing condition owner/phase clocks; repeated ready publication or pose refresh does not restart artwork", "retire_on": ["Observed public ready=false", "Actual condition removal", "Actual source suppression or invalid mouth input"], "firing_policy": "A separately observed accepted native action; readiness does not invent or replay a breath action"}, "phase": "removal", "readiness_interface": "res://assets/vfx/extensions/public-admission-20261020/sources/79be1c08c48239826769/condition_draconic_breath_cadence_radiant_event.tres"}
+
+[resource]
+script = ExtResource("phase")
+clip_id = "conditions/continuation/condition_draconic_breath_cadence_radiant_event/removal"
+label = "Draconic Breath \u00b7 observed Radiant readiness"
+phase = "removal"
+variant = "condition_draconic_breath_cadence_radiant_event"
+seconds = 0.12
+simulation_hz = 0.0
+components = Array[Resource]([SubResource("readiness")])
+bindings = [{"component":"readiness","kind":"sample","rate":1.0,"offset_seconds":0.0}]
+options = {}

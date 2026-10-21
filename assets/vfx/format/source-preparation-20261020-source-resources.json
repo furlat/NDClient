@@ -1,0 +1,59 @@
+{
+  "schema": "factory.source_preparation.source_resources.v1",
+  "resources": [
+    {
+      "key": "deafness",
+      "clip_id": "production-review/deafness/finite_application",
+      "phase": "res://assets/vfx/extensions/source-preparation-20261020/sources/6dc5a39bea3357fd04ad/finite_deafness.tres",
+      "source_phase": "res://authoring/runtime-cost-repair-20261020/r6_sensory/phases-v2/finite_deafness.tres",
+      "source_sha256": "e6b499800e0dc24982bb263fc95f923ceb6b49335b68093c88c4d6dfc0d945f4"
+    },
+    {
+      "key": "delayed_fire",
+      "clip_id": "production-review/retained-payload/delayed_fire",
+      "phase": "res://assets/vfx/extensions/source-preparation-20261020/sources/90f9a5a22d9213d09bc2/retained_fire.tres",
+      "source_phase": "res://authoring/runtime-cost-repair-20261020/review_contacts/retained_fire.tres",
+      "source_sha256": "3a87b0dae23d806be46f496857f89f42a1e7c3105ede613b4ebf322a398b4f65"
+    },
+    {
+      "key": "freezing",
+      "clip_id": "production-review/retained-payload/freezing",
+      "phase": "res://assets/vfx/extensions/source-preparation-20261020/sources/1602e5ab2c9262f9e0c5/retained.tres",
+      "source_phase": "res://authoring/runtime-cost-repair-20261020/r6_freezing/phases/retained.tres",
+      "source_sha256": "41c7ba5e9091d425a0ca0f754fa6c1027f5efe1b3d3bd7db8d77ec0670f21ed2"
+    },
+    {
+      "key": "counterspell",
+      "clip_id": "production-review/counterspell/actual_presentation_contact",
+      "phase": "res://assets/vfx/extensions/source-preparation-20261020/sources/24692e80be5c661fdc84/counterspell_contact.tres",
+      "source_phase": "res://authoring/runtime-cost-repair-20261020/review_contacts/counterspell_contact.tres",
+      "source_sha256": "a9a3c3a0cba3ed9692973ad31ca4105d69eadb72114d46c3d2dabbe4fd9ddea5"
+    },
+    {
+      "key": "continual_flame_bounded_hold",
+      "clip_id": "production-review/continual-flame/source-hold-loop",
+      "phase": "res://assets/vfx/extensions/production-review-20261020/sources/99344fc19f3a0e8d0096/source-hold-loop.tres",
+      "source_phase": "res://authoring/production-review-repair-20261020/continual_flame/source-hold-loop.tres",
+      "source_sha256": "29d3ceb9c16f3b6b2b23b1f35499dd76d1668f98248b014f85fa4a834709f0f4"
+    },
+    {
+      "key": "aura_of_life_main_owner",
+      "clip_id": "production-review/aura-of-life/main_owner",
+      "phase": "res://assets/vfx/extensions/production-review-20261020/sources/2b93d2f154712e5f200b/owner.tres",
+      "source_phase": "res://authoring/production-review-repair-20261020/aura_of_life/owner.tres",
+      "source_sha256": "98ad8a7e16edf66201b408dad1ec18a9f35730e1fac5708260bcd5930a396bf9"
+    }
+  ],
+  "default_selection_changed": false,
+  "new_index_clip_ids_added": false,
+  "usage": "Explicit typed SourceResource entries, not aliases for existing clip IDs or gameplay assignments",
+  "version": "runtime-source-preparation-20261020-efe34c587d3ac9fd",
+  "previous_table": "res://assets/vfx/format/production-review-source-resources.json",
+  "previous_table_sha256": "92904429005a085cd35b3ef0e38718d374e4710a910085d5a8278264d85197e6",
+  "superseded_keys": [
+    "counterspell",
+    "deafness",
+    "delayed_fire",
+    "freezing"
+  ]
+}

@@ -1,0 +1,234 @@
+[gd_resource type="Resource" format=3]
+
+[ext_resource type="Resource" path="res://assets/vfx/extensions/wall-child-v3-20261021/sources/3af353a514ffb6351aa1/native-bank.tres" id="1_rtcwo"]
+[ext_resource type="Shader" path="res://assets/vfx/extensions/production-review-20261020/sources/850b7697b1acc6c65c36/wind.gdshader" id="2_r0hac"]
+[ext_resource type="Texture2D" path="res://assets/vfx/sources/8b50d862e875547c4693/texture.res" id="3_1tcma"]
+[ext_resource type="Texture2D" path="res://assets/vfx/sources/bbbefac0deb7154eff4b/texture.res" id="4_77agj"]
+[ext_resource type="Texture2D" path="res://assets/vfx/sources/5aecbaf1cbc2519c6be0/texture.res" id="5_na0l8"]
+[ext_resource type="Shader" path="res://assets/vfx/extensions/production-review-20261020/sources/d42dbb95f75361597f81/wind-contact.gdshader" id="6_ve5oo"]
+[ext_resource type="Texture2D" path="res://assets/vfx/sources/6f803e6629eddabdb57f/texture.res" id="7_kt5iq"]
+[ext_resource type="Script" path="res://assets/vfx/extensions/production-review-20261020/sources/b761a45e7828c15c978f/wind_bank.gd" id="8_bmkrb"]
+
+[sub_resource type="Image" id="Image_nodwm"]
+data = {
+"data": PackedByteArray(255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255),
+"format": "RGBA8",
+"height": 2,
+"mipmaps": false,
+"width": 2
+}
+
+[sub_resource type="ImageTexture" id="ImageTexture_wdr2c"]
+image = SubResource("Image_nodwm")
+
+[sub_resource type="Gradient" id="Gradient_6t513"]
+offsets = PackedFloat32Array(0, 0.25, 0.5, 1)
+colors = PackedColorArray(1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 0.4, 1, 1, 1, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_jvfod"]
+gradient = SubResource("Gradient_6t513")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_n4as8"]
+render_priority = 2
+shader = ExtResource("2_r0hac")
+shader_parameter/vfx_package_clock_slot = 0
+shader_parameter/vfx_package_offset_wind_clock = null
+shader_parameter/wind_sheet_offset = -0.16970562760000002
+shader_parameter/live_wall_height = null
+shader_parameter/live_occupant_count = null
+shader_parameter/live_occupants = null
+shader_parameter/factory_occurrence_alpha = 1.0
+shader_parameter/factory_world_to_source = Projection(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1)
+shader_parameter/wind_macro_noise = ExtResource("5_na0l8")
+shader_parameter/wind_macro_phase = 0.0
+shader_parameter/wind_clock = null
+shader_parameter/reveal = null
+shader_parameter/wall_opacity = null
+shader_parameter/actor_ground = null
+shader_parameter/camera_ground = Vector2(0.70710677, 0.70710677)
+shader_parameter/foreground = false
+shader_parameter/split_layers = null
+shader_parameter/formation_pulse = null
+shader_parameter/scroll_offset = 0.0
+shader_parameter/speed = Vector2(0, -1)
+shader_parameter/scale = Vector2(1, 1)
+shader_parameter/BaseTexture = SubResource("ImageTexture_wdr2c")
+shader_parameter/wind_speed = Vector2(0, -1)
+shader_parameter/wind_scale = Vector2(1, 1)
+shader_parameter/Wind_1_texture = ExtResource("3_1tcma")
+shader_parameter/wind_2_speed = Vector2(0, 1.5)
+shader_parameter/wind_2_scale = Vector2(1, 2)
+shader_parameter/Wind_2_texture_subs = ExtResource("4_77agj")
+shader_parameter/Multiply_Mask = SubResource("ImageTexture_wdr2c")
+shader_parameter/Color1DGradient = SubResource("GradientTexture1D_jvfod")
+metadata/factory_occurrence_alpha = true
+metadata/factory_prepared_shader = ExtResource("2_r0hac")
+metadata/factory_opacity_prepared_shader = ExtResource("2_r0hac")
+metadata/factory_world_space_uniform = true
+metadata/factory_clock_names = ["wind_clock"]
+
+[sub_resource type="Image" id="Image_axncs"]
+data = {
+"data": PackedByteArray(255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255),
+"format": "RGBA8",
+"height": 2,
+"mipmaps": false,
+"width": 2
+}
+
+[sub_resource type="ImageTexture" id="ImageTexture_8th2f"]
+image = SubResource("Image_axncs")
+
+[sub_resource type="Gradient" id="Gradient_wkdmw"]
+offsets = PackedFloat32Array(0, 0.25, 0.5, 1)
+colors = PackedColorArray(1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 0.4, 1, 1, 1, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_ol155"]
+gradient = SubResource("Gradient_wkdmw")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_dgo6q"]
+render_priority = 2
+shader = ExtResource("2_r0hac")
+shader_parameter/vfx_package_clock_slot = 0
+shader_parameter/vfx_package_offset_wind_clock = null
+shader_parameter/wind_sheet_offset = 0.0
+shader_parameter/live_wall_height = null
+shader_parameter/live_occupant_count = null
+shader_parameter/live_occupants = null
+shader_parameter/factory_occurrence_alpha = 1.0
+shader_parameter/factory_world_to_source = Projection(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1)
+shader_parameter/wind_macro_noise = ExtResource("5_na0l8")
+shader_parameter/wind_macro_phase = 0.27
+shader_parameter/wind_clock = null
+shader_parameter/reveal = null
+shader_parameter/wall_opacity = null
+shader_parameter/actor_ground = null
+shader_parameter/camera_ground = Vector2(0.70710677, 0.70710677)
+shader_parameter/foreground = false
+shader_parameter/split_layers = null
+shader_parameter/formation_pulse = null
+shader_parameter/scroll_offset = 0.19
+shader_parameter/speed = Vector2(0, -1)
+shader_parameter/scale = Vector2(1, 1)
+shader_parameter/BaseTexture = SubResource("ImageTexture_8th2f")
+shader_parameter/wind_speed = Vector2(0, -1)
+shader_parameter/wind_scale = Vector2(1, 1)
+shader_parameter/Wind_1_texture = ExtResource("3_1tcma")
+shader_parameter/wind_2_speed = Vector2(0, 1.5)
+shader_parameter/wind_2_scale = Vector2(1, 2)
+shader_parameter/Wind_2_texture_subs = ExtResource("4_77agj")
+shader_parameter/Multiply_Mask = SubResource("ImageTexture_8th2f")
+shader_parameter/Color1DGradient = SubResource("GradientTexture1D_ol155")
+metadata/factory_occurrence_alpha = true
+metadata/factory_prepared_shader = ExtResource("2_r0hac")
+metadata/factory_opacity_prepared_shader = ExtResource("2_r0hac")
+metadata/factory_world_space_uniform = true
+metadata/factory_clock_names = ["wind_clock"]
+
+[sub_resource type="Image" id="Image_g0x4s"]
+data = {
+"data": PackedByteArray(255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255),
+"format": "RGBA8",
+"height": 2,
+"mipmaps": false,
+"width": 2
+}
+
+[sub_resource type="ImageTexture" id="ImageTexture_xbcp2"]
+image = SubResource("Image_g0x4s")
+
+[sub_resource type="Gradient" id="Gradient_gtubs"]
+offsets = PackedFloat32Array(0, 0.25, 0.5, 1)
+colors = PackedColorArray(1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 0.4, 1, 1, 1, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_hik1i"]
+gradient = SubResource("Gradient_gtubs")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_llvny"]
+render_priority = 2
+shader = ExtResource("2_r0hac")
+shader_parameter/vfx_package_clock_slot = 0
+shader_parameter/vfx_package_offset_wind_clock = null
+shader_parameter/wind_sheet_offset = 0.16970562760000002
+shader_parameter/live_wall_height = null
+shader_parameter/live_occupant_count = null
+shader_parameter/live_occupants = null
+shader_parameter/factory_occurrence_alpha = 1.0
+shader_parameter/factory_world_to_source = Projection(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1)
+shader_parameter/wind_macro_noise = ExtResource("5_na0l8")
+shader_parameter/wind_macro_phase = 0.54
+shader_parameter/wind_clock = null
+shader_parameter/reveal = null
+shader_parameter/wall_opacity = null
+shader_parameter/actor_ground = null
+shader_parameter/camera_ground = Vector2(0.70710677, 0.70710677)
+shader_parameter/foreground = false
+shader_parameter/split_layers = null
+shader_parameter/formation_pulse = null
+shader_parameter/scroll_offset = 0.38
+shader_parameter/speed = Vector2(0, -1)
+shader_parameter/scale = Vector2(1, 1)
+shader_parameter/BaseTexture = SubResource("ImageTexture_xbcp2")
+shader_parameter/wind_speed = Vector2(0, -1)
+shader_parameter/wind_scale = Vector2(1, 1)
+shader_parameter/Wind_1_texture = ExtResource("3_1tcma")
+shader_parameter/wind_2_speed = Vector2(0, 1.5)
+shader_parameter/wind_2_scale = Vector2(1, 2)
+shader_parameter/Wind_2_texture_subs = ExtResource("4_77agj")
+shader_parameter/Multiply_Mask = SubResource("ImageTexture_xbcp2")
+shader_parameter/Color1DGradient = SubResource("GradientTexture1D_hik1i")
+metadata/factory_occurrence_alpha = true
+metadata/factory_prepared_shader = ExtResource("2_r0hac")
+metadata/factory_opacity_prepared_shader = ExtResource("2_r0hac")
+metadata/factory_world_space_uniform = true
+metadata/factory_clock_names = ["wind_clock"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_gtxxq"]
+render_priority = 2
+shader = ExtResource("6_ve5oo")
+shader_parameter/vfx_package_clock_slot = 0
+shader_parameter/vfx_package_offset_phase = null
+shader_parameter/factory_occurrence_alpha = 1.0
+shader_parameter/factory_world_to_source = Projection(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1)
+shader_parameter/phase = null
+shader_parameter/envelope = null
+shader_parameter/actor_ground = null
+shader_parameter/camera_ground = Vector2(0.70710677, 0.70710677)
+shader_parameter/foreground = false
+shader_parameter/split_layers = null
+shader_parameter/sprite_sheet = ExtResource("7_kt5iq")
+shader_parameter/normal_intensity = 0.0
+shader_parameter/frame_count = Vector2(4, 3)
+metadata/factory_occurrence_alpha = true
+metadata/factory_prepared_shader = ExtResource("6_ve5oo")
+metadata/factory_opacity_prepared_shader = ExtResource("6_ve5oo")
+metadata/factory_world_space_uniform = true
+metadata/factory_clock_names = ["phase"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_7jihu"]
+render_priority = 2
+shader = ExtResource("6_ve5oo")
+shader_parameter/vfx_package_clock_slot = 0
+shader_parameter/vfx_package_offset_phase = null
+shader_parameter/factory_occurrence_alpha = 1.0
+shader_parameter/factory_world_to_source = Projection(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1)
+shader_parameter/phase = null
+shader_parameter/envelope = null
+shader_parameter/actor_ground = null
+shader_parameter/camera_ground = Vector2(0.70710677, 0.70710677)
+shader_parameter/foreground = false
+shader_parameter/split_layers = null
+shader_parameter/sprite_sheet = ExtResource("7_kt5iq")
+shader_parameter/normal_intensity = 0.0
+shader_parameter/frame_count = Vector2(4, 3)
+metadata/factory_occurrence_alpha = true
+metadata/factory_prepared_shader = ExtResource("6_ve5oo")
+metadata/factory_opacity_prepared_shader = ExtResource("6_ve5oo")
+metadata/factory_world_space_uniform = true
+metadata/factory_clock_names = ["phase"]
+
+[resource]
+script = ExtResource("8_bmkrb")
+donor_bank = ExtResource("1_rtcwo")
+flow_materials = Array[ShaderMaterial]([SubResource("ShaderMaterial_n4as8"), SubResource("ShaderMaterial_dgo6q"), SubResource("ShaderMaterial_llvny")])
+hit_materials = Array[ShaderMaterial]([SubResource("ShaderMaterial_gtxxq"), SubResource("ShaderMaterial_7jihu")])

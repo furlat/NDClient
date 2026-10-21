@@ -1,0 +1,26 @@
+[gd_resource type="Resource" load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://assets/vfx/sources/67ebe8ef4f358cad6a4b/phase.gd" id="script"]
+[ext_resource type="Script" path="res://assets/vfx/sources/d60670fa4c3a03cc8f3a/component.gd" id="component"]
+
+[sub_resource type="Resource" id="part_0"]
+script = ExtResource("component")
+component_id = "assembly"
+constructor_script = "res://assets/vfx/extensions/production-review-20261020/sources/c45116250daeb04fd3bd/current_item_flame_hold.gd"
+input = {"flame_hold_bank": "res://assets/vfx/extensions/production-review-20261020/sources/f03d7e6a3e7c1d7e7e6f/hold-loop.res", "item_uuid": "", "effect_uuid": "", "holder_uuid": "", "behavior_id": "condition.spell.continual_flame"}
+options = {"qualification": "New source-authored hold derivative:100 native checks/11 captures. Exact bank and current placement limits are in the separate continual_flame/qualification.json; human art approval is not inferred."}
+provenance = "Original recipes/spells/continual_flame.json hold interval; new separate closed-hold particle process and private absolute material clock"
+
+[resource]
+script = ExtResource("script")
+clip_id = "production-review/continual-flame/source-hold-loop"
+label = "Continual Flame source-authored closed hold candidate"
+phase = "lifecycle"
+variant = "back"
+source_recipe = "authoring/production-review-repair-20261020/continual_flame"
+bindings = [{"component": "assembly", "kind": "sample", "rate": 1.0, "offset_seconds": 0.0}]
+emitters = []
+seconds = 5.2
+simulation_hz = 144.0
+components = Array[Resource]([SubResource("part_0")])
+options = {"seekable": true, "qualification": "New source-authored recorded-hold art candidate. Direct/backward/paused/late sampled-time seeks tested through1000000.125s; source material age remains unwrapped. No original infinite native RNG parity or human approval claim."}

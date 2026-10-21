@@ -1,0 +1,22 @@
+[gd_resource type="Resource" format=3]
+
+[ext_resource type="PackedScene" path="res://assets/vfx/conditions/condition_draconic_breath_cadence_bludgeoning_event/prepared.scn" id="1_o2hi4"]
+[ext_resource type="Script" path="res://assets/vfx/extensions/followup-20261020/sources/0fb7351681180386b03a/condition_pose_interface.gd" id="2_wt4u5"]
+
+[resource]
+script = ExtResource("2_wt4u5")
+scene = ExtResource("1_o2hi4")
+bindings = [{
+"node_index": 2,
+"node_path": "./effect/NativeReceivingMaterial",
+"property_index": 1,
+"property_name": "material_override",
+"shader_path": "res://assets/vfx/shared/resources/ab48e05ccf95df01d53e26c8ba0ab50652ea2330c2da6cd9b725ec2b3f9a3438.res"
+}]
+receipt = {
+"artwork_changed": false,
+"owner_preconstructed": false,
+"scene": "res://assets/vfx/conditions/condition_draconic_breath_cadence_bludgeoning_event/prepared.scn",
+"scene_sha256": "802445419d4b4b11c5d61dedd6c549142db6418772d7214eae1d556fdaaca621",
+"selection": "condition_draconic_breath_cadence_bludgeoning_event"
+}

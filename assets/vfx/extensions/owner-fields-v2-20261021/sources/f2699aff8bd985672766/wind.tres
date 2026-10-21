@@ -1,0 +1,22 @@
+[gd_resource type="Resource" load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://assets/vfx/sources/67ebe8ef4f358cad6a4b/phase.gd" id="phase"]
+[ext_resource type="Script" path="res://assets/vfx/sources/d60670fa4c3a03cc8f3a/component.gd" id="component"]
+
+[sub_resource type="Resource" id="effect"]
+script = ExtResource("component")
+component_id = "effect"
+constructor_script = "res://assets/vfx/extensions/owner-fields-v2-20261021/sources/7ab71b46ac25c3d72d74/wind.gd"
+input = {"owner_uuid": "", "source_world_scale": 0.5000000000435206, "source_input": {"scene": "res://assets/vfx/sources/30d97daa0975dde56681/empty_subject.tscn", "settings": {"animation": "", "hand": [1.102034003571565, 1.35, -0.053368221754690914], "direction": [1, 0], "frames": 432}, "side": "full", "simulation_hz": 144, "seed": 47291, "donor_scene": "res://assets/vfx/sources/f3e524aacc9fef3ca61b/VFX_WindBlow_2.tscn", "prepared_recipient_bank": "res://assets/vfx/extensions/owner-fields-v2-20261021/sources/0af0058f9857bee0b917/wind.res"}}
+
+[resource]
+script = ExtResource("phase")
+clip_id = "review/gust_of_wind/whole/lifecycle"
+label = "Actual-owner native wind line"
+phase = "lifecycle"
+variant = "actual_owner"
+components = Array[Resource]([SubResource("effect")])
+bindings = [{"component":"effect","kind":"sample","rate":1.0,"offset_seconds":0.0}]
+seconds = 1.0
+simulation_hz = 144.0
+options = {"inputs":["owner_state","targets","zone_geometry"],"owner_driven":true}

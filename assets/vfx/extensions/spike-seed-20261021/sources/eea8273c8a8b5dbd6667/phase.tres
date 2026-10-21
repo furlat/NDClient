@@ -1,0 +1,22 @@
+[gd_resource type="Resource" load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://assets/vfx/sources/67ebe8ef4f358cad6a4b/phase.gd" id="phase"]
+[ext_resource type="Script" path="res://assets/vfx/sources/d60670fa4c3a03cc8f3a/component.gd" id="component"]
+
+[sub_resource type="Resource" id="effect"]
+script = ExtResource("component")
+component_id = "effect"
+constructor_script = "res://assets/vfx/extensions/spike-seed-20261021/sources/4e595f448d0154a0b4a2/spike.gd"
+input = {"owner_uuid": "", "patch_sources": [{"scene": "res://assets/vfx/sources/30d97daa0975dde56681/empty_subject.tscn", "settings": {"animation": "", "kind": "thorn", "variant": 0}, "side": "full", "simulation_hz": 144, "seed": 47291, "height_gain": 1.8, "prepared_recipient_bank": "res://assets/vfx/extensions/spike-seed-20261021/sources/899daaece33e57251818/patch-00.res"}, {"scene": "res://assets/vfx/sources/30d97daa0975dde56681/empty_subject.tscn", "settings": {"animation": "", "kind": "thorn", "variant": 1}, "side": "full", "simulation_hz": 144, "seed": 47291, "height_gain": 1.8, "prepared_recipient_bank": "res://assets/vfx/extensions/spike-seed-20261021/sources/574c6873a739f2bdad75/patch-01.res"}, {"scene": "res://assets/vfx/sources/30d97daa0975dde56681/empty_subject.tscn", "settings": {"animation": "", "kind": "thorn", "variant": 2}, "side": "full", "simulation_hz": 144, "seed": 47291, "height_gain": 1.8, "prepared_recipient_bank": "res://assets/vfx/extensions/spike-seed-20261021/sources/35cffdcb3a9273343422/patch-02.res"}, {"scene": "res://assets/vfx/sources/30d97daa0975dde56681/empty_subject.tscn", "settings": {"animation": "", "kind": "thorn", "variant": 3}, "side": "full", "simulation_hz": 144, "seed": 47291, "height_gain": 1.8, "prepared_recipient_bank": "res://assets/vfx/extensions/spike-seed-20261021/sources/ec0d1d64f63d55425ac7/patch-03.res"}, {"scene": "res://assets/vfx/sources/30d97daa0975dde56681/empty_subject.tscn", "settings": {"animation": "", "kind": "thorn", "variant": 4}, "side": "full", "simulation_hz": 144, "seed": 47291, "height_gain": 1.8, "prepared_recipient_bank": "res://assets/vfx/extensions/spike-seed-20261021/sources/ac5bae22d8fac28e730e/patch-04.res"}, {"scene": "res://assets/vfx/sources/30d97daa0975dde56681/empty_subject.tscn", "settings": {"animation": "", "kind": "thorn", "variant": 5}, "side": "full", "simulation_hz": 144, "seed": 47291, "height_gain": 1.8, "prepared_recipient_bank": "res://assets/vfx/extensions/spike-seed-20261021/sources/9b382957ac54f1ad0143/patch-05.res"}, {"scene": "res://assets/vfx/sources/30d97daa0975dde56681/empty_subject.tscn", "settings": {"animation": "", "kind": "thorn", "variant": 6}, "side": "full", "simulation_hz": 144, "seed": 47291, "height_gain": 1.8, "prepared_recipient_bank": "res://assets/vfx/extensions/spike-seed-20261021/sources/b1b1c3e557134013e401/patch-06.res"}, {"scene": "res://assets/vfx/sources/30d97daa0975dde56681/empty_subject.tscn", "settings": {"animation": "", "kind": "thorn", "variant": 7}, "side": "full", "simulation_hz": 144, "seed": 47291, "height_gain": 1.8, "prepared_recipient_bank": "res://assets/vfx/extensions/spike-seed-20261021/sources/21c4347d6ca8651df4bb/patch-07.res"}, {"scene": "res://assets/vfx/sources/30d97daa0975dde56681/empty_subject.tscn", "settings": {"animation": "", "kind": "thorn", "variant": 8}, "side": "full", "simulation_hz": 144, "seed": 47291, "height_gain": 1.8, "prepared_recipient_bank": "res://assets/vfx/extensions/spike-seed-20261021/sources/6c848af31c75844d741e/patch-08.res"}], "cells": []}
+
+[resource]
+script = ExtResource("phase")
+clip_id = "assembled/spike_growth_native"
+label = "Actual owner native continuation"
+phase = "lifecycle"
+variant = "actual_owner"
+components = Array[Resource]([SubResource("effect")])
+bindings = [{"component":"effect","kind":"sample","rate":1.0,"offset_seconds":0.0}]
+seconds = 1.0
+simulation_hz = 144.0
+options = {"inputs":["owner_state","targets","zone_geometry"],"owner_driven":true}

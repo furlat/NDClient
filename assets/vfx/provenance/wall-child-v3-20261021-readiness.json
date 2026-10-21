@@ -1,0 +1,35 @@
+{
+  "schema": "factory.additive_successor.actual_readiness.v1",
+  "version": "runtime-wall-child-v3-20261021-8b695014a812da72",
+  "index_sha256": "146aacc466bed83db14a0157a81cac826636feac4db8bae5c7e41802f4edfc47",
+  "native_receipt": "/mnt/c/Users/tommaso/Documents/assets/VFXFactory/.runtime/runtime-wall-child-v3-20261021/native-smoke-complete-v1.json",
+  "native_receipt_sha256": "2934edfc8272f8bb641aaa7b86a82ef739504c62158ac574a7401d20e41e84bd",
+  "cases": 2,
+  "constructor_flag_count": 0,
+  "unique_reported_immutable_resources": 0,
+  "resources": [],
+  "rows": [
+    {
+      "clip_id": "wall-native/wind_wall_corner_native/lifecycle",
+      "group": "wind",
+      "native_complete_constructor_us": 1648,
+      "constructor_over2000us": false,
+      "measured_readiness_step_cpu_us": 7586,
+      "maximum_readiness_step_cpu_us": 7433,
+      "readiness_steps": 4
+    },
+    {
+      "clip_id": "native/frigid_air/lifecycle",
+      "group": "frigid_air_child",
+      "native_complete_constructor_us": 650,
+      "constructor_over2000us": false,
+      "measured_readiness_step_cpu_us": 542,
+      "maximum_readiness_step_cpu_us": 403,
+      "readiness_steps": 4
+    }
+  ],
+  "maximum_actual_readiness_step_cpu_us": 7433,
+  "scope": "Actual native Resource-only prepublication CPU spans, separate from complete constructors. Cumulative Resource reports deduplicated by exact address. Async waiting, full-game input work and wall-clock loading are not characterized as negligible.",
+  "human_approval_inferred": false,
+  "production_integration_performed": false
+}

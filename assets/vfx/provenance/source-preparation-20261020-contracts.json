@@ -1,0 +1,1698 @@
+{
+  "version": "runtime-source-preparation-20261020-efe34c587d3ac9fd",
+  "predecessor": "runtime-production-review-20261020-937fdd136d621742",
+  "source_cohort": {
+    "schema": "factory.source_preparation.cohort.v1",
+    "predecessor": "runtime-production-review-20261020-937fdd136d621742",
+    "rows": [
+      {
+        "clip_id": "review/divine_word/back/target_deafened",
+        "candidate_phase": "res://authoring/runtime-cost-repair-20261020/r6_sensory/closed/phases/divine_deafened.tres",
+        "phase_sha256": "445c5c0c912177182e747a2086055251dc458c5dcbb463101ed46706b3ce5ab1",
+        "qualification_path": "authoring/runtime-cost-repair-20261020/r6_sensory/closed/qualification.json",
+        "qualification_sha256": "bde8671a1feafb0b325d27cd9084c3e4fb5f07a13cc00234da61b6e9cedea594",
+        "source_qualification": {
+          "key": "divine_deafened",
+          "clip_id": "review/divine_word/back/target_deafened",
+          "source": "res://assets/vfx/sources/0987b2a8f0ef2ae6d1ba/03.tres",
+          "source_sha256": "96abaeaf91894e3fa46f0795245260841e0a2db82649c138ff3848b1d6030eae",
+          "candidate": "res://authoring/runtime-cost-repair-20261020/r6_sensory/closed/phases/divine_deafened.tres",
+          "bank": "res://authoring/runtime-cost-repair-20261020/r6_sensory/closed/assets/divine_deafened.res",
+          "controllers": {
+            "res://assets/vfx/sources/0738ff2d24aa41b1b963/native_review_composition.gd": {
+              "sha256": "7a56ea1776095060e525ab634d1813cbb85ee46e4966b956db43ab1ef03e4081",
+              "fields": [
+                "definition",
+                "composition",
+                "prepared",
+                "adapted",
+                "source_materials",
+                "live_endpoints",
+                "delivery_timing",
+                "last_source_transform",
+                "source_transform_known"
+              ]
+            },
+            "res://assets/vfx/sources/edb4416ff06538073fee/divine_word_source_v196.gd": {
+              "sha256": "a087bce269457faa9a5ae9e5fca348a4415260114e716fba1fba9b3a814bf21f",
+              "fields": [
+                "settings",
+                "observation",
+                "endpoints",
+                "source",
+                "source_materials",
+                "source_zero_transforms",
+                "source_zero_emitters",
+                "source_zero_shaders",
+                "age_seconds",
+                "removed_at",
+                "envelope",
+                "reset_count",
+                "ground_world",
+                "measured_head_points"
+              ]
+            },
+            "res://assets/vfx/sources/0a6f9152e753968f33d1/divine.gd": {
+              "sha256": "64286d3feee7d329be3abbeb75ebdae2d2659e08e9d7bdfe2bbe72e092a3682e",
+              "fields": [
+                "settings",
+                "side",
+                "parameters",
+                "subject",
+                "tick",
+                "materials",
+                "visited",
+                "initialized",
+                "prepared",
+                "seeds"
+              ]
+            },
+            "res://assets/vfx/sources/8ab2a0ec54130654c8a7/shield_modifier.gd": {
+              "sha256": "e66314266e82b52930b969687dc1c0f7f4af438ecab62f480d1a8994b2984856",
+              "fields": [
+                "dissapear_line",
+                "sphere_size"
+              ]
+            }
+          },
+          "native_geometry": 11,
+          "native_emitters": 4,
+          "source_simulation_hz": 144,
+          "previous_bank": "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets/divine_deafened.res",
+          "previous_candidate": "res://authoring/runtime-cost-repair-20261020/r6_sensory/phases/divine_deafened.tres",
+          "source_candidate_qualified": true,
+          "source_record": {
+            "path": "assets/vfx/sources/0987b2a8f0ef2ae6d1ba/03.tres",
+            "sha256": "96abaeaf91894e3fa46f0795245260841e0a2db82649c138ff3848b1d6030eae",
+            "bytes": 3225
+          },
+          "candidate_record": {
+            "path": "authoring/runtime-cost-repair-20261020/r6_sensory/closed/phases/divine_deafened.tres",
+            "sha256": "445c5c0c912177182e747a2086055251dc458c5dcbb463101ed46706b3ce5ab1",
+            "bytes": 3200
+          },
+          "bank_record": {
+            "path": "authoring/runtime-cost-repair-20261020/r6_sensory/closed/assets/divine_deafened.res",
+            "sha256": "db51010504c7c4f96ccdf4dc9e6c0972395d9c18a1052c560b706d28b1353fa8",
+            "bytes": 61928
+          },
+          "native_receipt": {
+            "path": "evidence/runtime-cost-repair-20261020/r6_sensory/native-closed-v5/checks.json",
+            "sha256": "b3ce6c60ec422bce9a8f8220af204e2015c55d11079e0b23b791d12da764edcc",
+            "bytes": 9712
+          },
+          "native_captures": 5,
+          "rgba_byte_identical_to_original_and_independent_control": true,
+          "positive_active_captures": 4,
+          "final_removal_exact": true,
+          "actual_head_points": 31,
+          "actual_default_complete_constructor_us": [
+            1310,
+            853,
+            711,
+            616
+          ],
+          "first_actual_input_plus_sample_us": 191,
+          "stable": {
+            "count": 243,
+            "max_us": 181,
+            "p95_us": 151
+          },
+          "changed": {
+            "count": 2,
+            "max_us": 193,
+            "p95_us": 193
+          },
+          "source_runtime_flags": [],
+          "complete_constructor_and_p95_input_budget_pass": true,
+          "producer_cost_excluded_and_reported": true,
+          "immutable_readiness_steps": [
+            {
+              "operation": "request_resource",
+              "path": "res://factory/components/prepared_sensory/composition.gd",
+              "state": "pending",
+              "us": 22
+            },
+            {
+              "operation": "publish_resource",
+              "path": "res://factory/components/prepared_sensory/composition.gd",
+              "state": "pending",
+              "us": 231
+            },
+            {
+              "operation": "request_resource",
+              "path": "res://authoring/runtime-cost-repair-20261020/r6_sensory/closed/assets/divine_deafened.res",
+              "state": "pending",
+              "us": 21
+            },
+            {
+              "operation": "publish_resource_and_prepare_immutable_interface",
+              "path": "res://authoring/runtime-cost-repair-20261020/r6_sensory/closed/assets/divine_deafened.res",
+              "state": "ready",
+              "us": 4236
+            }
+          ],
+          "native_chronological_ticks": 246,
+          "new_indexed_clip": false,
+          "delivery_kind": "existing_indexed_clip_alternative",
+          "production_integration_performed": false,
+          "human_approval_inferred": false
+        },
+        "source_runtime_flags_retained": false,
+        "evidence": [
+          {
+            "path": "authoring/runtime-cost-repair-20261020/r6_sensory/closed/qualification.json",
+            "sha256": "bde8671a1feafb0b325d27cd9084c3e4fb5f07a13cc00234da61b6e9cedea594",
+            "active_art_context_qualified": true,
+            "optical": {
+              "strict_threshold_pass": true
+            },
+            "complete_constructor_and_update_budget_pass": true,
+            "scope": "Qualified exact source-stage native context only; source input tails and readiness remain in the complete row. New namespace execution/consumer assignment is separate."
+          }
+        ],
+        "group": "sensory2"
+      },
+      {
+        "clip_id": "review/divine_word/back/target_blinded",
+        "candidate_phase": "res://authoring/runtime-cost-repair-20261020/r6_sensory/closed/phases/divine_blinded.tres",
+        "phase_sha256": "f53e22371e018db9807371bb2b13b18eef39db82090da77b74e153b325f5a3e9",
+        "qualification_path": "authoring/runtime-cost-repair-20261020/r6_sensory/closed/qualification.json",
+        "qualification_sha256": "bde8671a1feafb0b325d27cd9084c3e4fb5f07a13cc00234da61b6e9cedea594",
+        "source_qualification": {
+          "key": "divine_blinded",
+          "clip_id": "review/divine_word/back/target_blinded",
+          "source": "res://assets/vfx/sources/0faeca76ac4946f1dc93/04.tres",
+          "source_sha256": "133befbb6397eb81bc98adfe75d11fe98db4b64f676bc0d7552256c29266dedb",
+          "candidate": "res://authoring/runtime-cost-repair-20261020/r6_sensory/closed/phases/divine_blinded.tres",
+          "bank": "res://authoring/runtime-cost-repair-20261020/r6_sensory/closed/assets/divine_blinded.res",
+          "controllers": {
+            "res://assets/vfx/sources/0738ff2d24aa41b1b963/native_review_composition.gd": {
+              "sha256": "7a56ea1776095060e525ab634d1813cbb85ee46e4966b956db43ab1ef03e4081",
+              "fields": [
+                "definition",
+                "composition",
+                "prepared",
+                "adapted",
+                "source_materials",
+                "live_endpoints",
+                "delivery_timing",
+                "last_source_transform",
+                "source_transform_known"
+              ]
+            },
+            "res://assets/vfx/sources/edb4416ff06538073fee/divine_word_source_v196.gd": {
+              "sha256": "a087bce269457faa9a5ae9e5fca348a4415260114e716fba1fba9b3a814bf21f",
+              "fields": [
+                "settings",
+                "observation",
+                "endpoints",
+                "source",
+                "source_materials",
+                "source_zero_transforms",
+                "source_zero_emitters",
+                "source_zero_shaders",
+                "age_seconds",
+                "removed_at",
+                "envelope",
+                "reset_count",
+                "ground_world",
+                "measured_head_points"
+              ]
+            },
+            "res://assets/vfx/sources/0a6f9152e753968f33d1/divine.gd": {
+              "sha256": "64286d3feee7d329be3abbeb75ebdae2d2659e08e9d7bdfe2bbe72e092a3682e",
+              "fields": [
+                "settings",
+                "side",
+                "parameters",
+                "subject",
+                "tick",
+                "materials",
+                "visited",
+                "initialized",
+                "prepared",
+                "seeds"
+              ]
+            },
+            "res://assets/vfx/sources/8ab2a0ec54130654c8a7/shield_modifier.gd": {
+              "sha256": "e66314266e82b52930b969687dc1c0f7f4af438ecab62f480d1a8994b2984856",
+              "fields": [
+                "dissapear_line",
+                "sphere_size"
+              ]
+            }
+          },
+          "native_geometry": 11,
+          "native_emitters": 4,
+          "source_simulation_hz": 144,
+          "previous_bank": "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets/divine_blinded.res",
+          "previous_candidate": "res://authoring/runtime-cost-repair-20261020/r6_sensory/phases/divine_blinded.tres",
+          "source_candidate_qualified": true,
+          "source_record": {
+            "path": "assets/vfx/sources/0faeca76ac4946f1dc93/04.tres",
+            "sha256": "133befbb6397eb81bc98adfe75d11fe98db4b64f676bc0d7552256c29266dedb",
+            "bytes": 3217
+          },
+          "candidate_record": {
+            "path": "authoring/runtime-cost-repair-20261020/r6_sensory/closed/phases/divine_blinded.tres",
+            "sha256": "f53e22371e018db9807371bb2b13b18eef39db82090da77b74e153b325f5a3e9",
+            "bytes": 3191
+          },
+          "bank_record": {
+            "path": "authoring/runtime-cost-repair-20261020/r6_sensory/closed/assets/divine_blinded.res",
+            "sha256": "1eb49edb72b18705535464d76949dbb93250a34fe083687518d3713ab7c6ee81",
+            "bytes": 61847
+          },
+          "native_receipt": {
+            "path": "evidence/runtime-cost-repair-20261020/r6_sensory/native-closed-v5/checks.json",
+            "sha256": "b3ce6c60ec422bce9a8f8220af204e2015c55d11079e0b23b791d12da764edcc",
+            "bytes": 9712
+          },
+          "native_captures": 5,
+          "rgba_byte_identical_to_original_and_independent_control": true,
+          "positive_active_captures": 4,
+          "final_removal_exact": true,
+          "actual_head_points": 31,
+          "actual_default_complete_constructor_us": [
+            1171,
+            898,
+            717,
+            629
+          ],
+          "first_actual_input_plus_sample_us": 184,
+          "stable": {
+            "count": 243,
+            "max_us": 158,
+            "p95_us": 121
+          },
+          "changed": {
+            "count": 2,
+            "max_us": 79,
+            "p95_us": 79
+          },
+          "source_runtime_flags": [],
+          "complete_constructor_and_p95_input_budget_pass": true,
+          "producer_cost_excluded_and_reported": true,
+          "immutable_readiness_steps": [
+            {
+              "operation": "publish_resource",
+              "path": "res://factory/components/prepared_sensory/composition.gd",
+              "state": "pending",
+              "us": 21
+            },
+            {
+              "operation": "request_resource",
+              "path": "res://authoring/runtime-cost-repair-20261020/r6_sensory/closed/assets/divine_blinded.res",
+              "state": "pending",
+              "us": 15
+            },
+            {
+              "operation": "publish_resource_and_prepare_immutable_interface",
+              "path": "res://authoring/runtime-cost-repair-20261020/r6_sensory/closed/assets/divine_blinded.res",
+              "state": "ready",
+              "us": 1241
+            }
+          ],
+          "native_chronological_ticks": 246,
+          "new_indexed_clip": false,
+          "delivery_kind": "existing_indexed_clip_alternative",
+          "production_integration_performed": false,
+          "human_approval_inferred": false
+        },
+        "source_runtime_flags_retained": false,
+        "evidence": [
+          {
+            "path": "authoring/runtime-cost-repair-20261020/r6_sensory/closed/qualification.json",
+            "sha256": "bde8671a1feafb0b325d27cd9084c3e4fb5f07a13cc00234da61b6e9cedea594",
+            "active_art_context_qualified": true,
+            "optical": {
+              "strict_threshold_pass": true
+            },
+            "complete_constructor_and_update_budget_pass": true,
+            "scope": "Qualified exact source-stage native context only; source input tails and readiness remain in the complete row. New namespace execution/consumer assignment is separate."
+          }
+        ],
+        "group": "sensory2"
+      },
+      {
+        "clip_id": "high-level-22/freezing-sphere/launch_blast",
+        "candidate_phase": "res://authoring/runtime-cost-repair-20261020/r6_freezing/phases/blast.tres",
+        "phase_sha256": "4a55620d1c6c7b5d49728c3e33310258729802e4fa56496782771e6349d9887a",
+        "qualification_path": "authoring/runtime-cost-repair-20261020/r6_freezing/qualification.json",
+        "qualification_sha256": "517327037685c95d3f2927dcbf4d5637ab5a45ff2d8f1edf84bbe026878a28e6",
+        "source_qualification": {
+          "clip_id": "high-level-22/freezing-sphere/launch_blast",
+          "source_phase": "res://authoring/gpu-payload-v397/phases/e181283ebe663514.tres",
+          "candidate_phase": "res://authoring/runtime-cost-repair-20261020/r6_freezing/phases/blast.tres",
+          "bank": "res://authoring/runtime-cost-repair-20261020/payloads/assets/freezing-native-source.tres",
+          "source_phase_sha256": "71dd8a8201d59918687aec0e9e18b3f7e830cf96cee0fd50f820707332aaebbb",
+          "candidate_phase_sha256": "4a55620d1c6c7b5d49728c3e33310258729802e4fa56496782771e6349d9887a",
+          "bank_sha256": "a9dad917f48cb93f2cfe8ccd7cfa569f67b25431207f3c3005fc7266e9c2d63c",
+          "source_qualification": true,
+          "source_state_native_ticks": 175,
+          "original_prepared_rgba_pairs": 3,
+          "raw_rgba_byte_exact": true,
+          "independent_original_control_byte_exact": true,
+          "complete_unprofiled_public_constructors_us": [
+            1097,
+            1063,
+            801,
+            633
+          ],
+          "complete_constructor_budget_pass": true,
+          "genuine_first_public_input_and_sample_us": 216,
+          "first_input_budget_pass": true,
+          "advancing_sample_p95_us": 217,
+          "advancing_sample_max_us": 279,
+          "advancing_sample_budget_pass": true,
+          "readiness_us_separate": 11841700,
+          "readiness_main_thread_steps": [
+            {
+              "operation": "request_resource",
+              "path": "res://factory/components/prepared_payloads/freezing.gd",
+              "state": "pending",
+              "us": 26
+            },
+            {
+              "operation": "publish_resource",
+              "path": "res://factory/components/prepared_payloads/freezing.gd",
+              "state": "pending",
+              "us": 205
+            },
+            {
+              "operation": "request_resource",
+              "path": "res://authoring/runtime-cost-repair-20261020/payloads/assets/freezing-native-source.tres",
+              "state": "pending",
+              "us": 38
+            },
+            {
+              "operation": "publish_resource_and_prepare_immutable_interface",
+              "path": "res://authoring/runtime-cost-repair-20261020/payloads/assets/freezing-native-source.tres",
+              "state": "ready",
+              "us": 2389
+            }
+          ],
+          "readiness_max_main_thread_step_us": 2389,
+          "readiness_main_thread_over2000us_steps_retained": [
+            {
+              "operation": "publish_resource_and_prepare_immutable_interface",
+              "path": "res://authoring/runtime-cost-repair-20261020/payloads/assets/freezing-native-source.tres",
+              "state": "ready",
+              "us": 2389
+            }
+          ],
+          "no_image_cost_followup": {
+            "bank_sha256": "a9dad917f48cb93f2cfe8ccd7cfa569f67b25431207f3c3005fc7266e9c2d63c",
+            "candidate": "res://authoring/runtime-cost-repair-20261020/r6_freezing/phases/blast.tres",
+            "candidate_phase_sha256": "4a55620d1c6c7b5d49728c3e33310258729802e4fa56496782771e6349d9887a",
+            "candidate_readiness_us": 11777073,
+            "changed_public_inputs": [
+              {
+                "age": 0.416666666666667,
+                "change": "actual supplied moved endpoint",
+                "public_setters_and_sample_us": 119,
+                "tick": 60
+              },
+              {
+                "age": 0.722222222222222,
+                "change": "actual supplied 1-cell footprint",
+                "public_setters_and_sample_us": 228,
+                "tick": 104
+              },
+              {
+                "age": 0.965277777777778,
+                "change": "actual supplied 128-cell footprint",
+                "public_setters_and_sample_us": 447,
+                "tick": 139
+              }
+            ],
+            "clip_id": "high-level-22/freezing-sphere/launch_blast",
+            "complete_public_constructors_us": [
+              1186,
+              831,
+              641,
+              512
+            ],
+            "genuine_first_public_input_and_sample_us": 169,
+            "kind": "blast",
+            "native_source_ticks": 175,
+            "ordinary_advancing_samples_us": {
+              "count": 172,
+              "max": 302,
+              "p95": 230
+            }
+          },
+          "combined_changed_input_cost_measured": true,
+          "combined_changed_input_budget_pass": false,
+          "source_runtime_flags_retained": [
+            {
+              "budget": "changed_public_setters_and_sample",
+              "kind": "blast",
+              "limit_us": 250,
+              "us": 447
+            }
+          ],
+          "actual_native_draws": 16,
+          "supplied_inputs_scope": "Explicit synthetic source-schema controls. Private phase.to_clip input changed before normal Source.make zero sample, matching the supplied construction operand shape. No real gameplay outcome, actor packet, fixed encounter or private power inferred.",
+          "private_owners_and_admission": {
+            "foreign_owner_and_retirement_or_suppression_tested": true,
+            "native_particle_state_private": false,
+            "private_draw_materials": 16,
+            "real_gameplay_outcome_inferred": false
+          },
+          "evidence": "evidence/runtime-cost-repair-20261020/r6_freezing/native-v1/checks.json",
+          "human_approval_inferred": false,
+          "production_integration_performed": false
+        },
+        "source_runtime_flags_retained": true,
+        "evidence": [
+          {
+            "path": "authoring/runtime-cost-repair-20261020/r6_freezing/qualification.json",
+            "sha256": "517327037685c95d3f2927dcbf4d5637ab5a45ff2d8f1edf84bbe026878a28e6",
+            "active_art_context_qualified": true,
+            "optical": {
+              "strict_threshold_pass": true
+            },
+            "complete_constructor_and_update_budget_pass": false,
+            "scope": "Qualified exact source-stage native context only; source input tails and readiness remain in the complete row. New namespace execution/consumer assignment is separate."
+          }
+        ],
+        "group": "freezing2",
+        "freezing_construction": "blast"
+      },
+      {
+        "clip_id": "high-level-22/freezing-sphere/launch_delivery",
+        "candidate_phase": "res://authoring/runtime-cost-repair-20261020/r6_freezing/phases/delivery.tres",
+        "phase_sha256": "e25c06c1c83cba47a9541a583511eaa083bfb3058be12e20c80a302cbc42f95a",
+        "qualification_path": "authoring/runtime-cost-repair-20261020/r6_freezing/qualification.json",
+        "qualification_sha256": "517327037685c95d3f2927dcbf4d5637ab5a45ff2d8f1edf84bbe026878a28e6",
+        "source_qualification": {
+          "clip_id": "high-level-22/freezing-sphere/launch_delivery",
+          "source_phase": "res://authoring/original-repairs/source_volumes_v284/freezing_sphere_native/phases/launch_delivery.tres",
+          "candidate_phase": "res://authoring/runtime-cost-repair-20261020/r6_freezing/phases/delivery.tres",
+          "bank": "res://authoring/runtime-cost-repair-20261020/r6_freezing/assets/delivery.tres",
+          "source_phase_sha256": "dec8ec00e7369d19729000f2d5ebfcea5ffddbf7e753fe52e6938aae78cca4fa",
+          "candidate_phase_sha256": "e25c06c1c83cba47a9541a583511eaa083bfb3058be12e20c80a302cbc42f95a",
+          "bank_sha256": "5ee1de34d05e88b3043104cbf4764946ef37ffa82d4b30117710bb61d2286b30",
+          "source_qualification": true,
+          "source_state_native_ticks": 131,
+          "original_prepared_rgba_pairs": 3,
+          "raw_rgba_byte_exact": true,
+          "independent_original_control_byte_exact": true,
+          "complete_unprofiled_public_constructors_us": [
+            579,
+            246,
+            226,
+            269
+          ],
+          "complete_constructor_budget_pass": true,
+          "genuine_first_public_input_and_sample_us": 111,
+          "first_input_budget_pass": true,
+          "advancing_sample_p95_us": 149,
+          "advancing_sample_max_us": 177,
+          "advancing_sample_budget_pass": true,
+          "readiness_us_separate": 346476,
+          "readiness_main_thread_steps": [
+            {
+              "operation": "request_resource",
+              "path": "res://factory/components/prepared_r6_freezing/delivery.gd",
+              "state": "pending",
+              "us": 18
+            },
+            {
+              "operation": "publish_resource",
+              "path": "res://factory/components/prepared_r6_freezing/delivery.gd",
+              "state": "pending",
+              "us": 202
+            },
+            {
+              "operation": "request_resource",
+              "path": "res://authoring/runtime-cost-repair-20261020/r6_freezing/assets/delivery.tres",
+              "state": "pending",
+              "us": 25
+            },
+            {
+              "operation": "publish_resource_and_prepare_immutable_interface",
+              "path": "res://authoring/runtime-cost-repair-20261020/r6_freezing/assets/delivery.tres",
+              "state": "ready",
+              "us": 7564
+            }
+          ],
+          "readiness_max_main_thread_step_us": 7564,
+          "readiness_main_thread_over2000us_steps_retained": [
+            {
+              "operation": "publish_resource_and_prepare_immutable_interface",
+              "path": "res://authoring/runtime-cost-repair-20261020/r6_freezing/assets/delivery.tres",
+              "state": "ready",
+              "us": 7564
+            }
+          ],
+          "no_image_cost_followup": {
+            "bank_sha256": "5ee1de34d05e88b3043104cbf4764946ef37ffa82d4b30117710bb61d2286b30",
+            "candidate": "res://authoring/runtime-cost-repair-20261020/r6_freezing/phases/delivery.tres",
+            "candidate_phase_sha256": "e25c06c1c83cba47a9541a583511eaa083bfb3058be12e20c80a302cbc42f95a",
+            "candidate_readiness_us": 372315,
+            "changed_public_inputs": [
+              {
+                "age": 0.166666666666667,
+                "change": "actual current hand before launch",
+                "public_setters_and_sample_us": 59,
+                "tick": 24
+              },
+              {
+                "age": 0.298611111111111,
+                "change": "accepted current-holder release",
+                "public_setters_and_sample_us": 140,
+                "tick": 43
+              },
+              {
+                "age": 0.416666666666667,
+                "change": "actual supplied moved endpoint",
+                "public_setters_and_sample_us": 156,
+                "tick": 60
+              }
+            ],
+            "clip_id": "high-level-22/freezing-sphere/launch_delivery",
+            "complete_public_constructors_us": [
+              611,
+              287,
+              239,
+              249
+            ],
+            "genuine_first_public_input_and_sample_us": 86,
+            "kind": "delivery",
+            "native_source_ticks": 131,
+            "ordinary_advancing_samples_us": {
+              "count": 128,
+              "max": 177,
+              "p95": 153
+            }
+          },
+          "combined_changed_input_cost_measured": true,
+          "combined_changed_input_budget_pass": true,
+          "source_runtime_flags_retained": [],
+          "actual_native_draws": 3,
+          "supplied_inputs_scope": "Explicit synthetic source-schema controls. Private phase.to_clip input changed before normal Source.make zero sample, matching the supplied construction operand shape. No real gameplay outcome, actor packet, fixed encounter or private power inferred.",
+          "private_owners_and_admission": {
+            "foreign_owner_and_retirement_or_suppression_tested": true,
+            "native_particle_state_private": true,
+            "private_draw_materials": 3,
+            "real_gameplay_outcome_inferred": false
+          },
+          "evidence": "evidence/runtime-cost-repair-20261020/r6_freezing/native-v1/checks.json",
+          "human_approval_inferred": false,
+          "production_integration_performed": false
+        },
+        "source_runtime_flags_retained": false,
+        "evidence": [
+          {
+            "path": "authoring/runtime-cost-repair-20261020/r6_freezing/qualification.json",
+            "sha256": "517327037685c95d3f2927dcbf4d5637ab5a45ff2d8f1edf84bbe026878a28e6",
+            "active_art_context_qualified": true,
+            "optical": {
+              "strict_threshold_pass": true
+            },
+            "complete_constructor_and_update_budget_pass": true,
+            "scope": "Qualified exact source-stage native context only; source input tails and readiness remain in the complete row. New namespace execution/consumer assignment is separate."
+          }
+        ],
+        "group": "freezing2",
+        "freezing_construction": "delivery"
+      }
+    ],
+    "source_resources": [
+      {
+        "key": "deafness",
+        "clip_id": "production-review/deafness/finite_application",
+        "candidate_phase": "res://authoring/runtime-cost-repair-20261020/r6_sensory/phases-v2/finite_deafness.tres",
+        "phase_sha256": "e6b499800e0dc24982bb263fc95f923ceb6b49335b68093c88c4d6dfc0d945f4",
+        "qualification_path": "authoring/runtime-cost-repair-20261020/r6_sensory/closed/qualification.json",
+        "qualification_sha256": "bde8671a1feafb0b325d27cd9084c3e4fb5f07a13cc00234da61b6e9cedea594",
+        "source_qualification": {
+          "key": "finite_deafness",
+          "clip_id": "production-review/deafness/finite_application",
+          "source": "res://authoring/production-review-repair-20261020/deafness/application.tres",
+          "source_sha256": "5097ff50a2ba1f1188532260c128c07adfd53ba949d3b222dc71313a6cdc55ad",
+          "candidate": "res://authoring/runtime-cost-repair-20261020/r6_sensory/phases-v2/finite_deafness.tres",
+          "bank": "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets-v2/finite_deafness.res",
+          "controllers": {
+            "res://factory/components/native_review_composition.gd": {
+              "sha256": "37d490341e3d389e345418f2151ad484d9dc1b5eeae6a01d1726b0e1ae9e86eb",
+              "fields": [
+                "definition",
+                "composition",
+                "prepared",
+                "adapted",
+                "source_materials",
+                "live_endpoints",
+                "delivery_timing",
+                "last_source_transform",
+                "source_transform_known"
+              ]
+            },
+            "res://factory/components/sensory/deafened_application.gd": {
+              "sha256": "04ae40b33c35cb2da93c137ba30e93ce2d48051afeb70bcc35cbcb236df8d8c3",
+              "fields": [
+                "source_age_seconds",
+                "application_emitters",
+                "overhead",
+                "head_endpoints",
+                "settings",
+                "side",
+                "parameters",
+                "subject",
+                "tick",
+                "materials",
+                "visited",
+                "initialized",
+                "prepared",
+                "seeds"
+              ]
+            }
+          },
+          "native_geometry": 4,
+          "native_emitters": 3,
+          "source_simulation_hz": 144,
+          "source_candidate_qualified": true,
+          "source_record": {
+            "path": "authoring/production-review-repair-20261020/deafness/application.tres",
+            "sha256": "5097ff50a2ba1f1188532260c128c07adfd53ba949d3b222dc71313a6cdc55ad",
+            "bytes": 1827
+          },
+          "candidate_record": {
+            "path": "authoring/runtime-cost-repair-20261020/r6_sensory/phases-v2/finite_deafness.tres",
+            "sha256": "e6b499800e0dc24982bb263fc95f923ceb6b49335b68093c88c4d6dfc0d945f4",
+            "bytes": 1911
+          },
+          "bank_record": {
+            "path": "authoring/runtime-cost-repair-20261020/r6_sensory/assets-v2/finite_deafness.res",
+            "sha256": "5e761eebc613e9d73bf4a6638a282cf8d587cc6a330daef6e61484a12b9d410c",
+            "bytes": 13633
+          },
+          "native_receipt": {
+            "path": "evidence/runtime-cost-repair-20261020/r6_sensory/native-finite-v4/checks.json",
+            "sha256": "8c6070c6babbf1aca3d3db1c5f655be4e77107bfc7425612f4d42a0b9061c2d1",
+            "bytes": 4696
+          },
+          "native_captures": 4,
+          "rgba_byte_identical_to_original_and_independent_control": true,
+          "positive_active_captures": 3,
+          "final_removal_exact": true,
+          "actual_head_points": 31,
+          "actual_default_complete_constructor_us": [
+            976,
+            495,
+            984,
+            576
+          ],
+          "first_actual_input_plus_sample_us": 113,
+          "stable": {
+            "count": 171,
+            "max_us": 164,
+            "p95_us": 92
+          },
+          "changed": {
+            "count": 2,
+            "max_us": 130,
+            "p95_us": 130
+          },
+          "source_runtime_flags": [],
+          "complete_constructor_and_p95_input_budget_pass": true,
+          "producer_cost_excluded_and_reported": true,
+          "immutable_readiness_steps": [
+            {
+              "operation": "request_resource",
+              "path": "res://factory/components/prepared_sensory/composition.gd",
+              "state": "pending",
+              "us": 28
+            },
+            {
+              "operation": "publish_resource",
+              "path": "res://factory/components/prepared_sensory/composition.gd",
+              "state": "pending",
+              "us": 242
+            },
+            {
+              "operation": "request_resource",
+              "path": "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets-v2/finite_deafness.res",
+              "state": "pending",
+              "us": 46
+            },
+            {
+              "operation": "publish_resource_and_prepare_immutable_interface",
+              "path": "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets-v2/finite_deafness.res",
+              "state": "ready",
+              "us": 2652
+            }
+          ],
+          "native_chronological_ticks": 174,
+          "new_indexed_clip": false,
+          "delivery_kind": "typed_source_resource",
+          "production_integration_performed": false,
+          "human_approval_inferred": false
+        },
+        "source_runtime_flags_retained": false,
+        "evidence": [
+          {
+            "path": "authoring/runtime-cost-repair-20261020/r6_sensory/closed/qualification.json",
+            "sha256": "bde8671a1feafb0b325d27cd9084c3e4fb5f07a13cc00234da61b6e9cedea594",
+            "active_art_context_qualified": true,
+            "optical": {
+              "strict_threshold_pass": true
+            },
+            "complete_constructor_and_update_budget_pass": true,
+            "scope": "Qualified exact source-stage native context only; source input tails and readiness remain in the complete row. New namespace execution/consumer assignment is separate."
+          }
+        ]
+      },
+      {
+        "key": "freezing",
+        "clip_id": "production-review/retained-payload/freezing",
+        "candidate_phase": "res://authoring/runtime-cost-repair-20261020/r6_freezing/phases/retained.tres",
+        "phase_sha256": "41c7ba5e9091d425a0ca0f754fa6c1027f5efe1b3d3bd7db8d77ec0670f21ed2",
+        "qualification_path": "authoring/runtime-cost-repair-20261020/r6_freezing/qualification.json",
+        "qualification_sha256": "517327037685c95d3f2927dcbf4d5637ab5a45ff2d8f1edf84bbe026878a28e6",
+        "source_qualification": {
+          "clip_id": "production-review/retained-payload/freezing",
+          "source_phase": "res://authoring/production-review-repair-20261020/payload/freezing.tres",
+          "candidate_phase": "res://authoring/runtime-cost-repair-20261020/r6_freezing/phases/retained.tres",
+          "bank": "res://authoring/runtime-cost-repair-20261020/r6_freezing/assets/retained.tres",
+          "source_phase_sha256": "1cad53a3f048663bc0cea0d8c6200e1d2b7f5cc3bfb95469319f5c3403e3153b",
+          "candidate_phase_sha256": "41c7ba5e9091d425a0ca0f754fa6c1027f5efe1b3d3bd7db8d77ec0670f21ed2",
+          "bank_sha256": "680421f3c5cbdc534138e238be8a9cfcc88aa8f990a83ee995bbde4a592ef439",
+          "source_qualification": true,
+          "source_state_native_ticks": 145,
+          "original_prepared_rgba_pairs": 3,
+          "raw_rgba_byte_exact": true,
+          "independent_original_control_byte_exact": true,
+          "complete_unprofiled_public_constructors_us": [
+            461,
+            190,
+            161,
+            147
+          ],
+          "complete_constructor_budget_pass": true,
+          "genuine_first_public_input_and_sample_us": 118,
+          "first_input_budget_pass": true,
+          "advancing_sample_p95_us": 146,
+          "advancing_sample_max_us": 165,
+          "advancing_sample_budget_pass": true,
+          "readiness_us_separate": 245246,
+          "readiness_main_thread_steps": [
+            {
+              "operation": "request_resource",
+              "path": "res://factory/components/prepared_r6_freezing/retained.gd",
+              "state": "pending",
+              "us": 18
+            },
+            {
+              "operation": "publish_resource",
+              "path": "res://factory/components/prepared_r6_freezing/retained.gd",
+              "state": "pending",
+              "us": 258
+            },
+            {
+              "operation": "request_resource",
+              "path": "res://authoring/runtime-cost-repair-20261020/r6_freezing/assets/retained.tres",
+              "state": "pending",
+              "us": 34
+            },
+            {
+              "operation": "publish_resource_and_prepare_immutable_interface",
+              "path": "res://authoring/runtime-cost-repair-20261020/r6_freezing/assets/retained.tres",
+              "state": "ready",
+              "us": 1129
+            }
+          ],
+          "readiness_max_main_thread_step_us": 1129,
+          "readiness_main_thread_over2000us_steps_retained": [],
+          "no_image_cost_followup": {
+            "bank_sha256": "680421f3c5cbdc534138e238be8a9cfcc88aa8f990a83ee995bbde4a592ef439",
+            "candidate": "res://authoring/runtime-cost-repair-20261020/r6_freezing/phases/retained.tres",
+            "candidate_phase_sha256": "41c7ba5e9091d425a0ca0f754fa6c1027f5efe1b3d3bd7db8d77ec0670f21ed2",
+            "candidate_readiness_us": 240986,
+            "changed_public_inputs": [
+              {
+                "age": 0.416666666666667,
+                "change": "same item actual supplied power plus current owner anchor",
+                "public_setters_and_sample_us": 82,
+                "tick": 60
+              },
+              {
+                "age": 0.833333333333333,
+                "change": "actual supplied item retirement",
+                "public_setters_and_sample_us": 75,
+                "tick": 120
+              }
+            ],
+            "clip_id": "production-review/retained-payload/freezing",
+            "complete_public_constructors_us": [
+              525,
+              215,
+              182,
+              150
+            ],
+            "genuine_first_public_input_and_sample_us": 81,
+            "kind": "retained",
+            "native_source_ticks": 145,
+            "ordinary_advancing_samples_us": {
+              "count": 143,
+              "max": 210,
+              "p95": 150
+            }
+          },
+          "combined_changed_input_cost_measured": true,
+          "combined_changed_input_budget_pass": true,
+          "source_runtime_flags_retained": [],
+          "actual_native_draws": 2,
+          "supplied_inputs_scope": "Explicit synthetic source-schema controls. Private phase.to_clip input changed before normal Source.make zero sample, matching the supplied construction operand shape. No real gameplay outcome, actor packet, fixed encounter or private power inferred.",
+          "private_owners_and_admission": {
+            "foreign_owner_and_retirement_or_suppression_tested": true,
+            "native_particle_state_private": false,
+            "private_draw_materials": 2,
+            "real_gameplay_outcome_inferred": false
+          },
+          "evidence": "evidence/runtime-cost-repair-20261020/r6_freezing/native-v1/checks.json",
+          "human_approval_inferred": false,
+          "production_integration_performed": false
+        },
+        "source_runtime_flags_retained": false,
+        "evidence": [
+          {
+            "path": "authoring/runtime-cost-repair-20261020/r6_freezing/qualification.json",
+            "sha256": "517327037685c95d3f2927dcbf4d5637ab5a45ff2d8f1edf84bbe026878a28e6",
+            "active_art_context_qualified": true,
+            "optical": {
+              "strict_threshold_pass": true
+            },
+            "complete_constructor_and_update_budget_pass": true,
+            "scope": "Qualified exact source-stage native context only; source input tails and readiness remain in the complete row. New namespace execution/consumer assignment is separate."
+          }
+        ]
+      },
+      {
+        "key": "delayed_fire",
+        "clip_id": "production-review/retained-payload/delayed_fire",
+        "candidate_phase": "res://authoring/runtime-cost-repair-20261020/review_contacts/retained_fire.tres",
+        "phase_sha256": "3a87b0dae23d806be46f496857f89f42a1e7c3105ede613b4ebf322a398b4f65",
+        "qualification_path": "authoring/runtime-cost-repair-20261020/review_contacts/qualification.json",
+        "qualification_sha256": "a1d2991d167a7c03a95a21060367c6548da98b726c45c49e7ad9b703af1ac9ce",
+        "source_qualification": {
+          "key": "retained_fire",
+          "clip_id": "production-review/retained-payload/delayed_fire",
+          "source": "res://authoring/production-review-repair-20261020/payload/delayed_fire.tres",
+          "source_sha256": "0e328a5286812fac3407dac43044a42b043220f4706cd009085a79af8bfcebc5",
+          "source_constructor": "res://factory/components/payload/retained_item.gd",
+          "adapter": "res://factory/components/prepared_review/retained_fire.gd",
+          "candidate": "res://authoring/runtime-cost-repair-20261020/review_contacts/retained_fire.tres",
+          "bank": "res://authoring/runtime-cost-repair-20261020/review_contacts/assets/retained_fire.res",
+          "source_candidate_qualified": true,
+          "candidate_sha256": "3a87b0dae23d806be46f496857f89f42a1e7c3105ede613b4ebf322a398b4f65",
+          "native_comparisons": 10,
+          "rgba_byte_identical": true,
+          "positive_pixels_maximum": 4521,
+          "actual_default_constructor_us": [
+            410,
+            142,
+            120
+          ],
+          "maximum_complete_constructor_us": 410,
+          "first_inputs_plus_sample_us": [
+            43
+          ],
+          "changed_inputs_plus_sample_us": [
+            31,
+            25,
+            21
+          ],
+          "update_p95_us": 12.0,
+          "actual_input_plus_sample_maximum_us": 43,
+          "maximum_readiness_step_us": 808,
+          "complete_constructor_and_update_budget_pass": true,
+          "source_runtime_flags_retained": false,
+          "resource_is_indexed_gameplay_spell": false,
+          "human_approval_inferred": false,
+          "production_integration_performed": false
+        },
+        "source_runtime_flags_retained": false,
+        "evidence": [
+          {
+            "path": "authoring/runtime-cost-repair-20261020/review_contacts/qualification.json",
+            "sha256": "a1d2991d167a7c03a95a21060367c6548da98b726c45c49e7ad9b703af1ac9ce",
+            "active_art_context_qualified": true,
+            "optical": {
+              "strict_threshold_pass": true
+            },
+            "complete_constructor_and_update_budget_pass": true,
+            "scope": "Qualified exact source-stage native context only; source input tails and readiness remain in the complete row. New namespace execution/consumer assignment is separate."
+          }
+        ]
+      },
+      {
+        "key": "counterspell",
+        "clip_id": "production-review/counterspell/actual_presentation_contact",
+        "candidate_phase": "res://authoring/runtime-cost-repair-20261020/review_contacts/counterspell_contact.tres",
+        "phase_sha256": "a9a3c3a0cba3ed9692973ad31ca4105d69eadb72114d46c3d2dabbe4fd9ddea5",
+        "qualification_path": "authoring/runtime-cost-repair-20261020/review_contacts/qualification.json",
+        "qualification_sha256": "a1d2991d167a7c03a95a21060367c6548da98b726c45c49e7ad9b703af1ac9ce",
+        "source_qualification": {
+          "key": "counterspell_contact",
+          "clip_id": "production-review/counterspell/actual_presentation_contact",
+          "source": "res://authoring/production-review-repair-20261020/counterspell/contact.tres",
+          "source_sha256": "7fd3aa5c2804f0bd93f5f5aae2087b34e9590a321c84b8f06391f42600be6c09",
+          "source_constructor": "res://factory/components/interrupt/counterspell_contact.gd",
+          "adapter": "res://factory/components/prepared_review/counterspell.gd",
+          "candidate": "res://authoring/runtime-cost-repair-20261020/review_contacts/counterspell_contact.tres",
+          "bank": "res://authoring/runtime-cost-repair-20261020/review_contacts/assets/counterspell_contact.res",
+          "source_candidate_qualified": true,
+          "candidate_sha256": "a9a3c3a0cba3ed9692973ad31ca4105d69eadb72114d46c3d2dabbe4fd9ddea5",
+          "native_comparisons": 16,
+          "rgba_byte_identical": true,
+          "positive_pixels_maximum": 8304,
+          "actual_default_constructor_us": [
+            390,
+            143,
+            128,
+            439,
+            168,
+            139
+          ],
+          "maximum_complete_constructor_us": 439,
+          "first_inputs_plus_sample_us": [
+            43,
+            46
+          ],
+          "changed_inputs_plus_sample_us": [
+            8,
+            8
+          ],
+          "update_p95_us": 19.0,
+          "actual_input_plus_sample_maximum_us": 46,
+          "maximum_readiness_step_us": 586,
+          "complete_constructor_and_update_budget_pass": true,
+          "source_runtime_flags_retained": false,
+          "resource_is_indexed_gameplay_spell": false,
+          "human_approval_inferred": false,
+          "production_integration_performed": false
+        },
+        "source_runtime_flags_retained": false,
+        "evidence": [
+          {
+            "path": "authoring/runtime-cost-repair-20261020/review_contacts/qualification.json",
+            "sha256": "a1d2991d167a7c03a95a21060367c6548da98b726c45c49e7ad9b703af1ac9ce",
+            "active_art_context_qualified": true,
+            "optical": {
+              "strict_threshold_pass": true
+            },
+            "complete_constructor_and_update_budget_pass": true,
+            "scope": "Qualified exact source-stage native context only; source input tails and readiness remain in the complete row. New namespace execution/consumer assignment is separate."
+          }
+        ]
+      }
+    ],
+    "construction_helpers": [
+      "res://factory/packaging/freezing_construction.gd",
+      "res://factory/packaging/constructed_occurrence.gd",
+      "res://authoring/runtime-cost-repair-20261020/r6_sensory/phases-v2/finite_deafness.tres",
+      "res://authoring/runtime-cost-repair-20261020/r6_freezing/phases/retained.tres",
+      "res://authoring/runtime-cost-repair-20261020/review_contacts/retained_fire.tres",
+      "res://authoring/runtime-cost-repair-20261020/review_contacts/counterspell_contact.tres"
+    ],
+    "required_source_closure": [
+      "res://factory/packaging/freezing_construction.gd",
+      "res://factory/packaging/constructed_occurrence.gd",
+      "res://authoring/runtime-cost-repair-20261020/r6_sensory/phases-v2/finite_deafness.tres",
+      "res://authoring/runtime-cost-repair-20261020/r6_freezing/phases/retained.tres",
+      "res://authoring/runtime-cost-repair-20261020/review_contacts/retained_fire.tres",
+      "res://authoring/runtime-cost-repair-20261020/review_contacts/counterspell_contact.tres"
+    ],
+    "groups": {
+      "sensory2": 2,
+      "freezing2": 2
+    },
+    "previous_source_table": "format/production-review-source-resources.json",
+    "previous_source_table_sha256": "92904429005a085cd35b3ef0e38718d374e4710a910085d5a8278264d85197e6",
+    "frozen_inputs": {
+      "tools/vfx_package/source_preparation_package.py": "26a9e48c471a03765026d937a784491bd51b65e893a46ed01230c7eeb5885091",
+      "factory/packaging/freezing_construction.gd": "2789060e9c8b468ae7cc79710d8ddc0f95bfc32d091371ab9dfe082ef8f85621",
+      "authoring/runtime-cost-repair-20261020/r6_sensory/closed/phases/divine_deafened.tres": "445c5c0c912177182e747a2086055251dc458c5dcbb463101ed46706b3ce5ab1",
+      "authoring/runtime-cost-repair-20261020/r6_sensory/closed/phases/divine_blinded.tres": "f53e22371e018db9807371bb2b13b18eef39db82090da77b74e153b325f5a3e9",
+      "authoring/runtime-cost-repair-20261020/r6_freezing/phases/blast.tres": "4a55620d1c6c7b5d49728c3e33310258729802e4fa56496782771e6349d9887a",
+      "authoring/runtime-cost-repair-20261020/r6_freezing/phases/delivery.tres": "e25c06c1c83cba47a9541a583511eaa083bfb3058be12e20c80a302cbc42f95a",
+      "authoring/runtime-cost-repair-20261020/r6_sensory/phases-v2/finite_deafness.tres": "e6b499800e0dc24982bb263fc95f923ceb6b49335b68093c88c4d6dfc0d945f4",
+      "authoring/runtime-cost-repair-20261020/r6_freezing/phases/retained.tres": "41c7ba5e9091d425a0ca0f754fa6c1027f5efe1b3d3bd7db8d77ec0670f21ed2",
+      "authoring/runtime-cost-repair-20261020/review_contacts/retained_fire.tres": "3a87b0dae23d806be46f496857f89f42a1e7c3105ede613b4ebf322a398b4f65",
+      "authoring/runtime-cost-repair-20261020/review_contacts/counterspell_contact.tres": "a9a3c3a0cba3ed9692973ad31ca4105d69eadb72114d46c3d2dabbe4fd9ddea5",
+      "authoring/runtime-cost-repair-20261020/r6_sensory/closed/assets/divine_deafened.res": "db51010504c7c4f96ccdf4dc9e6c0972395d9c18a1052c560b706d28b1353fa8",
+      "authoring/runtime-cost-repair-20261020/r6_sensory/closed/assets/divine_blinded.res": "1eb49edb72b18705535464d76949dbb93250a34fe083687518d3713ab7c6ee81",
+      "authoring/runtime-cost-repair-20261020/payloads/assets/freezing-native-source.tres": "a9dad917f48cb93f2cfe8ccd7cfa569f67b25431207f3c3005fc7266e9c2d63c",
+      "authoring/runtime-cost-repair-20261020/r6_freezing/assets/delivery.tres": "5ee1de34d05e88b3043104cbf4764946ef37ffa82d4b30117710bb61d2286b30",
+      "authoring/runtime-cost-repair-20261020/r6_sensory/assets-v2/finite_deafness.res": "5e761eebc613e9d73bf4a6638a282cf8d587cc6a330daef6e61484a12b9d410c",
+      "authoring/runtime-cost-repair-20261020/r6_freezing/assets/retained.tres": "680421f3c5cbdc534138e238be8a9cfcc88aa8f990a83ee995bbde4a592ef439",
+      "authoring/runtime-cost-repair-20261020/review_contacts/assets/retained_fire.res": "2bcf8fdbbd79c29b5b5873a0b2904a09195d3f5bb4e125172b7c642ed8115803",
+      "authoring/runtime-cost-repair-20261020/review_contacts/assets/counterspell_contact.res": "dbaf58fdca6fd825072fa524ac4988e2b3be1dcfb586075b3ab4596e91037e21",
+      "authoring/runtime-cost-repair-20261020/r6_sensory/closed/qualification.json": "bde8671a1feafb0b325d27cd9084c3e4fb5f07a13cc00234da61b6e9cedea594",
+      "authoring/runtime-cost-repair-20261020/r6_freezing/qualification.json": "517327037685c95d3f2927dcbf4d5637ab5a45ff2d8f1edf84bbe026878a28e6",
+      "authoring/runtime-cost-repair-20261020/review_contacts/qualification.json": "a1d2991d167a7c03a95a21060367c6548da98b726c45c49e7ad9b703af1ac9ce"
+    },
+    "source_counts": {
+      "indexed_alternatives": 4,
+      "typed_supersessions": 4
+    },
+    "default_selection_changed": false,
+    "human_approval_inferred": false,
+    "production_integration_performed": false
+  },
+  "source_resources": {
+    "schema": "factory.source_preparation.source_resources.v1",
+    "resources": [
+      {
+        "key": "deafness",
+        "clip_id": "production-review/deafness/finite_application",
+        "phase": "res://assets/vfx/extensions/source-preparation-20261020/sources/6dc5a39bea3357fd04ad/finite_deafness.tres",
+        "source_phase": "res://authoring/runtime-cost-repair-20261020/r6_sensory/phases-v2/finite_deafness.tres",
+        "source_sha256": "e6b499800e0dc24982bb263fc95f923ceb6b49335b68093c88c4d6dfc0d945f4"
+      },
+      {
+        "key": "delayed_fire",
+        "clip_id": "production-review/retained-payload/delayed_fire",
+        "phase": "res://assets/vfx/extensions/source-preparation-20261020/sources/90f9a5a22d9213d09bc2/retained_fire.tres",
+        "source_phase": "res://authoring/runtime-cost-repair-20261020/review_contacts/retained_fire.tres",
+        "source_sha256": "3a87b0dae23d806be46f496857f89f42a1e7c3105ede613b4ebf322a398b4f65"
+      },
+      {
+        "key": "freezing",
+        "clip_id": "production-review/retained-payload/freezing",
+        "phase": "res://assets/vfx/extensions/source-preparation-20261020/sources/1602e5ab2c9262f9e0c5/retained.tres",
+        "source_phase": "res://authoring/runtime-cost-repair-20261020/r6_freezing/phases/retained.tres",
+        "source_sha256": "41c7ba5e9091d425a0ca0f754fa6c1027f5efe1b3d3bd7db8d77ec0670f21ed2"
+      },
+      {
+        "key": "counterspell",
+        "clip_id": "production-review/counterspell/actual_presentation_contact",
+        "phase": "res://assets/vfx/extensions/source-preparation-20261020/sources/24692e80be5c661fdc84/counterspell_contact.tres",
+        "source_phase": "res://authoring/runtime-cost-repair-20261020/review_contacts/counterspell_contact.tres",
+        "source_sha256": "a9a3c3a0cba3ed9692973ad31ca4105d69eadb72114d46c3d2dabbe4fd9ddea5"
+      },
+      {
+        "key": "continual_flame_bounded_hold",
+        "clip_id": "production-review/continual-flame/source-hold-loop",
+        "phase": "res://assets/vfx/extensions/production-review-20261020/sources/99344fc19f3a0e8d0096/source-hold-loop.tres",
+        "source_phase": "res://authoring/production-review-repair-20261020/continual_flame/source-hold-loop.tres",
+        "source_sha256": "29d3ceb9c16f3b6b2b23b1f35499dd76d1668f98248b014f85fa4a834709f0f4"
+      },
+      {
+        "key": "aura_of_life_main_owner",
+        "clip_id": "production-review/aura-of-life/main_owner",
+        "phase": "res://assets/vfx/extensions/production-review-20261020/sources/2b93d2f154712e5f200b/owner.tres",
+        "source_phase": "res://authoring/production-review-repair-20261020/aura_of_life/owner.tres",
+        "source_sha256": "98ad8a7e16edf66201b408dad1ec18a9f35730e1fac5708260bcd5930a396bf9"
+      }
+    ],
+    "default_selection_changed": false,
+    "new_index_clip_ids_added": false,
+    "usage": "Explicit typed SourceResource entries, not aliases for existing clip IDs or gameplay assignments",
+    "version": "runtime-source-preparation-20261020-efe34c587d3ac9fd",
+    "previous_table": "res://assets/vfx/format/production-review-source-resources.json",
+    "previous_table_sha256": "92904429005a085cd35b3ef0e38718d374e4710a910085d5a8278264d85197e6",
+    "superseded_keys": [
+      "counterspell",
+      "deafness",
+      "delayed_fire",
+      "freezing"
+    ]
+  },
+  "new_typed_source_table": "res://assets/vfx/format/source-preparation-20261020-source-resources.json",
+  "native_namespace_execution": {
+    "checks": 94,
+    "current_id": "production-review/counterspell/actual_presentation_contact",
+    "failures": [],
+    "fixture_script_sha256": {
+      "followup_runtime_package_actual.gd": "8d9d24ab822c19c10939adc51dbe6c8c09c6ed5409c43142e4db4139561db211",
+      "production_review_package_actual.gd": "02aebb818bf6fe7b272e465a9ce83a5c25ad7cb461290bc4689fb5265d9217ef",
+      "source_preparation_package_actual.gd": "2ed2b945b24753f49c9814f8ae8f3a17f6d323202ea8148074f0cebbfac2d3a4"
+    },
+    "human_approval_inferred": false,
+    "index_sha256": "42cd3cf2ffee141712630967318dc810a0205044706d181673ef16d51127970e",
+    "production_integration_performed": false,
+    "requested_cases": 4,
+    "requested_source_resources": 4,
+    "rows": [
+      {
+        "actual_affected_production_case_qualified": false,
+        "clip_id": "review/divine_word/back/target_deafened",
+        "constructor_over2000us": false,
+        "execution_scope": "load_validate_construct_only_missing_actual_head_provider",
+        "group": "sensory2",
+        "native_complete_constructor_us": 1426,
+        "profile_construction": false,
+        "rendered_actor_pixels": false,
+        "retired_difference_pixels": 0,
+        "single_clock_script_checks": 1,
+        "source_optical_qualification_repeated": false,
+        "source_readiness": [
+          {
+            "operation": "request_resource",
+            "path": "res://assets/vfx/extensions/source-preparation-20261020/sources/0bfa45a045bf2d8200f6/composition.gd",
+            "state": "pending",
+            "us": 40
+          },
+          {
+            "operation": "publish_resource",
+            "path": "res://assets/vfx/extensions/source-preparation-20261020/sources/0bfa45a045bf2d8200f6/composition.gd",
+            "state": "pending",
+            "us": 270
+          },
+          {
+            "operation": "request_resource",
+            "path": "res://assets/vfx/extensions/source-preparation-20261020/sources/a3b89a9801b9839a91e3/divine_deafened.res",
+            "state": "pending",
+            "us": 48
+          },
+          {
+            "operation": "publish_resource_and_prepare_immutable_interface",
+            "path": "res://assets/vfx/extensions/source-preparation-20261020/sources/a3b89a9801b9839a91e3/divine_deafened.res",
+            "state": "ready",
+            "us": 5417
+          }
+        ]
+      },
+      {
+        "actual_affected_production_case_qualified": false,
+        "clip_id": "review/divine_word/back/target_blinded",
+        "constructor_over2000us": false,
+        "execution_scope": "load_validate_construct_only_missing_actual_head_provider",
+        "group": "sensory2",
+        "native_complete_constructor_us": 1239,
+        "profile_construction": false,
+        "rendered_actor_pixels": false,
+        "retired_difference_pixels": 0,
+        "single_clock_script_checks": 1,
+        "source_optical_qualification_repeated": false,
+        "source_readiness": [
+          {
+            "operation": "publish_resource",
+            "path": "res://assets/vfx/extensions/source-preparation-20261020/sources/0bfa45a045bf2d8200f6/composition.gd",
+            "state": "pending",
+            "us": 23
+          },
+          {
+            "operation": "request_resource",
+            "path": "res://assets/vfx/extensions/source-preparation-20261020/sources/86159b4cfae2cc78e4e6/divine_blinded.res",
+            "state": "pending",
+            "us": 21
+          },
+          {
+            "operation": "publish_resource_and_prepare_immutable_interface",
+            "path": "res://assets/vfx/extensions/source-preparation-20261020/sources/86159b4cfae2cc78e4e6/divine_blinded.res",
+            "state": "ready",
+            "us": 1462
+          }
+        ]
+      },
+      {
+        "actual_sample_hz": 144.0,
+        "captures": [
+          {
+            "age": 0.0,
+            "path": "res://native-smoke-complete-v1/f9aaf708375731a3-00000.png",
+            "positive_pixels": 0,
+            "tick": 0,
+            "visible_draws": 0
+          },
+          {
+            "age": 0.236111111111111,
+            "path": "res://native-smoke-complete-v1/f9aaf708375731a3-00034.png",
+            "positive_pixels": 277,
+            "tick": 34,
+            "visible_draws": 16
+          },
+          {
+            "age": 0.5,
+            "path": "res://native-smoke-complete-v1/f9aaf708375731a3-00072.png",
+            "positive_pixels": 176,
+            "tick": 72,
+            "visible_draws": 16
+          },
+          {
+            "age": 0.597222222222222,
+            "path": "res://native-smoke-complete-v1/f9aaf708375731a3-00086.png",
+            "positive_pixels": 172,
+            "tick": 86,
+            "visible_draws": 16
+          },
+          {
+            "age": 1.2,
+            "path": "res://native-smoke-complete-v1/f9aaf708375731a3-00173.png",
+            "positive_pixels": 0,
+            "tick": 173,
+            "visible_draws": 0
+          }
+        ],
+        "chronological_ticks": 174,
+        "clip_id": "high-level-22/freezing-sphere/launch_blast",
+        "construction_profile": {},
+        "constructor_over2000us": false,
+        "fallback_rate_scope": "Source declared rate retained",
+        "group": "freezing2",
+        "native_complete_constructor_us": 1010,
+        "original_source_pixel_parity_repeated": false,
+        "phase_seconds": 1.2,
+        "positive_pixels_maximum": 277,
+        "public_inputs": {
+          "actor_packet_staged": false,
+          "actual_gameplay_observation": false,
+          "construction_operands": [
+            {
+              "component_path": [
+                "effect"
+              ],
+              "input_field": "",
+              "values": {
+                "admitted_cells": [
+                  [
+                    0.0,
+                    0.0
+                  ],
+                  [
+                    1.0,
+                    0.0
+                  ],
+                  [
+                    0.0,
+                    1.0
+                  ]
+                ],
+                "event": {},
+                "immediate_launch": true,
+                "item_uuid": "",
+                "kind": "freezing",
+                "lifetime_uuid": "",
+                "original_caster_uuid": "synthetic-package-original-caster",
+                "source_owner_uuid": "synthetic-package-source-owner"
+              }
+            }
+          ],
+          "fixture_kind": "synthetic_source_schema",
+          "profile_construction": false,
+          "public_methods": [
+            "set_root_path",
+            "set_targets",
+            "set_blast_event"
+          ]
+        },
+        "rendered_actor_pixels": false,
+        "retired_difference_pixels": 0,
+        "single_clock_script_checks": 1,
+        "source_qualified_witness_age": 0.5,
+        "source_readiness": [
+          {
+            "operation": "request_resource",
+            "path": "res://assets/vfx/extensions/late-20261020/sources/e75e11e80c30bcf100c8/freezing.gd",
+            "state": "pending",
+            "us": 18
+          },
+          {
+            "operation": "publish_resource",
+            "path": "res://assets/vfx/extensions/late-20261020/sources/e75e11e80c30bcf100c8/freezing.gd",
+            "state": "pending",
+            "us": 187
+          },
+          {
+            "operation": "request_resource",
+            "path": "res://assets/vfx/extensions/late-20261020/sources/85e6b111cbb7a17f6052/freezing-native-source.tres",
+            "state": "pending",
+            "us": 31
+          },
+          {
+            "operation": "publish_resource_and_prepare_immutable_interface",
+            "path": "res://assets/vfx/extensions/late-20261020/sources/85e6b111cbb7a17f6052/freezing-native-source.tres",
+            "state": "ready",
+            "us": 1958
+          }
+        ],
+        "source_simulation_hz": 144.0,
+        "visible_draws_maximum": 16
+      },
+      {
+        "actual_sample_hz": 144.0,
+        "captures": [
+          {
+            "age": 0.0,
+            "path": "res://native-smoke-complete-v1/db559440a7a709fc-00000.png",
+            "positive_pixels": 0,
+            "tick": 0,
+            "visible_draws": 0
+          },
+          {
+            "age": 0.180555555555556,
+            "path": "res://native-smoke-complete-v1/db559440a7a709fc-00026.png",
+            "positive_pixels": 332,
+            "tick": 26,
+            "visible_draws": 3
+          },
+          {
+            "age": 0.451388888888889,
+            "path": "res://native-smoke-complete-v1/db559440a7a709fc-00065.png",
+            "positive_pixels": 420,
+            "tick": 65,
+            "visible_draws": 3
+          },
+          {
+            "age": 0.5,
+            "path": "res://native-smoke-complete-v1/db559440a7a709fc-00072.png",
+            "positive_pixels": 435,
+            "tick": 72,
+            "visible_draws": 3
+          },
+          {
+            "age": 0.9,
+            "path": "res://native-smoke-complete-v1/db559440a7a709fc-00130.png",
+            "positive_pixels": 0,
+            "tick": 130,
+            "visible_draws": 0
+          }
+        ],
+        "chronological_ticks": 131,
+        "clip_id": "high-level-22/freezing-sphere/launch_delivery",
+        "construction_profile": {},
+        "constructor_over2000us": false,
+        "fallback_rate_scope": "Source declared rate retained",
+        "group": "freezing2",
+        "native_complete_constructor_us": 691,
+        "original_source_pixel_parity_repeated": false,
+        "phase_seconds": 0.9,
+        "positive_pixels_maximum": 435,
+        "public_inputs": {
+          "actor_packet_staged": false,
+          "actual_gameplay_observation": false,
+          "construction_operands": [
+            {
+              "component_path": [
+                "effect"
+              ],
+              "input_field": "",
+              "values": {
+                "acting_holder_uuid": "synthetic-package-current-holder",
+                "cast_or_throw_accepted": true,
+                "caster_uuid": "synthetic-package-original-caster",
+                "kind": "freezing",
+                "release_mode": "supplied_cast_snapshot"
+              }
+            }
+          ],
+          "fixture_kind": "synthetic_source_schema",
+          "profile_construction": false,
+          "public_methods": [
+            "set_root_path",
+            "set_targets",
+            "set_delivery_timing"
+          ]
+        },
+        "rendered_actor_pixels": false,
+        "retired_difference_pixels": 0,
+        "single_clock_script_checks": 1,
+        "source_qualified_witness_age": 0.5,
+        "source_readiness": [
+          {
+            "operation": "request_resource",
+            "path": "res://assets/vfx/extensions/source-preparation-20261020/sources/5893135c57e28e4bc834/delivery.gd",
+            "state": "pending",
+            "us": 20
+          },
+          {
+            "operation": "publish_resource",
+            "path": "res://assets/vfx/extensions/source-preparation-20261020/sources/5893135c57e28e4bc834/delivery.gd",
+            "state": "pending",
+            "us": 196
+          },
+          {
+            "operation": "request_resource",
+            "path": "res://assets/vfx/extensions/source-preparation-20261020/sources/e42d1531cf38eabe1cb7/delivery.tres",
+            "state": "pending",
+            "us": 25
+          },
+          {
+            "operation": "publish_resource_and_prepare_immutable_interface",
+            "path": "res://assets/vfx/extensions/source-preparation-20261020/sources/e42d1531cf38eabe1cb7/delivery.tres",
+            "state": "ready",
+            "us": 6488
+          }
+        ],
+        "source_simulation_hz": 144.0,
+        "visible_draws_maximum": 3
+      }
+    ],
+    "scope": "Fresh complete namespace: four opt-in indexed approaches and four typed source supersessions. Actual public readiness/constructors and one Clock identity. Freezing indexed2 advance144Hz with explicit synthetic source-schema owner/event/holder/endpoints and positive/retired native pixels; payload2/Counterspell use admitted synthetic optical contexts. Divine2 and typed finite Deafness load/validate/construct only: actual measured head provider is not staged. No original/actor rerender, gameplay observation, default assignment, human art acceptance or whole-game budget claim.",
+    "source_optical_qualification_replaced": false,
+    "source_rows": [
+      {
+        "actual_affected_production_case_qualified": false,
+        "captures": [],
+        "clip_id": "production-review/deafness/finite_application",
+        "constructor_over2000us": false,
+        "execution_scope": "load_validate_construct_only_missing_actual_provider",
+        "key": "deafness",
+        "missing_provider": "actual measured head/support packet",
+        "native_complete_constructor_us": 1009,
+        "phase": "res://assets/vfx/extensions/source-preparation-20261020/sources/6dc5a39bea3357fd04ad/finite_deafness.tres",
+        "positive_pixels_maximum": 0,
+        "public_inputs": {
+          "actor_packet_staged": false,
+          "actual_gameplay_observation": false,
+          "fixture_kind": "synthetic_source_schema",
+          "item_provider_staged": false,
+          "public_methods": [
+            "set_root_path"
+          ]
+        },
+        "rendered_actor_pixels": false,
+        "retired_difference_pixels": 0,
+        "single_clock_script_checks": 1,
+        "source_optical_qualification_repeated": false,
+        "source_readiness": [
+          {
+            "operation": "publish_resource",
+            "path": "res://assets/vfx/extensions/source-preparation-20261020/sources/0bfa45a045bf2d8200f6/composition.gd",
+            "state": "pending",
+            "us": 18
+          },
+          {
+            "operation": "request_resource",
+            "path": "res://assets/vfx/extensions/source-preparation-20261020/sources/4e66f7d741fe731005ad/finite_deafness.res",
+            "state": "pending",
+            "us": 16
+          },
+          {
+            "operation": "publish_resource_and_prepare_immutable_interface",
+            "path": "res://assets/vfx/extensions/source-preparation-20261020/sources/4e66f7d741fe731005ad/finite_deafness.res",
+            "state": "ready",
+            "us": 2304
+          }
+        ]
+      },
+      {
+        "actual_affected_production_case_qualified": false,
+        "captures": [
+          {
+            "age": 0.4,
+            "path": "res://native-smoke-complete-v1/7dd063a922576a90-source-00400.png",
+            "positive_pixels": 949
+          },
+          {
+            "age": 0.65,
+            "path": "res://native-smoke-complete-v1/7dd063a922576a90-source-00650.png",
+            "positive_pixels": 946
+          }
+        ],
+        "clip_id": "production-review/retained-payload/freezing",
+        "constructor_over2000us": false,
+        "execution_scope": "synthetic_admitted_source_schema_positive_pixels",
+        "key": "freezing",
+        "missing_provider": "",
+        "native_complete_constructor_us": 521,
+        "phase": "res://assets/vfx/extensions/source-preparation-20261020/sources/1602e5ab2c9262f9e0c5/retained.tres",
+        "positive_pixels_maximum": 949,
+        "public_inputs": {
+          "actor_packet_staged": false,
+          "actual_gameplay_observation": false,
+          "fixture_kind": "synthetic_source_schema",
+          "item_provider_staged": false,
+          "power_or_save_dc_fabricated": false,
+          "public_methods": [
+            "set_payload_state",
+            "set_payload_anchor",
+            "set_live_endpoints"
+          ]
+        },
+        "rendered_actor_pixels": false,
+        "retired_difference_pixels": 0,
+        "single_clock_script_checks": 1,
+        "source_optical_qualification_repeated": false,
+        "source_readiness": [
+          {
+            "operation": "request_resource",
+            "path": "res://assets/vfx/extensions/source-preparation-20261020/sources/6190caa0d9fb53fad87a/retained.gd",
+            "state": "pending",
+            "us": 18
+          },
+          {
+            "operation": "publish_resource",
+            "path": "res://assets/vfx/extensions/source-preparation-20261020/sources/6190caa0d9fb53fad87a/retained.gd",
+            "state": "pending",
+            "us": 208
+          },
+          {
+            "operation": "request_resource",
+            "path": "res://assets/vfx/extensions/source-preparation-20261020/sources/03dc27065509919659d7/retained.tres",
+            "state": "pending",
+            "us": 27
+          },
+          {
+            "operation": "publish_resource_and_prepare_immutable_interface",
+            "path": "res://assets/vfx/extensions/source-preparation-20261020/sources/03dc27065509919659d7/retained.tres",
+            "state": "ready",
+            "us": 1096
+          }
+        ]
+      },
+      {
+        "actual_affected_production_case_qualified": false,
+        "captures": [
+          {
+            "age": 0.4,
+            "path": "res://native-smoke-complete-v1/7d71f6f7ce3ef8b1-source-00400.png",
+            "positive_pixels": 817
+          },
+          {
+            "age": 0.65,
+            "path": "res://native-smoke-complete-v1/7d71f6f7ce3ef8b1-source-00650.png",
+            "positive_pixels": 801
+          }
+        ],
+        "clip_id": "production-review/retained-payload/delayed_fire",
+        "constructor_over2000us": false,
+        "execution_scope": "synthetic_admitted_source_schema_positive_pixels",
+        "key": "delayed_fire",
+        "missing_provider": "",
+        "native_complete_constructor_us": 472,
+        "phase": "res://assets/vfx/extensions/source-preparation-20261020/sources/90f9a5a22d9213d09bc2/retained_fire.tres",
+        "positive_pixels_maximum": 817,
+        "public_inputs": {
+          "actor_packet_staged": false,
+          "actual_gameplay_observation": false,
+          "fixture_kind": "synthetic_source_schema",
+          "item_provider_staged": false,
+          "power_or_save_dc_fabricated": false,
+          "public_methods": [
+            "set_payload_state",
+            "set_payload_anchor",
+            "set_live_endpoints"
+          ]
+        },
+        "rendered_actor_pixels": false,
+        "retired_difference_pixels": 0,
+        "single_clock_script_checks": 1,
+        "source_optical_qualification_repeated": false,
+        "source_readiness": [
+          {
+            "operation": "request_resource",
+            "path": "res://assets/vfx/extensions/source-preparation-20261020/sources/f75c575bd4b3da2f9cc7/retained_fire.gd",
+            "state": "pending",
+            "us": 15
+          },
+          {
+            "operation": "publish_resource",
+            "path": "res://assets/vfx/extensions/source-preparation-20261020/sources/f75c575bd4b3da2f9cc7/retained_fire.gd",
+            "state": "pending",
+            "us": 213
+          },
+          {
+            "operation": "request_resource",
+            "path": "res://assets/vfx/extensions/source-preparation-20261020/sources/afaed64291a6fc1d2c79/retained_fire.res",
+            "state": "pending",
+            "us": 25
+          },
+          {
+            "operation": "publish_resource_and_prepare_immutable_interface",
+            "path": "res://assets/vfx/extensions/source-preparation-20261020/sources/afaed64291a6fc1d2c79/retained_fire.res",
+            "state": "ready",
+            "us": 653
+          }
+        ]
+      },
+      {
+        "actual_affected_production_case_qualified": false,
+        "captures": [
+          {
+            "age": 0.4,
+            "path": "res://native-smoke-complete-v1/5da39ce6f6040b61-source-00400.png",
+            "positive_pixels": 5206
+          },
+          {
+            "age": 0.65,
+            "path": "res://native-smoke-complete-v1/5da39ce6f6040b61-source-00650.png",
+            "positive_pixels": 172
+          }
+        ],
+        "clip_id": "production-review/counterspell/actual_presentation_contact",
+        "constructor_over2000us": false,
+        "execution_scope": "synthetic_admitted_source_schema_positive_pixels",
+        "key": "counterspell",
+        "missing_provider": "",
+        "native_complete_constructor_us": 511,
+        "phase": "res://assets/vfx/extensions/source-preparation-20261020/sources/24692e80be5c661fdc84/counterspell_contact.tres",
+        "positive_pixels_maximum": 5206,
+        "public_inputs": {
+          "actor_packet_staged": false,
+          "actual_gameplay_observation": false,
+          "fixture_kind": "synthetic_source_schema",
+          "incoming_spell_constructed": false,
+          "item_provider_staged": false,
+          "public_methods": [
+            "set_reaction_observation",
+            "set_interrupted_presentation",
+            "set_interrupted_path"
+          ]
+        },
+        "rendered_actor_pixels": false,
+        "retired_difference_pixels": 0,
+        "single_clock_script_checks": 1,
+        "source_optical_qualification_repeated": false,
+        "source_readiness": [
+          {
+            "operation": "request_resource",
+            "path": "res://assets/vfx/extensions/source-preparation-20261020/sources/6d5107280a9cdbf9b441/counterspell.gd",
+            "state": "pending",
+            "us": 17
+          },
+          {
+            "operation": "publish_resource",
+            "path": "res://assets/vfx/extensions/source-preparation-20261020/sources/6d5107280a9cdbf9b441/counterspell.gd",
+            "state": "pending",
+            "us": 161
+          },
+          {
+            "operation": "request_resource",
+            "path": "res://assets/vfx/extensions/source-preparation-20261020/sources/d11d9b541458c4aa9c31/counterspell_contact.res",
+            "state": "pending",
+            "us": 28
+          },
+          {
+            "operation": "publish_resource_and_prepare_immutable_interface",
+            "path": "res://assets/vfx/extensions/source-preparation-20261020/sources/d11d9b541458c4aa9c31/counterspell_contact.res",
+            "state": "ready",
+            "us": 655
+          }
+        ]
+      }
+    ],
+    "version": "runtime-source-preparation-20261020-efe34c587d3ac9fd"
+  },
+  "old_source_table_modified": false,
+  "default_selection_changed": false,
+  "whole_library_runtime_complete": false,
+  "human_approval_inferred": false,
+  "production_integration_performed": false
+}

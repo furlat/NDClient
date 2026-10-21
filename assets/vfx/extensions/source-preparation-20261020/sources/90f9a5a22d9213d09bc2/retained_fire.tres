@@ -1,0 +1,21 @@
+[gd_resource type="Resource" load_steps=4 format=3]
+[ext_resource type="Script" path="res://assets/vfx/sources/67ebe8ef4f358cad6a4b/phase.gd" id="phase"]
+[ext_resource type="Script" path="res://assets/vfx/sources/d60670fa4c3a03cc8f3a/component.gd" id="component"]
+[sub_resource type="Resource" id="visual"]
+script = ExtResource("component")
+component_id = "effect"
+constructor_script = "res://assets/vfx/extensions/source-preparation-20261020/sources/f75c575bd4b3da2f9cc7/retained_fire.gd"
+input = {"kind": "delayed_fire", "readable_retained_fire": true, "base_power": 12, "prepared_visual_bank": "res://assets/vfx/extensions/source-preparation-20261020/sources/afaed64291a6fc1d2c79/retained_fire.res"}
+provenance = "Existing native source; opt-in production review repair. No successful observation or gameplay owner is embedded."
+[resource]
+script = ExtResource("phase")
+clip_id = "production-review/retained-payload/delayed_fire"
+label = "production-review/retained-payload/delayed_fire"
+phase = "application"
+source_recipe = "authoring/production-review-repair-20261020/payload"
+components = Array[Resource]([SubResource("visual")])
+bindings = [{"component": "effect", "kind": "sample", "rate": 1.0, "offset_seconds": 0.0}]
+emitters = []
+seconds = 3.0
+simulation_hz = 144.0
+options = {"production_integration_performed": false, "human_approval_inferred": false}

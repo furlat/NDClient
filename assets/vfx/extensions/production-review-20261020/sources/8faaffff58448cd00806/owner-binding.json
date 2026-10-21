@@ -1,0 +1,38 @@
+{
+  "schema": "factory.aura_of_life.main_owner_binding.v1",
+  "phase": "res://assets/vfx/extensions/production-review-20261020/sources/2b93d2f154712e5f200b/owner.tres",
+  "clip_id": "production-review/aura-of-life/main_owner",
+  "owner_id": "condition.spell.aura_of_life.owner",
+  "source_part": "field",
+  "member_source_replaced": false,
+  "finite_windup_replaced": false,
+  "binding": {
+    "method": "set_owner_binding",
+    "fields": ["owner_uuid", "condition_id", "source_entity_uuid", "recipient_entity_uuid"],
+    "identity": "Actual self-owned Aura of Life condition and its caster; never the member-benefit UUID"
+  },
+  "lifetime": {
+    "method": "set_owner_state",
+    "fields": ["condition_state", "source_entity_uuid", "target_entity_uuid", "present", "observed"],
+    "removal_field": "removal_at_seconds",
+    "clock": "Absolute observed owner age supplied to sample; no cast-window retirement, duration inference or arbitrary modulo",
+    "removal": "Use actual observed owner removal age; original.38second material fade then hide"
+  },
+  "placement": {
+    "method": "set_root_path",
+    "anchor": "Actual condition caster ground/root in the existing source coordinate plane",
+    "orientation": "world",
+    "follows_held_age": true,
+    "requires_body_points": false,
+    "requires_hand_endpoint": false,
+    "requires_undisclosed_spatial_uuid": false
+  },
+  "radius": {
+    "source": "Authored size verified from backend: AuraOfLifeZone inherits Sphere(radius_feet=30), whose max_radius_tiles is radius_feet//5",
+    "radius_feet": 30,
+    "radius_cells": 6,
+    "public_spatial_observation_claimed": false
+  },
+  "consumer_assignment_performed": false,
+  "human_approval_inferred": false
+}

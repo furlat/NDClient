@@ -1,0 +1,5413 @@
+[gd_resource type="Resource" format=4]
+
+[ext_resource type="Shader" path="res://assets/vfx/extensions/heavy-effects-20261020/sources/a5b86fe9b9a68b0ff244/a484fa4b2b0d500e8dc7d9e749520d21ed2cc6b041a31ddb144beac488b2ab4b.gdshader" id="1_0jywu"]
+[ext_resource type="Texture2D" path="res://assets/vfx/extensions/heavy-effects-20261020/sources/2cc94f51b380b6eab0f5/texture.res" id="2_3d47q"]
+[ext_resource type="Shader" path="res://assets/vfx/extensions/heavy-effects-20261020/sources/361786ca0759b57e0a18/821e7b5de9dd7045d0238f4ba696c586f61e3d626677e448dfab647064def7a0.gdshader" id="3_d3h3f"]
+[ext_resource type="Shader" path="res://assets/vfx/extensions/heavy-effects-20261020/sources/a6309af34e92349d1788/658b3f7bfd899ddb3ebcda0e857031ba5ca639bb077c22fbca5f5eefc06d5480.gdshader" id="4_umjbl"]
+[ext_resource type="Texture2D" path="res://assets/vfx/extensions/heavy-effects-20261020/sources/c0f1a9c43d1a74ff13f7/texture.res" id="5_dgqvg"]
+[ext_resource type="Shader" path="res://assets/vfx/extensions/heavy-effects-20261020/sources/b8e9693e272f5eff3cf0/ebada648c69040bd4bc8f4a3488fdf876b90b3ec23c09a109c628e988a7230b8.gdshader" id="6_8qrfi"]
+[ext_resource type="Shader" path="res://assets/vfx/extensions/heavy-effects-20261020/sources/b7809ae2fd1846ffe1d9/23f22dfa1da16986371812d00a10a89b1a8b3e82761fda1f6ed4ee6f8bb0f725.gdshader" id="7_2uy1r"]
+[ext_resource type="Texture2D" path="res://assets/vfx/extensions/heavy-effects-20261020/sources/01e752888e0e81ae6474/texture.res" id="8_q8qqh"]
+[ext_resource type="Shader" path="res://assets/vfx/extensions/heavy-effects-20261020/sources/d21e8aaaee3009e8fc77/effac15244c36f296b6d7db751ceab5318681bdca8e5b52b795d4c16e154e37f.gdshader" id="9_upkvd"]
+[ext_resource type="Script" path="res://assets/vfx/extensions/owner-fields-v2-20261021/sources/1eafdc27168cdddb0047/straight-construct.gd" id="10_s3oa3"]
+[ext_resource type="Script" path="res://assets/vfx/extensions/heavy-effects-20261020/sources/684a28bf532eaf8cab24/bank.gd" id="11_1q6xu"]
+
+[sub_resource type="Gradient" id="Gradient_b4fpm"]
+offsets = PackedFloat32Array(0, 0.455696, 1)
+colors = PackedColorArray(1, 1, 1, 1, 0.168776, 0.168776, 0.168776, 1, 0, 0, 0, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_heopw"]
+gradient = SubResource("Gradient_b4fpm")
+
+[sub_resource type="Curve" id="Curve_6vmwq"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_5wf3f"]
+curve = SubResource("Curve_6vmwq")
+
+[sub_resource type="Gradient" id="Gradient_2h1oh"]
+offsets = PackedFloat32Array(0, 0.686747, 1)
+colors = PackedColorArray(0, 0, 0, 0, 0.165656, 0.165656, 0.165656, 0.686747, 1, 1, 1, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_xbq7a"]
+gradient = SubResource("Gradient_2h1oh")
+
+[sub_resource type="Gradient" id="Gradient_cqs4w"]
+offsets = PackedFloat32Array(0.409283, 0.586498, 0.831224)
+colors = PackedColorArray(1, 1, 1, 1, 0.294118, 0.294118, 0.294118, 1, 0, 0, 0, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_mwoe8"]
+gradient = SubResource("Gradient_cqs4w")
+
+[sub_resource type="Curve" id="Curve_evsie"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(0.788679, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_l2gef"]
+texture_mode = 1
+curve = SubResource("Curve_evsie")
+
+[sub_resource type="Curve" id="Curve_qsjkh"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Curve" id="Curve_4a8bo"]
+_limits = [0.0, 2.0, 0.0, 1.0]
+_data = [Vector2(0, 0.32967), 0.0, 0.931217, 0, 0, Vector2(1, 1.12088), 1.34454, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Curve" id="Curve_2kvi6"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveXYZTexture" id="CurveXYZTexture_pd8wc"]
+curve_x = SubResource("Curve_qsjkh")
+curve_y = SubResource("Curve_4a8bo")
+curve_z = SubResource("Curve_2kvi6")
+
+[sub_resource type="Gradient" id="Gradient_thdrb"]
+offsets = PackedFloat32Array(0.0966184, 0.384058, 0.591787)
+colors = PackedColorArray(1, 1, 1, 1, 0.19, 0.14825225, 0.114094995, 1, 0.0430392, 0.0430391, 0.0430392, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_jdlo3"]
+gradient = SubResource("Gradient_thdrb")
+
+[sub_resource type="Curve" id="Curve_bqqs6"]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.14717, 1), 0.0, 0.0, 0, 0, Vector2(0.441509, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), -0.482319, 0.0, 0, 0]
+point_count = 4
+
+[sub_resource type="CurveTexture" id="CurveTexture_cvtkw"]
+texture_mode = 1
+curve = SubResource("Curve_bqqs6")
+
+[sub_resource type="Curve" id="Curve_jstk5"]
+_data = [Vector2(0, 0.545222), 0.0, 1.50167, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_swa6q"]
+curve = SubResource("Curve_jstk5")
+
+[sub_resource type="Gradient" id="Gradient_l0uej"]
+offsets = PackedFloat32Array(0, 0.686747, 1)
+colors = PackedColorArray(0, 0, 0, 0, 0.165656, 0.165656, 0.165656, 0.686747, 1, 1, 1, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_ty1wc"]
+gradient = SubResource("Gradient_l0uej")
+
+[sub_resource type="Gradient" id="Gradient_63vo4"]
+offsets = PackedFloat32Array(0, 0.686747, 1)
+colors = PackedColorArray(0, 0, 0, 0, 0.165656, 0.165656, 0.165656, 0.686747, 1, 1, 1, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_b3wwa"]
+gradient = SubResource("Gradient_63vo4")
+
+[sub_resource type="Gradient" id="Gradient_8ja6c"]
+offsets = PackedFloat32Array(0, 0.686747, 1)
+colors = PackedColorArray(0, 0, 0, 0, 0.165656, 0.165656, 0.165656, 0.686747, 1, 1, 1, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_2an2c"]
+gradient = SubResource("Gradient_8ja6c")
+
+[sub_resource type="Gradient" id="Gradient_dnxb6"]
+offsets = PackedFloat32Array(0, 0.686747, 1)
+colors = PackedColorArray(0, 0, 0, 0, 0.165656, 0.165656, 0.165656, 0.686747, 1, 1, 1, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_p2bjm"]
+gradient = SubResource("Gradient_dnxb6")
+
+[sub_resource type="Gradient" id="Gradient_iox3e"]
+offsets = PackedFloat32Array(0, 0.686747, 1)
+colors = PackedColorArray(0, 0, 0, 0, 0.165656, 0.165656, 0.165656, 0.686747, 1, 1, 1, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_ku0xw"]
+gradient = SubResource("Gradient_iox3e")
+
+[sub_resource type="Gradient" id="Gradient_1kgn3"]
+offsets = PackedFloat32Array(0, 0.686747, 1)
+colors = PackedColorArray(0, 0, 0, 0, 0.165656, 0.165656, 0.165656, 0.686747, 1, 1, 1, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_ovxyc"]
+gradient = SubResource("Gradient_1kgn3")
+
+[sub_resource type="Gradient" id="Gradient_dtwqu"]
+offsets = PackedFloat32Array(0, 0.686747, 1)
+colors = PackedColorArray(0, 0, 0, 0, 0.165656, 0.165656, 0.165656, 0.686747, 1, 1, 1, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_6ufpa"]
+gradient = SubResource("Gradient_dtwqu")
+
+[sub_resource type="Gradient" id="Gradient_slq8x"]
+offsets = PackedFloat32Array(0, 0.686747, 1)
+colors = PackedColorArray(0, 0, 0, 0, 0.165656, 0.165656, 0.165656, 0.686747, 1, 1, 1, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_peal5"]
+gradient = SubResource("Gradient_slq8x")
+
+[sub_resource type="Gradient" id="Gradient_ufkrj"]
+offsets = PackedFloat32Array(0, 0.686747, 1)
+colors = PackedColorArray(0, 0, 0, 0, 0.165656, 0.165656, 0.165656, 0.686747, 1, 1, 1, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_03cwy"]
+gradient = SubResource("Gradient_ufkrj")
+
+[sub_resource type="Gradient" id="Gradient_igwkx"]
+offsets = PackedFloat32Array(0, 0.686747, 1)
+colors = PackedColorArray(0, 0, 0, 0, 0.165656, 0.165656, 0.165656, 0.686747, 1, 1, 1, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_5f3qk"]
+gradient = SubResource("Gradient_igwkx")
+
+[sub_resource type="Gradient" id="Gradient_qv2bu"]
+offsets = PackedFloat32Array(0, 0.686747, 1)
+colors = PackedColorArray(0, 0, 0, 0, 0.165656, 0.165656, 0.165656, 0.686747, 1, 1, 1, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_xu7t2"]
+gradient = SubResource("Gradient_qv2bu")
+
+[sub_resource type="QuadMesh" id="QuadMesh_cdb3y"]
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_tfuv6"]
+_surfaces = [{
+"aabb": AABB(-0.439564, 0, -0.439564, 0.879128, 2, 0.879128),
+"format": 34896613377,
+"index_count": 12,
+"index_data": PackedByteArray("AAABAAIAAgABAAMABAAFAAYABgAFAAcA"),
+"name": "Plane",
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 8,
+"vertex_data": PackedByteArray("/38AAAAAAAD/fwAA//8AAP9///8AAAAA/3//////AAAAAAAA/38AAAAA////fwAA//8AAP9/AAD//////38AAA==")
+}]
+blend_shape_mode = 0
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_edshv"]
+_surfaces = [{
+"aabb": AABB(-0.439564, 0, -0.439564, 0.879128, 2, 0.879128),
+"attribute_data": PackedByteArray("/////wAA/////wAAAAAAAAAA//8AAAAA////////AAA="),
+"format": 34896613399,
+"index_count": 12,
+"index_data": PackedByteArray("AAABAAIAAgABAAMABAAFAAYABgAFAAcA"),
+"name": "Plane",
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 8,
+"vertex_data": PackedByteArray("/38AAAAA/7//fwAA////v/9///8AAP+//3///////78AAAAA/38AgAAA////fwCA//8AAP9/AID//////38AgP9/AAD/fwAA/38AAP9/AAD/f////3////9/////f///")
+}]
+blend_shape_mode = 0
+shadow_mesh = SubResource("ArrayMesh_tfuv6")
+
+[sub_resource type="QuadMesh" id="QuadMesh_80lqt"]
+
+[sub_resource type="QuadMesh" id="QuadMesh_ra7gq"]
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_uidm0"]
+_surfaces = [{
+"aabb": AABB(-0.439564, 0, -0.439564, 0.879128, 2, 0.879128),
+"format": 34896613377,
+"index_count": 12,
+"index_data": PackedByteArray("AAABAAIAAgABAAMABAAFAAYABgAFAAcA"),
+"name": "Plane",
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 8,
+"vertex_data": PackedByteArray("/38AAAAAAAD/fwAA//8AAP9///8AAAAA/3//////AAAAAAAA/38AAAAA////fwAA//8AAP9/AAD//////38AAA==")
+}]
+blend_shape_mode = 0
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_c53rc"]
+_surfaces = [{
+"aabb": AABB(-0.439564, 0, -0.439564, 0.879128, 2, 0.879128),
+"attribute_data": PackedByteArray("/////wAA/////wAAAAAAAAAA//8AAAAA////////AAA="),
+"format": 34896613399,
+"index_count": 12,
+"index_data": PackedByteArray("AAABAAIAAgABAAMABAAFAAYABgAFAAcA"),
+"name": "Plane",
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 8,
+"vertex_data": PackedByteArray("/38AAAAA/7//fwAA////v/9///8AAP+//3///////78AAAAA/38AgAAA////fwCA//8AAP9/AID//////38AgP9/AAD/fwAA/38AAP9/AAD/f////3////9/////f///")
+}]
+blend_shape_mode = 0
+shadow_mesh = SubResource("ArrayMesh_uidm0")
+
+[sub_resource type="QuadMesh" id="QuadMesh_o523q"]
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_dfbyl"]
+_surfaces = [{
+"aabb": AABB(-0.439564, 0, -0.439564, 0.879128, 2, 0.879128),
+"format": 34896613377,
+"index_count": 12,
+"index_data": PackedByteArray("AAABAAIAAgABAAMABAAFAAYABgAFAAcA"),
+"name": "Plane",
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 8,
+"vertex_data": PackedByteArray("/38AAAAAAAD/fwAA//8AAP9///8AAAAA/3//////AAAAAAAA/38AAAAA////fwAA//8AAP9/AAD//////38AAA==")
+}]
+blend_shape_mode = 0
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_d88ch"]
+_surfaces = [{
+"aabb": AABB(-0.439564, 0, -0.439564, 0.879128, 2, 0.879128),
+"attribute_data": PackedByteArray("/////wAA/////wAAAAAAAAAA//8AAAAA////////AAA="),
+"format": 34896613399,
+"index_count": 12,
+"index_data": PackedByteArray("AAABAAIAAgABAAMABAAFAAYABgAFAAcA"),
+"name": "Plane",
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 8,
+"vertex_data": PackedByteArray("/38AAAAA/7//fwAA////v/9///8AAP+//3///////78AAAAA/38AgAAA////fwCA//8AAP9/AID//////38AgP9/AAD/fwAA/38AAP9/AAD/f////3////9/////f///")
+}]
+blend_shape_mode = 0
+shadow_mesh = SubResource("ArrayMesh_dfbyl")
+
+[sub_resource type="QuadMesh" id="QuadMesh_hu4xq"]
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_7awvf"]
+_surfaces = [{
+"aabb": AABB(-0.439564, 0, -0.439564, 0.879128, 2, 0.879128),
+"format": 34896613377,
+"index_count": 12,
+"index_data": PackedByteArray("AAABAAIAAgABAAMABAAFAAYABgAFAAcA"),
+"name": "Plane",
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 8,
+"vertex_data": PackedByteArray("/38AAAAAAAD/fwAA//8AAP9///8AAAAA/3//////AAAAAAAA/38AAAAA////fwAA//8AAP9/AAD//////38AAA==")
+}]
+blend_shape_mode = 0
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_6214f"]
+_surfaces = [{
+"aabb": AABB(-0.439564, 0, -0.439564, 0.879128, 2, 0.879128),
+"attribute_data": PackedByteArray("/////wAA/////wAAAAAAAAAA//8AAAAA////////AAA="),
+"format": 34896613399,
+"index_count": 12,
+"index_data": PackedByteArray("AAABAAIAAgABAAMABAAFAAYABgAFAAcA"),
+"name": "Plane",
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 8,
+"vertex_data": PackedByteArray("/38AAAAA/7//fwAA////v/9///8AAP+//3///////78AAAAA/38AgAAA////fwCA//8AAP9/AID//////38AgP9/AAD/fwAA/38AAP9/AAD/f////3////9/////f///")
+}]
+blend_shape_mode = 0
+shadow_mesh = SubResource("ArrayMesh_7awvf")
+
+[sub_resource type="QuadMesh" id="QuadMesh_e15sb"]
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_nk8bh"]
+_surfaces = [{
+"aabb": AABB(-0.439564, 0, -0.439564, 0.879128, 2, 0.879128),
+"format": 34896613377,
+"index_count": 12,
+"index_data": PackedByteArray("AAABAAIAAgABAAMABAAFAAYABgAFAAcA"),
+"name": "Plane",
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 8,
+"vertex_data": PackedByteArray("/38AAAAAAAD/fwAA//8AAP9///8AAAAA/3//////AAAAAAAA/38AAAAA////fwAA//8AAP9/AAD//////38AAA==")
+}]
+blend_shape_mode = 0
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_nyrw1"]
+_surfaces = [{
+"aabb": AABB(-0.439564, 0, -0.439564, 0.879128, 2, 0.879128),
+"attribute_data": PackedByteArray("/////wAA/////wAAAAAAAAAA//8AAAAA////////AAA="),
+"format": 34896613399,
+"index_count": 12,
+"index_data": PackedByteArray("AAABAAIAAgABAAMABAAFAAYABgAFAAcA"),
+"name": "Plane",
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 8,
+"vertex_data": PackedByteArray("/38AAAAA/7//fwAA////v/9///8AAP+//3///////78AAAAA/38AgAAA////fwCA//8AAP9/AID//////38AgP9/AAD/fwAA/38AAP9/AAD/f////3////9/////f///")
+}]
+blend_shape_mode = 0
+shadow_mesh = SubResource("ArrayMesh_nk8bh")
+
+[sub_resource type="QuadMesh" id="QuadMesh_w7au5"]
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_pp3be"]
+_surfaces = [{
+"aabb": AABB(-0.439564, 0, -0.439564, 0.879128, 2, 0.879128),
+"format": 34896613377,
+"index_count": 12,
+"index_data": PackedByteArray("AAABAAIAAgABAAMABAAFAAYABgAFAAcA"),
+"name": "Plane",
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 8,
+"vertex_data": PackedByteArray("/38AAAAAAAD/fwAA//8AAP9///8AAAAA/3//////AAAAAAAA/38AAAAA////fwAA//8AAP9/AAD//////38AAA==")
+}]
+blend_shape_mode = 0
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_520jh"]
+_surfaces = [{
+"aabb": AABB(-0.439564, 0, -0.439564, 0.879128, 2, 0.879128),
+"attribute_data": PackedByteArray("/////wAA/////wAAAAAAAAAA//8AAAAA////////AAA="),
+"format": 34896613399,
+"index_count": 12,
+"index_data": PackedByteArray("AAABAAIAAgABAAMABAAFAAYABgAFAAcA"),
+"name": "Plane",
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 8,
+"vertex_data": PackedByteArray("/38AAAAA/7//fwAA////v/9///8AAP+//3///////78AAAAA/38AgAAA////fwCA//8AAP9/AID//////38AgP9/AAD/fwAA/38AAP9/AAD/f////3////9/////f///")
+}]
+blend_shape_mode = 0
+shadow_mesh = SubResource("ArrayMesh_pp3be")
+
+[sub_resource type="QuadMesh" id="QuadMesh_shdu5"]
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_xitnm"]
+_surfaces = [{
+"aabb": AABB(-0.439564, 0, -0.439564, 0.879128, 2, 0.879128),
+"format": 34896613377,
+"index_count": 12,
+"index_data": PackedByteArray("AAABAAIAAgABAAMABAAFAAYABgAFAAcA"),
+"name": "Plane",
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 8,
+"vertex_data": PackedByteArray("/38AAAAAAAD/fwAA//8AAP9///8AAAAA/3//////AAAAAAAA/38AAAAA////fwAA//8AAP9/AAD//////38AAA==")
+}]
+blend_shape_mode = 0
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_peg8k"]
+_surfaces = [{
+"aabb": AABB(-0.439564, 0, -0.439564, 0.879128, 2, 0.879128),
+"attribute_data": PackedByteArray("/////wAA/////wAAAAAAAAAA//8AAAAA////////AAA="),
+"format": 34896613399,
+"index_count": 12,
+"index_data": PackedByteArray("AAABAAIAAgABAAMABAAFAAYABgAFAAcA"),
+"name": "Plane",
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 8,
+"vertex_data": PackedByteArray("/38AAAAA/7//fwAA////v/9///8AAP+//3///////78AAAAA/38AgAAA////fwCA//8AAP9/AID//////38AgP9/AAD/fwAA/38AAP9/AAD/f////3////9/////f///")
+}]
+blend_shape_mode = 0
+shadow_mesh = SubResource("ArrayMesh_xitnm")
+
+[sub_resource type="QuadMesh" id="QuadMesh_fkwi4"]
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_1wx15"]
+_surfaces = [{
+"aabb": AABB(-0.439564, 0, -0.439564, 0.879128, 2, 0.879128),
+"format": 34896613377,
+"index_count": 12,
+"index_data": PackedByteArray("AAABAAIAAgABAAMABAAFAAYABgAFAAcA"),
+"name": "Plane",
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 8,
+"vertex_data": PackedByteArray("/38AAAAAAAD/fwAA//8AAP9///8AAAAA/3//////AAAAAAAA/38AAAAA////fwAA//8AAP9/AAD//////38AAA==")
+}]
+blend_shape_mode = 0
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_btqga"]
+_surfaces = [{
+"aabb": AABB(-0.439564, 0, -0.439564, 0.879128, 2, 0.879128),
+"attribute_data": PackedByteArray("/////wAA/////wAAAAAAAAAA//8AAAAA////////AAA="),
+"format": 34896613399,
+"index_count": 12,
+"index_data": PackedByteArray("AAABAAIAAgABAAMABAAFAAYABgAFAAcA"),
+"name": "Plane",
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 8,
+"vertex_data": PackedByteArray("/38AAAAA/7//fwAA////v/9///8AAP+//3///////78AAAAA/38AgAAA////fwCA//8AAP9/AID//////38AgP9/AAD/fwAA/38AAP9/AAD/f////3////9/////f///")
+}]
+blend_shape_mode = 0
+shadow_mesh = SubResource("ArrayMesh_1wx15")
+
+[sub_resource type="QuadMesh" id="QuadMesh_ax2k6"]
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_qsdpi"]
+_surfaces = [{
+"aabb": AABB(-0.439564, 0, -0.439564, 0.879128, 2, 0.879128),
+"format": 34896613377,
+"index_count": 12,
+"index_data": PackedByteArray("AAABAAIAAgABAAMABAAFAAYABgAFAAcA"),
+"name": "Plane",
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 8,
+"vertex_data": PackedByteArray("/38AAAAAAAD/fwAA//8AAP9///8AAAAA/3//////AAAAAAAA/38AAAAA////fwAA//8AAP9/AAD//////38AAA==")
+}]
+blend_shape_mode = 0
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_hqqjf"]
+_surfaces = [{
+"aabb": AABB(-0.439564, 0, -0.439564, 0.879128, 2, 0.879128),
+"attribute_data": PackedByteArray("/////wAA/////wAAAAAAAAAA//8AAAAA////////AAA="),
+"format": 34896613399,
+"index_count": 12,
+"index_data": PackedByteArray("AAABAAIAAgABAAMABAAFAAYABgAFAAcA"),
+"name": "Plane",
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 8,
+"vertex_data": PackedByteArray("/38AAAAA/7//fwAA////v/9///8AAP+//3///////78AAAAA/38AgAAA////fwCA//8AAP9/AID//////38AgP9/AAD/fwAA/38AAP9/AAD/f////3////9/////f///")
+}]
+blend_shape_mode = 0
+shadow_mesh = SubResource("ArrayMesh_qsdpi")
+
+[sub_resource type="QuadMesh" id="QuadMesh_i3862"]
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_i3bg8"]
+_surfaces = [{
+"aabb": AABB(-0.439564, 0, -0.439564, 0.879128, 2, 0.879128),
+"format": 34896613377,
+"index_count": 12,
+"index_data": PackedByteArray("AAABAAIAAgABAAMABAAFAAYABgAFAAcA"),
+"name": "Plane",
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 8,
+"vertex_data": PackedByteArray("/38AAAAAAAD/fwAA//8AAP9///8AAAAA/3//////AAAAAAAA/38AAAAA////fwAA//8AAP9/AAD//////38AAA==")
+}]
+blend_shape_mode = 0
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_n0oyt"]
+_surfaces = [{
+"aabb": AABB(-0.439564, 0, -0.439564, 0.879128, 2, 0.879128),
+"attribute_data": PackedByteArray("/////wAA/////wAAAAAAAAAA//8AAAAA////////AAA="),
+"format": 34896613399,
+"index_count": 12,
+"index_data": PackedByteArray("AAABAAIAAgABAAMABAAFAAYABgAFAAcA"),
+"name": "Plane",
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 8,
+"vertex_data": PackedByteArray("/38AAAAA/7//fwAA////v/9///8AAP+//3///////78AAAAA/38AgAAA////fwCA//8AAP9/AID//////38AgP9/AAD/fwAA/38AAP9/AAD/f////3////9/////f///")
+}]
+blend_shape_mode = 0
+shadow_mesh = SubResource("ArrayMesh_i3bg8")
+
+[sub_resource type="QuadMesh" id="QuadMesh_n25y5"]
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_oh76n"]
+_surfaces = [{
+"aabb": AABB(-0.439564, 0, -0.439564, 0.879128, 2, 0.879128),
+"format": 34896613377,
+"index_count": 12,
+"index_data": PackedByteArray("AAABAAIAAgABAAMABAAFAAYABgAFAAcA"),
+"name": "Plane",
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 8,
+"vertex_data": PackedByteArray("/38AAAAAAAD/fwAA//8AAP9///8AAAAA/3//////AAAAAAAA/38AAAAA////fwAA//8AAP9/AAD//////38AAA==")
+}]
+blend_shape_mode = 0
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_w3n8n"]
+_surfaces = [{
+"aabb": AABB(-0.439564, 0, -0.439564, 0.879128, 2, 0.879128),
+"attribute_data": PackedByteArray("/////wAA/////wAAAAAAAAAA//8AAAAA////////AAA="),
+"format": 34896613399,
+"index_count": 12,
+"index_data": PackedByteArray("AAABAAIAAgABAAMABAAFAAYABgAFAAcA"),
+"name": "Plane",
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 8,
+"vertex_data": PackedByteArray("/38AAAAA/7//fwAA////v/9///8AAP+//3///////78AAAAA/38AgAAA////fwCA//8AAP9/AID//////38AgP9/AAD/fwAA/38AAP9/AAD/f////3////9/////f///")
+}]
+blend_shape_mode = 0
+shadow_mesh = SubResource("ArrayMesh_oh76n")
+
+[sub_resource type="QuadMesh" id="QuadMesh_i1x2n"]
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_qxlh7"]
+_surfaces = [{
+"aabb": AABB(-0.439564, 0, -0.439564, 0.879128, 2, 0.879128),
+"format": 34896613377,
+"index_count": 12,
+"index_data": PackedByteArray("AAABAAIAAgABAAMABAAFAAYABgAFAAcA"),
+"name": "Plane",
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 8,
+"vertex_data": PackedByteArray("/38AAAAAAAD/fwAA//8AAP9///8AAAAA/3//////AAAAAAAA/38AAAAA////fwAA//8AAP9/AAD//////38AAA==")
+}]
+blend_shape_mode = 0
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_y3ma8"]
+_surfaces = [{
+"aabb": AABB(-0.439564, 0, -0.439564, 0.879128, 2, 0.879128),
+"attribute_data": PackedByteArray("/////wAA/////wAAAAAAAAAA//8AAAAA////////AAA="),
+"format": 34896613399,
+"index_count": 12,
+"index_data": PackedByteArray("AAABAAIAAgABAAMABAAFAAYABgAFAAcA"),
+"name": "Plane",
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 8,
+"vertex_data": PackedByteArray("/38AAAAA/7//fwAA////v/9///8AAP+//3///////78AAAAA/38AgAAA////fwCA//8AAP9/AID//////38AgP9/AAD/fwAA/38AAP9/AAD/f////3////9/////f///")
+}]
+blend_shape_mode = 0
+shadow_mesh = SubResource("ArrayMesh_qxlh7")
+
+[resource]
+script = ExtResource("11_1q6xu")
+source_phase = "res://assets/vfx/extensions/owner-fields-v2-20261021/sources/7b40927ee73ee4dfeebe/7343d716f93399ca.tres"
+source_sha256 = "c2900eb36a27278acb815da69a516d99bb6f50153f5bdfc9e1c7712b3fab2555"
+source_parameters = {
+"entries": [{
+"begin": 0.0,
+"composition": {
+"bindings": [{
+"component": "effect",
+"kind": "sample",
+"offset_seconds": 0.0,
+"rate": 1.0
+}],
+"components": [{
+"id": "effect",
+"input": {
+"scene": "res://assets/vfx/extensions/heavy-effects-20261020/sources/05fd4307bdc7bf3ecca2/VFX_FireSoil_dynamic.tscn",
+"seed": 47291,
+"settings": {
+"alphaGain": 1.0,
+"amount": 37,
+"animation": "",
+"depth": 0.26,
+"emission_stop_seconds": 2.6,
+"groundGrowth": true,
+"growthDirection": [0.7071067811865476, 0.7071067811865476],
+"height": 0.0,
+"hold": [48, 112],
+"hue": 0.075,
+"id": "wall_of_fire",
+"mode": "tile_varied",
+"name": "VFX_FireSoil_dynamic",
+"pack": "lelu-godot-fire-premium",
+"scale": 2.15,
+"seed": 32576,
+"targetY": 2.5,
+"variant": 0,
+"width": 0.81
+},
+"side": "full",
+"simulation_hz": 144
+},
+"rotation_degrees": [0, 0, 0],
+"script": "res://assets/vfx/extensions/owner-fields-v2-20261021/sources/fc76bce6bee77652c0be/anchored_flame.gd"
+}],
+"emitters": []
+},
+"id": "flame_0",
+"position": [-5.5, 0, 0],
+"rotation_degrees": [0, 0.0, 0],
+"scale": 0.75,
+"seconds": 3.5
+}, {
+"begin": 0.0,
+"composition": {
+"bindings": [{
+"component": "effect",
+"kind": "sample",
+"offset_seconds": 0.0,
+"rate": 1.0
+}],
+"components": [{
+"id": "effect",
+"input": {
+"scene": "res://assets/vfx/extensions/heavy-effects-20261020/sources/05fd4307bdc7bf3ecca2/VFX_FireSoil_dynamic.tscn",
+"seed": 47291,
+"settings": {
+"alphaGain": 1.0,
+"amount": 37,
+"animation": "",
+"depth": 0.26,
+"emission_stop_seconds": 2.6,
+"groundGrowth": true,
+"growthDirection": [0.7071067811865476, 0.7071067811865476],
+"height": 0.0,
+"hold": [48, 112],
+"hue": 0.075,
+"id": "wall_of_fire",
+"mode": "tile_varied",
+"name": "VFX_FireSoil_dynamic",
+"pack": "lelu-godot-fire-premium",
+"scale": 2.15,
+"seed": 32576,
+"targetY": 2.5,
+"variant": 1,
+"width": 0.81
+},
+"side": "full",
+"simulation_hz": 144
+},
+"rotation_degrees": [0, 0, 0],
+"script": "res://assets/vfx/extensions/owner-fields-v2-20261021/sources/fc76bce6bee77652c0be/anchored_flame.gd"
+}],
+"emitters": []
+},
+"id": "flame_1",
+"position": [-4.5, 0, 0],
+"rotation_degrees": [0, 0.0, 0],
+"scale": 0.75,
+"seconds": 3.5
+}, {
+"begin": 0.0,
+"composition": {
+"bindings": [{
+"component": "effect",
+"kind": "sample",
+"offset_seconds": 0.0,
+"rate": 1.0
+}],
+"components": [{
+"id": "effect",
+"input": {
+"scene": "res://assets/vfx/extensions/heavy-effects-20261020/sources/05fd4307bdc7bf3ecca2/VFX_FireSoil_dynamic.tscn",
+"seed": 47291,
+"settings": {
+"alphaGain": 1.0,
+"amount": 37,
+"animation": "",
+"depth": 0.26,
+"emission_stop_seconds": 2.6,
+"groundGrowth": true,
+"growthDirection": [0.7071067811865476, 0.7071067811865476],
+"height": 0.0,
+"hold": [48, 112],
+"hue": 0.075,
+"id": "wall_of_fire",
+"mode": "tile_varied",
+"name": "VFX_FireSoil_dynamic",
+"pack": "lelu-godot-fire-premium",
+"scale": 2.15,
+"seed": 32576,
+"targetY": 2.5,
+"variant": 0,
+"width": 0.81
+},
+"side": "full",
+"simulation_hz": 144
+},
+"rotation_degrees": [0, 0, 0],
+"script": "res://assets/vfx/extensions/owner-fields-v2-20261021/sources/fc76bce6bee77652c0be/anchored_flame.gd"
+}],
+"emitters": []
+},
+"id": "flame_2",
+"position": [-3.5, 0, 0],
+"rotation_degrees": [0, 0.0, 0],
+"scale": 0.75,
+"seconds": 3.5
+}, {
+"begin": 0.0,
+"composition": {
+"bindings": [{
+"component": "effect",
+"kind": "sample",
+"offset_seconds": 0.0,
+"rate": 1.0
+}],
+"components": [{
+"id": "effect",
+"input": {
+"scene": "res://assets/vfx/extensions/heavy-effects-20261020/sources/05fd4307bdc7bf3ecca2/VFX_FireSoil_dynamic.tscn",
+"seed": 47291,
+"settings": {
+"alphaGain": 1.0,
+"amount": 37,
+"animation": "",
+"depth": 0.26,
+"emission_stop_seconds": 2.6,
+"groundGrowth": true,
+"growthDirection": [0.7071067811865476, 0.7071067811865476],
+"height": 0.0,
+"hold": [48, 112],
+"hue": 0.075,
+"id": "wall_of_fire",
+"mode": "tile_varied",
+"name": "VFX_FireSoil_dynamic",
+"pack": "lelu-godot-fire-premium",
+"scale": 2.15,
+"seed": 32576,
+"targetY": 2.5,
+"variant": 1,
+"width": 0.81
+},
+"side": "full",
+"simulation_hz": 144
+},
+"rotation_degrees": [0, 0, 0],
+"script": "res://assets/vfx/extensions/owner-fields-v2-20261021/sources/fc76bce6bee77652c0be/anchored_flame.gd"
+}],
+"emitters": []
+},
+"id": "flame_3",
+"position": [-2.5, 0, 0],
+"rotation_degrees": [0, 0.0, 0],
+"scale": 0.75,
+"seconds": 3.5
+}, {
+"begin": 0.0,
+"composition": {
+"bindings": [{
+"component": "effect",
+"kind": "sample",
+"offset_seconds": 0.0,
+"rate": 1.0
+}],
+"components": [{
+"id": "effect",
+"input": {
+"scene": "res://assets/vfx/extensions/heavy-effects-20261020/sources/05fd4307bdc7bf3ecca2/VFX_FireSoil_dynamic.tscn",
+"seed": 47291,
+"settings": {
+"alphaGain": 1.0,
+"amount": 37,
+"animation": "",
+"depth": 0.26,
+"emission_stop_seconds": 2.6,
+"groundGrowth": true,
+"growthDirection": [0.7071067811865476, 0.7071067811865476],
+"height": 0.0,
+"hold": [48, 112],
+"hue": 0.075,
+"id": "wall_of_fire",
+"mode": "tile_varied",
+"name": "VFX_FireSoil_dynamic",
+"pack": "lelu-godot-fire-premium",
+"scale": 2.15,
+"seed": 32576,
+"targetY": 2.5,
+"variant": 0,
+"width": 0.81
+},
+"side": "full",
+"simulation_hz": 144
+},
+"rotation_degrees": [0, 0, 0],
+"script": "res://assets/vfx/extensions/owner-fields-v2-20261021/sources/fc76bce6bee77652c0be/anchored_flame.gd"
+}],
+"emitters": []
+},
+"id": "flame_4",
+"position": [-1.5, 0, 0],
+"rotation_degrees": [0, 0.0, 0],
+"scale": 0.75,
+"seconds": 3.5
+}, {
+"begin": 0.0,
+"composition": {
+"bindings": [{
+"component": "effect",
+"kind": "sample",
+"offset_seconds": 0.0,
+"rate": 1.0
+}],
+"components": [{
+"id": "effect",
+"input": {
+"scene": "res://assets/vfx/extensions/heavy-effects-20261020/sources/05fd4307bdc7bf3ecca2/VFX_FireSoil_dynamic.tscn",
+"seed": 47291,
+"settings": {
+"alphaGain": 1.0,
+"amount": 37,
+"animation": "",
+"depth": 0.26,
+"emission_stop_seconds": 2.6,
+"groundGrowth": true,
+"growthDirection": [0.7071067811865476, 0.7071067811865476],
+"height": 0.0,
+"hold": [48, 112],
+"hue": 0.075,
+"id": "wall_of_fire",
+"mode": "tile_varied",
+"name": "VFX_FireSoil_dynamic",
+"pack": "lelu-godot-fire-premium",
+"scale": 2.15,
+"seed": 32576,
+"targetY": 2.5,
+"variant": 1,
+"width": 0.81
+},
+"side": "full",
+"simulation_hz": 144
+},
+"rotation_degrees": [0, 0, 0],
+"script": "res://assets/vfx/extensions/owner-fields-v2-20261021/sources/fc76bce6bee77652c0be/anchored_flame.gd"
+}],
+"emitters": []
+},
+"id": "flame_5",
+"position": [-0.5, 0, 0],
+"rotation_degrees": [0, 0.0, 0],
+"scale": 0.75,
+"seconds": 3.5
+}, {
+"begin": 0.0,
+"composition": {
+"bindings": [{
+"component": "effect",
+"kind": "sample",
+"offset_seconds": 0.0,
+"rate": 1.0
+}],
+"components": [{
+"id": "effect",
+"input": {
+"scene": "res://assets/vfx/extensions/heavy-effects-20261020/sources/05fd4307bdc7bf3ecca2/VFX_FireSoil_dynamic.tscn",
+"seed": 47291,
+"settings": {
+"alphaGain": 1.0,
+"amount": 37,
+"animation": "",
+"depth": 0.26,
+"emission_stop_seconds": 2.6,
+"groundGrowth": true,
+"growthDirection": [0.7071067811865476, 0.7071067811865476],
+"height": 0.0,
+"hold": [48, 112],
+"hue": 0.075,
+"id": "wall_of_fire",
+"mode": "tile_varied",
+"name": "VFX_FireSoil_dynamic",
+"pack": "lelu-godot-fire-premium",
+"scale": 2.15,
+"seed": 32576,
+"targetY": 2.5,
+"variant": 0,
+"width": 0.81
+},
+"side": "full",
+"simulation_hz": 144
+},
+"rotation_degrees": [0, 0, 0],
+"script": "res://assets/vfx/extensions/owner-fields-v2-20261021/sources/fc76bce6bee77652c0be/anchored_flame.gd"
+}],
+"emitters": []
+},
+"id": "flame_6",
+"position": [0.5, 0, 0],
+"rotation_degrees": [0, 0.0, 0],
+"scale": 0.75,
+"seconds": 3.5
+}, {
+"begin": 0.0,
+"composition": {
+"bindings": [{
+"component": "effect",
+"kind": "sample",
+"offset_seconds": 0.0,
+"rate": 1.0
+}],
+"components": [{
+"id": "effect",
+"input": {
+"scene": "res://assets/vfx/extensions/heavy-effects-20261020/sources/05fd4307bdc7bf3ecca2/VFX_FireSoil_dynamic.tscn",
+"seed": 47291,
+"settings": {
+"alphaGain": 1.0,
+"amount": 37,
+"animation": "",
+"depth": 0.26,
+"emission_stop_seconds": 2.6,
+"groundGrowth": true,
+"growthDirection": [0.7071067811865476, 0.7071067811865476],
+"height": 0.0,
+"hold": [48, 112],
+"hue": 0.075,
+"id": "wall_of_fire",
+"mode": "tile_varied",
+"name": "VFX_FireSoil_dynamic",
+"pack": "lelu-godot-fire-premium",
+"scale": 2.15,
+"seed": 32576,
+"targetY": 2.5,
+"variant": 1,
+"width": 0.81
+},
+"side": "full",
+"simulation_hz": 144
+},
+"rotation_degrees": [0, 0, 0],
+"script": "res://assets/vfx/extensions/owner-fields-v2-20261021/sources/fc76bce6bee77652c0be/anchored_flame.gd"
+}],
+"emitters": []
+},
+"id": "flame_7",
+"position": [1.5, 0, 0],
+"rotation_degrees": [0, 0.0, 0],
+"scale": 0.75,
+"seconds": 3.5
+}, {
+"begin": 0.0,
+"composition": {
+"bindings": [{
+"component": "effect",
+"kind": "sample",
+"offset_seconds": 0.0,
+"rate": 1.0
+}],
+"components": [{
+"id": "effect",
+"input": {
+"scene": "res://assets/vfx/extensions/heavy-effects-20261020/sources/05fd4307bdc7bf3ecca2/VFX_FireSoil_dynamic.tscn",
+"seed": 47291,
+"settings": {
+"alphaGain": 1.0,
+"amount": 37,
+"animation": "",
+"depth": 0.26,
+"emission_stop_seconds": 2.6,
+"groundGrowth": true,
+"growthDirection": [0.7071067811865476, 0.7071067811865476],
+"height": 0.0,
+"hold": [48, 112],
+"hue": 0.075,
+"id": "wall_of_fire",
+"mode": "tile_varied",
+"name": "VFX_FireSoil_dynamic",
+"pack": "lelu-godot-fire-premium",
+"scale": 2.15,
+"seed": 32576,
+"targetY": 2.5,
+"variant": 0,
+"width": 0.81
+},
+"side": "full",
+"simulation_hz": 144
+},
+"rotation_degrees": [0, 0, 0],
+"script": "res://assets/vfx/extensions/owner-fields-v2-20261021/sources/fc76bce6bee77652c0be/anchored_flame.gd"
+}],
+"emitters": []
+},
+"id": "flame_8",
+"position": [2.5, 0, 0],
+"rotation_degrees": [0, 0.0, 0],
+"scale": 0.75,
+"seconds": 3.5
+}, {
+"begin": 0.0,
+"composition": {
+"bindings": [{
+"component": "effect",
+"kind": "sample",
+"offset_seconds": 0.0,
+"rate": 1.0
+}],
+"components": [{
+"id": "effect",
+"input": {
+"scene": "res://assets/vfx/extensions/heavy-effects-20261020/sources/05fd4307bdc7bf3ecca2/VFX_FireSoil_dynamic.tscn",
+"seed": 47291,
+"settings": {
+"alphaGain": 1.0,
+"amount": 37,
+"animation": "",
+"depth": 0.26,
+"emission_stop_seconds": 2.6,
+"groundGrowth": true,
+"growthDirection": [0.7071067811865476, 0.7071067811865476],
+"height": 0.0,
+"hold": [48, 112],
+"hue": 0.075,
+"id": "wall_of_fire",
+"mode": "tile_varied",
+"name": "VFX_FireSoil_dynamic",
+"pack": "lelu-godot-fire-premium",
+"scale": 2.15,
+"seed": 32576,
+"targetY": 2.5,
+"variant": 1,
+"width": 0.81
+},
+"side": "full",
+"simulation_hz": 144
+},
+"rotation_degrees": [0, 0, 0],
+"script": "res://assets/vfx/extensions/owner-fields-v2-20261021/sources/fc76bce6bee77652c0be/anchored_flame.gd"
+}],
+"emitters": []
+},
+"id": "flame_9",
+"position": [3.5, 0, 0],
+"rotation_degrees": [0, 0.0, 0],
+"scale": 0.75,
+"seconds": 3.5
+}, {
+"begin": 0.0,
+"composition": {
+"bindings": [{
+"component": "effect",
+"kind": "sample",
+"offset_seconds": 0.0,
+"rate": 1.0
+}],
+"components": [{
+"id": "effect",
+"input": {
+"scene": "res://assets/vfx/extensions/heavy-effects-20261020/sources/05fd4307bdc7bf3ecca2/VFX_FireSoil_dynamic.tscn",
+"seed": 47291,
+"settings": {
+"alphaGain": 1.0,
+"amount": 37,
+"animation": "",
+"depth": 0.26,
+"emission_stop_seconds": 2.6,
+"groundGrowth": true,
+"growthDirection": [0.7071067811865476, 0.7071067811865476],
+"height": 0.0,
+"hold": [48, 112],
+"hue": 0.075,
+"id": "wall_of_fire",
+"mode": "tile_varied",
+"name": "VFX_FireSoil_dynamic",
+"pack": "lelu-godot-fire-premium",
+"scale": 2.15,
+"seed": 32576,
+"targetY": 2.5,
+"variant": 0,
+"width": 0.81
+},
+"side": "full",
+"simulation_hz": 144
+},
+"rotation_degrees": [0, 0, 0],
+"script": "res://assets/vfx/extensions/owner-fields-v2-20261021/sources/fc76bce6bee77652c0be/anchored_flame.gd"
+}],
+"emitters": []
+},
+"id": "flame_10",
+"position": [4.5, 0, 0],
+"rotation_degrees": [0, 0.0, 0],
+"scale": 0.75,
+"seconds": 3.5
+}, {
+"begin": 0.0,
+"composition": {
+"bindings": [{
+"component": "effect",
+"kind": "sample",
+"offset_seconds": 0.0,
+"rate": 1.0
+}],
+"components": [{
+"id": "effect",
+"input": {
+"scene": "res://assets/vfx/extensions/heavy-effects-20261020/sources/05fd4307bdc7bf3ecca2/VFX_FireSoil_dynamic.tscn",
+"seed": 47291,
+"settings": {
+"alphaGain": 1.0,
+"amount": 37,
+"animation": "",
+"depth": 0.26,
+"emission_stop_seconds": 2.6,
+"groundGrowth": true,
+"growthDirection": [0.7071067811865476, 0.7071067811865476],
+"height": 0.0,
+"hold": [48, 112],
+"hue": 0.075,
+"id": "wall_of_fire",
+"mode": "tile_varied",
+"name": "VFX_FireSoil_dynamic",
+"pack": "lelu-godot-fire-premium",
+"scale": 2.15,
+"seed": 32576,
+"targetY": 2.5,
+"variant": 1,
+"width": 0.81
+},
+"side": "full",
+"simulation_hz": 144
+},
+"rotation_degrees": [0, 0, 0],
+"script": "res://assets/vfx/extensions/owner-fields-v2-20261021/sources/fc76bce6bee77652c0be/anchored_flame.gd"
+}],
+"emitters": []
+},
+"id": "flame_11",
+"position": [5.5, 0, 0],
+"rotation_degrees": [0, 0.0, 0],
+"scale": 0.75,
+"seconds": 3.5
+}],
+"opacity_control": true
+}
+program = ExtResource("10_s3oa3")
+operands = [ExtResource("1_0jywu"), Projection(1.3333334, 0, 0, 0, 0, 1.3333334, 0, 0, 0, 0, 1.3333334, 0, 7.3333335, 0, 0, 1), ExtResource("2_3d47q"), true, ExtResource("1_0jywu"), ExtResource("1_0jywu"), [], false, ExtResource("3_d3h3f"), Vector3(0, 1, -0.4), 29.589, 0.5, 1.0, 1.0, 1.0, -2.23517e-05, -2.23517e-05, -180.0, 180.0, 1.5, 4.0, -2.23517e-08, -2.23517e-08, 1.0, 1.0, Vector3(0, 1, 0), 1.3, 90.0, Color(2, 1.2987502, 0.725, 1), Vector3(0, -1e-06, 0), SubResource("GradientTexture1D_heopw"), SubResource("CurveTexture_5wf3f"), ExtResource("3_d3h3f"), [], ExtResource("3_d3h3f"), "Godot4.7.2 ParticleProcessMaterial exact generated program/uniforms; immutable local-coordinate process", false, Vector3(0, -1e-06, 0), {
+"damping_max": 0.0,
+"damping_min": 0.0,
+"directional_velocity_max": 1.0,
+"directional_velocity_min": 1.0,
+"linear_accel_max": 0.0,
+"linear_accel_min": 0.0,
+"radial_accel_max": 0.0,
+"radial_accel_min": 0.0,
+"radial_velocity_max": -2.23517e-05,
+"radial_velocity_min": -2.23517e-05,
+"scale_max": 4.0,
+"scale_min": 1.5,
+"tangent_accel_max": 0.0,
+"tangent_accel_min": 0.0
+}, ExtResource("4_umjbl"), Projection(1.3333334, 0, 0, 0, 0, 1.3333334, 0, 0, 0, 0, 1.3333334, 0, 7.3333335, 0, 0, 1), ExtResource("5_dgqvg"), SubResource("GradientTexture1D_xbq7a"), Vector2(8, 8), true, Vector2(0, 0.001), true, ExtResource("4_umjbl"), ExtResource("4_umjbl"), [], false, ExtResource("6_8qrfi"), Vector3(1, 0, 0), 45.0, 1.0, 1.0, -180.0, 180.0, 0.7, 2.1, Vector3(0, 1, 0), 1.35, 90.0, Color(2.5, 1.4715002, 0.62999994, 1), Vector3(0, -1e-06, 0), SubResource("GradientTexture1D_mwoe8"), SubResource("CurveTexture_l2gef"), SubResource("CurveXYZTexture_pd8wc"), ExtResource("6_8qrfi"), [], ExtResource("6_8qrfi"), "Godot4.7.2 ParticleProcessMaterial exact generated program/uniforms; immutable local-coordinate process", false, Vector3(0, -1e-06, 0), {
+"damping_max": 0.0,
+"damping_min": 0.0,
+"directional_velocity_max": 1.0,
+"directional_velocity_min": 1.0,
+"linear_accel_max": 0.0,
+"linear_accel_min": 0.0,
+"radial_accel_max": 0.0,
+"radial_accel_min": 0.0,
+"radial_velocity_max": 0.0,
+"radial_velocity_min": 0.0,
+"scale_max": 2.1,
+"scale_min": 0.7,
+"tangent_accel_max": 0.0,
+"tangent_accel_min": 0.0
+}, ExtResource("7_2uy1r"), Projection(1.3333334, 0, 0, 0, 0, 1.3333334, 0, 0, 0, 0, 1.3333334, 0, 7.3333335, 0, 0, 1), ExtResource("8_q8qqh"), true, ExtResource("7_2uy1r"), ExtResource("7_2uy1r"), [], false, ExtResource("9_upkvd"), Vector3(0, 1, 0), 13.767, 1.0, 2.0, 1.0, 1.0, -2.23517e-05, 0.499978, -180.0, 180.0, 0.8, 1.7, 0.17, 0.2, Color(2, 1.2987502, 0.725, 1), Vector3(0, 1, 0), SubResource("GradientTexture1D_jdlo3"), SubResource("CurveTexture_cvtkw"), SubResource("CurveTexture_swa6q"), ExtResource("9_upkvd"), [], ExtResource("9_upkvd"), "Godot4.7.2 ParticleProcessMaterial exact generated program/uniforms; immutable local-coordinate process", false, {
+"damping_max": 0.0,
+"damping_min": 0.0,
+"directional_velocity_max": 1.0,
+"directional_velocity_min": 1.0,
+"gravity": Vector3(0, 1, 0),
+"linear_accel_max": 0.0,
+"linear_accel_min": 0.0,
+"radial_accel_max": 0.0,
+"radial_accel_min": 0.0,
+"radial_velocity_max": 0.499978,
+"radial_velocity_min": -2.23517e-05,
+"scale_max": 1.7,
+"scale_min": 0.8,
+"tangent_accel_max": 0.0,
+"tangent_accel_min": 0.0
+}, ExtResource("1_0jywu"), Projection(1.3333334, 0, 0, 0, 0, 1.3333334, 0, 0, 0, 0, 1.3333334, 0, 6, 0, 0, 1), ExtResource("2_3d47q"), true, ExtResource("1_0jywu"), ExtResource("1_0jywu"), [], false, ExtResource("4_umjbl"), Projection(1.3333334, 0, 0, 0, 0, 1.3333334, 0, 0, 0, 0, 1.3333334, 0, 6, 0, 0, 1), ExtResource("5_dgqvg"), SubResource("GradientTexture1D_ty1wc"), Vector2(8, 8), true, Vector2(0, 0.001), true, ExtResource("4_umjbl"), ExtResource("4_umjbl"), [], false, ExtResource("7_2uy1r"), Projection(1.3333334, 0, 0, 0, 0, 1.3333334, 0, 0, 0, 0, 1.3333334, 0, 6, 0, 0, 1), ExtResource("8_q8qqh"), true, ExtResource("7_2uy1r"), ExtResource("7_2uy1r"), [], false, ExtResource("1_0jywu"), Projection(1.3333334, 0, 0, 0, 0, 1.3333334, 0, 0, 0, 0, 1.3333334, 0, 4.666667, 0, 0, 1), ExtResource("2_3d47q"), true, ExtResource("1_0jywu"), ExtResource("1_0jywu"), [], false, ExtResource("4_umjbl"), Projection(1.3333334, 0, 0, 0, 0, 1.3333334, 0, 0, 0, 0, 1.3333334, 0, 4.666667, 0, 0, 1), ExtResource("5_dgqvg"), SubResource("GradientTexture1D_b3wwa"), Vector2(8, 8), true, Vector2(0, 0.001), true, ExtResource("4_umjbl"), ExtResource("4_umjbl"), [], false, ExtResource("7_2uy1r"), Projection(1.3333334, 0, 0, 0, 0, 1.3333334, 0, 0, 0, 0, 1.3333334, 0, 4.666667, 0, 0, 1), ExtResource("8_q8qqh"), true, ExtResource("7_2uy1r"), ExtResource("7_2uy1r"), [], false, ExtResource("1_0jywu"), Projection(1.3333334, 0, 0, 0, 0, 1.3333334, 0, 0, 0, 0, 1.3333334, 0, 3.3333335, 0, 0, 1), ExtResource("2_3d47q"), true, ExtResource("1_0jywu"), ExtResource("1_0jywu"), [], false, ExtResource("4_umjbl"), Projection(1.3333334, 0, 0, 0, 0, 1.3333334, 0, 0, 0, 0, 1.3333334, 0, 3.3333335, 0, 0, 1), ExtResource("5_dgqvg"), SubResource("GradientTexture1D_2an2c"), Vector2(8, 8), true, Vector2(0, 0.001), true, ExtResource("4_umjbl"), ExtResource("4_umjbl"), [], false, ExtResource("7_2uy1r"), Projection(1.3333334, 0, 0, 0, 0, 1.3333334, 0, 0, 0, 0, 1.3333334, 0, 3.3333335, 0, 0, 1), ExtResource("8_q8qqh"), true, ExtResource("7_2uy1r"), ExtResource("7_2uy1r"), [], false, ExtResource("1_0jywu"), Projection(1.3333334, 0, 0, 0, 0, 1.3333334, 0, 0, 0, 0, 1.3333334, 0, 2, 0, 0, 1), ExtResource("2_3d47q"), true, ExtResource("1_0jywu"), ExtResource("1_0jywu"), [], false, ExtResource("4_umjbl"), Projection(1.3333334, 0, 0, 0, 0, 1.3333334, 0, 0, 0, 0, 1.3333334, 0, 2, 0, 0, 1), ExtResource("5_dgqvg"), SubResource("GradientTexture1D_p2bjm"), Vector2(8, 8), true, Vector2(0, 0.001), true, ExtResource("4_umjbl"), ExtResource("4_umjbl"), [], false, ExtResource("7_2uy1r"), Projection(1.3333334, 0, 0, 0, 0, 1.3333334, 0, 0, 0, 0, 1.3333334, 0, 2, 0, 0, 1), ExtResource("8_q8qqh"), true, ExtResource("7_2uy1r"), ExtResource("7_2uy1r"), [], false, ExtResource("1_0jywu"), Projection(1.3333334, 0, 0, 0, 0, 1.3333334, 0, 0, 0, 0, 1.3333334, 0, 0.6666667, 0, 0, 1), ExtResource("2_3d47q"), true, ExtResource("1_0jywu"), ExtResource("1_0jywu"), [], false, ExtResource("4_umjbl"), Projection(1.3333334, 0, 0, 0, 0, 1.3333334, 0, 0, 0, 0, 1.3333334, 0, 0.6666667, 0, 0, 1), ExtResource("5_dgqvg"), SubResource("GradientTexture1D_ku0xw"), Vector2(8, 8), true, Vector2(0, 0.001), true, ExtResource("4_umjbl"), ExtResource("4_umjbl"), [], false, ExtResource("7_2uy1r"), Projection(1.3333334, 0, 0, 0, 0, 1.3333334, 0, 0, 0, 0, 1.3333334, 0, 0.6666667, 0, 0, 1), ExtResource("8_q8qqh"), true, ExtResource("7_2uy1r"), ExtResource("7_2uy1r"), [], false, ExtResource("1_0jywu"), Projection(1.3333334, 0, 0, 0, 0, 1.3333334, 0, 0, 0, 0, 1.3333334, 0, -0.6666667, 0, 0, 1), ExtResource("2_3d47q"), true, ExtResource("1_0jywu"), ExtResource("1_0jywu"), [], false, ExtResource("4_umjbl"), Projection(1.3333334, 0, 0, 0, 0, 1.3333334, 0, 0, 0, 0, 1.3333334, 0, -0.6666667, 0, 0, 1), ExtResource("5_dgqvg"), SubResource("GradientTexture1D_ovxyc"), Vector2(8, 8), true, Vector2(0, 0.001), true, ExtResource("4_umjbl"), ExtResource("4_umjbl"), [], false, ExtResource("7_2uy1r"), Projection(1.3333334, 0, 0, 0, 0, 1.3333334, 0, 0, 0, 0, 1.3333334, 0, -0.6666667, 0, 0, 1), ExtResource("8_q8qqh"), true, ExtResource("7_2uy1r"), ExtResource("7_2uy1r"), [], false, ExtResource("1_0jywu"), Projection(1.3333334, 0, 0, 0, 0, 1.3333334, 0, 0, 0, 0, 1.3333334, 0, -2, 0, 0, 1), ExtResource("2_3d47q"), true, ExtResource("1_0jywu"), ExtResource("1_0jywu"), [], false, ExtResource("4_umjbl"), Projection(1.3333334, 0, 0, 0, 0, 1.3333334, 0, 0, 0, 0, 1.3333334, 0, -2, 0, 0, 1), ExtResource("5_dgqvg"), SubResource("GradientTexture1D_6ufpa"), Vector2(8, 8), true, Vector2(0, 0.001), true, ExtResource("4_umjbl"), ExtResource("4_umjbl"), [], false, ExtResource("7_2uy1r"), Projection(1.3333334, 0, 0, 0, 0, 1.3333334, 0, 0, 0, 0, 1.3333334, 0, -2, 0, 0, 1), ExtResource("8_q8qqh"), true, ExtResource("7_2uy1r"), ExtResource("7_2uy1r"), [], false, ExtResource("1_0jywu"), Projection(1.3333334, 0, 0, 0, 0, 1.3333334, 0, 0, 0, 0, 1.3333334, 0, -3.3333335, 0, 0, 1), ExtResource("2_3d47q"), true, ExtResource("1_0jywu"), ExtResource("1_0jywu"), [], false, ExtResource("4_umjbl"), Projection(1.3333334, 0, 0, 0, 0, 1.3333334, 0, 0, 0, 0, 1.3333334, 0, -3.3333335, 0, 0, 1), ExtResource("5_dgqvg"), SubResource("GradientTexture1D_peal5"), Vector2(8, 8), true, Vector2(0, 0.001), true, ExtResource("4_umjbl"), ExtResource("4_umjbl"), [], false, ExtResource("7_2uy1r"), Projection(1.3333334, 0, 0, 0, 0, 1.3333334, 0, 0, 0, 0, 1.3333334, 0, -3.3333335, 0, 0, 1), ExtResource("8_q8qqh"), true, ExtResource("7_2uy1r"), ExtResource("7_2uy1r"), [], false, ExtResource("1_0jywu"), Projection(1.3333334, 0, 0, 0, 0, 1.3333334, 0, 0, 0, 0, 1.3333334, 0, -4.666667, 0, 0, 1), ExtResource("2_3d47q"), true, ExtResource("1_0jywu"), ExtResource("1_0jywu"), [], false, ExtResource("4_umjbl"), Projection(1.3333334, 0, 0, 0, 0, 1.3333334, 0, 0, 0, 0, 1.3333334, 0, -4.666667, 0, 0, 1), ExtResource("5_dgqvg"), SubResource("GradientTexture1D_03cwy"), Vector2(8, 8), true, Vector2(0, 0.001), true, ExtResource("4_umjbl"), ExtResource("4_umjbl"), [], false, ExtResource("7_2uy1r"), Projection(1.3333334, 0, 0, 0, 0, 1.3333334, 0, 0, 0, 0, 1.3333334, 0, -4.666667, 0, 0, 1), ExtResource("8_q8qqh"), true, ExtResource("7_2uy1r"), ExtResource("7_2uy1r"), [], false, ExtResource("1_0jywu"), Projection(1.3333334, 0, 0, 0, 0, 1.3333334, 0, 0, 0, 0, 1.3333334, 0, -6, 0, 0, 1), ExtResource("2_3d47q"), true, ExtResource("1_0jywu"), ExtResource("1_0jywu"), [], false, ExtResource("4_umjbl"), Projection(1.3333334, 0, 0, 0, 0, 1.3333334, 0, 0, 0, 0, 1.3333334, 0, -6, 0, 0, 1), ExtResource("5_dgqvg"), SubResource("GradientTexture1D_5f3qk"), Vector2(8, 8), true, Vector2(0, 0.001), true, ExtResource("4_umjbl"), ExtResource("4_umjbl"), [], false, ExtResource("7_2uy1r"), Projection(1.3333334, 0, 0, 0, 0, 1.3333334, 0, 0, 0, 0, 1.3333334, 0, -6, 0, 0, 1), ExtResource("8_q8qqh"), true, ExtResource("7_2uy1r"), ExtResource("7_2uy1r"), [], false, ExtResource("1_0jywu"), Projection(1.3333334, 0, 0, 0, 0, 1.3333334, 0, 0, 0, 0, 1.3333334, 0, -7.3333335, 0, 0, 1), ExtResource("2_3d47q"), true, ExtResource("1_0jywu"), ExtResource("1_0jywu"), [], false, ExtResource("4_umjbl"), Projection(1.3333334, 0, 0, 0, 0, 1.3333334, 0, 0, 0, 0, 1.3333334, 0, -7.3333335, 0, 0, 1), ExtResource("5_dgqvg"), SubResource("GradientTexture1D_xu7t2"), Vector2(8, 8), true, Vector2(0, 0.001), true, ExtResource("4_umjbl"), ExtResource("4_umjbl"), [], false, ExtResource("7_2uy1r"), Projection(1.3333334, 0, 0, 0, 0, 1.3333334, 0, 0, 0, 0, 1.3333334, 0, -7.3333335, 0, 0, 1), ExtResource("8_q8qqh"), true, ExtResource("7_2uy1r"), ExtResource("7_2uy1r"), [], false, Transform3D(0.75, 0, 0, 0, 0.75, 0, 0, 0, 0.75, -5.5, 0, 0), Transform3D(0.81, 0, 0, 0, 2.15, 0, 0, 0, 0.26, 0, 0, 0), false, 4, 0, 10, 2.0, true, 47291, 60, SubResource("QuadMesh_cdb3y"), 0, 37, 2.0, 2.0, true, 47292, 144, 1, SubResource("ArrayMesh_edshv"), Transform3D(0.48, 0, 0, 0, 0.7, 0, 0, 0, 0.48, -0.48, 0.06, 0.35), 0, 7, 2.0, true, 33095, 144, AABB(-5, -1, -5, 10, 10, 10), 1, SubResource("QuadMesh_80lqt"), Transform3D(0.75, 0, 0, 0, 0.75, 0, 0, 0, 0.75, -4.5, 0, 0), Transform3D(0.81, 0, 0, 0, 2.15, 0, 0, 0, 0.26, 0, 0, 0), false, 4, 0, 10, 2.0, true, 47291, 60, SubResource("QuadMesh_ra7gq"), 0, 37, 2.0, 2.0, true, 47292, 144, 1, SubResource("ArrayMesh_c53rc"), Transform3D(0.48, 0, 0, 0, 0.7, 0, 0, 0, 0.48, 0.25, 0.06, -0.48), 0, 2.0, true, 33095, 144, AABB(-5, -1, -5, 10, 10, 10), 1, SubResource("QuadMesh_80lqt"), Transform3D(0.75, 0, 0, 0, 0.75, 0, 0, 0, 0.75, -3.5, 0, 0), Transform3D(0.81, 0, 0, 0, 2.15, 0, 0, 0, 0.26, 0, 0, 0), false, 4, 0, 10, 2.0, true, 47291, 60, SubResource("QuadMesh_o523q"), 0, 37, 2.0, 2.0, true, 47292, 144, 1, SubResource("ArrayMesh_d88ch"), Transform3D(0.48, 0, 0, 0, 0.7, 0, 0, 0, 0.48, -0.48, 0.06, 0.35), 0, 7, 2.0, true, 33095, 144, AABB(-5, -1, -5, 10, 10, 10), 1, SubResource("QuadMesh_80lqt"), Transform3D(0.75, 0, 0, 0, 0.75, 0, 0, 0, 0.75, -2.5, 0, 0), Transform3D(0.81, 0, 0, 0, 2.15, 0, 0, 0, 0.26, 0, 0, 0), false, 4, 0, 10, 2.0, true, 47291, 60, SubResource("QuadMesh_hu4xq"), 0, 37, 2.0, 2.0, true, 47292, 144, 1, SubResource("ArrayMesh_6214f"), Transform3D(0.48, 0, 0, 0, 0.7, 0, 0, 0, 0.48, 0.25, 0.06, -0.48), 0, 2.0, true, 33095, 144, AABB(-5, -1, -5, 10, 10, 10), 1, SubResource("QuadMesh_80lqt"), Transform3D(0.75, 0, 0, 0, 0.75, 0, 0, 0, 0.75, -1.5, 0, 0), Transform3D(0.81, 0, 0, 0, 2.15, 0, 0, 0, 0.26, 0, 0, 0), false, 4, 0, 10, 2.0, true, 47291, 60, SubResource("QuadMesh_e15sb"), 0, 37, 2.0, 2.0, true, 47292, 144, 1, SubResource("ArrayMesh_nyrw1"), Transform3D(0.48, 0, 0, 0, 0.7, 0, 0, 0, 0.48, -0.48, 0.06, 0.35), 0, 7, 2.0, true, 33095, 144, AABB(-5, -1, -5, 10, 10, 10), 1, SubResource("QuadMesh_80lqt"), Transform3D(0.75, 0, 0, 0, 0.75, 0, 0, 0, 0.75, -0.5, 0, 0), Transform3D(0.81, 0, 0, 0, 2.15, 0, 0, 0, 0.26, 0, 0, 0), false, 4, 0, 10, 2.0, true, 47291, 60, SubResource("QuadMesh_w7au5"), 0, 37, 2.0, 2.0, true, 47292, 144, 1, SubResource("ArrayMesh_520jh"), Transform3D(0.48, 0, 0, 0, 0.7, 0, 0, 0, 0.48, 0.25, 0.06, -0.48), 0, 2.0, true, 33095, 144, AABB(-5, -1, -5, 10, 10, 10), 1, SubResource("QuadMesh_80lqt"), Transform3D(0.75, 0, 0, 0, 0.75, 0, 0, 0, 0.75, 0.5, 0, 0), Transform3D(0.81, 0, 0, 0, 2.15, 0, 0, 0, 0.26, 0, 0, 0), false, 4, 0, 10, 2.0, true, 47291, 60, SubResource("QuadMesh_shdu5"), 0, 37, 2.0, 2.0, true, 47292, 144, 1, SubResource("ArrayMesh_peg8k"), Transform3D(0.48, 0, 0, 0, 0.7, 0, 0, 0, 0.48, -0.48, 0.06, 0.35), 0, 7, 2.0, true, 33095, 144, AABB(-5, -1, -5, 10, 10, 10), 1, SubResource("QuadMesh_80lqt"), Transform3D(0.75, 0, 0, 0, 0.75, 0, 0, 0, 0.75, 1.5, 0, 0), Transform3D(0.81, 0, 0, 0, 2.15, 0, 0, 0, 0.26, 0, 0, 0), false, 4, 0, 10, 2.0, true, 47291, 60, SubResource("QuadMesh_fkwi4"), 0, 37, 2.0, 2.0, true, 47292, 144, 1, SubResource("ArrayMesh_btqga"), Transform3D(0.48, 0, 0, 0, 0.7, 0, 0, 0, 0.48, 0.25, 0.06, -0.48), 0, 2.0, true, 33095, 144, AABB(-5, -1, -5, 10, 10, 10), 1, SubResource("QuadMesh_80lqt"), Transform3D(0.75, 0, 0, 0, 0.75, 0, 0, 0, 0.75, 2.5, 0, 0), Transform3D(0.81, 0, 0, 0, 2.15, 0, 0, 0, 0.26, 0, 0, 0), false, 4, 0, 10, 2.0, true, 47291, 60, SubResource("QuadMesh_ax2k6"), 0, 37, 2.0, 2.0, true, 47292, 144, 1, SubResource("ArrayMesh_hqqjf"), Transform3D(0.48, 0, 0, 0, 0.7, 0, 0, 0, 0.48, -0.48, 0.06, 0.35), 0, 7, 2.0, true, 33095, 144, AABB(-5, -1, -5, 10, 10, 10), 1, SubResource("QuadMesh_80lqt"), Transform3D(0.75, 0, 0, 0, 0.75, 0, 0, 0, 0.75, 3.5, 0, 0), Transform3D(0.81, 0, 0, 0, 2.15, 0, 0, 0, 0.26, 0, 0, 0), false, 4, 0, 10, 2.0, true, 47291, 60, SubResource("QuadMesh_i3862"), 0, 37, 2.0, 2.0, true, 47292, 144, 1, SubResource("ArrayMesh_n0oyt"), Transform3D(0.48, 0, 0, 0, 0.7, 0, 0, 0, 0.48, 0.25, 0.06, -0.48), 0, 2.0, true, 33095, 144, AABB(-5, -1, -5, 10, 10, 10), 1, SubResource("QuadMesh_80lqt"), Transform3D(0.75, 0, 0, 0, 0.75, 0, 0, 0, 0.75, 4.5, 0, 0), Transform3D(0.81, 0, 0, 0, 2.15, 0, 0, 0, 0.26, 0, 0, 0), false, 4, 0, 10, 2.0, true, 47291, 60, SubResource("QuadMesh_n25y5"), 0, 37, 2.0, 2.0, true, 47292, 144, 1, SubResource("ArrayMesh_w3n8n"), Transform3D(0.48, 0, 0, 0, 0.7, 0, 0, 0, 0.48, -0.48, 0.06, 0.35), 0, 7, 2.0, true, 33095, 144, AABB(-5, -1, -5, 10, 10, 10), 1, SubResource("QuadMesh_80lqt"), Transform3D(0.75, 0, 0, 0, 0.75, 0, 0, 0, 0.75, 5.5, 0, 0), Transform3D(0.81, 0, 0, 0, 2.15, 0, 0, 0, 0.26, 0, 0, 0), false, 4, 0, 10, 2.0, true, 47291, 60, SubResource("QuadMesh_i1x2n"), 0, 37, 2.0, 2.0, true, 47292, 144, 1, SubResource("ArrayMesh_y3ma8"), Transform3D(0.48, 0, 0, 0, 0.7, 0, 0, 0, 0.48, 0.25, 0.06, -0.48), 0, 2.0, true, 33095, 144, AABB(-5, -1, -5, 10, 10, 10), 1, SubResource("QuadMesh_80lqt"), {
+"damping_max": 0.0,
+"damping_min": 0.0,
+"directional_velocity_max": 1.0,
+"directional_velocity_min": 1.0,
+"linear_accel_max": 0.0,
+"linear_accel_min": 0.0,
+"radial_accel_max": 0.0,
+"radial_accel_min": 0.0,
+"radial_velocity_max": -2.23517e-05,
+"radial_velocity_min": -2.23517e-05,
+"scale_max": 4.0,
+"scale_min": 1.5,
+"tangent_accel_max": 0.0,
+"tangent_accel_min": 0.0
+}, {
+"damping_max": 0.0,
+"damping_min": 0.0,
+"directional_velocity_max": 1.0,
+"directional_velocity_min": 1.0,
+"linear_accel_max": 0.0,
+"linear_accel_min": 0.0,
+"radial_accel_max": 0.0,
+"radial_accel_min": 0.0,
+"radial_velocity_max": 0.0,
+"radial_velocity_min": 0.0,
+"scale_max": 2.1,
+"scale_min": 0.7,
+"tangent_accel_max": 0.0,
+"tangent_accel_min": 0.0
+}, {
+"damping_max": 0.0,
+"damping_min": 0.0,
+"directional_velocity_max": 1.0,
+"directional_velocity_min": 1.0,
+"gravity": Vector3(0, 1, 0),
+"linear_accel_max": 0.0,
+"linear_accel_min": 0.0,
+"radial_accel_max": 0.0,
+"radial_accel_min": 0.0,
+"radial_velocity_max": 0.499978,
+"radial_velocity_min": -2.23517e-05,
+"scale_max": 1.7,
+"scale_min": 0.8,
+"tangent_accel_max": 0.0,
+"tangent_accel_min": 0.0
+}]
+material_specs = Array[Dictionary]([{
+"immutable_native_process": false,
+"metadata": {
+&"factory_clock_names": [],
+&"factory_clock_pool_required": false,
+&"factory_fire_wall_dead_source_world_assignment": true,
+&"factory_fire_wall_used_controls": {
+"support_age": true,
+"support_clock": false,
+"support_envelope": true
+},
+&"factory_occurrence_alpha": true,
+&"factory_opacity_prepared_shader": ExtResource("1_0jywu"),
+&"factory_prepared_shader": ExtResource("1_0jywu"),
+&"factory_world_space_uniform": false
+},
+"parameters": {
+"factory_world_to_source": Projection(1.3333334, 0, 0, 0, 0, 1.3333334, 0, 0, 0, 0, 1.3333334, 0, 7.3333335, 0, 0, 1),
+"source_tex": ExtResource("2_3d47q")
+},
+"render_priority": 0,
+"shader": ExtResource("1_0jywu")
+}, {
+"immutable_native_process": false,
+"metadata": {
+&"factory_clock_names": [],
+&"factory_clock_pool_required": false,
+&"factory_fire_wall_world_units": {
+"damping_max": 0.0,
+"damping_min": 0.0,
+"directional_velocity_max": 1.0,
+"directional_velocity_min": 1.0,
+"linear_accel_max": 0.0,
+"linear_accel_min": 0.0,
+"radial_accel_max": 0.0,
+"radial_accel_min": 0.0,
+"radial_velocity_max": -2.23517e-05,
+"radial_velocity_min": -2.23517e-05,
+"scale_max": 4.0,
+"scale_min": 1.5,
+"tangent_accel_max": 0.0,
+"tangent_accel_min": 0.0
+},
+&"factory_native_process_source": "Godot4.7.2 ParticleProcessMaterial exact generated program/uniforms; immutable local-coordinate process",
+&"factory_opacity_prepared_shader": ExtResource("3_d3h3f"),
+&"factory_prepared_shader": ExtResource("3_d3h3f"),
+&"factory_zero_gravity_native_operand": Vector3(0, -1e-06, 0)
+},
+"parameters": {
+"anim_speed_max": 1.0,
+"anim_speed_min": 1.0,
+"color_ramp": SubResource("GradientTexture1D_heopw"),
+"color_value": Color(2, 1.2987502, 0.725, 1),
+"direction": Vector3(0, 1, -0.4),
+"directional_velocity_max": 1.0,
+"directional_velocity_min": 1.0,
+"emission_ring_axis": Vector3(0, 1, 0),
+"emission_ring_cone_angle": 90.0,
+"emission_ring_radius": 1.3,
+"gravity": Vector3(0, -1e-06, 0),
+"hue_variation_max": -2.23517e-08,
+"hue_variation_min": -2.23517e-08,
+"initial_angle_max": 180.0,
+"initial_angle_min": -180.0,
+"initial_linear_velocity_max": 1.0,
+"initial_linear_velocity_min": 0.5,
+"radial_velocity_max": -2.23517e-05,
+"radial_velocity_min": -2.23517e-05,
+"scale_curve": SubResource("CurveTexture_5wf3f"),
+"scale_max": 4.0,
+"scale_min": 1.5,
+"spread": 29.589
+},
+"render_priority": 0,
+"shader": ExtResource("3_d3h3f")
+}, {
+"immutable_native_process": false,
+"metadata": {
+&"factory_clock_names": [],
+&"factory_clock_pool_required": false,
+&"factory_fire_wall_dead_source_world_assignment": true,
+&"factory_fire_wall_used_controls": {
+"support_age": true,
+"support_clock": true,
+"support_envelope": true
+},
+&"factory_occurrence_alpha": true,
+&"factory_opacity_prepared_shader": ExtResource("4_umjbl"),
+&"factory_prepared_shader": ExtResource("4_umjbl"),
+&"factory_world_space_uniform": false
+},
+"parameters": {
+"factory_world_to_source": Projection(1.3333334, 0, 0, 0, 0, 1.3333334, 0, 0, 0, 0, 1.3333334, 0, 7.3333335, 0, 0, 1),
+"frame_count": Vector2(8, 8),
+"gradient_1d_texture": SubResource("GradientTexture1D_xbq7a"),
+"is_loop": true,
+"sprite_sheet": ExtResource("5_dgqvg"),
+"uv_offset": Vector2(0, 0.001)
+},
+"render_priority": 0,
+"shader": ExtResource("4_umjbl")
+}, {
+"immutable_native_process": false,
+"metadata": {
+&"factory_clock_names": [],
+&"factory_clock_pool_required": false,
+&"factory_fire_wall_world_units": {
+"damping_max": 0.0,
+"damping_min": 0.0,
+"directional_velocity_max": 1.0,
+"directional_velocity_min": 1.0,
+"linear_accel_max": 0.0,
+"linear_accel_min": 0.0,
+"radial_accel_max": 0.0,
+"radial_accel_min": 0.0,
+"radial_velocity_max": 0.0,
+"radial_velocity_min": 0.0,
+"scale_max": 2.1,
+"scale_min": 0.7,
+"tangent_accel_max": 0.0,
+"tangent_accel_min": 0.0
+},
+&"factory_native_process_source": "Godot4.7.2 ParticleProcessMaterial exact generated program/uniforms; immutable local-coordinate process",
+&"factory_opacity_prepared_shader": ExtResource("6_8qrfi"),
+&"factory_prepared_shader": ExtResource("6_8qrfi"),
+&"factory_zero_gravity_native_operand": Vector3(0, -1e-06, 0)
+},
+"parameters": {
+"alpha_curve": SubResource("CurveTexture_l2gef"),
+"color_ramp": SubResource("GradientTexture1D_mwoe8"),
+"color_value": Color(2.5, 1.4715002, 0.62999994, 1),
+"direction": Vector3(1, 0, 0),
+"directional_velocity_max": 1.0,
+"directional_velocity_min": 1.0,
+"emission_ring_axis": Vector3(0, 1, 0),
+"emission_ring_cone_angle": 90.0,
+"emission_ring_radius": 1.35,
+"gravity": Vector3(0, -1e-06, 0),
+"initial_angle_max": 180.0,
+"initial_angle_min": -180.0,
+"scale_curve": SubResource("CurveXYZTexture_pd8wc"),
+"scale_max": 2.1,
+"scale_min": 0.7,
+"spread": 45.0
+},
+"render_priority": 0,
+"shader": ExtResource("6_8qrfi")
+}, {
+"immutable_native_process": false,
+"metadata": {
+&"factory_clock_names": [],
+&"factory_clock_pool_required": false,
+&"factory_fire_wall_dead_source_world_assignment": true,
+&"factory_fire_wall_used_controls": {
+"support_age": true,
+"support_clock": false,
+"support_envelope": true
+},
+&"factory_occurrence_alpha": true,
+&"factory_opacity_prepared_shader": ExtResource("7_2uy1r"),
+&"factory_prepared_shader": ExtResource("7_2uy1r"),
+&"factory_world_space_uniform": false
+},
+"parameters": {
+"factory_world_to_source": Projection(1.3333334, 0, 0, 0, 0, 1.3333334, 0, 0, 0, 0, 1.3333334, 0, 7.3333335, 0, 0, 1),
+"source_tex": ExtResource("8_q8qqh")
+},
+"render_priority": 0,
+"shader": ExtResource("7_2uy1r")
+}, {
+"immutable_native_process": false,
+"metadata": {
+&"factory_clock_names": [],
+&"factory_clock_pool_required": false,
+&"factory_fire_wall_world_units": {
+"damping_max": 0.0,
+"damping_min": 0.0,
+"directional_velocity_max": 1.0,
+"directional_velocity_min": 1.0,
+"gravity": Vector3(0, 1, 0),
+"linear_accel_max": 0.0,
+"linear_accel_min": 0.0,
+"radial_accel_max": 0.0,
+"radial_accel_min": 0.0,
+"radial_velocity_max": 0.499978,
+"radial_velocity_min": -2.23517e-05,
+"scale_max": 1.7,
+"scale_min": 0.8,
+"tangent_accel_max": 0.0,
+"tangent_accel_min": 0.0
+},
+&"factory_native_process_source": "Godot4.7.2 ParticleProcessMaterial exact generated program/uniforms; immutable local-coordinate process",
+&"factory_opacity_prepared_shader": ExtResource("9_upkvd"),
+&"factory_prepared_shader": ExtResource("9_upkvd")
+},
+"parameters": {
+"alpha_curve": SubResource("CurveTexture_cvtkw"),
+"color_ramp": SubResource("GradientTexture1D_jdlo3"),
+"color_value": Color(2, 1.2987502, 0.725, 1),
+"direction": Vector3(0, 1, 0),
+"directional_velocity_max": 1.0,
+"directional_velocity_min": 1.0,
+"emission_sphere_radius": 0.2,
+"gravity": Vector3(0, 1, 0),
+"initial_angle_max": 180.0,
+"initial_angle_min": -180.0,
+"initial_linear_velocity_max": 2.0,
+"initial_linear_velocity_min": 1.0,
+"lifetime_randomness": 0.17,
+"radial_velocity_max": 0.499978,
+"radial_velocity_min": -2.23517e-05,
+"scale_curve": SubResource("CurveTexture_swa6q"),
+"scale_max": 1.7,
+"scale_min": 0.8,
+"spread": 13.767
+},
+"render_priority": 0,
+"shader": ExtResource("9_upkvd")
+}, {
+"immutable_native_process": false,
+"metadata": {
+&"factory_clock_names": [],
+&"factory_clock_pool_required": false,
+&"factory_fire_wall_dead_source_world_assignment": true,
+&"factory_fire_wall_used_controls": {
+"support_age": true,
+"support_clock": false,
+"support_envelope": true
+},
+&"factory_occurrence_alpha": true,
+&"factory_opacity_prepared_shader": ExtResource("1_0jywu"),
+&"factory_prepared_shader": ExtResource("1_0jywu"),
+&"factory_world_space_uniform": false
+},
+"parameters": {
+"factory_world_to_source": Projection(1.3333334, 0, 0, 0, 0, 1.3333334, 0, 0, 0, 0, 1.3333334, 0, 6, 0, 0, 1),
+"source_tex": ExtResource("2_3d47q")
+},
+"render_priority": 0,
+"shader": ExtResource("1_0jywu")
+}, {
+"immutable_native_process": false,
+"metadata": {
+&"factory_clock_names": [],
+&"factory_clock_pool_required": false,
+&"factory_fire_wall_dead_source_world_assignment": true,
+&"factory_fire_wall_used_controls": {
+"support_age": true,
+"support_clock": true,
+"support_envelope": true
+},
+&"factory_occurrence_alpha": true,
+&"factory_opacity_prepared_shader": ExtResource("4_umjbl"),
+&"factory_prepared_shader": ExtResource("4_umjbl"),
+&"factory_world_space_uniform": false
+},
+"parameters": {
+"factory_world_to_source": Projection(1.3333334, 0, 0, 0, 0, 1.3333334, 0, 0, 0, 0, 1.3333334, 0, 6, 0, 0, 1),
+"frame_count": Vector2(8, 8),
+"gradient_1d_texture": SubResource("GradientTexture1D_ty1wc"),
+"is_loop": true,
+"sprite_sheet": ExtResource("5_dgqvg"),
+"uv_offset": Vector2(0, 0.001)
+},
+"render_priority": 0,
+"shader": ExtResource("4_umjbl")
+}, {
+"immutable_native_process": false,
+"metadata": {
+&"factory_clock_names": [],
+&"factory_clock_pool_required": false,
+&"factory_fire_wall_dead_source_world_assignment": true,
+&"factory_fire_wall_used_controls": {
+"support_age": true,
+"support_clock": false,
+"support_envelope": true
+},
+&"factory_occurrence_alpha": true,
+&"factory_opacity_prepared_shader": ExtResource("7_2uy1r"),
+&"factory_prepared_shader": ExtResource("7_2uy1r"),
+&"factory_world_space_uniform": false
+},
+"parameters": {
+"factory_world_to_source": Projection(1.3333334, 0, 0, 0, 0, 1.3333334, 0, 0, 0, 0, 1.3333334, 0, 6, 0, 0, 1),
+"source_tex": ExtResource("8_q8qqh")
+},
+"render_priority": 0,
+"shader": ExtResource("7_2uy1r")
+}, {
+"immutable_native_process": false,
+"metadata": {
+&"factory_clock_names": [],
+&"factory_clock_pool_required": false,
+&"factory_fire_wall_dead_source_world_assignment": true,
+&"factory_fire_wall_used_controls": {
+"support_age": true,
+"support_clock": false,
+"support_envelope": true
+},
+&"factory_occurrence_alpha": true,
+&"factory_opacity_prepared_shader": ExtResource("1_0jywu"),
+&"factory_prepared_shader": ExtResource("1_0jywu"),
+&"factory_world_space_uniform": false
+},
+"parameters": {
+"factory_world_to_source": Projection(1.3333334, 0, 0, 0, 0, 1.3333334, 0, 0, 0, 0, 1.3333334, 0, 4.666667, 0, 0, 1),
+"source_tex": ExtResource("2_3d47q")
+},
+"render_priority": 0,
+"shader": ExtResource("1_0jywu")
+}, {
+"immutable_native_process": false,
+"metadata": {
+&"factory_clock_names": [],
+&"factory_clock_pool_required": false,
+&"factory_fire_wall_dead_source_world_assignment": true,
+&"factory_fire_wall_used_controls": {
+"support_age": true,
+"support_clock": true,
+"support_envelope": true
+},
+&"factory_occurrence_alpha": true,
+&"factory_opacity_prepared_shader": ExtResource("4_umjbl"),
+&"factory_prepared_shader": ExtResource("4_umjbl"),
+&"factory_world_space_uniform": false
+},
+"parameters": {
+"factory_world_to_source": Projection(1.3333334, 0, 0, 0, 0, 1.3333334, 0, 0, 0, 0, 1.3333334, 0, 4.666667, 0, 0, 1),
+"frame_count": Vector2(8, 8),
+"gradient_1d_texture": SubResource("GradientTexture1D_b3wwa"),
+"is_loop": true,
+"sprite_sheet": ExtResource("5_dgqvg"),
+"uv_offset": Vector2(0, 0.001)
+},
+"render_priority": 0,
+"shader": ExtResource("4_umjbl")
+}, {
+"immutable_native_process": false,
+"metadata": {
+&"factory_clock_names": [],
+&"factory_clock_pool_required": false,
+&"factory_fire_wall_dead_source_world_assignment": true,
+&"factory_fire_wall_used_controls": {
+"support_age": true,
+"support_clock": false,
+"support_envelope": true
+},
+&"factory_occurrence_alpha": true,
+&"factory_opacity_prepared_shader": ExtResource("7_2uy1r"),
+&"factory_prepared_shader": ExtResource("7_2uy1r"),
+&"factory_world_space_uniform": false
+},
+"parameters": {
+"factory_world_to_source": Projection(1.3333334, 0, 0, 0, 0, 1.3333334, 0, 0, 0, 0, 1.3333334, 0, 4.666667, 0, 0, 1),
+"source_tex": ExtResource("8_q8qqh")
+},
+"render_priority": 0,
+"shader": ExtResource("7_2uy1r")
+}, {
+"immutable_native_process": false,
+"metadata": {
+&"factory_clock_names": [],
+&"factory_clock_pool_required": false,
+&"factory_fire_wall_dead_source_world_assignment": true,
+&"factory_fire_wall_used_controls": {
+"support_age": true,
+"support_clock": false,
+"support_envelope": true
+},
+&"factory_occurrence_alpha": true,
+&"factory_opacity_prepared_shader": ExtResource("1_0jywu"),
+&"factory_prepared_shader": ExtResource("1_0jywu"),
+&"factory_world_space_uniform": false
+},
+"parameters": {
+"factory_world_to_source": Projection(1.3333334, 0, 0, 0, 0, 1.3333334, 0, 0, 0, 0, 1.3333334, 0, 3.3333335, 0, 0, 1),
+"source_tex": ExtResource("2_3d47q")
+},
+"render_priority": 0,
+"shader": ExtResource("1_0jywu")
+}, {
+"immutable_native_process": false,
+"metadata": {
+&"factory_clock_names": [],
+&"factory_clock_pool_required": false,
+&"factory_fire_wall_dead_source_world_assignment": true,
+&"factory_fire_wall_used_controls": {
+"support_age": true,
+"support_clock": true,
+"support_envelope": true
+},
+&"factory_occurrence_alpha": true,
+&"factory_opacity_prepared_shader": ExtResource("4_umjbl"),
+&"factory_prepared_shader": ExtResource("4_umjbl"),
+&"factory_world_space_uniform": false
+},
+"parameters": {
+"factory_world_to_source": Projection(1.3333334, 0, 0, 0, 0, 1.3333334, 0, 0, 0, 0, 1.3333334, 0, 3.3333335, 0, 0, 1),
+"frame_count": Vector2(8, 8),
+"gradient_1d_texture": SubResource("GradientTexture1D_2an2c"),
+"is_loop": true,
+"sprite_sheet": ExtResource("5_dgqvg"),
+"uv_offset": Vector2(0, 0.001)
+},
+"render_priority": 0,
+"shader": ExtResource("4_umjbl")
+}, {
+"immutable_native_process": false,
+"metadata": {
+&"factory_clock_names": [],
+&"factory_clock_pool_required": false,
+&"factory_fire_wall_dead_source_world_assignment": true,
+&"factory_fire_wall_used_controls": {
+"support_age": true,
+"support_clock": false,
+"support_envelope": true
+},
+&"factory_occurrence_alpha": true,
+&"factory_opacity_prepared_shader": ExtResource("7_2uy1r"),
+&"factory_prepared_shader": ExtResource("7_2uy1r"),
+&"factory_world_space_uniform": false
+},
+"parameters": {
+"factory_world_to_source": Projection(1.3333334, 0, 0, 0, 0, 1.3333334, 0, 0, 0, 0, 1.3333334, 0, 3.3333335, 0, 0, 1),
+"source_tex": ExtResource("8_q8qqh")
+},
+"render_priority": 0,
+"shader": ExtResource("7_2uy1r")
+}, {
+"immutable_native_process": false,
+"metadata": {
+&"factory_clock_names": [],
+&"factory_clock_pool_required": false,
+&"factory_fire_wall_dead_source_world_assignment": true,
+&"factory_fire_wall_used_controls": {
+"support_age": true,
+"support_clock": false,
+"support_envelope": true
+},
+&"factory_occurrence_alpha": true,
+&"factory_opacity_prepared_shader": ExtResource("1_0jywu"),
+&"factory_prepared_shader": ExtResource("1_0jywu"),
+&"factory_world_space_uniform": false
+},
+"parameters": {
+"factory_world_to_source": Projection(1.3333334, 0, 0, 0, 0, 1.3333334, 0, 0, 0, 0, 1.3333334, 0, 2, 0, 0, 1),
+"source_tex": ExtResource("2_3d47q")
+},
+"render_priority": 0,
+"shader": ExtResource("1_0jywu")
+}, {
+"immutable_native_process": false,
+"metadata": {
+&"factory_clock_names": [],
+&"factory_clock_pool_required": false,
+&"factory_fire_wall_dead_source_world_assignment": true,
+&"factory_fire_wall_used_controls": {
+"support_age": true,
+"support_clock": true,
+"support_envelope": true
+},
+&"factory_occurrence_alpha": true,
+&"factory_opacity_prepared_shader": ExtResource("4_umjbl"),
+&"factory_prepared_shader": ExtResource("4_umjbl"),
+&"factory_world_space_uniform": false
+},
+"parameters": {
+"factory_world_to_source": Projection(1.3333334, 0, 0, 0, 0, 1.3333334, 0, 0, 0, 0, 1.3333334, 0, 2, 0, 0, 1),
+"frame_count": Vector2(8, 8),
+"gradient_1d_texture": SubResource("GradientTexture1D_p2bjm"),
+"is_loop": true,
+"sprite_sheet": ExtResource("5_dgqvg"),
+"uv_offset": Vector2(0, 0.001)
+},
+"render_priority": 0,
+"shader": ExtResource("4_umjbl")
+}, {
+"immutable_native_process": false,
+"metadata": {
+&"factory_clock_names": [],
+&"factory_clock_pool_required": false,
+&"factory_fire_wall_dead_source_world_assignment": true,
+&"factory_fire_wall_used_controls": {
+"support_age": true,
+"support_clock": false,
+"support_envelope": true
+},
+&"factory_occurrence_alpha": true,
+&"factory_opacity_prepared_shader": ExtResource("7_2uy1r"),
+&"factory_prepared_shader": ExtResource("7_2uy1r"),
+&"factory_world_space_uniform": false
+},
+"parameters": {
+"factory_world_to_source": Projection(1.3333334, 0, 0, 0, 0, 1.3333334, 0, 0, 0, 0, 1.3333334, 0, 2, 0, 0, 1),
+"source_tex": ExtResource("8_q8qqh")
+},
+"render_priority": 0,
+"shader": ExtResource("7_2uy1r")
+}, {
+"immutable_native_process": false,
+"metadata": {
+&"factory_clock_names": [],
+&"factory_clock_pool_required": false,
+&"factory_fire_wall_dead_source_world_assignment": true,
+&"factory_fire_wall_used_controls": {
+"support_age": true,
+"support_clock": false,
+"support_envelope": true
+},
+&"factory_occurrence_alpha": true,
+&"factory_opacity_prepared_shader": ExtResource("1_0jywu"),
+&"factory_prepared_shader": ExtResource("1_0jywu"),
+&"factory_world_space_uniform": false
+},
+"parameters": {
+"factory_world_to_source": Projection(1.3333334, 0, 0, 0, 0, 1.3333334, 0, 0, 0, 0, 1.3333334, 0, 0.6666667, 0, 0, 1),
+"source_tex": ExtResource("2_3d47q")
+},
+"render_priority": 0,
+"shader": ExtResource("1_0jywu")
+}, {
+"immutable_native_process": false,
+"metadata": {
+&"factory_clock_names": [],
+&"factory_clock_pool_required": false,
+&"factory_fire_wall_dead_source_world_assignment": true,
+&"factory_fire_wall_used_controls": {
+"support_age": true,
+"support_clock": true,
+"support_envelope": true
+},
+&"factory_occurrence_alpha": true,
+&"factory_opacity_prepared_shader": ExtResource("4_umjbl"),
+&"factory_prepared_shader": ExtResource("4_umjbl"),
+&"factory_world_space_uniform": false
+},
+"parameters": {
+"factory_world_to_source": Projection(1.3333334, 0, 0, 0, 0, 1.3333334, 0, 0, 0, 0, 1.3333334, 0, 0.6666667, 0, 0, 1),
+"frame_count": Vector2(8, 8),
+"gradient_1d_texture": SubResource("GradientTexture1D_ku0xw"),
+"is_loop": true,
+"sprite_sheet": ExtResource("5_dgqvg"),
+"uv_offset": Vector2(0, 0.001)
+},
+"render_priority": 0,
+"shader": ExtResource("4_umjbl")
+}, {
+"immutable_native_process": false,
+"metadata": {
+&"factory_clock_names": [],
+&"factory_clock_pool_required": false,
+&"factory_fire_wall_dead_source_world_assignment": true,
+&"factory_fire_wall_used_controls": {
+"support_age": true,
+"support_clock": false,
+"support_envelope": true
+},
+&"factory_occurrence_alpha": true,
+&"factory_opacity_prepared_shader": ExtResource("7_2uy1r"),
+&"factory_prepared_shader": ExtResource("7_2uy1r"),
+&"factory_world_space_uniform": false
+},
+"parameters": {
+"factory_world_to_source": Projection(1.3333334, 0, 0, 0, 0, 1.3333334, 0, 0, 0, 0, 1.3333334, 0, 0.6666667, 0, 0, 1),
+"source_tex": ExtResource("8_q8qqh")
+},
+"render_priority": 0,
+"shader": ExtResource("7_2uy1r")
+}, {
+"immutable_native_process": false,
+"metadata": {
+&"factory_clock_names": [],
+&"factory_clock_pool_required": false,
+&"factory_fire_wall_dead_source_world_assignment": true,
+&"factory_fire_wall_used_controls": {
+"support_age": true,
+"support_clock": false,
+"support_envelope": true
+},
+&"factory_occurrence_alpha": true,
+&"factory_opacity_prepared_shader": ExtResource("1_0jywu"),
+&"factory_prepared_shader": ExtResource("1_0jywu"),
+&"factory_world_space_uniform": false
+},
+"parameters": {
+"factory_world_to_source": Projection(1.3333334, 0, 0, 0, 0, 1.3333334, 0, 0, 0, 0, 1.3333334, 0, -0.6666667, 0, 0, 1),
+"source_tex": ExtResource("2_3d47q")
+},
+"render_priority": 0,
+"shader": ExtResource("1_0jywu")
+}, {
+"immutable_native_process": false,
+"metadata": {
+&"factory_clock_names": [],
+&"factory_clock_pool_required": false,
+&"factory_fire_wall_dead_source_world_assignment": true,
+&"factory_fire_wall_used_controls": {
+"support_age": true,
+"support_clock": true,
+"support_envelope": true
+},
+&"factory_occurrence_alpha": true,
+&"factory_opacity_prepared_shader": ExtResource("4_umjbl"),
+&"factory_prepared_shader": ExtResource("4_umjbl"),
+&"factory_world_space_uniform": false
+},
+"parameters": {
+"factory_world_to_source": Projection(1.3333334, 0, 0, 0, 0, 1.3333334, 0, 0, 0, 0, 1.3333334, 0, -0.6666667, 0, 0, 1),
+"frame_count": Vector2(8, 8),
+"gradient_1d_texture": SubResource("GradientTexture1D_ovxyc"),
+"is_loop": true,
+"sprite_sheet": ExtResource("5_dgqvg"),
+"uv_offset": Vector2(0, 0.001)
+},
+"render_priority": 0,
+"shader": ExtResource("4_umjbl")
+}, {
+"immutable_native_process": false,
+"metadata": {
+&"factory_clock_names": [],
+&"factory_clock_pool_required": false,
+&"factory_fire_wall_dead_source_world_assignment": true,
+&"factory_fire_wall_used_controls": {
+"support_age": true,
+"support_clock": false,
+"support_envelope": true
+},
+&"factory_occurrence_alpha": true,
+&"factory_opacity_prepared_shader": ExtResource("7_2uy1r"),
+&"factory_prepared_shader": ExtResource("7_2uy1r"),
+&"factory_world_space_uniform": false
+},
+"parameters": {
+"factory_world_to_source": Projection(1.3333334, 0, 0, 0, 0, 1.3333334, 0, 0, 0, 0, 1.3333334, 0, -0.6666667, 0, 0, 1),
+"source_tex": ExtResource("8_q8qqh")
+},
+"render_priority": 0,
+"shader": ExtResource("7_2uy1r")
+}, {
+"immutable_native_process": false,
+"metadata": {
+&"factory_clock_names": [],
+&"factory_clock_pool_required": false,
+&"factory_fire_wall_dead_source_world_assignment": true,
+&"factory_fire_wall_used_controls": {
+"support_age": true,
+"support_clock": false,
+"support_envelope": true
+},
+&"factory_occurrence_alpha": true,
+&"factory_opacity_prepared_shader": ExtResource("1_0jywu"),
+&"factory_prepared_shader": ExtResource("1_0jywu"),
+&"factory_world_space_uniform": false
+},
+"parameters": {
+"factory_world_to_source": Projection(1.3333334, 0, 0, 0, 0, 1.3333334, 0, 0, 0, 0, 1.3333334, 0, -2, 0, 0, 1),
+"source_tex": ExtResource("2_3d47q")
+},
+"render_priority": 0,
+"shader": ExtResource("1_0jywu")
+}, {
+"immutable_native_process": false,
+"metadata": {
+&"factory_clock_names": [],
+&"factory_clock_pool_required": false,
+&"factory_fire_wall_dead_source_world_assignment": true,
+&"factory_fire_wall_used_controls": {
+"support_age": true,
+"support_clock": true,
+"support_envelope": true
+},
+&"factory_occurrence_alpha": true,
+&"factory_opacity_prepared_shader": ExtResource("4_umjbl"),
+&"factory_prepared_shader": ExtResource("4_umjbl"),
+&"factory_world_space_uniform": false
+},
+"parameters": {
+"factory_world_to_source": Projection(1.3333334, 0, 0, 0, 0, 1.3333334, 0, 0, 0, 0, 1.3333334, 0, -2, 0, 0, 1),
+"frame_count": Vector2(8, 8),
+"gradient_1d_texture": SubResource("GradientTexture1D_6ufpa"),
+"is_loop": true,
+"sprite_sheet": ExtResource("5_dgqvg"),
+"uv_offset": Vector2(0, 0.001)
+},
+"render_priority": 0,
+"shader": ExtResource("4_umjbl")
+}, {
+"immutable_native_process": false,
+"metadata": {
+&"factory_clock_names": [],
+&"factory_clock_pool_required": false,
+&"factory_fire_wall_dead_source_world_assignment": true,
+&"factory_fire_wall_used_controls": {
+"support_age": true,
+"support_clock": false,
+"support_envelope": true
+},
+&"factory_occurrence_alpha": true,
+&"factory_opacity_prepared_shader": ExtResource("7_2uy1r"),
+&"factory_prepared_shader": ExtResource("7_2uy1r"),
+&"factory_world_space_uniform": false
+},
+"parameters": {
+"factory_world_to_source": Projection(1.3333334, 0, 0, 0, 0, 1.3333334, 0, 0, 0, 0, 1.3333334, 0, -2, 0, 0, 1),
+"source_tex": ExtResource("8_q8qqh")
+},
+"render_priority": 0,
+"shader": ExtResource("7_2uy1r")
+}, {
+"immutable_native_process": false,
+"metadata": {
+&"factory_clock_names": [],
+&"factory_clock_pool_required": false,
+&"factory_fire_wall_dead_source_world_assignment": true,
+&"factory_fire_wall_used_controls": {
+"support_age": true,
+"support_clock": false,
+"support_envelope": true
+},
+&"factory_occurrence_alpha": true,
+&"factory_opacity_prepared_shader": ExtResource("1_0jywu"),
+&"factory_prepared_shader": ExtResource("1_0jywu"),
+&"factory_world_space_uniform": false
+},
+"parameters": {
+"factory_world_to_source": Projection(1.3333334, 0, 0, 0, 0, 1.3333334, 0, 0, 0, 0, 1.3333334, 0, -3.3333335, 0, 0, 1),
+"source_tex": ExtResource("2_3d47q")
+},
+"render_priority": 0,
+"shader": ExtResource("1_0jywu")
+}, {
+"immutable_native_process": false,
+"metadata": {
+&"factory_clock_names": [],
+&"factory_clock_pool_required": false,
+&"factory_fire_wall_dead_source_world_assignment": true,
+&"factory_fire_wall_used_controls": {
+"support_age": true,
+"support_clock": true,
+"support_envelope": true
+},
+&"factory_occurrence_alpha": true,
+&"factory_opacity_prepared_shader": ExtResource("4_umjbl"),
+&"factory_prepared_shader": ExtResource("4_umjbl"),
+&"factory_world_space_uniform": false
+},
+"parameters": {
+"factory_world_to_source": Projection(1.3333334, 0, 0, 0, 0, 1.3333334, 0, 0, 0, 0, 1.3333334, 0, -3.3333335, 0, 0, 1),
+"frame_count": Vector2(8, 8),
+"gradient_1d_texture": SubResource("GradientTexture1D_peal5"),
+"is_loop": true,
+"sprite_sheet": ExtResource("5_dgqvg"),
+"uv_offset": Vector2(0, 0.001)
+},
+"render_priority": 0,
+"shader": ExtResource("4_umjbl")
+}, {
+"immutable_native_process": false,
+"metadata": {
+&"factory_clock_names": [],
+&"factory_clock_pool_required": false,
+&"factory_fire_wall_dead_source_world_assignment": true,
+&"factory_fire_wall_used_controls": {
+"support_age": true,
+"support_clock": false,
+"support_envelope": true
+},
+&"factory_occurrence_alpha": true,
+&"factory_opacity_prepared_shader": ExtResource("7_2uy1r"),
+&"factory_prepared_shader": ExtResource("7_2uy1r"),
+&"factory_world_space_uniform": false
+},
+"parameters": {
+"factory_world_to_source": Projection(1.3333334, 0, 0, 0, 0, 1.3333334, 0, 0, 0, 0, 1.3333334, 0, -3.3333335, 0, 0, 1),
+"source_tex": ExtResource("8_q8qqh")
+},
+"render_priority": 0,
+"shader": ExtResource("7_2uy1r")
+}, {
+"immutable_native_process": false,
+"metadata": {
+&"factory_clock_names": [],
+&"factory_clock_pool_required": false,
+&"factory_fire_wall_dead_source_world_assignment": true,
+&"factory_fire_wall_used_controls": {
+"support_age": true,
+"support_clock": false,
+"support_envelope": true
+},
+&"factory_occurrence_alpha": true,
+&"factory_opacity_prepared_shader": ExtResource("1_0jywu"),
+&"factory_prepared_shader": ExtResource("1_0jywu"),
+&"factory_world_space_uniform": false
+},
+"parameters": {
+"factory_world_to_source": Projection(1.3333334, 0, 0, 0, 0, 1.3333334, 0, 0, 0, 0, 1.3333334, 0, -4.666667, 0, 0, 1),
+"source_tex": ExtResource("2_3d47q")
+},
+"render_priority": 0,
+"shader": ExtResource("1_0jywu")
+}, {
+"immutable_native_process": false,
+"metadata": {
+&"factory_clock_names": [],
+&"factory_clock_pool_required": false,
+&"factory_fire_wall_dead_source_world_assignment": true,
+&"factory_fire_wall_used_controls": {
+"support_age": true,
+"support_clock": true,
+"support_envelope": true
+},
+&"factory_occurrence_alpha": true,
+&"factory_opacity_prepared_shader": ExtResource("4_umjbl"),
+&"factory_prepared_shader": ExtResource("4_umjbl"),
+&"factory_world_space_uniform": false
+},
+"parameters": {
+"factory_world_to_source": Projection(1.3333334, 0, 0, 0, 0, 1.3333334, 0, 0, 0, 0, 1.3333334, 0, -4.666667, 0, 0, 1),
+"frame_count": Vector2(8, 8),
+"gradient_1d_texture": SubResource("GradientTexture1D_03cwy"),
+"is_loop": true,
+"sprite_sheet": ExtResource("5_dgqvg"),
+"uv_offset": Vector2(0, 0.001)
+},
+"render_priority": 0,
+"shader": ExtResource("4_umjbl")
+}, {
+"immutable_native_process": false,
+"metadata": {
+&"factory_clock_names": [],
+&"factory_clock_pool_required": false,
+&"factory_fire_wall_dead_source_world_assignment": true,
+&"factory_fire_wall_used_controls": {
+"support_age": true,
+"support_clock": false,
+"support_envelope": true
+},
+&"factory_occurrence_alpha": true,
+&"factory_opacity_prepared_shader": ExtResource("7_2uy1r"),
+&"factory_prepared_shader": ExtResource("7_2uy1r"),
+&"factory_world_space_uniform": false
+},
+"parameters": {
+"factory_world_to_source": Projection(1.3333334, 0, 0, 0, 0, 1.3333334, 0, 0, 0, 0, 1.3333334, 0, -4.666667, 0, 0, 1),
+"source_tex": ExtResource("8_q8qqh")
+},
+"render_priority": 0,
+"shader": ExtResource("7_2uy1r")
+}, {
+"immutable_native_process": false,
+"metadata": {
+&"factory_clock_names": [],
+&"factory_clock_pool_required": false,
+&"factory_fire_wall_dead_source_world_assignment": true,
+&"factory_fire_wall_used_controls": {
+"support_age": true,
+"support_clock": false,
+"support_envelope": true
+},
+&"factory_occurrence_alpha": true,
+&"factory_opacity_prepared_shader": ExtResource("1_0jywu"),
+&"factory_prepared_shader": ExtResource("1_0jywu"),
+&"factory_world_space_uniform": false
+},
+"parameters": {
+"factory_world_to_source": Projection(1.3333334, 0, 0, 0, 0, 1.3333334, 0, 0, 0, 0, 1.3333334, 0, -6, 0, 0, 1),
+"source_tex": ExtResource("2_3d47q")
+},
+"render_priority": 0,
+"shader": ExtResource("1_0jywu")
+}, {
+"immutable_native_process": false,
+"metadata": {
+&"factory_clock_names": [],
+&"factory_clock_pool_required": false,
+&"factory_fire_wall_dead_source_world_assignment": true,
+&"factory_fire_wall_used_controls": {
+"support_age": true,
+"support_clock": true,
+"support_envelope": true
+},
+&"factory_occurrence_alpha": true,
+&"factory_opacity_prepared_shader": ExtResource("4_umjbl"),
+&"factory_prepared_shader": ExtResource("4_umjbl"),
+&"factory_world_space_uniform": false
+},
+"parameters": {
+"factory_world_to_source": Projection(1.3333334, 0, 0, 0, 0, 1.3333334, 0, 0, 0, 0, 1.3333334, 0, -6, 0, 0, 1),
+"frame_count": Vector2(8, 8),
+"gradient_1d_texture": SubResource("GradientTexture1D_5f3qk"),
+"is_loop": true,
+"sprite_sheet": ExtResource("5_dgqvg"),
+"uv_offset": Vector2(0, 0.001)
+},
+"render_priority": 0,
+"shader": ExtResource("4_umjbl")
+}, {
+"immutable_native_process": false,
+"metadata": {
+&"factory_clock_names": [],
+&"factory_clock_pool_required": false,
+&"factory_fire_wall_dead_source_world_assignment": true,
+&"factory_fire_wall_used_controls": {
+"support_age": true,
+"support_clock": false,
+"support_envelope": true
+},
+&"factory_occurrence_alpha": true,
+&"factory_opacity_prepared_shader": ExtResource("7_2uy1r"),
+&"factory_prepared_shader": ExtResource("7_2uy1r"),
+&"factory_world_space_uniform": false
+},
+"parameters": {
+"factory_world_to_source": Projection(1.3333334, 0, 0, 0, 0, 1.3333334, 0, 0, 0, 0, 1.3333334, 0, -6, 0, 0, 1),
+"source_tex": ExtResource("8_q8qqh")
+},
+"render_priority": 0,
+"shader": ExtResource("7_2uy1r")
+}, {
+"immutable_native_process": false,
+"metadata": {
+&"factory_clock_names": [],
+&"factory_clock_pool_required": false,
+&"factory_fire_wall_dead_source_world_assignment": true,
+&"factory_fire_wall_used_controls": {
+"support_age": true,
+"support_clock": false,
+"support_envelope": true
+},
+&"factory_occurrence_alpha": true,
+&"factory_opacity_prepared_shader": ExtResource("1_0jywu"),
+&"factory_prepared_shader": ExtResource("1_0jywu"),
+&"factory_world_space_uniform": false
+},
+"parameters": {
+"factory_world_to_source": Projection(1.3333334, 0, 0, 0, 0, 1.3333334, 0, 0, 0, 0, 1.3333334, 0, -7.3333335, 0, 0, 1),
+"source_tex": ExtResource("2_3d47q")
+},
+"render_priority": 0,
+"shader": ExtResource("1_0jywu")
+}, {
+"immutable_native_process": false,
+"metadata": {
+&"factory_clock_names": [],
+&"factory_clock_pool_required": false,
+&"factory_fire_wall_dead_source_world_assignment": true,
+&"factory_fire_wall_used_controls": {
+"support_age": true,
+"support_clock": true,
+"support_envelope": true
+},
+&"factory_occurrence_alpha": true,
+&"factory_opacity_prepared_shader": ExtResource("4_umjbl"),
+&"factory_prepared_shader": ExtResource("4_umjbl"),
+&"factory_world_space_uniform": false
+},
+"parameters": {
+"factory_world_to_source": Projection(1.3333334, 0, 0, 0, 0, 1.3333334, 0, 0, 0, 0, 1.3333334, 0, -7.3333335, 0, 0, 1),
+"frame_count": Vector2(8, 8),
+"gradient_1d_texture": SubResource("GradientTexture1D_xu7t2"),
+"is_loop": true,
+"sprite_sheet": ExtResource("5_dgqvg"),
+"uv_offset": Vector2(0, 0.001)
+},
+"render_priority": 0,
+"shader": ExtResource("4_umjbl")
+}, {
+"immutable_native_process": false,
+"metadata": {
+&"factory_clock_names": [],
+&"factory_clock_pool_required": false,
+&"factory_fire_wall_dead_source_world_assignment": true,
+&"factory_fire_wall_used_controls": {
+"support_age": true,
+"support_clock": false,
+"support_envelope": true
+},
+&"factory_occurrence_alpha": true,
+&"factory_opacity_prepared_shader": ExtResource("7_2uy1r"),
+&"factory_prepared_shader": ExtResource("7_2uy1r"),
+&"factory_world_space_uniform": false
+},
+"parameters": {
+"factory_world_to_source": Projection(1.3333334, 0, 0, 0, 0, 1.3333334, 0, 0, 0, 0, 1.3333334, 0, -7.3333335, 0, 0, 1),
+"source_tex": ExtResource("8_q8qqh")
+},
+"render_priority": 0,
+"shader": ExtResource("7_2uy1r")
+}])
+node_specs = Array[Dictionary]([{
+"class": "Node3D",
+"name": "FactoryGenerated_0000_Node3D",
+"parent": "root",
+"path": ".",
+"properties": []
+}, {
+"class": "Node3D",
+"name": "flame_0",
+"parent": ".",
+"path": "flame_0",
+"properties": [{
+"field": "transform",
+"operand": {
+"kind": "immutable_value",
+"value": Transform3D(0.75, 0, 0, 0, 0.75, 0, 0, 0, 0.75, -5.5, 0, 0)
+}
+}]
+}, {
+"class": "Node3D",
+"name": "effect",
+"parent": "flame_0",
+"path": "flame_0/effect",
+"properties": []
+}, {
+"class": "Node3D",
+"name": "Donor",
+"parent": "flame_0/effect",
+"path": "flame_0/effect/Donor",
+"properties": [{
+"field": "transform",
+"operand": {
+"kind": "immutable_value",
+"value": Transform3D(0.81, 0, 0, 0, 2.15, 0, 0, 0, 0.26, 0, 0, 0)
+}
+}]
+}, {
+"class": "GPUParticles3D",
+"name": "firepops",
+"parent": "flame_0/effect/Donor",
+"path": "flame_0/effect/Donor/firepops",
+"properties": [{
+"field": "visible",
+"operand": {
+"kind": "immutable_value",
+"value": false
+}
+}, {
+"field": "layers",
+"operand": {
+"kind": "immutable_value",
+"value": 4
+}
+}, {
+"field": "material_override",
+"operand": {
+"index": 0,
+"kind": "private_material"
+}
+}, {
+"field": "cast_shadow",
+"operand": {
+"kind": "immutable_value",
+"value": 0
+}
+}, {
+"field": "amount",
+"operand": {
+"kind": "immutable_value",
+"value": 10
+}
+}, {
+"field": "lifetime",
+"operand": {
+"kind": "immutable_value",
+"value": 2.0
+}
+}, {
+"field": "use_fixed_seed",
+"operand": {
+"kind": "immutable_value",
+"value": true
+}
+}, {
+"field": "seed",
+"operand": {
+"kind": "immutable_value",
+"value": 47291
+}
+}, {
+"field": "fixed_fps",
+"operand": {
+"kind": "immutable_value",
+"value": 60
+}
+}, {
+"field": "process_material",
+"operand": {
+"index": 1,
+"kind": "private_material"
+}
+}, {
+"field": "draw_pass_1",
+"operand": {
+"kind": "immutable_value",
+"value": SubResource("QuadMesh_cdb3y")
+}
+}]
+}, {
+"class": "GPUParticles3D",
+"name": "firebursts",
+"parent": "flame_0/effect/Donor",
+"path": "flame_0/effect/Donor/firebursts",
+"properties": [{
+"field": "material_override",
+"operand": {
+"index": 2,
+"kind": "private_material"
+}
+}, {
+"field": "cast_shadow",
+"operand": {
+"kind": "immutable_value",
+"value": 0
+}
+}, {
+"field": "amount",
+"operand": {
+"kind": "immutable_value",
+"value": 37
+}
+}, {
+"field": "lifetime",
+"operand": {
+"kind": "immutable_value",
+"value": 2.0
+}
+}, {
+"field": "preprocess",
+"operand": {
+"kind": "immutable_value",
+"value": 2.0
+}
+}, {
+"field": "use_fixed_seed",
+"operand": {
+"kind": "immutable_value",
+"value": true
+}
+}, {
+"field": "seed",
+"operand": {
+"kind": "immutable_value",
+"value": 47292
+}
+}, {
+"field": "fixed_fps",
+"operand": {
+"kind": "immutable_value",
+"value": 144
+}
+}, {
+"field": "draw_order",
+"operand": {
+"kind": "immutable_value",
+"value": 1
+}
+}, {
+"field": "process_material",
+"operand": {
+"index": 3,
+"kind": "private_material"
+}
+}, {
+"field": "draw_pass_1",
+"operand": {
+"kind": "immutable_value",
+"value": SubResource("ArrayMesh_edshv")
+}
+}]
+}, {
+"class": "GPUParticles3D",
+"name": "UnequalRisingFlames",
+"parent": "flame_0/effect/Donor",
+"path": "flame_0/effect/Donor/UnequalRisingFlames",
+"properties": [{
+"field": "transform",
+"operand": {
+"kind": "immutable_value",
+"value": Transform3D(0.48, 0, 0, 0, 0.7, 0, 0, 0, 0.48, -0.48, 0.06, 0.35)
+}
+}, {
+"field": "material_override",
+"operand": {
+"index": 4,
+"kind": "private_material"
+}
+}, {
+"field": "cast_shadow",
+"operand": {
+"kind": "immutable_value",
+"value": 0
+}
+}, {
+"field": "amount",
+"operand": {
+"kind": "immutable_value",
+"value": 7
+}
+}, {
+"field": "preprocess",
+"operand": {
+"kind": "immutable_value",
+"value": 2.0
+}
+}, {
+"field": "use_fixed_seed",
+"operand": {
+"kind": "immutable_value",
+"value": true
+}
+}, {
+"field": "seed",
+"operand": {
+"kind": "immutable_value",
+"value": 33095
+}
+}, {
+"field": "fixed_fps",
+"operand": {
+"kind": "immutable_value",
+"value": 144
+}
+}, {
+"field": "visibility_aabb",
+"operand": {
+"kind": "immutable_value",
+"value": AABB(-5, -1, -5, 10, 10, 10)
+}
+}, {
+"field": "draw_order",
+"operand": {
+"kind": "immutable_value",
+"value": 1
+}
+}, {
+"field": "process_material",
+"operand": {
+"index": 5,
+"kind": "private_material"
+}
+}, {
+"field": "draw_pass_1",
+"operand": {
+"kind": "immutable_value",
+"value": SubResource("QuadMesh_80lqt")
+}
+}]
+}, {
+"class": "Node3D",
+"name": "flame_1",
+"parent": ".",
+"path": "flame_1",
+"properties": [{
+"field": "transform",
+"operand": {
+"kind": "immutable_value",
+"value": Transform3D(0.75, 0, 0, 0, 0.75, 0, 0, 0, 0.75, -4.5, 0, 0)
+}
+}]
+}, {
+"class": "Node3D",
+"name": "effect",
+"parent": "flame_1",
+"path": "flame_1/effect",
+"properties": []
+}, {
+"class": "Node3D",
+"name": "Donor",
+"parent": "flame_1/effect",
+"path": "flame_1/effect/Donor",
+"properties": [{
+"field": "transform",
+"operand": {
+"kind": "immutable_value",
+"value": Transform3D(0.81, 0, 0, 0, 2.15, 0, 0, 0, 0.26, 0, 0, 0)
+}
+}]
+}, {
+"class": "GPUParticles3D",
+"name": "firepops",
+"parent": "flame_1/effect/Donor",
+"path": "flame_1/effect/Donor/firepops",
+"properties": [{
+"field": "visible",
+"operand": {
+"kind": "immutable_value",
+"value": false
+}
+}, {
+"field": "layers",
+"operand": {
+"kind": "immutable_value",
+"value": 4
+}
+}, {
+"field": "material_override",
+"operand": {
+"index": 6,
+"kind": "private_material"
+}
+}, {
+"field": "cast_shadow",
+"operand": {
+"kind": "immutable_value",
+"value": 0
+}
+}, {
+"field": "amount",
+"operand": {
+"kind": "immutable_value",
+"value": 10
+}
+}, {
+"field": "lifetime",
+"operand": {
+"kind": "immutable_value",
+"value": 2.0
+}
+}, {
+"field": "use_fixed_seed",
+"operand": {
+"kind": "immutable_value",
+"value": true
+}
+}, {
+"field": "seed",
+"operand": {
+"kind": "immutable_value",
+"value": 47291
+}
+}, {
+"field": "fixed_fps",
+"operand": {
+"kind": "immutable_value",
+"value": 60
+}
+}, {
+"field": "process_material",
+"operand": {
+"index": 1,
+"kind": "private_material"
+}
+}, {
+"field": "draw_pass_1",
+"operand": {
+"kind": "immutable_value",
+"value": SubResource("QuadMesh_ra7gq")
+}
+}]
+}, {
+"class": "GPUParticles3D",
+"name": "firebursts",
+"parent": "flame_1/effect/Donor",
+"path": "flame_1/effect/Donor/firebursts",
+"properties": [{
+"field": "material_override",
+"operand": {
+"index": 7,
+"kind": "private_material"
+}
+}, {
+"field": "cast_shadow",
+"operand": {
+"kind": "immutable_value",
+"value": 0
+}
+}, {
+"field": "amount",
+"operand": {
+"kind": "immutable_value",
+"value": 37
+}
+}, {
+"field": "lifetime",
+"operand": {
+"kind": "immutable_value",
+"value": 2.0
+}
+}, {
+"field": "preprocess",
+"operand": {
+"kind": "immutable_value",
+"value": 2.0
+}
+}, {
+"field": "use_fixed_seed",
+"operand": {
+"kind": "immutable_value",
+"value": true
+}
+}, {
+"field": "seed",
+"operand": {
+"kind": "immutable_value",
+"value": 47292
+}
+}, {
+"field": "fixed_fps",
+"operand": {
+"kind": "immutable_value",
+"value": 144
+}
+}, {
+"field": "draw_order",
+"operand": {
+"kind": "immutable_value",
+"value": 1
+}
+}, {
+"field": "process_material",
+"operand": {
+"index": 3,
+"kind": "private_material"
+}
+}, {
+"field": "draw_pass_1",
+"operand": {
+"kind": "immutable_value",
+"value": SubResource("ArrayMesh_c53rc")
+}
+}]
+}, {
+"class": "GPUParticles3D",
+"name": "UnequalRisingFlames",
+"parent": "flame_1/effect/Donor",
+"path": "flame_1/effect/Donor/UnequalRisingFlames",
+"properties": [{
+"field": "transform",
+"operand": {
+"kind": "immutable_value",
+"value": Transform3D(0.48, 0, 0, 0, 0.7, 0, 0, 0, 0.48, 0.25, 0.06, -0.48)
+}
+}, {
+"field": "material_override",
+"operand": {
+"index": 8,
+"kind": "private_material"
+}
+}, {
+"field": "cast_shadow",
+"operand": {
+"kind": "immutable_value",
+"value": 0
+}
+}, {
+"field": "preprocess",
+"operand": {
+"kind": "immutable_value",
+"value": 2.0
+}
+}, {
+"field": "use_fixed_seed",
+"operand": {
+"kind": "immutable_value",
+"value": true
+}
+}, {
+"field": "seed",
+"operand": {
+"kind": "immutable_value",
+"value": 33095
+}
+}, {
+"field": "fixed_fps",
+"operand": {
+"kind": "immutable_value",
+"value": 144
+}
+}, {
+"field": "visibility_aabb",
+"operand": {
+"kind": "immutable_value",
+"value": AABB(-5, -1, -5, 10, 10, 10)
+}
+}, {
+"field": "draw_order",
+"operand": {
+"kind": "immutable_value",
+"value": 1
+}
+}, {
+"field": "process_material",
+"operand": {
+"index": 5,
+"kind": "private_material"
+}
+}, {
+"field": "draw_pass_1",
+"operand": {
+"kind": "immutable_value",
+"value": SubResource("QuadMesh_80lqt")
+}
+}]
+}, {
+"class": "Node3D",
+"name": "flame_2",
+"parent": ".",
+"path": "flame_2",
+"properties": [{
+"field": "transform",
+"operand": {
+"kind": "immutable_value",
+"value": Transform3D(0.75, 0, 0, 0, 0.75, 0, 0, 0, 0.75, -3.5, 0, 0)
+}
+}]
+}, {
+"class": "Node3D",
+"name": "effect",
+"parent": "flame_2",
+"path": "flame_2/effect",
+"properties": []
+}, {
+"class": "Node3D",
+"name": "Donor",
+"parent": "flame_2/effect",
+"path": "flame_2/effect/Donor",
+"properties": [{
+"field": "transform",
+"operand": {
+"kind": "immutable_value",
+"value": Transform3D(0.81, 0, 0, 0, 2.15, 0, 0, 0, 0.26, 0, 0, 0)
+}
+}]
+}, {
+"class": "GPUParticles3D",
+"name": "firepops",
+"parent": "flame_2/effect/Donor",
+"path": "flame_2/effect/Donor/firepops",
+"properties": [{
+"field": "visible",
+"operand": {
+"kind": "immutable_value",
+"value": false
+}
+}, {
+"field": "layers",
+"operand": {
+"kind": "immutable_value",
+"value": 4
+}
+}, {
+"field": "material_override",
+"operand": {
+"index": 9,
+"kind": "private_material"
+}
+}, {
+"field": "cast_shadow",
+"operand": {
+"kind": "immutable_value",
+"value": 0
+}
+}, {
+"field": "amount",
+"operand": {
+"kind": "immutable_value",
+"value": 10
+}
+}, {
+"field": "lifetime",
+"operand": {
+"kind": "immutable_value",
+"value": 2.0
+}
+}, {
+"field": "use_fixed_seed",
+"operand": {
+"kind": "immutable_value",
+"value": true
+}
+}, {
+"field": "seed",
+"operand": {
+"kind": "immutable_value",
+"value": 47291
+}
+}, {
+"field": "fixed_fps",
+"operand": {
+"kind": "immutable_value",
+"value": 60
+}
+}, {
+"field": "process_material",
+"operand": {
+"index": 1,
+"kind": "private_material"
+}
+}, {
+"field": "draw_pass_1",
+"operand": {
+"kind": "immutable_value",
+"value": SubResource("QuadMesh_o523q")
+}
+}]
+}, {
+"class": "GPUParticles3D",
+"name": "firebursts",
+"parent": "flame_2/effect/Donor",
+"path": "flame_2/effect/Donor/firebursts",
+"properties": [{
+"field": "material_override",
+"operand": {
+"index": 10,
+"kind": "private_material"
+}
+}, {
+"field": "cast_shadow",
+"operand": {
+"kind": "immutable_value",
+"value": 0
+}
+}, {
+"field": "amount",
+"operand": {
+"kind": "immutable_value",
+"value": 37
+}
+}, {
+"field": "lifetime",
+"operand": {
+"kind": "immutable_value",
+"value": 2.0
+}
+}, {
+"field": "preprocess",
+"operand": {
+"kind": "immutable_value",
+"value": 2.0
+}
+}, {
+"field": "use_fixed_seed",
+"operand": {
+"kind": "immutable_value",
+"value": true
+}
+}, {
+"field": "seed",
+"operand": {
+"kind": "immutable_value",
+"value": 47292
+}
+}, {
+"field": "fixed_fps",
+"operand": {
+"kind": "immutable_value",
+"value": 144
+}
+}, {
+"field": "draw_order",
+"operand": {
+"kind": "immutable_value",
+"value": 1
+}
+}, {
+"field": "process_material",
+"operand": {
+"index": 3,
+"kind": "private_material"
+}
+}, {
+"field": "draw_pass_1",
+"operand": {
+"kind": "immutable_value",
+"value": SubResource("ArrayMesh_d88ch")
+}
+}]
+}, {
+"class": "GPUParticles3D",
+"name": "UnequalRisingFlames",
+"parent": "flame_2/effect/Donor",
+"path": "flame_2/effect/Donor/UnequalRisingFlames",
+"properties": [{
+"field": "transform",
+"operand": {
+"kind": "immutable_value",
+"value": Transform3D(0.48, 0, 0, 0, 0.7, 0, 0, 0, 0.48, -0.48, 0.06, 0.35)
+}
+}, {
+"field": "material_override",
+"operand": {
+"index": 11,
+"kind": "private_material"
+}
+}, {
+"field": "cast_shadow",
+"operand": {
+"kind": "immutable_value",
+"value": 0
+}
+}, {
+"field": "amount",
+"operand": {
+"kind": "immutable_value",
+"value": 7
+}
+}, {
+"field": "preprocess",
+"operand": {
+"kind": "immutable_value",
+"value": 2.0
+}
+}, {
+"field": "use_fixed_seed",
+"operand": {
+"kind": "immutable_value",
+"value": true
+}
+}, {
+"field": "seed",
+"operand": {
+"kind": "immutable_value",
+"value": 33095
+}
+}, {
+"field": "fixed_fps",
+"operand": {
+"kind": "immutable_value",
+"value": 144
+}
+}, {
+"field": "visibility_aabb",
+"operand": {
+"kind": "immutable_value",
+"value": AABB(-5, -1, -5, 10, 10, 10)
+}
+}, {
+"field": "draw_order",
+"operand": {
+"kind": "immutable_value",
+"value": 1
+}
+}, {
+"field": "process_material",
+"operand": {
+"index": 5,
+"kind": "private_material"
+}
+}, {
+"field": "draw_pass_1",
+"operand": {
+"kind": "immutable_value",
+"value": SubResource("QuadMesh_80lqt")
+}
+}]
+}, {
+"class": "Node3D",
+"name": "flame_3",
+"parent": ".",
+"path": "flame_3",
+"properties": [{
+"field": "transform",
+"operand": {
+"kind": "immutable_value",
+"value": Transform3D(0.75, 0, 0, 0, 0.75, 0, 0, 0, 0.75, -2.5, 0, 0)
+}
+}]
+}, {
+"class": "Node3D",
+"name": "effect",
+"parent": "flame_3",
+"path": "flame_3/effect",
+"properties": []
+}, {
+"class": "Node3D",
+"name": "Donor",
+"parent": "flame_3/effect",
+"path": "flame_3/effect/Donor",
+"properties": [{
+"field": "transform",
+"operand": {
+"kind": "immutable_value",
+"value": Transform3D(0.81, 0, 0, 0, 2.15, 0, 0, 0, 0.26, 0, 0, 0)
+}
+}]
+}, {
+"class": "GPUParticles3D",
+"name": "firepops",
+"parent": "flame_3/effect/Donor",
+"path": "flame_3/effect/Donor/firepops",
+"properties": [{
+"field": "visible",
+"operand": {
+"kind": "immutable_value",
+"value": false
+}
+}, {
+"field": "layers",
+"operand": {
+"kind": "immutable_value",
+"value": 4
+}
+}, {
+"field": "material_override",
+"operand": {
+"index": 12,
+"kind": "private_material"
+}
+}, {
+"field": "cast_shadow",
+"operand": {
+"kind": "immutable_value",
+"value": 0
+}
+}, {
+"field": "amount",
+"operand": {
+"kind": "immutable_value",
+"value": 10
+}
+}, {
+"field": "lifetime",
+"operand": {
+"kind": "immutable_value",
+"value": 2.0
+}
+}, {
+"field": "use_fixed_seed",
+"operand": {
+"kind": "immutable_value",
+"value": true
+}
+}, {
+"field": "seed",
+"operand": {
+"kind": "immutable_value",
+"value": 47291
+}
+}, {
+"field": "fixed_fps",
+"operand": {
+"kind": "immutable_value",
+"value": 60
+}
+}, {
+"field": "process_material",
+"operand": {
+"index": 1,
+"kind": "private_material"
+}
+}, {
+"field": "draw_pass_1",
+"operand": {
+"kind": "immutable_value",
+"value": SubResource("QuadMesh_hu4xq")
+}
+}]
+}, {
+"class": "GPUParticles3D",
+"name": "firebursts",
+"parent": "flame_3/effect/Donor",
+"path": "flame_3/effect/Donor/firebursts",
+"properties": [{
+"field": "material_override",
+"operand": {
+"index": 13,
+"kind": "private_material"
+}
+}, {
+"field": "cast_shadow",
+"operand": {
+"kind": "immutable_value",
+"value": 0
+}
+}, {
+"field": "amount",
+"operand": {
+"kind": "immutable_value",
+"value": 37
+}
+}, {
+"field": "lifetime",
+"operand": {
+"kind": "immutable_value",
+"value": 2.0
+}
+}, {
+"field": "preprocess",
+"operand": {
+"kind": "immutable_value",
+"value": 2.0
+}
+}, {
+"field": "use_fixed_seed",
+"operand": {
+"kind": "immutable_value",
+"value": true
+}
+}, {
+"field": "seed",
+"operand": {
+"kind": "immutable_value",
+"value": 47292
+}
+}, {
+"field": "fixed_fps",
+"operand": {
+"kind": "immutable_value",
+"value": 144
+}
+}, {
+"field": "draw_order",
+"operand": {
+"kind": "immutable_value",
+"value": 1
+}
+}, {
+"field": "process_material",
+"operand": {
+"index": 3,
+"kind": "private_material"
+}
+}, {
+"field": "draw_pass_1",
+"operand": {
+"kind": "immutable_value",
+"value": SubResource("ArrayMesh_6214f")
+}
+}]
+}, {
+"class": "GPUParticles3D",
+"name": "UnequalRisingFlames",
+"parent": "flame_3/effect/Donor",
+"path": "flame_3/effect/Donor/UnequalRisingFlames",
+"properties": [{
+"field": "transform",
+"operand": {
+"kind": "immutable_value",
+"value": Transform3D(0.48, 0, 0, 0, 0.7, 0, 0, 0, 0.48, 0.25, 0.06, -0.48)
+}
+}, {
+"field": "material_override",
+"operand": {
+"index": 14,
+"kind": "private_material"
+}
+}, {
+"field": "cast_shadow",
+"operand": {
+"kind": "immutable_value",
+"value": 0
+}
+}, {
+"field": "preprocess",
+"operand": {
+"kind": "immutable_value",
+"value": 2.0
+}
+}, {
+"field": "use_fixed_seed",
+"operand": {
+"kind": "immutable_value",
+"value": true
+}
+}, {
+"field": "seed",
+"operand": {
+"kind": "immutable_value",
+"value": 33095
+}
+}, {
+"field": "fixed_fps",
+"operand": {
+"kind": "immutable_value",
+"value": 144
+}
+}, {
+"field": "visibility_aabb",
+"operand": {
+"kind": "immutable_value",
+"value": AABB(-5, -1, -5, 10, 10, 10)
+}
+}, {
+"field": "draw_order",
+"operand": {
+"kind": "immutable_value",
+"value": 1
+}
+}, {
+"field": "process_material",
+"operand": {
+"index": 5,
+"kind": "private_material"
+}
+}, {
+"field": "draw_pass_1",
+"operand": {
+"kind": "immutable_value",
+"value": SubResource("QuadMesh_80lqt")
+}
+}]
+}, {
+"class": "Node3D",
+"name": "flame_4",
+"parent": ".",
+"path": "flame_4",
+"properties": [{
+"field": "transform",
+"operand": {
+"kind": "immutable_value",
+"value": Transform3D(0.75, 0, 0, 0, 0.75, 0, 0, 0, 0.75, -1.5, 0, 0)
+}
+}]
+}, {
+"class": "Node3D",
+"name": "effect",
+"parent": "flame_4",
+"path": "flame_4/effect",
+"properties": []
+}, {
+"class": "Node3D",
+"name": "Donor",
+"parent": "flame_4/effect",
+"path": "flame_4/effect/Donor",
+"properties": [{
+"field": "transform",
+"operand": {
+"kind": "immutable_value",
+"value": Transform3D(0.81, 0, 0, 0, 2.15, 0, 0, 0, 0.26, 0, 0, 0)
+}
+}]
+}, {
+"class": "GPUParticles3D",
+"name": "firepops",
+"parent": "flame_4/effect/Donor",
+"path": "flame_4/effect/Donor/firepops",
+"properties": [{
+"field": "visible",
+"operand": {
+"kind": "immutable_value",
+"value": false
+}
+}, {
+"field": "layers",
+"operand": {
+"kind": "immutable_value",
+"value": 4
+}
+}, {
+"field": "material_override",
+"operand": {
+"index": 15,
+"kind": "private_material"
+}
+}, {
+"field": "cast_shadow",
+"operand": {
+"kind": "immutable_value",
+"value": 0
+}
+}, {
+"field": "amount",
+"operand": {
+"kind": "immutable_value",
+"value": 10
+}
+}, {
+"field": "lifetime",
+"operand": {
+"kind": "immutable_value",
+"value": 2.0
+}
+}, {
+"field": "use_fixed_seed",
+"operand": {
+"kind": "immutable_value",
+"value": true
+}
+}, {
+"field": "seed",
+"operand": {
+"kind": "immutable_value",
+"value": 47291
+}
+}, {
+"field": "fixed_fps",
+"operand": {
+"kind": "immutable_value",
+"value": 60
+}
+}, {
+"field": "process_material",
+"operand": {
+"index": 1,
+"kind": "private_material"
+}
+}, {
+"field": "draw_pass_1",
+"operand": {
+"kind": "immutable_value",
+"value": SubResource("QuadMesh_e15sb")
+}
+}]
+}, {
+"class": "GPUParticles3D",
+"name": "firebursts",
+"parent": "flame_4/effect/Donor",
+"path": "flame_4/effect/Donor/firebursts",
+"properties": [{
+"field": "material_override",
+"operand": {
+"index": 16,
+"kind": "private_material"
+}
+}, {
+"field": "cast_shadow",
+"operand": {
+"kind": "immutable_value",
+"value": 0
+}
+}, {
+"field": "amount",
+"operand": {
+"kind": "immutable_value",
+"value": 37
+}
+}, {
+"field": "lifetime",
+"operand": {
+"kind": "immutable_value",
+"value": 2.0
+}
+}, {
+"field": "preprocess",
+"operand": {
+"kind": "immutable_value",
+"value": 2.0
+}
+}, {
+"field": "use_fixed_seed",
+"operand": {
+"kind": "immutable_value",
+"value": true
+}
+}, {
+"field": "seed",
+"operand": {
+"kind": "immutable_value",
+"value": 47292
+}
+}, {
+"field": "fixed_fps",
+"operand": {
+"kind": "immutable_value",
+"value": 144
+}
+}, {
+"field": "draw_order",
+"operand": {
+"kind": "immutable_value",
+"value": 1
+}
+}, {
+"field": "process_material",
+"operand": {
+"index": 3,
+"kind": "private_material"
+}
+}, {
+"field": "draw_pass_1",
+"operand": {
+"kind": "immutable_value",
+"value": SubResource("ArrayMesh_nyrw1")
+}
+}]
+}, {
+"class": "GPUParticles3D",
+"name": "UnequalRisingFlames",
+"parent": "flame_4/effect/Donor",
+"path": "flame_4/effect/Donor/UnequalRisingFlames",
+"properties": [{
+"field": "transform",
+"operand": {
+"kind": "immutable_value",
+"value": Transform3D(0.48, 0, 0, 0, 0.7, 0, 0, 0, 0.48, -0.48, 0.06, 0.35)
+}
+}, {
+"field": "material_override",
+"operand": {
+"index": 17,
+"kind": "private_material"
+}
+}, {
+"field": "cast_shadow",
+"operand": {
+"kind": "immutable_value",
+"value": 0
+}
+}, {
+"field": "amount",
+"operand": {
+"kind": "immutable_value",
+"value": 7
+}
+}, {
+"field": "preprocess",
+"operand": {
+"kind": "immutable_value",
+"value": 2.0
+}
+}, {
+"field": "use_fixed_seed",
+"operand": {
+"kind": "immutable_value",
+"value": true
+}
+}, {
+"field": "seed",
+"operand": {
+"kind": "immutable_value",
+"value": 33095
+}
+}, {
+"field": "fixed_fps",
+"operand": {
+"kind": "immutable_value",
+"value": 144
+}
+}, {
+"field": "visibility_aabb",
+"operand": {
+"kind": "immutable_value",
+"value": AABB(-5, -1, -5, 10, 10, 10)
+}
+}, {
+"field": "draw_order",
+"operand": {
+"kind": "immutable_value",
+"value": 1
+}
+}, {
+"field": "process_material",
+"operand": {
+"index": 5,
+"kind": "private_material"
+}
+}, {
+"field": "draw_pass_1",
+"operand": {
+"kind": "immutable_value",
+"value": SubResource("QuadMesh_80lqt")
+}
+}]
+}, {
+"class": "Node3D",
+"name": "flame_5",
+"parent": ".",
+"path": "flame_5",
+"properties": [{
+"field": "transform",
+"operand": {
+"kind": "immutable_value",
+"value": Transform3D(0.75, 0, 0, 0, 0.75, 0, 0, 0, 0.75, -0.5, 0, 0)
+}
+}]
+}, {
+"class": "Node3D",
+"name": "effect",
+"parent": "flame_5",
+"path": "flame_5/effect",
+"properties": []
+}, {
+"class": "Node3D",
+"name": "Donor",
+"parent": "flame_5/effect",
+"path": "flame_5/effect/Donor",
+"properties": [{
+"field": "transform",
+"operand": {
+"kind": "immutable_value",
+"value": Transform3D(0.81, 0, 0, 0, 2.15, 0, 0, 0, 0.26, 0, 0, 0)
+}
+}]
+}, {
+"class": "GPUParticles3D",
+"name": "firepops",
+"parent": "flame_5/effect/Donor",
+"path": "flame_5/effect/Donor/firepops",
+"properties": [{
+"field": "visible",
+"operand": {
+"kind": "immutable_value",
+"value": false
+}
+}, {
+"field": "layers",
+"operand": {
+"kind": "immutable_value",
+"value": 4
+}
+}, {
+"field": "material_override",
+"operand": {
+"index": 18,
+"kind": "private_material"
+}
+}, {
+"field": "cast_shadow",
+"operand": {
+"kind": "immutable_value",
+"value": 0
+}
+}, {
+"field": "amount",
+"operand": {
+"kind": "immutable_value",
+"value": 10
+}
+}, {
+"field": "lifetime",
+"operand": {
+"kind": "immutable_value",
+"value": 2.0
+}
+}, {
+"field": "use_fixed_seed",
+"operand": {
+"kind": "immutable_value",
+"value": true
+}
+}, {
+"field": "seed",
+"operand": {
+"kind": "immutable_value",
+"value": 47291
+}
+}, {
+"field": "fixed_fps",
+"operand": {
+"kind": "immutable_value",
+"value": 60
+}
+}, {
+"field": "process_material",
+"operand": {
+"index": 1,
+"kind": "private_material"
+}
+}, {
+"field": "draw_pass_1",
+"operand": {
+"kind": "immutable_value",
+"value": SubResource("QuadMesh_w7au5")
+}
+}]
+}, {
+"class": "GPUParticles3D",
+"name": "firebursts",
+"parent": "flame_5/effect/Donor",
+"path": "flame_5/effect/Donor/firebursts",
+"properties": [{
+"field": "material_override",
+"operand": {
+"index": 19,
+"kind": "private_material"
+}
+}, {
+"field": "cast_shadow",
+"operand": {
+"kind": "immutable_value",
+"value": 0
+}
+}, {
+"field": "amount",
+"operand": {
+"kind": "immutable_value",
+"value": 37
+}
+}, {
+"field": "lifetime",
+"operand": {
+"kind": "immutable_value",
+"value": 2.0
+}
+}, {
+"field": "preprocess",
+"operand": {
+"kind": "immutable_value",
+"value": 2.0
+}
+}, {
+"field": "use_fixed_seed",
+"operand": {
+"kind": "immutable_value",
+"value": true
+}
+}, {
+"field": "seed",
+"operand": {
+"kind": "immutable_value",
+"value": 47292
+}
+}, {
+"field": "fixed_fps",
+"operand": {
+"kind": "immutable_value",
+"value": 144
+}
+}, {
+"field": "draw_order",
+"operand": {
+"kind": "immutable_value",
+"value": 1
+}
+}, {
+"field": "process_material",
+"operand": {
+"index": 3,
+"kind": "private_material"
+}
+}, {
+"field": "draw_pass_1",
+"operand": {
+"kind": "immutable_value",
+"value": SubResource("ArrayMesh_520jh")
+}
+}]
+}, {
+"class": "GPUParticles3D",
+"name": "UnequalRisingFlames",
+"parent": "flame_5/effect/Donor",
+"path": "flame_5/effect/Donor/UnequalRisingFlames",
+"properties": [{
+"field": "transform",
+"operand": {
+"kind": "immutable_value",
+"value": Transform3D(0.48, 0, 0, 0, 0.7, 0, 0, 0, 0.48, 0.25, 0.06, -0.48)
+}
+}, {
+"field": "material_override",
+"operand": {
+"index": 20,
+"kind": "private_material"
+}
+}, {
+"field": "cast_shadow",
+"operand": {
+"kind": "immutable_value",
+"value": 0
+}
+}, {
+"field": "preprocess",
+"operand": {
+"kind": "immutable_value",
+"value": 2.0
+}
+}, {
+"field": "use_fixed_seed",
+"operand": {
+"kind": "immutable_value",
+"value": true
+}
+}, {
+"field": "seed",
+"operand": {
+"kind": "immutable_value",
+"value": 33095
+}
+}, {
+"field": "fixed_fps",
+"operand": {
+"kind": "immutable_value",
+"value": 144
+}
+}, {
+"field": "visibility_aabb",
+"operand": {
+"kind": "immutable_value",
+"value": AABB(-5, -1, -5, 10, 10, 10)
+}
+}, {
+"field": "draw_order",
+"operand": {
+"kind": "immutable_value",
+"value": 1
+}
+}, {
+"field": "process_material",
+"operand": {
+"index": 5,
+"kind": "private_material"
+}
+}, {
+"field": "draw_pass_1",
+"operand": {
+"kind": "immutable_value",
+"value": SubResource("QuadMesh_80lqt")
+}
+}]
+}, {
+"class": "Node3D",
+"name": "flame_6",
+"parent": ".",
+"path": "flame_6",
+"properties": [{
+"field": "transform",
+"operand": {
+"kind": "immutable_value",
+"value": Transform3D(0.75, 0, 0, 0, 0.75, 0, 0, 0, 0.75, 0.5, 0, 0)
+}
+}]
+}, {
+"class": "Node3D",
+"name": "effect",
+"parent": "flame_6",
+"path": "flame_6/effect",
+"properties": []
+}, {
+"class": "Node3D",
+"name": "Donor",
+"parent": "flame_6/effect",
+"path": "flame_6/effect/Donor",
+"properties": [{
+"field": "transform",
+"operand": {
+"kind": "immutable_value",
+"value": Transform3D(0.81, 0, 0, 0, 2.15, 0, 0, 0, 0.26, 0, 0, 0)
+}
+}]
+}, {
+"class": "GPUParticles3D",
+"name": "firepops",
+"parent": "flame_6/effect/Donor",
+"path": "flame_6/effect/Donor/firepops",
+"properties": [{
+"field": "visible",
+"operand": {
+"kind": "immutable_value",
+"value": false
+}
+}, {
+"field": "layers",
+"operand": {
+"kind": "immutable_value",
+"value": 4
+}
+}, {
+"field": "material_override",
+"operand": {
+"index": 21,
+"kind": "private_material"
+}
+}, {
+"field": "cast_shadow",
+"operand": {
+"kind": "immutable_value",
+"value": 0
+}
+}, {
+"field": "amount",
+"operand": {
+"kind": "immutable_value",
+"value": 10
+}
+}, {
+"field": "lifetime",
+"operand": {
+"kind": "immutable_value",
+"value": 2.0
+}
+}, {
+"field": "use_fixed_seed",
+"operand": {
+"kind": "immutable_value",
+"value": true
+}
+}, {
+"field": "seed",
+"operand": {
+"kind": "immutable_value",
+"value": 47291
+}
+}, {
+"field": "fixed_fps",
+"operand": {
+"kind": "immutable_value",
+"value": 60
+}
+}, {
+"field": "process_material",
+"operand": {
+"index": 1,
+"kind": "private_material"
+}
+}, {
+"field": "draw_pass_1",
+"operand": {
+"kind": "immutable_value",
+"value": SubResource("QuadMesh_shdu5")
+}
+}]
+}, {
+"class": "GPUParticles3D",
+"name": "firebursts",
+"parent": "flame_6/effect/Donor",
+"path": "flame_6/effect/Donor/firebursts",
+"properties": [{
+"field": "material_override",
+"operand": {
+"index": 22,
+"kind": "private_material"
+}
+}, {
+"field": "cast_shadow",
+"operand": {
+"kind": "immutable_value",
+"value": 0
+}
+}, {
+"field": "amount",
+"operand": {
+"kind": "immutable_value",
+"value": 37
+}
+}, {
+"field": "lifetime",
+"operand": {
+"kind": "immutable_value",
+"value": 2.0
+}
+}, {
+"field": "preprocess",
+"operand": {
+"kind": "immutable_value",
+"value": 2.0
+}
+}, {
+"field": "use_fixed_seed",
+"operand": {
+"kind": "immutable_value",
+"value": true
+}
+}, {
+"field": "seed",
+"operand": {
+"kind": "immutable_value",
+"value": 47292
+}
+}, {
+"field": "fixed_fps",
+"operand": {
+"kind": "immutable_value",
+"value": 144
+}
+}, {
+"field": "draw_order",
+"operand": {
+"kind": "immutable_value",
+"value": 1
+}
+}, {
+"field": "process_material",
+"operand": {
+"index": 3,
+"kind": "private_material"
+}
+}, {
+"field": "draw_pass_1",
+"operand": {
+"kind": "immutable_value",
+"value": SubResource("ArrayMesh_peg8k")
+}
+}]
+}, {
+"class": "GPUParticles3D",
+"name": "UnequalRisingFlames",
+"parent": "flame_6/effect/Donor",
+"path": "flame_6/effect/Donor/UnequalRisingFlames",
+"properties": [{
+"field": "transform",
+"operand": {
+"kind": "immutable_value",
+"value": Transform3D(0.48, 0, 0, 0, 0.7, 0, 0, 0, 0.48, -0.48, 0.06, 0.35)
+}
+}, {
+"field": "material_override",
+"operand": {
+"index": 23,
+"kind": "private_material"
+}
+}, {
+"field": "cast_shadow",
+"operand": {
+"kind": "immutable_value",
+"value": 0
+}
+}, {
+"field": "amount",
+"operand": {
+"kind": "immutable_value",
+"value": 7
+}
+}, {
+"field": "preprocess",
+"operand": {
+"kind": "immutable_value",
+"value": 2.0
+}
+}, {
+"field": "use_fixed_seed",
+"operand": {
+"kind": "immutable_value",
+"value": true
+}
+}, {
+"field": "seed",
+"operand": {
+"kind": "immutable_value",
+"value": 33095
+}
+}, {
+"field": "fixed_fps",
+"operand": {
+"kind": "immutable_value",
+"value": 144
+}
+}, {
+"field": "visibility_aabb",
+"operand": {
+"kind": "immutable_value",
+"value": AABB(-5, -1, -5, 10, 10, 10)
+}
+}, {
+"field": "draw_order",
+"operand": {
+"kind": "immutable_value",
+"value": 1
+}
+}, {
+"field": "process_material",
+"operand": {
+"index": 5,
+"kind": "private_material"
+}
+}, {
+"field": "draw_pass_1",
+"operand": {
+"kind": "immutable_value",
+"value": SubResource("QuadMesh_80lqt")
+}
+}]
+}, {
+"class": "Node3D",
+"name": "flame_7",
+"parent": ".",
+"path": "flame_7",
+"properties": [{
+"field": "transform",
+"operand": {
+"kind": "immutable_value",
+"value": Transform3D(0.75, 0, 0, 0, 0.75, 0, 0, 0, 0.75, 1.5, 0, 0)
+}
+}]
+}, {
+"class": "Node3D",
+"name": "effect",
+"parent": "flame_7",
+"path": "flame_7/effect",
+"properties": []
+}, {
+"class": "Node3D",
+"name": "Donor",
+"parent": "flame_7/effect",
+"path": "flame_7/effect/Donor",
+"properties": [{
+"field": "transform",
+"operand": {
+"kind": "immutable_value",
+"value": Transform3D(0.81, 0, 0, 0, 2.15, 0, 0, 0, 0.26, 0, 0, 0)
+}
+}]
+}, {
+"class": "GPUParticles3D",
+"name": "firepops",
+"parent": "flame_7/effect/Donor",
+"path": "flame_7/effect/Donor/firepops",
+"properties": [{
+"field": "visible",
+"operand": {
+"kind": "immutable_value",
+"value": false
+}
+}, {
+"field": "layers",
+"operand": {
+"kind": "immutable_value",
+"value": 4
+}
+}, {
+"field": "material_override",
+"operand": {
+"index": 24,
+"kind": "private_material"
+}
+}, {
+"field": "cast_shadow",
+"operand": {
+"kind": "immutable_value",
+"value": 0
+}
+}, {
+"field": "amount",
+"operand": {
+"kind": "immutable_value",
+"value": 10
+}
+}, {
+"field": "lifetime",
+"operand": {
+"kind": "immutable_value",
+"value": 2.0
+}
+}, {
+"field": "use_fixed_seed",
+"operand": {
+"kind": "immutable_value",
+"value": true
+}
+}, {
+"field": "seed",
+"operand": {
+"kind": "immutable_value",
+"value": 47291
+}
+}, {
+"field": "fixed_fps",
+"operand": {
+"kind": "immutable_value",
+"value": 60
+}
+}, {
+"field": "process_material",
+"operand": {
+"index": 1,
+"kind": "private_material"
+}
+}, {
+"field": "draw_pass_1",
+"operand": {
+"kind": "immutable_value",
+"value": SubResource("QuadMesh_fkwi4")
+}
+}]
+}, {
+"class": "GPUParticles3D",
+"name": "firebursts",
+"parent": "flame_7/effect/Donor",
+"path": "flame_7/effect/Donor/firebursts",
+"properties": [{
+"field": "material_override",
+"operand": {
+"index": 25,
+"kind": "private_material"
+}
+}, {
+"field": "cast_shadow",
+"operand": {
+"kind": "immutable_value",
+"value": 0
+}
+}, {
+"field": "amount",
+"operand": {
+"kind": "immutable_value",
+"value": 37
+}
+}, {
+"field": "lifetime",
+"operand": {
+"kind": "immutable_value",
+"value": 2.0
+}
+}, {
+"field": "preprocess",
+"operand": {
+"kind": "immutable_value",
+"value": 2.0
+}
+}, {
+"field": "use_fixed_seed",
+"operand": {
+"kind": "immutable_value",
+"value": true
+}
+}, {
+"field": "seed",
+"operand": {
+"kind": "immutable_value",
+"value": 47292
+}
+}, {
+"field": "fixed_fps",
+"operand": {
+"kind": "immutable_value",
+"value": 144
+}
+}, {
+"field": "draw_order",
+"operand": {
+"kind": "immutable_value",
+"value": 1
+}
+}, {
+"field": "process_material",
+"operand": {
+"index": 3,
+"kind": "private_material"
+}
+}, {
+"field": "draw_pass_1",
+"operand": {
+"kind": "immutable_value",
+"value": SubResource("ArrayMesh_btqga")
+}
+}]
+}, {
+"class": "GPUParticles3D",
+"name": "UnequalRisingFlames",
+"parent": "flame_7/effect/Donor",
+"path": "flame_7/effect/Donor/UnequalRisingFlames",
+"properties": [{
+"field": "transform",
+"operand": {
+"kind": "immutable_value",
+"value": Transform3D(0.48, 0, 0, 0, 0.7, 0, 0, 0, 0.48, 0.25, 0.06, -0.48)
+}
+}, {
+"field": "material_override",
+"operand": {
+"index": 26,
+"kind": "private_material"
+}
+}, {
+"field": "cast_shadow",
+"operand": {
+"kind": "immutable_value",
+"value": 0
+}
+}, {
+"field": "preprocess",
+"operand": {
+"kind": "immutable_value",
+"value": 2.0
+}
+}, {
+"field": "use_fixed_seed",
+"operand": {
+"kind": "immutable_value",
+"value": true
+}
+}, {
+"field": "seed",
+"operand": {
+"kind": "immutable_value",
+"value": 33095
+}
+}, {
+"field": "fixed_fps",
+"operand": {
+"kind": "immutable_value",
+"value": 144
+}
+}, {
+"field": "visibility_aabb",
+"operand": {
+"kind": "immutable_value",
+"value": AABB(-5, -1, -5, 10, 10, 10)
+}
+}, {
+"field": "draw_order",
+"operand": {
+"kind": "immutable_value",
+"value": 1
+}
+}, {
+"field": "process_material",
+"operand": {
+"index": 5,
+"kind": "private_material"
+}
+}, {
+"field": "draw_pass_1",
+"operand": {
+"kind": "immutable_value",
+"value": SubResource("QuadMesh_80lqt")
+}
+}]
+}, {
+"class": "Node3D",
+"name": "flame_8",
+"parent": ".",
+"path": "flame_8",
+"properties": [{
+"field": "transform",
+"operand": {
+"kind": "immutable_value",
+"value": Transform3D(0.75, 0, 0, 0, 0.75, 0, 0, 0, 0.75, 2.5, 0, 0)
+}
+}]
+}, {
+"class": "Node3D",
+"name": "effect",
+"parent": "flame_8",
+"path": "flame_8/effect",
+"properties": []
+}, {
+"class": "Node3D",
+"name": "Donor",
+"parent": "flame_8/effect",
+"path": "flame_8/effect/Donor",
+"properties": [{
+"field": "transform",
+"operand": {
+"kind": "immutable_value",
+"value": Transform3D(0.81, 0, 0, 0, 2.15, 0, 0, 0, 0.26, 0, 0, 0)
+}
+}]
+}, {
+"class": "GPUParticles3D",
+"name": "firepops",
+"parent": "flame_8/effect/Donor",
+"path": "flame_8/effect/Donor/firepops",
+"properties": [{
+"field": "visible",
+"operand": {
+"kind": "immutable_value",
+"value": false
+}
+}, {
+"field": "layers",
+"operand": {
+"kind": "immutable_value",
+"value": 4
+}
+}, {
+"field": "material_override",
+"operand": {
+"index": 27,
+"kind": "private_material"
+}
+}, {
+"field": "cast_shadow",
+"operand": {
+"kind": "immutable_value",
+"value": 0
+}
+}, {
+"field": "amount",
+"operand": {
+"kind": "immutable_value",
+"value": 10
+}
+}, {
+"field": "lifetime",
+"operand": {
+"kind": "immutable_value",
+"value": 2.0
+}
+}, {
+"field": "use_fixed_seed",
+"operand": {
+"kind": "immutable_value",
+"value": true
+}
+}, {
+"field": "seed",
+"operand": {
+"kind": "immutable_value",
+"value": 47291
+}
+}, {
+"field": "fixed_fps",
+"operand": {
+"kind": "immutable_value",
+"value": 60
+}
+}, {
+"field": "process_material",
+"operand": {
+"index": 1,
+"kind": "private_material"
+}
+}, {
+"field": "draw_pass_1",
+"operand": {
+"kind": "immutable_value",
+"value": SubResource("QuadMesh_ax2k6")
+}
+}]
+}, {
+"class": "GPUParticles3D",
+"name": "firebursts",
+"parent": "flame_8/effect/Donor",
+"path": "flame_8/effect/Donor/firebursts",
+"properties": [{
+"field": "material_override",
+"operand": {
+"index": 28,
+"kind": "private_material"
+}
+}, {
+"field": "cast_shadow",
+"operand": {
+"kind": "immutable_value",
+"value": 0
+}
+}, {
+"field": "amount",
+"operand": {
+"kind": "immutable_value",
+"value": 37
+}
+}, {
+"field": "lifetime",
+"operand": {
+"kind": "immutable_value",
+"value": 2.0
+}
+}, {
+"field": "preprocess",
+"operand": {
+"kind": "immutable_value",
+"value": 2.0
+}
+}, {
+"field": "use_fixed_seed",
+"operand": {
+"kind": "immutable_value",
+"value": true
+}
+}, {
+"field": "seed",
+"operand": {
+"kind": "immutable_value",
+"value": 47292
+}
+}, {
+"field": "fixed_fps",
+"operand": {
+"kind": "immutable_value",
+"value": 144
+}
+}, {
+"field": "draw_order",
+"operand": {
+"kind": "immutable_value",
+"value": 1
+}
+}, {
+"field": "process_material",
+"operand": {
+"index": 3,
+"kind": "private_material"
+}
+}, {
+"field": "draw_pass_1",
+"operand": {
+"kind": "immutable_value",
+"value": SubResource("ArrayMesh_hqqjf")
+}
+}]
+}, {
+"class": "GPUParticles3D",
+"name": "UnequalRisingFlames",
+"parent": "flame_8/effect/Donor",
+"path": "flame_8/effect/Donor/UnequalRisingFlames",
+"properties": [{
+"field": "transform",
+"operand": {
+"kind": "immutable_value",
+"value": Transform3D(0.48, 0, 0, 0, 0.7, 0, 0, 0, 0.48, -0.48, 0.06, 0.35)
+}
+}, {
+"field": "material_override",
+"operand": {
+"index": 29,
+"kind": "private_material"
+}
+}, {
+"field": "cast_shadow",
+"operand": {
+"kind": "immutable_value",
+"value": 0
+}
+}, {
+"field": "amount",
+"operand": {
+"kind": "immutable_value",
+"value": 7
+}
+}, {
+"field": "preprocess",
+"operand": {
+"kind": "immutable_value",
+"value": 2.0
+}
+}, {
+"field": "use_fixed_seed",
+"operand": {
+"kind": "immutable_value",
+"value": true
+}
+}, {
+"field": "seed",
+"operand": {
+"kind": "immutable_value",
+"value": 33095
+}
+}, {
+"field": "fixed_fps",
+"operand": {
+"kind": "immutable_value",
+"value": 144
+}
+}, {
+"field": "visibility_aabb",
+"operand": {
+"kind": "immutable_value",
+"value": AABB(-5, -1, -5, 10, 10, 10)
+}
+}, {
+"field": "draw_order",
+"operand": {
+"kind": "immutable_value",
+"value": 1
+}
+}, {
+"field": "process_material",
+"operand": {
+"index": 5,
+"kind": "private_material"
+}
+}, {
+"field": "draw_pass_1",
+"operand": {
+"kind": "immutable_value",
+"value": SubResource("QuadMesh_80lqt")
+}
+}]
+}, {
+"class": "Node3D",
+"name": "flame_9",
+"parent": ".",
+"path": "flame_9",
+"properties": [{
+"field": "transform",
+"operand": {
+"kind": "immutable_value",
+"value": Transform3D(0.75, 0, 0, 0, 0.75, 0, 0, 0, 0.75, 3.5, 0, 0)
+}
+}]
+}, {
+"class": "Node3D",
+"name": "effect",
+"parent": "flame_9",
+"path": "flame_9/effect",
+"properties": []
+}, {
+"class": "Node3D",
+"name": "Donor",
+"parent": "flame_9/effect",
+"path": "flame_9/effect/Donor",
+"properties": [{
+"field": "transform",
+"operand": {
+"kind": "immutable_value",
+"value": Transform3D(0.81, 0, 0, 0, 2.15, 0, 0, 0, 0.26, 0, 0, 0)
+}
+}]
+}, {
+"class": "GPUParticles3D",
+"name": "firepops",
+"parent": "flame_9/effect/Donor",
+"path": "flame_9/effect/Donor/firepops",
+"properties": [{
+"field": "visible",
+"operand": {
+"kind": "immutable_value",
+"value": false
+}
+}, {
+"field": "layers",
+"operand": {
+"kind": "immutable_value",
+"value": 4
+}
+}, {
+"field": "material_override",
+"operand": {
+"index": 30,
+"kind": "private_material"
+}
+}, {
+"field": "cast_shadow",
+"operand": {
+"kind": "immutable_value",
+"value": 0
+}
+}, {
+"field": "amount",
+"operand": {
+"kind": "immutable_value",
+"value": 10
+}
+}, {
+"field": "lifetime",
+"operand": {
+"kind": "immutable_value",
+"value": 2.0
+}
+}, {
+"field": "use_fixed_seed",
+"operand": {
+"kind": "immutable_value",
+"value": true
+}
+}, {
+"field": "seed",
+"operand": {
+"kind": "immutable_value",
+"value": 47291
+}
+}, {
+"field": "fixed_fps",
+"operand": {
+"kind": "immutable_value",
+"value": 60
+}
+}, {
+"field": "process_material",
+"operand": {
+"index": 1,
+"kind": "private_material"
+}
+}, {
+"field": "draw_pass_1",
+"operand": {
+"kind": "immutable_value",
+"value": SubResource("QuadMesh_i3862")
+}
+}]
+}, {
+"class": "GPUParticles3D",
+"name": "firebursts",
+"parent": "flame_9/effect/Donor",
+"path": "flame_9/effect/Donor/firebursts",
+"properties": [{
+"field": "material_override",
+"operand": {
+"index": 31,
+"kind": "private_material"
+}
+}, {
+"field": "cast_shadow",
+"operand": {
+"kind": "immutable_value",
+"value": 0
+}
+}, {
+"field": "amount",
+"operand": {
+"kind": "immutable_value",
+"value": 37
+}
+}, {
+"field": "lifetime",
+"operand": {
+"kind": "immutable_value",
+"value": 2.0
+}
+}, {
+"field": "preprocess",
+"operand": {
+"kind": "immutable_value",
+"value": 2.0
+}
+}, {
+"field": "use_fixed_seed",
+"operand": {
+"kind": "immutable_value",
+"value": true
+}
+}, {
+"field": "seed",
+"operand": {
+"kind": "immutable_value",
+"value": 47292
+}
+}, {
+"field": "fixed_fps",
+"operand": {
+"kind": "immutable_value",
+"value": 144
+}
+}, {
+"field": "draw_order",
+"operand": {
+"kind": "immutable_value",
+"value": 1
+}
+}, {
+"field": "process_material",
+"operand": {
+"index": 3,
+"kind": "private_material"
+}
+}, {
+"field": "draw_pass_1",
+"operand": {
+"kind": "immutable_value",
+"value": SubResource("ArrayMesh_n0oyt")
+}
+}]
+}, {
+"class": "GPUParticles3D",
+"name": "UnequalRisingFlames",
+"parent": "flame_9/effect/Donor",
+"path": "flame_9/effect/Donor/UnequalRisingFlames",
+"properties": [{
+"field": "transform",
+"operand": {
+"kind": "immutable_value",
+"value": Transform3D(0.48, 0, 0, 0, 0.7, 0, 0, 0, 0.48, 0.25, 0.06, -0.48)
+}
+}, {
+"field": "material_override",
+"operand": {
+"index": 32,
+"kind": "private_material"
+}
+}, {
+"field": "cast_shadow",
+"operand": {
+"kind": "immutable_value",
+"value": 0
+}
+}, {
+"field": "preprocess",
+"operand": {
+"kind": "immutable_value",
+"value": 2.0
+}
+}, {
+"field": "use_fixed_seed",
+"operand": {
+"kind": "immutable_value",
+"value": true
+}
+}, {
+"field": "seed",
+"operand": {
+"kind": "immutable_value",
+"value": 33095
+}
+}, {
+"field": "fixed_fps",
+"operand": {
+"kind": "immutable_value",
+"value": 144
+}
+}, {
+"field": "visibility_aabb",
+"operand": {
+"kind": "immutable_value",
+"value": AABB(-5, -1, -5, 10, 10, 10)
+}
+}, {
+"field": "draw_order",
+"operand": {
+"kind": "immutable_value",
+"value": 1
+}
+}, {
+"field": "process_material",
+"operand": {
+"index": 5,
+"kind": "private_material"
+}
+}, {
+"field": "draw_pass_1",
+"operand": {
+"kind": "immutable_value",
+"value": SubResource("QuadMesh_80lqt")
+}
+}]
+}, {
+"class": "Node3D",
+"name": "flame_10",
+"parent": ".",
+"path": "flame_10",
+"properties": [{
+"field": "transform",
+"operand": {
+"kind": "immutable_value",
+"value": Transform3D(0.75, 0, 0, 0, 0.75, 0, 0, 0, 0.75, 4.5, 0, 0)
+}
+}]
+}, {
+"class": "Node3D",
+"name": "effect",
+"parent": "flame_10",
+"path": "flame_10/effect",
+"properties": []
+}, {
+"class": "Node3D",
+"name": "Donor",
+"parent": "flame_10/effect",
+"path": "flame_10/effect/Donor",
+"properties": [{
+"field": "transform",
+"operand": {
+"kind": "immutable_value",
+"value": Transform3D(0.81, 0, 0, 0, 2.15, 0, 0, 0, 0.26, 0, 0, 0)
+}
+}]
+}, {
+"class": "GPUParticles3D",
+"name": "firepops",
+"parent": "flame_10/effect/Donor",
+"path": "flame_10/effect/Donor/firepops",
+"properties": [{
+"field": "visible",
+"operand": {
+"kind": "immutable_value",
+"value": false
+}
+}, {
+"field": "layers",
+"operand": {
+"kind": "immutable_value",
+"value": 4
+}
+}, {
+"field": "material_override",
+"operand": {
+"index": 33,
+"kind": "private_material"
+}
+}, {
+"field": "cast_shadow",
+"operand": {
+"kind": "immutable_value",
+"value": 0
+}
+}, {
+"field": "amount",
+"operand": {
+"kind": "immutable_value",
+"value": 10
+}
+}, {
+"field": "lifetime",
+"operand": {
+"kind": "immutable_value",
+"value": 2.0
+}
+}, {
+"field": "use_fixed_seed",
+"operand": {
+"kind": "immutable_value",
+"value": true
+}
+}, {
+"field": "seed",
+"operand": {
+"kind": "immutable_value",
+"value": 47291
+}
+}, {
+"field": "fixed_fps",
+"operand": {
+"kind": "immutable_value",
+"value": 60
+}
+}, {
+"field": "process_material",
+"operand": {
+"index": 1,
+"kind": "private_material"
+}
+}, {
+"field": "draw_pass_1",
+"operand": {
+"kind": "immutable_value",
+"value": SubResource("QuadMesh_n25y5")
+}
+}]
+}, {
+"class": "GPUParticles3D",
+"name": "firebursts",
+"parent": "flame_10/effect/Donor",
+"path": "flame_10/effect/Donor/firebursts",
+"properties": [{
+"field": "material_override",
+"operand": {
+"index": 34,
+"kind": "private_material"
+}
+}, {
+"field": "cast_shadow",
+"operand": {
+"kind": "immutable_value",
+"value": 0
+}
+}, {
+"field": "amount",
+"operand": {
+"kind": "immutable_value",
+"value": 37
+}
+}, {
+"field": "lifetime",
+"operand": {
+"kind": "immutable_value",
+"value": 2.0
+}
+}, {
+"field": "preprocess",
+"operand": {
+"kind": "immutable_value",
+"value": 2.0
+}
+}, {
+"field": "use_fixed_seed",
+"operand": {
+"kind": "immutable_value",
+"value": true
+}
+}, {
+"field": "seed",
+"operand": {
+"kind": "immutable_value",
+"value": 47292
+}
+}, {
+"field": "fixed_fps",
+"operand": {
+"kind": "immutable_value",
+"value": 144
+}
+}, {
+"field": "draw_order",
+"operand": {
+"kind": "immutable_value",
+"value": 1
+}
+}, {
+"field": "process_material",
+"operand": {
+"index": 3,
+"kind": "private_material"
+}
+}, {
+"field": "draw_pass_1",
+"operand": {
+"kind": "immutable_value",
+"value": SubResource("ArrayMesh_w3n8n")
+}
+}]
+}, {
+"class": "GPUParticles3D",
+"name": "UnequalRisingFlames",
+"parent": "flame_10/effect/Donor",
+"path": "flame_10/effect/Donor/UnequalRisingFlames",
+"properties": [{
+"field": "transform",
+"operand": {
+"kind": "immutable_value",
+"value": Transform3D(0.48, 0, 0, 0, 0.7, 0, 0, 0, 0.48, -0.48, 0.06, 0.35)
+}
+}, {
+"field": "material_override",
+"operand": {
+"index": 35,
+"kind": "private_material"
+}
+}, {
+"field": "cast_shadow",
+"operand": {
+"kind": "immutable_value",
+"value": 0
+}
+}, {
+"field": "amount",
+"operand": {
+"kind": "immutable_value",
+"value": 7
+}
+}, {
+"field": "preprocess",
+"operand": {
+"kind": "immutable_value",
+"value": 2.0
+}
+}, {
+"field": "use_fixed_seed",
+"operand": {
+"kind": "immutable_value",
+"value": true
+}
+}, {
+"field": "seed",
+"operand": {
+"kind": "immutable_value",
+"value": 33095
+}
+}, {
+"field": "fixed_fps",
+"operand": {
+"kind": "immutable_value",
+"value": 144
+}
+}, {
+"field": "visibility_aabb",
+"operand": {
+"kind": "immutable_value",
+"value": AABB(-5, -1, -5, 10, 10, 10)
+}
+}, {
+"field": "draw_order",
+"operand": {
+"kind": "immutable_value",
+"value": 1
+}
+}, {
+"field": "process_material",
+"operand": {
+"index": 5,
+"kind": "private_material"
+}
+}, {
+"field": "draw_pass_1",
+"operand": {
+"kind": "immutable_value",
+"value": SubResource("QuadMesh_80lqt")
+}
+}]
+}, {
+"class": "Node3D",
+"name": "flame_11",
+"parent": ".",
+"path": "flame_11",
+"properties": [{
+"field": "transform",
+"operand": {
+"kind": "immutable_value",
+"value": Transform3D(0.75, 0, 0, 0, 0.75, 0, 0, 0, 0.75, 5.5, 0, 0)
+}
+}]
+}, {
+"class": "Node3D",
+"name": "effect",
+"parent": "flame_11",
+"path": "flame_11/effect",
+"properties": []
+}, {
+"class": "Node3D",
+"name": "Donor",
+"parent": "flame_11/effect",
+"path": "flame_11/effect/Donor",
+"properties": [{
+"field": "transform",
+"operand": {
+"kind": "immutable_value",
+"value": Transform3D(0.81, 0, 0, 0, 2.15, 0, 0, 0, 0.26, 0, 0, 0)
+}
+}]
+}, {
+"class": "GPUParticles3D",
+"name": "firepops",
+"parent": "flame_11/effect/Donor",
+"path": "flame_11/effect/Donor/firepops",
+"properties": [{
+"field": "visible",
+"operand": {
+"kind": "immutable_value",
+"value": false
+}
+}, {
+"field": "layers",
+"operand": {
+"kind": "immutable_value",
+"value": 4
+}
+}, {
+"field": "material_override",
+"operand": {
+"index": 36,
+"kind": "private_material"
+}
+}, {
+"field": "cast_shadow",
+"operand": {
+"kind": "immutable_value",
+"value": 0
+}
+}, {
+"field": "amount",
+"operand": {
+"kind": "immutable_value",
+"value": 10
+}
+}, {
+"field": "lifetime",
+"operand": {
+"kind": "immutable_value",
+"value": 2.0
+}
+}, {
+"field": "use_fixed_seed",
+"operand": {
+"kind": "immutable_value",
+"value": true
+}
+}, {
+"field": "seed",
+"operand": {
+"kind": "immutable_value",
+"value": 47291
+}
+}, {
+"field": "fixed_fps",
+"operand": {
+"kind": "immutable_value",
+"value": 60
+}
+}, {
+"field": "process_material",
+"operand": {
+"index": 1,
+"kind": "private_material"
+}
+}, {
+"field": "draw_pass_1",
+"operand": {
+"kind": "immutable_value",
+"value": SubResource("QuadMesh_i1x2n")
+}
+}]
+}, {
+"class": "GPUParticles3D",
+"name": "firebursts",
+"parent": "flame_11/effect/Donor",
+"path": "flame_11/effect/Donor/firebursts",
+"properties": [{
+"field": "material_override",
+"operand": {
+"index": 37,
+"kind": "private_material"
+}
+}, {
+"field": "cast_shadow",
+"operand": {
+"kind": "immutable_value",
+"value": 0
+}
+}, {
+"field": "amount",
+"operand": {
+"kind": "immutable_value",
+"value": 37
+}
+}, {
+"field": "lifetime",
+"operand": {
+"kind": "immutable_value",
+"value": 2.0
+}
+}, {
+"field": "preprocess",
+"operand": {
+"kind": "immutable_value",
+"value": 2.0
+}
+}, {
+"field": "use_fixed_seed",
+"operand": {
+"kind": "immutable_value",
+"value": true
+}
+}, {
+"field": "seed",
+"operand": {
+"kind": "immutable_value",
+"value": 47292
+}
+}, {
+"field": "fixed_fps",
+"operand": {
+"kind": "immutable_value",
+"value": 144
+}
+}, {
+"field": "draw_order",
+"operand": {
+"kind": "immutable_value",
+"value": 1
+}
+}, {
+"field": "process_material",
+"operand": {
+"index": 3,
+"kind": "private_material"
+}
+}, {
+"field": "draw_pass_1",
+"operand": {
+"kind": "immutable_value",
+"value": SubResource("ArrayMesh_y3ma8")
+}
+}]
+}, {
+"class": "GPUParticles3D",
+"name": "UnequalRisingFlames",
+"parent": "flame_11/effect/Donor",
+"path": "flame_11/effect/Donor/UnequalRisingFlames",
+"properties": [{
+"field": "transform",
+"operand": {
+"kind": "immutable_value",
+"value": Transform3D(0.48, 0, 0, 0, 0.7, 0, 0, 0, 0.48, 0.25, 0.06, -0.48)
+}
+}, {
+"field": "material_override",
+"operand": {
+"index": 38,
+"kind": "private_material"
+}
+}, {
+"field": "cast_shadow",
+"operand": {
+"kind": "immutable_value",
+"value": 0
+}
+}, {
+"field": "preprocess",
+"operand": {
+"kind": "immutable_value",
+"value": 2.0
+}
+}, {
+"field": "use_fixed_seed",
+"operand": {
+"kind": "immutable_value",
+"value": true
+}
+}, {
+"field": "seed",
+"operand": {
+"kind": "immutable_value",
+"value": 33095
+}
+}, {
+"field": "fixed_fps",
+"operand": {
+"kind": "immutable_value",
+"value": 144
+}
+}, {
+"field": "visibility_aabb",
+"operand": {
+"kind": "immutable_value",
+"value": AABB(-5, -1, -5, 10, 10, 10)
+}
+}, {
+"field": "draw_order",
+"operand": {
+"kind": "immutable_value",
+"value": 1
+}
+}, {
+"field": "process_material",
+"operand": {
+"index": 5,
+"kind": "private_material"
+}
+}, {
+"field": "draw_pass_1",
+"operand": {
+"kind": "immutable_value",
+"value": SubResource("QuadMesh_80lqt")
+}
+}]
+}])
+entries = Array[Dictionary]([{
+"alpha_gain": 1.0,
+"begin": 0.0,
+"emission_stop": 2.6,
+"emitter_paths": [NodePath("flame_0/effect/Donor/firepops"), NodePath("flame_0/effect/Donor/firebursts"), NodePath("flame_0/effect/Donor/UnequalRisingFlames")],
+"hz": 144,
+&"material_indices": [0, 2, 4],
+"path": NodePath("flame_0"),
+"seconds": 3.5,
+&"source_material_indices": [0, 2, 4]
+}, {
+"alpha_gain": 1.0,
+"begin": 0.0,
+"emission_stop": 2.6,
+"emitter_paths": [NodePath("flame_1/effect/Donor/firepops"), NodePath("flame_1/effect/Donor/firebursts"), NodePath("flame_1/effect/Donor/UnequalRisingFlames")],
+"hz": 144,
+&"material_indices": [6, 7, 8],
+"path": NodePath("flame_1"),
+"seconds": 3.5,
+&"source_material_indices": [6, 7, 8]
+}, {
+"alpha_gain": 1.0,
+"begin": 0.0,
+"emission_stop": 2.6,
+"emitter_paths": [NodePath("flame_2/effect/Donor/firepops"), NodePath("flame_2/effect/Donor/firebursts"), NodePath("flame_2/effect/Donor/UnequalRisingFlames")],
+"hz": 144,
+&"material_indices": [9, 10, 11],
+"path": NodePath("flame_2"),
+"seconds": 3.5,
+&"source_material_indices": [9, 10, 11]
+}, {
+"alpha_gain": 1.0,
+"begin": 0.0,
+"emission_stop": 2.6,
+"emitter_paths": [NodePath("flame_3/effect/Donor/firepops"), NodePath("flame_3/effect/Donor/firebursts"), NodePath("flame_3/effect/Donor/UnequalRisingFlames")],
+"hz": 144,
+&"material_indices": [12, 13, 14],
+"path": NodePath("flame_3"),
+"seconds": 3.5,
+&"source_material_indices": [12, 13, 14]
+}, {
+"alpha_gain": 1.0,
+"begin": 0.0,
+"emission_stop": 2.6,
+"emitter_paths": [NodePath("flame_4/effect/Donor/firepops"), NodePath("flame_4/effect/Donor/firebursts"), NodePath("flame_4/effect/Donor/UnequalRisingFlames")],
+"hz": 144,
+&"material_indices": [15, 16, 17],
+"path": NodePath("flame_4"),
+"seconds": 3.5,
+&"source_material_indices": [15, 16, 17]
+}, {
+"alpha_gain": 1.0,
+"begin": 0.0,
+"emission_stop": 2.6,
+"emitter_paths": [NodePath("flame_5/effect/Donor/firepops"), NodePath("flame_5/effect/Donor/firebursts"), NodePath("flame_5/effect/Donor/UnequalRisingFlames")],
+"hz": 144,
+&"material_indices": [18, 19, 20],
+"path": NodePath("flame_5"),
+"seconds": 3.5,
+&"source_material_indices": [18, 19, 20]
+}, {
+"alpha_gain": 1.0,
+"begin": 0.0,
+"emission_stop": 2.6,
+"emitter_paths": [NodePath("flame_6/effect/Donor/firepops"), NodePath("flame_6/effect/Donor/firebursts"), NodePath("flame_6/effect/Donor/UnequalRisingFlames")],
+"hz": 144,
+&"material_indices": [21, 22, 23],
+"path": NodePath("flame_6"),
+"seconds": 3.5,
+&"source_material_indices": [21, 22, 23]
+}, {
+"alpha_gain": 1.0,
+"begin": 0.0,
+"emission_stop": 2.6,
+"emitter_paths": [NodePath("flame_7/effect/Donor/firepops"), NodePath("flame_7/effect/Donor/firebursts"), NodePath("flame_7/effect/Donor/UnequalRisingFlames")],
+"hz": 144,
+&"material_indices": [24, 25, 26],
+"path": NodePath("flame_7"),
+"seconds": 3.5,
+&"source_material_indices": [24, 25, 26]
+}, {
+"alpha_gain": 1.0,
+"begin": 0.0,
+"emission_stop": 2.6,
+"emitter_paths": [NodePath("flame_8/effect/Donor/firepops"), NodePath("flame_8/effect/Donor/firebursts"), NodePath("flame_8/effect/Donor/UnequalRisingFlames")],
+"hz": 144,
+&"material_indices": [27, 28, 29],
+"path": NodePath("flame_8"),
+"seconds": 3.5,
+&"source_material_indices": [27, 28, 29]
+}, {
+"alpha_gain": 1.0,
+"begin": 0.0,
+"emission_stop": 2.6,
+"emitter_paths": [NodePath("flame_9/effect/Donor/firepops"), NodePath("flame_9/effect/Donor/firebursts"), NodePath("flame_9/effect/Donor/UnequalRisingFlames")],
+"hz": 144,
+&"material_indices": [30, 31, 32],
+"path": NodePath("flame_9"),
+"seconds": 3.5,
+&"source_material_indices": [30, 31, 32]
+}, {
+"alpha_gain": 1.0,
+"begin": 0.0,
+"emission_stop": 2.6,
+"emitter_paths": [NodePath("flame_10/effect/Donor/firepops"), NodePath("flame_10/effect/Donor/firebursts"), NodePath("flame_10/effect/Donor/UnequalRisingFlames")],
+"hz": 144,
+&"material_indices": [33, 34, 35],
+"path": NodePath("flame_10"),
+"seconds": 3.5,
+&"source_material_indices": [33, 34, 35]
+}, {
+"alpha_gain": 1.0,
+"begin": 0.0,
+"emission_stop": 2.6,
+"emitter_paths": [NodePath("flame_11/effect/Donor/firepops"), NodePath("flame_11/effect/Donor/firebursts"), NodePath("flame_11/effect/Donor/UnequalRisingFlames")],
+"hz": 144,
+&"material_indices": [36, 37, 38],
+"path": NodePath("flame_11"),
+"seconds": 3.5,
+&"source_material_indices": [36, 37, 38]
+}])
+world_process_units = Array[Dictionary]([{
+"material_index": 1,
+"values": {
+"damping_max": 0.0,
+"damping_min": 0.0,
+"directional_velocity_max": 1.0,
+"directional_velocity_min": 1.0,
+"linear_accel_max": 0.0,
+"linear_accel_min": 0.0,
+"radial_accel_max": 0.0,
+"radial_accel_min": 0.0,
+"radial_velocity_max": -2.23517e-05,
+"radial_velocity_min": -2.23517e-05,
+"scale_max": 4.0,
+"scale_min": 1.5,
+"tangent_accel_max": 0.0,
+"tangent_accel_min": 0.0
+}
+}, {
+"material_index": 3,
+"values": {
+"damping_max": 0.0,
+"damping_min": 0.0,
+"directional_velocity_max": 1.0,
+"directional_velocity_min": 1.0,
+"linear_accel_max": 0.0,
+"linear_accel_min": 0.0,
+"radial_accel_max": 0.0,
+"radial_accel_min": 0.0,
+"radial_velocity_max": 0.0,
+"radial_velocity_min": 0.0,
+"scale_max": 2.1,
+"scale_min": 0.7,
+"tangent_accel_max": 0.0,
+"tangent_accel_min": 0.0
+}
+}, {
+"material_index": 5,
+"values": {
+"damping_max": 0.0,
+"damping_min": 0.0,
+"directional_velocity_max": 1.0,
+"directional_velocity_min": 1.0,
+"gravity": Vector3(0, 1, 0),
+"linear_accel_max": 0.0,
+"linear_accel_min": 0.0,
+"radial_accel_max": 0.0,
+"radial_accel_min": 0.0,
+"radial_velocity_max": 0.499978,
+"radial_velocity_min": -2.23517e-05,
+"scale_max": 1.7,
+"scale_min": 0.8,
+"tangent_accel_max": 0.0,
+"tangent_accel_min": 0.0
+}
+}])
+preparation_receipt = {
+"geometry": 36,
+"human_approval_inferred": false,
+"materials": 39,
+"modules": 12,
+"native_particle_programs": true,
+"native_process_sharing": "exact shader and actual uniform/sampler pixels; within owner only; native GPU state stays per emitter",
+"nodes": 73,
+"outer_phase_hz": 60.0,
+"preparation_us": 2725000,
+"private_native_process_materials": 3,
+"private_spatial_materials": 36,
+"production_integration_performed": false,
+"runtime_source_compilation": false,
+"source_hz": 144,
+"stable_path_matrix": [[NodePath("."), "Node3D", Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)], [NodePath("flame_0"), "Node3D", Transform3D(0.75, 0, 0, 0, 0.75, 0, 0, 0, 0.75, -5.5, 0, 0)], [NodePath("flame_0/effect"), "Node3D", Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)], [NodePath("flame_0/effect/Donor"), "Node3D", Transform3D(0.81, 0, 0, 0, 2.15, 0, 0, 0, 0.26, 0, 0, 0)], [NodePath("flame_0/effect/Donor/firepops"), "GPUParticles3D", Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)], [NodePath("flame_0/effect/Donor/firebursts"), "GPUParticles3D", Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)], [NodePath("flame_0/effect/Donor/UnequalRisingFlames"), "GPUParticles3D", Transform3D(0.48, 0, 0, 0, 0.7, 0, 0, 0, 0.48, -0.48, 0.06, 0.35)], [NodePath("flame_1"), "Node3D", Transform3D(0.75, 0, 0, 0, 0.75, 0, 0, 0, 0.75, -4.5, 0, 0)], [NodePath("flame_1/effect"), "Node3D", Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)], [NodePath("flame_1/effect/Donor"), "Node3D", Transform3D(0.81, 0, 0, 0, 2.15, 0, 0, 0, 0.26, 0, 0, 0)], [NodePath("flame_1/effect/Donor/firepops"), "GPUParticles3D", Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)], [NodePath("flame_1/effect/Donor/firebursts"), "GPUParticles3D", Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)], [NodePath("flame_1/effect/Donor/UnequalRisingFlames"), "GPUParticles3D", Transform3D(0.48, 0, 0, 0, 0.7, 0, 0, 0, 0.48, 0.25, 0.06, -0.48)], [NodePath("flame_2"), "Node3D", Transform3D(0.75, 0, 0, 0, 0.75, 0, 0, 0, 0.75, -3.5, 0, 0)], [NodePath("flame_2/effect"), "Node3D", Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)], [NodePath("flame_2/effect/Donor"), "Node3D", Transform3D(0.81, 0, 0, 0, 2.15, 0, 0, 0, 0.26, 0, 0, 0)], [NodePath("flame_2/effect/Donor/firepops"), "GPUParticles3D", Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)], [NodePath("flame_2/effect/Donor/firebursts"), "GPUParticles3D", Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)], [NodePath("flame_2/effect/Donor/UnequalRisingFlames"), "GPUParticles3D", Transform3D(0.48, 0, 0, 0, 0.7, 0, 0, 0, 0.48, -0.48, 0.06, 0.35)], [NodePath("flame_3"), "Node3D", Transform3D(0.75, 0, 0, 0, 0.75, 0, 0, 0, 0.75, -2.5, 0, 0)], [NodePath("flame_3/effect"), "Node3D", Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)], [NodePath("flame_3/effect/Donor"), "Node3D", Transform3D(0.81, 0, 0, 0, 2.15, 0, 0, 0, 0.26, 0, 0, 0)], [NodePath("flame_3/effect/Donor/firepops"), "GPUParticles3D", Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)], [NodePath("flame_3/effect/Donor/firebursts"), "GPUParticles3D", Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)], [NodePath("flame_3/effect/Donor/UnequalRisingFlames"), "GPUParticles3D", Transform3D(0.48, 0, 0, 0, 0.7, 0, 0, 0, 0.48, 0.25, 0.06, -0.48)], [NodePath("flame_4"), "Node3D", Transform3D(0.75, 0, 0, 0, 0.75, 0, 0, 0, 0.75, -1.5, 0, 0)], [NodePath("flame_4/effect"), "Node3D", Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)], [NodePath("flame_4/effect/Donor"), "Node3D", Transform3D(0.81, 0, 0, 0, 2.15, 0, 0, 0, 0.26, 0, 0, 0)], [NodePath("flame_4/effect/Donor/firepops"), "GPUParticles3D", Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)], [NodePath("flame_4/effect/Donor/firebursts"), "GPUParticles3D", Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)], [NodePath("flame_4/effect/Donor/UnequalRisingFlames"), "GPUParticles3D", Transform3D(0.48, 0, 0, 0, 0.7, 0, 0, 0, 0.48, -0.48, 0.06, 0.35)], [NodePath("flame_5"), "Node3D", Transform3D(0.75, 0, 0, 0, 0.75, 0, 0, 0, 0.75, -0.5, 0, 0)], [NodePath("flame_5/effect"), "Node3D", Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)], [NodePath("flame_5/effect/Donor"), "Node3D", Transform3D(0.81, 0, 0, 0, 2.15, 0, 0, 0, 0.26, 0, 0, 0)], [NodePath("flame_5/effect/Donor/firepops"), "GPUParticles3D", Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)], [NodePath("flame_5/effect/Donor/firebursts"), "GPUParticles3D", Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)], [NodePath("flame_5/effect/Donor/UnequalRisingFlames"), "GPUParticles3D", Transform3D(0.48, 0, 0, 0, 0.7, 0, 0, 0, 0.48, 0.25, 0.06, -0.48)], [NodePath("flame_6"), "Node3D", Transform3D(0.75, 0, 0, 0, 0.75, 0, 0, 0, 0.75, 0.5, 0, 0)], [NodePath("flame_6/effect"), "Node3D", Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)], [NodePath("flame_6/effect/Donor"), "Node3D", Transform3D(0.81, 0, 0, 0, 2.15, 0, 0, 0, 0.26, 0, 0, 0)], [NodePath("flame_6/effect/Donor/firepops"), "GPUParticles3D", Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)], [NodePath("flame_6/effect/Donor/firebursts"), "GPUParticles3D", Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)], [NodePath("flame_6/effect/Donor/UnequalRisingFlames"), "GPUParticles3D", Transform3D(0.48, 0, 0, 0, 0.7, 0, 0, 0, 0.48, -0.48, 0.06, 0.35)], [NodePath("flame_7"), "Node3D", Transform3D(0.75, 0, 0, 0, 0.75, 0, 0, 0, 0.75, 1.5, 0, 0)], [NodePath("flame_7/effect"), "Node3D", Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)], [NodePath("flame_7/effect/Donor"), "Node3D", Transform3D(0.81, 0, 0, 0, 2.15, 0, 0, 0, 0.26, 0, 0, 0)], [NodePath("flame_7/effect/Donor/firepops"), "GPUParticles3D", Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)], [NodePath("flame_7/effect/Donor/firebursts"), "GPUParticles3D", Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)], [NodePath("flame_7/effect/Donor/UnequalRisingFlames"), "GPUParticles3D", Transform3D(0.48, 0, 0, 0, 0.7, 0, 0, 0, 0.48, 0.25, 0.06, -0.48)], [NodePath("flame_8"), "Node3D", Transform3D(0.75, 0, 0, 0, 0.75, 0, 0, 0, 0.75, 2.5, 0, 0)], [NodePath("flame_8/effect"), "Node3D", Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)], [NodePath("flame_8/effect/Donor"), "Node3D", Transform3D(0.81, 0, 0, 0, 2.15, 0, 0, 0, 0.26, 0, 0, 0)], [NodePath("flame_8/effect/Donor/firepops"), "GPUParticles3D", Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)], [NodePath("flame_8/effect/Donor/firebursts"), "GPUParticles3D", Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)], [NodePath("flame_8/effect/Donor/UnequalRisingFlames"), "GPUParticles3D", Transform3D(0.48, 0, 0, 0, 0.7, 0, 0, 0, 0.48, -0.48, 0.06, 0.35)], [NodePath("flame_9"), "Node3D", Transform3D(0.75, 0, 0, 0, 0.75, 0, 0, 0, 0.75, 3.5, 0, 0)], [NodePath("flame_9/effect"), "Node3D", Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)], [NodePath("flame_9/effect/Donor"), "Node3D", Transform3D(0.81, 0, 0, 0, 2.15, 0, 0, 0, 0.26, 0, 0, 0)], [NodePath("flame_9/effect/Donor/firepops"), "GPUParticles3D", Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)], [NodePath("flame_9/effect/Donor/firebursts"), "GPUParticles3D", Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)], [NodePath("flame_9/effect/Donor/UnequalRisingFlames"), "GPUParticles3D", Transform3D(0.48, 0, 0, 0, 0.7, 0, 0, 0, 0.48, 0.25, 0.06, -0.48)], [NodePath("flame_10"), "Node3D", Transform3D(0.75, 0, 0, 0, 0.75, 0, 0, 0, 0.75, 4.5, 0, 0)], [NodePath("flame_10/effect"), "Node3D", Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)], [NodePath("flame_10/effect/Donor"), "Node3D", Transform3D(0.81, 0, 0, 0, 2.15, 0, 0, 0, 0.26, 0, 0, 0)], [NodePath("flame_10/effect/Donor/firepops"), "GPUParticles3D", Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)], [NodePath("flame_10/effect/Donor/firebursts"), "GPUParticles3D", Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)], [NodePath("flame_10/effect/Donor/UnequalRisingFlames"), "GPUParticles3D", Transform3D(0.48, 0, 0, 0, 0.7, 0, 0, 0, 0.48, -0.48, 0.06, 0.35)], [NodePath("flame_11"), "Node3D", Transform3D(0.75, 0, 0, 0, 0.75, 0, 0, 0, 0.75, 5.5, 0, 0)], [NodePath("flame_11/effect"), "Node3D", Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)], [NodePath("flame_11/effect/Donor"), "Node3D", Transform3D(0.81, 0, 0, 0, 2.15, 0, 0, 0, 0.26, 0, 0, 0)], [NodePath("flame_11/effect/Donor/firepops"), "GPUParticles3D", Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)], [NodePath("flame_11/effect/Donor/firebursts"), "GPUParticles3D", Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)], [NodePath("flame_11/effect/Donor/UnequalRisingFlames"), "GPUParticles3D", Transform3D(0.48, 0, 0, 0, 0.7, 0, 0, 0, 0.48, 0.25, 0.06, -0.48)]],
+"stable_paths_verified": true,
+"visible_layers_removed": false,
+"world_coordinate_processes": 3
+}
+stable_paths_verified = true

@@ -1,0 +1,71 @@
+{
+  "version": "runtime-spike-seed-20261021-7ca62e2877bf5156",
+  "approach": "runtime-prepared-spike-seed-20261021",
+  "choices": [
+    {
+      "clip_id": "assembled/spike_growth_native",
+      "approach_id": "runtime-prepared-spike-seed-20261021",
+      "constructor": "res://assets/vfx/clips/ff9054553df3f010759f155a/construct.gd",
+      "phase": "res://assets/vfx/extensions/spike-seed-20261021/sources/eea8273c8a8b5dbd6667/phase.tres",
+      "source_qualification_path": "authoring/production-review-repair-20261021/runtime_tail/spike_instance_seed/v1/qualification.json",
+      "source_qualification": true,
+      "source_runtime_flags_retained": {
+        "qualification": "authoring/production-review-repair-20261021/runtime_tail/spike_instance_seed/v1/qualification.json",
+        "qualification_sha256": "e35b88d2cf951f568a1b330e5d10df4fbec6dbe867a0932ff1e9ed06b184fc9d",
+        "cost_flags": [
+          {
+            "actual_us": 2118.0,
+            "measurement": "complete_constructor",
+            "source": "spike",
+            "threshold_us": 2000.0
+          },
+          {
+            "actual_us": 2437.0,
+            "measurement": "complete_constructor",
+            "source": "spike",
+            "threshold_us": 2000.0
+          },
+          {
+            "actual_us": 2071.0,
+            "measurement": "complete_constructor",
+            "source": "spike",
+            "threshold_us": 2000.0
+          }
+        ],
+        "readiness": [
+          {
+            "phase": "res://authoring/production-review-repair-20261021/runtime_tail/spike_instance_seed/v1/phase.tres",
+            "total_including_frame_yields_us": 383345,
+            "sum_actual_step_us": 159235,
+            "maximum_actual_step_us": 24454,
+            "steps_over2000us": 9,
+            "scope": "Readiness.begin and actual resource steps; caller phase load is separate. No owner construction or sample."
+          },
+          {
+            "phase": "res://authoring/production-review-repair-20261021/runtime_tail/spike_owner_direct/v1/phases/spike.tres",
+            "total_including_frame_yields_us": 246799,
+            "sum_actual_step_us": 148981,
+            "maximum_actual_step_us": 18093,
+            "steps_over2000us": 9,
+            "scope": "Readiness.begin and actual resource steps; caller phase load is separate. No owner construction or sample."
+          }
+        ],
+        "runtime_budget_pass": false,
+        "raw_flags_retained": true
+      },
+      "construction_input_contract": "make_component({phase:load(candidate_phase),layer_mask:2,operands:[{component_path:[\"effect\"],input_field:\"\",values:{owner_uuid:actual_owner_uuid,cells:actual_constructed_cells}}]}); add returned occurrence to its real parent before live setters/sample. A later package must privately bind this phase; existing fixed owner_release_spike wrapper still names the older phase.",
+      "packaged_execution_qualified": true,
+      "human_approval_inferred": false,
+      "source_key": "spike_instance_seed",
+      "packaged_smoke_label": "complete-v1",
+      "packaged_smoke_scope": "One actual-owner Spike seed-instance alternative;59preceding typed rows unchanged; actual public owner inputs, chronological native samples, positive pixels and absence/retirement. No new index ID, gameplay replay, art approval, full budget pass or source-control rerender.",
+      "packaged_first_complete_constructor_us": 2472,
+      "packaged_first_constructor_over2000us": true
+    }
+  ],
+  "by_clip_id": {
+    "assembled/spike_growth_native": "runtime-prepared-spike-seed-20261021"
+  },
+  "automatic_client_selection_performed": false,
+  "native_receipt_sha256": "4268178c3ca057221110bc18765e2e84ade0861b79110f6e76cdd16ddcb2f457"
+}

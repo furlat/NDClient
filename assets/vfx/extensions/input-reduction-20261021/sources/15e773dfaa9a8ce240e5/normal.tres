@@ -1,0 +1,26 @@
+[gd_resource type="Resource" load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://assets/vfx/sources/67ebe8ef4f358cad6a4b/phase.gd" id="script"]
+[ext_resource type="Script" path="res://assets/vfx/sources/d60670fa4c3a03cc8f3a/component.gd" id="component"]
+
+[sub_resource type="Resource" id="part_0"]
+script = ExtResource("component")
+component_id = "assembly"
+constructor_script = "res://assets/vfx/extensions/input-reduction-20261021/sources/b26a32983546c300b542/typed_sequence.gd"
+input = {"components": [{"script": "res://assets/vfx/sources/5bf1f373ac1affd0173c/skeletal_cast.gd", "input": {"hand_script": "res://assets/vfx/extensions/input-reduction-20261021/sources/4f53e608963e80310412/skeletal_point.gd", "hand_input": {"scene": "res://assets/vfx/sources/d5ecd06fc57beb3273b3/effect_root.tscn", "settings": {"animation": "", "mode": "binding", "pack": "lelu-portal", "name": "VFX_Hit_dark", "sourceScale": 0.92, "height": 1.1, "kind": "finger", "cell": 768, "ortho": 24, "targetY": 1.0, "frames": 104, "palette": ["26221d", "4c4030", "847155", "b19e77", "d8cbaa", "fff0ce"], "adapter": "GroundMagicArmCapture.gd", "target": [0, 7.54247233], "id": "finger_ground_magic_v7", "cameraQuarter": 0}, "side": "full", "simulation_hz": 144, "seed": 47291}, "counterspell": false, "native_units_per_cell": 1.885618083, "emission_point_native": [0.2105243369936943, 2.062067713588476, 2.4470988512039185], "launch_seconds": 1.1, "travel_seconds": 0.65, "projectile_scene": "res://assets/vfx/extensions/continuation42-20261020/sources/ad27e34ccc3251fedf28/VFX_Darkness_projectile.tscn", "splinter_geometry": "res://assets/vfx/sources/64feffa25a7eab59ef08/splinter.json", "splinter_material": "res://assets/vfx/extensions/continuation42-20261020/sources/9c884e66e750a862ecb7/shard.tres"}, "id": "effect", "rotation_degrees": [0, 0, 0]}], "bindings": [{"component": "effect", "kind": "sample", "rate": 1.0, "offset_seconds": 0.0}], "emitters": [], "light_roles": [{"class": "DirectionalLight3D", "role": "geometry_only"}], "skeletal_sequence_bank": "res://assets/vfx/extensions/input-reduction-20261021/sources/647f27d65d1345e3b040/normal.res"}
+options = {}
+provenance = "Pinned native selection; recipes/spells/finger_of_death.json"
+
+[resource]
+script = ExtResource("script")
+clip_id = "review/finger_of_death/normal_back/lifecycle"
+label = "Lifecycle"
+phase = "lifecycle"
+variant = "normal_back"
+source_recipe = "recipes/spells/finger_of_death.json"
+bindings = [{"component": "assembly", "kind": "sample", "rate": 1.0, "offset_seconds": 0.0}]
+emitters = []
+seconds = 3.25
+simulation_hz = 144.0
+components = Array[Resource]([SubResource("part_0")])
+options = {"qualification": "Native-context visual review; not production approval"}

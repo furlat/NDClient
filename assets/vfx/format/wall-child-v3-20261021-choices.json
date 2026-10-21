@@ -1,0 +1,358 @@
+{
+  "version": "runtime-wall-child-v3-20261021-8b695014a812da72",
+  "approach": "runtime-prepared-wall-child-v3-20261021",
+  "choices": [
+    {
+      "clip_id": "wall-native/wind_wall_corner_native/lifecycle",
+      "approach_id": "runtime-prepared-wall-child-v3-20261021",
+      "constructor": "res://assets/vfx/clips/0104bbdeff25725b6aaceb35/construct.gd",
+      "phase": "res://assets/vfx/extensions/wall-child-v3-20261021/sources/452fc1257a14b1c4913e/phase.tres",
+      "source_qualification_path": "authoring/runtime-cost-repair-20261020/live_wind/qualification.json",
+      "source_qualification": {
+        "schema": "factory.prepared_live_wind.qualification.v2",
+        "clip_id": "wall-native/wind_wall_corner_native/lifecycle",
+        "source_phase": "res://authoring/production-review-repair-20261020/walls/wind.tres",
+        "source_phase_sha256": "cad586afc8c50e1660a0b9addea698d92316b4b3d0fd970d38ba44c8e1dae239",
+        "candidate_phase": "res://authoring/runtime-cost-repair-20261020/live_wind/phase.tres",
+        "candidate_phase_sha256": "563f0ad8fb433ecbded06e4c28e14c14ae5f0d9a3c27a183c6c09828fcb54962",
+        "bank": "res://authoring/runtime-cost-repair-20261020/live_wind/assets/bank.tres",
+        "bank_sha256": "2a05c3fc9735a73bd7253bfe569d96bf1dcef2d01b3a5b839755cb73464824a9",
+        "source_qualification": true,
+        "actual_runtime_controller": "res://factory/components/live_walls/wind.gd",
+        "runtime_math_and_geometry_are_original": true,
+        "current_source_stage": "slim explicit resource-readiness proxy returns original controller",
+        "current_native_admission_receipt": "evidence/runtime-cost-repair-20261020/live_wind/admission-native-v2/checks.json",
+        "current_native_admission_receipt_sha256": "ca5aa9ad3fc63f127bb1f8e06b7ecb5bd5b83a7104d3e1e83cfdb2449063b91c",
+        "native_assertions": 4914,
+        "failures": [],
+        "complete_default_public_constructors_us": [
+          1764,
+          1252,
+          1030,
+          1016
+        ],
+        "first_actual_public_input_and_sample_us": 201,
+        "changed_state_and_sample_us": [
+          {
+            "age": 0.0,
+            "us": 188
+          },
+          {
+            "age": 0.5,
+            "us": 188
+          },
+          {
+            "age": 31.0,
+            "us": 100
+          },
+          {
+            "age": 31.1,
+            "us": 55
+          },
+          {
+            "age": 32.0,
+            "us": 51
+          },
+          {
+            "age": 32.7,
+            "us": 72
+          }
+        ],
+        "ordinary_active_sample_p95_us": 34.0,
+        "ordinary_active_sample_max_us": 120,
+        "readiness": {
+          "elapsed_us": 112765,
+          "steps": [
+            {
+              "operation": "request_resource",
+              "path": "res://factory/components/prepared_live_walls/wind.gd",
+              "state": "pending",
+              "us": 22
+            },
+            {
+              "operation": "publish_resource",
+              "path": "res://factory/components/prepared_live_walls/wind.gd",
+              "state": "pending",
+              "us": 73
+            },
+            {
+              "operation": "request_resource",
+              "path": "res://authoring/runtime-cost-repair-20261020/live_wind/assets/bank.tres",
+              "state": "pending",
+              "us": 33
+            },
+            {
+              "operation": "publish_resource_and_prepare_immutable_interface",
+              "path": "res://authoring/runtime-cost-repair-20261020/live_wind/assets/bank.tres",
+              "state": "ready",
+              "us": 8277
+            }
+          ]
+        },
+        "readiness_mainthread_max_us": 8277,
+        "runtime_flags_retained": [
+          {
+            "boundary": "immutable_readiness_main_thread_publish",
+            "us": 8277,
+            "limit_us": 2000
+          }
+        ],
+        "constructor_and_input_budget_after_readiness_pass": true,
+        "immutable_readiness_budget_pass": false,
+        "earlier_raster_proof": {
+          "receipt": "evidence/runtime-cost-repair-20261020/live_wind/native-v1/checks.json",
+          "qualification": "authoring/runtime-cost-repair-20261020/live_wind/qualification-v1.json",
+          "source_snapshot": "authoring/runtime-cost-repair-20261020/live_wind/native-v1-source-files.json",
+          "rich_source_archive": "research/live-wind-20261020/native-v1-wind.gd",
+          "full_rgba_byte_exact_pairs": 3,
+          "current_proxy_bytes_equal_that_capture": false,
+          "art_math_retained_by_calling_actual_original_controller": true
+        },
+        "source_files": [
+          {
+            "path": "factory/components/prepared_live_walls/wind.gd",
+            "sha256": "e4118a9e4afd0880db31b51463f2fd0549bac79dc996eb9617d48c228d9b8c87"
+          },
+          {
+            "path": "factory/components/prepared_live_walls/wind_bank.gd",
+            "sha256": "a1dfe48908f480353953540fa87ad5789fa1cd7ac8adeb7e5c1f00cde32572bd"
+          },
+          {
+            "path": "factory/packaging/prepare_live_wind.gd",
+            "sha256": "10a02787782de575059d905b3457ddb12dd1eb920117e3ee48f604107b5837a1"
+          },
+          {
+            "path": "factory/tests/prepared_live_wind_admission.gd",
+            "sha256": "d9d35b00a9434b6520a30aa460b83526d7a7660e0f393bed6af7e62b3e85f098"
+          },
+          {
+            "path": "factory/components/live_walls/wind.gd",
+            "sha256": "5530836d43e0aded686c7ae9552d96560d933e5b53fef5336e12c6645c0fc39d"
+          },
+          {
+            "path": "factory/components/live_walls/wind_bank.gd",
+            "sha256": "d8bb05939be98b173917bf911ad90923c6c06573589855982fec4c2fb26679f6"
+          }
+        ],
+        "source_hz": 144,
+        "physics_ticks_per_second": 60,
+        "production_integration_performed": false,
+        "human_approval_inferred": false,
+        "scope": "Slim readiness proxy returns actual original live-wall Node. One supplied synthetic polyline; public constructors/private native materials/live owner and contact semantics. No new images, no new source equations or geometry implementation."
+      },
+      "source_runtime_flags_retained": [
+        {
+          "boundary": "immutable_readiness_main_thread_publish",
+          "us": 8277,
+          "limit_us": 2000
+        }
+      ],
+      "construction_input_contract": null,
+      "packaged_execution_qualified": true,
+      "human_approval_inferred": false,
+      "packaged_smoke_label": "complete-v1",
+      "packaged_smoke_scope": "Two exact closed source constructors and actual public setters. Synthetic schema polyline/child cells, private owners, chronological144Hz, positive pixels and observed removal. No actual journal/actor, original-art parity rerender, installation or approval.",
+      "packaged_first_complete_constructor_us": 1648,
+      "packaged_first_constructor_over2000us": false
+    },
+    {
+      "clip_id": "native/frigid_air/lifecycle",
+      "approach_id": "runtime-prepared-wall-child-v3-20261021",
+      "constructor": "res://assets/vfx/extensions/wall-child-v3-20261021/sources/77685eed96e701f52da0/frigid_air_child_v3_occurrence.gd",
+      "phase": "res://assets/vfx/extensions/wall-child-v3-20261021/sources/2503267e57482def9940/phase.tres",
+      "source_qualification_path": "authoring/production-review-repair-20261021/frigid_air_child_v3/qualification.json",
+      "source_qualification": {
+        "schema": "factory.frigid_air_child.qualification.v3",
+        "clip_id": "native/frigid_air/lifecycle",
+        "variant": "observed_child_resource_safe_bank",
+        "candidate_phase": "res://authoring/production-review-repair-20261021/frigid_air_child_v3/phase.tres",
+        "candidate_phase_sha256": "32a7ba9eb18c2869eea464cc3fb8e4aa5c4111688c3f9913537533c5954e69e1",
+        "bank": "res://authoring/production-review-repair-20261021/frigid_air_child_v3/assets/mist-bank.tres",
+        "bank_sha256": "221c30fa538029df2fffd320df3e4635a59ccfe70080489e9d6debc721e3dcb0",
+        "constructor": "res://factory/packaging/frigid_air_child_v3_occurrence.gd",
+        "source_qualification": true,
+        "source_files": [
+          {
+            "path": "authoring/production-review-repair-20261021/frigid_air_child/assets/frost.gdshader",
+            "sha256": "acbf5e8e4d1e5af801b43412991e6c5ab28fd192186bb5312b927c162aee41f9",
+            "bytes": 1287
+          },
+          {
+            "path": "authoring/production-review-repair-20261021/frigid_air_child/assets/frost.tres",
+            "sha256": "01c4d92cdf2541ca18ed4025d9693724972bbf2f2352766da001208ec7773706",
+            "bytes": 883
+          },
+          {
+            "path": "authoring/production-review-repair-20261021/frigid_air_child/assets/mist.gdshader",
+            "sha256": "b5b2f3ab68a16e3dcf00f3e585628d010aca2bb1c7a23d4a69aef5907abd198a",
+            "bytes": 2238
+          },
+          {
+            "path": "authoring/production-review-repair-20261021/frigid_air_child/assets/mist.tres",
+            "sha256": "9b82d4d002ff5f91481bfe13e5d8016d6ba6da4417de5777f0392c461fbb65f6",
+            "bytes": 1242
+          },
+          {
+            "path": "authoring/production-review-repair-20261021/frigid_air_child_v3/assets/mist-bank.tres",
+            "sha256": "221c30fa538029df2fffd320df3e4635a59ccfe70080489e9d6debc721e3dcb0",
+            "bytes": 5759
+          },
+          {
+            "path": "authoring/production-review-repair-20261021/frigid_air_child_v3/phase.tres",
+            "sha256": "32a7ba9eb18c2869eea464cc3fb8e4aa5c4111688c3f9913537533c5954e69e1",
+            "bytes": 1102
+          },
+          {
+            "path": "factory/components/frigid_air_child/input.gd",
+            "sha256": "e03c9244aef80d6011c30daa22ffa54660937188a39cdb696c979fb37798b5e8",
+            "bytes": 3920
+          },
+          {
+            "path": "factory/components/frigid_air_child_v2/field.gd",
+            "sha256": "b785000746b2ec2c68d0711dd93b63fbe44a6bb23e2b7274d4240991c1e04d29",
+            "bytes": 6128
+          },
+          {
+            "path": "factory/components/frigid_air_child_v3/bank.gd",
+            "sha256": "1f03e1c2b83a53d809c52ab831bdfd78f0244def9e55048428a251396a2ff8f6",
+            "bytes": 985
+          },
+          {
+            "path": "factory/packaging/frigid_air_child_construction.gd",
+            "sha256": "bf2fd2070403079940ac4082f386da56e1c300b6cc1571d3cd81657ec78af2c2",
+            "bytes": 795
+          },
+          {
+            "path": "factory/packaging/frigid_air_child_v3_occurrence.gd",
+            "sha256": "16daf90cc75a8b19bb4727d4cfb80f290aa9398b979b093cf8a7c107bde0411e",
+            "bytes": 780
+          },
+          {
+            "path": "factory/tests/frigid_air_child_v3.gd",
+            "sha256": "cd55959df5c3a6135f8ac129cb96bfc540a88e846ef95c087272df3eb7896b4f",
+            "bytes": 6932
+          },
+          {
+            "path": "tools/runtime_cost/frigid_air_child_v3.py",
+            "sha256": "f0c150d3c140de7f70dc6d48e5e866304c789380084bc5357579f8e76fe1e93e",
+            "bytes": 4543
+          }
+        ],
+        "original_art_qualification": {
+          "path": "authoring/production-review-repair-20261021/frigid_air_child/qualification.json",
+          "sha256": "6d7f4fb441fbe6de20809997f48fa56915182f0bbe1afc48a6836f2459a0e45c",
+          "bytes": 9865
+        },
+        "previous_ownership_qualification": {
+          "path": "authoring/production-review-repair-20261021/frigid_air_child_v2/qualification.json",
+          "sha256": "11d081352bad2c45410ad378bf2381df7d736ee3f12b61bcc892ef25d048f0bd",
+          "bytes": 8543
+        },
+        "derivative": {
+          "schema": "factory.frigid_air_child.bank_ownership_derivative.v3",
+          "sources": {
+            "bank_script": {
+              "path": "factory/components/frigid_air_child/bank.gd",
+              "sha256": "8e6b56e61bca9a1b009d2a03765a21508e11f346bb76ab936139e52db750920c"
+            },
+            "bank": {
+              "path": "authoring/production-review-repair-20261021/frigid_air_child/assets/mist-bank.tres",
+              "sha256": "68bdd62d221d840faac8214bb78c35a336a0cfb4d233783a344652d68fb5c6f5"
+            },
+            "phase": {
+              "path": "authoring/production-review-repair-20261021/frigid_air_child_v2/phase.tres",
+              "sha256": "ba2ac1c6580eaee09db512a14bebc16ece5da10e2d1a6138e440d9045be98cf0"
+            },
+            "wrapper": {
+              "path": "factory/packaging/frigid_air_child_v2_occurrence.gd",
+              "sha256": "6d85588fdedcb9902cfed92ad9244c4746556aca043c3fe62b3e7b0169a60fd7"
+            },
+            "fixture": {
+              "path": "factory/tests/frigid_air_child_v2.gd",
+              "sha256": "f912aba97a5070a627908f4717f71a21d3d4d823ac241f7bf3f52937388ea022"
+            }
+          },
+          "unchanged_runtime_field": {
+            "path": "factory/components/frigid_air_child_v2/field.gd",
+            "sha256": "b785000746b2ec2c68d0711dd93b63fbe44a6bb23e2b7274d4240991c1e04d29"
+          },
+          "files": [
+            {
+              "path": "factory/components/frigid_air_child_v3/bank.gd",
+              "sha256": "1f03e1c2b83a53d809c52ab831bdfd78f0244def9e55048428a251396a2ff8f6",
+              "bytes": 985
+            },
+            {
+              "path": "authoring/production-review-repair-20261021/frigid_air_child_v3/assets/mist-bank.tres",
+              "sha256": "221c30fa538029df2fffd320df3e4635a59ccfe70080489e9d6debc721e3dcb0",
+              "bytes": 5759
+            },
+            {
+              "path": "authoring/production-review-repair-20261021/frigid_air_child_v3/phase.tres",
+              "sha256": "32a7ba9eb18c2869eea464cc3fb8e4aa5c4111688c3f9913537533c5954e69e1",
+              "bytes": 1102
+            },
+            {
+              "path": "factory/packaging/frigid_air_child_v3_occurrence.gd",
+              "sha256": "16daf90cc75a8b19bb4727d4cfb80f290aa9398b979b093cf8a7c107bde0411e",
+              "bytes": 780
+            },
+            {
+              "path": "factory/tests/frigid_air_child_v3.gd",
+              "sha256": "cd55959df5c3a6135f8ac129cb96bfc540a88e846ef95c087272df3eb7896b4f",
+              "bytes": 6932
+            }
+          ],
+          "bank_art_delta": "Only bank Script reference changes; original serialized meshes/materials/shaders/textures/metadata/provenance remain byte-for-byte in text.",
+          "namespace_retention_qualified": false
+        },
+        "focused_cpu": {
+          "path": "evidence/production-review-repair-20261021/frigid_air_child_v3/cpu-v1.json",
+          "sha256": "7a5bc87e3c1a0ee53a0813f3f12a00e3666251f990d404ca00f719255c0715b3",
+          "bytes": 1505
+        },
+        "native_receipt": {
+          "path": "evidence/production-review-repair-20261021/frigid_air_child_v3/native-v1.json",
+          "sha256": "34ce9b1fa097b4edcdb1f77addfbc5cd2b79e9337efb345226d2e68bd22eed92",
+          "bytes": 1503
+        },
+        "cost_flags": [],
+        "new_images": 0,
+        "runtime_field_unchanged_from_v2": true,
+        "art_equations_unchanged": true,
+        "full_namespace_retention_qualified": false,
+        "status": "Focused CPU36/0 and native36/0 current ownership/public constructor proof. V2 field unchanged; bank text differs only in Script path. Oldv1/v2 failed full namespace traces retained; final successor namespace-retention remains separate.",
+        "production_integration_performed": false,
+        "human_approval_inferred": false,
+        "measured_native": {
+          "complete_public_constructor_us": [
+            756,
+            402,
+            285,
+            259
+          ],
+          "first_input_plus_sample_us": 148,
+          "readiness_elapsed_us": 86693,
+          "maximum_readiness_step_us": 426,
+          "images_captured": 0,
+          "source_hz": 144,
+          "physics_hz": 60
+        }
+      },
+      "source_runtime_flags_retained": [],
+      "construction_input_contract": null,
+      "packaged_execution_qualified": true,
+      "human_approval_inferred": false,
+      "packaged_smoke_label": "complete-v1",
+      "packaged_smoke_scope": "Two exact closed source constructors and actual public setters. Synthetic schema polyline/child cells, private owners, chronological144Hz, positive pixels and observed removal. No actual journal/actor, original-art parity rerender, installation or approval.",
+      "packaged_first_complete_constructor_us": 650,
+      "packaged_first_constructor_over2000us": false
+    }
+  ],
+  "by_clip_id": {
+    "wall-native/wind_wall_corner_native/lifecycle": "runtime-prepared-wall-child-v3-20261021",
+    "native/frigid_air/lifecycle": "runtime-prepared-wall-child-v3-20261021"
+  },
+  "automatic_client_selection_performed": false,
+  "native_receipt_sha256": "2934edfc8272f8bb641aaa7b86a82ef739504c62158ac574a7401d20e41e84bd"
+}

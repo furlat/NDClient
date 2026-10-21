@@ -1,0 +1,105 @@
+[gd_resource type="Resource" format=3]
+
+[ext_resource type="QuadMesh" path="res://assets/vfx/sources/6a37c0dc53e946ba49f2/mesh-63c570901cde0e31cce0.res" id="1_4l0cv"]
+[ext_resource type="QuadMesh" path="res://assets/vfx/sources/0e3298085f2d8841a53c/mesh-f593aae0f4d9fa76bf10.res" id="2_1jva1"]
+[ext_resource type="QuadMesh" path="res://assets/vfx/sources/723d521e409b2b14e92c/mesh-24e53c9767c7ebdf4e6d.res" id="3_ocine"]
+[ext_resource type="Shader" path="res://assets/vfx/extensions/wall-child-v3-20261021/sources/4dbd244b81c8a518425d/mist.gdshader" id="4_3mw77"]
+[ext_resource type="Texture2D" path="res://assets/vfx/sources/900721c102c94ad02849/texture.res" id="5_uup4o"]
+[ext_resource type="Shader" path="res://assets/vfx/extensions/wall-child-v3-20261021/sources/4cd084942bc2f7415e64/frost.gdshader" id="6_6f8t8"]
+[ext_resource type="Script" path="res://assets/vfx/extensions/wall-child-v3-20261021/sources/0697d1c7468e4bad1156/bank.gd" id="7_11704"]
+[ext_resource type="Material" path="res://assets/vfx/sources/db0d2592406e1b7c6519/ice_straight-material-04.tres" id="8_ormfk"]
+[ext_resource type="Material" path="res://assets/vfx/sources/6f6a88ba4634427df16b/ice_straight-material-03.tres" id="9_y3o6b"]
+[ext_resource type="BoxMesh" path="res://assets/vfx/sources/20220d9465fbf39fbe79/mesh-44daaa774beb2219b685.res" id="10_pu7mh"]
+
+[sub_resource type="QuadMesh" id="QuadMesh_rgn3x"]
+size = Vector2(0.065, 0.065)
+
+[sub_resource type="QuadMesh" id="QuadMesh_bcqae"]
+size = Vector2(0.089, 0.089)
+
+[sub_resource type="QuadMesh" id="QuadMesh_ijspe"]
+size = Vector2(0.113, 0.113)
+
+[sub_resource type="QuadMesh" id="QuadMesh_4pxqq"]
+size = Vector2(0.065, 0.065)
+
+[sub_resource type="QuadMesh" id="QuadMesh_d5loo"]
+size = Vector2(0.089, 0.089)
+
+[sub_resource type="QuadMesh" id="QuadMesh_w10yj"]
+size = Vector2(0.113, 0.113)
+
+[sub_resource type="QuadMesh" id="QuadMesh_s6yag"]
+size = Vector2(0.065, 0.065)
+
+[sub_resource type="QuadMesh" id="QuadMesh_ebygm"]
+size = Vector2(0.089, 0.089)
+
+[sub_resource type="QuadMesh" id="QuadMesh_ok42c"]
+size = Vector2(0.113, 0.113)
+
+[sub_resource type="QuadMesh" id="QuadMesh_6tl7l"]
+size = Vector2(0.065, 0.065)
+
+[sub_resource type="QuadMesh" id="QuadMesh_n4rrg"]
+size = Vector2(0.089, 0.089)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ostfp"]
+render_priority = 0
+shader = ExtResource("4_3mw77")
+shader_parameter/factory_world_to_source = null
+shader_parameter/factory_occurrence_alpha = 1.0
+shader_parameter/cold_noise = ExtResource("5_uup4o")
+shader_parameter/wall_clock = null
+shader_parameter/opacity = null
+shader_parameter/actor_ground = null
+shader_parameter/camera_ground = Vector2(0.70710677, 0.70710677)
+shader_parameter/foreground = false
+shader_parameter/centre = Vector3(0, 2.1213202, 1.0606601)
+shader_parameter/half_extent = Vector3(2.1213202, 2.1213202, 0.84852815)
+shader_parameter/child_mask_origin = null
+shader_parameter/child_mask_size = null
+metadata/factory_occurrence_alpha = true
+metadata/factory_prepared_shader = ExtResource("4_3mw77")
+metadata/factory_opacity_prepared_shader = ExtResource("4_3mw77")
+metadata/factory_clock_names = []
+metadata/factory_clock_pool_required = false
+metadata/factory_world_space_uniform = true
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_kibgb"]
+render_priority = 0
+shader = ExtResource("6_6f8t8")
+shader_parameter/factory_world_to_source = null
+shader_parameter/factory_occurrence_alpha = 1.0
+shader_parameter/opacity = 1.0
+shader_parameter/actor_ground = null
+shader_parameter/camera_ground = Vector2(0.70710677, 0.70710677)
+shader_parameter/foreground = false
+shader_parameter/child_mask_origin = null
+shader_parameter/child_mask_size = null
+metadata/factory_occurrence_alpha = true
+metadata/factory_prepared_shader = ExtResource("6_6f8t8")
+metadata/factory_opacity_prepared_shader = ExtResource("6_6f8t8")
+metadata/factory_clock_names = []
+metadata/factory_clock_pool_required = false
+metadata/factory_world_space_uniform = true
+
+[resource]
+script = ExtResource("7_11704")
+volume_mesh = ExtResource("10_pu7mh")
+flake_meshes = Array[Mesh]([SubResource("QuadMesh_rgn3x"), SubResource("QuadMesh_bcqae"), SubResource("QuadMesh_ijspe"), SubResource("QuadMesh_4pxqq"), SubResource("QuadMesh_d5loo"), SubResource("QuadMesh_w10yj"), SubResource("QuadMesh_s6yag"), SubResource("QuadMesh_ebygm"), SubResource("QuadMesh_ok42c"), SubResource("QuadMesh_6tl7l"), SubResource("QuadMesh_n4rrg"), ExtResource("1_4l0cv"), ExtResource("2_1jva1"), ExtResource("3_ocine")])
+materials = Array[ShaderMaterial]([SubResource("ShaderMaterial_ostfp"), SubResource("ShaderMaterial_kibgb")])
+source_volume_material = ExtResource("9_y3o6b")
+source_flake_material = ExtResource("8_ormfk")
+source_volume_transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.1213202, 1.0606601)
+provenance = {
+"flake_source_sha256": "4097a4f651934576c209e2be63617cc83c3dc513a4b06852a09f7f626fc5b732",
+"flake_source_shader": "res://assets/vfx/sources/9d303bf63d4cc1346357/program-4097a4f651934576c209.gdshader",
+"geometry": "Only original one BoxMesh and14 original QuadMeshes; no wall/rigidbody/player",
+"mist_source_sha256": "f70356e4f67eddc0eb1c663cda46ba54b34f474fa2fffcd8fdcfd2716b813206",
+"mist_source_shader": "res://assets/vfx/sources/10e69fb4b55714cdfec9/program-f70356e4f67eddc0eb1c.gdshader",
+"original_bank_sha256": "2523e12a98b634bbf8bfbcf52a4f65ac4b482ea58d99162814f27c61f40d0bad",
+"original_prepared_bank": "res://assets/vfx/extensions/wall-child-v3-20261021/sources/12a003fffdbfc70fda51/ice_straight-bank.tres",
+"source_change": "Current disclosed-cell mask in fog integration and flakes; independent owner clock; no wall lease",
+"source_noise": "LeLu elementary premium T_VFX_Noise_075 original material texture; license provenance retained by material dependency"
+}

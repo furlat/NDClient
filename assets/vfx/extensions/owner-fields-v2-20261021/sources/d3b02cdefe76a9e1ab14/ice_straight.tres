@@ -1,0 +1,33 @@
+[gd_resource type="Resource" format=3]
+
+[ext_resource type="Script" path="res://assets/vfx/sources/d60670fa4c3a03cc8f3a/component.gd" id="1_rvvwx"]
+[ext_resource type="Script" path="res://assets/vfx/sources/67ebe8ef4f358cad6a4b/phase.gd" id="2_fuy8r"]
+
+[sub_resource type="Resource" id="Resource_3twha"]
+script = ExtResource("1_rvvwx")
+component_id = "wall"
+constructor_script = "res://assets/vfx/extensions/owner-fields-v2-20261021/sources/44a07f767e19f1faf49c/wall.gd"
+input = {
+"solid_owner_bank": "res://assets/vfx/extensions/owner-fields-v2-20261021/sources/1adaa698ea22e808fd4a/ice_straight.res"
+}
+provenance = "Existing native intact solid wall surfaces; construction and current section/cell/owner facts supplied live"
+
+[resource]
+script = ExtResource("2_fuy8r")
+clip_id = "wall-native/ice_wall_assembly_breakup_native/lifecycle"
+label = "ice_straight — actual surviving solid wall"
+phase = "lifecycle"
+variant = "actual_owner_sections"
+components = Array[Resource]([SubResource("Resource_3twha")])
+bindings = [{
+"component": "wall",
+"kind": "sample",
+"offset_seconds": 0.0,
+"rate": 1.0
+}]
+simulation_hz = 144.0
+options = {
+"human_approval_inferred": false,
+"owner_driven": true,
+"production_integration_performed": false
+}

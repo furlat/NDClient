@@ -1,0 +1,75 @@
+[gd_resource type="Resource" format=3]
+
+[ext_resource type="Resource" path="res://assets/vfx/sources/add9c82cfdb4eff72692/f130c7e48c04.tres" id="1_lhtfa"]
+[ext_resource type="Shader" path="res://assets/vfx/extensions/production-review-20261020/sources/cfeaf175c07af31a3b22/thorns.gdshader" id="2_fqjy2"]
+[ext_resource type="Texture2D" path="res://assets/vfx/sources/e1a0e0dfc4cb8c8bc962/texture.res" id="3_b3do0"]
+[ext_resource type="Texture2D" path="res://assets/vfx/sources/c0a2515abc39856316d0/texture.res" id="4_rijdq"]
+[ext_resource type="Texture2D" path="res://assets/vfx/sources/c3db941ca0009cd4d57e/texture.res" id="5_8pdmd"]
+[ext_resource type="Script" path="res://assets/vfx/extensions/production-review-20261020/sources/cbc90224978c68d8ce5d/thorns_bank.gd" id="6_ninla"]
+
+[sub_resource type="Gradient" id="Gradient_2sbf0"]
+colors = PackedColorArray(1.20327e-06, 0.448723, 0.045844, 1, 0.678121, 0.83095, 0, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_e4bpp"]
+gradient = SubResource("Gradient_2sbf0")
+fill_to = Vector2(0, 1)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_mc6ea"]
+render_priority = 0
+shader = ExtResource("2_fqjy2")
+shader_parameter/factory_world_to_source = null
+shader_parameter/factory_occurrence_alpha = 1.0
+shader_parameter/thorns_bark_fill = 0.18
+shader_parameter/thorns_world_to_source = null
+shader_parameter/thorns_source_to_world = null
+shader_parameter/wall_clock = null
+shader_parameter/wall_fade = null
+shader_parameter/occupant_count = null
+shader_parameter/occupants = null
+shader_parameter/contact_pulse = null
+shader_parameter/actor_ground = null
+shader_parameter/camera_ground = null
+shader_parameter/split_layers = null
+shader_parameter/foreground = null
+shader_parameter/retirement = null
+shader_parameter/wall_heading = null
+shader_parameter/circular = null
+shader_parameter/live_wall_center = null
+shader_parameter/live_wall_radius = null
+shader_parameter/live_wall_width_scale = null
+shader_parameter/live_wall_height_scale = null
+shader_parameter/VineTextureScale = Vector2(1, 3)
+shader_parameter/VinesTexture = ExtResource("5_8pdmd")
+shader_parameter/EnergyColor2DGradient = SubResource("GradientTexture2D_e4bpp")
+shader_parameter/NoiseScale = Vector2(0.5, 1)
+shader_parameter/NoiseSpeed = Vector2(0.1, 0.3)
+shader_parameter/DetailsNoiseTexture = ExtResource("3_b3do0")
+shader_parameter/Intensity = 2.2
+shader_parameter/DisolverColorEnergy = 2.0
+shader_parameter/IsInvertFresnel = false
+shader_parameter/FresnelPower = 1.0
+shader_parameter/Roughtness = 1.0
+shader_parameter/AlphaScissorThreshold = 0.966
+shader_parameter/DisolverDetailsScale = Vector2(1, 3)
+shader_parameter/DisolverDetailsSpeed = Vector2(0.1, -0.8)
+shader_parameter/DisolverDetailsTexture = ExtResource("4_rijdq")
+shader_parameter/DisolverBaias = 0.05
+shader_parameter/VertexScale = Vector2(1, 1)
+shader_parameter/VertexSpeed = Vector2(0.3, 0.8)
+shader_parameter/VertexIntensity = 0.0
+shader_parameter/TextureVertex = ExtResource("4_rijdq")
+shader_parameter/SwaySpeed = 2.0
+shader_parameter/SwayFrequency = 2.0
+shader_parameter/SwayAmplitude = 0.0
+shader_parameter/SwayDirection = Vector3(1, 0, 1)
+shader_parameter/SwayRandomness = 1.0
+metadata/factory_occurrence_alpha = true
+metadata/factory_prepared_shader = ExtResource("2_fqjy2")
+metadata/factory_opacity_prepared_shader = ExtResource("2_fqjy2")
+metadata/factory_clock_names = []
+metadata/factory_world_space_uniform = true
+
+[resource]
+script = ExtResource("6_ninla")
+donor_bank = ExtResource("1_lhtfa")
+material = SubResource("ShaderMaterial_mc6ea")

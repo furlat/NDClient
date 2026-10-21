@@ -1,0 +1,22 @@
+[gd_resource type="Resource" format=3]
+
+[ext_resource type="PackedScene" path="res://assets/vfx/conditions/condition_draconic_breath_cadence_necrotic_event/prepared.scn" id="1_176vp"]
+[ext_resource type="Script" path="res://assets/vfx/extensions/followup-20261020/sources/0fb7351681180386b03a/condition_pose_interface.gd" id="2_m3ycu"]
+
+[resource]
+script = ExtResource("2_m3ycu")
+scene = ExtResource("1_176vp")
+bindings = [{
+"node_index": 2,
+"node_path": "./effect/NativeReceivingMaterial",
+"property_index": 1,
+"property_name": "material_override",
+"shader_path": "res://assets/vfx/shared/resources/606cecfd6682c7712dd96a6034cd9caeba24b60dd87dc89b0d626feb44d9fbe7.res"
+}]
+receipt = {
+"artwork_changed": false,
+"owner_preconstructed": false,
+"scene": "res://assets/vfx/conditions/condition_draconic_breath_cadence_necrotic_event/prepared.scn",
+"scene_sha256": "52e414000a3b36ce80729fa6d656dbfefa0b524a9af8b9b934717fa14152406d",
+"selection": "condition_draconic_breath_cadence_necrotic_event"
+}

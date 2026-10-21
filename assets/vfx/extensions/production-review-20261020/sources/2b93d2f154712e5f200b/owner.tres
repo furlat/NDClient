@@ -1,0 +1,22 @@
+[gd_resource type="Resource" format=3]
+
+[ext_resource type="Script" path="res://assets/vfx/sources/67ebe8ef4f358cad6a4b/phase.gd" id="phase"]
+[ext_resource type="Script" path="res://assets/vfx/sources/d60670fa4c3a03cc8f3a/component.gd" id="component"]
+
+[sub_resource type="Resource" id="field"]
+script = ExtResource("component")
+component_id = "aura_owner"
+constructor_script = "res://assets/vfx/extensions/production-review-20261020/sources/1160d2e2ac6f4e4e9780/field.gd"
+input = {"aura_field_bank": "res://assets/vfx/extensions/production-review-20261020/sources/1efe0246400ec83e0846/bank.tres"}
+provenance = "Original six-petal Aura of Life owner GPU field/material. Actual owner lease and caster root are required; radius30ft/6cells is verified backend authored size. No review facts/member treatment/undisclosed spatial UUID."
+
+[resource]
+script = ExtResource("phase")
+clip_id = "production-review/aura-of-life/main_owner"
+label = "Aura of Life actual main-owner field"
+phase = "sustain"
+seconds = 4.4
+simulation_hz = 60
+components = Array[Resource]([SubResource("field")])
+bindings = [{"component": "aura_owner", "kind": "sample", "offset_seconds": 0.0, "rate": 1.0}]
+options = {"opacity_uniform": "support_visibility", "owner_lifetime": true, "human_approval_inferred": false, "production_integration_performed": false}

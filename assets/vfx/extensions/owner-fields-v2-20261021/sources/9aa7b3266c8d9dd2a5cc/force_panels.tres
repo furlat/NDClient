@@ -1,0 +1,22 @@
+[gd_resource type="Resource" load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://assets/vfx/sources/67ebe8ef4f358cad6a4b/phase.gd" id="phase"]
+[ext_resource type="Script" path="res://assets/vfx/sources/d60670fa4c3a03cc8f3a/component.gd" id="component"]
+
+[sub_resource type="Resource" id="effect"]
+script = ExtResource("component")
+component_id = "effect"
+constructor_script = "res://assets/vfx/extensions/owner-fields-v2-20261021/sources/0ab0ccb672dd38856a68/force.gd"
+input = {"force_owner_bank": "res://assets/vfx/extensions/owner-fields-v2-20261021/sources/9131c0186028394158e6/force_panels-bank.res", "wall_uuid": "", "anchor_position": [], "wall_geometry": {}}
+
+[resource]
+script = ExtResource("phase")
+clip_id = "wall-native/wall_of_force_panels_back_native/lifecycle"
+label = "Actual-owner passive blue Force wall"
+phase = "lifecycle"
+variant = "actual_owner"
+components = Array[Resource]([SubResource("effect")])
+bindings = [{"component":"effect","kind":"sample","rate":1.0,"offset_seconds":0.0}]
+seconds = 1.0
+simulation_hz = 144.0
+options = {"inputs":["owner_state","targets","zone_geometry"],"owner_driven":true,"contacts_qualified":false}

@@ -1,0 +1,293 @@
+{
+  "version": "runtime-public-admission-20261020-976f8289ebcefa5c",
+  "review_path": "evidence/production-review-repair-20261020/public_admission/package-native-v1-review/image-review.json",
+  "review_sha256": "ac3284283e90e1168aa115081a83a02157c2ee8fef4f6936fe9cde3fdac6a659",
+  "review": {
+    "schema": "factory.public_admission.package_image_review.v1",
+    "version": "runtime-public-admission-20261020-976f8289ebcefa5c",
+    "index_sha256": "07e4d2fa58f45e76724083f70239191b2af64527f211b08f2a52533b3165a55b",
+    "receipt": {
+      "path": ".runtime\\runtime-public-admission-20261020\\native-smoke-complete-v1.json",
+      "sha256": "36c74622a379a7f8d176cad23975c9cd2fdbd6c2fdf190b009c2d6241d43fb50"
+    },
+    "checks": 739,
+    "functional_failures": [],
+    "cost_flags": [
+      {
+        "clip_id": "high-level-22/freezing-sphere/launch_blast",
+        "kind": "actual_observed_explosion_and_first_sample",
+        "limit_us": 250,
+        "us": 325
+      }
+    ],
+    "contact": {
+      "path": "evidence\\production-review-repair-20261020\\public_admission\\package-native-v1-review\\contact.png",
+      "sha256": "81d16b75ab89ac87dafb5b582f0be1f2eadc9c10794f8a1bd46c54474b81d9c9"
+    },
+    "images": [
+      {
+        "path": "res://native-smoke-complete-v1/fire-ready.png",
+        "sha256": "67ef17438a3bee2b80064257acc26a922e68d8391c3bd917ccf5833bf295c3d9",
+        "size": [
+          256,
+          256
+        ],
+        "alpha_positive_pixels": 832,
+        "alpha_bbox": [
+          124,
+          116,
+          158,
+          151
+        ],
+        "alpha_maximum": 41
+      },
+      {
+        "path": "res://native-smoke-complete-v1/fire-retired.png",
+        "sha256": "9b8c0fb55362cdcb2a04b7f52c99aeca590ed88f30b95821b36ec15e8ec819de",
+        "size": [
+          256,
+          256
+        ],
+        "alpha_positive_pixels": 0,
+        "alpha_bbox": null,
+        "alpha_maximum": 0
+      },
+      {
+        "path": "res://native-smoke-complete-v1/cold-ready.png",
+        "sha256": "278686661f8392fc35a1b0e8fda5a887bb2db64846ada168d10795a7cd2e173c",
+        "size": [
+          256,
+          256
+        ],
+        "alpha_positive_pixels": 471,
+        "alpha_bbox": [
+          124,
+          116,
+          158,
+          151
+        ],
+        "alpha_maximum": 3
+      },
+      {
+        "path": "res://native-smoke-complete-v1/cold-retired.png",
+        "sha256": "9b8c0fb55362cdcb2a04b7f52c99aeca590ed88f30b95821b36ec15e8ec819de",
+        "size": [
+          256,
+          256
+        ],
+        "alpha_positive_pixels": 0,
+        "alpha_bbox": null,
+        "alpha_maximum": 0
+      },
+      {
+        "path": "res://native-smoke-complete-v1/lightning-ready.png",
+        "sha256": "bb68e6ae8615ed794f5b097f1ef3f13794e18e040351356cf551e89e8dd7bb31",
+        "size": [
+          256,
+          256
+        ],
+        "alpha_positive_pixels": 95,
+        "alpha_bbox": [
+          124,
+          116,
+          158,
+          151
+        ],
+        "alpha_maximum": 17
+      },
+      {
+        "path": "res://native-smoke-complete-v1/lightning-retired.png",
+        "sha256": "9b8c0fb55362cdcb2a04b7f52c99aeca590ed88f30b95821b36ec15e8ec819de",
+        "size": [
+          256,
+          256
+        ],
+        "alpha_positive_pixels": 0,
+        "alpha_bbox": null,
+        "alpha_maximum": 0
+      },
+      {
+        "path": "res://native-smoke-complete-v1/acid-ready.png",
+        "sha256": "ab83ff4ee5f33f804a99af59759013ec005915b90998f076c15db17c7393ae45",
+        "size": [
+          256,
+          256
+        ],
+        "alpha_positive_pixels": 407,
+        "alpha_bbox": [
+          124,
+          116,
+          158,
+          151
+        ],
+        "alpha_maximum": 6
+      },
+      {
+        "path": "res://native-smoke-complete-v1/acid-retired.png",
+        "sha256": "9b8c0fb55362cdcb2a04b7f52c99aeca590ed88f30b95821b36ec15e8ec819de",
+        "size": [
+          256,
+          256
+        ],
+        "alpha_positive_pixels": 0,
+        "alpha_bbox": null,
+        "alpha_maximum": 0
+      },
+      {
+        "path": "res://native-smoke-complete-v1/poison-ready.png",
+        "sha256": "9944cffa49b3b9af7e0212bd1f4124acc84728dc7363cf4ae424c33caa3ed37e",
+        "size": [
+          256,
+          256
+        ],
+        "alpha_positive_pixels": 407,
+        "alpha_bbox": [
+          124,
+          116,
+          158,
+          151
+        ],
+        "alpha_maximum": 6
+      },
+      {
+        "path": "res://native-smoke-complete-v1/poison-retired.png",
+        "sha256": "9b8c0fb55362cdcb2a04b7f52c99aeca590ed88f30b95821b36ec15e8ec819de",
+        "size": [
+          256,
+          256
+        ],
+        "alpha_positive_pixels": 0,
+        "alpha_bbox": null,
+        "alpha_maximum": 0
+      },
+      {
+        "path": "res://native-smoke-complete-v1/portable-amber-0017.png",
+        "sha256": "04561c12a6833ad29a01872313483a4c6e429f69691406960b5acf32947f61de",
+        "size": [
+          256,
+          256
+        ],
+        "alpha_positive_pixels": 136,
+        "alpha_bbox": [
+          103,
+          108,
+          151,
+          149
+        ],
+        "alpha_maximum": 239
+      },
+      {
+        "path": "res://native-smoke-complete-v1/portable-blue-0017.png",
+        "sha256": "04561c12a6833ad29a01872313483a4c6e429f69691406960b5acf32947f61de",
+        "size": [
+          256,
+          256
+        ],
+        "alpha_positive_pixels": 136,
+        "alpha_bbox": [
+          103,
+          108,
+          151,
+          149
+        ],
+        "alpha_maximum": 239
+      },
+      {
+        "path": "res://native-smoke-complete-v1/portable-amber-0079.png",
+        "sha256": "05486d450f2b9dd7a8508e9b4c0e737aeddc0c44324f7928686915846b59de32",
+        "size": [
+          256,
+          256
+        ],
+        "alpha_positive_pixels": 198,
+        "alpha_bbox": [
+          81,
+          84,
+          172,
+          162
+        ],
+        "alpha_maximum": 237
+      },
+      {
+        "path": "res://native-smoke-complete-v1/portable-blue-0079.png",
+        "sha256": "05486d450f2b9dd7a8508e9b4c0e737aeddc0c44324f7928686915846b59de32",
+        "size": [
+          256,
+          256
+        ],
+        "alpha_positive_pixels": 198,
+        "alpha_bbox": [
+          81,
+          84,
+          172,
+          162
+        ],
+        "alpha_maximum": 237
+      },
+      {
+        "path": "res://native-smoke-complete-v1/portable-amber-0173.png",
+        "sha256": "9b8c0fb55362cdcb2a04b7f52c99aeca590ed88f30b95821b36ec15e8ec819de",
+        "size": [
+          256,
+          256
+        ],
+        "alpha_positive_pixels": 0,
+        "alpha_bbox": null,
+        "alpha_maximum": 0
+      },
+      {
+        "path": "res://native-smoke-complete-v1/portable-blue-0173.png",
+        "sha256": "9b8c0fb55362cdcb2a04b7f52c99aeca590ed88f30b95821b36ec15e8ec819de",
+        "size": [
+          256,
+          256
+        ],
+        "alpha_positive_pixels": 0,
+        "alpha_bbox": null,
+        "alpha_maximum": 0
+      }
+    ],
+    "saved_source_comparisons": [
+      {
+        "kind": "fire",
+        "saved_source_path": "evidence\\production-review-repair-20261020\\cadence\\native-v1\\fire-ready.png",
+        "saved_source_sha256": "67ef17438a3bee2b80064257acc26a922e68d8391c3bd917ccf5833bf295c3d9",
+        "current_sha256": "67ef17438a3bee2b80064257acc26a922e68d8391c3bd917ccf5833bf295c3d9",
+        "same_saved_context_full_rgba_exact": true
+      },
+      {
+        "kind": "cold",
+        "saved_source_path": "evidence\\production-review-repair-20261020\\cadence\\native-v1\\cold-ready.png",
+        "saved_source_sha256": "278686661f8392fc35a1b0e8fda5a887bb2db64846ada168d10795a7cd2e173c",
+        "current_sha256": "278686661f8392fc35a1b0e8fda5a887bb2db64846ada168d10795a7cd2e173c",
+        "same_saved_context_full_rgba_exact": true
+      },
+      {
+        "kind": "lightning",
+        "saved_source_path": "evidence\\production-review-repair-20261020\\cadence\\native-v1\\lightning-ready.png",
+        "saved_source_sha256": "bb68e6ae8615ed794f5b097f1ef3f13794e18e040351356cf551e89e8dd7bb31",
+        "current_sha256": "bb68e6ae8615ed794f5b097f1ef3f13794e18e040351356cf551e89e8dd7bb31",
+        "same_saved_context_full_rgba_exact": true
+      },
+      {
+        "kind": "acid",
+        "saved_source_path": "evidence\\production-review-repair-20261020\\cadence\\native-v1\\acid-ready.png",
+        "saved_source_sha256": "ab83ff4ee5f33f804a99af59759013ec005915b90998f076c15db17c7393ae45",
+        "current_sha256": "ab83ff4ee5f33f804a99af59759013ec005915b90998f076c15db17c7393ae45",
+        "same_saved_context_full_rgba_exact": true
+      },
+      {
+        "kind": "poison",
+        "saved_source_path": "evidence\\production-review-repair-20261020\\cadence\\native-v1\\poison-ready.png",
+        "saved_source_sha256": "9944cffa49b3b9af7e0212bd1f4124acc84728dc7363cf4ae424c33caa3ed37e",
+        "current_sha256": "9944cffa49b3b9af7e0212bd1f4124acc84728dc7363cf4ae424c33caa3ed37e",
+        "same_saved_context_full_rgba_exact": true
+      }
+    ],
+    "human_approval_inferred": false,
+    "scope": "Display-only saved actual namespace output.39direct API rows, five sustain positive source-alpha cases and15negative gates; only one inspected four-source-pixel mouth, no actor rendered. Portable two actual normalized seats match all RGBA at three ages with retirement. Five saved source-frame comparisons are exact-context CPU checks, not original rerenders or broader pose/camera/provider qualification."
+  },
+  "scope": "CPU inspection/comparison of already-saved native images; no new render, runtime input or human approval",
+  "human_approval_inferred": false,
+  "production_integration_performed": false
+}

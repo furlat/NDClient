@@ -1,0 +1,22 @@
+[gd_resource type="Resource" format=3]
+
+[ext_resource type="PackedScene" path="res://assets/vfx/conditions/condition_draconic_breath_cadence_poison_event/prepared.scn" id="1_a7hk3"]
+[ext_resource type="Script" path="res://assets/vfx/extensions/followup-20261020/sources/0fb7351681180386b03a/condition_pose_interface.gd" id="2_py0vp"]
+
+[resource]
+script = ExtResource("2_py0vp")
+scene = ExtResource("1_a7hk3")
+bindings = [{
+"node_index": 2,
+"node_path": "./effect/NativeReceivingMaterial",
+"property_index": 1,
+"property_name": "material_override",
+"shader_path": "res://assets/vfx/shared/resources/556f7a117aad599a421c6d65fcd0176afccc2ca3aea8bd35f656d90e05bad759.res"
+}]
+receipt = {
+"artwork_changed": false,
+"owner_preconstructed": false,
+"scene": "res://assets/vfx/conditions/condition_draconic_breath_cadence_poison_event/prepared.scn",
+"scene_sha256": "87ef011a1aecca4dc3da14d29d2863028a703ef314cc06be43abadf3ebbe89bf",
+"selection": "condition_draconic_breath_cadence_poison_event"
+}

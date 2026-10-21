@@ -1,0 +1,23 @@
+[gd_resource type="Resource" load_steps=4 format=3]
+[ext_resource type="Script" path="res://assets/vfx/sources/67ebe8ef4f358cad6a4b/phase.gd" id="phase"]
+[ext_resource type="Script" path="res://assets/vfx/sources/d60670fa4c3a03cc8f3a/component.gd" id="component"]
+[sub_resource type="Resource" id="part"]
+script = ExtResource("component")
+component_id = "effect"
+constructor_script = "res://assets/vfx/extensions/public-admission-20261020/sources/560dd92ac143f7135535/explosion.gd"
+input = {"kind":"freezing","prepared_payload_bank":"res://assets/vfx/extensions/late-20261020/sources/85e6b111cbb7a17f6052/freezing-native-source.tres"}
+options = {}
+provenance = "Opt-in finite public explosion; actual completed native throw ancestry and child source/geometry required. No review owner/item/lifetime packet."
+[resource]
+script = ExtResource("phase")
+clip_id = "high-level-22/freezing-sphere/launch_blast"
+label = "Observed portable Freezing explosion"
+phase = "launch_blast"
+variant = "portable_observed"
+source_recipe = "agent_docs/FACTORY_REVIEW_2026-10-20.md#9"
+bindings = [{"component":"effect","kind":"sample","rate":1.0,"offset_seconds":0.0}]
+emitters = []
+seconds = 1.2
+simulation_hz = 144.0
+components = Array[Resource]([SubResource("part")])
+options = {"qualification":"Opt-in public observed explosion; no default selection or client installation"}

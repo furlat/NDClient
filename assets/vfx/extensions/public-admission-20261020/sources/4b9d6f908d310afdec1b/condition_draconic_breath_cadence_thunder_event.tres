@@ -1,0 +1,22 @@
+[gd_resource type="Resource" format=3]
+
+[ext_resource type="PackedScene" path="res://assets/vfx/conditions/condition_draconic_breath_cadence_thunder_event/prepared.scn" id="1_n54on"]
+[ext_resource type="Script" path="res://assets/vfx/extensions/followup-20261020/sources/0fb7351681180386b03a/condition_pose_interface.gd" id="2_elo1a"]
+
+[resource]
+script = ExtResource("2_elo1a")
+scene = ExtResource("1_n54on")
+bindings = [{
+"node_index": 2,
+"node_path": "./effect/NativeReceivingMaterial",
+"property_index": 1,
+"property_name": "material_override",
+"shader_path": "res://assets/vfx/shared/resources/dcf2fcb28560bdd9e5f3fa606aa739b2f026fd1933cb7730913b6c4502311c3e.res"
+}]
+receipt = {
+"artwork_changed": false,
+"owner_preconstructed": false,
+"scene": "res://assets/vfx/conditions/condition_draconic_breath_cadence_thunder_event/prepared.scn",
+"scene_sha256": "6e2f27dde0484ee776673a7ef97317423f3332d41236273b8558877da64a9e50",
+"selection": "condition_draconic_breath_cadence_thunder_event"
+}

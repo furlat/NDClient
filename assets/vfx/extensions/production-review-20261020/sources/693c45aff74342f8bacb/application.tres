@@ -1,0 +1,21 @@
+[gd_resource type="Resource" load_steps=4 format=3]
+[ext_resource type="Script" path="res://assets/vfx/sources/67ebe8ef4f358cad6a4b/phase.gd" id="phase"]
+[ext_resource type="Script" path="res://assets/vfx/sources/d60670fa4c3a03cc8f3a/component.gd" id="component"]
+[sub_resource type="Resource" id="visual"]
+script = ExtResource("component")
+component_id = "effect"
+constructor_script = "res://assets/vfx/extensions/production-review-20261020/sources/0738ff2d24aa41b1b963/native_review_composition.gd"
+input = {"components": [{"id": "application", "script": "res://assets/vfx/extensions/production-review-20261020/sources/56f4d161c3b894afc7f4/deafened_application.gd", "input": {"scene": "res://assets/vfx/sources/0715951e8be28c10c13a/vfx_status_sleep.tscn", "settings": {"animation": "", "kind": "deafened"}, "side": "full", "simulation_hz": 144, "seed": 47291, "donor_scene": "res://assets/vfx/extensions/production-review-20261020/sources/cacb79a9ce53d4527418/vfx_status_glow.tscn", "overhead": {"clearance_cells": 0.12}, "application_seconds": 1.2, "fade_seconds": 0.3}, "rotation_degrees": [0, 0, 0]}], "bindings": [{"component": "application", "kind": "sample", "rate": 1.0, "offset_seconds": 0.0}], "emitters": []}
+provenance = "Existing native source; opt-in production review repair. No successful observation or gameplay owner is embedded."
+[resource]
+script = ExtResource("phase")
+clip_id = "production-review/deafness/finite_application"
+label = "production-review/deafness/finite_application"
+phase = "application"
+source_recipe = "authoring/production-review-repair-20261020/deafness"
+components = Array[Resource]([SubResource("visual")])
+bindings = [{"component": "effect", "kind": "sample", "rate": 1.0, "offset_seconds": 0.0}]
+emitters = []
+seconds = 1.2
+simulation_hz = 144.0
+options = {"production_integration_performed": false, "human_approval_inferred": false}

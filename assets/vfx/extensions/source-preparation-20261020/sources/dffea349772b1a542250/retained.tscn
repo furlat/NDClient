@@ -1,0 +1,152 @@
+[gd_scene format=3]
+
+[ext_resource type="Shader" path="res://assets/vfx/extensions/source-preparation-20261020/sources/c54f7abea08890ccb684/program-ceb0b6e4e6d210db.gdshader" id="1_l33uj"]
+[ext_resource type="Shader" path="res://assets/vfx/extensions/source-preparation-20261020/sources/73ed15d6a604493741a9/program-359b026cc35b801e.gdshader" id="2_y32uq"]
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_ne2ex"]
+noise_type = 2
+seed = 4
+fractal_octaves = 2
+cellular_distance_function = 2
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_2iqv1"]
+noise = SubResource("FastNoiseLite_ne2ex")
+seamless = true
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_g864s"]
+noise_type = 2
+seed = 12
+fractal_octaves = 3
+fractal_gain = 0.7
+fractal_weighted_strength = 0.6
+cellular_return_type = 6
+domain_warp_amplitude = 10.0
+domain_warp_frequency = 0.02
+domain_warp_fractal_octaves = 1
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_kf5tj"]
+noise = SubResource("FastNoiseLite_g864s")
+seamless = true
+seamless_blend_skirt = 0.2
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_5qaky"]
+render_priority = 0
+shader = ExtResource("1_l33uj")
+shader_parameter/vfx_package_clock_slot = 0
+shader_parameter/vfx_package_offset_payload_seconds = 0.0
+shader_parameter/payload_seconds = 0.0
+shader_parameter/payload_alpha = 0.0
+shader_parameter/mask1_texture = SubResource("NoiseTexture2D_2iqv1")
+shader_parameter/mask1_scroll = Vector2(-0.01, 0)
+shader_parameter/mask1_scale = Vector2(1, 1)
+shader_parameter/mask1_radial = false
+shader_parameter/use_mask2 = true
+shader_parameter/mask2_texture = SubResource("NoiseTexture2D_kf5tj")
+shader_parameter/mask2_scroll = Vector2(0.01, 0)
+shader_parameter/mask2_scale = Vector2(1, 0.5)
+shader_parameter/mask2_strength = 1.0
+shader_parameter/mask2_blend_mode = 3
+shader_parameter/mask2_radial = false
+shader_parameter/use_mask3 = false
+shader_parameter/mask3_scroll = Vector2(0, 0)
+shader_parameter/mask3_scale = Vector2(1, 1)
+shader_parameter/mask3_strength = 0.0
+shader_parameter/mask3_blend_mode = 0
+shader_parameter/mask3_radial = false
+shader_parameter/primary_color = Color(1, 1, 1, 1)
+shader_parameter/secondary_color = Color(0.443137, 1, 0.917647, 1)
+shader_parameter/tertiary_color = Color(0.5056, 0.58624, 0.64, 1)
+shader_parameter/use_tertiary = false
+shader_parameter/color_smoothness = 0.5
+shader_parameter/billboard = false
+shader_parameter/displacement_scale = 0.18
+shader_parameter/displacement_offset = 0.5
+shader_parameter/time_scale = 1.0
+shader_parameter/texture_scale = Vector2(1, 1)
+shader_parameter/uv_alignment = 0
+shader_parameter/emission_strength = 0.3
+shader_parameter/proximity_fade = false
+shader_parameter/proximity_fade_distance = 1.0
+shader_parameter/alpha_multiplier = 1.0
+shader_parameter/alpha_mode = 0
+shader_parameter/alpha_cutoff = 0.02
+shader_parameter/dither_cutoff = 0.8
+metadata/factory_clock_names = ["payload_seconds"]
+metadata/factory_prepared_shader = ExtResource("1_l33uj")
+metadata/factory_opacity_prepared_shader = ExtResource("1_l33uj")
+metadata/factory_world_space_uniform = false
+metadata/factory_clock_pool_required = true
+
+[sub_resource type="SphereMesh" id="SphereMesh_eu7gl"]
+radial_segments = 24
+rings = 14
+
+[sub_resource type="Gradient" id="Gradient_mqm5w"]
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_0l05l"]
+gradient = SubResource("Gradient_mqm5w")
+width = 128
+height = 128
+fill_from = Vector2(0.9, 0)
+fill_to = Vector2(0, 0)
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_doig5"]
+noise_type = 2
+seed = 3
+fractal_type = 0
+fractal_octaves = 1
+cellular_distance_function = 2
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_4c0a8"]
+noise = SubResource("FastNoiseLite_doig5")
+seamless = true
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_duaix"]
+render_priority = 0
+shader = ExtResource("2_y32uq")
+shader_parameter/vfx_package_clock_slot = 0
+shader_parameter/vfx_package_offset_payload_seconds = 0.0
+shader_parameter/payload_seconds = 0.0
+shader_parameter/payload_alpha = 0.0
+shader_parameter/fresnel_amount = 0.8
+shader_parameter/fresnel_exponent = 3.0
+shader_parameter/fresnel_gradient = SubResource("GradientTexture2D_0l05l")
+shader_parameter/enable_mask = true
+shader_parameter/mask_texture = SubResource("NoiseTexture2D_4c0a8")
+shader_parameter/mask_scroll = Vector2(0, 0.05)
+shader_parameter/mask_scale = Vector2(1, 1)
+shader_parameter/mask_blend_mode = 1
+shader_parameter/mask_blend = 0.2
+shader_parameter/emission_strength = 0.7
+shader_parameter/primary_color = Color(1, 1, 1, 1)
+shader_parameter/secondary_color = Color(0.443137, 1, 0.917647, 1)
+shader_parameter/tertiary_color = Color(0.5056, 0.58624, 0.64, 1)
+shader_parameter/proximity_fade = false
+shader_parameter/proximity_fade_distance = 1.0
+shader_parameter/alpha_multiplier = 1.0
+shader_parameter/alpha_mode = 0
+shader_parameter/alpha_cutoff = 0.02
+shader_parameter/dither_cutoff = 0.8
+metadata/factory_clock_names = ["payload_seconds"]
+metadata/factory_prepared_shader = ExtResource("2_y32uq")
+metadata/factory_opacity_prepared_shader = ExtResource("2_y32uq")
+metadata/factory_world_space_uniform = false
+metadata/factory_clock_pool_required = true
+
+[node name="PreparedNativeFreezing" type="Node3D" unique_id=845924001]
+
+[node name="NativeCrystallinePayloadLayer" type="MeshInstance3D" parent="." unique_id=68616145]
+top_level = true
+visible = false
+layers = 2
+material_override = SubResource("ShaderMaterial_5qaky")
+cast_shadow = 0
+mesh = SubResource("SphereMesh_eu7gl")
+
+[node name="FactoryGenerated_0001_MeshInstance3D" type="MeshInstance3D" parent="." unique_id=919817868]
+top_level = true
+visible = false
+layers = 2
+material_override = SubResource("ShaderMaterial_duaix")
+cast_shadow = 0
+mesh = SubResource("SphereMesh_eu7gl")

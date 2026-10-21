@@ -1,0 +1,22 @@
+[gd_resource type="Resource" load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://assets/vfx/sources/67ebe8ef4f358cad6a4b/phase.gd" id="phase"]
+[ext_resource type="Script" path="res://assets/vfx/sources/d60670fa4c3a03cc8f3a/component.gd" id="component"]
+
+[sub_resource type="Resource" id="effect"]
+script = ExtResource("component")
+component_id = "effect"
+constructor_script = "res://assets/vfx/extensions/spike-seed-20261021/sources/4e595f448d0154a0b4a2/spike.gd"
+input = {"owner_uuid": "", "patch_sources": [{"scene": "res://assets/vfx/sources/30d97daa0975dde56681/empty_subject.tscn", "settings": {"animation": "", "kind": "thorn", "variant": 0}, "side": "full", "simulation_hz": 144, "seed": 47291, "height_gain": 1.8, "prepared_recipient_bank": "res://assets/vfx/extensions/spike-seed-20261021/sources/65f4d3c103008699a6ce/bf54ecc2419330806b3e.res"}, {"scene": "res://assets/vfx/sources/30d97daa0975dde56681/empty_subject.tscn", "settings": {"animation": "", "kind": "thorn", "variant": 1}, "side": "full", "simulation_hz": 144, "seed": 47291, "height_gain": 1.8, "prepared_recipient_bank": "res://assets/vfx/extensions/spike-seed-20261021/sources/31b64e96c80d2f6b4270/6718959dcaea3cdcd4dc.res"}, {"scene": "res://assets/vfx/sources/30d97daa0975dde56681/empty_subject.tscn", "settings": {"animation": "", "kind": "thorn", "variant": 2}, "side": "full", "simulation_hz": 144, "seed": 47291, "height_gain": 1.8, "prepared_recipient_bank": "res://assets/vfx/extensions/spike-seed-20261021/sources/1f3f397cd22bc37a6329/b58956bf102fe6f33e74.res"}, {"scene": "res://assets/vfx/sources/30d97daa0975dde56681/empty_subject.tscn", "settings": {"animation": "", "kind": "thorn", "variant": 3}, "side": "full", "simulation_hz": 144, "seed": 47291, "height_gain": 1.8, "prepared_recipient_bank": "res://assets/vfx/extensions/spike-seed-20261021/sources/5ab51fa2ef1fe3d60abd/467f2f086fe6346a6bc6.res"}, {"scene": "res://assets/vfx/sources/30d97daa0975dde56681/empty_subject.tscn", "settings": {"animation": "", "kind": "thorn", "variant": 4}, "side": "full", "simulation_hz": 144, "seed": 47291, "height_gain": 1.8, "prepared_recipient_bank": "res://assets/vfx/extensions/spike-seed-20261021/sources/02b1cefb6a6bc45eea4f/16e3e01ce252f98d02c5.res"}, {"scene": "res://assets/vfx/sources/30d97daa0975dde56681/empty_subject.tscn", "settings": {"animation": "", "kind": "thorn", "variant": 5}, "side": "full", "simulation_hz": 144, "seed": 47291, "height_gain": 1.8, "prepared_recipient_bank": "res://assets/vfx/extensions/spike-seed-20261021/sources/80e6b68df253a2d65fb8/3283ee4c4d9195da7c50.res"}, {"scene": "res://assets/vfx/sources/30d97daa0975dde56681/empty_subject.tscn", "settings": {"animation": "", "kind": "thorn", "variant": 6}, "side": "full", "simulation_hz": 144, "seed": 47291, "height_gain": 1.8, "prepared_recipient_bank": "res://assets/vfx/extensions/spike-seed-20261021/sources/9f3b153b363beba82adc/308782b981291d566d5d.res"}, {"scene": "res://assets/vfx/sources/30d97daa0975dde56681/empty_subject.tscn", "settings": {"animation": "", "kind": "thorn", "variant": 7}, "side": "full", "simulation_hz": 144, "seed": 47291, "height_gain": 1.8, "prepared_recipient_bank": "res://assets/vfx/extensions/spike-seed-20261021/sources/057bdceb4c5c22634b74/80bd9ae752586964e350.res"}, {"scene": "res://assets/vfx/sources/30d97daa0975dde56681/empty_subject.tscn", "settings": {"animation": "", "kind": "thorn", "variant": 8}, "side": "full", "simulation_hz": 144, "seed": 47291, "height_gain": 1.8, "prepared_recipient_bank": "res://assets/vfx/extensions/spike-seed-20261021/sources/75ef2dcf27299d88b508/5e21e9c6bd83de5e2fd7.res"}], "cells": []}
+
+[resource]
+script = ExtResource("phase")
+clip_id = "assembled/spike_growth_native"
+label = "Actual owner native continuation"
+phase = "lifecycle"
+variant = "actual_owner"
+components = Array[Resource]([SubResource("effect")])
+bindings = [{"component":"effect","kind":"sample","rate":1.0,"offset_seconds":0.0}]
+seconds = 1.0
+simulation_hz = 144.0
+options = {"inputs":["owner_state","targets","zone_geometry"],"owner_driven":true}

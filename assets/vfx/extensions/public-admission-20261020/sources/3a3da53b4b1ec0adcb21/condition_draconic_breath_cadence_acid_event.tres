@@ -1,0 +1,22 @@
+[gd_resource type="Resource" format=3]
+
+[ext_resource type="PackedScene" path="res://assets/vfx/conditions/condition_draconic_breath_cadence_acid_event/prepared.scn" id="1_hyg13"]
+[ext_resource type="Script" path="res://assets/vfx/extensions/followup-20261020/sources/0fb7351681180386b03a/condition_pose_interface.gd" id="2_g8d3b"]
+
+[resource]
+script = ExtResource("2_g8d3b")
+scene = ExtResource("1_hyg13")
+bindings = [{
+"node_index": 2,
+"node_path": "./effect/NativeReceivingMaterial",
+"property_index": 1,
+"property_name": "material_override",
+"shader_path": "res://assets/vfx/shared/resources/860eba36c6b20eda281cb7b13517d4e38b6da7b916221813e6d334a248a65f30.res"
+}]
+receipt = {
+"artwork_changed": false,
+"owner_preconstructed": false,
+"scene": "res://assets/vfx/conditions/condition_draconic_breath_cadence_acid_event/prepared.scn",
+"scene_sha256": "5cfe4c5f18ea3ac22e47135a75c7b2d9f0d50b36e3e65bc3c5b3208facdf7719",
+"selection": "condition_draconic_breath_cadence_acid_event"
+}

@@ -1,0 +1,21 @@
+[gd_resource type="Resource" load_steps=4 format=3]
+[ext_resource type="Script" path="res://assets/vfx/sources/67ebe8ef4f358cad6a4b/phase.gd" id="phase"]
+[ext_resource type="Script" path="res://assets/vfx/sources/d60670fa4c3a03cc8f3a/component.gd" id="component"]
+[sub_resource type="Resource" id="visual"]
+script = ExtResource("component")
+component_id = "effect"
+constructor_script = "res://assets/vfx/extensions/source-preparation-20261020/sources/6d5107280a9cdbf9b441/counterspell.gd"
+input = {"fragments": {"material": "res://assets/vfx/extensions/continuation42-20261020/sources/f0efc0d33a6039e52ea9/m_basic_blueshield1.tres", "palette": ["592d40", "b06059", "da7c72", "f7ab9d"], "scale_cells_per_source_unit": 0.85, "prepared_visual_bank": "res://assets/vfx/extensions/source-preparation-20261020/sources/d11d9b541458c4aa9c31/counterspell_contact.res"}}
+provenance = "Existing native source; opt-in production review repair. No successful observation or gameplay owner is embedded."
+[resource]
+script = ExtResource("phase")
+clip_id = "production-review/counterspell/actual_presentation_contact"
+label = "production-review/counterspell/actual_presentation_contact"
+phase = "application"
+source_recipe = "authoring/production-review-repair-20261020/counterspell"
+components = Array[Resource]([SubResource("visual")])
+bindings = [{"component": "effect", "kind": "sample", "rate": 1.0, "offset_seconds": 0.0}]
+emitters = []
+seconds = 1.2
+simulation_hz = 144.0
+options = {"production_integration_performed": false, "human_approval_inferred": false}

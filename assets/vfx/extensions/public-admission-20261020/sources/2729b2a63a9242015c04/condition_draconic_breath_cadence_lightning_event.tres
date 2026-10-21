@@ -1,0 +1,22 @@
+[gd_resource type="Resource" format=3]
+
+[ext_resource type="PackedScene" path="res://assets/vfx/conditions/condition_draconic_breath_cadence_lightning_event/prepared.scn" id="1_w2u64"]
+[ext_resource type="Script" path="res://assets/vfx/extensions/followup-20261020/sources/0fb7351681180386b03a/condition_pose_interface.gd" id="2_g7l8r"]
+
+[resource]
+script = ExtResource("2_g7l8r")
+scene = ExtResource("1_w2u64")
+bindings = [{
+"node_index": 2,
+"node_path": "./effect/CurrentItemCoating",
+"property_index": 1,
+"property_name": "material_override",
+"shader_path": "res://assets/vfx/shared/resources/75d5b23e309a2922ab0427e366a0cbba786824cc2b253e433dd662d30599b246.res"
+}]
+receipt = {
+"artwork_changed": false,
+"owner_preconstructed": false,
+"scene": "res://assets/vfx/conditions/condition_draconic_breath_cadence_lightning_event/prepared.scn",
+"scene_sha256": "89556ed6749ceb51c581518ea3bfc203f64fee13b2ebe412e1096df3841eb90e",
+"selection": "condition_draconic_breath_cadence_lightning_event"
+}

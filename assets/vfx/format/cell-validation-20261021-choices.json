@@ -1,0 +1,57 @@
+{
+  "version": "runtime-cell-validation-20261021-39c35c8322c07ef7",
+  "approach": "runtime-prepared-cell-validation-20261021",
+  "choices": [
+    {
+      "clip_id": "assembled/sleet_storm_native",
+      "approach_id": "runtime-prepared-cell-validation-20261021",
+      "constructor": "res://assets/vfx/extensions/cell-validation-20261021/sources/466f2cf191ebaf6b135d/owner_release_sleet.gd",
+      "phase": "res://assets/vfx/extensions/cell-validation-20261021/sources/1b7f19780b26c6798b82/sleet.tres",
+      "source_qualification_path": "authoring/production-review-repair-20261021/cell_validation/qualification.json",
+      "source_qualification": true,
+      "source_runtime_flags_retained": {
+        "flags": [
+          {
+            "actual_us": 258,
+            "measurement": "first_positive_age_inputs_plus_sample",
+            "repeat": 0,
+            "representation": "native_int197",
+            "threshold_us": 250
+          },
+          {
+            "actual_us": 2184,
+            "measurement": "complete_public_constructor",
+            "repeat": 1,
+            "representation": "",
+            "threshold_us": 2000
+          }
+        ],
+        "readiness": {
+          "elapsed_us": 276994,
+          "maximum_step_us": 13916,
+          "resources_only_before_first_owner": true,
+          "all_steps_below2000us": false
+        },
+        "raw_single_input_max_us": 347,
+        "full_budget_pass_claimed": false,
+        "previous_source_flags_preserved": true
+      },
+      "construction_input_contract": {
+        "operands": "One exact source-component operand with current owner/construction facts. No saved fixture defaults or bank override.",
+        "lifetime": "Explicit current owner state, disclosed geometry/cells and supplied world anchor; no review lease/recast."
+      },
+      "packaged_execution_qualified": true,
+      "human_approval_inferred": false,
+      "source_key": "cell_validation_sleet",
+      "packaged_smoke_label": "complete-v1",
+      "packaged_smoke_scope": "One exact indexed current-public Sleet alternative with53 prior typed rows retained; actual public owner inputs, chronological native samples, positive pixels and absence/retirement. No new index ID, gameplay replay, art approval, full budget pass or source-control rerender.",
+      "packaged_first_complete_constructor_us": 1906,
+      "packaged_first_constructor_over2000us": false
+    }
+  ],
+  "by_clip_id": {
+    "assembled/sleet_storm_native": "runtime-prepared-cell-validation-20261021"
+  },
+  "automatic_client_selection_performed": false,
+  "native_receipt_sha256": "3ede21978b717d49cf9fafc106e3fc3cb83f6cd3e2b154d68682b1afede216d8"
+}

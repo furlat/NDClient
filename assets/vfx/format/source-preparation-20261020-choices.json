@@ -1,0 +1,613 @@
+{
+  "version": "runtime-source-preparation-20261020-efe34c587d3ac9fd",
+  "approach": "runtime-prepared-source-preparation-20261020",
+  "choices": [
+    {
+      "clip_id": "review/divine_word/back/target_deafened",
+      "approach_id": "runtime-prepared-source-preparation-20261020",
+      "constructor": "res://assets/vfx/clips/5e62f0c3a96bd83dc97b42d9/construct.gd",
+      "phase": "res://assets/vfx/extensions/source-preparation-20261020/sources/32533179fe19fc9f5009/divine_deafened.tres",
+      "source_qualification_path": "authoring/runtime-cost-repair-20261020/r6_sensory/closed/qualification.json",
+      "source_qualification": {
+        "key": "divine_deafened",
+        "clip_id": "review/divine_word/back/target_deafened",
+        "source": "res://assets/vfx/sources/0987b2a8f0ef2ae6d1ba/03.tres",
+        "source_sha256": "96abaeaf91894e3fa46f0795245260841e0a2db82649c138ff3848b1d6030eae",
+        "candidate": "res://authoring/runtime-cost-repair-20261020/r6_sensory/closed/phases/divine_deafened.tres",
+        "bank": "res://authoring/runtime-cost-repair-20261020/r6_sensory/closed/assets/divine_deafened.res",
+        "controllers": {
+          "res://assets/vfx/sources/0738ff2d24aa41b1b963/native_review_composition.gd": {
+            "sha256": "7a56ea1776095060e525ab634d1813cbb85ee46e4966b956db43ab1ef03e4081",
+            "fields": [
+              "definition",
+              "composition",
+              "prepared",
+              "adapted",
+              "source_materials",
+              "live_endpoints",
+              "delivery_timing",
+              "last_source_transform",
+              "source_transform_known"
+            ]
+          },
+          "res://assets/vfx/sources/edb4416ff06538073fee/divine_word_source_v196.gd": {
+            "sha256": "a087bce269457faa9a5ae9e5fca348a4415260114e716fba1fba9b3a814bf21f",
+            "fields": [
+              "settings",
+              "observation",
+              "endpoints",
+              "source",
+              "source_materials",
+              "source_zero_transforms",
+              "source_zero_emitters",
+              "source_zero_shaders",
+              "age_seconds",
+              "removed_at",
+              "envelope",
+              "reset_count",
+              "ground_world",
+              "measured_head_points"
+            ]
+          },
+          "res://assets/vfx/sources/0a6f9152e753968f33d1/divine.gd": {
+            "sha256": "64286d3feee7d329be3abbeb75ebdae2d2659e08e9d7bdfe2bbe72e092a3682e",
+            "fields": [
+              "settings",
+              "side",
+              "parameters",
+              "subject",
+              "tick",
+              "materials",
+              "visited",
+              "initialized",
+              "prepared",
+              "seeds"
+            ]
+          },
+          "res://assets/vfx/sources/8ab2a0ec54130654c8a7/shield_modifier.gd": {
+            "sha256": "e66314266e82b52930b969687dc1c0f7f4af438ecab62f480d1a8994b2984856",
+            "fields": [
+              "dissapear_line",
+              "sphere_size"
+            ]
+          }
+        },
+        "native_geometry": 11,
+        "native_emitters": 4,
+        "source_simulation_hz": 144,
+        "previous_bank": "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets/divine_deafened.res",
+        "previous_candidate": "res://authoring/runtime-cost-repair-20261020/r6_sensory/phases/divine_deafened.tres",
+        "source_candidate_qualified": true,
+        "source_record": {
+          "path": "assets/vfx/sources/0987b2a8f0ef2ae6d1ba/03.tres",
+          "sha256": "96abaeaf91894e3fa46f0795245260841e0a2db82649c138ff3848b1d6030eae",
+          "bytes": 3225
+        },
+        "candidate_record": {
+          "path": "authoring/runtime-cost-repair-20261020/r6_sensory/closed/phases/divine_deafened.tres",
+          "sha256": "445c5c0c912177182e747a2086055251dc458c5dcbb463101ed46706b3ce5ab1",
+          "bytes": 3200
+        },
+        "bank_record": {
+          "path": "authoring/runtime-cost-repair-20261020/r6_sensory/closed/assets/divine_deafened.res",
+          "sha256": "db51010504c7c4f96ccdf4dc9e6c0972395d9c18a1052c560b706d28b1353fa8",
+          "bytes": 61928
+        },
+        "native_receipt": {
+          "path": "evidence/runtime-cost-repair-20261020/r6_sensory/native-closed-v5/checks.json",
+          "sha256": "b3ce6c60ec422bce9a8f8220af204e2015c55d11079e0b23b791d12da764edcc",
+          "bytes": 9712
+        },
+        "native_captures": 5,
+        "rgba_byte_identical_to_original_and_independent_control": true,
+        "positive_active_captures": 4,
+        "final_removal_exact": true,
+        "actual_head_points": 31,
+        "actual_default_complete_constructor_us": [
+          1310,
+          853,
+          711,
+          616
+        ],
+        "first_actual_input_plus_sample_us": 191,
+        "stable": {
+          "count": 243,
+          "max_us": 181,
+          "p95_us": 151
+        },
+        "changed": {
+          "count": 2,
+          "max_us": 193,
+          "p95_us": 193
+        },
+        "source_runtime_flags": [],
+        "complete_constructor_and_p95_input_budget_pass": true,
+        "producer_cost_excluded_and_reported": true,
+        "immutable_readiness_steps": [
+          {
+            "operation": "request_resource",
+            "path": "res://factory/components/prepared_sensory/composition.gd",
+            "state": "pending",
+            "us": 22
+          },
+          {
+            "operation": "publish_resource",
+            "path": "res://factory/components/prepared_sensory/composition.gd",
+            "state": "pending",
+            "us": 231
+          },
+          {
+            "operation": "request_resource",
+            "path": "res://authoring/runtime-cost-repair-20261020/r6_sensory/closed/assets/divine_deafened.res",
+            "state": "pending",
+            "us": 21
+          },
+          {
+            "operation": "publish_resource_and_prepare_immutable_interface",
+            "path": "res://authoring/runtime-cost-repair-20261020/r6_sensory/closed/assets/divine_deafened.res",
+            "state": "ready",
+            "us": 4236
+          }
+        ],
+        "native_chronological_ticks": 246,
+        "new_indexed_clip": false,
+        "delivery_kind": "existing_indexed_clip_alternative",
+        "production_integration_performed": false,
+        "human_approval_inferred": false
+      },
+      "source_runtime_flags_retained": false,
+      "construction_input_contract": null,
+      "packaged_execution_qualified": true,
+      "human_approval_inferred": false,
+      "packaged_smoke_label": "complete-v1",
+      "packaged_smoke_scope": "Fresh complete namespace: four opt-in indexed approaches and four typed source supersessions. Actual public readiness/constructors and one Clock identity. Freezing indexed2 advance144Hz with explicit synthetic source-schema owner/event/holder/endpoints and positive/retired native pixels; payload2/Counterspell use admitted synthetic optical contexts. Divine2 and typed finite Deafness load/validate/construct only: actual measured head provider is not staged. No original/actor rerender, gameplay observation, default assignment, human art acceptance or whole-game budget claim.",
+      "packaged_first_complete_constructor_us": 1426,
+      "packaged_first_constructor_over2000us": false
+    },
+    {
+      "clip_id": "review/divine_word/back/target_blinded",
+      "approach_id": "runtime-prepared-source-preparation-20261020",
+      "constructor": "res://assets/vfx/clips/f3c6bfdb67547b04b45a8aad/construct.gd",
+      "phase": "res://assets/vfx/extensions/source-preparation-20261020/sources/0f866ec3dd623b7b4aff/divine_blinded.tres",
+      "source_qualification_path": "authoring/runtime-cost-repair-20261020/r6_sensory/closed/qualification.json",
+      "source_qualification": {
+        "key": "divine_blinded",
+        "clip_id": "review/divine_word/back/target_blinded",
+        "source": "res://assets/vfx/sources/0faeca76ac4946f1dc93/04.tres",
+        "source_sha256": "133befbb6397eb81bc98adfe75d11fe98db4b64f676bc0d7552256c29266dedb",
+        "candidate": "res://authoring/runtime-cost-repair-20261020/r6_sensory/closed/phases/divine_blinded.tres",
+        "bank": "res://authoring/runtime-cost-repair-20261020/r6_sensory/closed/assets/divine_blinded.res",
+        "controllers": {
+          "res://assets/vfx/sources/0738ff2d24aa41b1b963/native_review_composition.gd": {
+            "sha256": "7a56ea1776095060e525ab634d1813cbb85ee46e4966b956db43ab1ef03e4081",
+            "fields": [
+              "definition",
+              "composition",
+              "prepared",
+              "adapted",
+              "source_materials",
+              "live_endpoints",
+              "delivery_timing",
+              "last_source_transform",
+              "source_transform_known"
+            ]
+          },
+          "res://assets/vfx/sources/edb4416ff06538073fee/divine_word_source_v196.gd": {
+            "sha256": "a087bce269457faa9a5ae9e5fca348a4415260114e716fba1fba9b3a814bf21f",
+            "fields": [
+              "settings",
+              "observation",
+              "endpoints",
+              "source",
+              "source_materials",
+              "source_zero_transforms",
+              "source_zero_emitters",
+              "source_zero_shaders",
+              "age_seconds",
+              "removed_at",
+              "envelope",
+              "reset_count",
+              "ground_world",
+              "measured_head_points"
+            ]
+          },
+          "res://assets/vfx/sources/0a6f9152e753968f33d1/divine.gd": {
+            "sha256": "64286d3feee7d329be3abbeb75ebdae2d2659e08e9d7bdfe2bbe72e092a3682e",
+            "fields": [
+              "settings",
+              "side",
+              "parameters",
+              "subject",
+              "tick",
+              "materials",
+              "visited",
+              "initialized",
+              "prepared",
+              "seeds"
+            ]
+          },
+          "res://assets/vfx/sources/8ab2a0ec54130654c8a7/shield_modifier.gd": {
+            "sha256": "e66314266e82b52930b969687dc1c0f7f4af438ecab62f480d1a8994b2984856",
+            "fields": [
+              "dissapear_line",
+              "sphere_size"
+            ]
+          }
+        },
+        "native_geometry": 11,
+        "native_emitters": 4,
+        "source_simulation_hz": 144,
+        "previous_bank": "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets/divine_blinded.res",
+        "previous_candidate": "res://authoring/runtime-cost-repair-20261020/r6_sensory/phases/divine_blinded.tres",
+        "source_candidate_qualified": true,
+        "source_record": {
+          "path": "assets/vfx/sources/0faeca76ac4946f1dc93/04.tres",
+          "sha256": "133befbb6397eb81bc98adfe75d11fe98db4b64f676bc0d7552256c29266dedb",
+          "bytes": 3217
+        },
+        "candidate_record": {
+          "path": "authoring/runtime-cost-repair-20261020/r6_sensory/closed/phases/divine_blinded.tres",
+          "sha256": "f53e22371e018db9807371bb2b13b18eef39db82090da77b74e153b325f5a3e9",
+          "bytes": 3191
+        },
+        "bank_record": {
+          "path": "authoring/runtime-cost-repair-20261020/r6_sensory/closed/assets/divine_blinded.res",
+          "sha256": "1eb49edb72b18705535464d76949dbb93250a34fe083687518d3713ab7c6ee81",
+          "bytes": 61847
+        },
+        "native_receipt": {
+          "path": "evidence/runtime-cost-repair-20261020/r6_sensory/native-closed-v5/checks.json",
+          "sha256": "b3ce6c60ec422bce9a8f8220af204e2015c55d11079e0b23b791d12da764edcc",
+          "bytes": 9712
+        },
+        "native_captures": 5,
+        "rgba_byte_identical_to_original_and_independent_control": true,
+        "positive_active_captures": 4,
+        "final_removal_exact": true,
+        "actual_head_points": 31,
+        "actual_default_complete_constructor_us": [
+          1171,
+          898,
+          717,
+          629
+        ],
+        "first_actual_input_plus_sample_us": 184,
+        "stable": {
+          "count": 243,
+          "max_us": 158,
+          "p95_us": 121
+        },
+        "changed": {
+          "count": 2,
+          "max_us": 79,
+          "p95_us": 79
+        },
+        "source_runtime_flags": [],
+        "complete_constructor_and_p95_input_budget_pass": true,
+        "producer_cost_excluded_and_reported": true,
+        "immutable_readiness_steps": [
+          {
+            "operation": "publish_resource",
+            "path": "res://factory/components/prepared_sensory/composition.gd",
+            "state": "pending",
+            "us": 21
+          },
+          {
+            "operation": "request_resource",
+            "path": "res://authoring/runtime-cost-repair-20261020/r6_sensory/closed/assets/divine_blinded.res",
+            "state": "pending",
+            "us": 15
+          },
+          {
+            "operation": "publish_resource_and_prepare_immutable_interface",
+            "path": "res://authoring/runtime-cost-repair-20261020/r6_sensory/closed/assets/divine_blinded.res",
+            "state": "ready",
+            "us": 1241
+          }
+        ],
+        "native_chronological_ticks": 246,
+        "new_indexed_clip": false,
+        "delivery_kind": "existing_indexed_clip_alternative",
+        "production_integration_performed": false,
+        "human_approval_inferred": false
+      },
+      "source_runtime_flags_retained": false,
+      "construction_input_contract": null,
+      "packaged_execution_qualified": true,
+      "human_approval_inferred": false,
+      "packaged_smoke_label": "complete-v1",
+      "packaged_smoke_scope": "Fresh complete namespace: four opt-in indexed approaches and four typed source supersessions. Actual public readiness/constructors and one Clock identity. Freezing indexed2 advance144Hz with explicit synthetic source-schema owner/event/holder/endpoints and positive/retired native pixels; payload2/Counterspell use admitted synthetic optical contexts. Divine2 and typed finite Deafness load/validate/construct only: actual measured head provider is not staged. No original/actor rerender, gameplay observation, default assignment, human art acceptance or whole-game budget claim.",
+      "packaged_first_complete_constructor_us": 1239,
+      "packaged_first_constructor_over2000us": false
+    },
+    {
+      "clip_id": "high-level-22/freezing-sphere/launch_blast",
+      "approach_id": "runtime-prepared-source-preparation-20261020",
+      "constructor": "res://assets/vfx/clips/100d3fa73c33c700b8c1d11f/construct.gd",
+      "phase": "res://assets/vfx/extensions/source-preparation-20261020/sources/7dd318a93f1e6313f6b3/blast.tres",
+      "source_qualification_path": "authoring/runtime-cost-repair-20261020/r6_freezing/qualification.json",
+      "source_qualification": {
+        "clip_id": "high-level-22/freezing-sphere/launch_blast",
+        "source_phase": "res://authoring/gpu-payload-v397/phases/e181283ebe663514.tres",
+        "candidate_phase": "res://authoring/runtime-cost-repair-20261020/r6_freezing/phases/blast.tres",
+        "bank": "res://authoring/runtime-cost-repair-20261020/payloads/assets/freezing-native-source.tres",
+        "source_phase_sha256": "71dd8a8201d59918687aec0e9e18b3f7e830cf96cee0fd50f820707332aaebbb",
+        "candidate_phase_sha256": "4a55620d1c6c7b5d49728c3e33310258729802e4fa56496782771e6349d9887a",
+        "bank_sha256": "a9dad917f48cb93f2cfe8ccd7cfa569f67b25431207f3c3005fc7266e9c2d63c",
+        "source_qualification": true,
+        "source_state_native_ticks": 175,
+        "original_prepared_rgba_pairs": 3,
+        "raw_rgba_byte_exact": true,
+        "independent_original_control_byte_exact": true,
+        "complete_unprofiled_public_constructors_us": [
+          1097,
+          1063,
+          801,
+          633
+        ],
+        "complete_constructor_budget_pass": true,
+        "genuine_first_public_input_and_sample_us": 216,
+        "first_input_budget_pass": true,
+        "advancing_sample_p95_us": 217,
+        "advancing_sample_max_us": 279,
+        "advancing_sample_budget_pass": true,
+        "readiness_us_separate": 11841700,
+        "readiness_main_thread_steps": [
+          {
+            "operation": "request_resource",
+            "path": "res://factory/components/prepared_payloads/freezing.gd",
+            "state": "pending",
+            "us": 26
+          },
+          {
+            "operation": "publish_resource",
+            "path": "res://factory/components/prepared_payloads/freezing.gd",
+            "state": "pending",
+            "us": 205
+          },
+          {
+            "operation": "request_resource",
+            "path": "res://authoring/runtime-cost-repair-20261020/payloads/assets/freezing-native-source.tres",
+            "state": "pending",
+            "us": 38
+          },
+          {
+            "operation": "publish_resource_and_prepare_immutable_interface",
+            "path": "res://authoring/runtime-cost-repair-20261020/payloads/assets/freezing-native-source.tres",
+            "state": "ready",
+            "us": 2389
+          }
+        ],
+        "readiness_max_main_thread_step_us": 2389,
+        "readiness_main_thread_over2000us_steps_retained": [
+          {
+            "operation": "publish_resource_and_prepare_immutable_interface",
+            "path": "res://authoring/runtime-cost-repair-20261020/payloads/assets/freezing-native-source.tres",
+            "state": "ready",
+            "us": 2389
+          }
+        ],
+        "no_image_cost_followup": {
+          "bank_sha256": "a9dad917f48cb93f2cfe8ccd7cfa569f67b25431207f3c3005fc7266e9c2d63c",
+          "candidate": "res://authoring/runtime-cost-repair-20261020/r6_freezing/phases/blast.tres",
+          "candidate_phase_sha256": "4a55620d1c6c7b5d49728c3e33310258729802e4fa56496782771e6349d9887a",
+          "candidate_readiness_us": 11777073,
+          "changed_public_inputs": [
+            {
+              "age": 0.416666666666667,
+              "change": "actual supplied moved endpoint",
+              "public_setters_and_sample_us": 119,
+              "tick": 60
+            },
+            {
+              "age": 0.722222222222222,
+              "change": "actual supplied 1-cell footprint",
+              "public_setters_and_sample_us": 228,
+              "tick": 104
+            },
+            {
+              "age": 0.965277777777778,
+              "change": "actual supplied 128-cell footprint",
+              "public_setters_and_sample_us": 447,
+              "tick": 139
+            }
+          ],
+          "clip_id": "high-level-22/freezing-sphere/launch_blast",
+          "complete_public_constructors_us": [
+            1186,
+            831,
+            641,
+            512
+          ],
+          "genuine_first_public_input_and_sample_us": 169,
+          "kind": "blast",
+          "native_source_ticks": 175,
+          "ordinary_advancing_samples_us": {
+            "count": 172,
+            "max": 302,
+            "p95": 230
+          }
+        },
+        "combined_changed_input_cost_measured": true,
+        "combined_changed_input_budget_pass": false,
+        "source_runtime_flags_retained": [
+          {
+            "budget": "changed_public_setters_and_sample",
+            "kind": "blast",
+            "limit_us": 250,
+            "us": 447
+          }
+        ],
+        "actual_native_draws": 16,
+        "supplied_inputs_scope": "Explicit synthetic source-schema controls. Private phase.to_clip input changed before normal Source.make zero sample, matching the supplied construction operand shape. No real gameplay outcome, actor packet, fixed encounter or private power inferred.",
+        "private_owners_and_admission": {
+          "foreign_owner_and_retirement_or_suppression_tested": true,
+          "native_particle_state_private": false,
+          "private_draw_materials": 16,
+          "real_gameplay_outcome_inferred": false
+        },
+        "evidence": "evidence/runtime-cost-repair-20261020/r6_freezing/native-v1/checks.json",
+        "human_approval_inferred": false,
+        "production_integration_performed": false
+      },
+      "source_runtime_flags_retained": true,
+      "construction_input_contract": {
+        "kind": "freezing_blast",
+        "operands": "Existing component_path/input_field/values shape; actual effect inputs required before Source.make",
+        "fixture_observation_defaults_used": false,
+        "private_clip_binding": true
+      },
+      "packaged_execution_qualified": true,
+      "human_approval_inferred": false,
+      "packaged_smoke_label": "complete-v1",
+      "packaged_smoke_scope": "Fresh complete namespace: four opt-in indexed approaches and four typed source supersessions. Actual public readiness/constructors and one Clock identity. Freezing indexed2 advance144Hz with explicit synthetic source-schema owner/event/holder/endpoints and positive/retired native pixels; payload2/Counterspell use admitted synthetic optical contexts. Divine2 and typed finite Deafness load/validate/construct only: actual measured head provider is not staged. No original/actor rerender, gameplay observation, default assignment, human art acceptance or whole-game budget claim.",
+      "packaged_first_complete_constructor_us": 1010,
+      "packaged_first_constructor_over2000us": false
+    },
+    {
+      "clip_id": "high-level-22/freezing-sphere/launch_delivery",
+      "approach_id": "runtime-prepared-source-preparation-20261020",
+      "constructor": "res://assets/vfx/clips/86c54c615be9b8dfefcd9051/construct.gd",
+      "phase": "res://assets/vfx/extensions/source-preparation-20261020/sources/4283b96dc005240b8b57/delivery.tres",
+      "source_qualification_path": "authoring/runtime-cost-repair-20261020/r6_freezing/qualification.json",
+      "source_qualification": {
+        "clip_id": "high-level-22/freezing-sphere/launch_delivery",
+        "source_phase": "res://authoring/original-repairs/source_volumes_v284/freezing_sphere_native/phases/launch_delivery.tres",
+        "candidate_phase": "res://authoring/runtime-cost-repair-20261020/r6_freezing/phases/delivery.tres",
+        "bank": "res://authoring/runtime-cost-repair-20261020/r6_freezing/assets/delivery.tres",
+        "source_phase_sha256": "dec8ec00e7369d19729000f2d5ebfcea5ffddbf7e753fe52e6938aae78cca4fa",
+        "candidate_phase_sha256": "e25c06c1c83cba47a9541a583511eaa083bfb3058be12e20c80a302cbc42f95a",
+        "bank_sha256": "5ee1de34d05e88b3043104cbf4764946ef37ffa82d4b30117710bb61d2286b30",
+        "source_qualification": true,
+        "source_state_native_ticks": 131,
+        "original_prepared_rgba_pairs": 3,
+        "raw_rgba_byte_exact": true,
+        "independent_original_control_byte_exact": true,
+        "complete_unprofiled_public_constructors_us": [
+          579,
+          246,
+          226,
+          269
+        ],
+        "complete_constructor_budget_pass": true,
+        "genuine_first_public_input_and_sample_us": 111,
+        "first_input_budget_pass": true,
+        "advancing_sample_p95_us": 149,
+        "advancing_sample_max_us": 177,
+        "advancing_sample_budget_pass": true,
+        "readiness_us_separate": 346476,
+        "readiness_main_thread_steps": [
+          {
+            "operation": "request_resource",
+            "path": "res://factory/components/prepared_r6_freezing/delivery.gd",
+            "state": "pending",
+            "us": 18
+          },
+          {
+            "operation": "publish_resource",
+            "path": "res://factory/components/prepared_r6_freezing/delivery.gd",
+            "state": "pending",
+            "us": 202
+          },
+          {
+            "operation": "request_resource",
+            "path": "res://authoring/runtime-cost-repair-20261020/r6_freezing/assets/delivery.tres",
+            "state": "pending",
+            "us": 25
+          },
+          {
+            "operation": "publish_resource_and_prepare_immutable_interface",
+            "path": "res://authoring/runtime-cost-repair-20261020/r6_freezing/assets/delivery.tres",
+            "state": "ready",
+            "us": 7564
+          }
+        ],
+        "readiness_max_main_thread_step_us": 7564,
+        "readiness_main_thread_over2000us_steps_retained": [
+          {
+            "operation": "publish_resource_and_prepare_immutable_interface",
+            "path": "res://authoring/runtime-cost-repair-20261020/r6_freezing/assets/delivery.tres",
+            "state": "ready",
+            "us": 7564
+          }
+        ],
+        "no_image_cost_followup": {
+          "bank_sha256": "5ee1de34d05e88b3043104cbf4764946ef37ffa82d4b30117710bb61d2286b30",
+          "candidate": "res://authoring/runtime-cost-repair-20261020/r6_freezing/phases/delivery.tres",
+          "candidate_phase_sha256": "e25c06c1c83cba47a9541a583511eaa083bfb3058be12e20c80a302cbc42f95a",
+          "candidate_readiness_us": 372315,
+          "changed_public_inputs": [
+            {
+              "age": 0.166666666666667,
+              "change": "actual current hand before launch",
+              "public_setters_and_sample_us": 59,
+              "tick": 24
+            },
+            {
+              "age": 0.298611111111111,
+              "change": "accepted current-holder release",
+              "public_setters_and_sample_us": 140,
+              "tick": 43
+            },
+            {
+              "age": 0.416666666666667,
+              "change": "actual supplied moved endpoint",
+              "public_setters_and_sample_us": 156,
+              "tick": 60
+            }
+          ],
+          "clip_id": "high-level-22/freezing-sphere/launch_delivery",
+          "complete_public_constructors_us": [
+            611,
+            287,
+            239,
+            249
+          ],
+          "genuine_first_public_input_and_sample_us": 86,
+          "kind": "delivery",
+          "native_source_ticks": 131,
+          "ordinary_advancing_samples_us": {
+            "count": 128,
+            "max": 177,
+            "p95": 153
+          }
+        },
+        "combined_changed_input_cost_measured": true,
+        "combined_changed_input_budget_pass": true,
+        "source_runtime_flags_retained": [],
+        "actual_native_draws": 3,
+        "supplied_inputs_scope": "Explicit synthetic source-schema controls. Private phase.to_clip input changed before normal Source.make zero sample, matching the supplied construction operand shape. No real gameplay outcome, actor packet, fixed encounter or private power inferred.",
+        "private_owners_and_admission": {
+          "foreign_owner_and_retirement_or_suppression_tested": true,
+          "native_particle_state_private": true,
+          "private_draw_materials": 3,
+          "real_gameplay_outcome_inferred": false
+        },
+        "evidence": "evidence/runtime-cost-repair-20261020/r6_freezing/native-v1/checks.json",
+        "human_approval_inferred": false,
+        "production_integration_performed": false
+      },
+      "source_runtime_flags_retained": false,
+      "construction_input_contract": {
+        "kind": "freezing_delivery",
+        "operands": "Existing component_path/input_field/values shape; actual effect inputs required before Source.make",
+        "fixture_observation_defaults_used": false,
+        "private_clip_binding": true
+      },
+      "packaged_execution_qualified": true,
+      "human_approval_inferred": false,
+      "packaged_smoke_label": "complete-v1",
+      "packaged_smoke_scope": "Fresh complete namespace: four opt-in indexed approaches and four typed source supersessions. Actual public readiness/constructors and one Clock identity. Freezing indexed2 advance144Hz with explicit synthetic source-schema owner/event/holder/endpoints and positive/retired native pixels; payload2/Counterspell use admitted synthetic optical contexts. Divine2 and typed finite Deafness load/validate/construct only: actual measured head provider is not staged. No original/actor rerender, gameplay observation, default assignment, human art acceptance or whole-game budget claim.",
+      "packaged_first_complete_constructor_us": 691,
+      "packaged_first_constructor_over2000us": false
+    }
+  ],
+  "by_clip_id": {
+    "review/divine_word/back/target_deafened": "runtime-prepared-source-preparation-20261020",
+    "review/divine_word/back/target_blinded": "runtime-prepared-source-preparation-20261020",
+    "high-level-22/freezing-sphere/launch_blast": "runtime-prepared-source-preparation-20261020",
+    "high-level-22/freezing-sphere/launch_delivery": "runtime-prepared-source-preparation-20261020"
+  },
+  "automatic_client_selection_performed": false,
+  "native_receipt_sha256": "4abcb48de2e5a1d321c8763b112cfbaf8cf82a1abb80c75ddc8ce704897f391d"
+}

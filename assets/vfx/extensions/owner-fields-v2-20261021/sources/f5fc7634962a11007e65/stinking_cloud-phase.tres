@@ -1,0 +1,48 @@
+[gd_resource type="Resource" format=3]
+
+[ext_resource type="Script" path="res://assets/vfx/sources/d60670fa4c3a03cc8f3a/component.gd" id="1_uv3vb"]
+[ext_resource type="Script" path="res://assets/vfx/sources/67ebe8ef4f358cad6a4b/phase.gd" id="2_c4soa"]
+
+[sub_resource type="Resource" id="Resource_vox54"]
+script = ExtResource("1_uv3vb")
+component_id = "assembly"
+constructor_script = "res://assets/vfx/extensions/owner-fields-v2-20261021/sources/6d60a32ff7fdc84a19fa/field.gd"
+input = {
+&"owner_lifetime_policy": "actual_spatial_owner",
+&"prepared_cloud_bank": "res://assets/vfx/extensions/owner-fields-v2-20261021/sources/5696ca405d6d1bda5a6b/stinking_cloud-bank.tres",
+"scene": "res://assets/vfx/sources/e61d478d2aa397acda47/poison_cloud_vfx_02.tscn",
+"seed": 47291,
+"settings": {
+"animation": "",
+"carrier_feather_uv": 0.16,
+"retire_begin_seconds": 10.40972222222222,
+"retire_seconds": 1.15,
+"spell": "stinking_cloud",
+"volume_shader": "res://assets/vfx/sources/d98a96ec17daaf9d4704/ShortCloud32V1_stinking_cloud_color.gdshader"
+},
+"side": "full",
+"simulation_hz": 144
+}
+provenance = "Pinned native selection; recipes/spells/stinking_cloud.json; prepared native cloud hierarchy and private occurrence materials; ART REVISION stable paired-cohort sorting +0.0001; raw original parity not claimed; human review required; explicit real spatial owner lifetime, unchanged prepared bank/art"
+
+[resource]
+script = ExtResource("2_c4soa")
+clip_id = "review/stinking_cloud/volume/lifecycle"
+label = "Lifecycle"
+phase = "lifecycle"
+variant = "actual_owner"
+source_recipe = "recipes/spells/stinking_cloud.json"
+components = Array[Resource]([SubResource("Resource_vox54")])
+bindings = [{
+"component": "assembly",
+"kind": "sample",
+"offset_seconds": 0.0,
+"rate": 1.0
+}]
+seconds = 11.65972222222222
+simulation_hz = 144.0
+options = {
+"opacity_uniform": "factory_occurrence_alpha",
+&"owner_driven": true,
+"qualification": "Source/API candidate; original stabilized art and native history limits retained"
+}

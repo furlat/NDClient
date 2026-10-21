@@ -1,0 +1,22 @@
+[gd_resource type="Resource" load_steps=4 format=3]
+[ext_resource type="Script" path="res://assets/vfx/sources/67ebe8ef4f358cad6a4b/phase.gd" id="phase"]
+[ext_resource type="Script" path="res://assets/vfx/sources/d60670fa4c3a03cc8f3a/component.gd" id="component"]
+[sub_resource type="Resource" id="manifestation"]
+script = ExtResource("component")
+component_id = "summon_manifestation"
+constructor_script = "res://assets/vfx/extensions/material-runtime-20261021/sources/ce2988340441bc57f566/manifestation.gd"
+input = {"owner_uuid": "fixture-summon-air_elemental-entity-A", "birth_event_uuid": "fixture-birth-air_elemental", "form": "air_elemental", "initial_state": {"owner_uuid": "fixture-summon-air_elemental-entity-A", "birth_admitted": true, "observed": true, "suppressed": false}, "review_states": [{"seconds": 3.0, "state": {"terminal_event_uuid": "fixture-terminal-air_elemental", "terminal_started_at_seconds": 3.0}}], "entries": [{"id": "birth-air_elemental", "kind": "birth", "composition": {"components": [{"script": "res://assets/vfx/extensions/material-runtime-20261021/sources/92fd8420b6249066d8eb/summon_lifecycle.gd", "input": {"scene": "res://assets/vfx/sources/30d97daa0975dde56681/empty_subject.tscn", "settings": {"animation": "", "kind": "arrival", "camera_quadrant": 0}, "side": "full", "simulation_hz": 144, "seed": 47291, "shaders": {"ground": "res://assets/vfx/extensions/late-20261020/sources/c464c97e2ebb61e0e97c/ground.gdshader", "wisp": "res://assets/vfx/extensions/late-20261020/sources/45c91e9033764f175fb0/wisp.gdshader", "mote": "res://assets/vfx/extensions/late-20261020/sources/ca3d4358a92bac67683f/mote.gdshader"}, "neutral_family_palette": {"colors": ["1d3f31", "32694f", "498e61", "64b975", "8ad987", "b4e7a5", "d9f3c7", "f0f6dc"], "neutral_levels": [32, 62, 94, 128, 163, 196, 225, 244], "gain": 1.45, "albedo_is_encoded_srgb": true}}, "id": "effect", "rotation_degrees": [0, 0, 0]}], "bindings": [{"component": "effect", "kind": "sample", "rate": 1.0, "offset_seconds": 0.0}], "emitters": []}, "scale": 0.68, "endpoint_index": 0, "begin_seconds": 0.4, "seconds": 1.7291666666666667}, {"id": "terminal-air_elemental", "kind": "terminal", "composition": {"components": [{"script": "res://assets/vfx/extensions/material-runtime-20261021/sources/92fd8420b6249066d8eb/summon_lifecycle.gd", "input": {"scene": "res://assets/vfx/sources/30d97daa0975dde56681/empty_subject.tscn", "settings": {"animation": "", "kind": "departure", "camera_quadrant": 0}, "side": "full", "simulation_hz": 144, "seed": 47291, "shaders": {"ground": "res://assets/vfx/extensions/late-20261020/sources/c464c97e2ebb61e0e97c/ground.gdshader", "wisp": "res://assets/vfx/extensions/late-20261020/sources/45c91e9033764f175fb0/wisp.gdshader", "mote": "res://assets/vfx/extensions/late-20261020/sources/ca3d4358a92bac67683f/mote.gdshader"}, "neutral_family_palette": {"colors": ["1d3f31", "32694f", "498e61", "64b975", "8ad987", "b4e7a5", "d9f3c7", "f0f6dc"], "neutral_levels": [32, 62, 94, 128, 163, 196, 225, 244], "gain": 1.45, "albedo_is_encoded_srgb": true}}, "id": "effect", "rotation_degrees": [0, 0, 0]}], "bindings": [{"component": "effect", "kind": "sample", "rate": 1.0, "offset_seconds": 0.0}], "emitters": []}, "scale": 0.68, "endpoint_index": 1, "begin_seconds": 0.4, "seconds": 1.4791666666666667}]}
+provenance = "Shared native summon manifestation follows the actual backend NATURAL value; creature body and actions are independent, currently unbound."
+[resource]
+script = ExtResource("phase")
+clip_id = "high-level-22/summon-manifestation/air_elemental/admitted"
+label = "air_elemental · common manifestation only · admitted"
+phase = "lifecycle"
+variant = "admitted"
+source_recipe = "docs/HIGH_LEVEL_22_SUMMON_BODY_ACTION_COVERAGE_2026-10-15.md"
+seconds = 4.6
+simulation_hz = 60
+components = Array[Resource]([SubResource("manifestation")])
+bindings = [{"component":"summon_manifestation","kind":"sample","rate":1.0,"offset_seconds":0.0}]
+emitters = []
+options = {"source_revision": "gpu-clocked-birth-v403-20261018"}

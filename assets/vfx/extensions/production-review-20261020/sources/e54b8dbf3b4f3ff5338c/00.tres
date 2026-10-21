@@ -1,0 +1,26 @@
+[gd_resource type="Resource" load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://assets/vfx/sources/67ebe8ef4f358cad6a4b/phase.gd" id="script"]
+[ext_resource type="Script" path="res://assets/vfx/sources/d60670fa4c3a03cc8f3a/component.gd" id="component"]
+
+[sub_resource type="Resource" id="part_0"]
+script = ExtResource("component")
+component_id = "assembly"
+constructor_script = "res://assets/vfx/extensions/production-review-20261020/sources/3e50ff948fb18da9b909/wind_wall_composition.gd"
+input = {"components": [{"script": "res://assets/vfx/sources/051bff004bce28671a4f/wind_periodic_flow.gd", "input": {"scene": "res://assets/vfx/sources/546681adf3a962816738/VFX_WindHit_K2.tscn", "settings": {"coverage_noise": "res://assets/vfx/sources/5aecbaf1cbc2519c6be0/texture.res", "animation": "", "path_points": [[-4, 0], [-1, 0], [1, 2], [3, 2]]}, "side": "full", "simulation_hz": 144, "seed": 47291, "clip_ground": [1, 1]}, "id": "effect", "rotation_degrees": [0, 0, 0]}], "bindings": [{"component": "effect", "kind": "sample", "rate": 1.0, "offset_seconds": 0.0}], "emitters": []}
+options = {}
+provenance = "Pinned native selection; recipes/spells/wind_wall.json"
+
+[resource]
+script = ExtResource("script")
+clip_id = "wall-native/wind_wall_corner_native/lifecycle"
+label = "Lifecycle"
+phase = "lifecycle"
+variant = "corner"
+source_recipe = "recipes/spells/wind_wall.json"
+bindings = [{"component": "assembly", "kind": "sample", "rate": 1.0, "offset_seconds": 0.0}]
+emitters = []
+seconds = 5.0
+simulation_hz = 144.0
+components = Array[Resource]([SubResource("part_0")])
+options = {"qualification": "Native-context visual review; not production approval"}

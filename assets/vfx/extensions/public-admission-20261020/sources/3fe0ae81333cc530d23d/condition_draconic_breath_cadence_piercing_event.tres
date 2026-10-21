@@ -1,0 +1,22 @@
+[gd_resource type="Resource" format=3]
+
+[ext_resource type="PackedScene" path="res://assets/vfx/conditions/condition_draconic_breath_cadence_piercing_event/prepared.scn" id="1_26wpc"]
+[ext_resource type="Script" path="res://assets/vfx/extensions/followup-20261020/sources/0fb7351681180386b03a/condition_pose_interface.gd" id="2_01n3o"]
+
+[resource]
+script = ExtResource("2_01n3o")
+scene = ExtResource("1_26wpc")
+bindings = [{
+"node_index": 2,
+"node_path": "./effect/NativeReceivingMaterial",
+"property_index": 1,
+"property_name": "material_override",
+"shader_path": "res://assets/vfx/shared/resources/ab48e05ccf95df01d53e26c8ba0ab50652ea2330c2da6cd9b725ec2b3f9a3438.res"
+}]
+receipt = {
+"artwork_changed": false,
+"owner_preconstructed": false,
+"scene": "res://assets/vfx/conditions/condition_draconic_breath_cadence_piercing_event/prepared.scn",
+"scene_sha256": "30de113652bb771328a445d26555b02b96e469554ab781cbfe4bc8d8b33c627d",
+"selection": "condition_draconic_breath_cadence_piercing_event"
+}

@@ -1,0 +1,192 @@
+[gd_resource type="Resource" format=4]
+
+[ext_resource type="Shader" path="res://assets/vfx/extensions/owner-fields-v2-20261021/sources/274af03cff3e666c76d4/poison-original.gdshader" id="1_kqgmd"]
+[ext_resource type="Shader" path="res://assets/vfx/extensions/owner-fields-v2-20261021/sources/f714f777b888d2b5c666/poison-partition.gdshader" id="2_ggjrp"]
+[ext_resource type="Script" path="res://assets/vfx/extensions/material-runtime-20261021/sources/a4e49f1ffe2c3489e923/bank.gd" id="3_ctdwq"]
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_pvpsg"]
+noise_type = 2
+fractal_type = 0
+fractal_octaves = 1
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_3abb6"]
+noise = SubResource("FastNoiseLite_pvpsg")
+seamless = true
+invert = true
+seamless_blend_skirt = 0.2
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_dfovl"]
+noise_type = 2
+seed = 1
+fractal_octaves = 2
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_p1dmn"]
+noise = SubResource("FastNoiseLite_dfovl")
+seamless = true
+invert = true
+
+[sub_resource type="Gradient" id="Gradient_r6a70"]
+interpolation_color_space = 1
+colors = PackedColorArray(1, 1, 1, 1, 0, 0, 0, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_c6n5v"]
+gradient = SubResource("Gradient_r6a70")
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(0.5, 0)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_3ylom"]
+render_priority = 0
+shader = ExtResource("1_kqgmd")
+shader_parameter/observed_perimeter_texture = SubResource("NoiseTexture2D_3abb6")
+shader_parameter/observed_cells = PackedVector2Array(-1, 0, 0, 0, 1, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+shader_parameter/observed_open_edges = PackedVector4Array(1, 0, 1, 1, 0, 0, 1, 0, 0, 1, 1, 0, 1, 0, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+shader_parameter/observed_cell_count = 5
+shader_parameter/observed_emission_gain = 1.0
+shader_parameter/observed_alpha_response = 1.0
+shader_parameter/observed_source_contrast = 0.0
+shader_parameter/observed_base_film = 0.0
+shader_parameter/orb_burst_seconds = 0.4
+shader_parameter/orb_burst_envelope = 0.42
+shader_parameter/mask1_texture = SubResource("NoiseTexture2D_3abb6")
+shader_parameter/mask1_scroll = Vector2(0, -0.05)
+shader_parameter/mask1_scale = Vector2(4, 2)
+shader_parameter/mask1_radial = false
+shader_parameter/mask1_rotation = 0.0
+shader_parameter/use_mask2 = true
+shader_parameter/mask2_texture = SubResource("NoiseTexture2D_p1dmn")
+shader_parameter/mask2_scroll = Vector2(0, -0.05)
+shader_parameter/mask2_scale = Vector2(3, 2)
+shader_parameter/mask2_strength = 1.0
+shader_parameter/mask2_blend_mode = 10
+shader_parameter/mask2_radial = false
+shader_parameter/mask2_rotation = 0.0
+shader_parameter/use_mask3 = false
+shader_parameter/mask3_texture = SubResource("GradientTexture2D_c6n5v")
+shader_parameter/mask3_scroll = Vector2(0, 0)
+shader_parameter/mask3_scale = Vector2(1, 1)
+shader_parameter/mask3_strength = 1.0
+shader_parameter/mask3_blend_mode = 7
+shader_parameter/mask3_radial = false
+shader_parameter/mask3_rotation = 0.0
+shader_parameter/primary_color = Color(0.631373, 0.905882, 0, 1)
+shader_parameter/secondary_color = Color(0.368627, 0.541176, 0, 1)
+shader_parameter/tertiary_color = Color(0, 0.360784, 0.109804, 1)
+shader_parameter/use_tertiary = true
+shader_parameter/color_smoothness = 0.5
+shader_parameter/billboard = false
+shader_parameter/displacement_scale = 0.0
+shader_parameter/displacement_offset = 0.0
+shader_parameter/time_scale = 1.0
+shader_parameter/texture_scale = Vector2(1, 1)
+shader_parameter/uv_alignment = 0
+shader_parameter/emission_strength = 2.0
+shader_parameter/proximity_fade = false
+shader_parameter/proximity_fade_distance = 1.0
+shader_parameter/edge_cutoff = Vector4(0, 0, 0, 0)
+shader_parameter/alpha_smoothness = 1.0
+shader_parameter/alpha_multiplier = 1.0
+shader_parameter/alpha_mode = 0
+shader_parameter/alpha_cutoff = 0.02
+shader_parameter/dither_cutoff = 0.8
+metadata/native_alpha_clamp_corrected = true
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_x2pif"]
+render_priority = 0
+shader = ExtResource("2_ggjrp")
+shader_parameter/observed_perimeter_texture = SubResource("NoiseTexture2D_3abb6")
+shader_parameter/observed_cells = PackedVector2Array(-1, 0, 0, 0, 1, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+shader_parameter/observed_draw_flags = PackedFloat32Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+shader_parameter/observed_open_edges = PackedVector4Array(1, 0, 1, 1, 0, 0, 1, 0, 0, 1, 1, 0, 1, 0, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+shader_parameter/observed_cell_count = 5
+shader_parameter/observed_emission_gain = 1.0
+shader_parameter/observed_alpha_response = 1.0
+shader_parameter/observed_source_contrast = 0.0
+shader_parameter/observed_base_film = 0.0
+shader_parameter/orb_burst_seconds = 0.4
+shader_parameter/orb_burst_envelope = 0.42
+shader_parameter/mask1_texture = SubResource("NoiseTexture2D_3abb6")
+shader_parameter/mask1_scroll = Vector2(0, -0.05)
+shader_parameter/mask1_scale = Vector2(4, 2)
+shader_parameter/mask1_radial = false
+shader_parameter/mask1_rotation = 0.0
+shader_parameter/use_mask2 = true
+shader_parameter/mask2_texture = SubResource("NoiseTexture2D_p1dmn")
+shader_parameter/mask2_scroll = Vector2(0, -0.05)
+shader_parameter/mask2_scale = Vector2(3, 2)
+shader_parameter/mask2_strength = 1.0
+shader_parameter/mask2_blend_mode = 10
+shader_parameter/mask2_radial = false
+shader_parameter/mask2_rotation = 0.0
+shader_parameter/use_mask3 = false
+shader_parameter/mask3_texture = SubResource("GradientTexture2D_c6n5v")
+shader_parameter/mask3_scroll = Vector2(0, 0)
+shader_parameter/mask3_scale = Vector2(1, 1)
+shader_parameter/mask3_strength = 1.0
+shader_parameter/mask3_blend_mode = 7
+shader_parameter/mask3_radial = false
+shader_parameter/mask3_rotation = 0.0
+shader_parameter/primary_color = Color(0.631373, 0.905882, 0, 1)
+shader_parameter/secondary_color = Color(0.368627, 0.541176, 0, 1)
+shader_parameter/tertiary_color = Color(0, 0.360784, 0.109804, 1)
+shader_parameter/use_tertiary = true
+shader_parameter/color_smoothness = 0.5
+shader_parameter/billboard = false
+shader_parameter/displacement_scale = 0.0
+shader_parameter/displacement_offset = 0.0
+shader_parameter/time_scale = 1.0
+shader_parameter/texture_scale = Vector2(1, 1)
+shader_parameter/uv_alignment = 0
+shader_parameter/emission_strength = 2.0
+shader_parameter/proximity_fade = false
+shader_parameter/proximity_fade_distance = 1.0
+shader_parameter/edge_cutoff = Vector4(0, 0, 0, 0)
+shader_parameter/alpha_smoothness = 1.0
+shader_parameter/alpha_multiplier = 1.0
+shader_parameter/alpha_mode = 0
+shader_parameter/alpha_cutoff = 0.02
+shader_parameter/dither_cutoff = 0.8
+metadata/native_alpha_clamp_corrected = true
+metadata/factory_prepared_shader = ExtResource("2_ggjrp")
+metadata/factory_opacity_prepared_shader = ExtResource("2_ggjrp")
+metadata/factory_clock_pool_required = false
+metadata/factory_clock_names = []
+
+[resource]
+script = ExtResource("3_ctdwq")
+original_material = SubResource("ShaderMaterial_3ylom")
+partition_material = SubResource("ShaderMaterial_x2pif")
+style = "orb"
+capacity = 128
+surface_kind = "spatial_effect.spell.simple_toxin"
+source_input = {
+"admitted_cells": [[-1, 0], [0, 0], [1, 0], [0, 1], [1, 1]],
+"alpha_response": 1.0,
+"base_film": 0.0,
+"birth_seconds": 0.22,
+"emission_gain": 1.0,
+"native_parameters": {
+"displacement_scale": 0.0,
+"mask1_radial": false,
+"mask2_blend_mode": 10,
+"mask2_radial": false,
+"use_mask3": false
+},
+"observed_surface_kind": "spatial_effect.spell.simple_toxin",
+"opacity": 1.0,
+"perimeter_texture_parameter": "mask1_texture",
+"retire_at_seconds": 3.0,
+"source_contrast": 0.0,
+"source_material": "res://assets/vfx/sources/cbb2ec4b8e8fa195862e/poison_puddle_01_ground.tres",
+"surface_admitted": true
+}
+provenance = {
+"change": "Native selected puddle Burn, colours, alpha and emission restored; original connected UV/cell crop retained. Separate source-art candidate, not old-output equivalence.",
+"geometry": "Original full-owner PlaneMesh bounds, subdivision and UV per draw; no overlapping output halo",
+&"original_prepared_bank": "res://assets/vfx/extensions/material-runtime-20261021/sources/6bb402969237ffb57728/poison-bank.tres",
+"original_program_sha256": "599224333506abfb9f84941106d543525832663cf2712c162a20c81d9a8bb543",
+&"restored_donor_material": "res://assets/vfx/sources/cbb2ec4b8e8fa195862e/poison_puddle_01_ground.tres",
+"source_constructor": "res://assets/vfx/extensions/material-runtime-20261021/sources/5d2781cac4ec7582d670/chromatic_orb_surface.gd",
+"source_phase": "res://assets/vfx/extensions/material-runtime-20261021/sources/561e050eca9d7bcdfdda/poison_surface.tres",
+"source_phase_sha256": "e7b3e9084d1d1d69d49b2f124cfb72e9aa3a12d1cbb8731184fe968b39f9f9b4"
+}

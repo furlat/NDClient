@@ -1,0 +1,44 @@
+{
+  "schema": "factory.additive_successor.actual_readiness.v1",
+  "version": "runtime-production-review-20261020-937fdd136d621742",
+  "index_sha256": "3e87de20e9a3e43dfdb66b7d616aa5d2911aed2865f222b52cbbc20ae3c1b806",
+  "native_receipt": "/mnt/c/Users/tommaso/Documents/assets/VFXFactory/.runtime/runtime-production-review-20261020/native-smoke-complete-v1.json",
+  "native_receipt_sha256": "98921025be64d1500fa74a43da1efd28fe9fc9a2821bebe629d18a55a7ef255c",
+  "cases": 3,
+  "constructor_flag_count": 1,
+  "unique_reported_immutable_resources": 0,
+  "resources": [],
+  "rows": [
+    {
+      "clip_id": "wall_of_thorns_straight_native",
+      "group": "live_wall_owner",
+      "native_complete_constructor_us": 597,
+      "constructor_over2000us": false,
+      "measured_readiness_step_cpu_us": 560,
+      "maximum_readiness_step_cpu_us": 334,
+      "readiness_steps": 4
+    },
+    {
+      "clip_id": "wall_of_thorns_circle_native",
+      "group": "live_wall_owner",
+      "native_complete_constructor_us": 1004,
+      "constructor_over2000us": false,
+      "measured_readiness_step_cpu_us": 27,
+      "maximum_readiness_step_cpu_us": 22,
+      "readiness_steps": 2
+    },
+    {
+      "clip_id": "wall-native/wind_wall_corner_native/lifecycle",
+      "group": "live_wall_owner",
+      "native_complete_constructor_us": 7396,
+      "constructor_over2000us": true,
+      "measured_readiness_step_cpu_us": 2765,
+      "maximum_readiness_step_cpu_us": 2571,
+      "readiness_steps": 4
+    }
+  ],
+  "maximum_actual_readiness_step_cpu_us": 2571,
+  "scope": "Actual native Resource-only prepublication CPU spans, separate from complete constructors. Cumulative Resource reports deduplicated by exact address. Async waiting, full-game input work and wall-clock loading are not characterized as negligible.",
+  "human_approval_inferred": false,
+  "production_integration_performed": false
+}

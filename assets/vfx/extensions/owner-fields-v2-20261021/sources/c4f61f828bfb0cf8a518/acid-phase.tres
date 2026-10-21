@@ -1,0 +1,32 @@
+[gd_resource type="Resource" format=3]
+
+[ext_resource type="Script" path="res://assets/vfx/sources/d60670fa4c3a03cc8f3a/component.gd" id="1_ki5bn"]
+[ext_resource type="Script" path="res://assets/vfx/sources/67ebe8ef4f358cad6a4b/phase.gd" id="2_rh85m"]
+
+[sub_resource type="Resource" id="Resource_2quyu"]
+script = ExtResource("1_ki5bn")
+component_id = "effect"
+constructor_script = "res://assets/vfx/extensions/owner-fields-v2-20261021/sources/e337e0c543aa9b9a17b2/field.gd"
+input = {
+"surface_bank": "res://assets/vfx/extensions/owner-fields-v2-20261021/sources/2c8be4282212f16ed1c3/acid-bank.tres"
+}
+provenance = "res://assets/vfx/extensions/owner-fields-v2-20261021/sources/5b4d4ce0b128df5d9074/acid_surface.tres"
+
+[resource]
+script = ExtResource("2_rh85m")
+clip_id = "bg3-36/chromatic-orb/acid/observed-surface"
+label = "Separate observed acid cells — full-owner neighbors / disjoint draw"
+phase = "surface"
+variant = "partitioned_observed_acid"
+components = Array[Resource]([SubResource("Resource_2quyu")])
+bindings = [{
+"component": "effect",
+"kind": "sample",
+"offset_seconds": 0.0,
+"rate": 1.0
+}]
+simulation_hz = 144.0
+options = {
+"owner_driven": true,
+"qualification": "Actual full footprint / draw partition and owner inputs required; no art acceptance inferred"
+}

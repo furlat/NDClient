@@ -1,0 +1,32 @@
+[gd_resource type="Resource" format=3]
+
+[ext_resource type="Script" path="res://assets/vfx/sources/d60670fa4c3a03cc8f3a/component.gd" id="1_oletb"]
+[ext_resource type="Script" path="res://assets/vfx/sources/67ebe8ef4f358cad6a4b/phase.gd" id="2_ew3bw"]
+
+[sub_resource type="Resource" id="Resource_4vgx1"]
+script = ExtResource("1_oletb")
+component_id = "effect"
+constructor_script = "res://assets/vfx/extensions/wall-child-v3-20261021/sources/39a8f882a0878cd303e3/field.gd"
+input = {
+"frigid_air_bank": "res://assets/vfx/extensions/wall-child-v3-20261021/sources/b7ea6d936f6aa6be5b46/mist-bank.tres"
+}
+provenance = "Existing prepared ice mist; owner/footprint required from actual disclosure"
+
+[resource]
+script = ExtResource("2_ew3bw")
+clip_id = "native/frigid_air/lifecycle"
+label = "Frigid Air — observed child only"
+phase = "lifecycle"
+variant = "observed_child_resource_safe_bank"
+components = Array[Resource]([SubResource("Resource_4vgx1")])
+bindings = [{
+"component": "effect",
+"kind": "sample",
+"offset_seconds": 0.0,
+"rate": 1.0
+}]
+simulation_hz = 144.0
+options = {
+"owner_driven": true,
+"qualification": "Source/API candidate; no production assignment or visual approval"
+}

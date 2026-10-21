@@ -1,0 +1,587 @@
+{
+  "version": "runtime-cell-validation-20261021-39c35c8322c07ef7",
+  "predecessor": "runtime-material-runtime-20261021-6d5439325ec85d0a",
+  "rows": [
+    {
+      "key": "cell_validation_sleet",
+      "clip_id": "assembled/sleet_storm_native",
+      "candidate_phase": "res://authoring/production-review-repair-20261021/owner_release/sleet.tres",
+      "fixed_constructor": "res://factory/packaging/owner_release_sleet.gd",
+      "public_constructor": "res://factory/components/owner_release/common_occurrence.gd",
+      "make_method": "make_component",
+      "required_public_setters": [
+        "set_targets",
+        "set_owner_state",
+        "set_zone_geometry"
+      ],
+      "public_fixture": {
+        "constructor_values": {
+          "owner_uuid": "labelled-owner-release-sleet"
+        },
+        "component_path": [
+          "effect"
+        ],
+        "input_field": "",
+        "owner_uuid": "labelled-owner-release-sleet",
+        "zone_geometry": {
+          "spatial_effect_uuid": "labelled-owner-release-sleet",
+          "effect": {
+            "content_ref": {
+              "content_id": "spatial_effect.spell.sleet_storm"
+            },
+            "anchor_position": [
+              21,
+              -7
+            ],
+            "positions": [
+              [
+                21,
+                -7
+              ],
+              [
+                22,
+                -7
+              ],
+              [
+                21,
+                -6
+              ],
+              [
+                19,
+                -6
+              ]
+            ],
+            "suppressions": []
+          }
+        },
+        "targets": [
+          [
+            4,
+            0.8,
+            -3
+          ]
+        ],
+        "owner_state": {
+          "owner_uuid": "labelled-owner-release-sleet",
+          "present": true,
+          "observed": true,
+          "suppressed": false,
+          "owner_age_seconds": 32.0
+        },
+        "source_root_scale": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "camera_focus": [
+          4,
+          0.8,
+          -3
+        ],
+        "camera_size": 12.0,
+        "sample_age_seconds": 32.0,
+        "layer_mask": 2,
+        "witness_age": 1.5
+      },
+      "immutable_readiness_before_make": true,
+      "validate_phase_at_import_only": true,
+      "ownership_qualification": "res://authoring/production-review-repair-20261021/owner_release/qualification.json",
+      "source_qualification": true,
+      "fixture_is_gameplay_observation": false,
+      "new_art_approval": false,
+      "group": "cell_validation",
+      "constructor": "res://factory/packaging/owner_release_sleet.gd",
+      "public_setters": [
+        "set_targets",
+        "set_owner_state",
+        "set_zone_geometry"
+      ],
+      "qualification_path": "authoring/production-review-repair-20261021/cell_validation/qualification.json",
+      "phase_sha256": "021d4c4d1a253199b0a7699fadbef4a33c6a5c8a2edbe8f20435bc31ab9fd7af",
+      "simulation_hz": 144.0,
+      "construction_input_contract": {
+        "operands": "One exact source-component operand with current owner/construction facts. No saved fixture defaults or bank override.",
+        "lifetime": "Explicit current owner state, disclosed geometry/cells and supplied world anchor; no review lease/recast."
+      },
+      "source_runtime_flags_retained": {
+        "flags": [
+          {
+            "actual_us": 258,
+            "measurement": "first_positive_age_inputs_plus_sample",
+            "repeat": 0,
+            "representation": "native_int197",
+            "threshold_us": 250
+          },
+          {
+            "actual_us": 2184,
+            "measurement": "complete_public_constructor",
+            "repeat": 1,
+            "representation": "",
+            "threshold_us": 2000
+          }
+        ],
+        "readiness": {
+          "elapsed_us": 276994,
+          "maximum_step_us": 13916,
+          "resources_only_before_first_owner": true,
+          "all_steps_below2000us": false
+        },
+        "raw_single_input_max_us": 347,
+        "full_budget_pass_claimed": false,
+        "previous_source_flags_preserved": true
+      },
+      "evidence": [
+        {
+          "path": "authoring/production-review-repair-20261021/cell_validation/qualification.json",
+          "sha256": "81d1f06834de23dac5faa3faf3d5c7edc50b31e06638104b8f679a0e32ae5127",
+          "active_art_context_qualified": false,
+          "optical": {
+            "strict_threshold_pass": false,
+            "new_raster_performed": false
+          },
+          "complete_constructor_and_update_budget_pass": false,
+          "scope": "Exact CPU geometry and actual original-public native timing; no new source-art comparison or waived tail."
+        }
+      ],
+      "construction_kind": "owner_operands",
+      "qualification": "authoring/production-review-repair-20261021/cell_validation/qualification.json",
+      "qualification_sha256": "81d1f06834de23dac5faa3faf3d5c7edc50b31e06638104b8f679a0e32ae5127",
+      "native_art_scope": "Only equivalent numeric cell admission; original weather masks, shaders, topology and clocks unchanged."
+    }
+  ],
+  "source_hashes": {
+    "res://authoring/production-review-repair-20261021/owner_release/sleet.tres": "021d4c4d1a253199b0a7699fadbef4a33c6a5c8a2edbe8f20435bc31ab9fd7af",
+    "res://authoring/production-review-repair-20261021/terrain_owner/assets-v1/4eae811de02703673e4b.res": "39c1906740dd5032e4dbff38c13459370fbcfacb7c096b6182fc76af410373e2",
+    "res://authoring/production-review-repair-20261021/terrain_owner/assets-v1/4eae811de02703673e4b.scn": "e6f5888b1a816a3964e644263c7fb7512265b835f09c5d9a997c2ff142fec2de",
+    "res://authoring/production-review-repair-20261021/terrain_owner/assets-v1/f6c4d6ccbfc0b32f6506.res": "223c6d98d95ff77031c09bb9f29bb67714fb94c4565c6a07337a5fcccb2e7185",
+    "res://authoring/production-review-repair-20261021/terrain_owner/assets-v1/f6c4d6ccbfc0b32f6506.scn": "76899d9a2c62e328c36df3dbc39396b7510cf8ec2ff4e8e30c62642e331ee4df",
+    "res://authoring/production-review-repair-20261021/terrain_owner/assets-v1/program-2878177b8a429a85ea71.gdshader": "2878177b8a429a85ea71456428f17cf56968b5ad64cb9556994ccddbe9e383cd",
+    "res://authoring/production-review-repair-20261021/terrain_owner/assets-v1/program-4276940d24ec86dc4c47.gdshader": "4276940d24ec86dc4c47a9d52edec09b862fa5e9921acfe93d4c220024f24bb1",
+    "res://authoring/production-review-repair-20261021/terrain_owner/assets-v1/program-6f6e92d274014e559356.gdshader": "6f6e92d274014e55935653d16ff670ef627bedbca5d03874c09aec89d40c7597",
+    "res://factory/authoring/component.gd": "3a37b2d404e3daf6a645f7a1569f878619e28d0c477d4f88af3c824b3f300fa3",
+    "res://factory/authoring/phase.gd": "e60cd3283f20b7555657d7336054094dcb8f1a791939e4956ec563114bcd1779",
+    "res://factory/baking/live_geometry_bindings.gd": "34c2ccdce695072ac450bdb79c6766ab7f843107dadc9044cd395be4f5b6409c",
+    "res://factory/baking/private_particle_process.gd": "799d1871a0a56b260c652b48e1ec8239682315026d3cd76dbf7730162241dd8f",
+    "res://factory/baking/recording_source_sampler.gd": "18e128dbe6f9df00915f2d1727053e380fa92222424747ea6cca7439df7026fa",
+    "res://factory/baking/runtime_particle_units.gd": "40a94dd0f1eb3d13bc372c75dc435db3567f14ad4cb7a1a991ce7a58e84885a7",
+    "res://factory/baking/source_bridge.gd": "daa9ffcaa41beae562991ec3edb60ff5397ab5772aab2cfeb3d8115136b03c4d",
+    "res://factory/baking/stable_source_paths.gd": "79d8683f87bbf7f860c394af64e5c4837c627911c4f94f01d4762377136fcce3",
+    "res://factory/components/owned_fields/input.gd": "7560cd5594285fed3582e18e397bf522ea1e453c084ef8dbfb0a052ae791b9ec",
+    "res://factory/components/owned_fields/sleet_leaf.gd": "32a79ea7cffe254095b4e3622cb2b6962d59bf9cb759da45f549d2c5eeca8837",
+    "res://factory/components/owner_release/common_occurrence.gd": "0356ecee848d74ed47e6d110191d8b179326f7db7bc35904053e34e888a56058",
+    "res://factory/components/owner_release/sleet.gd": "438ab843c11204bedd9e494bd5ef08e67437e675ce6243d9dd662d970a246d16",
+    "res://factory/components/prepared_recipient/bank.gd": "03374ea39842dcb2f2809fc56cf6379f053cc5f5e8c5c3609792826e7d78782e",
+    "res://factory/components/prepared_recipient/restore.gd": "c4532aa2169ad51fd18e6886d983b0af91e2aa0fa9fca6c3b87fba9f05fd4b63",
+    "res://factory/components/prepared_timed/bank.gd": "82faf22fd22b0cc538701d853b788497cefbf0b7336a5395db2d0b47984fde00",
+    "res://factory/components/prepared_timed/restore.gd": "1f2c831af1a4242d1ca6aaff9cea81011cd48028d51e70eab3200486a433afed",
+    "res://factory/components/recipient/base.gd": "a866dea4a07145fce4b0a5719ed36a1e5c3eab3183d305d40ea6a221e4e3af39",
+    "res://factory/components/recipient/sleet_soft_mist.gd": "1794f5cab2425f2c081ff5b53c489b17a156b0597981c9dbb818965d598e0f0a",
+    "res://factory/components/recipient/sleet_storm.gd": "e96e395f05969deb13c1f2497a4adb9f54ad8a3a76f696e2d147a367e99a0834",
+    "res://factory/core/animation_key_times.gd": "64ca9ccd2e54c61c5cd52cbb68d7943a7eabbf7d7002127bb59c2cdd5406dfcd",
+    "res://factory/core/contract_stage.gd": "74b2cfe382b08b973be3e71a06842c6b29170e19521d21daec305bc9c8441ca6",
+    "res://factory/core/donor_scene.gd": "dd29d6d7e2f8a3c94ff7246736aefc8ad43f5e4b6e088223a6a37595ffd49702",
+    "res://factory/core/immutable_materials.gd": "7ccf04d48918a608d4b4f39a2e8fa86fe1d638cee8f48543441328ac55b521ba",
+    "res://factory/core/native_source_space.gd": "f8cc53bd9caed6a2168bf7c478d08cbff25fa8ea83ecd3aa48817ac8a27b66a6",
+    "res://factory/core/resource_graph.gd": "eca090b0c9895146375d3e959eaf193fef1236f0a7aadf91d9f137e50f853627",
+    "res://factory/core/source_materials.gd": "0f4c218085af57252c96d744a0c174fba72539eb0b90f88ff418966c2ac2f9e0",
+    "res://factory/materials/spatial_energy_palette.gd": "f9ba610cf896d678b91cdd11e553a6c4db9b1cca82e1a6cb0b36eb2f90928828",
+    "res://factory/packaging/constructed_occurrence.gd": "ae59f52f60d99675d983839cb8696abd341de18b46bb618686f5481e3a5a009e",
+    "res://factory/packaging/construction_profile.gd": "78b2194e6c972c80a191799044e7886450fa36bbb0c52b7a0d783a9a706bd4e8",
+    "res://factory/packaging/occurrence.gd": "144c9c73ed1a0b1c955be270f68b41e998ba86584db9f36cda0366eea7aa7a73",
+    "res://factory/packaging/occurrence_bindings.gd": "30d613541975e19fd62bced07522ce4959da6657489ae4531143ac9a5c886df3",
+    "res://factory/packaging/occurrence_clock.gd": "59a42844d8168bc0bdb3fb893261197f7559d5fc94a7342d1861421c02691f6a",
+    "res://factory/packaging/owner_release_sleet.gd": "226118fe20bbe8bbc8d1232e423df0fd53863d25aa010fe032e06cbf62b4cc51",
+    "res://factory/packaging/resource_io.gd": "7a001b4b69c2480a2ee5b85c8f85e7fcc812c8ed67398483522ea9be8d9f39ed",
+    "res://factory/packaging/scene_document.gd": "698f1b1ab06ea61ae1fd22eaf278d181aa0634e3f8c251874f4274be14e44ebc",
+    "res://factory/packaging/source_readiness.gd": "9321995d3d4cc2e5ddc98cdf6b805685dc43a952589056654d9c6b0070c1a76a",
+    "res://factory/resources/cold/SleetSources/blotch.tres": "af6dfcbb63a4f5898d7b11f99e3cfcfa6ac67be789902a787924f18b920e8cf8",
+    "res://factory/resources/cold/SleetSources/brush.tres": "ddbd862f6725730ba936aebe248742a6c3e8ae9c535d9db9e66730e673393b6f",
+    "res://factory/resources/cold/SleetSources/circle.tres": "60057f8cc5971795a9a4a32211d7e8dc852c331b596582d2e3c49f2111f0e2e3",
+    "res://factory/resources/cold/SleetSources/mist.tres": "02b6e5a9e5201c1aa0183b72a35ff60928f480d6f65f55bf21d8c21b94433e84",
+    "res://factory/resources/cold/SleetSources/particle.gdshader": "bb3a3c4b598bd07f49c017aa9b0e107efff39bca48822b60e10ce643b4a8d831",
+    "res://factory/resources/cold/SleetSources/util/alpha.gdshaderinc": "e96ad3782009ee296d044bb9802f45003e4b3be0bf5424559ca21015ee588b05",
+    "res://factory/resources/cold/SleetSources/util/blend.gdshaderinc": "9ee43e3c82be1c32d015f1ab1ed40794c6ba36bd553fd6bd701ef7c514025f93",
+    "res://factory/resources/cold/SleetSources/util/dithering.gdshaderinc": "5e32891f6fb4e625f92388b6edc7d3aad8261fb0103ab9a88c67140212195cab",
+    "res://factory/resources/cold/SleetSources/util/uvtools.gdshaderinc": "d004a204c41b65e6b267f1d879aca0fec6e8099929e8d5b6f7f322db251567ab",
+    "res://factory/resources/empty_subject.tscn": "914a9055eb1b7c78ef6fbd2a20217103c464eb63c201ffd7ef0827c4ae8a1474",
+    "res://factory/shaders/cie_d65_v1.gdshaderinc": "1b92ec2f105962f8126bc3e7c38110d163fdc62414820e65c730f752aade2dae",
+    "res://factory/shaders/cold/sleet_storm_floor.gdshader": "7df9293d04afdaff336b5c143a23e7c4e64852d3e4e14f4ed970d867e7da815e",
+    "res://factory/shaders/cold/sleet_storm_rain.gdshader": "96cb65a5582d115af81a4fac91dd7da8a7737aa134faf1af1bd0748ac25fbe68",
+    "res://factory/shaders/necrotic_recipient_layer_v3.gdshader": "bfaebeacbae39378d86ef2f468d96c7355c3d2c937889b6328c75d2af0a168a2",
+    "res://integrations/ndclient/assets/native_effects/class_actions/Charge.gdshader": "19dbd070254366ba40b284511b159e757415779aefc8167775db011e01e1259e",
+    "res://integrations/ndclient/assets/native_effects/class_actions/ClassComponents.gd": "beffe6ba882eccc92b7672613cd5959e225a893fe21a6f528cff746063a742b7",
+    "res://integrations/ndclient/assets/native_effects/class_actions/Film.gdshader": "1da06086b96579d88ef317026c395699f9e379f306a11ce76075307521bad3ca",
+    "res://integrations/ndclient/assets/native_effects/class_actions/Flow.gdshader": "1e7fcb04c1f31c237adf7fefdf7d2b9ece9d0c7fa179e1f041b9b2413daea8e8",
+    "res://integrations/ndclient/assets/native_effects/class_actions/Glow.gdshader": "dcd7c27efcd84ec38e226e5180e753edb56d4c28a8364bf3053a30322f6d8774",
+    "res://integrations/ndclient/assets/native_effects/class_actions/Strike.gd": "1042121c97885e95cf4006690cab0ad080bc879f9c6ea39c1f433ca092566d81",
+    "res://integrations/ndclient/assets/native_effects/class_actions/Strike.gdshader": "3d00a1eb3a5ee5705699e2171e509d832633a1e7645bebc9bb6e7513eca6bf89",
+    "res://integrations/ndclient/assets/native_effects/class_actions/StrikePaths.json": "341630ccd6adcd31965a753c58e8302f075f9a7cab225646fe608816beabb220",
+    "res://integrations/ndclient/assets/native_effects/class_actions/strike_hit.png": "fbde8002dad5a6cc88e8fffa95af4b36ba8eaf77b7c4ae2c9c44b40e3da9883b",
+    "res://integrations/ndclient/assets/native_effects/class_actions/vfx_1/arc_charge/scripts/arc_charge_swirl.gd": "0aa31ac5de4f4efc74b4adcfd020266c53dda13920276114c88d0a0edaa39777",
+    "res://integrations/ndclient/assets/native_effects/class_actions/vfx_1/arc_charge/shaders/ribbon.gdshader": "2be39c852753907caee390514c2cb228f66edab12f2eadc3b99f1c87d68dca57",
+    "res://integrations/ndclient/assets/native_effects/class_actions/vfx_1/arc_charge/textures/aura_glow.png": "0153d00f65f7d86263514a57b5892176816d8fb374ca94325de74e7e667aa820",
+    "res://integrations/ndclient/assets/native_effects/class_actions/vfx_1/arc_charge/textures/ember.png": "c143513f7154cf2a9322d6f115e457689236b8081fd0613dc0f4b6af68bc0fd0",
+    "res://integrations/ndclient/assets/native_effects/class_actions/vfx_1/arc_charge/textures/flow_noise.tres": "638185929e10e90b3accceab043e07da1d70d8e391fc41925e1a0081a2708964",
+    "res://integrations/ndclient/assets/native_effects/class_actions/vfx_1/arc_charge/textures/star.png": "a5a94d4fd20b2794485c25adb50f47238dd2f38926754621b9f9f0736c40135d",
+    "res://integrations/ndclient/assets/native_effects/class_actions/vfx_1/arc_charge/variants/arc_charge_swirl_charge.tscn": "7035b169077b6c5144b6ccf77795ac67f72b1ea6332d45248d1e5eb80bfddb5e",
+    "res://integrations/ndclient/assets/native_effects/factory/archive/objects/73/73682ae4aa57cb2f9264cf5550437223fa5c5c0a3129f00096fc640aaefe4091": "73682ae4aa57cb2f9264cf5550437223fa5c5c0a3129f00096fc640aaefe4091",
+    "res://integrations/ndclient/assets/native_effects/factory/factory/shaders/cie_d65_v1.gdshaderinc": "252c03994b0bb8925b8e656abe9a62d922753fb341567e334c0a57065cdef7f9",
+    "res://integrations/ndclient/assets/native_effects/factory/factory/shaders/energy_palette_v1.gdshader": "32f76501adc64e7e6444b28b779150d39c96b857bf868b1c075348fa0715c47e",
+    "res://integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_blood_premium/VFX/Scenes/Decal_Blood_Animated_A1.tscn": "33639e05a422bab5ef19e4c1b47146eeb6c39fa837c3c9b7a2666d5830382b7a",
+    "res://integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_blood_premium/VFX/Scenes/VFX_Blood_Hit_A1.tscn": "f621aad24921fffeb7988413bb861ab51dcedea5ff249fecef60a6f23fb07195",
+    "res://integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_blood_premium/VFX/Scenes/VFX_Blood_Hit_A2.tscn": "f0e2a479e0c03f2540a743c813c60e61ce6d94213e759d5cb00d9454cedc745b",
+    "res://integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_blood_premium/VFX/Scenes/VFX_Blood_Mark_J1.tscn": "68c97270042bccea62ea5d5b22b8bc1753342803eafda4be698177ed8a951eb0",
+    "res://integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_blood_premium/VFX/objects/sm_plane_coned_spiked_waved1.obj": "0d08c64ea3173f8860d1cadec0b3005d1df7681ebe45b0876e8ff770460a50cc",
+    "res://integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_blood_premium/VFX/shaders/s_Disolver_small_Liquid.tres": "07ac62b3c3371f7d9f7c845626ec10f5455b58387dc21d9b836749af01483e05",
+    "res://integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_blood_premium/VFX/shaders/s_Disolver_small_Liquid_p_Treshold_ds.tres": "77e3bc50180da87bd76ed9f4808e69a30e87dd7dc8861aeeacc1e043152b0a88",
+    "res://integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_blood_premium/VFX/shaders/ss_Disolver_subUV_small_Liquid_Treshold_p.gdshader": "5cd8214ed58b515189f1aafd77aba17b99dbf57a86571c0885f8070ab1db3778",
+    "res://integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_blood_premium/VFX/shaders/ss_decal3double_treshold.gdshader": "0b6eff740399f012f86c493150fae48916e2a03f63be281a40a1795762957529",
+    "res://integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_blood_premium/VFX/textures/T_Blood_DECAL_g4.png": "68ee2643fe401e02a28ee3e49867125212759feb88f5615ddb7d7153df8f5a2d",
+    "res://integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_blood_premium/VFX/textures/T_Blood_DECAL_g4x.png": "1e8fdb62cf96bd3b631eb92ec04163a4f8746f790ee2da2d6d2dbf54fdb98ad6",
+    "res://integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_blood_premium/VFX/textures/T_Blood_DECAL_g4x_N.png": "01080724dd6b8a11ea03b34ef5c607319140c87501a591d13425700212c2c643",
+    "res://integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_blood_premium/VFX/textures/T_Blood_MultiUV_f3.png": "eb3b31b84652471d6c7069b1e05eda310c07072d9f10bbf492b661f71b03c193",
+    "res://integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_blood_premium/VFX/textures/T_Blood_MultiUV_f3_N.png": "718ba1a347fbf32fcae370ee82f00a5aa0727fc4b96084d3ea3624569e1bc80c",
+    "res://integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_blood_premium/VFX/textures/T_Blood_Splatter11_N.png": "85ebdc53b869510cade1d5b97f4cc433bc84b38f2d1d06d1e1f5430f7d735f91",
+    "res://integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_blood_premium/VFX/textures/T_Blood_Splatter77.png": "103fcb03e0420d33b2670f87bf66844bfc823b5da1a6325ff417afb7265f96f3",
+    "res://integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_blood_premium/VFX/textures/T_Decal_BloodSplatter45k.png": "33a1b5146ac72a518c62811aae2057004aee85517980574711a34c232551607d",
+    "res://integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_blood_premium/VFX/textures/T_Decal_BloodSplatter45ki_N.png": "e2597a3c095800b8b6a29cd248fa7f7bb1c0787e2712c372908bf58056282f19",
+    "res://integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_blood_premium/VFX/textures/T_Gib_Red_C.PNG": "b764bf132265459154759a08791f3eeaf242b1d5593b0971badedd045c73ee22",
+    "res://integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_blood_premium/VFX/textures/T_NP41.PNG": "f9c8e2fa1dcc62f85965e5a7f3a48cbe4739b01dbbecb9298e9f1da43ec13af2",
+    "res://integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_blood_premium/VFX/textures/T_smoke_K97.png": "2cc94f51b380b6eab0f5cde5c64a5de8176f07e3f5ce3c79878598cc5834e2a6",
+    "res://integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_magic_projectiles_premium_demo_project/VFX/Objects/sm_box2.obj": "219430b5f1dfc7211212f026d4977d04d772925e08c8c7322fea7f40e09ae598",
+    "res://integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_magic_projectiles_premium_demo_project/VFX/Objects/sm_box2_rotated.obj": "464b76e43d36a2fb2007abe8e913cc2bc761dfc779b8073b20543e4732f7d300",
+    "res://integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_magic_projectiles_premium_demo_project/VFX/Scenes/VFX_Cube_projectile.tscn": "e3dc3d912d7f6c07f3649aed17877fd09f146945b212aac7487ccd851296a89e",
+    "res://integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_magic_projectiles_premium_demo_project/VFX/Scenes/VFX_Hit_cyber.tscn": "14f16f90110769de3f5d98850a4005242cbf72f8274555cd972520804f880520",
+    "res://integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_magic_projectiles_premium_demo_project/VFX/Shaders/s_dualColor_masked.tres": "07e2521b9373c5f6decd4c62b49401a7d2cc8ff55433fb72f1a2c999b3a7cf54",
+    "res://integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_magic_projectiles_premium_demo_project/VFX/Shaders/s_simple_p.tres": "31c9ea5b51962959ff51414f1012c7a4659bcfcc1ed8ffd9c2ea99eb8382eed1",
+    "res://integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_magic_projectiles_premium_demo_project/VFX/Shaders/s_single_masked_p.tres": "4f0afc3129be1c9c233abd11309d77096a39129dc5e277ed0cfc0a904f280ca2",
+    "res://integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_magic_projectiles_premium_demo_project/VFX/Textures/T_VFX_Sqart2.jpg": "572afc50e3faed1b246c465b57b2b07877031eda3feda1fbfaeb23afb9aa196c",
+    "res://integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_magic_projectiles_premium_demo_project/VFX/Textures/T_VFX_Square_22Edge.PNG": "5d3b3f9353c0acb6e7caa4c13e947e7e81d6361fa3e44d0ec16d45f7f99329bb",
+    "res://integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_magic_projectiles_premium_demo_project/VFX/Textures/T_VFX_Srt1.jpg": "0d1962a4dce132b6e3322aa79e4df4fa0d6b53396a35e7eeebb34e294d6cd4de",
+    "res://integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_magic_projectiles_premium_demo_project/VFX/Textures/T_VFX_hit22.jpg": "cb1bb8e1d32b8ba5c28cd12f51a7dccb0c804a89d81e040e3039030a54628f2c",
+    "res://integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_magic_projectiles_premium_demo_project/VFX/Textures/T_basic1_vfx.PNG": "cc6ba7e8e8459eb301a332e62d4c369dd4cdfcdadc613caf72624aba12bbd471",
+    "res://integrations/ndclient/assets/native_effects/sandbox/projectiles/factory/core/resource_graph.gd": "a093af6fd6afa7fa5deb99fa45ba216df65846d7d2c8029f38eebf34a0a8588b",
+    "res://integrations/ndclient/authoring/native_effects/index.json": "3062c34b403f70beccd47578315d5745c8ece672f4a476de7225a7512b783035",
+    "res://integrations/ndclient/presentation/native_effect_mote.gdshader": "9425a324f584a792d2ff5d6568dada1365abcf3d66625ebf5846b886fa1be445",
+    "res://integrations/ndclient/presentation/native_effect_palette.gdshader": "58074cd68941da3049c488e42d4b3f0115a864a48063419c048c23b900bb4203",
+    "res://integrations/ndclient/presentation/native_effects.gd": "f288b44595271f899a2be4f963413f18e8c604970e56766098ce10418c2d18e4",
+    "res://integrations/ndclient/presentation/native_factory_source.gd": "4d5896dba23598d57e7b3ee9ccca9c1f1f76931ca010a7dced6b311db38f5bfd",
+    "res://integrations/ndclient/presentation/native_light_units.gd": "80eb9e980fcdf00ecd58834bde45389b760495922114a2f66c2c5a7d06b1c7f5",
+    "res://integrations/ndclient/presentation/native_particle_units.gd": "ce21b59d14dcbe593c8f8bd9b689bca6a6a6033e293b1c892f1aaaeb1d135ba5",
+    "res://library/lelu/pack_lelu_godot_blood_premium/VFX/Scenes/Decal_Blood_Animated_A1.tscn": "8b542bcc993654d88c4e007aaafec8be67e59b9f492221e0e769c160fa8784f8",
+    "res://library/lelu/pack_lelu_godot_blood_premium/VFX/Scenes/VFX_Blood_Hit_A1.tscn": "cb3a53c2b298625f603a6638a4ee8f00323255d196dc142cb43dd5c153255be5",
+    "res://library/lelu/pack_lelu_godot_blood_premium/VFX/Scenes/VFX_Blood_Hit_A2.tscn": "b31656c3b83e5006e23dcc08e043e1125b0c4d8bac50934fec83bd72f4a3144e",
+    "res://library/lelu/pack_lelu_godot_blood_premium/VFX/Scenes/VFX_Blood_Mark_J1.tscn": "5c3993df8e3a7f329dbf5abc034ec39fc5acfa1ff014871cdc5af341dce09428",
+    "res://library/lelu/pack_lelu_godot_blood_premium/VFX/objects/sm_plane_coned_spiked_waved1.obj": "0d08c64ea3173f8860d1cadec0b3005d1df7681ebe45b0876e8ff770460a50cc",
+    "res://library/lelu/pack_lelu_godot_blood_premium/VFX/shaders/s_Disolver_small_Liquid.tres": "07ac62b3c3371f7d9f7c845626ec10f5455b58387dc21d9b836749af01483e05",
+    "res://library/lelu/pack_lelu_godot_blood_premium/VFX/shaders/s_Disolver_small_Liquid_p_Treshold_ds.tres": "022adcea7620dc32f7aa8948751927d4deec60544a3b708ca7b520dee6fb5c8d",
+    "res://library/lelu/pack_lelu_godot_blood_premium/VFX/shaders/ss_Disolver_subUV_small_Liquid_Treshold_p.gdshader": "e5167e8b5cb2eb000a31c3349d69463b3c3a3fd8c28d6cacb9bd95bea58432fd",
+    "res://library/lelu/pack_lelu_godot_blood_premium/VFX/shaders/ss_decal3double_treshold.gdshader": "0b6eff740399f012f86c493150fae48916e2a03f63be281a40a1795762957529",
+    "res://library/lelu/pack_lelu_godot_blood_premium/VFX/textures/T_Blood_DECAL_g4.png": "68ee2643fe401e02a28ee3e49867125212759feb88f5615ddb7d7153df8f5a2d",
+    "res://library/lelu/pack_lelu_godot_blood_premium/VFX/textures/T_Blood_DECAL_g4x.png": "1e8fdb62cf96bd3b631eb92ec04163a4f8746f790ee2da2d6d2dbf54fdb98ad6",
+    "res://library/lelu/pack_lelu_godot_blood_premium/VFX/textures/T_Blood_DECAL_g4x_N.png": "01080724dd6b8a11ea03b34ef5c607319140c87501a591d13425700212c2c643",
+    "res://library/lelu/pack_lelu_godot_blood_premium/VFX/textures/T_Blood_MultiUV_f3.png": "eb3b31b84652471d6c7069b1e05eda310c07072d9f10bbf492b661f71b03c193",
+    "res://library/lelu/pack_lelu_godot_blood_premium/VFX/textures/T_Blood_MultiUV_f3_N.png": "718ba1a347fbf32fcae370ee82f00a5aa0727fc4b96084d3ea3624569e1bc80c",
+    "res://library/lelu/pack_lelu_godot_blood_premium/VFX/textures/T_Blood_Splatter11_N.png": "85ebdc53b869510cade1d5b97f4cc433bc84b38f2d1d06d1e1f5430f7d735f91",
+    "res://library/lelu/pack_lelu_godot_blood_premium/VFX/textures/T_Blood_Splatter77.png": "103fcb03e0420d33b2670f87bf66844bfc823b5da1a6325ff417afb7265f96f3",
+    "res://library/lelu/pack_lelu_godot_blood_premium/VFX/textures/T_Decal_BloodSplatter45k.png": "33a1b5146ac72a518c62811aae2057004aee85517980574711a34c232551607d",
+    "res://library/lelu/pack_lelu_godot_blood_premium/VFX/textures/T_Decal_BloodSplatter45ki_N.png": "e2597a3c095800b8b6a29cd248fa7f7bb1c0787e2712c372908bf58056282f19",
+    "res://library/lelu/pack_lelu_godot_blood_premium/VFX/textures/T_Gib_Red_C.PNG": "b764bf132265459154759a08791f3eeaf242b1d5593b0971badedd045c73ee22",
+    "res://library/lelu/pack_lelu_godot_blood_premium/VFX/textures/T_NP41.PNG": "f9c8e2fa1dcc62f85965e5a7f3a48cbe4739b01dbbecb9298e9f1da43ec13af2",
+    "res://library/lelu/pack_lelu_godot_blood_premium/VFX/textures/T_smoke_K97.png": "2cc94f51b380b6eab0f5cde5c64a5de8176f07e3f5ce3c79878598cc5834e2a6",
+    "res://library/lelu/pack_lelu_godot_elementary_premium/VFX/textures/T_VFX_Noise_075.png": "900721c102c94ad02849da1619429cefd7dc62031c9c1c52a7044a457a3d6b79",
+    "res://library/lelu/pack_lelu_godot_magic_projectiles_premium_demo_project/VFX/Objects/sm_box2.obj": "219430b5f1dfc7211212f026d4977d04d772925e08c8c7322fea7f40e09ae598",
+    "res://library/lelu/pack_lelu_godot_magic_projectiles_premium_demo_project/VFX/Objects/sm_box2_rotated.obj": "464b76e43d36a2fb2007abe8e913cc2bc761dfc779b8073b20543e4732f7d300",
+    "res://library/lelu/pack_lelu_godot_magic_projectiles_premium_demo_project/VFX/Scenes/VFX_Cube_projectile.tscn": "d5efdfa957e96b684c03e8706e1e83c3d2fc288a8679ef24cef7c43e065e5583",
+    "res://library/lelu/pack_lelu_godot_magic_projectiles_premium_demo_project/VFX/Scenes/VFX_Hit_cyber.tscn": "9eaad456e2aa4cfc91b1dbd2463e8fb84e51f8363233c498d0aac5a59f1cbfa3",
+    "res://library/lelu/pack_lelu_godot_magic_projectiles_premium_demo_project/VFX/Shaders/s_dualColor_masked.tres": "07e2521b9373c5f6decd4c62b49401a7d2cc8ff55433fb72f1a2c999b3a7cf54",
+    "res://library/lelu/pack_lelu_godot_magic_projectiles_premium_demo_project/VFX/Shaders/s_simple_p.tres": "31c9ea5b51962959ff51414f1012c7a4659bcfcc1ed8ffd9c2ea99eb8382eed1",
+    "res://library/lelu/pack_lelu_godot_magic_projectiles_premium_demo_project/VFX/Shaders/s_single_masked_p.tres": "4f0afc3129be1c9c233abd11309d77096a39129dc5e277ed0cfc0a904f280ca2",
+    "res://library/lelu/pack_lelu_godot_magic_projectiles_premium_demo_project/VFX/Textures/T_VFX_Sqart2.jpg": "572afc50e3faed1b246c465b57b2b07877031eda3feda1fbfaeb23afb9aa196c",
+    "res://library/lelu/pack_lelu_godot_magic_projectiles_premium_demo_project/VFX/Textures/T_VFX_Square_22Edge.PNG": "5d3b3f9353c0acb6e7caa4c13e947e7e81d6361fa3e44d0ec16d45f7f99329bb",
+    "res://library/lelu/pack_lelu_godot_magic_projectiles_premium_demo_project/VFX/Textures/T_VFX_Srt1.jpg": "0d1962a4dce132b6e3322aa79e4df4fa0d6b53396a35e7eeebb34e294d6cd4de",
+    "res://library/lelu/pack_lelu_godot_magic_projectiles_premium_demo_project/VFX/Textures/T_VFX_hit22.jpg": "cb1bb8e1d32b8ba5c28cd12f51a7dccb0c804a89d81e040e3039030a54628f2c",
+    "res://library/lelu/pack_lelu_godot_magic_projectiles_premium_demo_project/VFX/Textures/T_basic1_vfx.PNG": "cc6ba7e8e8459eb301a332e62d4c369dd4cdfcdadc613caf72624aba12bbd471",
+    "res://library/lelu/pack_lelu_godot_patreons_community_pack_3_d/VFX/textures/T_VFX_NHU491Ax.png": "9fb69ffb13aabda6ae8df32eb36c310bc5bb838dee58cf223de291c6122558ed"
+  },
+  "isolation": {
+    "reused": [
+      "res://authoring/production-review-repair-20261021/terrain_owner/assets-v1/4eae811de02703673e4b.scn",
+      "res://authoring/production-review-repair-20261021/terrain_owner/assets-v1/f6c4d6ccbfc0b32f6506.scn",
+      "res://authoring/production-review-repair-20261021/terrain_owner/assets-v1/program-2878177b8a429a85ea71.gdshader",
+      "res://authoring/production-review-repair-20261021/terrain_owner/assets-v1/program-4276940d24ec86dc4c47.gdshader",
+      "res://authoring/production-review-repair-20261021/terrain_owner/assets-v1/program-6f6e92d274014e559356.gdshader",
+      "res://factory/authoring/component.gd",
+      "res://factory/authoring/phase.gd",
+      "res://factory/baking/live_geometry_bindings.gd",
+      "res://factory/baking/private_particle_process.gd",
+      "res://factory/baking/runtime_particle_units.gd",
+      "res://factory/baking/stable_source_paths.gd",
+      "res://factory/components/prepared_recipient/bank.gd",
+      "res://factory/components/prepared_timed/bank.gd",
+      "res://factory/components/recipient/base.gd",
+      "res://factory/core/animation_key_times.gd",
+      "res://factory/core/contract_stage.gd",
+      "res://factory/core/donor_scene.gd",
+      "res://factory/core/immutable_materials.gd",
+      "res://factory/core/native_source_space.gd",
+      "res://factory/core/resource_graph.gd",
+      "res://factory/core/source_materials.gd",
+      "res://factory/materials/spatial_energy_palette.gd",
+      "res://factory/packaging/construction_profile.gd",
+      "res://factory/packaging/occurrence_bindings.gd",
+      "res://factory/packaging/occurrence_clock.gd",
+      "res://factory/packaging/resource_io.gd",
+      "res://factory/packaging/scene_document.gd",
+      "res://factory/packaging/source_readiness.gd",
+      "res://factory/resources/cold/SleetSources/blotch.tres",
+      "res://factory/resources/cold/SleetSources/brush.tres",
+      "res://factory/resources/cold/SleetSources/circle.tres",
+      "res://factory/resources/cold/SleetSources/mist.tres",
+      "res://factory/resources/cold/SleetSources/particle.gdshader",
+      "res://factory/resources/cold/SleetSources/util/alpha.gdshaderinc",
+      "res://factory/resources/cold/SleetSources/util/blend.gdshaderinc",
+      "res://factory/resources/cold/SleetSources/util/dithering.gdshaderinc",
+      "res://factory/resources/cold/SleetSources/util/uvtools.gdshaderinc",
+      "res://factory/resources/empty_subject.tscn",
+      "res://factory/shaders/cie_d65_v1.gdshaderinc",
+      "res://factory/shaders/cold/sleet_storm_floor.gdshader",
+      "res://factory/shaders/cold/sleet_storm_rain.gdshader",
+      "res://factory/shaders/necrotic_recipient_layer_v3.gdshader",
+      "res://integrations/ndclient/assets/native_effects/class_actions/Charge.gdshader",
+      "res://integrations/ndclient/assets/native_effects/class_actions/Film.gdshader",
+      "res://integrations/ndclient/assets/native_effects/class_actions/Flow.gdshader",
+      "res://integrations/ndclient/assets/native_effects/class_actions/Glow.gdshader",
+      "res://integrations/ndclient/assets/native_effects/class_actions/Strike.gd",
+      "res://integrations/ndclient/assets/native_effects/class_actions/Strike.gdshader",
+      "res://integrations/ndclient/assets/native_effects/class_actions/StrikePaths.json",
+      "res://integrations/ndclient/assets/native_effects/class_actions/strike_hit.png",
+      "res://integrations/ndclient/assets/native_effects/class_actions/vfx_1/arc_charge/shaders/ribbon.gdshader",
+      "res://integrations/ndclient/assets/native_effects/class_actions/vfx_1/arc_charge/textures/aura_glow.png",
+      "res://integrations/ndclient/assets/native_effects/class_actions/vfx_1/arc_charge/textures/ember.png",
+      "res://integrations/ndclient/assets/native_effects/class_actions/vfx_1/arc_charge/textures/flow_noise.tres",
+      "res://integrations/ndclient/assets/native_effects/class_actions/vfx_1/arc_charge/textures/star.png",
+      "res://integrations/ndclient/assets/native_effects/factory/archive/objects/73/73682ae4aa57cb2f9264cf5550437223fa5c5c0a3129f00096fc640aaefe4091",
+      "res://integrations/ndclient/assets/native_effects/factory/factory/shaders/cie_d65_v1.gdshaderinc",
+      "res://integrations/ndclient/assets/native_effects/factory/factory/shaders/energy_palette_v1.gdshader",
+      "res://integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_blood_premium/VFX/Scenes/Decal_Blood_Animated_A1.tscn",
+      "res://integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_blood_premium/VFX/Scenes/VFX_Blood_Hit_A1.tscn",
+      "res://integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_blood_premium/VFX/Scenes/VFX_Blood_Hit_A2.tscn",
+      "res://integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_blood_premium/VFX/Scenes/VFX_Blood_Mark_J1.tscn",
+      "res://integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_blood_premium/VFX/objects/sm_plane_coned_spiked_waved1.obj",
+      "res://integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_blood_premium/VFX/shaders/s_Disolver_small_Liquid.tres",
+      "res://integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_blood_premium/VFX/shaders/s_Disolver_small_Liquid_p_Treshold_ds.tres",
+      "res://integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_blood_premium/VFX/shaders/ss_Disolver_subUV_small_Liquid_Treshold_p.gdshader",
+      "res://integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_blood_premium/VFX/shaders/ss_decal3double_treshold.gdshader",
+      "res://integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_blood_premium/VFX/textures/T_Blood_DECAL_g4.png",
+      "res://integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_blood_premium/VFX/textures/T_Blood_DECAL_g4x.png",
+      "res://integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_blood_premium/VFX/textures/T_Blood_DECAL_g4x_N.png",
+      "res://integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_blood_premium/VFX/textures/T_Blood_MultiUV_f3.png",
+      "res://integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_blood_premium/VFX/textures/T_Blood_MultiUV_f3_N.png",
+      "res://integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_blood_premium/VFX/textures/T_Blood_Splatter11_N.png",
+      "res://integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_blood_premium/VFX/textures/T_Blood_Splatter77.png",
+      "res://integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_blood_premium/VFX/textures/T_Decal_BloodSplatter45k.png",
+      "res://integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_blood_premium/VFX/textures/T_Decal_BloodSplatter45ki_N.png",
+      "res://integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_blood_premium/VFX/textures/T_Gib_Red_C.PNG",
+      "res://integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_blood_premium/VFX/textures/T_NP41.PNG",
+      "res://integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_blood_premium/VFX/textures/T_smoke_K97.png",
+      "res://integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_magic_projectiles_premium_demo_project/VFX/Objects/sm_box2.obj",
+      "res://integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_magic_projectiles_premium_demo_project/VFX/Objects/sm_box2_rotated.obj",
+      "res://integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_magic_projectiles_premium_demo_project/VFX/Scenes/VFX_Cube_projectile.tscn",
+      "res://integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_magic_projectiles_premium_demo_project/VFX/Scenes/VFX_Hit_cyber.tscn",
+      "res://integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_magic_projectiles_premium_demo_project/VFX/Shaders/s_dualColor_masked.tres",
+      "res://integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_magic_projectiles_premium_demo_project/VFX/Shaders/s_simple_p.tres",
+      "res://integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_magic_projectiles_premium_demo_project/VFX/Shaders/s_single_masked_p.tres",
+      "res://integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_magic_projectiles_premium_demo_project/VFX/Textures/T_VFX_Sqart2.jpg",
+      "res://integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_magic_projectiles_premium_demo_project/VFX/Textures/T_VFX_Square_22Edge.PNG",
+      "res://integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_magic_projectiles_premium_demo_project/VFX/Textures/T_VFX_Srt1.jpg",
+      "res://integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_magic_projectiles_premium_demo_project/VFX/Textures/T_VFX_hit22.jpg",
+      "res://integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_magic_projectiles_premium_demo_project/VFX/Textures/T_basic1_vfx.PNG",
+      "res://integrations/ndclient/assets/native_effects/sandbox/projectiles/factory/core/resource_graph.gd",
+      "res://integrations/ndclient/presentation/native_effect_mote.gdshader",
+      "res://integrations/ndclient/presentation/native_effect_palette.gdshader",
+      "res://integrations/ndclient/presentation/native_light_units.gd",
+      "res://integrations/ndclient/presentation/native_particle_units.gd",
+      "res://library/lelu/pack_lelu_godot_blood_premium/VFX/Scenes/Decal_Blood_Animated_A1.tscn",
+      "res://library/lelu/pack_lelu_godot_blood_premium/VFX/Scenes/VFX_Blood_Hit_A1.tscn",
+      "res://library/lelu/pack_lelu_godot_blood_premium/VFX/Scenes/VFX_Blood_Hit_A2.tscn",
+      "res://library/lelu/pack_lelu_godot_blood_premium/VFX/Scenes/VFX_Blood_Mark_J1.tscn",
+      "res://library/lelu/pack_lelu_godot_blood_premium/VFX/objects/sm_plane_coned_spiked_waved1.obj",
+      "res://library/lelu/pack_lelu_godot_blood_premium/VFX/shaders/s_Disolver_small_Liquid.tres",
+      "res://library/lelu/pack_lelu_godot_blood_premium/VFX/shaders/s_Disolver_small_Liquid_p_Treshold_ds.tres",
+      "res://library/lelu/pack_lelu_godot_blood_premium/VFX/shaders/ss_Disolver_subUV_small_Liquid_Treshold_p.gdshader",
+      "res://library/lelu/pack_lelu_godot_blood_premium/VFX/shaders/ss_decal3double_treshold.gdshader",
+      "res://library/lelu/pack_lelu_godot_blood_premium/VFX/textures/T_Blood_DECAL_g4.png",
+      "res://library/lelu/pack_lelu_godot_blood_premium/VFX/textures/T_Blood_DECAL_g4x.png",
+      "res://library/lelu/pack_lelu_godot_blood_premium/VFX/textures/T_Blood_DECAL_g4x_N.png",
+      "res://library/lelu/pack_lelu_godot_blood_premium/VFX/textures/T_Blood_MultiUV_f3.png",
+      "res://library/lelu/pack_lelu_godot_blood_premium/VFX/textures/T_Blood_MultiUV_f3_N.png",
+      "res://library/lelu/pack_lelu_godot_blood_premium/VFX/textures/T_Blood_Splatter11_N.png",
+      "res://library/lelu/pack_lelu_godot_blood_premium/VFX/textures/T_Blood_Splatter77.png",
+      "res://library/lelu/pack_lelu_godot_blood_premium/VFX/textures/T_Decal_BloodSplatter45k.png",
+      "res://library/lelu/pack_lelu_godot_blood_premium/VFX/textures/T_Decal_BloodSplatter45ki_N.png",
+      "res://library/lelu/pack_lelu_godot_blood_premium/VFX/textures/T_Gib_Red_C.PNG",
+      "res://library/lelu/pack_lelu_godot_blood_premium/VFX/textures/T_NP41.PNG",
+      "res://library/lelu/pack_lelu_godot_blood_premium/VFX/textures/T_smoke_K97.png",
+      "res://library/lelu/pack_lelu_godot_elementary_premium/VFX/textures/T_VFX_Noise_075.png",
+      "res://library/lelu/pack_lelu_godot_magic_projectiles_premium_demo_project/VFX/Objects/sm_box2.obj",
+      "res://library/lelu/pack_lelu_godot_magic_projectiles_premium_demo_project/VFX/Objects/sm_box2_rotated.obj",
+      "res://library/lelu/pack_lelu_godot_magic_projectiles_premium_demo_project/VFX/Scenes/VFX_Cube_projectile.tscn",
+      "res://library/lelu/pack_lelu_godot_magic_projectiles_premium_demo_project/VFX/Scenes/VFX_Hit_cyber.tscn",
+      "res://library/lelu/pack_lelu_godot_magic_projectiles_premium_demo_project/VFX/Shaders/s_dualColor_masked.tres",
+      "res://library/lelu/pack_lelu_godot_magic_projectiles_premium_demo_project/VFX/Shaders/s_simple_p.tres",
+      "res://library/lelu/pack_lelu_godot_magic_projectiles_premium_demo_project/VFX/Shaders/s_single_masked_p.tres",
+      "res://library/lelu/pack_lelu_godot_magic_projectiles_premium_demo_project/VFX/Textures/T_VFX_Sqart2.jpg",
+      "res://library/lelu/pack_lelu_godot_magic_projectiles_premium_demo_project/VFX/Textures/T_VFX_Square_22Edge.PNG",
+      "res://library/lelu/pack_lelu_godot_magic_projectiles_premium_demo_project/VFX/Textures/T_VFX_Srt1.jpg",
+      "res://library/lelu/pack_lelu_godot_magic_projectiles_premium_demo_project/VFX/Textures/T_VFX_hit22.jpg",
+      "res://library/lelu/pack_lelu_godot_magic_projectiles_premium_demo_project/VFX/Textures/T_basic1_vfx.PNG",
+      "res://library/lelu/pack_lelu_godot_patreons_community_pack_3_d/VFX/textures/T_VFX_NHU491Ax.png"
+    ],
+    "isolated": [
+      "res://authoring/production-review-repair-20261021/owner_release/sleet.tres",
+      "res://authoring/production-review-repair-20261021/terrain_owner/assets-v1/4eae811de02703673e4b.res",
+      "res://authoring/production-review-repair-20261021/terrain_owner/assets-v1/f6c4d6ccbfc0b32f6506.res",
+      "res://factory/baking/recording_source_sampler.gd",
+      "res://factory/baking/source_bridge.gd",
+      "res://factory/components/owned_fields/input.gd",
+      "res://factory/components/owned_fields/sleet_leaf.gd",
+      "res://factory/components/owner_release/common_occurrence.gd",
+      "res://factory/components/owner_release/sleet.gd",
+      "res://factory/components/prepared_recipient/restore.gd",
+      "res://factory/components/prepared_timed/restore.gd",
+      "res://factory/components/recipient/sleet_soft_mist.gd",
+      "res://factory/components/recipient/sleet_storm.gd",
+      "res://factory/packaging/constructed_occurrence.gd",
+      "res://factory/packaging/occurrence.gd",
+      "res://factory/packaging/owner_release_sleet.gd",
+      "res://integrations/ndclient/assets/native_effects/class_actions/ClassComponents.gd",
+      "res://integrations/ndclient/assets/native_effects/class_actions/vfx_1/arc_charge/scripts/arc_charge_swirl.gd",
+      "res://integrations/ndclient/assets/native_effects/class_actions/vfx_1/arc_charge/variants/arc_charge_swirl_charge.tscn",
+      "res://integrations/ndclient/authoring/native_effects/index.json",
+      "res://integrations/ndclient/presentation/native_effects.gd",
+      "res://integrations/ndclient/presentation/native_factory_source.gd"
+    ],
+    "singleton_compatibility_aliases": {},
+    "reasons": {
+      "res://integrations/ndclient/assets/native_effects/class_actions/vfx_1/arc_charge/scripts/arc_charge_swirl.gd": [
+        "explicit_new_caller_scope"
+      ],
+      "res://factory/baking/recording_source_sampler.gd": [
+        "rewritten_text_or_dependency_changed"
+      ],
+      "res://factory/components/owned_fields/input.gd": [
+        "rewritten_text_or_dependency_changed"
+      ],
+      "res://factory/components/owner_release/common_occurrence.gd": [
+        "rewritten_text_or_dependency_changed"
+      ],
+      "res://factory/components/owner_release/sleet.gd": [
+        "rewritten_text_or_dependency_changed"
+      ],
+      "res://factory/components/prepared_recipient/restore.gd": [
+        "rewritten_text_or_dependency_changed"
+      ],
+      "res://factory/components/prepared_timed/restore.gd": [
+        "rewritten_text_or_dependency_changed"
+      ],
+      "res://factory/components/recipient/sleet_soft_mist.gd": [
+        "rewritten_text_or_dependency_changed"
+      ],
+      "res://factory/components/recipient/sleet_storm.gd": [
+        "rewritten_text_or_dependency_changed"
+      ],
+      "res://factory/packaging/constructed_occurrence.gd": [
+        "rewritten_text_or_dependency_changed"
+      ],
+      "res://factory/packaging/occurrence.gd": [
+        "rewritten_text_or_dependency_changed"
+      ],
+      "res://factory/packaging/owner_release_sleet.gd": [
+        "rewritten_text_or_dependency_changed"
+      ],
+      "res://integrations/ndclient/assets/native_effects/class_actions/ClassComponents.gd": [
+        "rewritten_text_or_dependency_changed"
+      ],
+      "res://integrations/ndclient/assets/native_effects/class_actions/vfx_1/arc_charge/variants/arc_charge_swirl_charge.tscn": [
+        "rewritten_text_or_dependency_changed"
+      ],
+      "res://integrations/ndclient/presentation/native_effects.gd": [
+        "rewritten_text_or_dependency_changed"
+      ],
+      "res://integrations/ndclient/presentation/native_factory_source.gd": [
+        "rewritten_text_or_dependency_changed"
+      ],
+      "res://authoring/production-review-repair-20261021/owner_release/sleet.tres": [
+        "rewritten_text_or_dependency_changed"
+      ],
+      "res://factory/baking/source_bridge.gd": [
+        "rewritten_text_or_dependency_changed"
+      ],
+      "res://factory/components/owned_fields/sleet_leaf.gd": [
+        "rewritten_text_or_dependency_changed"
+      ],
+      "res://integrations/ndclient/authoring/native_effects/index.json": [
+        "rewritten_text_or_dependency_changed"
+      ],
+      "res://authoring/production-review-repair-20261021/terrain_owner/assets-v1/4eae811de02703673e4b.res": [
+        "actual_native_child_namespace_changed"
+      ],
+      "res://authoring/production-review-repair-20261021/terrain_owner/assets-v1/f6c4d6ccbfc0b32f6506.res": [
+        "actual_native_child_namespace_changed"
+      ]
+    },
+    "rounds": 4,
+    "exact_text_comparisons": 106,
+    "native_dependency_edges": {
+      "res://authoring/production-review-repair-20261021/terrain_owner/assets-v1/4eae811de02703673e4b.res": [
+        "res://factory/components/prepared_timed/bank.gd",
+        "res://authoring/production-review-repair-20261021/terrain_owner/assets-v1/4eae811de02703673e4b.scn",
+        "res://factory/components/owned_fields/sleet_leaf.gd"
+      ],
+      "res://authoring/production-review-repair-20261021/terrain_owner/assets-v1/4eae811de02703673e4b.scn": [
+        "res://authoring/production-review-repair-20261021/terrain_owner/assets-v1/program-6f6e92d274014e559356.gdshader",
+        "res://library/lelu/pack_lelu_godot_elementary_premium/VFX/textures/T_VFX_Noise_075.png",
+        "res://library/lelu/pack_lelu_godot_patreons_community_pack_3_d/VFX/textures/T_VFX_NHU491Ax.png"
+      ],
+      "res://authoring/production-review-repair-20261021/terrain_owner/assets-v1/f6c4d6ccbfc0b32f6506.res": [
+        "res://factory/components/prepared_timed/bank.gd",
+        "res://authoring/production-review-repair-20261021/terrain_owner/assets-v1/f6c4d6ccbfc0b32f6506.scn",
+        "res://factory/components/owned_fields/sleet_leaf.gd"
+      ],
+      "res://authoring/production-review-repair-20261021/terrain_owner/assets-v1/f6c4d6ccbfc0b32f6506.scn": [
+        "res://authoring/production-review-repair-20261021/terrain_owner/assets-v1/program-4276940d24ec86dc4c47.gdshader",
+        "res://library/lelu/pack_lelu_godot_elementary_premium/VFX/textures/T_VFX_Noise_075.png",
+        "res://factory/resources/cold/SleetSources/blotch.tres",
+        "res://factory/resources/cold/SleetSources/brush.tres",
+        "res://factory/resources/cold/SleetSources/circle.tres",
+        "res://authoring/production-review-repair-20261021/terrain_owner/assets-v1/program-2878177b8a429a85ea71.gdshader"
+      ],
+      "res://authoring/production-review-repair-20261021/terrain_owner/assets-v1/program-2878177b8a429a85ea71.gdshader": [],
+      "res://authoring/production-review-repair-20261021/terrain_owner/assets-v1/program-4276940d24ec86dc4c47.gdshader": [],
+      "res://authoring/production-review-repair-20261021/terrain_owner/assets-v1/program-6f6e92d274014e559356.gdshader": [],
+      "res://factory/components/owned_fields/sleet_leaf.gd": [],
+      "res://factory/components/prepared_timed/bank.gd": [],
+      "res://factory/resources/cold/SleetSources/blotch.tres": [],
+      "res://factory/resources/cold/SleetSources/brush.tres": [],
+      "res://factory/resources/cold/SleetSources/circle.tres": [],
+      "res://integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_blood_premium/VFX/objects/sm_plane_coned_spiked_waved1.obj": [],
+      "res://integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_magic_projectiles_premium_demo_project/VFX/Objects/sm_box2.obj": [],
+      "res://integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_magic_projectiles_premium_demo_project/VFX/Objects/sm_box2_rotated.obj": [],
+      "res://library/lelu/pack_lelu_godot_blood_premium/VFX/objects/sm_plane_coned_spiked_waved1.obj": [],
+      "res://library/lelu/pack_lelu_godot_magic_projectiles_premium_demo_project/VFX/Objects/sm_box2.obj": [],
+      "res://library/lelu/pack_lelu_godot_magic_projectiles_premium_demo_project/VFX/Objects/sm_box2_rotated.obj": []
+    },
+    "shared_clock": "res://assets/vfx/sources/c0017ad639184b208deb/occurrence_clock.gd",
+    "no_runtime_hash_or_graph_work": true
+  },
+  "scoped_aliases": {
+    "resolver": "res://assets/vfx/extensions/cell-validation-20261021/scoped_resource_io.gd",
+    "map": "res://assets/vfx/format/cell-validation-20261021-aliases.json",
+    "resolver_sha256": "35aa29e59a3991010b1dad44357fdf91c081c6aa9c291244d4e8f04888163224",
+    "map_sha256": "8f32ba76ed41925dd9804877beaeaf4eb0659adad36c5ef9c1c6ce336dfd46ad",
+    "aliases": 7789,
+    "scope": "Only newly isolated callers; existing aliases and resolver bytes remain unchanged"
+  },
+  "selection_changed": false
+}

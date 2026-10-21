@@ -1,0 +1,26 @@
+[gd_resource type="Resource" load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://assets/vfx/sources/67ebe8ef4f358cad6a4b/phase.gd" id="phase"]
+[ext_resource type="Script" path="res://assets/vfx/sources/d60670fa4c3a03cc8f3a/component.gd" id="component"]
+
+[sub_resource type="Resource" id="part"]
+script = ExtResource("component")
+component_id = "effect"
+constructor_script = "res://assets/vfx/extensions/owner-fields-v2-20261021/sources/5d2781cac4ec7582d670/chromatic_orb_surface.gd"
+input = {"observed_surface_kind": "spatial_effect.material.electrified_water", "source_scene": "res://assets/vfx/sources/b7d3822e010cafcf4cc8/vfx_electric_area_02.tscn", "source_node": "Ground", "perimeter_texture_parameter": "noise_texture", "native_parameters": {"emission": 0.65}, "opacity": 0.6, "emission_gain": 0.08, "surface_admitted": true, "admitted_cells": [[-1, 0], [0, 0], [1, 0], [0, 1], [1, 1]], "birth_seconds": 0.22, "retire_at_seconds": 3.0}
+options = {}
+provenance = "res://assets/vfx/sources/873c8d5938f1ba595713/bg3-36-spell-contracts-20261015.json#chromatic_orb"
+
+[resource]
+script = ExtResource("phase")
+clip_id = "bg3-36/chromatic-orb/lightning/observed-surface"
+label = "Separate observed lightning cells"
+phase = "surface"
+variant = "spatial_effect.material.electrified_water"
+source_recipe = "res://assets/vfx/sources/873c8d5938f1ba595713/bg3-36-spell-contracts-20261015.json#chromatic_orb"
+bindings = [{"component": "effect", "kind": "sample", "rate": 1.0, "offset_seconds": 0.0}]
+emitters = []
+seconds = 3.7
+simulation_hz = 144.0
+components = Array[Resource]([SubResource("part")])
+options = {"qualification": "Private native candidate; GPU/art/event qualification pending"}

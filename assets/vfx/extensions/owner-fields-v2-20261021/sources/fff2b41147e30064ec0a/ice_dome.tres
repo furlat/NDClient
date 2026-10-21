@@ -1,0 +1,33 @@
+[gd_resource type="Resource" format=3]
+
+[ext_resource type="Script" path="res://assets/vfx/sources/d60670fa4c3a03cc8f3a/component.gd" id="1_mu6ms"]
+[ext_resource type="Script" path="res://assets/vfx/sources/67ebe8ef4f358cad6a4b/phase.gd" id="2_gsoae"]
+
+[sub_resource type="Resource" id="Resource_4n4be"]
+script = ExtResource("1_mu6ms")
+component_id = "wall"
+constructor_script = "res://assets/vfx/extensions/owner-fields-v2-20261021/sources/44a07f767e19f1faf49c/wall.gd"
+input = {
+"solid_owner_bank": "res://assets/vfx/extensions/owner-fields-v2-20261021/sources/149e3af11e6c32d3c53f/ice_dome.res"
+}
+provenance = "Existing native intact solid wall surfaces; construction and current section/cell/owner facts supplied live"
+
+[resource]
+script = ExtResource("2_gsoae")
+clip_id = "wall-native/ice_dome_surface_breakup_native/lifecycle"
+label = "ice_dome — actual surviving solid wall"
+phase = "lifecycle"
+variant = "actual_owner_sections"
+components = Array[Resource]([SubResource("Resource_4n4be")])
+bindings = [{
+"component": "wall",
+"kind": "sample",
+"offset_seconds": 0.0,
+"rate": 1.0
+}]
+simulation_hz = 144.0
+options = {
+"human_approval_inferred": false,
+"owner_driven": true,
+"production_integration_performed": false
+}

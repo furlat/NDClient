@@ -1,0 +1,25 @@
+[gd_resource type="Resource" load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://assets/vfx/sources/67ebe8ef4f358cad6a4b/phase.gd" id="phase"]
+[ext_resource type="Script" path="res://assets/vfx/sources/d60670fa4c3a03cc8f3a/component.gd" id="component"]
+
+[sub_resource type="Resource" id="source"]
+script = ExtResource("component")
+component_id = "control"
+constructor_script = "res://assets/vfx/extensions/input-reduction-20261021/sources/ed4d797836efe191ff94/patches.gd"
+input = {"shape": "petal", "mode": "application", "seconds": 1.1, "layers": [{"scene": "res://assets/vfx/extensions/input-reduction-20261021/sources/61cfb0206de0437f5ee5/vfx_status_nature.tscn", "node": "Aura", "replace_vertex": true, "alpha": 0.55, "uv_longitude_bounds": [0.26, 0.74], "uniforms": {"primary_color": {"type": "Color", "value": "a1b46d"}, "secondary_color": {"type": "Color", "value": "526e47"}, "tertiary_color": {"type": "Color", "value": "354b3b"}, "emission": 0.85, "hue_variation": 0.0, "proximity_fade": false, "noise_scroll": {"type": "Vector2", "value": [0.07, 0.22]}}}, {"scene": "res://assets/vfx/extensions/input-reduction-20261021/sources/61cfb0206de0437f5ee5/vfx_status_nature.tscn", "node": "Particles", "replace_vertex": false, "alpha": 0.65, "uniforms": {"primary_color": {"type": "Color", "value": "a9bb72"}, "secondary_color": {"type": "Color", "value": "688453"}, "emission": 0.85, "hue_variation": 0.0, "proximity_fade": false}}], "count": 2, "motion_rate": 2.1, "width_cells": 0.063, "colour": "94ac66", "source_alpha": 0.8, "apply_seconds": 0.14, "retire_seconds": 0.28, "prepared_receiving_bank": "res://assets/vfx/extensions/input-reduction-20261021/sources/b61a2f3830e7a604fd90/87f3b8e0852cfbcf.res"}
+provenance = "Inspected original native material layers on measured open geometry; evidence/parallel-animal-laughter-v72/REPORT.md"
+
+[resource]
+script = ExtResource("phase")
+clip_id = "bg3-36/animal-friendship/application"
+label = "animal_friendship · application"
+phase = "impact"
+variant = "application"
+source_recipe = "evidence/parallel-animal-laughter-v72/REPORT.md"
+seconds = 1.1
+simulation_hz = 60
+components = Array[Resource]([SubResource("source")])
+bindings = [{"component":"control","kind":"sample","rate":1.0,"offset_seconds":0.0}]
+emitters = []
+options = {"opacity_uniform": "receiving_opacity", "source_revision": "gpu-patches-v388-20261018"}

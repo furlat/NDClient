@@ -1,0 +1,1916 @@
+{
+  "version": "runtime-source-preparation-20261020-efe34c587d3ac9fd",
+  "predecessor": "runtime-production-review-20261020-937fdd136d621742",
+  "rows": [
+    {
+      "clip_id": "review/divine_word/back/target_deafened",
+      "candidate_phase": "res://authoring/runtime-cost-repair-20261020/r6_sensory/closed/phases/divine_deafened.tres",
+      "phase_sha256": "445c5c0c912177182e747a2086055251dc458c5dcbb463101ed46706b3ce5ab1",
+      "qualification_path": "authoring/runtime-cost-repair-20261020/r6_sensory/closed/qualification.json",
+      "qualification_sha256": "bde8671a1feafb0b325d27cd9084c3e4fb5f07a13cc00234da61b6e9cedea594",
+      "source_qualification": {
+        "key": "divine_deafened",
+        "clip_id": "review/divine_word/back/target_deafened",
+        "source": "res://assets/vfx/sources/0987b2a8f0ef2ae6d1ba/03.tres",
+        "source_sha256": "96abaeaf91894e3fa46f0795245260841e0a2db82649c138ff3848b1d6030eae",
+        "candidate": "res://authoring/runtime-cost-repair-20261020/r6_sensory/closed/phases/divine_deafened.tres",
+        "bank": "res://authoring/runtime-cost-repair-20261020/r6_sensory/closed/assets/divine_deafened.res",
+        "controllers": {
+          "res://assets/vfx/sources/0738ff2d24aa41b1b963/native_review_composition.gd": {
+            "sha256": "7a56ea1776095060e525ab634d1813cbb85ee46e4966b956db43ab1ef03e4081",
+            "fields": [
+              "definition",
+              "composition",
+              "prepared",
+              "adapted",
+              "source_materials",
+              "live_endpoints",
+              "delivery_timing",
+              "last_source_transform",
+              "source_transform_known"
+            ]
+          },
+          "res://assets/vfx/sources/edb4416ff06538073fee/divine_word_source_v196.gd": {
+            "sha256": "a087bce269457faa9a5ae9e5fca348a4415260114e716fba1fba9b3a814bf21f",
+            "fields": [
+              "settings",
+              "observation",
+              "endpoints",
+              "source",
+              "source_materials",
+              "source_zero_transforms",
+              "source_zero_emitters",
+              "source_zero_shaders",
+              "age_seconds",
+              "removed_at",
+              "envelope",
+              "reset_count",
+              "ground_world",
+              "measured_head_points"
+            ]
+          },
+          "res://assets/vfx/sources/0a6f9152e753968f33d1/divine.gd": {
+            "sha256": "64286d3feee7d329be3abbeb75ebdae2d2659e08e9d7bdfe2bbe72e092a3682e",
+            "fields": [
+              "settings",
+              "side",
+              "parameters",
+              "subject",
+              "tick",
+              "materials",
+              "visited",
+              "initialized",
+              "prepared",
+              "seeds"
+            ]
+          },
+          "res://assets/vfx/sources/8ab2a0ec54130654c8a7/shield_modifier.gd": {
+            "sha256": "e66314266e82b52930b969687dc1c0f7f4af438ecab62f480d1a8994b2984856",
+            "fields": [
+              "dissapear_line",
+              "sphere_size"
+            ]
+          }
+        },
+        "native_geometry": 11,
+        "native_emitters": 4,
+        "source_simulation_hz": 144,
+        "previous_bank": "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets/divine_deafened.res",
+        "previous_candidate": "res://authoring/runtime-cost-repair-20261020/r6_sensory/phases/divine_deafened.tres",
+        "source_candidate_qualified": true,
+        "source_record": {
+          "path": "assets/vfx/sources/0987b2a8f0ef2ae6d1ba/03.tres",
+          "sha256": "96abaeaf91894e3fa46f0795245260841e0a2db82649c138ff3848b1d6030eae",
+          "bytes": 3225
+        },
+        "candidate_record": {
+          "path": "authoring/runtime-cost-repair-20261020/r6_sensory/closed/phases/divine_deafened.tres",
+          "sha256": "445c5c0c912177182e747a2086055251dc458c5dcbb463101ed46706b3ce5ab1",
+          "bytes": 3200
+        },
+        "bank_record": {
+          "path": "authoring/runtime-cost-repair-20261020/r6_sensory/closed/assets/divine_deafened.res",
+          "sha256": "db51010504c7c4f96ccdf4dc9e6c0972395d9c18a1052c560b706d28b1353fa8",
+          "bytes": 61928
+        },
+        "native_receipt": {
+          "path": "evidence/runtime-cost-repair-20261020/r6_sensory/native-closed-v5/checks.json",
+          "sha256": "b3ce6c60ec422bce9a8f8220af204e2015c55d11079e0b23b791d12da764edcc",
+          "bytes": 9712
+        },
+        "native_captures": 5,
+        "rgba_byte_identical_to_original_and_independent_control": true,
+        "positive_active_captures": 4,
+        "final_removal_exact": true,
+        "actual_head_points": 31,
+        "actual_default_complete_constructor_us": [
+          1310,
+          853,
+          711,
+          616
+        ],
+        "first_actual_input_plus_sample_us": 191,
+        "stable": {
+          "count": 243,
+          "max_us": 181,
+          "p95_us": 151
+        },
+        "changed": {
+          "count": 2,
+          "max_us": 193,
+          "p95_us": 193
+        },
+        "source_runtime_flags": [],
+        "complete_constructor_and_p95_input_budget_pass": true,
+        "producer_cost_excluded_and_reported": true,
+        "immutable_readiness_steps": [
+          {
+            "operation": "request_resource",
+            "path": "res://factory/components/prepared_sensory/composition.gd",
+            "state": "pending",
+            "us": 22
+          },
+          {
+            "operation": "publish_resource",
+            "path": "res://factory/components/prepared_sensory/composition.gd",
+            "state": "pending",
+            "us": 231
+          },
+          {
+            "operation": "request_resource",
+            "path": "res://authoring/runtime-cost-repair-20261020/r6_sensory/closed/assets/divine_deafened.res",
+            "state": "pending",
+            "us": 21
+          },
+          {
+            "operation": "publish_resource_and_prepare_immutable_interface",
+            "path": "res://authoring/runtime-cost-repair-20261020/r6_sensory/closed/assets/divine_deafened.res",
+            "state": "ready",
+            "us": 4236
+          }
+        ],
+        "native_chronological_ticks": 246,
+        "new_indexed_clip": false,
+        "delivery_kind": "existing_indexed_clip_alternative",
+        "production_integration_performed": false,
+        "human_approval_inferred": false
+      },
+      "source_runtime_flags_retained": false,
+      "evidence": [
+        {
+          "path": "authoring/runtime-cost-repair-20261020/r6_sensory/closed/qualification.json",
+          "sha256": "bde8671a1feafb0b325d27cd9084c3e4fb5f07a13cc00234da61b6e9cedea594",
+          "active_art_context_qualified": true,
+          "optical": {
+            "strict_threshold_pass": true
+          },
+          "complete_constructor_and_update_budget_pass": true,
+          "scope": "Qualified exact source-stage native context only; source input tails and readiness remain in the complete row. New namespace execution/consumer assignment is separate."
+        }
+      ],
+      "group": "sensory2"
+    },
+    {
+      "clip_id": "review/divine_word/back/target_blinded",
+      "candidate_phase": "res://authoring/runtime-cost-repair-20261020/r6_sensory/closed/phases/divine_blinded.tres",
+      "phase_sha256": "f53e22371e018db9807371bb2b13b18eef39db82090da77b74e153b325f5a3e9",
+      "qualification_path": "authoring/runtime-cost-repair-20261020/r6_sensory/closed/qualification.json",
+      "qualification_sha256": "bde8671a1feafb0b325d27cd9084c3e4fb5f07a13cc00234da61b6e9cedea594",
+      "source_qualification": {
+        "key": "divine_blinded",
+        "clip_id": "review/divine_word/back/target_blinded",
+        "source": "res://assets/vfx/sources/0faeca76ac4946f1dc93/04.tres",
+        "source_sha256": "133befbb6397eb81bc98adfe75d11fe98db4b64f676bc0d7552256c29266dedb",
+        "candidate": "res://authoring/runtime-cost-repair-20261020/r6_sensory/closed/phases/divine_blinded.tres",
+        "bank": "res://authoring/runtime-cost-repair-20261020/r6_sensory/closed/assets/divine_blinded.res",
+        "controllers": {
+          "res://assets/vfx/sources/0738ff2d24aa41b1b963/native_review_composition.gd": {
+            "sha256": "7a56ea1776095060e525ab634d1813cbb85ee46e4966b956db43ab1ef03e4081",
+            "fields": [
+              "definition",
+              "composition",
+              "prepared",
+              "adapted",
+              "source_materials",
+              "live_endpoints",
+              "delivery_timing",
+              "last_source_transform",
+              "source_transform_known"
+            ]
+          },
+          "res://assets/vfx/sources/edb4416ff06538073fee/divine_word_source_v196.gd": {
+            "sha256": "a087bce269457faa9a5ae9e5fca348a4415260114e716fba1fba9b3a814bf21f",
+            "fields": [
+              "settings",
+              "observation",
+              "endpoints",
+              "source",
+              "source_materials",
+              "source_zero_transforms",
+              "source_zero_emitters",
+              "source_zero_shaders",
+              "age_seconds",
+              "removed_at",
+              "envelope",
+              "reset_count",
+              "ground_world",
+              "measured_head_points"
+            ]
+          },
+          "res://assets/vfx/sources/0a6f9152e753968f33d1/divine.gd": {
+            "sha256": "64286d3feee7d329be3abbeb75ebdae2d2659e08e9d7bdfe2bbe72e092a3682e",
+            "fields": [
+              "settings",
+              "side",
+              "parameters",
+              "subject",
+              "tick",
+              "materials",
+              "visited",
+              "initialized",
+              "prepared",
+              "seeds"
+            ]
+          },
+          "res://assets/vfx/sources/8ab2a0ec54130654c8a7/shield_modifier.gd": {
+            "sha256": "e66314266e82b52930b969687dc1c0f7f4af438ecab62f480d1a8994b2984856",
+            "fields": [
+              "dissapear_line",
+              "sphere_size"
+            ]
+          }
+        },
+        "native_geometry": 11,
+        "native_emitters": 4,
+        "source_simulation_hz": 144,
+        "previous_bank": "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets/divine_blinded.res",
+        "previous_candidate": "res://authoring/runtime-cost-repair-20261020/r6_sensory/phases/divine_blinded.tres",
+        "source_candidate_qualified": true,
+        "source_record": {
+          "path": "assets/vfx/sources/0faeca76ac4946f1dc93/04.tres",
+          "sha256": "133befbb6397eb81bc98adfe75d11fe98db4b64f676bc0d7552256c29266dedb",
+          "bytes": 3217
+        },
+        "candidate_record": {
+          "path": "authoring/runtime-cost-repair-20261020/r6_sensory/closed/phases/divine_blinded.tres",
+          "sha256": "f53e22371e018db9807371bb2b13b18eef39db82090da77b74e153b325f5a3e9",
+          "bytes": 3191
+        },
+        "bank_record": {
+          "path": "authoring/runtime-cost-repair-20261020/r6_sensory/closed/assets/divine_blinded.res",
+          "sha256": "1eb49edb72b18705535464d76949dbb93250a34fe083687518d3713ab7c6ee81",
+          "bytes": 61847
+        },
+        "native_receipt": {
+          "path": "evidence/runtime-cost-repair-20261020/r6_sensory/native-closed-v5/checks.json",
+          "sha256": "b3ce6c60ec422bce9a8f8220af204e2015c55d11079e0b23b791d12da764edcc",
+          "bytes": 9712
+        },
+        "native_captures": 5,
+        "rgba_byte_identical_to_original_and_independent_control": true,
+        "positive_active_captures": 4,
+        "final_removal_exact": true,
+        "actual_head_points": 31,
+        "actual_default_complete_constructor_us": [
+          1171,
+          898,
+          717,
+          629
+        ],
+        "first_actual_input_plus_sample_us": 184,
+        "stable": {
+          "count": 243,
+          "max_us": 158,
+          "p95_us": 121
+        },
+        "changed": {
+          "count": 2,
+          "max_us": 79,
+          "p95_us": 79
+        },
+        "source_runtime_flags": [],
+        "complete_constructor_and_p95_input_budget_pass": true,
+        "producer_cost_excluded_and_reported": true,
+        "immutable_readiness_steps": [
+          {
+            "operation": "publish_resource",
+            "path": "res://factory/components/prepared_sensory/composition.gd",
+            "state": "pending",
+            "us": 21
+          },
+          {
+            "operation": "request_resource",
+            "path": "res://authoring/runtime-cost-repair-20261020/r6_sensory/closed/assets/divine_blinded.res",
+            "state": "pending",
+            "us": 15
+          },
+          {
+            "operation": "publish_resource_and_prepare_immutable_interface",
+            "path": "res://authoring/runtime-cost-repair-20261020/r6_sensory/closed/assets/divine_blinded.res",
+            "state": "ready",
+            "us": 1241
+          }
+        ],
+        "native_chronological_ticks": 246,
+        "new_indexed_clip": false,
+        "delivery_kind": "existing_indexed_clip_alternative",
+        "production_integration_performed": false,
+        "human_approval_inferred": false
+      },
+      "source_runtime_flags_retained": false,
+      "evidence": [
+        {
+          "path": "authoring/runtime-cost-repair-20261020/r6_sensory/closed/qualification.json",
+          "sha256": "bde8671a1feafb0b325d27cd9084c3e4fb5f07a13cc00234da61b6e9cedea594",
+          "active_art_context_qualified": true,
+          "optical": {
+            "strict_threshold_pass": true
+          },
+          "complete_constructor_and_update_budget_pass": true,
+          "scope": "Qualified exact source-stage native context only; source input tails and readiness remain in the complete row. New namespace execution/consumer assignment is separate."
+        }
+      ],
+      "group": "sensory2"
+    },
+    {
+      "clip_id": "high-level-22/freezing-sphere/launch_blast",
+      "candidate_phase": "res://authoring/runtime-cost-repair-20261020/r6_freezing/phases/blast.tres",
+      "phase_sha256": "4a55620d1c6c7b5d49728c3e33310258729802e4fa56496782771e6349d9887a",
+      "qualification_path": "authoring/runtime-cost-repair-20261020/r6_freezing/qualification.json",
+      "qualification_sha256": "517327037685c95d3f2927dcbf4d5637ab5a45ff2d8f1edf84bbe026878a28e6",
+      "source_qualification": {
+        "clip_id": "high-level-22/freezing-sphere/launch_blast",
+        "source_phase": "res://authoring/gpu-payload-v397/phases/e181283ebe663514.tres",
+        "candidate_phase": "res://authoring/runtime-cost-repair-20261020/r6_freezing/phases/blast.tres",
+        "bank": "res://authoring/runtime-cost-repair-20261020/payloads/assets/freezing-native-source.tres",
+        "source_phase_sha256": "71dd8a8201d59918687aec0e9e18b3f7e830cf96cee0fd50f820707332aaebbb",
+        "candidate_phase_sha256": "4a55620d1c6c7b5d49728c3e33310258729802e4fa56496782771e6349d9887a",
+        "bank_sha256": "a9dad917f48cb93f2cfe8ccd7cfa569f67b25431207f3c3005fc7266e9c2d63c",
+        "source_qualification": true,
+        "source_state_native_ticks": 175,
+        "original_prepared_rgba_pairs": 3,
+        "raw_rgba_byte_exact": true,
+        "independent_original_control_byte_exact": true,
+        "complete_unprofiled_public_constructors_us": [
+          1097,
+          1063,
+          801,
+          633
+        ],
+        "complete_constructor_budget_pass": true,
+        "genuine_first_public_input_and_sample_us": 216,
+        "first_input_budget_pass": true,
+        "advancing_sample_p95_us": 217,
+        "advancing_sample_max_us": 279,
+        "advancing_sample_budget_pass": true,
+        "readiness_us_separate": 11841700,
+        "readiness_main_thread_steps": [
+          {
+            "operation": "request_resource",
+            "path": "res://factory/components/prepared_payloads/freezing.gd",
+            "state": "pending",
+            "us": 26
+          },
+          {
+            "operation": "publish_resource",
+            "path": "res://factory/components/prepared_payloads/freezing.gd",
+            "state": "pending",
+            "us": 205
+          },
+          {
+            "operation": "request_resource",
+            "path": "res://authoring/runtime-cost-repair-20261020/payloads/assets/freezing-native-source.tres",
+            "state": "pending",
+            "us": 38
+          },
+          {
+            "operation": "publish_resource_and_prepare_immutable_interface",
+            "path": "res://authoring/runtime-cost-repair-20261020/payloads/assets/freezing-native-source.tres",
+            "state": "ready",
+            "us": 2389
+          }
+        ],
+        "readiness_max_main_thread_step_us": 2389,
+        "readiness_main_thread_over2000us_steps_retained": [
+          {
+            "operation": "publish_resource_and_prepare_immutable_interface",
+            "path": "res://authoring/runtime-cost-repair-20261020/payloads/assets/freezing-native-source.tres",
+            "state": "ready",
+            "us": 2389
+          }
+        ],
+        "no_image_cost_followup": {
+          "bank_sha256": "a9dad917f48cb93f2cfe8ccd7cfa569f67b25431207f3c3005fc7266e9c2d63c",
+          "candidate": "res://authoring/runtime-cost-repair-20261020/r6_freezing/phases/blast.tres",
+          "candidate_phase_sha256": "4a55620d1c6c7b5d49728c3e33310258729802e4fa56496782771e6349d9887a",
+          "candidate_readiness_us": 11777073,
+          "changed_public_inputs": [
+            {
+              "age": 0.416666666666667,
+              "change": "actual supplied moved endpoint",
+              "public_setters_and_sample_us": 119,
+              "tick": 60
+            },
+            {
+              "age": 0.722222222222222,
+              "change": "actual supplied 1-cell footprint",
+              "public_setters_and_sample_us": 228,
+              "tick": 104
+            },
+            {
+              "age": 0.965277777777778,
+              "change": "actual supplied 128-cell footprint",
+              "public_setters_and_sample_us": 447,
+              "tick": 139
+            }
+          ],
+          "clip_id": "high-level-22/freezing-sphere/launch_blast",
+          "complete_public_constructors_us": [
+            1186,
+            831,
+            641,
+            512
+          ],
+          "genuine_first_public_input_and_sample_us": 169,
+          "kind": "blast",
+          "native_source_ticks": 175,
+          "ordinary_advancing_samples_us": {
+            "count": 172,
+            "max": 302,
+            "p95": 230
+          }
+        },
+        "combined_changed_input_cost_measured": true,
+        "combined_changed_input_budget_pass": false,
+        "source_runtime_flags_retained": [
+          {
+            "budget": "changed_public_setters_and_sample",
+            "kind": "blast",
+            "limit_us": 250,
+            "us": 447
+          }
+        ],
+        "actual_native_draws": 16,
+        "supplied_inputs_scope": "Explicit synthetic source-schema controls. Private phase.to_clip input changed before normal Source.make zero sample, matching the supplied construction operand shape. No real gameplay outcome, actor packet, fixed encounter or private power inferred.",
+        "private_owners_and_admission": {
+          "foreign_owner_and_retirement_or_suppression_tested": true,
+          "native_particle_state_private": false,
+          "private_draw_materials": 16,
+          "real_gameplay_outcome_inferred": false
+        },
+        "evidence": "evidence/runtime-cost-repair-20261020/r6_freezing/native-v1/checks.json",
+        "human_approval_inferred": false,
+        "production_integration_performed": false
+      },
+      "source_runtime_flags_retained": true,
+      "evidence": [
+        {
+          "path": "authoring/runtime-cost-repair-20261020/r6_freezing/qualification.json",
+          "sha256": "517327037685c95d3f2927dcbf4d5637ab5a45ff2d8f1edf84bbe026878a28e6",
+          "active_art_context_qualified": true,
+          "optical": {
+            "strict_threshold_pass": true
+          },
+          "complete_constructor_and_update_budget_pass": false,
+          "scope": "Qualified exact source-stage native context only; source input tails and readiness remain in the complete row. New namespace execution/consumer assignment is separate."
+        }
+      ],
+      "group": "freezing2",
+      "freezing_construction": "blast"
+    },
+    {
+      "clip_id": "high-level-22/freezing-sphere/launch_delivery",
+      "candidate_phase": "res://authoring/runtime-cost-repair-20261020/r6_freezing/phases/delivery.tres",
+      "phase_sha256": "e25c06c1c83cba47a9541a583511eaa083bfb3058be12e20c80a302cbc42f95a",
+      "qualification_path": "authoring/runtime-cost-repair-20261020/r6_freezing/qualification.json",
+      "qualification_sha256": "517327037685c95d3f2927dcbf4d5637ab5a45ff2d8f1edf84bbe026878a28e6",
+      "source_qualification": {
+        "clip_id": "high-level-22/freezing-sphere/launch_delivery",
+        "source_phase": "res://authoring/original-repairs/source_volumes_v284/freezing_sphere_native/phases/launch_delivery.tres",
+        "candidate_phase": "res://authoring/runtime-cost-repair-20261020/r6_freezing/phases/delivery.tres",
+        "bank": "res://authoring/runtime-cost-repair-20261020/r6_freezing/assets/delivery.tres",
+        "source_phase_sha256": "dec8ec00e7369d19729000f2d5ebfcea5ffddbf7e753fe52e6938aae78cca4fa",
+        "candidate_phase_sha256": "e25c06c1c83cba47a9541a583511eaa083bfb3058be12e20c80a302cbc42f95a",
+        "bank_sha256": "5ee1de34d05e88b3043104cbf4764946ef37ffa82d4b30117710bb61d2286b30",
+        "source_qualification": true,
+        "source_state_native_ticks": 131,
+        "original_prepared_rgba_pairs": 3,
+        "raw_rgba_byte_exact": true,
+        "independent_original_control_byte_exact": true,
+        "complete_unprofiled_public_constructors_us": [
+          579,
+          246,
+          226,
+          269
+        ],
+        "complete_constructor_budget_pass": true,
+        "genuine_first_public_input_and_sample_us": 111,
+        "first_input_budget_pass": true,
+        "advancing_sample_p95_us": 149,
+        "advancing_sample_max_us": 177,
+        "advancing_sample_budget_pass": true,
+        "readiness_us_separate": 346476,
+        "readiness_main_thread_steps": [
+          {
+            "operation": "request_resource",
+            "path": "res://factory/components/prepared_r6_freezing/delivery.gd",
+            "state": "pending",
+            "us": 18
+          },
+          {
+            "operation": "publish_resource",
+            "path": "res://factory/components/prepared_r6_freezing/delivery.gd",
+            "state": "pending",
+            "us": 202
+          },
+          {
+            "operation": "request_resource",
+            "path": "res://authoring/runtime-cost-repair-20261020/r6_freezing/assets/delivery.tres",
+            "state": "pending",
+            "us": 25
+          },
+          {
+            "operation": "publish_resource_and_prepare_immutable_interface",
+            "path": "res://authoring/runtime-cost-repair-20261020/r6_freezing/assets/delivery.tres",
+            "state": "ready",
+            "us": 7564
+          }
+        ],
+        "readiness_max_main_thread_step_us": 7564,
+        "readiness_main_thread_over2000us_steps_retained": [
+          {
+            "operation": "publish_resource_and_prepare_immutable_interface",
+            "path": "res://authoring/runtime-cost-repair-20261020/r6_freezing/assets/delivery.tres",
+            "state": "ready",
+            "us": 7564
+          }
+        ],
+        "no_image_cost_followup": {
+          "bank_sha256": "5ee1de34d05e88b3043104cbf4764946ef37ffa82d4b30117710bb61d2286b30",
+          "candidate": "res://authoring/runtime-cost-repair-20261020/r6_freezing/phases/delivery.tres",
+          "candidate_phase_sha256": "e25c06c1c83cba47a9541a583511eaa083bfb3058be12e20c80a302cbc42f95a",
+          "candidate_readiness_us": 372315,
+          "changed_public_inputs": [
+            {
+              "age": 0.166666666666667,
+              "change": "actual current hand before launch",
+              "public_setters_and_sample_us": 59,
+              "tick": 24
+            },
+            {
+              "age": 0.298611111111111,
+              "change": "accepted current-holder release",
+              "public_setters_and_sample_us": 140,
+              "tick": 43
+            },
+            {
+              "age": 0.416666666666667,
+              "change": "actual supplied moved endpoint",
+              "public_setters_and_sample_us": 156,
+              "tick": 60
+            }
+          ],
+          "clip_id": "high-level-22/freezing-sphere/launch_delivery",
+          "complete_public_constructors_us": [
+            611,
+            287,
+            239,
+            249
+          ],
+          "genuine_first_public_input_and_sample_us": 86,
+          "kind": "delivery",
+          "native_source_ticks": 131,
+          "ordinary_advancing_samples_us": {
+            "count": 128,
+            "max": 177,
+            "p95": 153
+          }
+        },
+        "combined_changed_input_cost_measured": true,
+        "combined_changed_input_budget_pass": true,
+        "source_runtime_flags_retained": [],
+        "actual_native_draws": 3,
+        "supplied_inputs_scope": "Explicit synthetic source-schema controls. Private phase.to_clip input changed before normal Source.make zero sample, matching the supplied construction operand shape. No real gameplay outcome, actor packet, fixed encounter or private power inferred.",
+        "private_owners_and_admission": {
+          "foreign_owner_and_retirement_or_suppression_tested": true,
+          "native_particle_state_private": true,
+          "private_draw_materials": 3,
+          "real_gameplay_outcome_inferred": false
+        },
+        "evidence": "evidence/runtime-cost-repair-20261020/r6_freezing/native-v1/checks.json",
+        "human_approval_inferred": false,
+        "production_integration_performed": false
+      },
+      "source_runtime_flags_retained": false,
+      "evidence": [
+        {
+          "path": "authoring/runtime-cost-repair-20261020/r6_freezing/qualification.json",
+          "sha256": "517327037685c95d3f2927dcbf4d5637ab5a45ff2d8f1edf84bbe026878a28e6",
+          "active_art_context_qualified": true,
+          "optical": {
+            "strict_threshold_pass": true
+          },
+          "complete_constructor_and_update_budget_pass": true,
+          "scope": "Qualified exact source-stage native context only; source input tails and readiness remain in the complete row. New namespace execution/consumer assignment is separate."
+        }
+      ],
+      "group": "freezing2",
+      "freezing_construction": "delivery"
+    }
+  ],
+  "source_hashes": {
+    "res://assets/vfx/sources/00c02fcee34396816766/texture.res": "c1635a26ad3ea7c2648c26022743db644db1582f6489a69ce42231df1c9a0c1c",
+    "res://assets/vfx/sources/09dcc0a7c340a362d0ba/VFX_Protection_Area.tscn": "7a2840c7a723605cc79aa47446e8467c350d4643c36ce51f60fcf4b00f61a0a6",
+    "res://assets/vfx/sources/0a6f9152e753968f33d1/divine.gd": "64286d3feee7d329be3abbeb75ebdae2d2659e08e9d7bdfe2bbe72e092a3682e",
+    "res://assets/vfx/sources/1260156cd354dac43fb5/s_Disolver_advanced_D_p.tres": "d14cef9edb6856a559f7743e2ff13264ee6ac19af552a798cdf353c183dc3cd6",
+    "res://assets/vfx/sources/1d02b6d800655ef86df2/resource_graph.gd": "eca090b0c9895146375d3e959eaf193fef1236f0a7aadf91d9f137e50f853627",
+    "res://assets/vfx/sources/1e7a863b8005a91859cf/sm_ring7.res": "450d89fad58f0e97d743572dbf310e9de6a18a7cb4ca5533aa50dfd085621ef1",
+    "res://assets/vfx/sources/386bc581a35eb3b9ee50/spatial_energy_palette.gd": "7a64bb0028b03ec4b1c584f4fdf2d812c2349148fc1023256244bdb64234e2c0",
+    "res://assets/vfx/sources/39ced3e79a9833e731fb/source_materials.gd": "c9024ef6b7475dcdd47c3db7f31b32091e043fe56af08678a12f7f39ef1c351e",
+    "res://assets/vfx/sources/39f30ee3f172ac269cd6/native_opacity.gd": "bfd5f87e1223c840ee89f2221ce50cfb7252cfad3b3ef85f46504a063ec8a582",
+    "res://assets/vfx/sources/506744103c5bc9adef59/texture.res": "16a85ce69bcf89e02d7b23db457cae2c346c671036c9d9fa05c91bfcd2ae0f8a",
+    "res://assets/vfx/sources/5b0a18fdc09c1fcdd677/texture.res": "762ad26987630c1bb6b0316360cb0612af4aa7c8b69251828c88eefb07b76f9d",
+    "res://assets/vfx/sources/5b9c096cc96695e032e7/s_shield_color_wLine.tres": "86dfb6f14374d523228d9573751da95bf9e03438d167ab80bb9bd2a4ca855b3e",
+    "res://assets/vfx/sources/62107bf2d655046b1f9b/s_distortion_wLine.tres": "e8ec7b1f86c10ea0802d1b8b09b3c1550b82ba4c8abd65873e25a771533e5ba9",
+    "res://assets/vfx/sources/67ebe8ef4f358cad6a4b/phase.gd": "e60cd3283f20b7555657d7336054094dcb8f1a791939e4956ec563114bcd1779",
+    "res://assets/vfx/sources/6c7e97d33d579dd6b3bc/resource_io.gd": "7a001b4b69c2480a2ee5b85c8f85e7fcc812c8ed67398483522ea9be8d9f39ed",
+    "res://assets/vfx/sources/7f341087427abd458e59/texture.res": "63e8e0968a2b86c77339b55a0f8a948cec8443a87cb740b52105771d40aa842a",
+    "res://assets/vfx/sources/7fb2e55699a318c2dafb/donor_scene.gd": "dd29d6d7e2f8a3c94ff7246736aefc8ad43f5e4b6e088223a6a37595ffd49702",
+    "res://assets/vfx/sources/7ffdb77f06cb06b0c42e/contract_stage.gd": "c221609b70fd97c7323cb05883f67c670d205392a50d02a1b1667886b1dd6804",
+    "res://assets/vfx/sources/84c4bd18907bcc63bd83/texture.res": "acd5df1fe7082d02bdeba42be7481f97fe39a10fe155de181f498dd7171e3037",
+    "res://assets/vfx/sources/8ab2a0ec54130654c8a7/shield_modifier.gd": "e66314266e82b52930b969687dc1c0f7f4af438ecab62f480d1a8994b2984856",
+    "res://assets/vfx/sources/9f4b596b231411166d4b/s_aura_cylinder_p.tres": "6f0c4380b05190c50710fa717b29a6f9fede5fdbba6efef183acc54b163e2087",
+    "res://assets/vfx/sources/a02e62c059c89f4070a7/texture.res": "1dbc72ab30d18c666f5abba7c9ec45e0fafb4e3d752d3fbb3cb3647d665547d8",
+    "res://assets/vfx/sources/a131a1f62c5eb8179424/s_GoldenFire.tres": "eb52a389c02d4348e0405d5c754f0de08f0fbb9f0f89e3cdccf5fef178a70180",
+    "res://assets/vfx/sources/a4fd0883f0b17d893a03/base.gd": "d62e96175b6b67ebd79feb9c67318892fb1f111ee8cbd77517aa64f1b688ed90",
+    "res://assets/vfx/sources/c0a2515abc39856316d0/texture.res": "cde39b25263861773c161ea3988dd9a986631e55d288008fd3010d77dc5f9d5a",
+    "res://assets/vfx/sources/d584883ce30a469af2c6/sm_cylinder_vulkano2.res": "6933229f989ba7a74821f16d42cbf52e6d897ef9b442561344496b4226ad940f",
+    "res://assets/vfx/sources/d60670fa4c3a03cc8f3a/component.gd": "3a37b2d404e3daf6a645f7a1569f878619e28d0c477d4f88af3c824b3f300fa3",
+    "res://assets/vfx/sources/d9fc803a9ee705b79e8c/s_PolarPanning_manualD.tres": "5020dfa07fce9756b3658866f16b14f3a20489ea58baf0fb67e96fa0ec9f93b4",
+    "res://assets/vfx/sources/eb06cc2929dc57d35d5b/cie_d65_v1.gdshaderinc": "1b92ec2f105962f8126bc3e7c38110d163fdc62414820e65c730f752aade2dae",
+    "res://assets/vfx/sources/edb4416ff06538073fee/divine_word_source_v196.gd": "a087bce269457faa9a5ae9e5fca348a4415260114e716fba1fba9b3a814bf21f",
+    "res://assets/vfx/sources/fd7566461f35d1fcf6e2/texture.res": "a6eb895f054e2505a1ec2dffe50769838f5dda119a525bbc650b3a3ce1c6aa55",
+    "res://authoring/gpu-payload-v397/phases/e181283ebe663514.tres": "71dd8a8201d59918687aec0e9e18b3f7e830cf96cee0fd50f820707332aaebbb",
+    "res://authoring/high-level-22/delayed_blast_fireball_native/sources/fireball_native.tres": "b15e95f855808847748a34fa34320730e1fea3baaf8cc18edaa3485b35a4312f",
+    "res://authoring/high-level-22/freezing_sphere_native/sources/ice_fragment_native.tres": "475d25e7e14a956a9547fcc475615a974b7f13bfca152201a85995a9a787178b",
+    "res://authoring/high-level-22/vitriolic_sphere_native/sources/acid_native.tres": "d237e71d2899819899bba4ac08e950ab43790321317737d2190b3ae0286c50a8",
+    "res://authoring/original-repairs/source_volumes_v284/freezing_sphere_native/phases/launch_delivery.tres": "dec8ec00e7369d19729000f2d5ebfcea5ffddbf7e753fe52e6938aae78cca4fa",
+    "res://authoring/production-review-repair-20261020/payload/freezing.tres": "1cad53a3f048663bc0cea0d8c6200e1d2b7f5cc3bfb95469319f5c3403e3153b",
+    "res://authoring/runtime-cost-repair-20261020/payloads/assets/freezing-native-source.tres": "a9dad917f48cb93f2cfe8ccd7cfa569f67b25431207f3c3005fc7266e9c2d63c",
+    "res://authoring/runtime-cost-repair-20261020/payloads/assets/freezing-native-source.tscn": "38a68a7f9c21230d361c07f6209154d53f4bdf556df89f3efc6efd776354c8b9",
+    "res://authoring/runtime-cost-repair-20261020/payloads/assets/program-1d0b4186aa5b42a3.gdshader": "1d0b4186aa5b42a388d9e85ecc344cfe3400c78abd53aac71d7826a74f321f02",
+    "res://authoring/runtime-cost-repair-20261020/r6_freezing/assets/delivery.tres": "5ee1de34d05e88b3043104cbf4764946ef37ffa82d4b30117710bb61d2286b30",
+    "res://authoring/runtime-cost-repair-20261020/r6_freezing/assets/delivery.tscn": "37b89895b94f8959c64539b8ffde329a1ec0fa39d815fb2a764e3ba589b53a2e",
+    "res://authoring/runtime-cost-repair-20261020/r6_freezing/assets/program-359b026cc35b801e.gdshader": "359b026cc35b801e7dcafd73406181786fbd700a9a48dc8594f5fd78c2ba321b",
+    "res://authoring/runtime-cost-repair-20261020/r6_freezing/assets/program-68d6e3fddfc4b400.gdshader": "68d6e3fddfc4b4004da245a662c14c2d69926e368554d7bcf127b3714ab06d17",
+    "res://authoring/runtime-cost-repair-20261020/r6_freezing/assets/program-8eabeb3df8ae1771.gdshader": "8eabeb3df8ae1771ff586620540b07398876954c4aebaf4a5027838c576347f4",
+    "res://authoring/runtime-cost-repair-20261020/r6_freezing/assets/program-cc5f8afb13060bfc.gdshader": "cc5f8afb13060bfcffac2c94513de3f72b0958396b05748b4d249aab8fb6537c",
+    "res://authoring/runtime-cost-repair-20261020/r6_freezing/assets/program-ceb0b6e4e6d210db.gdshader": "ceb0b6e4e6d210db795adc5674abef7325d2db08d26a1bba3efaa0dc163ead3d",
+    "res://authoring/runtime-cost-repair-20261020/r6_freezing/assets/retained.tres": "680421f3c5cbdc534138e238be8a9cfcc88aa8f990a83ee995bbde4a592ef439",
+    "res://authoring/runtime-cost-repair-20261020/r6_freezing/assets/retained.tscn": "8828179007d9396e3cde4b5a64ee75838ae5226f56f7e9d23455d306410970fb",
+    "res://authoring/runtime-cost-repair-20261020/r6_freezing/phases/blast.tres": "4a55620d1c6c7b5d49728c3e33310258729802e4fa56496782771e6349d9887a",
+    "res://authoring/runtime-cost-repair-20261020/r6_freezing/phases/delivery.tres": "e25c06c1c83cba47a9541a583511eaa083bfb3058be12e20c80a302cbc42f95a",
+    "res://authoring/runtime-cost-repair-20261020/r6_freezing/phases/retained.tres": "41c7ba5e9091d425a0ca0f754fa6c1027f5efe1b3d3bd7db8d77ec0670f21ed2",
+    "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets-v2/finite_deafness.res": "5e761eebc613e9d73bf4a6638a282cf8d587cc6a330daef6e61484a12b9d410c",
+    "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets-v2/native-process/080587f5b5ecf799395ee01fbf2cbc4760c9f5e4aa49bbcfaa36ee9b8e8a7dab.gdshader": "080587f5b5ecf799395ee01fbf2cbc4760c9f5e4aa49bbcfaa36ee9b8e8a7dab",
+    "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets-v2/native-process/2475c89bf296800c713afaa17ab087771a103ff974eb1995fd2cd28d0bcce83e.gdshader": "2475c89bf296800c713afaa17ab087771a103ff974eb1995fd2cd28d0bcce83e",
+    "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets-v2/program-04e1862270d6c8ab72fc1bcc8dd81035ea236cf92437b9ce4e8afcd6688ae068.gdshader": "04e1862270d6c8ab72fc1bcc8dd81035ea236cf92437b9ce4e8afcd6688ae068",
+    "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets-v2/program-0f9be758c539312ec9a8ebca27c554987c934ef48a95f418ad15e08f8192317f.gdshader": "0f9be758c539312ec9a8ebca27c554987c934ef48a95f418ad15e08f8192317f",
+    "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets-v2/program-dec8d60342538d4b96795d194955ebdeae63fb922b33150efedd32aa495c8eb5.gdshader": "dec8d60342538d4b96795d194955ebdeae63fb922b33150efedd32aa495c8eb5",
+    "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets-v2/program-e0e051b02a22a95c5d269490a9c349582dd6304875d5d06648e28f11909c09cc.gdshader": "e0e051b02a22a95c5d269490a9c349582dd6304875d5d06648e28f11909c09cc",
+    "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets-v2/texture-6b3e16ab3d942a42ffa8729f6564ff58d51cdc81ec2194e825f11292bd786c5f.res": "cfa358adc9a2a525d4dcd116d8088d026bbea25a1449db7e3389564ec9786c6b",
+    "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets-v2/texture-9bb4421037915b622688d0627d8c7c8f1f618a4410b7fd12dd73cd07eed175ab.res": "294dc4e424fdb864262fd28203f7eb4fc03a3d6975f1dcf48be5ba27d508d940",
+    "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets/native-process/18b52329d2b4a8a9314c997f6e0ec9bbcc9683070fa080fac3588673a5cc63b2.gdshader": "18b52329d2b4a8a9314c997f6e0ec9bbcc9683070fa080fac3588673a5cc63b2",
+    "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets/native-process/72194500960ef0fe9763e10e9050f98b17a7717986bb5225846b0814254f11d3.gdshader": "72194500960ef0fe9763e10e9050f98b17a7717986bb5225846b0814254f11d3",
+    "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets/native-process/91dd2656860cfe92b1285bafe1869a27bc0b9f0e08308a34304aff490c77a3b5.gdshader": "91dd2656860cfe92b1285bafe1869a27bc0b9f0e08308a34304aff490c77a3b5",
+    "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets/native-process/b0f232a776c370c28523a4a1a8e9c5fa9d41f933e98fcc3f10c3acec918f55f8.gdshader": "b0f232a776c370c28523a4a1a8e9c5fa9d41f933e98fcc3f10c3acec918f55f8",
+    "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets/program-052fd1b47de118060c154eaf6e0b2b458ab98e898448f310ecda1d0f4ee13358.gdshader": "052fd1b47de118060c154eaf6e0b2b458ab98e898448f310ecda1d0f4ee13358",
+    "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets/program-0c2674a3fdac544b2ceaf4762dbef75e2e9f0e02077a5bfb06fea72ef7993088.gdshader": "0c2674a3fdac544b2ceaf4762dbef75e2e9f0e02077a5bfb06fea72ef7993088",
+    "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets/program-1007ff7b3cc03726d2edc877513fd4d94d48e09b902a5988681592a3f6a7a8ae.gdshader": "1007ff7b3cc03726d2edc877513fd4d94d48e09b902a5988681592a3f6a7a8ae",
+    "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets/program-3874d7fed80da8969c27a1b7debab01aeeeb93c09c026e7c94cff829ea9ab282.gdshader": "3874d7fed80da8969c27a1b7debab01aeeeb93c09c026e7c94cff829ea9ab282",
+    "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets/program-40a303d768b5ad324f7a6c93406988f2f5bc7ed0c0b6bfba6b826f4e1e1e70bf.gdshader": "40a303d768b5ad324f7a6c93406988f2f5bc7ed0c0b6bfba6b826f4e1e1e70bf",
+    "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets/program-8e19a7f065ea6e18196763faaf827b7ede089ce3e2b879947b5686f5e2ca9053.gdshader": "8e19a7f065ea6e18196763faaf827b7ede089ce3e2b879947b5686f5e2ca9053",
+    "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets/program-ac528f24a39a44530d0786ca7f076e6928dcf3173d1861fecaec9f136acbe63f.gdshader": "ac528f24a39a44530d0786ca7f076e6928dcf3173d1861fecaec9f136acbe63f",
+    "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets/program-d9a914c52a4935502acd5fda63ea3e9225ee5f40350cbd6e2058759a70dce079.gdshader": "d9a914c52a4935502acd5fda63ea3e9225ee5f40350cbd6e2058759a70dce079",
+    "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets/texture-0fc6bc480dc8c62ec8a6a951e23958baa5366244f798d0d873079069fe2ffb50.res": "ecc56e7026097108a034ccc417d53791ecd9a7d0acf6658cfb2479e4e5e44eca",
+    "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets/texture-1301ffe4c560c6e53cb460304f1728942307c8ddd75e43e3f99a4d9c28e9e8b4.res": "9df0c36db76b6032a13175814b1b9d57402006e4c78eb76069d8c5807c98c378",
+    "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets/texture-2940b4de79af6159b6a24bf8374d749bcabe1c3cc6235b198f790063cc91a2b6.res": "7010216edabff0a50af539c7556d99290620d014b643dabd498f8c356db46e0a",
+    "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets/texture-32bb588a43dcc075fdd8d3d634e6957aa808888a69cf2af6e14fb6f9d919b2b4.res": "d9f3d1f212eac85e57feacf678086b7d76ff2095668101d3618e1439512a2350",
+    "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets/texture-34b9fbc0ab9fa2dbb4e8b51a5769763f83255ce48d3b336b7625b339b6e66e98.res": "10863ab66cebfc2173717a1669da2b4bbb437258c50aec4a434c29b98f53701e",
+    "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets/texture-3540a7c211b59768cf6afbdf358317db356632421f5bfc79cdeffbb369ebdb60.res": "7d02f152bac12d9a0f84b4bc03d5d5b961bc2f573403a03b1e000563a80c2834",
+    "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets/texture-37158527d0968289dabc6ab49708e40b38eca960c4811d16df7f02fd7049ae30.res": "5aa4ae720557ad6efee31fdbc501fd33b4dec74e7025ddcbfc5ef4bcca095ca8",
+    "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets/texture-372730a23fb6de94c74797915bd61a4090de2f9175259829e507fce03af2977a.res": "832de179f9a8f7bc432c5dde460a011c4e3af93953d0d8e3edd3b854a3426869",
+    "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets/texture-3e6f95aa5c3bdd92cb69bcebb66069677078168d1ab50905339de18db1c07e6a.res": "be14c2296d59ac11d1f4dc4806ca585d28fba45c9b1a94651812d8bcaeb0b74e",
+    "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets/texture-625cf993ec96f7e41ef61694763539433e7b78588355526cb4a8ef41cb82a84d.res": "f3a7bb7b4a4fe138f66bad9206439c9d73d06c8195ec8623f4164df8aff4a539",
+    "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets/texture-7c8bd9e2bd12e6d038aa6f24fc74dce182b74b5a56890d3396d7ca97130dcb96.res": "686d011716853b8bffd9eca93a8e223d3bdf0ed543a4dce309ef351f3ad6ab7f",
+    "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets/texture-7dc95f780b8a3332c1cb3567fd843f81f76e84e533d4515058fa32e3fa2fb63f.res": "ad71d02b42338ad3f7a3060ed6ac9f6ca381dd0f2676881aa17ec6ba68b54b24",
+    "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets/texture-8e07d4b473b4e28a659b500e51250e6ffc380681455fff12257035d1bdea5e58.res": "bbfe9a561af86dfbf6e30d40cae46560eb32c0f5d65f940fb68d89f56aaf0f81",
+    "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets/texture-986fa6f13671e1740f7b89691cf56333a48f9c0d1af73b1c55183924d716d168.res": "e7d03ae207c5b7f82940bfb0b7d1d783bc6dda57e2aca395a6aaac32f4df13c6",
+    "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets/texture-9b6a817162b07a12d228d6c2441e59fe8f1f72a9d383a35bca628bd8949f5dff.res": "262d8d5642c805310f8c750f967a8c2694e9d2dce0b124a17dc735fd83c9105b",
+    "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets/texture-9fcbab1a2a881c6e2056f1ad294ec8621fe9d420095c2b0d04c7d2c1fa5cb4d5.res": "ced00b2534d4f7d6cc7b1e540ad763a3f8f80b897b72221bd78abfbdde7940e2",
+    "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets/texture-bbcd6e20d72505b3617e6ac1fd5794b1b178161d8ce4c5ca550cba5f022862e0.res": "cfba23c6aa35611725952c7de1c87af41fc5700b28bff095f2e9285f403461e2",
+    "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets/texture-be7f70270546f7198d1e1f6315d11f14161630ac6623e8d292d58853966151fb.res": "823d7a23a65283432a2452d63de0564af285d6633c108c8037a9cfd6bcd62409",
+    "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets/texture-c7131b5118c12bf14033bcf77f381b251d027688f320cbd16688274a27ec06e8.res": "717513476f5806b5e358ae2e1e300fbcb768df0fdd4c4824d0735ef2476a1cad",
+    "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets/texture-c8e3d0b58957f07bd4823b96c5b78a7ee14e9c10fe2ee085d997f27f5662edb1.res": "082ca8f955c4e10718a94dce905a50e174b4f514d08c741167503a157104613f",
+    "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets/texture-ca387ca3e4a58d0c4911172b6fc64818f393e329eab2c979377ca8591c07b5c7.res": "35f337a1bb225fd91a0572f4e71a9b0216a47d2c187e25f76e799caa42ae86bd",
+    "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets/texture-d4d55b23b92ab92181bc5c09b2904b895d3bfce0db682edc3fc3cdac48be48be.res": "e461d90a2e68552451a9fe15e6f6da0d1773f4e87e58570e9f392a82ad3207e6",
+    "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets/texture-e7dda77ea9e0932116ab784883a19b982dfadc27c7889926f966bce195f084b6.res": "f8a39759fc85eb064840c1d1c6b9495ef1fa41293cc8e3203ee6c4c8b9f21d9a",
+    "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets/texture-ed20c22d066eb630e096ab8240938523cebd7629d9a39fe74f45f5badc8e37d3.res": "88f2b48d16ef1790d2dd275f7b2cb2f2fbc19edb1e06bd69e28799969c20e59b",
+    "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets/texture-f40e8913864bd8e0068c8f32163aa3ef0aca3e1434611f57a17607113c3ddd60.res": "6dcd99a0b2941aaa7b30a4174a83e574a54a7b135fc8e3ea95f75faac08d772e",
+    "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets/texture-f72303978ca4ff7bfc6078814bdd366cdaa495a28ca1cfc6443ee23e98b5c604.res": "d2f0bd8941b70b95c4fe93bf6e545f8d7fafa076ba80235d1c77beee2ff2a3ba",
+    "res://authoring/runtime-cost-repair-20261020/r6_sensory/closed/assets/divine_blinded.res": "1eb49edb72b18705535464d76949dbb93250a34fe083687518d3713ab7c6ee81",
+    "res://authoring/runtime-cost-repair-20261020/r6_sensory/closed/assets/divine_deafened.res": "db51010504c7c4f96ccdf4dc9e6c0972395d9c18a1052c560b706d28b1353fa8",
+    "res://authoring/runtime-cost-repair-20261020/r6_sensory/closed/controllers/01db38fe9d22df135205/base.gd": "21468e47c2f834eb2da1faca9f79d6edb9a88b06f1732c1b0aed33fa81689c1f",
+    "res://authoring/runtime-cost-repair-20261020/r6_sensory/closed/controllers/03ee2e4007ee0a39f08b/contract_stage.gd": "381ddc81012ea3f48e6440897a47a42ebf7d45b84df8836eb90e01fc89849d25",
+    "res://authoring/runtime-cost-repair-20261020/r6_sensory/closed/controllers/25787490e77fa5c2115c/native_opacity.gd": "641ae30fd6b1b6eb9a8e83b5788c5db06157c269826e4b88afe50ca8792e5fbd",
+    "res://authoring/runtime-cost-repair-20261020/r6_sensory/closed/controllers/432d6a7ae8cdc8dd1adb/donor_scene.gd": "dd29d6d7e2f8a3c94ff7246736aefc8ad43f5e4b6e088223a6a37595ffd49702",
+    "res://authoring/runtime-cost-repair-20261020/r6_sensory/closed/controllers/4a6fc0ff9d0093ad6f89/divine_word_source_v196.gd": "6db9df4358af7e0d0c4e7e395aa80d007beaad860479047db0ced499f8578d40",
+    "res://authoring/runtime-cost-repair-20261020/r6_sensory/closed/controllers/5d620fd9a64eea66a8cb/source_materials.gd": "5918569a7578acd46f8bf56d64c1f26a6611665949c6e3628e10bb10e39890a1",
+    "res://authoring/runtime-cost-repair-20261020/r6_sensory/closed/controllers/5ffc67aeffe4d2e17ad2/resource_graph.gd": "eca090b0c9895146375d3e959eaf193fef1236f0a7aadf91d9f137e50f853627",
+    "res://authoring/runtime-cost-repair-20261020/r6_sensory/closed/controllers/6882034ac873c97ef72e/resource_io.gd": "7a001b4b69c2480a2ee5b85c8f85e7fcc812c8ed67398483522ea9be8d9f39ed",
+    "res://authoring/runtime-cost-repair-20261020/r6_sensory/closed/controllers/91726aad046a0acf7237/divine.gd": "ade4e1d08c45861e524e8cda2dd2ead627407833c5d31a77692320a9699263c5",
+    "res://authoring/runtime-cost-repair-20261020/r6_sensory/closed/controllers/a88cc0b6fd9f8a77e483/spatial_energy_palette.gd": "a4b3edcbec348996cee76d642e49f0bfc67c5528198271eb78da9f097ae8368b",
+    "res://authoring/runtime-cost-repair-20261020/r6_sensory/closed/controllers/ba1d81f46b18858266ef/shield_modifier.gd": "e66314266e82b52930b969687dc1c0f7f4af438ecab62f480d1a8994b2984856",
+    "res://authoring/runtime-cost-repair-20261020/r6_sensory/closed/phases/divine_blinded.tres": "f53e22371e018db9807371bb2b13b18eef39db82090da77b74e153b325f5a3e9",
+    "res://authoring/runtime-cost-repair-20261020/r6_sensory/closed/phases/divine_deafened.tres": "445c5c0c912177182e747a2086055251dc458c5dcbb463101ed46706b3ce5ab1",
+    "res://authoring/runtime-cost-repair-20261020/r6_sensory/phases-v2/finite_deafness.tres": "e6b499800e0dc24982bb263fc95f923ceb6b49335b68093c88c4d6dfc0d945f4",
+    "res://authoring/runtime-cost-repair-20261020/review_contacts/assets/counterspell_contact.res": "dbaf58fdca6fd825072fa524ac4988e2b3be1dcfb586075b3ab4596e91037e21",
+    "res://authoring/runtime-cost-repair-20261020/review_contacts/assets/counterspell_contact.scn": "cb5793578be4b94d901bd0bb4966ec3b0c889e26e74364bb78f9937c3de656ec",
+    "res://authoring/runtime-cost-repair-20261020/review_contacts/assets/program-7fe2a486af3d323af09323f7429fb5d6ad2c09f414525e3c58f08b994c9cfb74.gdshader": "7fe2a486af3d323af09323f7429fb5d6ad2c09f414525e3c58f08b994c9cfb74",
+    "res://authoring/runtime-cost-repair-20261020/review_contacts/assets/program-9626e3d1956fc5312de62e0e12e9d7f0b2e2c01ffc313b998ef01be040bc75be.gdshader": "9626e3d1956fc5312de62e0e12e9d7f0b2e2c01ffc313b998ef01be040bc75be",
+    "res://authoring/runtime-cost-repair-20261020/review_contacts/assets/retained_fire.res": "2bcf8fdbbd79c29b5b5873a0b2904a09195d3f5bb4e125172b7c642ed8115803",
+    "res://authoring/runtime-cost-repair-20261020/review_contacts/assets/retained_fire.scn": "6c1a39f95fdebe53509298678ee9727822bc47bf5b48098fdcf7fe46851a874d",
+    "res://authoring/runtime-cost-repair-20261020/review_contacts/assets/texture-2218f6f1022c8d9630e50c5c77215dae32e076f59481d3da68852979d400dbe7.res": "fdaca7b00dfc052155ca85b9c7d99bd78de52056717471541b893d98678d6b0b",
+    "res://authoring/runtime-cost-repair-20261020/review_contacts/assets/texture-468e7d03ab2bb3c5775a4b61668beda919ca2cd7224c5e31a9c2fbc626467141.res": "324757f8687bafc5f35a8026f057888a06412e7c9c1dabad21e768de51fa799c",
+    "res://authoring/runtime-cost-repair-20261020/review_contacts/assets/texture-624d703baaed6097e921e68841bebd6713ae22ddfa455697ff6c8629bf2b24bc.res": "f1ccad6b09b79153d10d3724d67e5fc1da1779f24006bfdc8420c48ea55bf4de",
+    "res://authoring/runtime-cost-repair-20261020/review_contacts/assets/texture-625cf993ec96f7e41ef61694763539433e7b78588355526cb4a8ef41cb82a84d.res": "f85dd57eda92a8f23954de9108434648415dd15d689ba53a644e385cacdc48fb",
+    "res://authoring/runtime-cost-repair-20261020/review_contacts/assets/texture-6fad9fff68f32746ae7ea59b50fdc39529536516dd1cc01317d102edc169db45.res": "a12ff284405275b6ab3d652bdc8dd81f741a984cadfacf9cc781eea0978c9e8e",
+    "res://authoring/runtime-cost-repair-20261020/review_contacts/assets/texture-87bf87d6ebc15bb9032d436fb739e85fbce5a5762ccead41ae7e3e935877fcad.res": "09bdfd95dab11205c38ed324afc7db2f2f6940d9e46e9ecd843cdb101cc908bc",
+    "res://authoring/runtime-cost-repair-20261020/review_contacts/assets/texture-af202dbce04b95984fe7a77598cbb5a2e3ddefd359bc5531cb548562353927bb.res": "87209b09ee017ebc50c0025ad789eb25ba3de1a5c686f98812bc4864cabc525e",
+    "res://authoring/runtime-cost-repair-20261020/review_contacts/assets/texture-b27fced0abc70ac4521c5deeeea400b1bf75a4e7d9ccd540252b2737b36460f8.res": "ff9da6df67dc04bbca4751dc8bdfcbbbeeecd6adc69b1caae0900b2330d2943c",
+    "res://authoring/runtime-cost-repair-20261020/review_contacts/counterspell_contact.tres": "a9a3c3a0cba3ed9692973ad31ca4105d69eadb72114d46c3d2dabbe4fd9ddea5",
+    "res://authoring/runtime-cost-repair-20261020/review_contacts/retained_fire.tres": "3a87b0dae23d806be46f496857f89f42a1e7c3105ede613b4ebf322a398b4f65",
+    "res://factory/authoring/component.gd": "3a37b2d404e3daf6a645f7a1569f878619e28d0c477d4f88af3c824b3f300fa3",
+    "res://factory/authoring/phase.gd": "e60cd3283f20b7555657d7336054094dcb8f1a791939e4956ec563114bcd1779",
+    "res://factory/baking/live_geometry_bindings.gd": "34c2ccdce695072ac450bdb79c6766ab7f843107dadc9044cd395be4f5b6409c",
+    "res://factory/baking/private_particle_process.gd": "799d1871a0a56b260c652b48e1ec8239682315026d3cd76dbf7730162241dd8f",
+    "res://factory/baking/recording_source_sampler.gd": "18e128dbe6f9df00915f2d1727053e380fa92222424747ea6cca7439df7026fa",
+    "res://factory/baking/runtime_particle_units.gd": "40a94dd0f1eb3d13bc372c75dc435db3567f14ad4cb7a1a991ce7a58e84885a7",
+    "res://factory/baking/source_bridge.gd": "daa9ffcaa41beae562991ec3edb60ff5397ab5772aab2cfeb3d8115136b03c4d",
+    "res://factory/baking/stable_source_paths.gd": "79d8683f87bbf7f860c394af64e5c4837c627911c4f94f01d4762377136fcce3",
+    "res://factory/components/high_level_payloads/blast.gd": "15224123da2dc8683b13865729e778ff8cddf28f4ed947c51df58c03f7219808",
+    "res://factory/components/high_level_payloads/delivery.gd": "76025e37e530fbdb2b1dab1a2687cbfbd2764479ffcbe38aefd0cd769613e7ae",
+    "res://factory/components/high_level_payloads/freezing_delivery.gd": "42d0c6201e8b4707f1f82fd061c61aaea17595f1c0e7f6d16268a7d57c737c83",
+    "res://factory/components/high_level_payloads/native_materials.gd": "5b945888b7727564d93e2b1f036a385a58ee807d828978a373646da11dc560a6",
+    "res://factory/components/high_level_payloads/observed_footprint.gd": "09c80001030ffd7950e2804aad097ac04feac4c7603e4bf5ba396c0ac96f7560",
+    "res://factory/components/high_level_payloads/payload_item.gd": "4130972dd7bcb6a3b1b0ebee36b28f9d8312e2b6cd77f211e5c91ddde08ae5b0",
+    "res://factory/components/high_level_payloads/source_bundle.gd": "697c2c27d3407db60537fcdffc3c1cb875b9238a750ff2fbd3bbbdebd32b7e50",
+    "res://factory/components/interrupt/counterspell_contact.gd": "5c3efa80709f362f0767d6bc3dbf3aa9e887f859c439ced4fe9e267a16ed3e22",
+    "res://factory/components/native_review_composition.gd": "37d490341e3d389e345418f2151ad484d9dc1b5eeae6a01d1726b0e1ae9e86eb",
+    "res://factory/components/payload/retained_item.gd": "85754d7f2e903c53138fffd414f47b869828c542dfef1cc725d506c9011c3699",
+    "res://factory/components/prepared_fireball/native_units.gd": "98afb9fbb436466372aa41c16ad87726416a5027fd3f35ab69f95e43a0971681",
+    "res://factory/components/prepared_native_compositions/bank.gd": "bde7c733ce693c4c4e96b7951c2f6bc6acb382b8fe0d144614942e95f250201a",
+    "res://factory/components/prepared_native_compositions/composition.gd": "0d73b8057f7825c55768801f0be960830ec65a7cf01db82e968c94d6c0803504",
+    "res://factory/components/prepared_payload_contacts/bank.gd": "524574a0f6d062201bd370a6628306a51ff12ab6dfd7de3b60295117a885063c",
+    "res://factory/components/prepared_payloads/bank.gd": "4fdb5c2c3682180446e95c6e8452255ad6e81fe4145c528327f1ebaca51870dc",
+    "res://factory/components/prepared_payloads/footprint_state.gd": "49476f4863dec30b73b375b8fae85d60aeefebb05f34cd66b492c07aa86d3e70",
+    "res://factory/components/prepared_payloads/freezing.gd": "845135aef71c922b24673309244631c0cbc870319a7d0d88d9a0f370e7f55cef",
+    "res://factory/components/prepared_payloads/restore.gd": "f5587fee844a14a7b42258a266be4917bb98eecded6c71b048e5ba1692019a48",
+    "res://factory/components/prepared_r6_freezing/delivery.gd": "6a2fab83ce234361d1ab500fe9a30faf5d233ee4858f9b00e8012625ba73585e",
+    "res://factory/components/prepared_r6_freezing/retained.gd": "b8d3dc5967839517d2f1ceda4bf41be7dceeee4f487ebdffdef19ec635ee07a9",
+    "res://factory/components/prepared_recipient/restore.gd": "c4532aa2169ad51fd18e6886d983b0af91e2aa0fa9fca6c3b87fba9f05fd4b63",
+    "res://factory/components/prepared_review/counter_fragments.gd": "83b78996be35eb9c2916d2484316a7746da3cd3c36e3e887ea46793f7fe71c7e",
+    "res://factory/components/prepared_review/counterspell.gd": "39d6f8004c346322b65fabe297c4369e117a0cb654f349f2ae6b9bf588d0c980",
+    "res://factory/components/prepared_review/retained_fire.gd": "d854472f09d16cd4a3ed9ed9fd7c4e437ee761ffacfa776589da2688bfafb5ec",
+    "res://factory/components/prepared_sensory/bank.gd": "77408302111a1b2d6b818323c8c80428f98fdaa4038c20b2ab7198e004150d5e",
+    "res://factory/components/prepared_sensory/composition.gd": "011b5d22943f6ca050717510142fc9592205fdb59e8b9febef69746c3182ea37",
+    "res://factory/components/reaction_prismatic/counter_fragments.gd": "75d6a7bfcd1006c5eff39fd4fd4eefc742afdd97b644421441403ceb2021377c",
+    "res://factory/components/recipient/base.gd": "a866dea4a07145fce4b0a5719ed36a1e5c3eab3183d305d40ea6a221e4e3af39",
+    "res://factory/components/recipient/control_status.gd": "8baa1558d38c2dc9a984807fb94b3c7ed1bd934354d7d2c8218e8eef73470988",
+    "res://factory/components/recipient/control_status_overhead.gd": "31f7bd25569187a5018167c2e4233b229f2e154bf49f5452b1e8bcbbb5750b01",
+    "res://factory/components/recipient/overhead_anchor.gd": "c3874ab72c09b0880682dedea78da96f6fc4a1caa7a326f92c027f8f566d4381",
+    "res://factory/components/sensory/deafened_application.gd": "04ae40b33c35cb2da93c137ba30e93ce2d48051afeb70bcc35cbcb236df8d8c3",
+    "res://factory/core/animation_key_times.gd": "64ca9ccd2e54c61c5cd52cbb68d7943a7eabbf7d7002127bb59c2cdd5406dfcd",
+    "res://factory/core/contract_composition.gd": "a27920cd68ea46ba734706fbe97614095d826ad137dc48e7506abc05b5770ec7",
+    "res://factory/core/contract_stage.gd": "74b2cfe382b08b973be3e71a06842c6b29170e19521d21daec305bc9c8441ca6",
+    "res://factory/core/donor_scene.gd": "dd29d6d7e2f8a3c94ff7246736aefc8ad43f5e4b6e088223a6a37595ffd49702",
+    "res://factory/core/immutable_materials.gd": "7ccf04d48918a608d4b4f39a2e8fa86fe1d638cee8f48543441328ac55b521ba",
+    "res://factory/core/native_opacity.gd": "c35a60e825d5966b2fd812e4a4b7d70b5b11bed3cb901ff799bf16da957b7e5f",
+    "res://factory/core/native_source_space.gd": "f8cc53bd9caed6a2168bf7c478d08cbff25fa8ea83ecd3aa48817ac8a27b66a6",
+    "res://factory/core/resource_graph.gd": "eca090b0c9895146375d3e959eaf193fef1236f0a7aadf91d9f137e50f853627",
+    "res://factory/core/source_materials.gd": "0f4c218085af57252c96d744a0c174fba72539eb0b90f88ff418966c2ac2f9e0",
+    "res://factory/materials/spatial_energy_palette.gd": "f9ba610cf896d678b91cdd11e553a6c4db9b1cca82e1a6cb0b36eb2f90928828",
+    "res://factory/packaging/constructed_occurrence.gd": "ae59f52f60d99675d983839cb8696abd341de18b46bb618686f5481e3a5a009e",
+    "res://factory/packaging/construction_profile.gd": "78b2194e6c972c80a191799044e7886450fa36bbb0c52b7a0d783a9a706bd4e8",
+    "res://factory/packaging/freezing_construction.gd": "2789060e9c8b468ae7cc79710d8ddc0f95bfc32d091371ab9dfe082ef8f85621",
+    "res://factory/packaging/occurrence.gd": "144c9c73ed1a0b1c955be270f68b41e998ba86584db9f36cda0366eea7aa7a73",
+    "res://factory/packaging/occurrence_bindings.gd": "30d613541975e19fd62bced07522ce4959da6657489ae4531143ac9a5c886df3",
+    "res://factory/packaging/occurrence_clock.gd": "59a42844d8168bc0bdb3fb893261197f7559d5fc94a7342d1861421c02691f6a",
+    "res://factory/packaging/resource_io.gd": "7a001b4b69c2480a2ee5b85c8f85e7fcc812c8ed67398483522ea9be8d9f39ed",
+    "res://factory/packaging/scene_document.gd": "698f1b1ab06ea61ae1fd22eaf278d181aa0634e3f8c251874f4274be14e44ebc",
+    "res://factory/packaging/source_readiness.gd": "9321995d3d4cc2e5ddc98cdf6b805685dc43a952589056654d9c6b0070c1a76a",
+    "res://factory/shaders/cie_d65_v1.gdshaderinc": "1b92ec2f105962f8126bc3e7c38110d163fdc62414820e65c730f752aade2dae",
+    "res://integrations/ndclient/assets/native_effects/class_actions/Charge.gdshader": "19dbd070254366ba40b284511b159e757415779aefc8167775db011e01e1259e",
+    "res://integrations/ndclient/assets/native_effects/class_actions/ClassComponents.gd": "beffe6ba882eccc92b7672613cd5959e225a893fe21a6f528cff746063a742b7",
+    "res://integrations/ndclient/assets/native_effects/class_actions/Film.gdshader": "1da06086b96579d88ef317026c395699f9e379f306a11ce76075307521bad3ca",
+    "res://integrations/ndclient/assets/native_effects/class_actions/Flow.gdshader": "1e7fcb04c1f31c237adf7fefdf7d2b9ece9d0c7fa179e1f041b9b2413daea8e8",
+    "res://integrations/ndclient/assets/native_effects/class_actions/Glow.gdshader": "dcd7c27efcd84ec38e226e5180e753edb56d4c28a8364bf3053a30322f6d8774",
+    "res://integrations/ndclient/assets/native_effects/class_actions/Strike.gd": "1042121c97885e95cf4006690cab0ad080bc879f9c6ea39c1f433ca092566d81",
+    "res://integrations/ndclient/assets/native_effects/class_actions/Strike.gdshader": "3d00a1eb3a5ee5705699e2171e509d832633a1e7645bebc9bb6e7513eca6bf89",
+    "res://integrations/ndclient/assets/native_effects/class_actions/StrikePaths.json": "341630ccd6adcd31965a753c58e8302f075f9a7cab225646fe608816beabb220",
+    "res://integrations/ndclient/assets/native_effects/class_actions/strike_hit.png": "fbde8002dad5a6cc88e8fffa95af4b36ba8eaf77b7c4ae2c9c44b40e3da9883b",
+    "res://integrations/ndclient/assets/native_effects/class_actions/vfx_1/arc_charge/scripts/arc_charge_swirl.gd": "0aa31ac5de4f4efc74b4adcfd020266c53dda13920276114c88d0a0edaa39777",
+    "res://integrations/ndclient/assets/native_effects/class_actions/vfx_1/arc_charge/shaders/ribbon.gdshader": "2be39c852753907caee390514c2cb228f66edab12f2eadc3b99f1c87d68dca57",
+    "res://integrations/ndclient/assets/native_effects/class_actions/vfx_1/arc_charge/textures/aura_glow.png": "0153d00f65f7d86263514a57b5892176816d8fb374ca94325de74e7e667aa820",
+    "res://integrations/ndclient/assets/native_effects/class_actions/vfx_1/arc_charge/textures/ember.png": "c143513f7154cf2a9322d6f115e457689236b8081fd0613dc0f4b6af68bc0fd0",
+    "res://integrations/ndclient/assets/native_effects/class_actions/vfx_1/arc_charge/textures/flow_noise.tres": "638185929e10e90b3accceab043e07da1d70d8e391fc41925e1a0081a2708964",
+    "res://integrations/ndclient/assets/native_effects/class_actions/vfx_1/arc_charge/textures/star.png": "a5a94d4fd20b2794485c25adb50f47238dd2f38926754621b9f9f0736c40135d",
+    "res://integrations/ndclient/assets/native_effects/class_actions/vfx_1/arc_charge/variants/arc_charge_swirl_charge.tscn": "7035b169077b6c5144b6ccf77795ac67f72b1ea6332d45248d1e5eb80bfddb5e",
+    "res://integrations/ndclient/assets/native_effects/factory/archive/objects/73/73682ae4aa57cb2f9264cf5550437223fa5c5c0a3129f00096fc640aaefe4091": "73682ae4aa57cb2f9264cf5550437223fa5c5c0a3129f00096fc640aaefe4091",
+    "res://integrations/ndclient/assets/native_effects/factory/factory/shaders/cie_d65_v1.gdshaderinc": "252c03994b0bb8925b8e656abe9a62d922753fb341567e334c0a57065cdef7f9",
+    "res://integrations/ndclient/assets/native_effects/factory/factory/shaders/energy_palette_v1.gdshader": "32f76501adc64e7e6444b28b779150d39c96b857bf868b1c075348fa0715c47e",
+    "res://integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_blood_premium/VFX/Scenes/Decal_Blood_Animated_A1.tscn": "33639e05a422bab5ef19e4c1b47146eeb6c39fa837c3c9b7a2666d5830382b7a",
+    "res://integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_blood_premium/VFX/Scenes/VFX_Blood_Hit_A1.tscn": "f621aad24921fffeb7988413bb861ab51dcedea5ff249fecef60a6f23fb07195",
+    "res://integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_blood_premium/VFX/Scenes/VFX_Blood_Hit_A2.tscn": "f0e2a479e0c03f2540a743c813c60e61ce6d94213e759d5cb00d9454cedc745b",
+    "res://integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_blood_premium/VFX/Scenes/VFX_Blood_Mark_J1.tscn": "68c97270042bccea62ea5d5b22b8bc1753342803eafda4be698177ed8a951eb0",
+    "res://integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_blood_premium/VFX/objects/sm_plane_coned_spiked_waved1.obj": "0d08c64ea3173f8860d1cadec0b3005d1df7681ebe45b0876e8ff770460a50cc",
+    "res://integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_blood_premium/VFX/shaders/s_Disolver_small_Liquid.tres": "07ac62b3c3371f7d9f7c845626ec10f5455b58387dc21d9b836749af01483e05",
+    "res://integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_blood_premium/VFX/shaders/s_Disolver_small_Liquid_p_Treshold_ds.tres": "77e3bc50180da87bd76ed9f4808e69a30e87dd7dc8861aeeacc1e043152b0a88",
+    "res://integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_blood_premium/VFX/shaders/ss_Disolver_subUV_small_Liquid_Treshold_p.gdshader": "5cd8214ed58b515189f1aafd77aba17b99dbf57a86571c0885f8070ab1db3778",
+    "res://integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_blood_premium/VFX/shaders/ss_decal3double_treshold.gdshader": "0b6eff740399f012f86c493150fae48916e2a03f63be281a40a1795762957529",
+    "res://integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_blood_premium/VFX/textures/T_Blood_DECAL_g4.png": "68ee2643fe401e02a28ee3e49867125212759feb88f5615ddb7d7153df8f5a2d",
+    "res://integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_blood_premium/VFX/textures/T_Blood_DECAL_g4x.png": "1e8fdb62cf96bd3b631eb92ec04163a4f8746f790ee2da2d6d2dbf54fdb98ad6",
+    "res://integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_blood_premium/VFX/textures/T_Blood_DECAL_g4x_N.png": "01080724dd6b8a11ea03b34ef5c607319140c87501a591d13425700212c2c643",
+    "res://integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_blood_premium/VFX/textures/T_Blood_MultiUV_f3.png": "eb3b31b84652471d6c7069b1e05eda310c07072d9f10bbf492b661f71b03c193",
+    "res://integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_blood_premium/VFX/textures/T_Blood_MultiUV_f3_N.png": "718ba1a347fbf32fcae370ee82f00a5aa0727fc4b96084d3ea3624569e1bc80c",
+    "res://integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_blood_premium/VFX/textures/T_Blood_Splatter11_N.png": "85ebdc53b869510cade1d5b97f4cc433bc84b38f2d1d06d1e1f5430f7d735f91",
+    "res://integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_blood_premium/VFX/textures/T_Blood_Splatter77.png": "103fcb03e0420d33b2670f87bf66844bfc823b5da1a6325ff417afb7265f96f3",
+    "res://integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_blood_premium/VFX/textures/T_Decal_BloodSplatter45k.png": "33a1b5146ac72a518c62811aae2057004aee85517980574711a34c232551607d",
+    "res://integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_blood_premium/VFX/textures/T_Decal_BloodSplatter45ki_N.png": "e2597a3c095800b8b6a29cd248fa7f7bb1c0787e2712c372908bf58056282f19",
+    "res://integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_blood_premium/VFX/textures/T_Gib_Red_C.PNG": "b764bf132265459154759a08791f3eeaf242b1d5593b0971badedd045c73ee22",
+    "res://integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_blood_premium/VFX/textures/T_NP41.PNG": "f9c8e2fa1dcc62f85965e5a7f3a48cbe4739b01dbbecb9298e9f1da43ec13af2",
+    "res://integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_blood_premium/VFX/textures/T_smoke_K97.png": "2cc94f51b380b6eab0f5cde5c64a5de8176f07e3f5ce3c79878598cc5834e2a6",
+    "res://integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_magic_projectiles_premium_demo_project/VFX/Objects/sm_box2.obj": "219430b5f1dfc7211212f026d4977d04d772925e08c8c7322fea7f40e09ae598",
+    "res://integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_magic_projectiles_premium_demo_project/VFX/Objects/sm_box2_rotated.obj": "464b76e43d36a2fb2007abe8e913cc2bc761dfc779b8073b20543e4732f7d300",
+    "res://integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_magic_projectiles_premium_demo_project/VFX/Scenes/VFX_Cube_projectile.tscn": "e3dc3d912d7f6c07f3649aed17877fd09f146945b212aac7487ccd851296a89e",
+    "res://integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_magic_projectiles_premium_demo_project/VFX/Scenes/VFX_Hit_cyber.tscn": "14f16f90110769de3f5d98850a4005242cbf72f8274555cd972520804f880520",
+    "res://integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_magic_projectiles_premium_demo_project/VFX/Shaders/s_dualColor_masked.tres": "07e2521b9373c5f6decd4c62b49401a7d2cc8ff55433fb72f1a2c999b3a7cf54",
+    "res://integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_magic_projectiles_premium_demo_project/VFX/Shaders/s_simple_p.tres": "31c9ea5b51962959ff51414f1012c7a4659bcfcc1ed8ffd9c2ea99eb8382eed1",
+    "res://integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_magic_projectiles_premium_demo_project/VFX/Shaders/s_single_masked_p.tres": "4f0afc3129be1c9c233abd11309d77096a39129dc5e277ed0cfc0a904f280ca2",
+    "res://integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_magic_projectiles_premium_demo_project/VFX/Textures/T_VFX_Sqart2.jpg": "572afc50e3faed1b246c465b57b2b07877031eda3feda1fbfaeb23afb9aa196c",
+    "res://integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_magic_projectiles_premium_demo_project/VFX/Textures/T_VFX_Square_22Edge.PNG": "5d3b3f9353c0acb6e7caa4c13e947e7e81d6361fa3e44d0ec16d45f7f99329bb",
+    "res://integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_magic_projectiles_premium_demo_project/VFX/Textures/T_VFX_Srt1.jpg": "0d1962a4dce132b6e3322aa79e4df4fa0d6b53396a35e7eeebb34e294d6cd4de",
+    "res://integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_magic_projectiles_premium_demo_project/VFX/Textures/T_VFX_hit22.jpg": "cb1bb8e1d32b8ba5c28cd12f51a7dccb0c804a89d81e040e3039030a54628f2c",
+    "res://integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_magic_projectiles_premium_demo_project/VFX/Textures/T_basic1_vfx.PNG": "cc6ba7e8e8459eb301a332e62d4c369dd4cdfcdadc613caf72624aba12bbd471",
+    "res://integrations/ndclient/assets/native_effects/sandbox/projectiles/factory/core/resource_graph.gd": "a093af6fd6afa7fa5deb99fa45ba216df65846d7d2c8029f38eebf34a0a8588b",
+    "res://integrations/ndclient/authoring/native_effects/index.json": "3062c34b403f70beccd47578315d5745c8ece672f4a476de7225a7512b783035",
+    "res://integrations/ndclient/presentation/native_effect_mote.gdshader": "9425a324f584a792d2ff5d6568dada1365abcf3d66625ebf5846b886fa1be445",
+    "res://integrations/ndclient/presentation/native_effect_palette.gdshader": "58074cd68941da3049c488e42d4b3f0115a864a48063419c048c23b900bb4203",
+    "res://integrations/ndclient/presentation/native_effects.gd": "f288b44595271f899a2be4f963413f18e8c604970e56766098ce10418c2d18e4",
+    "res://integrations/ndclient/presentation/native_factory_source.gd": "4d5896dba23598d57e7b3ee9ccca9c1f1f76931ca010a7dced6b311db38f5bfd",
+    "res://integrations/ndclient/presentation/native_light_units.gd": "80eb9e980fcdf00ecd58834bde45389b760495922114a2f66c2c5a7d06b1c7f5",
+    "res://integrations/ndclient/presentation/native_particle_units.gd": "ce21b59d14dcbe593c8f8bd9b689bca6a6a6033e293b1c892f1aaaeb1d135ba5",
+    "res://library/binbun/pack_binbun_godoticevfx/assets/BinbunVFX/ice_effects/effects/ice_ball/ice_ball_vfx_03.tscn": "79c9605a4d1bbc6615182d18fa719c34ce18f20eaeb69a22a65657ef39dcca7f",
+    "res://library/binbun/pack_binbun_godoticevfx/assets/BinbunVFX/ice_effects/src/material/ice_ball/ice_ball_03/ice_ball_03_core.tres": "1f7700d85d36fbc51640fd54ed9509c689880d3d4df714c570b5b1c2e9bca66b",
+    "res://library/binbun/pack_binbun_godoticevfx/assets/BinbunVFX/ice_effects/src/material/ice_ball/ice_ball_03/ice_ball_03_mist.tres": "92e0c8a3cc1ab43a47ccb844e482c32dc44fbc51690927db73e9a2c65aa88b78",
+    "res://library/binbun/pack_binbun_godoticevfx/assets/BinbunVFX/ice_effects/src/material/ice_ball/ice_ball_03/ice_ball_03_surface.tres": "7476afad57e74459e924bfca13d0eb09e9bf2f075191557c8fd12d8a7b3f674d",
+    "res://library/binbun/pack_binbun_godoticevfx/assets/BinbunVFX/shared/script/vfx_controller.gd": "da3cccf788d8936f2aa554e869d58b6334dc33150f2f8a9827d44c3828768c45",
+    "res://library/binbun/pack_binbun_godoticevfx/assets/BinbunVFX/shared/script/vfx_light.gd": "e95785aad3465e5cab6834655bcc6f0d24612a004fa21a0f048c15fb92e9dff3",
+    "res://library/binbun/pack_binbun_godoticevfx/assets/BinbunVFX/shared/shader/glow_fresnel.gdshader": "7912efe57ffb4f1ebf91d7e88f0fd026d94819a8dc6a7f97a456cd0688200767",
+    "res://library/binbun/pack_binbun_godoticevfx/assets/BinbunVFX/shared/shader/opaque.gdshader": "ec8b0ac7d92be214ab22825b481212e8529ccdd70b5545340cdfa83dc88360b8",
+    "res://library/binbun/pack_binbun_godoticevfx/assets/BinbunVFX/shared/shader/particle.gdshader": "bb3a3c4b598bd07f49c017aa9b0e107efff39bca48822b60e10ce643b4a8d831",
+    "res://library/binbun/pack_binbun_godoticevfx/assets/BinbunVFX/shared/shader/util/alpha.gdshaderinc": "e96ad3782009ee296d044bb9802f45003e4b3be0bf5424559ca21015ee588b05",
+    "res://library/binbun/pack_binbun_godoticevfx/assets/BinbunVFX/shared/shader/util/blend.gdshaderinc": "9ee43e3c82be1c32d015f1ab1ed40794c6ba36bd553fd6bd701ef7c514025f93",
+    "res://library/binbun/pack_binbun_godoticevfx/assets/BinbunVFX/shared/shader/util/dithering.gdshaderinc": "5e32891f6fb4e625f92388b6edc7d3aad8261fb0103ab9a88c67140212195cab",
+    "res://library/binbun/pack_binbun_godoticevfx/assets/BinbunVFX/shared/shader/util/freshnel.gdshaderinc": "8cb64f2727807371713aa3b754829b696e4a33d94fd233730dd6c098e31a44bd",
+    "res://library/binbun/pack_binbun_godoticevfx/assets/BinbunVFX/shared/shader/util/uvtools.gdshaderinc": "d004a204c41b65e6b267f1d879aca0fec6e8099929e8d5b6f7f322db251567ab",
+    "res://library/binbun/pack_binbun_godoticevfx/assets/BinbunVFX/shared/texture/gradient/circle/circle_03.tres": "1f5b5e7ea1e1d8f548add83ca41f769cd0dd159b3a9d1d7fec6a3b4d600edbb8",
+    "res://library/binbun/pack_binbun_godoticevfx/assets/BinbunVFX/shared/texture/noise/cell/cell_manhattan_01.tres": "a3c2ed3aa841e83f0a09633dea8d6e78cf86d6e5ff8f56c7e9605bed187ead09",
+    "res://library/binbun/pack_binbun_godoticevfx/assets/BinbunVFX/shared/texture/noise/cell/cell_manhattan_02.tres": "429b1317df22b75f2cb0a790cf0c9b38d0f7496190ba987d3670729ff20962a2",
+    "res://library/binbun/pack_binbun_godoticevfx/assets/BinbunVFX/shared/texture/noise/web/web_02.tres": "8ef0f99993788eaf1ba2fc90c0f6ce064e2c04a2fff4cee29739c665b5e883fe",
+    "res://library/lelu/pack_lelu_godot_blood_premium/VFX/Scenes/Decal_Blood_Animated_A1.tscn": "8b542bcc993654d88c4e007aaafec8be67e59b9f492221e0e769c160fa8784f8",
+    "res://library/lelu/pack_lelu_godot_blood_premium/VFX/Scenes/VFX_Blood_Hit_A1.tscn": "cb3a53c2b298625f603a6638a4ee8f00323255d196dc142cb43dd5c153255be5",
+    "res://library/lelu/pack_lelu_godot_blood_premium/VFX/Scenes/VFX_Blood_Hit_A2.tscn": "b31656c3b83e5006e23dcc08e043e1125b0c4d8bac50934fec83bd72f4a3144e",
+    "res://library/lelu/pack_lelu_godot_blood_premium/VFX/Scenes/VFX_Blood_Mark_J1.tscn": "5c3993df8e3a7f329dbf5abc034ec39fc5acfa1ff014871cdc5af341dce09428",
+    "res://library/lelu/pack_lelu_godot_blood_premium/VFX/objects/sm_plane_coned_spiked_waved1.obj": "0d08c64ea3173f8860d1cadec0b3005d1df7681ebe45b0876e8ff770460a50cc",
+    "res://library/lelu/pack_lelu_godot_blood_premium/VFX/shaders/s_Disolver_small_Liquid.tres": "07ac62b3c3371f7d9f7c845626ec10f5455b58387dc21d9b836749af01483e05",
+    "res://library/lelu/pack_lelu_godot_blood_premium/VFX/shaders/s_Disolver_small_Liquid_p_Treshold_ds.tres": "022adcea7620dc32f7aa8948751927d4deec60544a3b708ca7b520dee6fb5c8d",
+    "res://library/lelu/pack_lelu_godot_blood_premium/VFX/shaders/ss_Disolver_subUV_small_Liquid_Treshold_p.gdshader": "e5167e8b5cb2eb000a31c3349d69463b3c3a3fd8c28d6cacb9bd95bea58432fd",
+    "res://library/lelu/pack_lelu_godot_blood_premium/VFX/shaders/ss_decal3double_treshold.gdshader": "0b6eff740399f012f86c493150fae48916e2a03f63be281a40a1795762957529",
+    "res://library/lelu/pack_lelu_godot_blood_premium/VFX/textures/T_Blood_DECAL_g4.png": "68ee2643fe401e02a28ee3e49867125212759feb88f5615ddb7d7153df8f5a2d",
+    "res://library/lelu/pack_lelu_godot_blood_premium/VFX/textures/T_Blood_DECAL_g4x.png": "1e8fdb62cf96bd3b631eb92ec04163a4f8746f790ee2da2d6d2dbf54fdb98ad6",
+    "res://library/lelu/pack_lelu_godot_blood_premium/VFX/textures/T_Blood_DECAL_g4x_N.png": "01080724dd6b8a11ea03b34ef5c607319140c87501a591d13425700212c2c643",
+    "res://library/lelu/pack_lelu_godot_blood_premium/VFX/textures/T_Blood_MultiUV_f3.png": "eb3b31b84652471d6c7069b1e05eda310c07072d9f10bbf492b661f71b03c193",
+    "res://library/lelu/pack_lelu_godot_blood_premium/VFX/textures/T_Blood_MultiUV_f3_N.png": "718ba1a347fbf32fcae370ee82f00a5aa0727fc4b96084d3ea3624569e1bc80c",
+    "res://library/lelu/pack_lelu_godot_blood_premium/VFX/textures/T_Blood_Splatter11_N.png": "85ebdc53b869510cade1d5b97f4cc433bc84b38f2d1d06d1e1f5430f7d735f91",
+    "res://library/lelu/pack_lelu_godot_blood_premium/VFX/textures/T_Blood_Splatter77.png": "103fcb03e0420d33b2670f87bf66844bfc823b5da1a6325ff417afb7265f96f3",
+    "res://library/lelu/pack_lelu_godot_blood_premium/VFX/textures/T_Decal_BloodSplatter45k.png": "33a1b5146ac72a518c62811aae2057004aee85517980574711a34c232551607d",
+    "res://library/lelu/pack_lelu_godot_blood_premium/VFX/textures/T_Decal_BloodSplatter45ki_N.png": "e2597a3c095800b8b6a29cd248fa7f7bb1c0787e2712c372908bf58056282f19",
+    "res://library/lelu/pack_lelu_godot_blood_premium/VFX/textures/T_Gib_Red_C.PNG": "b764bf132265459154759a08791f3eeaf242b1d5593b0971badedd045c73ee22",
+    "res://library/lelu/pack_lelu_godot_blood_premium/VFX/textures/T_NP41.PNG": "f9c8e2fa1dcc62f85965e5a7f3a48cbe4739b01dbbecb9298e9f1da43ec13af2",
+    "res://library/lelu/pack_lelu_godot_blood_premium/VFX/textures/T_smoke_K97.png": "2cc94f51b380b6eab0f5cde5c64a5de8176f07e3f5ce3c79878598cc5834e2a6",
+    "res://library/lelu/pack_lelu_godot_elementary_premium/VFX/shaders/s_master_firewall_ds.tres": "085506e4a1b7f4c24e953c195c7aacc9afe2f0dde51b49178250e93bc86ed7a7",
+    "res://library/lelu/pack_lelu_godot_elementary_premium/VFX/textures/T_VFX_Noise_j035.png": "6773f8e2f47fae4f0684430d7fb08bfc9ea93134d6e4b549541e971cba3cdd06",
+    "res://library/lelu/pack_lelu_godot_magic_projectiles_premium_demo_project/VFX/Objects/sm_box2.obj": "219430b5f1dfc7211212f026d4977d04d772925e08c8c7322fea7f40e09ae598",
+    "res://library/lelu/pack_lelu_godot_magic_projectiles_premium_demo_project/VFX/Objects/sm_box2_rotated.obj": "464b76e43d36a2fb2007abe8e913cc2bc761dfc779b8073b20543e4732f7d300",
+    "res://library/lelu/pack_lelu_godot_magic_projectiles_premium_demo_project/VFX/Scenes/VFX_Cube_projectile.tscn": "d5efdfa957e96b684c03e8706e1e83c3d2fc288a8679ef24cef7c43e065e5583",
+    "res://library/lelu/pack_lelu_godot_magic_projectiles_premium_demo_project/VFX/Scenes/VFX_Hit_cyber.tscn": "9eaad456e2aa4cfc91b1dbd2463e8fb84e51f8363233c498d0aac5a59f1cbfa3",
+    "res://library/lelu/pack_lelu_godot_magic_projectiles_premium_demo_project/VFX/Shaders/s_dualColor_masked.tres": "07e2521b9373c5f6decd4c62b49401a7d2cc8ff55433fb72f1a2c999b3a7cf54",
+    "res://library/lelu/pack_lelu_godot_magic_projectiles_premium_demo_project/VFX/Shaders/s_simple_p.tres": "31c9ea5b51962959ff51414f1012c7a4659bcfcc1ed8ffd9c2ea99eb8382eed1",
+    "res://library/lelu/pack_lelu_godot_magic_projectiles_premium_demo_project/VFX/Shaders/s_single_masked_p.tres": "4f0afc3129be1c9c233abd11309d77096a39129dc5e277ed0cfc0a904f280ca2",
+    "res://library/lelu/pack_lelu_godot_magic_projectiles_premium_demo_project/VFX/Textures/T_VFX_Sqart2.jpg": "572afc50e3faed1b246c465b57b2b07877031eda3feda1fbfaeb23afb9aa196c",
+    "res://library/lelu/pack_lelu_godot_magic_projectiles_premium_demo_project/VFX/Textures/T_VFX_Square_22Edge.PNG": "5d3b3f9353c0acb6e7caa4c13e947e7e81d6361fa3e44d0ec16d45f7f99329bb",
+    "res://library/lelu/pack_lelu_godot_magic_projectiles_premium_demo_project/VFX/Textures/T_VFX_Srt1.jpg": "0d1962a4dce132b6e3322aa79e4df4fa0d6b53396a35e7eeebb34e294d6cd4de",
+    "res://library/lelu/pack_lelu_godot_magic_projectiles_premium_demo_project/VFX/Textures/T_VFX_hit22.jpg": "cb1bb8e1d32b8ba5c28cd12f51a7dccb0c804a89d81e040e3039030a54628f2c",
+    "res://library/lelu/pack_lelu_godot_magic_projectiles_premium_demo_project/VFX/Textures/T_basic1_vfx.PNG": "cc6ba7e8e8459eb301a332e62d4c369dd4cdfcdadc613caf72624aba12bbd471",
+    "res://library/lelu/pack_lelu_godot_patreons_community_pack_3_d/VFX/objects/textures/T_rocks_I5_colors.png": "cc3ee322db85204a95aa6f4dca90e550fb7a9d7ae0296336b86a67f1fa3339dd",
+    "res://library/lelu/pack_lelu_godot_patreons_community_pack_3_d/VFX/shaders/s_ice_I1.tres": "569ecca7327c94a331c35976c35715da4c2d486605a5ad0d972b7dbaa22fbc05",
+    "res://library/lelu/pack_lelu_godot_patreons_community_pack_3_d/VFX/textures/T_noise_iceunder8.png": "9dd4b1e9c98d16632575cd947db96311a36a2e58935e4201ce912b0729cee96b",
+    "res://library/selected/project_temporary_fireball_surface_project_38a7394e/VFX/Shaders/s_master_explosion_2.tres": "08c3c674338294b59189e611bae2581163802cf98bb4477c6ab57a87821859c4",
+    "res://library/selected/project_temporary_fireball_surface_project_38a7394e/VFX/Textures/T_VFX_Noise_13.PNG": "59848ac6d6b42d4ce850210201ecc145be20793522f3ec1716010d64ba3777d4",
+    "res://library/selected/project_temporary_fireball_surface_project_38a7394e/VFX/Textures/generated/n_explosionB.tres": "0ac48ae2b8db4efa11594a0e1be00284719b0e2ede20128c60994ba90d6d3c7f",
+    "res://library/selected/project_temporary_fireball_surface_project_38a7394e/VFX/Textures/gradients/g_explossive1.tres": "9f237e09d66f1a14faacea1d17ea25f6753f64858b9832e59c2581e652e54c80",
+    "res://library/selected/project_temporary_gva_p_39c5316af053_91468cb9/VFX/models/m_basic_blueshield1.tres": "2fc737b9acb476bb10261b6903be9f77aa3b5e1d430aa38aba6e47de112c4dba",
+    "res://library/selected/project_temporary_gva_p_39c5316af053_91468cb9/VFX/shaders/s_shield_color_wLine.tres": "f5c1dcd9ba1bbdbf9ee5d14f902548a0126a120683bee65b87704a19dda7d47f",
+    "res://library/selected/project_temporary_gva_p_39c5316af053_91468cb9/VFX/textures/T_VFX_Noise_10.PNG": "9fb31deef39536e38753b71e6f0098967d2c9e24f598906abe54d901a524744c",
+    "res://library/selected/project_temporary_gva_p_39c5316af053_91468cb9/VFX/textures/T_mask_black1.jpg": "39d1cc435216d610dc8d02e8482761065dc8731fbb3ba02a2f4d1bd5e8ac3cff",
+    "res://library/selected/project_temporary_gva_p_e6c858aa4f88_62851a1a/assets/BinbunVFX_Vol2/StatusFX/effects/status/vfx_status_glow.tscn": "2ce3b3f315a335e72e46ad128c8efcc80e315094b46c37dd9877173dfb59d76c",
+    "res://library/selected/project_temporary_gva_p_e6c858aa4f88_62851a1a/assets/BinbunVFX_Vol2/StatusFX/effects/status/vfx_status_sleep.tscn": "47f8666b10607335d425dacb0ad1e96a2f5ae510c0a4ef65b38d6b2d6657b69b",
+    "res://library/selected/project_temporary_gva_p_e6c858aa4f88_62851a1a/assets/BinbunVFX_Vol2/StatusFX/script/VFXStatusBB.gd": "674b4c2b37a23ca906e4848a21c003c1795dab226f87544e43c14e037f711659",
+    "res://library/selected/project_temporary_gva_p_e6c858aa4f88_62851a1a/assets/BinbunVFX_Vol2/StatusFX/shader/aura_particle.gdshader": "3cd13b894eafa4b2107cd68a8f4d09e5bdd327d967978b9416073fe83da21e99",
+    "res://library/selected/project_temporary_gva_p_e6c858aa4f88_62851a1a/assets/BinbunVFX_Vol2/StatusFX/shader/sleep_particle.gdshader": "966d8f7f21c476779f863c9b8f38c54cd0589a33542a23e3f43143ecafe4191a",
+    "res://library/selected/project_temporary_gva_p_e6c858aa4f88_62851a1a/assets/BinbunVFX_Vol2/StatusFX/shader/streaks.gdshader": "9204c490da8d00c2c2abdd11ed3b0bd352da3d8a917e3f0b8060d3ad590a45ee",
+    "res://library/selected/project_temporary_gva_p_e6c858aa4f88_62851a1a/assets/BinbunVFX_Vol2/shared/script/VFXEmitterBB.gd": "bf7da9fcdfcb65072cd9654984f15e42e019f3021a51db7a8053fdccb224d88a",
+    "res://library/selected/project_temporary_gva_p_e6c858aa4f88_62851a1a/codexfx_exporter/control_glyph.gdshader": "7846536a5a16acd3c4796684b34098fdb891a450ceb73634fe086ae480112224"
+  },
+  "isolation": {
+    "reused": [
+      "res://assets/vfx/sources/00c02fcee34396816766/texture.res",
+      "res://assets/vfx/sources/09dcc0a7c340a362d0ba/VFX_Protection_Area.tscn",
+      "res://assets/vfx/sources/1260156cd354dac43fb5/s_Disolver_advanced_D_p.tres",
+      "res://assets/vfx/sources/1d02b6d800655ef86df2/resource_graph.gd",
+      "res://assets/vfx/sources/1e7a863b8005a91859cf/sm_ring7.res",
+      "res://assets/vfx/sources/506744103c5bc9adef59/texture.res",
+      "res://assets/vfx/sources/5b0a18fdc09c1fcdd677/texture.res",
+      "res://assets/vfx/sources/5b9c096cc96695e032e7/s_shield_color_wLine.tres",
+      "res://assets/vfx/sources/62107bf2d655046b1f9b/s_distortion_wLine.tres",
+      "res://assets/vfx/sources/67ebe8ef4f358cad6a4b/phase.gd",
+      "res://assets/vfx/sources/6c7e97d33d579dd6b3bc/resource_io.gd",
+      "res://assets/vfx/sources/7f341087427abd458e59/texture.res",
+      "res://assets/vfx/sources/7fb2e55699a318c2dafb/donor_scene.gd",
+      "res://assets/vfx/sources/7ffdb77f06cb06b0c42e/contract_stage.gd",
+      "res://assets/vfx/sources/84c4bd18907bcc63bd83/texture.res",
+      "res://assets/vfx/sources/8ab2a0ec54130654c8a7/shield_modifier.gd",
+      "res://assets/vfx/sources/9f4b596b231411166d4b/s_aura_cylinder_p.tres",
+      "res://assets/vfx/sources/a02e62c059c89f4070a7/texture.res",
+      "res://assets/vfx/sources/a131a1f62c5eb8179424/s_GoldenFire.tres",
+      "res://assets/vfx/sources/c0a2515abc39856316d0/texture.res",
+      "res://assets/vfx/sources/d584883ce30a469af2c6/sm_cylinder_vulkano2.res",
+      "res://assets/vfx/sources/d60670fa4c3a03cc8f3a/component.gd",
+      "res://assets/vfx/sources/d9fc803a9ee705b79e8c/s_PolarPanning_manualD.tres",
+      "res://assets/vfx/sources/eb06cc2929dc57d35d5b/cie_d65_v1.gdshaderinc",
+      "res://assets/vfx/sources/fd7566461f35d1fcf6e2/texture.res",
+      "res://authoring/gpu-payload-v397/phases/e181283ebe663514.tres",
+      "res://authoring/high-level-22/delayed_blast_fireball_native/sources/fireball_native.tres",
+      "res://authoring/high-level-22/freezing_sphere_native/sources/ice_fragment_native.tres",
+      "res://authoring/high-level-22/vitriolic_sphere_native/sources/acid_native.tres",
+      "res://authoring/runtime-cost-repair-20261020/payloads/assets/freezing-native-source.tres",
+      "res://authoring/runtime-cost-repair-20261020/payloads/assets/freezing-native-source.tscn",
+      "res://authoring/runtime-cost-repair-20261020/payloads/assets/program-1d0b4186aa5b42a3.gdshader",
+      "res://factory/authoring/component.gd",
+      "res://factory/authoring/phase.gd",
+      "res://factory/baking/live_geometry_bindings.gd",
+      "res://factory/baking/private_particle_process.gd",
+      "res://factory/baking/runtime_particle_units.gd",
+      "res://factory/baking/stable_source_paths.gd",
+      "res://factory/components/high_level_payloads/blast.gd",
+      "res://factory/components/high_level_payloads/native_materials.gd",
+      "res://factory/components/high_level_payloads/observed_footprint.gd",
+      "res://factory/components/high_level_payloads/source_bundle.gd",
+      "res://factory/components/prepared_fireball/native_units.gd",
+      "res://factory/components/prepared_payload_contacts/bank.gd",
+      "res://factory/components/prepared_payloads/bank.gd",
+      "res://factory/components/prepared_payloads/footprint_state.gd",
+      "res://factory/components/prepared_payloads/freezing.gd",
+      "res://factory/components/prepared_payloads/restore.gd",
+      "res://factory/components/reaction_prismatic/counter_fragments.gd",
+      "res://factory/components/recipient/base.gd",
+      "res://factory/components/recipient/control_status.gd",
+      "res://factory/components/recipient/control_status_overhead.gd",
+      "res://factory/components/recipient/overhead_anchor.gd",
+      "res://factory/components/sensory/deafened_application.gd",
+      "res://factory/core/animation_key_times.gd",
+      "res://factory/core/contract_stage.gd",
+      "res://factory/core/donor_scene.gd",
+      "res://factory/core/immutable_materials.gd",
+      "res://factory/core/native_opacity.gd",
+      "res://factory/core/native_source_space.gd",
+      "res://factory/core/resource_graph.gd",
+      "res://factory/core/source_materials.gd",
+      "res://factory/materials/spatial_energy_palette.gd",
+      "res://factory/packaging/construction_profile.gd",
+      "res://factory/packaging/occurrence_bindings.gd",
+      "res://factory/packaging/occurrence_clock.gd",
+      "res://factory/packaging/resource_io.gd",
+      "res://factory/packaging/scene_document.gd",
+      "res://factory/packaging/source_readiness.gd",
+      "res://factory/shaders/cie_d65_v1.gdshaderinc",
+      "res://integrations/ndclient/assets/native_effects/class_actions/Charge.gdshader",
+      "res://integrations/ndclient/assets/native_effects/class_actions/Film.gdshader",
+      "res://integrations/ndclient/assets/native_effects/class_actions/Flow.gdshader",
+      "res://integrations/ndclient/assets/native_effects/class_actions/Glow.gdshader",
+      "res://integrations/ndclient/assets/native_effects/class_actions/Strike.gd",
+      "res://integrations/ndclient/assets/native_effects/class_actions/Strike.gdshader",
+      "res://integrations/ndclient/assets/native_effects/class_actions/StrikePaths.json",
+      "res://integrations/ndclient/assets/native_effects/class_actions/strike_hit.png",
+      "res://integrations/ndclient/assets/native_effects/class_actions/vfx_1/arc_charge/shaders/ribbon.gdshader",
+      "res://integrations/ndclient/assets/native_effects/class_actions/vfx_1/arc_charge/textures/aura_glow.png",
+      "res://integrations/ndclient/assets/native_effects/class_actions/vfx_1/arc_charge/textures/ember.png",
+      "res://integrations/ndclient/assets/native_effects/class_actions/vfx_1/arc_charge/textures/flow_noise.tres",
+      "res://integrations/ndclient/assets/native_effects/class_actions/vfx_1/arc_charge/textures/star.png",
+      "res://integrations/ndclient/assets/native_effects/factory/archive/objects/73/73682ae4aa57cb2f9264cf5550437223fa5c5c0a3129f00096fc640aaefe4091",
+      "res://integrations/ndclient/assets/native_effects/factory/factory/shaders/cie_d65_v1.gdshaderinc",
+      "res://integrations/ndclient/assets/native_effects/factory/factory/shaders/energy_palette_v1.gdshader",
+      "res://integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_blood_premium/VFX/Scenes/Decal_Blood_Animated_A1.tscn",
+      "res://integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_blood_premium/VFX/Scenes/VFX_Blood_Hit_A1.tscn",
+      "res://integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_blood_premium/VFX/Scenes/VFX_Blood_Hit_A2.tscn",
+      "res://integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_blood_premium/VFX/Scenes/VFX_Blood_Mark_J1.tscn",
+      "res://integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_blood_premium/VFX/objects/sm_plane_coned_spiked_waved1.obj",
+      "res://integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_blood_premium/VFX/shaders/s_Disolver_small_Liquid.tres",
+      "res://integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_blood_premium/VFX/shaders/s_Disolver_small_Liquid_p_Treshold_ds.tres",
+      "res://integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_blood_premium/VFX/shaders/ss_Disolver_subUV_small_Liquid_Treshold_p.gdshader",
+      "res://integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_blood_premium/VFX/shaders/ss_decal3double_treshold.gdshader",
+      "res://integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_blood_premium/VFX/textures/T_Blood_DECAL_g4.png",
+      "res://integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_blood_premium/VFX/textures/T_Blood_DECAL_g4x.png",
+      "res://integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_blood_premium/VFX/textures/T_Blood_DECAL_g4x_N.png",
+      "res://integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_blood_premium/VFX/textures/T_Blood_MultiUV_f3.png",
+      "res://integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_blood_premium/VFX/textures/T_Blood_MultiUV_f3_N.png",
+      "res://integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_blood_premium/VFX/textures/T_Blood_Splatter11_N.png",
+      "res://integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_blood_premium/VFX/textures/T_Blood_Splatter77.png",
+      "res://integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_blood_premium/VFX/textures/T_Decal_BloodSplatter45k.png",
+      "res://integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_blood_premium/VFX/textures/T_Decal_BloodSplatter45ki_N.png",
+      "res://integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_blood_premium/VFX/textures/T_Gib_Red_C.PNG",
+      "res://integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_blood_premium/VFX/textures/T_NP41.PNG",
+      "res://integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_blood_premium/VFX/textures/T_smoke_K97.png",
+      "res://integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_magic_projectiles_premium_demo_project/VFX/Objects/sm_box2.obj",
+      "res://integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_magic_projectiles_premium_demo_project/VFX/Objects/sm_box2_rotated.obj",
+      "res://integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_magic_projectiles_premium_demo_project/VFX/Scenes/VFX_Cube_projectile.tscn",
+      "res://integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_magic_projectiles_premium_demo_project/VFX/Scenes/VFX_Hit_cyber.tscn",
+      "res://integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_magic_projectiles_premium_demo_project/VFX/Shaders/s_dualColor_masked.tres",
+      "res://integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_magic_projectiles_premium_demo_project/VFX/Shaders/s_simple_p.tres",
+      "res://integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_magic_projectiles_premium_demo_project/VFX/Shaders/s_single_masked_p.tres",
+      "res://integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_magic_projectiles_premium_demo_project/VFX/Textures/T_VFX_Sqart2.jpg",
+      "res://integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_magic_projectiles_premium_demo_project/VFX/Textures/T_VFX_Square_22Edge.PNG",
+      "res://integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_magic_projectiles_premium_demo_project/VFX/Textures/T_VFX_Srt1.jpg",
+      "res://integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_magic_projectiles_premium_demo_project/VFX/Textures/T_VFX_hit22.jpg",
+      "res://integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_magic_projectiles_premium_demo_project/VFX/Textures/T_basic1_vfx.PNG",
+      "res://integrations/ndclient/assets/native_effects/sandbox/projectiles/factory/core/resource_graph.gd",
+      "res://integrations/ndclient/presentation/native_effect_mote.gdshader",
+      "res://integrations/ndclient/presentation/native_effect_palette.gdshader",
+      "res://integrations/ndclient/presentation/native_light_units.gd",
+      "res://integrations/ndclient/presentation/native_particle_units.gd",
+      "res://library/binbun/pack_binbun_godoticevfx/assets/BinbunVFX/ice_effects/src/material/ice_ball/ice_ball_03/ice_ball_03_core.tres",
+      "res://library/binbun/pack_binbun_godoticevfx/assets/BinbunVFX/ice_effects/src/material/ice_ball/ice_ball_03/ice_ball_03_surface.tres",
+      "res://library/binbun/pack_binbun_godoticevfx/assets/BinbunVFX/shared/script/vfx_controller.gd",
+      "res://library/binbun/pack_binbun_godoticevfx/assets/BinbunVFX/shared/script/vfx_light.gd",
+      "res://library/binbun/pack_binbun_godoticevfx/assets/BinbunVFX/shared/shader/glow_fresnel.gdshader",
+      "res://library/binbun/pack_binbun_godoticevfx/assets/BinbunVFX/shared/shader/opaque.gdshader",
+      "res://library/binbun/pack_binbun_godoticevfx/assets/BinbunVFX/shared/shader/particle.gdshader",
+      "res://library/binbun/pack_binbun_godoticevfx/assets/BinbunVFX/shared/shader/util/alpha.gdshaderinc",
+      "res://library/binbun/pack_binbun_godoticevfx/assets/BinbunVFX/shared/shader/util/blend.gdshaderinc",
+      "res://library/binbun/pack_binbun_godoticevfx/assets/BinbunVFX/shared/shader/util/dithering.gdshaderinc",
+      "res://library/binbun/pack_binbun_godoticevfx/assets/BinbunVFX/shared/shader/util/freshnel.gdshaderinc",
+      "res://library/binbun/pack_binbun_godoticevfx/assets/BinbunVFX/shared/shader/util/uvtools.gdshaderinc",
+      "res://library/binbun/pack_binbun_godoticevfx/assets/BinbunVFX/shared/texture/gradient/circle/circle_03.tres",
+      "res://library/binbun/pack_binbun_godoticevfx/assets/BinbunVFX/shared/texture/noise/cell/cell_manhattan_01.tres",
+      "res://library/binbun/pack_binbun_godoticevfx/assets/BinbunVFX/shared/texture/noise/cell/cell_manhattan_02.tres",
+      "res://library/binbun/pack_binbun_godoticevfx/assets/BinbunVFX/shared/texture/noise/web/web_02.tres",
+      "res://library/lelu/pack_lelu_godot_blood_premium/VFX/Scenes/Decal_Blood_Animated_A1.tscn",
+      "res://library/lelu/pack_lelu_godot_blood_premium/VFX/Scenes/VFX_Blood_Hit_A1.tscn",
+      "res://library/lelu/pack_lelu_godot_blood_premium/VFX/Scenes/VFX_Blood_Hit_A2.tscn",
+      "res://library/lelu/pack_lelu_godot_blood_premium/VFX/Scenes/VFX_Blood_Mark_J1.tscn",
+      "res://library/lelu/pack_lelu_godot_blood_premium/VFX/objects/sm_plane_coned_spiked_waved1.obj",
+      "res://library/lelu/pack_lelu_godot_blood_premium/VFX/shaders/s_Disolver_small_Liquid.tres",
+      "res://library/lelu/pack_lelu_godot_blood_premium/VFX/shaders/s_Disolver_small_Liquid_p_Treshold_ds.tres",
+      "res://library/lelu/pack_lelu_godot_blood_premium/VFX/shaders/ss_Disolver_subUV_small_Liquid_Treshold_p.gdshader",
+      "res://library/lelu/pack_lelu_godot_blood_premium/VFX/shaders/ss_decal3double_treshold.gdshader",
+      "res://library/lelu/pack_lelu_godot_blood_premium/VFX/textures/T_Blood_DECAL_g4.png",
+      "res://library/lelu/pack_lelu_godot_blood_premium/VFX/textures/T_Blood_DECAL_g4x.png",
+      "res://library/lelu/pack_lelu_godot_blood_premium/VFX/textures/T_Blood_DECAL_g4x_N.png",
+      "res://library/lelu/pack_lelu_godot_blood_premium/VFX/textures/T_Blood_MultiUV_f3.png",
+      "res://library/lelu/pack_lelu_godot_blood_premium/VFX/textures/T_Blood_MultiUV_f3_N.png",
+      "res://library/lelu/pack_lelu_godot_blood_premium/VFX/textures/T_Blood_Splatter11_N.png",
+      "res://library/lelu/pack_lelu_godot_blood_premium/VFX/textures/T_Blood_Splatter77.png",
+      "res://library/lelu/pack_lelu_godot_blood_premium/VFX/textures/T_Decal_BloodSplatter45k.png",
+      "res://library/lelu/pack_lelu_godot_blood_premium/VFX/textures/T_Decal_BloodSplatter45ki_N.png",
+      "res://library/lelu/pack_lelu_godot_blood_premium/VFX/textures/T_Gib_Red_C.PNG",
+      "res://library/lelu/pack_lelu_godot_blood_premium/VFX/textures/T_NP41.PNG",
+      "res://library/lelu/pack_lelu_godot_blood_premium/VFX/textures/T_smoke_K97.png",
+      "res://library/lelu/pack_lelu_godot_elementary_premium/VFX/shaders/s_master_firewall_ds.tres",
+      "res://library/lelu/pack_lelu_godot_elementary_premium/VFX/textures/T_VFX_Noise_j035.png",
+      "res://library/lelu/pack_lelu_godot_magic_projectiles_premium_demo_project/VFX/Objects/sm_box2.obj",
+      "res://library/lelu/pack_lelu_godot_magic_projectiles_premium_demo_project/VFX/Objects/sm_box2_rotated.obj",
+      "res://library/lelu/pack_lelu_godot_magic_projectiles_premium_demo_project/VFX/Scenes/VFX_Cube_projectile.tscn",
+      "res://library/lelu/pack_lelu_godot_magic_projectiles_premium_demo_project/VFX/Scenes/VFX_Hit_cyber.tscn",
+      "res://library/lelu/pack_lelu_godot_magic_projectiles_premium_demo_project/VFX/Shaders/s_dualColor_masked.tres",
+      "res://library/lelu/pack_lelu_godot_magic_projectiles_premium_demo_project/VFX/Shaders/s_simple_p.tres",
+      "res://library/lelu/pack_lelu_godot_magic_projectiles_premium_demo_project/VFX/Shaders/s_single_masked_p.tres",
+      "res://library/lelu/pack_lelu_godot_magic_projectiles_premium_demo_project/VFX/Textures/T_VFX_Sqart2.jpg",
+      "res://library/lelu/pack_lelu_godot_magic_projectiles_premium_demo_project/VFX/Textures/T_VFX_Square_22Edge.PNG",
+      "res://library/lelu/pack_lelu_godot_magic_projectiles_premium_demo_project/VFX/Textures/T_VFX_Srt1.jpg",
+      "res://library/lelu/pack_lelu_godot_magic_projectiles_premium_demo_project/VFX/Textures/T_VFX_hit22.jpg",
+      "res://library/lelu/pack_lelu_godot_magic_projectiles_premium_demo_project/VFX/Textures/T_basic1_vfx.PNG",
+      "res://library/lelu/pack_lelu_godot_patreons_community_pack_3_d/VFX/objects/textures/T_rocks_I5_colors.png",
+      "res://library/lelu/pack_lelu_godot_patreons_community_pack_3_d/VFX/shaders/s_ice_I1.tres",
+      "res://library/lelu/pack_lelu_godot_patreons_community_pack_3_d/VFX/textures/T_noise_iceunder8.png",
+      "res://library/selected/project_temporary_fireball_surface_project_38a7394e/VFX/Shaders/s_master_explosion_2.tres",
+      "res://library/selected/project_temporary_fireball_surface_project_38a7394e/VFX/Textures/T_VFX_Noise_13.PNG",
+      "res://library/selected/project_temporary_fireball_surface_project_38a7394e/VFX/Textures/generated/n_explosionB.tres",
+      "res://library/selected/project_temporary_fireball_surface_project_38a7394e/VFX/Textures/gradients/g_explossive1.tres",
+      "res://library/selected/project_temporary_gva_p_39c5316af053_91468cb9/VFX/models/m_basic_blueshield1.tres",
+      "res://library/selected/project_temporary_gva_p_39c5316af053_91468cb9/VFX/shaders/s_shield_color_wLine.tres",
+      "res://library/selected/project_temporary_gva_p_39c5316af053_91468cb9/VFX/textures/T_VFX_Noise_10.PNG",
+      "res://library/selected/project_temporary_gva_p_39c5316af053_91468cb9/VFX/textures/T_mask_black1.jpg",
+      "res://library/selected/project_temporary_gva_p_e6c858aa4f88_62851a1a/assets/BinbunVFX_Vol2/StatusFX/effects/status/vfx_status_glow.tscn",
+      "res://library/selected/project_temporary_gva_p_e6c858aa4f88_62851a1a/assets/BinbunVFX_Vol2/StatusFX/effects/status/vfx_status_sleep.tscn",
+      "res://library/selected/project_temporary_gva_p_e6c858aa4f88_62851a1a/assets/BinbunVFX_Vol2/StatusFX/script/VFXStatusBB.gd",
+      "res://library/selected/project_temporary_gva_p_e6c858aa4f88_62851a1a/assets/BinbunVFX_Vol2/StatusFX/shader/aura_particle.gdshader",
+      "res://library/selected/project_temporary_gva_p_e6c858aa4f88_62851a1a/assets/BinbunVFX_Vol2/StatusFX/shader/sleep_particle.gdshader",
+      "res://library/selected/project_temporary_gva_p_e6c858aa4f88_62851a1a/assets/BinbunVFX_Vol2/StatusFX/shader/streaks.gdshader",
+      "res://library/selected/project_temporary_gva_p_e6c858aa4f88_62851a1a/assets/BinbunVFX_Vol2/shared/script/VFXEmitterBB.gd",
+      "res://library/selected/project_temporary_gva_p_e6c858aa4f88_62851a1a/codexfx_exporter/control_glyph.gdshader"
+    ],
+    "isolated": [
+      "res://assets/vfx/sources/0a6f9152e753968f33d1/divine.gd",
+      "res://assets/vfx/sources/386bc581a35eb3b9ee50/spatial_energy_palette.gd",
+      "res://assets/vfx/sources/39ced3e79a9833e731fb/source_materials.gd",
+      "res://assets/vfx/sources/39f30ee3f172ac269cd6/native_opacity.gd",
+      "res://assets/vfx/sources/a4fd0883f0b17d893a03/base.gd",
+      "res://assets/vfx/sources/edb4416ff06538073fee/divine_word_source_v196.gd",
+      "res://authoring/original-repairs/source_volumes_v284/freezing_sphere_native/phases/launch_delivery.tres",
+      "res://authoring/production-review-repair-20261020/payload/freezing.tres",
+      "res://authoring/runtime-cost-repair-20261020/r6_freezing/assets/delivery.tres",
+      "res://authoring/runtime-cost-repair-20261020/r6_freezing/assets/delivery.tscn",
+      "res://authoring/runtime-cost-repair-20261020/r6_freezing/assets/program-359b026cc35b801e.gdshader",
+      "res://authoring/runtime-cost-repair-20261020/r6_freezing/assets/program-68d6e3fddfc4b400.gdshader",
+      "res://authoring/runtime-cost-repair-20261020/r6_freezing/assets/program-8eabeb3df8ae1771.gdshader",
+      "res://authoring/runtime-cost-repair-20261020/r6_freezing/assets/program-cc5f8afb13060bfc.gdshader",
+      "res://authoring/runtime-cost-repair-20261020/r6_freezing/assets/program-ceb0b6e4e6d210db.gdshader",
+      "res://authoring/runtime-cost-repair-20261020/r6_freezing/assets/retained.tres",
+      "res://authoring/runtime-cost-repair-20261020/r6_freezing/assets/retained.tscn",
+      "res://authoring/runtime-cost-repair-20261020/r6_freezing/phases/blast.tres",
+      "res://authoring/runtime-cost-repair-20261020/r6_freezing/phases/delivery.tres",
+      "res://authoring/runtime-cost-repair-20261020/r6_freezing/phases/retained.tres",
+      "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets-v2/finite_deafness.res",
+      "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets-v2/native-process/080587f5b5ecf799395ee01fbf2cbc4760c9f5e4aa49bbcfaa36ee9b8e8a7dab.gdshader",
+      "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets-v2/native-process/2475c89bf296800c713afaa17ab087771a103ff974eb1995fd2cd28d0bcce83e.gdshader",
+      "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets-v2/program-04e1862270d6c8ab72fc1bcc8dd81035ea236cf92437b9ce4e8afcd6688ae068.gdshader",
+      "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets-v2/program-0f9be758c539312ec9a8ebca27c554987c934ef48a95f418ad15e08f8192317f.gdshader",
+      "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets-v2/program-dec8d60342538d4b96795d194955ebdeae63fb922b33150efedd32aa495c8eb5.gdshader",
+      "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets-v2/program-e0e051b02a22a95c5d269490a9c349582dd6304875d5d06648e28f11909c09cc.gdshader",
+      "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets-v2/texture-6b3e16ab3d942a42ffa8729f6564ff58d51cdc81ec2194e825f11292bd786c5f.res",
+      "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets-v2/texture-9bb4421037915b622688d0627d8c7c8f1f618a4410b7fd12dd73cd07eed175ab.res",
+      "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets/native-process/18b52329d2b4a8a9314c997f6e0ec9bbcc9683070fa080fac3588673a5cc63b2.gdshader",
+      "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets/native-process/72194500960ef0fe9763e10e9050f98b17a7717986bb5225846b0814254f11d3.gdshader",
+      "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets/native-process/91dd2656860cfe92b1285bafe1869a27bc0b9f0e08308a34304aff490c77a3b5.gdshader",
+      "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets/native-process/b0f232a776c370c28523a4a1a8e9c5fa9d41f933e98fcc3f10c3acec918f55f8.gdshader",
+      "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets/program-052fd1b47de118060c154eaf6e0b2b458ab98e898448f310ecda1d0f4ee13358.gdshader",
+      "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets/program-0c2674a3fdac544b2ceaf4762dbef75e2e9f0e02077a5bfb06fea72ef7993088.gdshader",
+      "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets/program-1007ff7b3cc03726d2edc877513fd4d94d48e09b902a5988681592a3f6a7a8ae.gdshader",
+      "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets/program-3874d7fed80da8969c27a1b7debab01aeeeb93c09c026e7c94cff829ea9ab282.gdshader",
+      "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets/program-40a303d768b5ad324f7a6c93406988f2f5bc7ed0c0b6bfba6b826f4e1e1e70bf.gdshader",
+      "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets/program-8e19a7f065ea6e18196763faaf827b7ede089ce3e2b879947b5686f5e2ca9053.gdshader",
+      "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets/program-ac528f24a39a44530d0786ca7f076e6928dcf3173d1861fecaec9f136acbe63f.gdshader",
+      "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets/program-d9a914c52a4935502acd5fda63ea3e9225ee5f40350cbd6e2058759a70dce079.gdshader",
+      "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets/texture-0fc6bc480dc8c62ec8a6a951e23958baa5366244f798d0d873079069fe2ffb50.res",
+      "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets/texture-1301ffe4c560c6e53cb460304f1728942307c8ddd75e43e3f99a4d9c28e9e8b4.res",
+      "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets/texture-2940b4de79af6159b6a24bf8374d749bcabe1c3cc6235b198f790063cc91a2b6.res",
+      "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets/texture-32bb588a43dcc075fdd8d3d634e6957aa808888a69cf2af6e14fb6f9d919b2b4.res",
+      "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets/texture-34b9fbc0ab9fa2dbb4e8b51a5769763f83255ce48d3b336b7625b339b6e66e98.res",
+      "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets/texture-3540a7c211b59768cf6afbdf358317db356632421f5bfc79cdeffbb369ebdb60.res",
+      "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets/texture-37158527d0968289dabc6ab49708e40b38eca960c4811d16df7f02fd7049ae30.res",
+      "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets/texture-372730a23fb6de94c74797915bd61a4090de2f9175259829e507fce03af2977a.res",
+      "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets/texture-3e6f95aa5c3bdd92cb69bcebb66069677078168d1ab50905339de18db1c07e6a.res",
+      "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets/texture-625cf993ec96f7e41ef61694763539433e7b78588355526cb4a8ef41cb82a84d.res",
+      "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets/texture-7c8bd9e2bd12e6d038aa6f24fc74dce182b74b5a56890d3396d7ca97130dcb96.res",
+      "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets/texture-7dc95f780b8a3332c1cb3567fd843f81f76e84e533d4515058fa32e3fa2fb63f.res",
+      "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets/texture-8e07d4b473b4e28a659b500e51250e6ffc380681455fff12257035d1bdea5e58.res",
+      "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets/texture-986fa6f13671e1740f7b89691cf56333a48f9c0d1af73b1c55183924d716d168.res",
+      "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets/texture-9b6a817162b07a12d228d6c2441e59fe8f1f72a9d383a35bca628bd8949f5dff.res",
+      "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets/texture-9fcbab1a2a881c6e2056f1ad294ec8621fe9d420095c2b0d04c7d2c1fa5cb4d5.res",
+      "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets/texture-bbcd6e20d72505b3617e6ac1fd5794b1b178161d8ce4c5ca550cba5f022862e0.res",
+      "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets/texture-be7f70270546f7198d1e1f6315d11f14161630ac6623e8d292d58853966151fb.res",
+      "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets/texture-c7131b5118c12bf14033bcf77f381b251d027688f320cbd16688274a27ec06e8.res",
+      "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets/texture-c8e3d0b58957f07bd4823b96c5b78a7ee14e9c10fe2ee085d997f27f5662edb1.res",
+      "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets/texture-ca387ca3e4a58d0c4911172b6fc64818f393e329eab2c979377ca8591c07b5c7.res",
+      "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets/texture-d4d55b23b92ab92181bc5c09b2904b895d3bfce0db682edc3fc3cdac48be48be.res",
+      "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets/texture-e7dda77ea9e0932116ab784883a19b982dfadc27c7889926f966bce195f084b6.res",
+      "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets/texture-ed20c22d066eb630e096ab8240938523cebd7629d9a39fe74f45f5badc8e37d3.res",
+      "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets/texture-f40e8913864bd8e0068c8f32163aa3ef0aca3e1434611f57a17607113c3ddd60.res",
+      "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets/texture-f72303978ca4ff7bfc6078814bdd366cdaa495a28ca1cfc6443ee23e98b5c604.res",
+      "res://authoring/runtime-cost-repair-20261020/r6_sensory/closed/assets/divine_blinded.res",
+      "res://authoring/runtime-cost-repair-20261020/r6_sensory/closed/assets/divine_deafened.res",
+      "res://authoring/runtime-cost-repair-20261020/r6_sensory/closed/controllers/01db38fe9d22df135205/base.gd",
+      "res://authoring/runtime-cost-repair-20261020/r6_sensory/closed/controllers/03ee2e4007ee0a39f08b/contract_stage.gd",
+      "res://authoring/runtime-cost-repair-20261020/r6_sensory/closed/controllers/25787490e77fa5c2115c/native_opacity.gd",
+      "res://authoring/runtime-cost-repair-20261020/r6_sensory/closed/controllers/432d6a7ae8cdc8dd1adb/donor_scene.gd",
+      "res://authoring/runtime-cost-repair-20261020/r6_sensory/closed/controllers/4a6fc0ff9d0093ad6f89/divine_word_source_v196.gd",
+      "res://authoring/runtime-cost-repair-20261020/r6_sensory/closed/controllers/5d620fd9a64eea66a8cb/source_materials.gd",
+      "res://authoring/runtime-cost-repair-20261020/r6_sensory/closed/controllers/5ffc67aeffe4d2e17ad2/resource_graph.gd",
+      "res://authoring/runtime-cost-repair-20261020/r6_sensory/closed/controllers/6882034ac873c97ef72e/resource_io.gd",
+      "res://authoring/runtime-cost-repair-20261020/r6_sensory/closed/controllers/91726aad046a0acf7237/divine.gd",
+      "res://authoring/runtime-cost-repair-20261020/r6_sensory/closed/controllers/a88cc0b6fd9f8a77e483/spatial_energy_palette.gd",
+      "res://authoring/runtime-cost-repair-20261020/r6_sensory/closed/controllers/ba1d81f46b18858266ef/shield_modifier.gd",
+      "res://authoring/runtime-cost-repair-20261020/r6_sensory/closed/phases/divine_blinded.tres",
+      "res://authoring/runtime-cost-repair-20261020/r6_sensory/closed/phases/divine_deafened.tres",
+      "res://authoring/runtime-cost-repair-20261020/r6_sensory/phases-v2/finite_deafness.tres",
+      "res://authoring/runtime-cost-repair-20261020/review_contacts/assets/counterspell_contact.res",
+      "res://authoring/runtime-cost-repair-20261020/review_contacts/assets/counterspell_contact.scn",
+      "res://authoring/runtime-cost-repair-20261020/review_contacts/assets/program-7fe2a486af3d323af09323f7429fb5d6ad2c09f414525e3c58f08b994c9cfb74.gdshader",
+      "res://authoring/runtime-cost-repair-20261020/review_contacts/assets/program-9626e3d1956fc5312de62e0e12e9d7f0b2e2c01ffc313b998ef01be040bc75be.gdshader",
+      "res://authoring/runtime-cost-repair-20261020/review_contacts/assets/retained_fire.res",
+      "res://authoring/runtime-cost-repair-20261020/review_contacts/assets/retained_fire.scn",
+      "res://authoring/runtime-cost-repair-20261020/review_contacts/assets/texture-2218f6f1022c8d9630e50c5c77215dae32e076f59481d3da68852979d400dbe7.res",
+      "res://authoring/runtime-cost-repair-20261020/review_contacts/assets/texture-468e7d03ab2bb3c5775a4b61668beda919ca2cd7224c5e31a9c2fbc626467141.res",
+      "res://authoring/runtime-cost-repair-20261020/review_contacts/assets/texture-624d703baaed6097e921e68841bebd6713ae22ddfa455697ff6c8629bf2b24bc.res",
+      "res://authoring/runtime-cost-repair-20261020/review_contacts/assets/texture-625cf993ec96f7e41ef61694763539433e7b78588355526cb4a8ef41cb82a84d.res",
+      "res://authoring/runtime-cost-repair-20261020/review_contacts/assets/texture-6fad9fff68f32746ae7ea59b50fdc39529536516dd1cc01317d102edc169db45.res",
+      "res://authoring/runtime-cost-repair-20261020/review_contacts/assets/texture-87bf87d6ebc15bb9032d436fb739e85fbce5a5762ccead41ae7e3e935877fcad.res",
+      "res://authoring/runtime-cost-repair-20261020/review_contacts/assets/texture-af202dbce04b95984fe7a77598cbb5a2e3ddefd359bc5531cb548562353927bb.res",
+      "res://authoring/runtime-cost-repair-20261020/review_contacts/assets/texture-b27fced0abc70ac4521c5deeeea400b1bf75a4e7d9ccd540252b2737b36460f8.res",
+      "res://authoring/runtime-cost-repair-20261020/review_contacts/counterspell_contact.tres",
+      "res://authoring/runtime-cost-repair-20261020/review_contacts/retained_fire.tres",
+      "res://factory/baking/recording_source_sampler.gd",
+      "res://factory/baking/source_bridge.gd",
+      "res://factory/components/high_level_payloads/delivery.gd",
+      "res://factory/components/high_level_payloads/freezing_delivery.gd",
+      "res://factory/components/high_level_payloads/payload_item.gd",
+      "res://factory/components/interrupt/counterspell_contact.gd",
+      "res://factory/components/native_review_composition.gd",
+      "res://factory/components/payload/retained_item.gd",
+      "res://factory/components/prepared_native_compositions/bank.gd",
+      "res://factory/components/prepared_native_compositions/composition.gd",
+      "res://factory/components/prepared_r6_freezing/delivery.gd",
+      "res://factory/components/prepared_r6_freezing/retained.gd",
+      "res://factory/components/prepared_recipient/restore.gd",
+      "res://factory/components/prepared_review/counter_fragments.gd",
+      "res://factory/components/prepared_review/counterspell.gd",
+      "res://factory/components/prepared_review/retained_fire.gd",
+      "res://factory/components/prepared_sensory/bank.gd",
+      "res://factory/components/prepared_sensory/composition.gd",
+      "res://factory/core/contract_composition.gd",
+      "res://factory/packaging/constructed_occurrence.gd",
+      "res://factory/packaging/freezing_construction.gd",
+      "res://factory/packaging/occurrence.gd",
+      "res://integrations/ndclient/assets/native_effects/class_actions/ClassComponents.gd",
+      "res://integrations/ndclient/assets/native_effects/class_actions/vfx_1/arc_charge/scripts/arc_charge_swirl.gd",
+      "res://integrations/ndclient/assets/native_effects/class_actions/vfx_1/arc_charge/variants/arc_charge_swirl_charge.tscn",
+      "res://integrations/ndclient/authoring/native_effects/index.json",
+      "res://integrations/ndclient/presentation/native_effects.gd",
+      "res://integrations/ndclient/presentation/native_factory_source.gd",
+      "res://library/binbun/pack_binbun_godoticevfx/assets/BinbunVFX/ice_effects/effects/ice_ball/ice_ball_vfx_03.tscn",
+      "res://library/binbun/pack_binbun_godoticevfx/assets/BinbunVFX/ice_effects/src/material/ice_ball/ice_ball_03/ice_ball_03_mist.tres"
+    ],
+    "singleton_compatibility_aliases": {},
+    "reasons": {
+      "res://authoring/runtime-cost-repair-20261020/review_contacts/counterspell_contact.tres": [
+        "new_source_or_unproven_native_identity"
+      ],
+      "res://authoring/runtime-cost-repair-20261020/review_contacts/assets/counterspell_contact.res": [
+        "new_source_or_unproven_native_identity"
+      ],
+      "res://factory/components/prepared_review/counterspell.gd": [
+        "new_source_or_unproven_native_identity"
+      ],
+      "res://factory/components/prepared_review/counter_fragments.gd": [
+        "new_source_or_unproven_native_identity"
+      ],
+      "res://authoring/runtime-cost-repair-20261020/review_contacts/retained_fire.tres": [
+        "new_source_or_unproven_native_identity"
+      ],
+      "res://authoring/runtime-cost-repair-20261020/review_contacts/assets/retained_fire.res": [
+        "new_source_or_unproven_native_identity"
+      ],
+      "res://factory/components/prepared_review/retained_fire.gd": [
+        "new_source_or_unproven_native_identity"
+      ],
+      "res://authoring/runtime-cost-repair-20261020/r6_freezing/phases/retained.tres": [
+        "new_source_or_unproven_native_identity"
+      ],
+      "res://authoring/runtime-cost-repair-20261020/r6_freezing/assets/retained.tres": [
+        "new_source_or_unproven_native_identity"
+      ],
+      "res://authoring/runtime-cost-repair-20261020/r6_freezing/assets/retained.tscn": [
+        "new_source_or_unproven_native_identity"
+      ],
+      "res://authoring/runtime-cost-repair-20261020/r6_freezing/assets/program-359b026cc35b801e.gdshader": [
+        "new_source_or_unproven_native_identity"
+      ],
+      "res://authoring/runtime-cost-repair-20261020/r6_freezing/assets/program-ceb0b6e4e6d210db.gdshader": [
+        "new_source_or_unproven_native_identity"
+      ],
+      "res://factory/components/prepared_r6_freezing/retained.gd": [
+        "new_source_or_unproven_native_identity"
+      ],
+      "res://authoring/runtime-cost-repair-20261020/r6_sensory/phases-v2/finite_deafness.tres": [
+        "new_source_or_unproven_native_identity"
+      ],
+      "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets-v2/finite_deafness.res": [
+        "new_source_or_unproven_native_identity"
+      ],
+      "res://factory/components/prepared_sensory/composition.gd": [
+        "new_source_or_unproven_native_identity"
+      ],
+      "res://integrations/ndclient/assets/native_effects/class_actions/vfx_1/arc_charge/scripts/arc_charge_swirl.gd": [
+        "explicit_new_caller_scope"
+      ],
+      "res://factory/packaging/freezing_construction.gd": [
+        "new_source_or_unproven_native_identity"
+      ],
+      "res://authoring/runtime-cost-repair-20261020/r6_sensory/closed/assets/divine_deafened.res": [
+        "new_source_or_unproven_native_identity"
+      ],
+      "res://authoring/runtime-cost-repair-20261020/r6_sensory/closed/assets/divine_blinded.res": [
+        "new_source_or_unproven_native_identity"
+      ],
+      "res://authoring/runtime-cost-repair-20261020/r6_freezing/assets/delivery.tres": [
+        "new_source_or_unproven_native_identity"
+      ],
+      "res://authoring/runtime-cost-repair-20261020/r6_freezing/assets/delivery.tscn": [
+        "new_source_or_unproven_native_identity"
+      ],
+      "res://authoring/runtime-cost-repair-20261020/r6_freezing/assets/program-8eabeb3df8ae1771.gdshader": [
+        "new_source_or_unproven_native_identity"
+      ],
+      "res://authoring/runtime-cost-repair-20261020/r6_freezing/assets/program-cc5f8afb13060bfc.gdshader": [
+        "new_source_or_unproven_native_identity"
+      ],
+      "res://authoring/runtime-cost-repair-20261020/r6_freezing/assets/program-68d6e3fddfc4b400.gdshader": [
+        "new_source_or_unproven_native_identity"
+      ],
+      "res://factory/components/prepared_r6_freezing/delivery.gd": [
+        "new_source_or_unproven_native_identity"
+      ],
+      "res://authoring/runtime-cost-repair-20261020/r6_sensory/closed/phases/divine_deafened.tres": [
+        "new_source_or_unproven_native_identity"
+      ],
+      "res://authoring/runtime-cost-repair-20261020/r6_sensory/closed/phases/divine_blinded.tres": [
+        "new_source_or_unproven_native_identity"
+      ],
+      "res://authoring/runtime-cost-repair-20261020/r6_freezing/phases/delivery.tres": [
+        "new_source_or_unproven_native_identity"
+      ],
+      "res://authoring/runtime-cost-repair-20261020/r6_freezing/phases/blast.tres": [
+        "new_source_or_unproven_native_identity"
+      ],
+      "res://authoring/runtime-cost-repair-20261020/review_contacts/assets/texture-87bf87d6ebc15bb9032d436fb739e85fbce5a5762ccead41ae7e3e935877fcad.res": [
+        "new_source_or_unproven_native_identity"
+      ],
+      "res://authoring/runtime-cost-repair-20261020/review_contacts/assets/texture-624d703baaed6097e921e68841bebd6713ae22ddfa455697ff6c8629bf2b24bc.res": [
+        "new_source_or_unproven_native_identity"
+      ],
+      "res://authoring/runtime-cost-repair-20261020/review_contacts/assets/texture-625cf993ec96f7e41ef61694763539433e7b78588355526cb4a8ef41cb82a84d.res": [
+        "new_source_or_unproven_native_identity"
+      ],
+      "res://authoring/runtime-cost-repair-20261020/review_contacts/assets/texture-2218f6f1022c8d9630e50c5c77215dae32e076f59481d3da68852979d400dbe7.res": [
+        "new_source_or_unproven_native_identity"
+      ],
+      "res://authoring/runtime-cost-repair-20261020/review_contacts/assets/program-7fe2a486af3d323af09323f7429fb5d6ad2c09f414525e3c58f08b994c9cfb74.gdshader": [
+        "new_source_or_unproven_native_identity"
+      ],
+      "res://authoring/runtime-cost-repair-20261020/review_contacts/assets/counterspell_contact.scn": [
+        "new_source_or_unproven_native_identity"
+      ],
+      "res://authoring/runtime-cost-repair-20261020/review_contacts/assets/texture-af202dbce04b95984fe7a77598cbb5a2e3ddefd359bc5531cb548562353927bb.res": [
+        "new_source_or_unproven_native_identity"
+      ],
+      "res://authoring/runtime-cost-repair-20261020/review_contacts/assets/texture-b27fced0abc70ac4521c5deeeea400b1bf75a4e7d9ccd540252b2737b36460f8.res": [
+        "new_source_or_unproven_native_identity"
+      ],
+      "res://authoring/runtime-cost-repair-20261020/review_contacts/assets/texture-6fad9fff68f32746ae7ea59b50fdc39529536516dd1cc01317d102edc169db45.res": [
+        "new_source_or_unproven_native_identity"
+      ],
+      "res://authoring/runtime-cost-repair-20261020/review_contacts/assets/texture-468e7d03ab2bb3c5775a4b61668beda919ca2cd7224c5e31a9c2fbc626467141.res": [
+        "new_source_or_unproven_native_identity"
+      ],
+      "res://authoring/runtime-cost-repair-20261020/review_contacts/assets/program-9626e3d1956fc5312de62e0e12e9d7f0b2e2c01ffc313b998ef01be040bc75be.gdshader": [
+        "new_source_or_unproven_native_identity"
+      ],
+      "res://authoring/runtime-cost-repair-20261020/review_contacts/assets/retained_fire.scn": [
+        "new_source_or_unproven_native_identity"
+      ],
+      "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets-v2/native-process/2475c89bf296800c713afaa17ab087771a103ff974eb1995fd2cd28d0bcce83e.gdshader": [
+        "new_source_or_unproven_native_identity"
+      ],
+      "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets-v2/native-process/080587f5b5ecf799395ee01fbf2cbc4760c9f5e4aa49bbcfaa36ee9b8e8a7dab.gdshader": [
+        "new_source_or_unproven_native_identity"
+      ],
+      "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets-v2/program-dec8d60342538d4b96795d194955ebdeae63fb922b33150efedd32aa495c8eb5.gdshader": [
+        "new_source_or_unproven_native_identity"
+      ],
+      "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets-v2/texture-9bb4421037915b622688d0627d8c7c8f1f618a4410b7fd12dd73cd07eed175ab.res": [
+        "new_source_or_unproven_native_identity"
+      ],
+      "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets-v2/program-e0e051b02a22a95c5d269490a9c349582dd6304875d5d06648e28f11909c09cc.gdshader": [
+        "new_source_or_unproven_native_identity"
+      ],
+      "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets-v2/texture-6b3e16ab3d942a42ffa8729f6564ff58d51cdc81ec2194e825f11292bd786c5f.res": [
+        "new_source_or_unproven_native_identity"
+      ],
+      "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets-v2/program-0f9be758c539312ec9a8ebca27c554987c934ef48a95f418ad15e08f8192317f.gdshader": [
+        "new_source_or_unproven_native_identity"
+      ],
+      "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets-v2/program-04e1862270d6c8ab72fc1bcc8dd81035ea236cf92437b9ce4e8afcd6688ae068.gdshader": [
+        "new_source_or_unproven_native_identity"
+      ],
+      "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets/native-process/b0f232a776c370c28523a4a1a8e9c5fa9d41f933e98fcc3f10c3acec918f55f8.gdshader": [
+        "new_source_or_unproven_native_identity"
+      ],
+      "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets/native-process/18b52329d2b4a8a9314c997f6e0ec9bbcc9683070fa080fac3588673a5cc63b2.gdshader": [
+        "new_source_or_unproven_native_identity"
+      ],
+      "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets/native-process/72194500960ef0fe9763e10e9050f98b17a7717986bb5225846b0814254f11d3.gdshader": [
+        "new_source_or_unproven_native_identity"
+      ],
+      "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets/native-process/91dd2656860cfe92b1285bafe1869a27bc0b9f0e08308a34304aff490c77a3b5.gdshader": [
+        "new_source_or_unproven_native_identity"
+      ],
+      "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets/texture-3e6f95aa5c3bdd92cb69bcebb66069677078168d1ab50905339de18db1c07e6a.res": [
+        "new_source_or_unproven_native_identity"
+      ],
+      "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets/program-40a303d768b5ad324f7a6c93406988f2f5bc7ed0c0b6bfba6b826f4e1e1e70bf.gdshader": [
+        "new_source_or_unproven_native_identity"
+      ],
+      "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets/texture-e7dda77ea9e0932116ab784883a19b982dfadc27c7889926f966bce195f084b6.res": [
+        "new_source_or_unproven_native_identity"
+      ],
+      "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets/texture-bbcd6e20d72505b3617e6ac1fd5794b1b178161d8ce4c5ca550cba5f022862e0.res": [
+        "new_source_or_unproven_native_identity"
+      ],
+      "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets/texture-0fc6bc480dc8c62ec8a6a951e23958baa5366244f798d0d873079069fe2ffb50.res": [
+        "new_source_or_unproven_native_identity"
+      ],
+      "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets/texture-ca387ca3e4a58d0c4911172b6fc64818f393e329eab2c979377ca8591c07b5c7.res": [
+        "new_source_or_unproven_native_identity"
+      ],
+      "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets/texture-34b9fbc0ab9fa2dbb4e8b51a5769763f83255ce48d3b336b7625b339b6e66e98.res": [
+        "new_source_or_unproven_native_identity"
+      ],
+      "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets/program-052fd1b47de118060c154eaf6e0b2b458ab98e898448f310ecda1d0f4ee13358.gdshader": [
+        "new_source_or_unproven_native_identity"
+      ],
+      "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets/texture-3540a7c211b59768cf6afbdf358317db356632421f5bfc79cdeffbb369ebdb60.res": [
+        "new_source_or_unproven_native_identity"
+      ],
+      "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets/program-d9a914c52a4935502acd5fda63ea3e9225ee5f40350cbd6e2058759a70dce079.gdshader": [
+        "new_source_or_unproven_native_identity"
+      ],
+      "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets/texture-c7131b5118c12bf14033bcf77f381b251d027688f320cbd16688274a27ec06e8.res": [
+        "new_source_or_unproven_native_identity"
+      ],
+      "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets/texture-32bb588a43dcc075fdd8d3d634e6957aa808888a69cf2af6e14fb6f9d919b2b4.res": [
+        "new_source_or_unproven_native_identity"
+      ],
+      "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets/texture-625cf993ec96f7e41ef61694763539433e7b78588355526cb4a8ef41cb82a84d.res": [
+        "new_source_or_unproven_native_identity"
+      ],
+      "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets/program-1007ff7b3cc03726d2edc877513fd4d94d48e09b902a5988681592a3f6a7a8ae.gdshader": [
+        "new_source_or_unproven_native_identity"
+      ],
+      "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets/texture-9b6a817162b07a12d228d6c2441e59fe8f1f72a9d383a35bca628bd8949f5dff.res": [
+        "new_source_or_unproven_native_identity"
+      ],
+      "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets/texture-2940b4de79af6159b6a24bf8374d749bcabe1c3cc6235b198f790063cc91a2b6.res": [
+        "new_source_or_unproven_native_identity"
+      ],
+      "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets/texture-7c8bd9e2bd12e6d038aa6f24fc74dce182b74b5a56890d3396d7ca97130dcb96.res": [
+        "new_source_or_unproven_native_identity"
+      ],
+      "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets/texture-ed20c22d066eb630e096ab8240938523cebd7629d9a39fe74f45f5badc8e37d3.res": [
+        "new_source_or_unproven_native_identity"
+      ],
+      "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets/program-3874d7fed80da8969c27a1b7debab01aeeeb93c09c026e7c94cff829ea9ab282.gdshader": [
+        "new_source_or_unproven_native_identity"
+      ],
+      "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets/texture-1301ffe4c560c6e53cb460304f1728942307c8ddd75e43e3f99a4d9c28e9e8b4.res": [
+        "new_source_or_unproven_native_identity"
+      ],
+      "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets/texture-7dc95f780b8a3332c1cb3567fd843f81f76e84e533d4515058fa32e3fa2fb63f.res": [
+        "new_source_or_unproven_native_identity"
+      ],
+      "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets/texture-37158527d0968289dabc6ab49708e40b38eca960c4811d16df7f02fd7049ae30.res": [
+        "new_source_or_unproven_native_identity"
+      ],
+      "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets/texture-372730a23fb6de94c74797915bd61a4090de2f9175259829e507fce03af2977a.res": [
+        "new_source_or_unproven_native_identity"
+      ],
+      "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets/texture-be7f70270546f7198d1e1f6315d11f14161630ac6623e8d292d58853966151fb.res": [
+        "new_source_or_unproven_native_identity"
+      ],
+      "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets/program-8e19a7f065ea6e18196763faaf827b7ede089ce3e2b879947b5686f5e2ca9053.gdshader": [
+        "new_source_or_unproven_native_identity"
+      ],
+      "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets/texture-986fa6f13671e1740f7b89691cf56333a48f9c0d1af73b1c55183924d716d168.res": [
+        "new_source_or_unproven_native_identity"
+      ],
+      "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets/texture-f72303978ca4ff7bfc6078814bdd366cdaa495a28ca1cfc6443ee23e98b5c604.res": [
+        "new_source_or_unproven_native_identity"
+      ],
+      "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets/texture-9fcbab1a2a881c6e2056f1ad294ec8621fe9d420095c2b0d04c7d2c1fa5cb4d5.res": [
+        "new_source_or_unproven_native_identity"
+      ],
+      "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets/texture-8e07d4b473b4e28a659b500e51250e6ffc380681455fff12257035d1bdea5e58.res": [
+        "new_source_or_unproven_native_identity"
+      ],
+      "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets/texture-c8e3d0b58957f07bd4823b96c5b78a7ee14e9c10fe2ee085d997f27f5662edb1.res": [
+        "new_source_or_unproven_native_identity"
+      ],
+      "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets/program-0c2674a3fdac544b2ceaf4762dbef75e2e9f0e02077a5bfb06fea72ef7993088.gdshader": [
+        "new_source_or_unproven_native_identity"
+      ],
+      "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets/texture-f40e8913864bd8e0068c8f32163aa3ef0aca3e1434611f57a17607113c3ddd60.res": [
+        "new_source_or_unproven_native_identity"
+      ],
+      "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets/texture-d4d55b23b92ab92181bc5c09b2904b895d3bfce0db682edc3fc3cdac48be48be.res": [
+        "new_source_or_unproven_native_identity"
+      ],
+      "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets/program-ac528f24a39a44530d0786ca7f076e6928dcf3173d1861fecaec9f136acbe63f.gdshader": [
+        "new_source_or_unproven_native_identity"
+      ],
+      "res://authoring/runtime-cost-repair-20261020/r6_sensory/closed/controllers/ba1d81f46b18858266ef/shield_modifier.gd": [
+        "new_source_or_unproven_native_identity"
+      ],
+      "res://authoring/runtime-cost-repair-20261020/r6_sensory/closed/controllers/91726aad046a0acf7237/divine.gd": [
+        "new_source_or_unproven_native_identity"
+      ],
+      "res://authoring/runtime-cost-repair-20261020/r6_sensory/closed/controllers/01db38fe9d22df135205/base.gd": [
+        "new_source_or_unproven_native_identity"
+      ],
+      "res://authoring/runtime-cost-repair-20261020/r6_sensory/closed/controllers/6882034ac873c97ef72e/resource_io.gd": [
+        "explicit_new_caller_scope"
+      ],
+      "res://authoring/runtime-cost-repair-20261020/r6_sensory/closed/controllers/a88cc0b6fd9f8a77e483/spatial_energy_palette.gd": [
+        "new_source_or_unproven_native_identity"
+      ],
+      "res://authoring/runtime-cost-repair-20261020/r6_sensory/closed/controllers/03ee2e4007ee0a39f08b/contract_stage.gd": [
+        "new_source_or_unproven_native_identity"
+      ],
+      "res://authoring/runtime-cost-repair-20261020/r6_sensory/closed/controllers/5d620fd9a64eea66a8cb/source_materials.gd": [
+        "new_source_or_unproven_native_identity"
+      ],
+      "res://authoring/runtime-cost-repair-20261020/r6_sensory/closed/controllers/432d6a7ae8cdc8dd1adb/donor_scene.gd": [
+        "new_source_or_unproven_native_identity"
+      ],
+      "res://authoring/runtime-cost-repair-20261020/r6_sensory/closed/controllers/5ffc67aeffe4d2e17ad2/resource_graph.gd": [
+        "new_source_or_unproven_native_identity"
+      ],
+      "res://authoring/runtime-cost-repair-20261020/r6_sensory/closed/controllers/4a6fc0ff9d0093ad6f89/divine_word_source_v196.gd": [
+        "new_source_or_unproven_native_identity"
+      ],
+      "res://authoring/runtime-cost-repair-20261020/r6_sensory/closed/controllers/25787490e77fa5c2115c/native_opacity.gd": [
+        "new_source_or_unproven_native_identity"
+      ],
+      "res://factory/components/prepared_sensory/bank.gd": [
+        "new_source_or_unproven_native_identity"
+      ],
+      "res://assets/vfx/sources/386bc581a35eb3b9ee50/spatial_energy_palette.gd": [
+        "rewritten_text_or_dependency_changed"
+      ],
+      "res://assets/vfx/sources/39ced3e79a9833e731fb/source_materials.gd": [
+        "rewritten_text_or_dependency_changed"
+      ],
+      "res://assets/vfx/sources/39f30ee3f172ac269cd6/native_opacity.gd": [
+        "rewritten_text_or_dependency_changed"
+      ],
+      "res://factory/baking/recording_source_sampler.gd": [
+        "rewritten_text_or_dependency_changed"
+      ],
+      "res://factory/components/high_level_payloads/delivery.gd": [
+        "rewritten_text_or_dependency_changed"
+      ],
+      "res://factory/components/high_level_payloads/payload_item.gd": [
+        "rewritten_text_or_dependency_changed"
+      ],
+      "res://factory/components/interrupt/counterspell_contact.gd": [
+        "rewritten_text_or_dependency_changed"
+      ],
+      "res://factory/components/native_review_composition.gd": [
+        "rewritten_text_or_dependency_changed"
+      ],
+      "res://factory/components/payload/retained_item.gd": [
+        "rewritten_text_or_dependency_changed"
+      ],
+      "res://factory/components/prepared_native_compositions/bank.gd": [
+        "rewritten_text_or_dependency_changed"
+      ],
+      "res://factory/components/prepared_native_compositions/composition.gd": [
+        "rewritten_text_or_dependency_changed"
+      ],
+      "res://factory/components/prepared_recipient/restore.gd": [
+        "rewritten_text_or_dependency_changed"
+      ],
+      "res://factory/core/contract_composition.gd": [
+        "rewritten_text_or_dependency_changed"
+      ],
+      "res://factory/packaging/constructed_occurrence.gd": [
+        "rewritten_text_or_dependency_changed"
+      ],
+      "res://factory/packaging/occurrence.gd": [
+        "rewritten_text_or_dependency_changed"
+      ],
+      "res://integrations/ndclient/assets/native_effects/class_actions/ClassComponents.gd": [
+        "rewritten_text_or_dependency_changed"
+      ],
+      "res://integrations/ndclient/assets/native_effects/class_actions/vfx_1/arc_charge/variants/arc_charge_swirl_charge.tscn": [
+        "rewritten_text_or_dependency_changed"
+      ],
+      "res://integrations/ndclient/presentation/native_effects.gd": [
+        "rewritten_text_or_dependency_changed"
+      ],
+      "res://integrations/ndclient/presentation/native_factory_source.gd": [
+        "rewritten_text_or_dependency_changed"
+      ],
+      "res://library/binbun/pack_binbun_godoticevfx/assets/BinbunVFX/ice_effects/effects/ice_ball/ice_ball_vfx_03.tscn": [
+        "rewritten_text_or_dependency_changed"
+      ],
+      "res://library/binbun/pack_binbun_godoticevfx/assets/BinbunVFX/ice_effects/src/material/ice_ball/ice_ball_03/ice_ball_03_mist.tres": [
+        "rewritten_text_or_dependency_changed"
+      ],
+      "res://assets/vfx/sources/a4fd0883f0b17d893a03/base.gd": [
+        "rewritten_text_or_dependency_changed"
+      ],
+      "res://assets/vfx/sources/edb4416ff06538073fee/divine_word_source_v196.gd": [
+        "rewritten_text_or_dependency_changed"
+      ],
+      "res://authoring/production-review-repair-20261020/payload/freezing.tres": [
+        "rewritten_text_or_dependency_changed"
+      ],
+      "res://factory/baking/source_bridge.gd": [
+        "rewritten_text_or_dependency_changed"
+      ],
+      "res://factory/components/high_level_payloads/freezing_delivery.gd": [
+        "rewritten_text_or_dependency_changed"
+      ],
+      "res://integrations/ndclient/authoring/native_effects/index.json": [
+        "rewritten_text_or_dependency_changed"
+      ],
+      "res://assets/vfx/sources/0a6f9152e753968f33d1/divine.gd": [
+        "rewritten_text_or_dependency_changed"
+      ],
+      "res://authoring/original-repairs/source_volumes_v284/freezing_sphere_native/phases/launch_delivery.tres": [
+        "rewritten_text_or_dependency_changed"
+      ]
+    },
+    "rounds": 4,
+    "exact_text_comparisons": 182,
+    "native_dependency_edges": {
+      "res://assets/vfx/sources/00c02fcee34396816766/texture.res": [],
+      "res://assets/vfx/sources/1e7a863b8005a91859cf/sm_ring7.res": [],
+      "res://assets/vfx/sources/506744103c5bc9adef59/texture.res": [],
+      "res://assets/vfx/sources/5b0a18fdc09c1fcdd677/texture.res": [],
+      "res://assets/vfx/sources/7f341087427abd458e59/texture.res": [],
+      "res://assets/vfx/sources/84c4bd18907bcc63bd83/texture.res": [],
+      "res://assets/vfx/sources/a02e62c059c89f4070a7/texture.res": [],
+      "res://assets/vfx/sources/c0a2515abc39856316d0/texture.res": [],
+      "res://assets/vfx/sources/d584883ce30a469af2c6/sm_cylinder_vulkano2.res": [],
+      "res://assets/vfx/sources/fd7566461f35d1fcf6e2/texture.res": [],
+      "res://authoring/high-level-22/delayed_blast_fireball_native/sources/fireball_native.tres": [
+        "res://factory/components/high_level_payloads/source_bundle.gd",
+        "res://library/selected/project_temporary_fireball_surface_project_38a7394e/VFX/Shaders/s_master_explosion_2.tres",
+        "res://library/selected/project_temporary_fireball_surface_project_38a7394e/VFX/Textures/generated/n_explosionB.tres",
+        "res://library/selected/project_temporary_fireball_surface_project_38a7394e/VFX/Textures/T_VFX_Noise_13.PNG",
+        "res://library/selected/project_temporary_fireball_surface_project_38a7394e/VFX/Textures/gradients/g_explossive1.tres"
+      ],
+      "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets-v2/finite_deafness.res": [
+        "res://factory/components/prepared_sensory/bank.gd",
+        "res://factory/components/prepared_sensory/composition.gd",
+        "res://factory/components/sensory/deafened_application.gd",
+        "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets-v2/program-04e1862270d6c8ab72fc1bcc8dd81035ea236cf92437b9ce4e8afcd6688ae068.gdshader",
+        "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets-v2/program-0f9be758c539312ec9a8ebca27c554987c934ef48a95f418ad15e08f8192317f.gdshader",
+        "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets-v2/texture-6b3e16ab3d942a42ffa8729f6564ff58d51cdc81ec2194e825f11292bd786c5f.res",
+        "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets-v2/program-e0e051b02a22a95c5d269490a9c349582dd6304875d5d06648e28f11909c09cc.gdshader",
+        "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets-v2/texture-9bb4421037915b622688d0627d8c7c8f1f618a4410b7fd12dd73cd07eed175ab.res",
+        "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets-v2/program-dec8d60342538d4b96795d194955ebdeae63fb922b33150efedd32aa495c8eb5.gdshader",
+        "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets-v2/native-process/080587f5b5ecf799395ee01fbf2cbc4760c9f5e4aa49bbcfaa36ee9b8e8a7dab.gdshader",
+        "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets-v2/native-process/2475c89bf296800c713afaa17ab087771a103ff974eb1995fd2cd28d0bcce83e.gdshader"
+      ],
+      "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets-v2/native-process/080587f5b5ecf799395ee01fbf2cbc4760c9f5e4aa49bbcfaa36ee9b8e8a7dab.gdshader": [],
+      "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets-v2/native-process/2475c89bf296800c713afaa17ab087771a103ff974eb1995fd2cd28d0bcce83e.gdshader": [],
+      "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets-v2/program-04e1862270d6c8ab72fc1bcc8dd81035ea236cf92437b9ce4e8afcd6688ae068.gdshader": [],
+      "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets-v2/program-0f9be758c539312ec9a8ebca27c554987c934ef48a95f418ad15e08f8192317f.gdshader": [],
+      "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets-v2/program-dec8d60342538d4b96795d194955ebdeae63fb922b33150efedd32aa495c8eb5.gdshader": [],
+      "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets-v2/program-e0e051b02a22a95c5d269490a9c349582dd6304875d5d06648e28f11909c09cc.gdshader": [],
+      "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets-v2/texture-6b3e16ab3d942a42ffa8729f6564ff58d51cdc81ec2194e825f11292bd786c5f.res": [],
+      "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets-v2/texture-9bb4421037915b622688d0627d8c7c8f1f618a4410b7fd12dd73cd07eed175ab.res": [],
+      "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets/native-process/18b52329d2b4a8a9314c997f6e0ec9bbcc9683070fa080fac3588673a5cc63b2.gdshader": [],
+      "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets/native-process/72194500960ef0fe9763e10e9050f98b17a7717986bb5225846b0814254f11d3.gdshader": [],
+      "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets/native-process/91dd2656860cfe92b1285bafe1869a27bc0b9f0e08308a34304aff490c77a3b5.gdshader": [],
+      "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets/native-process/b0f232a776c370c28523a4a1a8e9c5fa9d41f933e98fcc3f10c3acec918f55f8.gdshader": [],
+      "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets/program-052fd1b47de118060c154eaf6e0b2b458ab98e898448f310ecda1d0f4ee13358.gdshader": [],
+      "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets/program-0c2674a3fdac544b2ceaf4762dbef75e2e9f0e02077a5bfb06fea72ef7993088.gdshader": [],
+      "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets/program-1007ff7b3cc03726d2edc877513fd4d94d48e09b902a5988681592a3f6a7a8ae.gdshader": [],
+      "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets/program-3874d7fed80da8969c27a1b7debab01aeeeb93c09c026e7c94cff829ea9ab282.gdshader": [],
+      "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets/program-40a303d768b5ad324f7a6c93406988f2f5bc7ed0c0b6bfba6b826f4e1e1e70bf.gdshader": [],
+      "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets/program-8e19a7f065ea6e18196763faaf827b7ede089ce3e2b879947b5686f5e2ca9053.gdshader": [],
+      "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets/program-ac528f24a39a44530d0786ca7f076e6928dcf3173d1861fecaec9f136acbe63f.gdshader": [],
+      "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets/program-d9a914c52a4935502acd5fda63ea3e9225ee5f40350cbd6e2058759a70dce079.gdshader": [],
+      "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets/texture-0fc6bc480dc8c62ec8a6a951e23958baa5366244f798d0d873079069fe2ffb50.res": [],
+      "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets/texture-1301ffe4c560c6e53cb460304f1728942307c8ddd75e43e3f99a4d9c28e9e8b4.res": [],
+      "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets/texture-2940b4de79af6159b6a24bf8374d749bcabe1c3cc6235b198f790063cc91a2b6.res": [],
+      "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets/texture-32bb588a43dcc075fdd8d3d634e6957aa808888a69cf2af6e14fb6f9d919b2b4.res": [],
+      "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets/texture-34b9fbc0ab9fa2dbb4e8b51a5769763f83255ce48d3b336b7625b339b6e66e98.res": [],
+      "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets/texture-3540a7c211b59768cf6afbdf358317db356632421f5bfc79cdeffbb369ebdb60.res": [],
+      "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets/texture-37158527d0968289dabc6ab49708e40b38eca960c4811d16df7f02fd7049ae30.res": [],
+      "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets/texture-372730a23fb6de94c74797915bd61a4090de2f9175259829e507fce03af2977a.res": [],
+      "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets/texture-3e6f95aa5c3bdd92cb69bcebb66069677078168d1ab50905339de18db1c07e6a.res": [],
+      "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets/texture-625cf993ec96f7e41ef61694763539433e7b78588355526cb4a8ef41cb82a84d.res": [],
+      "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets/texture-7c8bd9e2bd12e6d038aa6f24fc74dce182b74b5a56890d3396d7ca97130dcb96.res": [],
+      "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets/texture-7dc95f780b8a3332c1cb3567fd843f81f76e84e533d4515058fa32e3fa2fb63f.res": [],
+      "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets/texture-8e07d4b473b4e28a659b500e51250e6ffc380681455fff12257035d1bdea5e58.res": [],
+      "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets/texture-986fa6f13671e1740f7b89691cf56333a48f9c0d1af73b1c55183924d716d168.res": [],
+      "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets/texture-9b6a817162b07a12d228d6c2441e59fe8f1f72a9d383a35bca628bd8949f5dff.res": [],
+      "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets/texture-9fcbab1a2a881c6e2056f1ad294ec8621fe9d420095c2b0d04c7d2c1fa5cb4d5.res": [],
+      "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets/texture-bbcd6e20d72505b3617e6ac1fd5794b1b178161d8ce4c5ca550cba5f022862e0.res": [],
+      "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets/texture-be7f70270546f7198d1e1f6315d11f14161630ac6623e8d292d58853966151fb.res": [],
+      "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets/texture-c7131b5118c12bf14033bcf77f381b251d027688f320cbd16688274a27ec06e8.res": [],
+      "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets/texture-c8e3d0b58957f07bd4823b96c5b78a7ee14e9c10fe2ee085d997f27f5662edb1.res": [],
+      "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets/texture-ca387ca3e4a58d0c4911172b6fc64818f393e329eab2c979377ca8591c07b5c7.res": [],
+      "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets/texture-d4d55b23b92ab92181bc5c09b2904b895d3bfce0db682edc3fc3cdac48be48be.res": [],
+      "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets/texture-e7dda77ea9e0932116ab784883a19b982dfadc27c7889926f966bce195f084b6.res": [],
+      "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets/texture-ed20c22d066eb630e096ab8240938523cebd7629d9a39fe74f45f5badc8e37d3.res": [],
+      "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets/texture-f40e8913864bd8e0068c8f32163aa3ef0aca3e1434611f57a17607113c3ddd60.res": [],
+      "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets/texture-f72303978ca4ff7bfc6078814bdd366cdaa495a28ca1cfc6443ee23e98b5c604.res": [],
+      "res://authoring/runtime-cost-repair-20261020/r6_sensory/closed/assets/divine_blinded.res": [
+        "res://factory/components/prepared_sensory/bank.gd",
+        "res://factory/components/prepared_sensory/composition.gd",
+        "res://authoring/runtime-cost-repair-20261020/r6_sensory/closed/controllers/4a6fc0ff9d0093ad6f89/divine_word_source_v196.gd",
+        "res://authoring/runtime-cost-repair-20261020/r6_sensory/closed/controllers/91726aad046a0acf7237/divine.gd",
+        "res://authoring/runtime-cost-repair-20261020/r6_sensory/closed/controllers/ba1d81f46b18858266ef/shield_modifier.gd",
+        "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets/program-ac528f24a39a44530d0786ca7f076e6928dcf3173d1861fecaec9f136acbe63f.gdshader",
+        "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets/texture-d4d55b23b92ab92181bc5c09b2904b895d3bfce0db682edc3fc3cdac48be48be.res",
+        "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets/texture-f40e8913864bd8e0068c8f32163aa3ef0aca3e1434611f57a17607113c3ddd60.res",
+        "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets/program-0c2674a3fdac544b2ceaf4762dbef75e2e9f0e02077a5bfb06fea72ef7993088.gdshader",
+        "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets/texture-c8e3d0b58957f07bd4823b96c5b78a7ee14e9c10fe2ee085d997f27f5662edb1.res",
+        "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets/texture-8e07d4b473b4e28a659b500e51250e6ffc380681455fff12257035d1bdea5e58.res",
+        "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets/texture-9fcbab1a2a881c6e2056f1ad294ec8621fe9d420095c2b0d04c7d2c1fa5cb4d5.res",
+        "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets/texture-f72303978ca4ff7bfc6078814bdd366cdaa495a28ca1cfc6443ee23e98b5c604.res",
+        "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets/texture-986fa6f13671e1740f7b89691cf56333a48f9c0d1af73b1c55183924d716d168.res",
+        "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets/program-8e19a7f065ea6e18196763faaf827b7ede089ce3e2b879947b5686f5e2ca9053.gdshader",
+        "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets/texture-be7f70270546f7198d1e1f6315d11f14161630ac6623e8d292d58853966151fb.res",
+        "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets/texture-372730a23fb6de94c74797915bd61a4090de2f9175259829e507fce03af2977a.res",
+        "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets/texture-37158527d0968289dabc6ab49708e40b38eca960c4811d16df7f02fd7049ae30.res",
+        "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets/texture-7dc95f780b8a3332c1cb3567fd843f81f76e84e533d4515058fa32e3fa2fb63f.res",
+        "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets/texture-1301ffe4c560c6e53cb460304f1728942307c8ddd75e43e3f99a4d9c28e9e8b4.res",
+        "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets/program-3874d7fed80da8969c27a1b7debab01aeeeb93c09c026e7c94cff829ea9ab282.gdshader",
+        "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets/texture-ed20c22d066eb630e096ab8240938523cebd7629d9a39fe74f45f5badc8e37d3.res",
+        "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets/texture-7c8bd9e2bd12e6d038aa6f24fc74dce182b74b5a56890d3396d7ca97130dcb96.res",
+        "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets/texture-2940b4de79af6159b6a24bf8374d749bcabe1c3cc6235b198f790063cc91a2b6.res",
+        "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets/texture-9b6a817162b07a12d228d6c2441e59fe8f1f72a9d383a35bca628bd8949f5dff.res",
+        "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets/program-1007ff7b3cc03726d2edc877513fd4d94d48e09b902a5988681592a3f6a7a8ae.gdshader",
+        "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets/texture-625cf993ec96f7e41ef61694763539433e7b78588355526cb4a8ef41cb82a84d.res",
+        "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets/texture-32bb588a43dcc075fdd8d3d634e6957aa808888a69cf2af6e14fb6f9d919b2b4.res",
+        "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets/texture-c7131b5118c12bf14033bcf77f381b251d027688f320cbd16688274a27ec06e8.res",
+        "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets/program-d9a914c52a4935502acd5fda63ea3e9225ee5f40350cbd6e2058759a70dce079.gdshader",
+        "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets/texture-3540a7c211b59768cf6afbdf358317db356632421f5bfc79cdeffbb369ebdb60.res",
+        "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets/program-052fd1b47de118060c154eaf6e0b2b458ab98e898448f310ecda1d0f4ee13358.gdshader",
+        "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets/texture-34b9fbc0ab9fa2dbb4e8b51a5769763f83255ce48d3b336b7625b339b6e66e98.res",
+        "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets/texture-ca387ca3e4a58d0c4911172b6fc64818f393e329eab2c979377ca8591c07b5c7.res",
+        "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets/texture-0fc6bc480dc8c62ec8a6a951e23958baa5366244f798d0d873079069fe2ffb50.res",
+        "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets/texture-bbcd6e20d72505b3617e6ac1fd5794b1b178161d8ce4c5ca550cba5f022862e0.res",
+        "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets/texture-e7dda77ea9e0932116ab784883a19b982dfadc27c7889926f966bce195f084b6.res",
+        "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets/program-40a303d768b5ad324f7a6c93406988f2f5bc7ed0c0b6bfba6b826f4e1e1e70bf.gdshader",
+        "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets/texture-3e6f95aa5c3bdd92cb69bcebb66069677078168d1ab50905339de18db1c07e6a.res",
+        "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets/native-process/91dd2656860cfe92b1285bafe1869a27bc0b9f0e08308a34304aff490c77a3b5.gdshader",
+        "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets/native-process/72194500960ef0fe9763e10e9050f98b17a7717986bb5225846b0814254f11d3.gdshader",
+        "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets/native-process/18b52329d2b4a8a9314c997f6e0ec9bbcc9683070fa080fac3588673a5cc63b2.gdshader",
+        "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets/native-process/b0f232a776c370c28523a4a1a8e9c5fa9d41f933e98fcc3f10c3acec918f55f8.gdshader"
+      ],
+      "res://authoring/runtime-cost-repair-20261020/r6_sensory/closed/assets/divine_deafened.res": [
+        "res://factory/components/prepared_sensory/bank.gd",
+        "res://factory/components/prepared_sensory/composition.gd",
+        "res://authoring/runtime-cost-repair-20261020/r6_sensory/closed/controllers/4a6fc0ff9d0093ad6f89/divine_word_source_v196.gd",
+        "res://authoring/runtime-cost-repair-20261020/r6_sensory/closed/controllers/91726aad046a0acf7237/divine.gd",
+        "res://authoring/runtime-cost-repair-20261020/r6_sensory/closed/controllers/ba1d81f46b18858266ef/shield_modifier.gd",
+        "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets/program-ac528f24a39a44530d0786ca7f076e6928dcf3173d1861fecaec9f136acbe63f.gdshader",
+        "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets/texture-d4d55b23b92ab92181bc5c09b2904b895d3bfce0db682edc3fc3cdac48be48be.res",
+        "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets/texture-f40e8913864bd8e0068c8f32163aa3ef0aca3e1434611f57a17607113c3ddd60.res",
+        "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets/program-0c2674a3fdac544b2ceaf4762dbef75e2e9f0e02077a5bfb06fea72ef7993088.gdshader",
+        "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets/texture-c8e3d0b58957f07bd4823b96c5b78a7ee14e9c10fe2ee085d997f27f5662edb1.res",
+        "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets/texture-8e07d4b473b4e28a659b500e51250e6ffc380681455fff12257035d1bdea5e58.res",
+        "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets/texture-9fcbab1a2a881c6e2056f1ad294ec8621fe9d420095c2b0d04c7d2c1fa5cb4d5.res",
+        "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets/texture-f72303978ca4ff7bfc6078814bdd366cdaa495a28ca1cfc6443ee23e98b5c604.res",
+        "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets/texture-986fa6f13671e1740f7b89691cf56333a48f9c0d1af73b1c55183924d716d168.res",
+        "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets/program-8e19a7f065ea6e18196763faaf827b7ede089ce3e2b879947b5686f5e2ca9053.gdshader",
+        "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets/texture-be7f70270546f7198d1e1f6315d11f14161630ac6623e8d292d58853966151fb.res",
+        "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets/texture-372730a23fb6de94c74797915bd61a4090de2f9175259829e507fce03af2977a.res",
+        "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets/texture-37158527d0968289dabc6ab49708e40b38eca960c4811d16df7f02fd7049ae30.res",
+        "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets/texture-7dc95f780b8a3332c1cb3567fd843f81f76e84e533d4515058fa32e3fa2fb63f.res",
+        "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets/texture-1301ffe4c560c6e53cb460304f1728942307c8ddd75e43e3f99a4d9c28e9e8b4.res",
+        "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets/program-3874d7fed80da8969c27a1b7debab01aeeeb93c09c026e7c94cff829ea9ab282.gdshader",
+        "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets/texture-ed20c22d066eb630e096ab8240938523cebd7629d9a39fe74f45f5badc8e37d3.res",
+        "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets/texture-7c8bd9e2bd12e6d038aa6f24fc74dce182b74b5a56890d3396d7ca97130dcb96.res",
+        "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets/texture-2940b4de79af6159b6a24bf8374d749bcabe1c3cc6235b198f790063cc91a2b6.res",
+        "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets/texture-9b6a817162b07a12d228d6c2441e59fe8f1f72a9d383a35bca628bd8949f5dff.res",
+        "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets/program-1007ff7b3cc03726d2edc877513fd4d94d48e09b902a5988681592a3f6a7a8ae.gdshader",
+        "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets/texture-625cf993ec96f7e41ef61694763539433e7b78588355526cb4a8ef41cb82a84d.res",
+        "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets/texture-32bb588a43dcc075fdd8d3d634e6957aa808888a69cf2af6e14fb6f9d919b2b4.res",
+        "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets/texture-c7131b5118c12bf14033bcf77f381b251d027688f320cbd16688274a27ec06e8.res",
+        "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets/program-d9a914c52a4935502acd5fda63ea3e9225ee5f40350cbd6e2058759a70dce079.gdshader",
+        "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets/texture-3540a7c211b59768cf6afbdf358317db356632421f5bfc79cdeffbb369ebdb60.res",
+        "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets/program-052fd1b47de118060c154eaf6e0b2b458ab98e898448f310ecda1d0f4ee13358.gdshader",
+        "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets/texture-34b9fbc0ab9fa2dbb4e8b51a5769763f83255ce48d3b336b7625b339b6e66e98.res",
+        "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets/texture-ca387ca3e4a58d0c4911172b6fc64818f393e329eab2c979377ca8591c07b5c7.res",
+        "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets/texture-0fc6bc480dc8c62ec8a6a951e23958baa5366244f798d0d873079069fe2ffb50.res",
+        "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets/texture-bbcd6e20d72505b3617e6ac1fd5794b1b178161d8ce4c5ca550cba5f022862e0.res",
+        "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets/texture-e7dda77ea9e0932116ab784883a19b982dfadc27c7889926f966bce195f084b6.res",
+        "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets/program-40a303d768b5ad324f7a6c93406988f2f5bc7ed0c0b6bfba6b826f4e1e1e70bf.gdshader",
+        "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets/texture-3e6f95aa5c3bdd92cb69bcebb66069677078168d1ab50905339de18db1c07e6a.res",
+        "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets/native-process/91dd2656860cfe92b1285bafe1869a27bc0b9f0e08308a34304aff490c77a3b5.gdshader",
+        "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets/native-process/72194500960ef0fe9763e10e9050f98b17a7717986bb5225846b0814254f11d3.gdshader",
+        "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets/native-process/18b52329d2b4a8a9314c997f6e0ec9bbcc9683070fa080fac3588673a5cc63b2.gdshader",
+        "res://authoring/runtime-cost-repair-20261020/r6_sensory/assets/native-process/b0f232a776c370c28523a4a1a8e9c5fa9d41f933e98fcc3f10c3acec918f55f8.gdshader"
+      ],
+      "res://authoring/runtime-cost-repair-20261020/r6_sensory/closed/controllers/4a6fc0ff9d0093ad6f89/divine_word_source_v196.gd": [],
+      "res://authoring/runtime-cost-repair-20261020/r6_sensory/closed/controllers/91726aad046a0acf7237/divine.gd": [],
+      "res://authoring/runtime-cost-repair-20261020/r6_sensory/closed/controllers/ba1d81f46b18858266ef/shield_modifier.gd": [],
+      "res://authoring/runtime-cost-repair-20261020/review_contacts/assets/counterspell_contact.res": [
+        "res://factory/components/prepared_payload_contacts/bank.gd",
+        "res://authoring/runtime-cost-repair-20261020/review_contacts/assets/counterspell_contact.scn",
+        "res://factory/components/prepared_review/counterspell.gd",
+        "res://authoring/runtime-cost-repair-20261020/review_contacts/assets/program-7fe2a486af3d323af09323f7429fb5d6ad2c09f414525e3c58f08b994c9cfb74.gdshader",
+        "res://authoring/runtime-cost-repair-20261020/review_contacts/assets/texture-2218f6f1022c8d9630e50c5c77215dae32e076f59481d3da68852979d400dbe7.res",
+        "res://library/selected/project_temporary_gva_p_39c5316af053_91468cb9/VFX/textures/T_VFX_Noise_10.PNG",
+        "res://authoring/runtime-cost-repair-20261020/review_contacts/assets/texture-625cf993ec96f7e41ef61694763539433e7b78588355526cb4a8ef41cb82a84d.res",
+        "res://authoring/runtime-cost-repair-20261020/review_contacts/assets/texture-624d703baaed6097e921e68841bebd6713ae22ddfa455697ff6c8629bf2b24bc.res",
+        "res://library/selected/project_temporary_gva_p_39c5316af053_91468cb9/VFX/textures/T_mask_black1.jpg",
+        "res://authoring/runtime-cost-repair-20261020/review_contacts/assets/texture-87bf87d6ebc15bb9032d436fb739e85fbce5a5762ccead41ae7e3e935877fcad.res"
+      ],
+      "res://authoring/runtime-cost-repair-20261020/review_contacts/assets/counterspell_contact.scn": [
+        "res://authoring/runtime-cost-repair-20261020/review_contacts/assets/program-7fe2a486af3d323af09323f7429fb5d6ad2c09f414525e3c58f08b994c9cfb74.gdshader",
+        "res://authoring/runtime-cost-repair-20261020/review_contacts/assets/texture-2218f6f1022c8d9630e50c5c77215dae32e076f59481d3da68852979d400dbe7.res",
+        "res://library/selected/project_temporary_gva_p_39c5316af053_91468cb9/VFX/textures/T_VFX_Noise_10.PNG",
+        "res://authoring/runtime-cost-repair-20261020/review_contacts/assets/texture-625cf993ec96f7e41ef61694763539433e7b78588355526cb4a8ef41cb82a84d.res",
+        "res://authoring/runtime-cost-repair-20261020/review_contacts/assets/texture-624d703baaed6097e921e68841bebd6713ae22ddfa455697ff6c8629bf2b24bc.res",
+        "res://library/selected/project_temporary_gva_p_39c5316af053_91468cb9/VFX/textures/T_mask_black1.jpg",
+        "res://authoring/runtime-cost-repair-20261020/review_contacts/assets/texture-87bf87d6ebc15bb9032d436fb739e85fbce5a5762ccead41ae7e3e935877fcad.res"
+      ],
+      "res://authoring/runtime-cost-repair-20261020/review_contacts/assets/program-7fe2a486af3d323af09323f7429fb5d6ad2c09f414525e3c58f08b994c9cfb74.gdshader": [],
+      "res://authoring/runtime-cost-repair-20261020/review_contacts/assets/program-9626e3d1956fc5312de62e0e12e9d7f0b2e2c01ffc313b998ef01be040bc75be.gdshader": [],
+      "res://authoring/runtime-cost-repair-20261020/review_contacts/assets/retained_fire.res": [
+        "res://factory/components/prepared_payload_contacts/bank.gd",
+        "res://authoring/high-level-22/delayed_blast_fireball_native/sources/fireball_native.tres",
+        "res://authoring/runtime-cost-repair-20261020/review_contacts/assets/retained_fire.scn",
+        "res://factory/components/prepared_review/retained_fire.gd",
+        "res://authoring/runtime-cost-repair-20261020/review_contacts/assets/program-9626e3d1956fc5312de62e0e12e9d7f0b2e2c01ffc313b998ef01be040bc75be.gdshader",
+        "res://library/selected/project_temporary_fireball_surface_project_38a7394e/VFX/Textures/T_VFX_Noise_13.PNG",
+        "res://authoring/runtime-cost-repair-20261020/review_contacts/assets/texture-468e7d03ab2bb3c5775a4b61668beda919ca2cd7224c5e31a9c2fbc626467141.res",
+        "res://authoring/runtime-cost-repair-20261020/review_contacts/assets/texture-6fad9fff68f32746ae7ea59b50fdc39529536516dd1cc01317d102edc169db45.res",
+        "res://authoring/runtime-cost-repair-20261020/review_contacts/assets/texture-b27fced0abc70ac4521c5deeeea400b1bf75a4e7d9ccd540252b2737b36460f8.res",
+        "res://authoring/runtime-cost-repair-20261020/review_contacts/assets/texture-af202dbce04b95984fe7a77598cbb5a2e3ddefd359bc5531cb548562353927bb.res"
+      ],
+      "res://authoring/runtime-cost-repair-20261020/review_contacts/assets/retained_fire.scn": [
+        "res://authoring/runtime-cost-repair-20261020/review_contacts/assets/program-9626e3d1956fc5312de62e0e12e9d7f0b2e2c01ffc313b998ef01be040bc75be.gdshader",
+        "res://library/selected/project_temporary_fireball_surface_project_38a7394e/VFX/Textures/T_VFX_Noise_13.PNG",
+        "res://authoring/runtime-cost-repair-20261020/review_contacts/assets/texture-468e7d03ab2bb3c5775a4b61668beda919ca2cd7224c5e31a9c2fbc626467141.res",
+        "res://authoring/runtime-cost-repair-20261020/review_contacts/assets/texture-6fad9fff68f32746ae7ea59b50fdc39529536516dd1cc01317d102edc169db45.res",
+        "res://authoring/runtime-cost-repair-20261020/review_contacts/assets/texture-b27fced0abc70ac4521c5deeeea400b1bf75a4e7d9ccd540252b2737b36460f8.res",
+        "res://authoring/runtime-cost-repair-20261020/review_contacts/assets/texture-af202dbce04b95984fe7a77598cbb5a2e3ddefd359bc5531cb548562353927bb.res"
+      ],
+      "res://authoring/runtime-cost-repair-20261020/review_contacts/assets/texture-2218f6f1022c8d9630e50c5c77215dae32e076f59481d3da68852979d400dbe7.res": [],
+      "res://authoring/runtime-cost-repair-20261020/review_contacts/assets/texture-468e7d03ab2bb3c5775a4b61668beda919ca2cd7224c5e31a9c2fbc626467141.res": [],
+      "res://authoring/runtime-cost-repair-20261020/review_contacts/assets/texture-624d703baaed6097e921e68841bebd6713ae22ddfa455697ff6c8629bf2b24bc.res": [],
+      "res://authoring/runtime-cost-repair-20261020/review_contacts/assets/texture-625cf993ec96f7e41ef61694763539433e7b78588355526cb4a8ef41cb82a84d.res": [],
+      "res://authoring/runtime-cost-repair-20261020/review_contacts/assets/texture-6fad9fff68f32746ae7ea59b50fdc39529536516dd1cc01317d102edc169db45.res": [],
+      "res://authoring/runtime-cost-repair-20261020/review_contacts/assets/texture-87bf87d6ebc15bb9032d436fb739e85fbce5a5762ccead41ae7e3e935877fcad.res": [],
+      "res://authoring/runtime-cost-repair-20261020/review_contacts/assets/texture-af202dbce04b95984fe7a77598cbb5a2e3ddefd359bc5531cb548562353927bb.res": [],
+      "res://authoring/runtime-cost-repair-20261020/review_contacts/assets/texture-b27fced0abc70ac4521c5deeeea400b1bf75a4e7d9ccd540252b2737b36460f8.res": [],
+      "res://factory/components/high_level_payloads/source_bundle.gd": [],
+      "res://factory/components/prepared_payload_contacts/bank.gd": [],
+      "res://factory/components/prepared_review/counterspell.gd": [],
+      "res://factory/components/prepared_review/retained_fire.gd": [],
+      "res://factory/components/prepared_sensory/bank.gd": [],
+      "res://factory/components/prepared_sensory/composition.gd": [],
+      "res://factory/components/sensory/deafened_application.gd": [],
+      "res://integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_blood_premium/VFX/objects/sm_plane_coned_spiked_waved1.obj": [],
+      "res://integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_magic_projectiles_premium_demo_project/VFX/Objects/sm_box2.obj": [],
+      "res://integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_magic_projectiles_premium_demo_project/VFX/Objects/sm_box2_rotated.obj": [],
+      "res://library/lelu/pack_lelu_godot_blood_premium/VFX/objects/sm_plane_coned_spiked_waved1.obj": [],
+      "res://library/lelu/pack_lelu_godot_magic_projectiles_premium_demo_project/VFX/Objects/sm_box2.obj": [],
+      "res://library/lelu/pack_lelu_godot_magic_projectiles_premium_demo_project/VFX/Objects/sm_box2_rotated.obj": [],
+      "res://library/selected/project_temporary_fireball_surface_project_38a7394e/VFX/Shaders/s_master_explosion_2.tres": [],
+      "res://library/selected/project_temporary_fireball_surface_project_38a7394e/VFX/Textures/generated/n_explosionB.tres": [],
+      "res://library/selected/project_temporary_fireball_surface_project_38a7394e/VFX/Textures/gradients/g_explossive1.tres": []
+    },
+    "shared_clock": "res://assets/vfx/sources/c0017ad639184b208deb/occurrence_clock.gd",
+    "no_runtime_hash_or_graph_work": true
+  },
+  "scoped_aliases": {
+    "resolver": "res://assets/vfx/extensions/source-preparation-20261020/scoped_resource_io.gd",
+    "map": "res://assets/vfx/format/source-preparation-20261020-aliases.json",
+    "resolver_sha256": "e05b4dfcc0e6f18214eaa3df585f4a4544d386a87ead7c3aa148b04db573a6f8",
+    "map_sha256": "a8f79f76d69c8c0e69d6a89ecb218b5ec5c816f0aa5cf11c87a757fffb03a526",
+    "aliases": 7355,
+    "scope": "Only newly isolated callers; existing aliases and resolver bytes remain unchanged"
+  },
+  "selection_changed": false
+}

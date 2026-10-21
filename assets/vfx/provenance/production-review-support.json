@@ -1,0 +1,43 @@
+{
+  "support": {
+    "schema": "factory.production_review.delivery_support.v1",
+    "construction_helpers": [
+      "res://factory/packaging/condition_actor_history.gd",
+      "res://factory/packaging/condition_history_capture.gd",
+      "res://authoring/production-review-repair-20261020/aura_of_life/owner-binding.json"
+    ],
+    "source_resources": [
+      {
+        "key": "continual_flame_bounded_hold",
+        "phase": "res://authoring/production-review-repair-20261020/continual_flame/source-hold-loop.tres"
+      },
+      {
+        "key": "aura_of_life_main_owner",
+        "phase": "res://authoring/production-review-repair-20261020/aura_of_life/owner.tres"
+      }
+    ],
+    "support": {
+      "immutable_actor_history": {
+        "owner": "res://factory/packaging/condition_actor_history.gd",
+        "capture": "res://factory/packaging/condition_history_capture.gd",
+        "qualification": "authoring/production-review-repair-20261020/history/qualification.json",
+        "human_approval_inferred": false,
+        "consumer_assignment_performed": false,
+        "requires_actual_receiver_context_and_material_dependencies": true,
+        "lighting_globals": "Actual scene globals at the capture draw boundary; historical global-light restoration is not qualified"
+      },
+      "aura_owner_binding": {
+        "resource": "res://authoring/production-review-repair-20261020/aura_of_life/owner-binding.json",
+        "condition_id": "condition.spell.aura_of_life.owner",
+        "member_source_replaced": false
+      }
+    },
+    "human_approval_inferred": false,
+    "production_integration_performed": false
+  },
+  "paths": {
+    "res://factory/packaging/condition_actor_history.gd": "res://assets/vfx/extensions/production-review-20261020/sources/6e2fd9339711629213f5/condition_actor_history.gd",
+    "res://factory/packaging/condition_history_capture.gd": "res://assets/vfx/extensions/production-review-20261020/sources/55cd7ae83a2e60843ea1/condition_history_capture.gd",
+    "res://authoring/production-review-repair-20261020/aura_of_life/owner-binding.json": "res://assets/vfx/extensions/production-review-20261020/sources/8faaffff58448cd00806/owner-binding.json"
+  }
+}

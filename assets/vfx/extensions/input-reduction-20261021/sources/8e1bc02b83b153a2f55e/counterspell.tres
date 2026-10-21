@@ -1,0 +1,26 @@
+[gd_resource type="Resource" load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://assets/vfx/sources/67ebe8ef4f358cad6a4b/phase.gd" id="script"]
+[ext_resource type="Script" path="res://assets/vfx/sources/d60670fa4c3a03cc8f3a/component.gd" id="component"]
+
+[sub_resource type="Resource" id="part_0"]
+script = ExtResource("component")
+component_id = "assembly"
+constructor_script = "res://assets/vfx/extensions/input-reduction-20261021/sources/b26a32983546c300b542/typed_sequence.gd"
+input = {"components": [{"script": "res://assets/vfx/sources/23179f981610edc6fd8f/finger_counterspell_source_v193.gd", "input": {"owner": {"reaction_uuid": "56133811-4303-4913-a456-f2d063bfc193", "triggered_event_uuid": "56133811-4303-4913-a456-f2d063bfc194", "triggered_lineage_uuid": "56133811-4303-4913-a456-f2d063bfc195", "source_entity_uuid": "target", "target_entity_uuid": "caster", "reaction_id": "reaction.spell.counterspell", "outcome_code": "spell.counterspell.interrupted"}, "observation": {"reaction_uuid": "56133811-4303-4913-a456-f2d063bfc193", "triggered_event_uuid": "56133811-4303-4913-a456-f2d063bfc194", "triggered_lineage_uuid": "56133811-4303-4913-a456-f2d063bfc195", "source_entity_uuid": "target", "target_entity_uuid": "caster", "reaction_id": "reaction.spell.counterspell", "outcome_code": "spell.counterspell.interrupted", "admitted": true, "succeeded": true, "canceled": true, "phase": "completion", "presented_facts": "Explicit offline resolved CounterspellReactionEvent and incoming cancellation facts; no rules or backend connection"}, "incoming_parent_owner": "56133811-4303-4913-a456-f2d063bfc194", "source_clock_offset": 0.0, "source_end": 3.25, "interception_source_seconds": 0.875, "reaction_owner_seconds": 0.5, "interception_socket_native": [0.21123416126, 2.17426496595, 2.46239132285], "wrist_turn_source_seconds": [0.96875, 1.375], "wrist_hold_through_source_seconds": 2.125, "hand": {"hand_script": "res://assets/vfx/extensions/input-reduction-20261021/sources/40e0cbd5dd4bbb31bd1c/skeletal_counterspell.gd", "hand_input": {"scene": "res://assets/vfx/sources/d5ecd06fc57beb3273b3/effect_root.tscn", "settings": {"animation": "", "mode": "binding", "pack": "lelu-portal", "name": "VFX_Hit_dark", "sourceScale": 0.92, "height": 1.1, "kind": "finger", "cell": 768, "ortho": 24, "targetY": 1.0, "frames": 104, "palette": ["26221d", "4c4030", "847155", "b19e77", "d8cbaa", "fff0ce"], "adapter": "GroundMagicArmCapture.gd", "target": [0, 7.54247233], "id": "finger_ground_magic_v7", "cameraQuarter": 0}, "side": "full", "simulation_hz": 144, "seed": 47291}, "counterspell": true, "native_units_per_cell": 1.885618083, "emission_point_native": [0.2105243369936943, 2.062067713588476, 2.4470988512039185], "launch_seconds": 1.1, "travel_seconds": 0.65, "projectile_scene": "res://assets/vfx/extensions/continuation42-20261020/sources/ad27e34ccc3251fedf28/VFX_Darkness_projectile.tscn", "splinter_geometry": "res://assets/vfx/sources/64feffa25a7eab59ef08/splinter.json", "splinter_material": "res://assets/vfx/extensions/continuation42-20261020/sources/9c884e66e750a862ecb7/shard.tres"}, "hand_finish": {"id": "source_pow_energy_nearest", "colors": ["26221d", "4c4030", "847155", "b19e77", "d8cbaa", "fff0ce"], "exponent": 1.15, "native_input": "original material ALBEDO+EMISSION before lighting", "historical_input": "alpha-weighted max rendered RGB after lighting and 2x2 pooling", "exact_historical_RGBA": false}, "interception": {"material": "res://assets/vfx/extensions/continuation42-20261020/sources/f0efc0d33a6039e52ea9/m_basic_blueshield1.tres", "palette": ["592d40", "b06059", "da7c72", "f7ab9d"], "scale_cells_per_source_unit": 0.5303300859360713, "succeeded": true}, "hand_only_control": false}, "id": "effect", "rotation_degrees": [0, 0, 0]}], "bindings": [{"component": "effect", "kind": "sample", "rate": 1.0, "offset_seconds": 0.0}], "emitters": [], "light_roles": [{"class": "DirectionalLight3D", "role": "geometry_only"}], "skeletal_sequence_bank": "res://assets/vfx/extensions/input-reduction-20261021/sources/c0706bc8a3a9626b8798/counterspell.res"}
+options = {}
+provenance = "Preserved source hand plus explicit private per-material six-stop finish. Original coral interception only in full_sequence. No normal Finger delivery."
+
+[resource]
+script = ExtResource("script")
+clip_id = "private/finger-counterspell-v193/full_sequence"
+label = "Original counterspell source · full_sequence"
+phase = "lifecycle"
+variant = "finger_counterspell_full_sequence_v193"
+source_recipe = "recipes/spells/finger_of_death.json"
+bindings = [{"component": "assembly", "kind": "sample", "rate": 1.0, "offset_seconds": 0.0}]
+emitters = []
+seconds = 3.25
+simulation_hz = 144.0
+components = Array[Resource]([SubResource("part_0")])
+options = {"qualification": "Native-context visual review; not production approval"}

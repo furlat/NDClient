@@ -1,0 +1,979 @@
+{
+  "version": "runtime-spike-seed-20261021-7ca62e2877bf5156",
+  "predecessor": "runtime-input-reduction-20261021-ae66781e13227349",
+  "rows": [
+    {
+      "key": "spike_instance_seed",
+      "clip_id": "assembled/spike_growth_native",
+      "group": "spike_instance_seed",
+      "candidate_phase": "res://authoring/production-review-repair-20261021/runtime_tail/spike_instance_seed/v1/phase.tres",
+      "phase_sha256": "2a64c78415f32aa87b8f0e67df9d33586f0bae9aeb95179c9b7cb2425ca3313d",
+      "qualification_path": "authoring/production-review-repair-20261021/runtime_tail/spike_instance_seed/v1/qualification.json",
+      "qualification_sha256": "e35b88d2cf951f568a1b330e5d10df4fbec6dbe867a0932ff1e9ed06b184fc9d",
+      "source_qualification": true,
+      "source_runtime_flags_retained": {
+        "qualification": "authoring/production-review-repair-20261021/runtime_tail/spike_instance_seed/v1/qualification.json",
+        "qualification_sha256": "e35b88d2cf951f568a1b330e5d10df4fbec6dbe867a0932ff1e9ed06b184fc9d",
+        "cost_flags": [
+          {
+            "actual_us": 2118.0,
+            "measurement": "complete_constructor",
+            "source": "spike",
+            "threshold_us": 2000.0
+          },
+          {
+            "actual_us": 2437.0,
+            "measurement": "complete_constructor",
+            "source": "spike",
+            "threshold_us": 2000.0
+          },
+          {
+            "actual_us": 2071.0,
+            "measurement": "complete_constructor",
+            "source": "spike",
+            "threshold_us": 2000.0
+          }
+        ],
+        "readiness": [
+          {
+            "phase": "res://authoring/production-review-repair-20261021/runtime_tail/spike_instance_seed/v1/phase.tres",
+            "total_including_frame_yields_us": 383345,
+            "sum_actual_step_us": 159235,
+            "maximum_actual_step_us": 24454,
+            "steps_over2000us": 9,
+            "scope": "Readiness.begin and actual resource steps; caller phase load is separate. No owner construction or sample."
+          },
+          {
+            "phase": "res://authoring/production-review-repair-20261021/runtime_tail/spike_owner_direct/v1/phases/spike.tres",
+            "total_including_frame_yields_us": 246799,
+            "sum_actual_step_us": 148981,
+            "maximum_actual_step_us": 18093,
+            "steps_over2000us": 9,
+            "scope": "Readiness.begin and actual resource steps; caller phase load is separate. No owner construction or sample."
+          }
+        ],
+        "runtime_budget_pass": false,
+        "raw_flags_retained": true
+      },
+      "construction_kind": "owner_operands",
+      "public_constructor": "res://factory/components/owner_release/common_occurrence.gd",
+      "public_setters": [
+        "set_targets",
+        "set_owner_state",
+        "set_zone_geometry"
+      ],
+      "public_fixture": {
+        "constructor_values": {
+          "owner_uuid": "schema-spike-owner-direct",
+          "cells": [
+            [
+              -1,
+              -1
+            ],
+            [
+              0,
+              -1
+            ],
+            [
+              1,
+              -1
+            ],
+            [
+              -1,
+              0
+            ],
+            [
+              0,
+              0
+            ],
+            [
+              1,
+              0
+            ],
+            [
+              -1,
+              1
+            ],
+            [
+              0,
+              1
+            ],
+            [
+              1,
+              1
+            ]
+          ]
+        },
+        "component_path": [
+          "effect"
+        ],
+        "input_field": "",
+        "zone_geometry": {
+          "spatial_effect_uuid": "schema-spike-owner-direct",
+          "effect": {
+            "content_ref": {
+              "content_id": "spatial_effect.spell.spike_growth"
+            },
+            "anchor_position": [
+              0,
+              0
+            ],
+            "positions": [
+              [
+                -1,
+                -1
+              ],
+              [
+                0,
+                -1
+              ],
+              [
+                1,
+                -1
+              ],
+              [
+                -1,
+                0
+              ],
+              [
+                0,
+                0
+              ],
+              [
+                1,
+                0
+              ],
+              [
+                -1,
+                1
+              ],
+              [
+                0,
+                1
+              ],
+              [
+                1,
+                1
+              ]
+            ],
+            "suppressions": []
+          }
+        },
+        "targets": [
+          [
+            0,
+            0,
+            0
+          ]
+        ],
+        "owner_state": {
+          "owner_uuid": "schema-spike-owner-direct",
+          "present": true,
+          "observed": true,
+          "suppressed": false,
+          "owner_age_seconds": 1.25
+        },
+        "source_root_scale": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "camera_focus": [
+          0,
+          0.4,
+          0
+        ],
+        "camera_size": 8.5,
+        "sample_age_seconds": 1.25,
+        "layer_mask": 2,
+        "fixture_is_gameplay_observation": false,
+        "scope": "Exact schema-only nine-cell public fixture from native-v1. Labels are test inputs, never asset/producer defaults.",
+        "owner_uuid": "schema-spike-owner-direct",
+        "witness_age": 1.25,
+        "witness_sample_hz": 144
+      },
+      "simulation_hz": 144,
+      "construction_input_contract": "make_component({phase:load(candidate_phase),layer_mask:2,operands:[{component_path:[\"effect\"],input_field:\"\",values:{owner_uuid:actual_owner_uuid,cells:actual_constructed_cells}}]}); add returned occurrence to its real parent before live setters/sample. A later package must privately bind this phase; existing fixed owner_release_spike wrapper still names the older phase.",
+      "native_art_scope": "Only the native seed moves from material to draw-instance storage; three selected actual-owner native source/candidate pairs exact. Not whole chronology/arbitrary actor or human art approval.",
+      "evidence": [
+        {
+          "path": "authoring/production-review-repair-20261021/runtime_tail/spike_instance_seed/v1/qualification.json",
+          "sha256": "e35b88d2cf951f568a1b330e5d10df4fbec6dbe867a0932ff1e9ed06b184fc9d",
+          "active_art_context_qualified": true,
+          "optical": {
+            "strict_threshold_pass": true
+          },
+          "complete_constructor_and_update_budget_pass": false,
+          "scope": "Existing actual-owner source with seed-only native instance storage. All3selected source/candidate native pairs exact;3constructor flags and readiness tails remain. No full chronology, actual actor/gameplay or art approval."
+        }
+      ]
+    }
+  ],
+  "source_hashes": {
+    "res://authoring/production-review-repair-20261021/owner_release/spike.tres": "99a9e9b0af95bb582b994ba8441d6f427564e62c5dc6503faa67950e02a580f9",
+    "res://authoring/production-review-repair-20261021/runtime_tail/spike_instance_seed/v1/banks/patch-00-construct.gd": "fe1989db5361c9051e8680c6bbc140d86e792ee7fe6bb14966e530c05b24fa83",
+    "res://authoring/production-review-repair-20261021/runtime_tail/spike_instance_seed/v1/banks/patch-00.res": "30b4632dcb9edc1df49a246481aa85f4a08b17703c08743a7f9dacbcc3dd6082",
+    "res://authoring/production-review-repair-20261021/runtime_tail/spike_instance_seed/v1/banks/patch-01-construct.gd": "8bf9cf3ba0a8d58d93e4e1f18b109ce2928c08c4794de14543224e55d3c3ad50",
+    "res://authoring/production-review-repair-20261021/runtime_tail/spike_instance_seed/v1/banks/patch-01.res": "cd8ff0f05dd5ea45b19eba3612b34ae5ab8cfdcfafaa67887d1a34883f7eca88",
+    "res://authoring/production-review-repair-20261021/runtime_tail/spike_instance_seed/v1/banks/patch-02-construct.gd": "74e48c54ed84090aafddb6a4ed8daf896f19a2c7bf610420266797259ec7adf7",
+    "res://authoring/production-review-repair-20261021/runtime_tail/spike_instance_seed/v1/banks/patch-02.res": "c3329b6ea698c80b736717e94e825f500181b368db8c74ce923812f7a4425906",
+    "res://authoring/production-review-repair-20261021/runtime_tail/spike_instance_seed/v1/banks/patch-03-construct.gd": "05178f2bbd419b9f1cbc008b6abed1fd9b5673e1d0535cd70777a48c9ad0f51c",
+    "res://authoring/production-review-repair-20261021/runtime_tail/spike_instance_seed/v1/banks/patch-03.res": "8a47ab4f1be1cc80d4259db5a1725a0287d101b1994ea41c2ee5edbacae26fc2",
+    "res://authoring/production-review-repair-20261021/runtime_tail/spike_instance_seed/v1/banks/patch-04-construct.gd": "74e48c54ed84090aafddb6a4ed8daf896f19a2c7bf610420266797259ec7adf7",
+    "res://authoring/production-review-repair-20261021/runtime_tail/spike_instance_seed/v1/banks/patch-04.res": "0d2b87517201642aba6718eac20ab0114505e8ab1800ddddc8f49ed2cf1d256f",
+    "res://authoring/production-review-repair-20261021/runtime_tail/spike_instance_seed/v1/banks/patch-05-construct.gd": "8bf9cf3ba0a8d58d93e4e1f18b109ce2928c08c4794de14543224e55d3c3ad50",
+    "res://authoring/production-review-repair-20261021/runtime_tail/spike_instance_seed/v1/banks/patch-05.res": "85af576886a932b09142022aec9d435cd9edbad4a75cb7cce4e0e2bf1f8de75a",
+    "res://authoring/production-review-repair-20261021/runtime_tail/spike_instance_seed/v1/banks/patch-06-construct.gd": "fe1989db5361c9051e8680c6bbc140d86e792ee7fe6bb14966e530c05b24fa83",
+    "res://authoring/production-review-repair-20261021/runtime_tail/spike_instance_seed/v1/banks/patch-06.res": "0f230370663e919ef23698c1d140173d60a6e990d30bab1b3c8c157ea93df09a",
+    "res://authoring/production-review-repair-20261021/runtime_tail/spike_instance_seed/v1/banks/patch-07-construct.gd": "8bf9cf3ba0a8d58d93e4e1f18b109ce2928c08c4794de14543224e55d3c3ad50",
+    "res://authoring/production-review-repair-20261021/runtime_tail/spike_instance_seed/v1/banks/patch-07.res": "ce1656bffaa6c394a1bfbfdbf74c1c3fe73cbc30f1488ba5b7f036ed4ce32e8a",
+    "res://authoring/production-review-repair-20261021/runtime_tail/spike_instance_seed/v1/banks/patch-08-construct.gd": "74e48c54ed84090aafddb6a4ed8daf896f19a2c7bf610420266797259ec7adf7",
+    "res://authoring/production-review-repair-20261021/runtime_tail/spike_instance_seed/v1/banks/patch-08.res": "e6d8c6735b1133de92f40cf76bec757643a487f82c41ecf088ab31a09b02e41d",
+    "res://authoring/production-review-repair-20261021/runtime_tail/spike_instance_seed/v1/banks/seed-program.gdshader": "9b351baea200e49f30dbd88817570f5c9f721ead10922976a67ae5957550d22d",
+    "res://authoring/production-review-repair-20261021/runtime_tail/spike_instance_seed/v1/phase.tres": "2a64c78415f32aa87b8f0e67df9d33586f0bae9aeb95179c9b7cb2425ca3313d",
+    "res://authoring/production-review-repair-20261021/terrain_owner/assets-v1/16e3e01ce252f98d02c5.res": "2b2d292c4d4291b007fcc552fc6f957ac98f134f5e06ee6936720bc068f48bfb",
+    "res://authoring/production-review-repair-20261021/terrain_owner/assets-v1/16e3e01ce252f98d02c5.scn": "e0bef52a230a01562ded1a6a8c51899c3d91f59d09e3bc24381f95a66f7dc5bb",
+    "res://authoring/production-review-repair-20261021/terrain_owner/assets-v1/308782b981291d566d5d.res": "2053257fac8f78d153013bc136478aa43cecc44f3092a6d4230adc89a32273f0",
+    "res://authoring/production-review-repair-20261021/terrain_owner/assets-v1/308782b981291d566d5d.scn": "73fdb271da4f4db74546acca8d722a08f9f2900459740243912f66c2c4d436a1",
+    "res://authoring/production-review-repair-20261021/terrain_owner/assets-v1/3283ee4c4d9195da7c50.res": "b30c97b621ce1f946e97dfeb9190940da102f6cb4604fb7f23f017e20a940105",
+    "res://authoring/production-review-repair-20261021/terrain_owner/assets-v1/3283ee4c4d9195da7c50.scn": "6faca41cf1bf9e160f009363eab1ae47c4af18139f832dba8e4b714f221b4796",
+    "res://authoring/production-review-repair-20261021/terrain_owner/assets-v1/467f2f086fe6346a6bc6.res": "d30cb6754e502c45ca3bc35b14ae142135225ee2fd7909e293a85a261ed4f5a0",
+    "res://authoring/production-review-repair-20261021/terrain_owner/assets-v1/467f2f086fe6346a6bc6.scn": "995747309a73eb73ee9d2bced2ca96094ac10d92c514e840e80413d03b0a2d2e",
+    "res://authoring/production-review-repair-20261021/terrain_owner/assets-v1/5e21e9c6bd83de5e2fd7.res": "3c9c50477cfe53dbae83fb3ae038fa4799b86a9e6e30dcba3b0d1059e273d681",
+    "res://authoring/production-review-repair-20261021/terrain_owner/assets-v1/5e21e9c6bd83de5e2fd7.scn": "96b4dfd2c5416ed9ac9691c7822ab79626d92dacc30cdd487d70e97fc07b6e3e",
+    "res://authoring/production-review-repair-20261021/terrain_owner/assets-v1/6718959dcaea3cdcd4dc.res": "74739fcbf8d1bab0e66b217672cfbee81f82293e7f6cd15907ddf49cc1b81f0f",
+    "res://authoring/production-review-repair-20261021/terrain_owner/assets-v1/6718959dcaea3cdcd4dc.scn": "de3d82da6dba5349eb9f77cd6861e48ea118665cc3dc3bc4d385027abe6cb388",
+    "res://authoring/production-review-repair-20261021/terrain_owner/assets-v1/80bd9ae752586964e350.res": "2c7078f11faed300e7e4a8f4c07e05fb48c0fd4bae3343e38153b8d7fc174098",
+    "res://authoring/production-review-repair-20261021/terrain_owner/assets-v1/80bd9ae752586964e350.scn": "e2588b0175dda89bce3c0fe6e1e818b3dc6817040cd0092cfcffcde4a20e3764",
+    "res://authoring/production-review-repair-20261021/terrain_owner/assets-v1/b58956bf102fe6f33e74.res": "7a1395029f2cb90047fa94aa0153857402f0b8aad056d6fd4147aa517d43e313",
+    "res://authoring/production-review-repair-20261021/terrain_owner/assets-v1/b58956bf102fe6f33e74.scn": "e17444b5c2ff86a9106b1574fdc1958e8669b3839170fdf8e33d4d9480b2cb03",
+    "res://authoring/production-review-repair-20261021/terrain_owner/assets-v1/bf54ecc2419330806b3e.res": "fca84cc50934405097e54f4b0f2343db8cca2daa50a908694771451baa61b1d2",
+    "res://authoring/production-review-repair-20261021/terrain_owner/assets-v1/bf54ecc2419330806b3e.scn": "4545c99dced7de741126dd70837cf37f83bb686d498648363ad27a73006a6eaf",
+    "res://authoring/production-review-repair-20261021/terrain_owner/assets-v1/program-2dc54dd63cb5e3570f62.gdshader": "2dc54dd63cb5e3570f62f80882d67441757204d080c72d2fe4f5aa74b1c2b76c",
+    "res://authoring/production-review-repair-20261021/terrain_owner/assets-v1/program-327485ff2f40323b8588.gdshader": "327485ff2f40323b8588a35030d29a7b41286baae412b612a19c8e17856765a6",
+    "res://factory/authoring/component.gd": "3a37b2d404e3daf6a645f7a1569f878619e28d0c477d4f88af3c824b3f300fa3",
+    "res://factory/authoring/phase.gd": "e60cd3283f20b7555657d7336054094dcb8f1a791939e4956ec563114bcd1779",
+    "res://factory/baking/live_geometry_bindings.gd": "34c2ccdce695072ac450bdb79c6766ab7f843107dadc9044cd395be4f5b6409c",
+    "res://factory/baking/private_particle_process.gd": "799d1871a0a56b260c652b48e1ec8239682315026d3cd76dbf7730162241dd8f",
+    "res://factory/baking/recording_source_sampler.gd": "18e128dbe6f9df00915f2d1727053e380fa92222424747ea6cca7439df7026fa",
+    "res://factory/baking/runtime_particle_units.gd": "40a94dd0f1eb3d13bc372c75dc435db3567f14ad4cb7a1a991ce7a58e84885a7",
+    "res://factory/baking/source_bridge.gd": "daa9ffcaa41beae562991ec3edb60ff5397ab5772aab2cfeb3d8115136b03c4d",
+    "res://factory/baking/stable_source_paths.gd": "79d8683f87bbf7f860c394af64e5c4837c627911c4f94f01d4762377136fcce3",
+    "res://factory/components/owned_fields/input.gd": "7560cd5594285fed3582e18e397bf522ea1e453c084ef8dbfb0a052ae791b9ec",
+    "res://factory/components/owned_fields/spike_leaf.gd": "f6aee259250fee73c8f64eba76b9ec44b109125fd79abce98caa8164dfe5cf38",
+    "res://factory/components/owner_release/common_occurrence.gd": "0356ecee848d74ed47e6d110191d8b179326f7db7bc35904053e34e888a56058",
+    "res://factory/components/owner_release/spike.gd": "f5f6c2d6619086a812bdc239b6c95d431c2bcf7fdb309c5acfdd1cab59d0448b",
+    "res://factory/components/prepared_recipient/bank.gd": "03374ea39842dcb2f2809fc56cf6379f053cc5f5e8c5c3609792826e7d78782e",
+    "res://factory/components/prepared_recipient/restore.gd": "c4532aa2169ad51fd18e6886d983b0af91e2aa0fa9fca6c3b87fba9f05fd4b63",
+    "res://factory/components/prepared_timed/bank.gd": "82faf22fd22b0cc538701d853b788497cefbf0b7336a5395db2d0b47984fde00",
+    "res://factory/components/prepared_timed/direct_restore_bank.gd": "7a411555b6dee67d103984b58208bf714d984656728e5aed0a5cab3f18933e9d",
+    "res://factory/components/prepared_timed/restore.gd": "1f2c831af1a4242d1ca6aaff9cea81011cd48028d51e70eab3200486a433afed",
+    "res://factory/components/prepared_timed/typed_bank.gd": "37916707f310b4b0bbdf5ff7c0ccea0f1d234215930c1d5bbbe00bdf91a11336",
+    "res://factory/components/recipient/base.gd": "a866dea4a07145fce4b0a5719ed36a1e5c3eab3183d305d40ea6a221e4e3af39",
+    "res://factory/components/recipient/spike_growth_bark_mass.gd": "45497a5de615227dc81a7029c8146e62173b4f3a7a3cdcb21901ccf42c111cc5",
+    "res://factory/components/recipient/spike_growth_relief.gd": "c728736f02089f542d4e8dc276d1fc44cea5ce65374cbabfe2b182cab2587436",
+    "res://factory/components/recipient/terrain_growth.gd": "244c346c10096e8f10f6b6448f8eaa507cca69953a8d8ec87eb2aebb8bb6c882",
+    "res://factory/core/animation_key_times.gd": "64ca9ccd2e54c61c5cd52cbb68d7943a7eabbf7d7002127bb59c2cdd5406dfcd",
+    "res://factory/core/contract_stage.gd": "74b2cfe382b08b973be3e71a06842c6b29170e19521d21daec305bc9c8441ca6",
+    "res://factory/core/donor_scene.gd": "dd29d6d7e2f8a3c94ff7246736aefc8ad43f5e4b6e088223a6a37595ffd49702",
+    "res://factory/core/immutable_materials.gd": "7ccf04d48918a608d4b4f39a2e8fa86fe1d638cee8f48543441328ac55b521ba",
+    "res://factory/core/native_source_space.gd": "f8cc53bd9caed6a2168bf7c478d08cbff25fa8ea83ecd3aa48817ac8a27b66a6",
+    "res://factory/core/resource_graph.gd": "eca090b0c9895146375d3e959eaf193fef1236f0a7aadf91d9f137e50f853627",
+    "res://factory/core/source_materials.gd": "0f4c218085af57252c96d744a0c174fba72539eb0b90f88ff418966c2ac2f9e0",
+    "res://factory/core/tapered_tube.gd": "baaf6f6c50d1fada9ca714502161817e9ca16e474d074359d37a81b4d163fd22",
+    "res://factory/materials/spatial_energy_palette.gd": "f9ba610cf896d678b91cdd11e553a6c4db9b1cca82e1a6cb0b36eb2f90928828",
+    "res://factory/packaging/constructed_occurrence.gd": "ae59f52f60d99675d983839cb8696abd341de18b46bb618686f5481e3a5a009e",
+    "res://factory/packaging/construction_profile.gd": "78b2194e6c972c80a191799044e7886450fa36bbb0c52b7a0d783a9a706bd4e8",
+    "res://factory/packaging/occurrence.gd": "144c9c73ed1a0b1c955be270f68b41e998ba86584db9f36cda0366eea7aa7a73",
+    "res://factory/packaging/occurrence_bindings.gd": "30d613541975e19fd62bced07522ce4959da6657489ae4531143ac9a5c886df3",
+    "res://factory/packaging/occurrence_clock.gd": "59a42844d8168bc0bdb3fb893261197f7559d5fc94a7342d1861421c02691f6a",
+    "res://factory/packaging/owner_release_spike.gd": "d683983efbb7f2a5eb54ab47662a6f4a6e234a3e672e8ad31373f18933f8d2c7",
+    "res://factory/packaging/resource_io.gd": "7a001b4b69c2480a2ee5b85c8f85e7fcc812c8ed67398483522ea9be8d9f39ed",
+    "res://factory/packaging/scene_document.gd": "698f1b1ab06ea61ae1fd22eaf278d181aa0634e3f8c251874f4274be14e44ebc",
+    "res://factory/packaging/scene_operand_references.gd": "e4b9249de5f85a915fe1bae5edb24a541fb85848aea67077230f8e076d4b30c2",
+    "res://factory/packaging/source_readiness.gd": "9321995d3d4cc2e5ddc98cdf6b805685dc43a952589056654d9c6b0070c1a76a",
+    "res://factory/resources/empty_subject.tscn": "914a9055eb1b7c78ef6fbd2a20217103c464eb63c201ffd7ef0827c4ae8a1474",
+    "res://factory/resources/terrain_native/art/T_BarkA1_col.png": "c3db941ca0009cd4d57e5546c94952b3cc10a0d010eb809b322a545b898da2c6",
+    "res://factory/resources/terrain_native/art/T_Blood_Puddle_ZX1_N.png": "8a43cfb503b7c212e7ac535ef192d778dcd20b0cefbe9ac62a827fdee350be12",
+    "res://factory/resources/terrain_native/art/T_Leaf_001gray.png": "08fdfe261849c907a0c748b62b1cd1f1c4d29150227b475de652c7b61bd5d546",
+    "res://factory/resources/terrain_native/art/T_MarbleNoise_tiled.png": "d9693b7f9e0749d03a88cd61594ddc6d2315b5ee18a7d8495cc6b738348b2820",
+    "res://factory/resources/terrain_native/art/sm_vines_horizontal_soil.obj": "e0bb774ff15004d48e074ab50a1601e310fa2856e969f300a319ebb3bd8db14d",
+    "res://factory/resources/terrain_native/grease.gdshader": "0f4508af35c0660903188e9db5906ba4435141ff214c566cc4c46c1431368cf7",
+    "res://factory/resources/terrain_native/wood.gdshader": "1cbdcef535183a091e7eedb1098da4b416b18b28c6acda2ea868de91be473e8d",
+    "res://factory/shaders/cie_d65_v1.gdshaderinc": "1b92ec2f105962f8126bc3e7c38110d163fdc62414820e65c730f752aade2dae",
+    "res://integrations/ndclient/assets/native_effects/class_actions/Charge.gdshader": "19dbd070254366ba40b284511b159e757415779aefc8167775db011e01e1259e",
+    "res://integrations/ndclient/assets/native_effects/class_actions/ClassComponents.gd": "beffe6ba882eccc92b7672613cd5959e225a893fe21a6f528cff746063a742b7",
+    "res://integrations/ndclient/assets/native_effects/class_actions/Film.gdshader": "1da06086b96579d88ef317026c395699f9e379f306a11ce76075307521bad3ca",
+    "res://integrations/ndclient/assets/native_effects/class_actions/Flow.gdshader": "1e7fcb04c1f31c237adf7fefdf7d2b9ece9d0c7fa179e1f041b9b2413daea8e8",
+    "res://integrations/ndclient/assets/native_effects/class_actions/Glow.gdshader": "dcd7c27efcd84ec38e226e5180e753edb56d4c28a8364bf3053a30322f6d8774",
+    "res://integrations/ndclient/assets/native_effects/class_actions/Strike.gd": "1042121c97885e95cf4006690cab0ad080bc879f9c6ea39c1f433ca092566d81",
+    "res://integrations/ndclient/assets/native_effects/class_actions/Strike.gdshader": "3d00a1eb3a5ee5705699e2171e509d832633a1e7645bebc9bb6e7513eca6bf89",
+    "res://integrations/ndclient/assets/native_effects/class_actions/StrikePaths.json": "341630ccd6adcd31965a753c58e8302f075f9a7cab225646fe608816beabb220",
+    "res://integrations/ndclient/assets/native_effects/class_actions/strike_hit.png": "fbde8002dad5a6cc88e8fffa95af4b36ba8eaf77b7c4ae2c9c44b40e3da9883b",
+    "res://integrations/ndclient/assets/native_effects/class_actions/vfx_1/arc_charge/scripts/arc_charge_swirl.gd": "0aa31ac5de4f4efc74b4adcfd020266c53dda13920276114c88d0a0edaa39777",
+    "res://integrations/ndclient/assets/native_effects/class_actions/vfx_1/arc_charge/shaders/ribbon.gdshader": "2be39c852753907caee390514c2cb228f66edab12f2eadc3b99f1c87d68dca57",
+    "res://integrations/ndclient/assets/native_effects/class_actions/vfx_1/arc_charge/textures/aura_glow.png": "0153d00f65f7d86263514a57b5892176816d8fb374ca94325de74e7e667aa820",
+    "res://integrations/ndclient/assets/native_effects/class_actions/vfx_1/arc_charge/textures/ember.png": "c143513f7154cf2a9322d6f115e457689236b8081fd0613dc0f4b6af68bc0fd0",
+    "res://integrations/ndclient/assets/native_effects/class_actions/vfx_1/arc_charge/textures/flow_noise.tres": "638185929e10e90b3accceab043e07da1d70d8e391fc41925e1a0081a2708964",
+    "res://integrations/ndclient/assets/native_effects/class_actions/vfx_1/arc_charge/textures/star.png": "a5a94d4fd20b2794485c25adb50f47238dd2f38926754621b9f9f0736c40135d",
+    "res://integrations/ndclient/assets/native_effects/class_actions/vfx_1/arc_charge/variants/arc_charge_swirl_charge.tscn": "7035b169077b6c5144b6ccf77795ac67f72b1ea6332d45248d1e5eb80bfddb5e",
+    "res://integrations/ndclient/assets/native_effects/factory/archive/objects/73/73682ae4aa57cb2f9264cf5550437223fa5c5c0a3129f00096fc640aaefe4091": "73682ae4aa57cb2f9264cf5550437223fa5c5c0a3129f00096fc640aaefe4091",
+    "res://integrations/ndclient/assets/native_effects/factory/factory/shaders/cie_d65_v1.gdshaderinc": "252c03994b0bb8925b8e656abe9a62d922753fb341567e334c0a57065cdef7f9",
+    "res://integrations/ndclient/assets/native_effects/factory/factory/shaders/energy_palette_v1.gdshader": "32f76501adc64e7e6444b28b779150d39c96b857bf868b1c075348fa0715c47e",
+    "res://integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_blood_premium/VFX/Scenes/Decal_Blood_Animated_A1.tscn": "33639e05a422bab5ef19e4c1b47146eeb6c39fa837c3c9b7a2666d5830382b7a",
+    "res://integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_blood_premium/VFX/Scenes/VFX_Blood_Hit_A1.tscn": "f621aad24921fffeb7988413bb861ab51dcedea5ff249fecef60a6f23fb07195",
+    "res://integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_blood_premium/VFX/Scenes/VFX_Blood_Hit_A2.tscn": "f0e2a479e0c03f2540a743c813c60e61ce6d94213e759d5cb00d9454cedc745b",
+    "res://integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_blood_premium/VFX/Scenes/VFX_Blood_Mark_J1.tscn": "68c97270042bccea62ea5d5b22b8bc1753342803eafda4be698177ed8a951eb0",
+    "res://integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_blood_premium/VFX/objects/sm_plane_coned_spiked_waved1.obj": "0d08c64ea3173f8860d1cadec0b3005d1df7681ebe45b0876e8ff770460a50cc",
+    "res://integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_blood_premium/VFX/shaders/s_Disolver_small_Liquid.tres": "07ac62b3c3371f7d9f7c845626ec10f5455b58387dc21d9b836749af01483e05",
+    "res://integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_blood_premium/VFX/shaders/s_Disolver_small_Liquid_p_Treshold_ds.tres": "77e3bc50180da87bd76ed9f4808e69a30e87dd7dc8861aeeacc1e043152b0a88",
+    "res://integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_blood_premium/VFX/shaders/ss_Disolver_subUV_small_Liquid_Treshold_p.gdshader": "5cd8214ed58b515189f1aafd77aba17b99dbf57a86571c0885f8070ab1db3778",
+    "res://integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_blood_premium/VFX/shaders/ss_decal3double_treshold.gdshader": "0b6eff740399f012f86c493150fae48916e2a03f63be281a40a1795762957529",
+    "res://integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_blood_premium/VFX/textures/T_Blood_DECAL_g4.png": "68ee2643fe401e02a28ee3e49867125212759feb88f5615ddb7d7153df8f5a2d",
+    "res://integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_blood_premium/VFX/textures/T_Blood_DECAL_g4x.png": "1e8fdb62cf96bd3b631eb92ec04163a4f8746f790ee2da2d6d2dbf54fdb98ad6",
+    "res://integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_blood_premium/VFX/textures/T_Blood_DECAL_g4x_N.png": "01080724dd6b8a11ea03b34ef5c607319140c87501a591d13425700212c2c643",
+    "res://integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_blood_premium/VFX/textures/T_Blood_MultiUV_f3.png": "eb3b31b84652471d6c7069b1e05eda310c07072d9f10bbf492b661f71b03c193",
+    "res://integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_blood_premium/VFX/textures/T_Blood_MultiUV_f3_N.png": "718ba1a347fbf32fcae370ee82f00a5aa0727fc4b96084d3ea3624569e1bc80c",
+    "res://integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_blood_premium/VFX/textures/T_Blood_Splatter11_N.png": "85ebdc53b869510cade1d5b97f4cc433bc84b38f2d1d06d1e1f5430f7d735f91",
+    "res://integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_blood_premium/VFX/textures/T_Blood_Splatter77.png": "103fcb03e0420d33b2670f87bf66844bfc823b5da1a6325ff417afb7265f96f3",
+    "res://integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_blood_premium/VFX/textures/T_Decal_BloodSplatter45k.png": "33a1b5146ac72a518c62811aae2057004aee85517980574711a34c232551607d",
+    "res://integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_blood_premium/VFX/textures/T_Decal_BloodSplatter45ki_N.png": "e2597a3c095800b8b6a29cd248fa7f7bb1c0787e2712c372908bf58056282f19",
+    "res://integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_blood_premium/VFX/textures/T_Gib_Red_C.PNG": "b764bf132265459154759a08791f3eeaf242b1d5593b0971badedd045c73ee22",
+    "res://integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_blood_premium/VFX/textures/T_NP41.PNG": "f9c8e2fa1dcc62f85965e5a7f3a48cbe4739b01dbbecb9298e9f1da43ec13af2",
+    "res://integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_blood_premium/VFX/textures/T_smoke_K97.png": "2cc94f51b380b6eab0f5cde5c64a5de8176f07e3f5ce3c79878598cc5834e2a6",
+    "res://integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_magic_projectiles_premium_demo_project/VFX/Objects/sm_box2.obj": "219430b5f1dfc7211212f026d4977d04d772925e08c8c7322fea7f40e09ae598",
+    "res://integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_magic_projectiles_premium_demo_project/VFX/Objects/sm_box2_rotated.obj": "464b76e43d36a2fb2007abe8e913cc2bc761dfc779b8073b20543e4732f7d300",
+    "res://integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_magic_projectiles_premium_demo_project/VFX/Scenes/VFX_Cube_projectile.tscn": "e3dc3d912d7f6c07f3649aed17877fd09f146945b212aac7487ccd851296a89e",
+    "res://integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_magic_projectiles_premium_demo_project/VFX/Scenes/VFX_Hit_cyber.tscn": "14f16f90110769de3f5d98850a4005242cbf72f8274555cd972520804f880520",
+    "res://integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_magic_projectiles_premium_demo_project/VFX/Shaders/s_dualColor_masked.tres": "07e2521b9373c5f6decd4c62b49401a7d2cc8ff55433fb72f1a2c999b3a7cf54",
+    "res://integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_magic_projectiles_premium_demo_project/VFX/Shaders/s_simple_p.tres": "31c9ea5b51962959ff51414f1012c7a4659bcfcc1ed8ffd9c2ea99eb8382eed1",
+    "res://integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_magic_projectiles_premium_demo_project/VFX/Shaders/s_single_masked_p.tres": "4f0afc3129be1c9c233abd11309d77096a39129dc5e277ed0cfc0a904f280ca2",
+    "res://integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_magic_projectiles_premium_demo_project/VFX/Textures/T_VFX_Sqart2.jpg": "572afc50e3faed1b246c465b57b2b07877031eda3feda1fbfaeb23afb9aa196c",
+    "res://integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_magic_projectiles_premium_demo_project/VFX/Textures/T_VFX_Square_22Edge.PNG": "5d3b3f9353c0acb6e7caa4c13e947e7e81d6361fa3e44d0ec16d45f7f99329bb",
+    "res://integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_magic_projectiles_premium_demo_project/VFX/Textures/T_VFX_Srt1.jpg": "0d1962a4dce132b6e3322aa79e4df4fa0d6b53396a35e7eeebb34e294d6cd4de",
+    "res://integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_magic_projectiles_premium_demo_project/VFX/Textures/T_VFX_hit22.jpg": "cb1bb8e1d32b8ba5c28cd12f51a7dccb0c804a89d81e040e3039030a54628f2c",
+    "res://integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_magic_projectiles_premium_demo_project/VFX/Textures/T_basic1_vfx.PNG": "cc6ba7e8e8459eb301a332e62d4c369dd4cdfcdadc613caf72624aba12bbd471",
+    "res://integrations/ndclient/assets/native_effects/sandbox/projectiles/factory/core/resource_graph.gd": "a093af6fd6afa7fa5deb99fa45ba216df65846d7d2c8029f38eebf34a0a8588b",
+    "res://integrations/ndclient/authoring/native_effects/index.json": "3062c34b403f70beccd47578315d5745c8ece672f4a476de7225a7512b783035",
+    "res://integrations/ndclient/presentation/native_effect_mote.gdshader": "9425a324f584a792d2ff5d6568dada1365abcf3d66625ebf5846b886fa1be445",
+    "res://integrations/ndclient/presentation/native_effect_palette.gdshader": "58074cd68941da3049c488e42d4b3f0115a864a48063419c048c23b900bb4203",
+    "res://integrations/ndclient/presentation/native_effects.gd": "f288b44595271f899a2be4f963413f18e8c604970e56766098ce10418c2d18e4",
+    "res://integrations/ndclient/presentation/native_factory_source.gd": "4d5896dba23598d57e7b3ee9ccca9c1f1f76931ca010a7dced6b311db38f5bfd",
+    "res://integrations/ndclient/presentation/native_light_units.gd": "80eb9e980fcdf00ecd58834bde45389b760495922114a2f66c2c5a7d06b1c7f5",
+    "res://integrations/ndclient/presentation/native_particle_units.gd": "ce21b59d14dcbe593c8f8bd9b689bca6a6a6033e293b1c892f1aaaeb1d135ba5",
+    "res://library/lelu/pack_lelu_godot_blood_premium/VFX/Scenes/Decal_Blood_Animated_A1.tscn": "8b542bcc993654d88c4e007aaafec8be67e59b9f492221e0e769c160fa8784f8",
+    "res://library/lelu/pack_lelu_godot_blood_premium/VFX/Scenes/VFX_Blood_Hit_A1.tscn": "cb3a53c2b298625f603a6638a4ee8f00323255d196dc142cb43dd5c153255be5",
+    "res://library/lelu/pack_lelu_godot_blood_premium/VFX/Scenes/VFX_Blood_Hit_A2.tscn": "b31656c3b83e5006e23dcc08e043e1125b0c4d8bac50934fec83bd72f4a3144e",
+    "res://library/lelu/pack_lelu_godot_blood_premium/VFX/Scenes/VFX_Blood_Mark_J1.tscn": "5c3993df8e3a7f329dbf5abc034ec39fc5acfa1ff014871cdc5af341dce09428",
+    "res://library/lelu/pack_lelu_godot_blood_premium/VFX/objects/sm_plane_coned_spiked_waved1.obj": "0d08c64ea3173f8860d1cadec0b3005d1df7681ebe45b0876e8ff770460a50cc",
+    "res://library/lelu/pack_lelu_godot_blood_premium/VFX/shaders/s_Disolver_small_Liquid.tres": "07ac62b3c3371f7d9f7c845626ec10f5455b58387dc21d9b836749af01483e05",
+    "res://library/lelu/pack_lelu_godot_blood_premium/VFX/shaders/s_Disolver_small_Liquid_p_Treshold_ds.tres": "022adcea7620dc32f7aa8948751927d4deec60544a3b708ca7b520dee6fb5c8d",
+    "res://library/lelu/pack_lelu_godot_blood_premium/VFX/shaders/ss_Disolver_subUV_small_Liquid_Treshold_p.gdshader": "e5167e8b5cb2eb000a31c3349d69463b3c3a3fd8c28d6cacb9bd95bea58432fd",
+    "res://library/lelu/pack_lelu_godot_blood_premium/VFX/shaders/ss_decal3double_treshold.gdshader": "0b6eff740399f012f86c493150fae48916e2a03f63be281a40a1795762957529",
+    "res://library/lelu/pack_lelu_godot_blood_premium/VFX/textures/T_Blood_DECAL_g4.png": "68ee2643fe401e02a28ee3e49867125212759feb88f5615ddb7d7153df8f5a2d",
+    "res://library/lelu/pack_lelu_godot_blood_premium/VFX/textures/T_Blood_DECAL_g4x.png": "1e8fdb62cf96bd3b631eb92ec04163a4f8746f790ee2da2d6d2dbf54fdb98ad6",
+    "res://library/lelu/pack_lelu_godot_blood_premium/VFX/textures/T_Blood_DECAL_g4x_N.png": "01080724dd6b8a11ea03b34ef5c607319140c87501a591d13425700212c2c643",
+    "res://library/lelu/pack_lelu_godot_blood_premium/VFX/textures/T_Blood_MultiUV_f3.png": "eb3b31b84652471d6c7069b1e05eda310c07072d9f10bbf492b661f71b03c193",
+    "res://library/lelu/pack_lelu_godot_blood_premium/VFX/textures/T_Blood_MultiUV_f3_N.png": "718ba1a347fbf32fcae370ee82f00a5aa0727fc4b96084d3ea3624569e1bc80c",
+    "res://library/lelu/pack_lelu_godot_blood_premium/VFX/textures/T_Blood_Splatter11_N.png": "85ebdc53b869510cade1d5b97f4cc433bc84b38f2d1d06d1e1f5430f7d735f91",
+    "res://library/lelu/pack_lelu_godot_blood_premium/VFX/textures/T_Blood_Splatter77.png": "103fcb03e0420d33b2670f87bf66844bfc823b5da1a6325ff417afb7265f96f3",
+    "res://library/lelu/pack_lelu_godot_blood_premium/VFX/textures/T_Decal_BloodSplatter45k.png": "33a1b5146ac72a518c62811aae2057004aee85517980574711a34c232551607d",
+    "res://library/lelu/pack_lelu_godot_blood_premium/VFX/textures/T_Decal_BloodSplatter45ki_N.png": "e2597a3c095800b8b6a29cd248fa7f7bb1c0787e2712c372908bf58056282f19",
+    "res://library/lelu/pack_lelu_godot_blood_premium/VFX/textures/T_Gib_Red_C.PNG": "b764bf132265459154759a08791f3eeaf242b1d5593b0971badedd045c73ee22",
+    "res://library/lelu/pack_lelu_godot_blood_premium/VFX/textures/T_NP41.PNG": "f9c8e2fa1dcc62f85965e5a7f3a48cbe4739b01dbbecb9298e9f1da43ec13af2",
+    "res://library/lelu/pack_lelu_godot_blood_premium/VFX/textures/T_smoke_K97.png": "2cc94f51b380b6eab0f5cde5c64a5de8176f07e3f5ce3c79878598cc5834e2a6",
+    "res://library/lelu/pack_lelu_godot_magic_projectiles_premium_demo_project/VFX/Objects/sm_box2.obj": "219430b5f1dfc7211212f026d4977d04d772925e08c8c7322fea7f40e09ae598",
+    "res://library/lelu/pack_lelu_godot_magic_projectiles_premium_demo_project/VFX/Objects/sm_box2_rotated.obj": "464b76e43d36a2fb2007abe8e913cc2bc761dfc779b8073b20543e4732f7d300",
+    "res://library/lelu/pack_lelu_godot_magic_projectiles_premium_demo_project/VFX/Scenes/VFX_Cube_projectile.tscn": "d5efdfa957e96b684c03e8706e1e83c3d2fc288a8679ef24cef7c43e065e5583",
+    "res://library/lelu/pack_lelu_godot_magic_projectiles_premium_demo_project/VFX/Scenes/VFX_Hit_cyber.tscn": "9eaad456e2aa4cfc91b1dbd2463e8fb84e51f8363233c498d0aac5a59f1cbfa3",
+    "res://library/lelu/pack_lelu_godot_magic_projectiles_premium_demo_project/VFX/Shaders/s_dualColor_masked.tres": "07e2521b9373c5f6decd4c62b49401a7d2cc8ff55433fb72f1a2c999b3a7cf54",
+    "res://library/lelu/pack_lelu_godot_magic_projectiles_premium_demo_project/VFX/Shaders/s_simple_p.tres": "31c9ea5b51962959ff51414f1012c7a4659bcfcc1ed8ffd9c2ea99eb8382eed1",
+    "res://library/lelu/pack_lelu_godot_magic_projectiles_premium_demo_project/VFX/Shaders/s_single_masked_p.tres": "4f0afc3129be1c9c233abd11309d77096a39129dc5e277ed0cfc0a904f280ca2",
+    "res://library/lelu/pack_lelu_godot_magic_projectiles_premium_demo_project/VFX/Textures/T_VFX_Sqart2.jpg": "572afc50e3faed1b246c465b57b2b07877031eda3feda1fbfaeb23afb9aa196c",
+    "res://library/lelu/pack_lelu_godot_magic_projectiles_premium_demo_project/VFX/Textures/T_VFX_Square_22Edge.PNG": "5d3b3f9353c0acb6e7caa4c13e947e7e81d6361fa3e44d0ec16d45f7f99329bb",
+    "res://library/lelu/pack_lelu_godot_magic_projectiles_premium_demo_project/VFX/Textures/T_VFX_Srt1.jpg": "0d1962a4dce132b6e3322aa79e4df4fa0d6b53396a35e7eeebb34e294d6cd4de",
+    "res://library/lelu/pack_lelu_godot_magic_projectiles_premium_demo_project/VFX/Textures/T_VFX_hit22.jpg": "cb1bb8e1d32b8ba5c28cd12f51a7dccb0c804a89d81e040e3039030a54628f2c",
+    "res://library/lelu/pack_lelu_godot_magic_projectiles_premium_demo_project/VFX/Textures/T_basic1_vfx.PNG": "cc6ba7e8e8459eb301a332e62d4c369dd4cdfcdadc613caf72624aba12bbd471"
+  },
+  "isolation": {
+    "reused": [
+      "res://authoring/production-review-repair-20261021/terrain_owner/assets-v1/16e3e01ce252f98d02c5.scn",
+      "res://authoring/production-review-repair-20261021/terrain_owner/assets-v1/308782b981291d566d5d.scn",
+      "res://authoring/production-review-repair-20261021/terrain_owner/assets-v1/3283ee4c4d9195da7c50.scn",
+      "res://authoring/production-review-repair-20261021/terrain_owner/assets-v1/467f2f086fe6346a6bc6.scn",
+      "res://authoring/production-review-repair-20261021/terrain_owner/assets-v1/5e21e9c6bd83de5e2fd7.scn",
+      "res://authoring/production-review-repair-20261021/terrain_owner/assets-v1/6718959dcaea3cdcd4dc.scn",
+      "res://authoring/production-review-repair-20261021/terrain_owner/assets-v1/80bd9ae752586964e350.scn",
+      "res://authoring/production-review-repair-20261021/terrain_owner/assets-v1/b58956bf102fe6f33e74.scn",
+      "res://authoring/production-review-repair-20261021/terrain_owner/assets-v1/bf54ecc2419330806b3e.scn",
+      "res://authoring/production-review-repair-20261021/terrain_owner/assets-v1/program-2dc54dd63cb5e3570f62.gdshader",
+      "res://authoring/production-review-repair-20261021/terrain_owner/assets-v1/program-327485ff2f40323b8588.gdshader",
+      "res://factory/authoring/component.gd",
+      "res://factory/authoring/phase.gd",
+      "res://factory/baking/live_geometry_bindings.gd",
+      "res://factory/baking/private_particle_process.gd",
+      "res://factory/baking/runtime_particle_units.gd",
+      "res://factory/baking/stable_source_paths.gd",
+      "res://factory/components/owned_fields/input.gd",
+      "res://factory/components/prepared_recipient/bank.gd",
+      "res://factory/components/prepared_timed/bank.gd",
+      "res://factory/components/prepared_timed/typed_bank.gd",
+      "res://factory/components/recipient/base.gd",
+      "res://factory/core/animation_key_times.gd",
+      "res://factory/core/contract_stage.gd",
+      "res://factory/core/donor_scene.gd",
+      "res://factory/core/immutable_materials.gd",
+      "res://factory/core/native_source_space.gd",
+      "res://factory/core/resource_graph.gd",
+      "res://factory/core/source_materials.gd",
+      "res://factory/core/tapered_tube.gd",
+      "res://factory/materials/spatial_energy_palette.gd",
+      "res://factory/packaging/construction_profile.gd",
+      "res://factory/packaging/occurrence_bindings.gd",
+      "res://factory/packaging/occurrence_clock.gd",
+      "res://factory/packaging/resource_io.gd",
+      "res://factory/packaging/scene_document.gd",
+      "res://factory/packaging/scene_operand_references.gd",
+      "res://factory/packaging/source_readiness.gd",
+      "res://factory/resources/empty_subject.tscn",
+      "res://factory/resources/terrain_native/art/T_BarkA1_col.png",
+      "res://factory/resources/terrain_native/art/T_Blood_Puddle_ZX1_N.png",
+      "res://factory/resources/terrain_native/art/T_Leaf_001gray.png",
+      "res://factory/resources/terrain_native/art/T_MarbleNoise_tiled.png",
+      "res://factory/resources/terrain_native/art/sm_vines_horizontal_soil.obj",
+      "res://factory/resources/terrain_native/grease.gdshader",
+      "res://factory/resources/terrain_native/wood.gdshader",
+      "res://factory/shaders/cie_d65_v1.gdshaderinc",
+      "res://integrations/ndclient/assets/native_effects/class_actions/Charge.gdshader",
+      "res://integrations/ndclient/assets/native_effects/class_actions/Film.gdshader",
+      "res://integrations/ndclient/assets/native_effects/class_actions/Flow.gdshader",
+      "res://integrations/ndclient/assets/native_effects/class_actions/Glow.gdshader",
+      "res://integrations/ndclient/assets/native_effects/class_actions/Strike.gd",
+      "res://integrations/ndclient/assets/native_effects/class_actions/Strike.gdshader",
+      "res://integrations/ndclient/assets/native_effects/class_actions/StrikePaths.json",
+      "res://integrations/ndclient/assets/native_effects/class_actions/strike_hit.png",
+      "res://integrations/ndclient/assets/native_effects/class_actions/vfx_1/arc_charge/shaders/ribbon.gdshader",
+      "res://integrations/ndclient/assets/native_effects/class_actions/vfx_1/arc_charge/textures/aura_glow.png",
+      "res://integrations/ndclient/assets/native_effects/class_actions/vfx_1/arc_charge/textures/ember.png",
+      "res://integrations/ndclient/assets/native_effects/class_actions/vfx_1/arc_charge/textures/flow_noise.tres",
+      "res://integrations/ndclient/assets/native_effects/class_actions/vfx_1/arc_charge/textures/star.png",
+      "res://integrations/ndclient/assets/native_effects/factory/archive/objects/73/73682ae4aa57cb2f9264cf5550437223fa5c5c0a3129f00096fc640aaefe4091",
+      "res://integrations/ndclient/assets/native_effects/factory/factory/shaders/cie_d65_v1.gdshaderinc",
+      "res://integrations/ndclient/assets/native_effects/factory/factory/shaders/energy_palette_v1.gdshader",
+      "res://integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_blood_premium/VFX/Scenes/Decal_Blood_Animated_A1.tscn",
+      "res://integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_blood_premium/VFX/Scenes/VFX_Blood_Hit_A1.tscn",
+      "res://integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_blood_premium/VFX/Scenes/VFX_Blood_Hit_A2.tscn",
+      "res://integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_blood_premium/VFX/Scenes/VFX_Blood_Mark_J1.tscn",
+      "res://integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_blood_premium/VFX/objects/sm_plane_coned_spiked_waved1.obj",
+      "res://integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_blood_premium/VFX/shaders/s_Disolver_small_Liquid.tres",
+      "res://integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_blood_premium/VFX/shaders/s_Disolver_small_Liquid_p_Treshold_ds.tres",
+      "res://integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_blood_premium/VFX/shaders/ss_Disolver_subUV_small_Liquid_Treshold_p.gdshader",
+      "res://integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_blood_premium/VFX/shaders/ss_decal3double_treshold.gdshader",
+      "res://integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_blood_premium/VFX/textures/T_Blood_DECAL_g4.png",
+      "res://integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_blood_premium/VFX/textures/T_Blood_DECAL_g4x.png",
+      "res://integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_blood_premium/VFX/textures/T_Blood_DECAL_g4x_N.png",
+      "res://integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_blood_premium/VFX/textures/T_Blood_MultiUV_f3.png",
+      "res://integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_blood_premium/VFX/textures/T_Blood_MultiUV_f3_N.png",
+      "res://integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_blood_premium/VFX/textures/T_Blood_Splatter11_N.png",
+      "res://integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_blood_premium/VFX/textures/T_Blood_Splatter77.png",
+      "res://integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_blood_premium/VFX/textures/T_Decal_BloodSplatter45k.png",
+      "res://integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_blood_premium/VFX/textures/T_Decal_BloodSplatter45ki_N.png",
+      "res://integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_blood_premium/VFX/textures/T_Gib_Red_C.PNG",
+      "res://integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_blood_premium/VFX/textures/T_NP41.PNG",
+      "res://integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_blood_premium/VFX/textures/T_smoke_K97.png",
+      "res://integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_magic_projectiles_premium_demo_project/VFX/Objects/sm_box2.obj",
+      "res://integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_magic_projectiles_premium_demo_project/VFX/Objects/sm_box2_rotated.obj",
+      "res://integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_magic_projectiles_premium_demo_project/VFX/Scenes/VFX_Cube_projectile.tscn",
+      "res://integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_magic_projectiles_premium_demo_project/VFX/Scenes/VFX_Hit_cyber.tscn",
+      "res://integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_magic_projectiles_premium_demo_project/VFX/Shaders/s_dualColor_masked.tres",
+      "res://integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_magic_projectiles_premium_demo_project/VFX/Shaders/s_simple_p.tres",
+      "res://integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_magic_projectiles_premium_demo_project/VFX/Shaders/s_single_masked_p.tres",
+      "res://integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_magic_projectiles_premium_demo_project/VFX/Textures/T_VFX_Sqart2.jpg",
+      "res://integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_magic_projectiles_premium_demo_project/VFX/Textures/T_VFX_Square_22Edge.PNG",
+      "res://integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_magic_projectiles_premium_demo_project/VFX/Textures/T_VFX_Srt1.jpg",
+      "res://integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_magic_projectiles_premium_demo_project/VFX/Textures/T_VFX_hit22.jpg",
+      "res://integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_magic_projectiles_premium_demo_project/VFX/Textures/T_basic1_vfx.PNG",
+      "res://integrations/ndclient/assets/native_effects/sandbox/projectiles/factory/core/resource_graph.gd",
+      "res://integrations/ndclient/presentation/native_effect_mote.gdshader",
+      "res://integrations/ndclient/presentation/native_effect_palette.gdshader",
+      "res://integrations/ndclient/presentation/native_light_units.gd",
+      "res://integrations/ndclient/presentation/native_particle_units.gd",
+      "res://library/lelu/pack_lelu_godot_blood_premium/VFX/Scenes/Decal_Blood_Animated_A1.tscn",
+      "res://library/lelu/pack_lelu_godot_blood_premium/VFX/Scenes/VFX_Blood_Hit_A1.tscn",
+      "res://library/lelu/pack_lelu_godot_blood_premium/VFX/Scenes/VFX_Blood_Hit_A2.tscn",
+      "res://library/lelu/pack_lelu_godot_blood_premium/VFX/Scenes/VFX_Blood_Mark_J1.tscn",
+      "res://library/lelu/pack_lelu_godot_blood_premium/VFX/objects/sm_plane_coned_spiked_waved1.obj",
+      "res://library/lelu/pack_lelu_godot_blood_premium/VFX/shaders/s_Disolver_small_Liquid.tres",
+      "res://library/lelu/pack_lelu_godot_blood_premium/VFX/shaders/s_Disolver_small_Liquid_p_Treshold_ds.tres",
+      "res://library/lelu/pack_lelu_godot_blood_premium/VFX/shaders/ss_Disolver_subUV_small_Liquid_Treshold_p.gdshader",
+      "res://library/lelu/pack_lelu_godot_blood_premium/VFX/shaders/ss_decal3double_treshold.gdshader",
+      "res://library/lelu/pack_lelu_godot_blood_premium/VFX/textures/T_Blood_DECAL_g4.png",
+      "res://library/lelu/pack_lelu_godot_blood_premium/VFX/textures/T_Blood_DECAL_g4x.png",
+      "res://library/lelu/pack_lelu_godot_blood_premium/VFX/textures/T_Blood_DECAL_g4x_N.png",
+      "res://library/lelu/pack_lelu_godot_blood_premium/VFX/textures/T_Blood_MultiUV_f3.png",
+      "res://library/lelu/pack_lelu_godot_blood_premium/VFX/textures/T_Blood_MultiUV_f3_N.png",
+      "res://library/lelu/pack_lelu_godot_blood_premium/VFX/textures/T_Blood_Splatter11_N.png",
+      "res://library/lelu/pack_lelu_godot_blood_premium/VFX/textures/T_Blood_Splatter77.png",
+      "res://library/lelu/pack_lelu_godot_blood_premium/VFX/textures/T_Decal_BloodSplatter45k.png",
+      "res://library/lelu/pack_lelu_godot_blood_premium/VFX/textures/T_Decal_BloodSplatter45ki_N.png",
+      "res://library/lelu/pack_lelu_godot_blood_premium/VFX/textures/T_Gib_Red_C.PNG",
+      "res://library/lelu/pack_lelu_godot_blood_premium/VFX/textures/T_NP41.PNG",
+      "res://library/lelu/pack_lelu_godot_blood_premium/VFX/textures/T_smoke_K97.png",
+      "res://library/lelu/pack_lelu_godot_magic_projectiles_premium_demo_project/VFX/Objects/sm_box2.obj",
+      "res://library/lelu/pack_lelu_godot_magic_projectiles_premium_demo_project/VFX/Objects/sm_box2_rotated.obj",
+      "res://library/lelu/pack_lelu_godot_magic_projectiles_premium_demo_project/VFX/Scenes/VFX_Cube_projectile.tscn",
+      "res://library/lelu/pack_lelu_godot_magic_projectiles_premium_demo_project/VFX/Scenes/VFX_Hit_cyber.tscn",
+      "res://library/lelu/pack_lelu_godot_magic_projectiles_premium_demo_project/VFX/Shaders/s_dualColor_masked.tres",
+      "res://library/lelu/pack_lelu_godot_magic_projectiles_premium_demo_project/VFX/Shaders/s_simple_p.tres",
+      "res://library/lelu/pack_lelu_godot_magic_projectiles_premium_demo_project/VFX/Shaders/s_single_masked_p.tres",
+      "res://library/lelu/pack_lelu_godot_magic_projectiles_premium_demo_project/VFX/Textures/T_VFX_Sqart2.jpg",
+      "res://library/lelu/pack_lelu_godot_magic_projectiles_premium_demo_project/VFX/Textures/T_VFX_Square_22Edge.PNG",
+      "res://library/lelu/pack_lelu_godot_magic_projectiles_premium_demo_project/VFX/Textures/T_VFX_Srt1.jpg",
+      "res://library/lelu/pack_lelu_godot_magic_projectiles_premium_demo_project/VFX/Textures/T_VFX_hit22.jpg",
+      "res://library/lelu/pack_lelu_godot_magic_projectiles_premium_demo_project/VFX/Textures/T_basic1_vfx.PNG"
+    ],
+    "isolated": [
+      "res://authoring/production-review-repair-20261021/owner_release/spike.tres",
+      "res://authoring/production-review-repair-20261021/runtime_tail/spike_instance_seed/v1/banks/patch-00-construct.gd",
+      "res://authoring/production-review-repair-20261021/runtime_tail/spike_instance_seed/v1/banks/patch-00.res",
+      "res://authoring/production-review-repair-20261021/runtime_tail/spike_instance_seed/v1/banks/patch-01-construct.gd",
+      "res://authoring/production-review-repair-20261021/runtime_tail/spike_instance_seed/v1/banks/patch-01.res",
+      "res://authoring/production-review-repair-20261021/runtime_tail/spike_instance_seed/v1/banks/patch-02-construct.gd",
+      "res://authoring/production-review-repair-20261021/runtime_tail/spike_instance_seed/v1/banks/patch-02.res",
+      "res://authoring/production-review-repair-20261021/runtime_tail/spike_instance_seed/v1/banks/patch-03-construct.gd",
+      "res://authoring/production-review-repair-20261021/runtime_tail/spike_instance_seed/v1/banks/patch-03.res",
+      "res://authoring/production-review-repair-20261021/runtime_tail/spike_instance_seed/v1/banks/patch-04-construct.gd",
+      "res://authoring/production-review-repair-20261021/runtime_tail/spike_instance_seed/v1/banks/patch-04.res",
+      "res://authoring/production-review-repair-20261021/runtime_tail/spike_instance_seed/v1/banks/patch-05-construct.gd",
+      "res://authoring/production-review-repair-20261021/runtime_tail/spike_instance_seed/v1/banks/patch-05.res",
+      "res://authoring/production-review-repair-20261021/runtime_tail/spike_instance_seed/v1/banks/patch-06-construct.gd",
+      "res://authoring/production-review-repair-20261021/runtime_tail/spike_instance_seed/v1/banks/patch-06.res",
+      "res://authoring/production-review-repair-20261021/runtime_tail/spike_instance_seed/v1/banks/patch-07-construct.gd",
+      "res://authoring/production-review-repair-20261021/runtime_tail/spike_instance_seed/v1/banks/patch-07.res",
+      "res://authoring/production-review-repair-20261021/runtime_tail/spike_instance_seed/v1/banks/patch-08-construct.gd",
+      "res://authoring/production-review-repair-20261021/runtime_tail/spike_instance_seed/v1/banks/patch-08.res",
+      "res://authoring/production-review-repair-20261021/runtime_tail/spike_instance_seed/v1/banks/seed-program.gdshader",
+      "res://authoring/production-review-repair-20261021/runtime_tail/spike_instance_seed/v1/phase.tres",
+      "res://authoring/production-review-repair-20261021/terrain_owner/assets-v1/16e3e01ce252f98d02c5.res",
+      "res://authoring/production-review-repair-20261021/terrain_owner/assets-v1/308782b981291d566d5d.res",
+      "res://authoring/production-review-repair-20261021/terrain_owner/assets-v1/3283ee4c4d9195da7c50.res",
+      "res://authoring/production-review-repair-20261021/terrain_owner/assets-v1/467f2f086fe6346a6bc6.res",
+      "res://authoring/production-review-repair-20261021/terrain_owner/assets-v1/5e21e9c6bd83de5e2fd7.res",
+      "res://authoring/production-review-repair-20261021/terrain_owner/assets-v1/6718959dcaea3cdcd4dc.res",
+      "res://authoring/production-review-repair-20261021/terrain_owner/assets-v1/80bd9ae752586964e350.res",
+      "res://authoring/production-review-repair-20261021/terrain_owner/assets-v1/b58956bf102fe6f33e74.res",
+      "res://authoring/production-review-repair-20261021/terrain_owner/assets-v1/bf54ecc2419330806b3e.res",
+      "res://factory/baking/recording_source_sampler.gd",
+      "res://factory/baking/source_bridge.gd",
+      "res://factory/components/owned_fields/spike_leaf.gd",
+      "res://factory/components/owner_release/common_occurrence.gd",
+      "res://factory/components/owner_release/spike.gd",
+      "res://factory/components/prepared_recipient/restore.gd",
+      "res://factory/components/prepared_timed/direct_restore_bank.gd",
+      "res://factory/components/prepared_timed/restore.gd",
+      "res://factory/components/recipient/spike_growth_bark_mass.gd",
+      "res://factory/components/recipient/spike_growth_relief.gd",
+      "res://factory/components/recipient/terrain_growth.gd",
+      "res://factory/packaging/constructed_occurrence.gd",
+      "res://factory/packaging/occurrence.gd",
+      "res://factory/packaging/owner_release_spike.gd",
+      "res://integrations/ndclient/assets/native_effects/class_actions/ClassComponents.gd",
+      "res://integrations/ndclient/assets/native_effects/class_actions/vfx_1/arc_charge/scripts/arc_charge_swirl.gd",
+      "res://integrations/ndclient/assets/native_effects/class_actions/vfx_1/arc_charge/variants/arc_charge_swirl_charge.tscn",
+      "res://integrations/ndclient/authoring/native_effects/index.json",
+      "res://integrations/ndclient/presentation/native_effects.gd",
+      "res://integrations/ndclient/presentation/native_factory_source.gd"
+    ],
+    "singleton_compatibility_aliases": {},
+    "reasons": {
+      "res://integrations/ndclient/assets/native_effects/class_actions/vfx_1/arc_charge/scripts/arc_charge_swirl.gd": [
+        "explicit_new_caller_scope"
+      ],
+      "res://authoring/production-review-repair-20261021/runtime_tail/spike_instance_seed/v1/banks/patch-08.res": [
+        "new_source_or_unproven_native_identity"
+      ],
+      "res://authoring/production-review-repair-20261021/runtime_tail/spike_instance_seed/v1/banks/patch-07.res": [
+        "new_source_or_unproven_native_identity"
+      ],
+      "res://authoring/production-review-repair-20261021/runtime_tail/spike_instance_seed/v1/banks/patch-06.res": [
+        "new_source_or_unproven_native_identity"
+      ],
+      "res://authoring/production-review-repair-20261021/runtime_tail/spike_instance_seed/v1/banks/patch-05.res": [
+        "new_source_or_unproven_native_identity"
+      ],
+      "res://authoring/production-review-repair-20261021/runtime_tail/spike_instance_seed/v1/banks/patch-04.res": [
+        "new_source_or_unproven_native_identity"
+      ],
+      "res://authoring/production-review-repair-20261021/runtime_tail/spike_instance_seed/v1/banks/patch-03.res": [
+        "new_source_or_unproven_native_identity"
+      ],
+      "res://authoring/production-review-repair-20261021/runtime_tail/spike_instance_seed/v1/banks/patch-02.res": [
+        "new_source_or_unproven_native_identity"
+      ],
+      "res://authoring/production-review-repair-20261021/runtime_tail/spike_instance_seed/v1/banks/patch-01.res": [
+        "new_source_or_unproven_native_identity"
+      ],
+      "res://authoring/production-review-repair-20261021/runtime_tail/spike_instance_seed/v1/banks/patch-00.res": [
+        "new_source_or_unproven_native_identity"
+      ],
+      "res://authoring/production-review-repair-20261021/runtime_tail/spike_instance_seed/v1/phase.tres": [
+        "new_source_or_unproven_native_identity"
+      ],
+      "res://authoring/production-review-repair-20261021/runtime_tail/spike_instance_seed/v1/banks/patch-08-construct.gd": [
+        "new_source_or_unproven_native_identity"
+      ],
+      "res://authoring/production-review-repair-20261021/runtime_tail/spike_instance_seed/v1/banks/patch-07-construct.gd": [
+        "new_source_or_unproven_native_identity"
+      ],
+      "res://authoring/production-review-repair-20261021/runtime_tail/spike_instance_seed/v1/banks/patch-06-construct.gd": [
+        "new_source_or_unproven_native_identity"
+      ],
+      "res://authoring/production-review-repair-20261021/runtime_tail/spike_instance_seed/v1/banks/patch-05-construct.gd": [
+        "new_source_or_unproven_native_identity"
+      ],
+      "res://authoring/production-review-repair-20261021/runtime_tail/spike_instance_seed/v1/banks/patch-04-construct.gd": [
+        "new_source_or_unproven_native_identity"
+      ],
+      "res://authoring/production-review-repair-20261021/runtime_tail/spike_instance_seed/v1/banks/patch-03-construct.gd": [
+        "new_source_or_unproven_native_identity"
+      ],
+      "res://authoring/production-review-repair-20261021/runtime_tail/spike_instance_seed/v1/banks/patch-02-construct.gd": [
+        "new_source_or_unproven_native_identity"
+      ],
+      "res://authoring/production-review-repair-20261021/runtime_tail/spike_instance_seed/v1/banks/patch-01-construct.gd": [
+        "new_source_or_unproven_native_identity"
+      ],
+      "res://authoring/production-review-repair-20261021/runtime_tail/spike_instance_seed/v1/banks/seed-program.gdshader": [
+        "new_source_or_unproven_native_identity"
+      ],
+      "res://authoring/production-review-repair-20261021/runtime_tail/spike_instance_seed/v1/banks/patch-00-construct.gd": [
+        "new_source_or_unproven_native_identity"
+      ],
+      "res://factory/baking/recording_source_sampler.gd": [
+        "rewritten_text_or_dependency_changed"
+      ],
+      "res://factory/components/owned_fields/spike_leaf.gd": [
+        "rewritten_text_or_dependency_changed"
+      ],
+      "res://factory/components/owner_release/common_occurrence.gd": [
+        "rewritten_text_or_dependency_changed"
+      ],
+      "res://factory/components/owner_release/spike.gd": [
+        "rewritten_text_or_dependency_changed"
+      ],
+      "res://factory/components/prepared_recipient/restore.gd": [
+        "rewritten_text_or_dependency_changed"
+      ],
+      "res://factory/components/prepared_timed/direct_restore_bank.gd": [
+        "rewritten_text_or_dependency_changed"
+      ],
+      "res://factory/components/prepared_timed/restore.gd": [
+        "rewritten_text_or_dependency_changed"
+      ],
+      "res://factory/components/recipient/terrain_growth.gd": [
+        "rewritten_text_or_dependency_changed"
+      ],
+      "res://factory/packaging/constructed_occurrence.gd": [
+        "rewritten_text_or_dependency_changed"
+      ],
+      "res://factory/packaging/occurrence.gd": [
+        "rewritten_text_or_dependency_changed"
+      ],
+      "res://factory/packaging/owner_release_spike.gd": [
+        "rewritten_text_or_dependency_changed"
+      ],
+      "res://integrations/ndclient/assets/native_effects/class_actions/ClassComponents.gd": [
+        "rewritten_text_or_dependency_changed"
+      ],
+      "res://integrations/ndclient/assets/native_effects/class_actions/vfx_1/arc_charge/variants/arc_charge_swirl_charge.tscn": [
+        "rewritten_text_or_dependency_changed"
+      ],
+      "res://integrations/ndclient/presentation/native_effects.gd": [
+        "rewritten_text_or_dependency_changed"
+      ],
+      "res://integrations/ndclient/presentation/native_factory_source.gd": [
+        "rewritten_text_or_dependency_changed"
+      ],
+      "res://authoring/production-review-repair-20261021/owner_release/spike.tres": [
+        "rewritten_text_or_dependency_changed"
+      ],
+      "res://authoring/production-review-repair-20261021/terrain_owner/assets-v1/16e3e01ce252f98d02c5.res": [
+        "actual_native_child_namespace_changed"
+      ],
+      "res://authoring/production-review-repair-20261021/terrain_owner/assets-v1/308782b981291d566d5d.res": [
+        "actual_native_child_namespace_changed"
+      ],
+      "res://authoring/production-review-repair-20261021/terrain_owner/assets-v1/3283ee4c4d9195da7c50.res": [
+        "actual_native_child_namespace_changed"
+      ],
+      "res://authoring/production-review-repair-20261021/terrain_owner/assets-v1/467f2f086fe6346a6bc6.res": [
+        "actual_native_child_namespace_changed"
+      ],
+      "res://authoring/production-review-repair-20261021/terrain_owner/assets-v1/5e21e9c6bd83de5e2fd7.res": [
+        "actual_native_child_namespace_changed"
+      ],
+      "res://authoring/production-review-repair-20261021/terrain_owner/assets-v1/6718959dcaea3cdcd4dc.res": [
+        "actual_native_child_namespace_changed"
+      ],
+      "res://authoring/production-review-repair-20261021/terrain_owner/assets-v1/80bd9ae752586964e350.res": [
+        "actual_native_child_namespace_changed"
+      ],
+      "res://authoring/production-review-repair-20261021/terrain_owner/assets-v1/b58956bf102fe6f33e74.res": [
+        "actual_native_child_namespace_changed"
+      ],
+      "res://authoring/production-review-repair-20261021/terrain_owner/assets-v1/bf54ecc2419330806b3e.res": [
+        "actual_native_child_namespace_changed"
+      ],
+      "res://factory/baking/source_bridge.gd": [
+        "rewritten_text_or_dependency_changed"
+      ],
+      "res://factory/components/recipient/spike_growth_relief.gd": [
+        "rewritten_text_or_dependency_changed"
+      ],
+      "res://integrations/ndclient/authoring/native_effects/index.json": [
+        "rewritten_text_or_dependency_changed"
+      ],
+      "res://factory/components/recipient/spike_growth_bark_mass.gd": [
+        "rewritten_text_or_dependency_changed"
+      ]
+    },
+    "rounds": 4,
+    "exact_text_comparisons": 101,
+    "native_dependency_edges": {
+      "res://authoring/production-review-repair-20261021/runtime_tail/spike_instance_seed/v1/banks/patch-00-construct.gd": [],
+      "res://authoring/production-review-repair-20261021/runtime_tail/spike_instance_seed/v1/banks/patch-00.res": [
+        "res://factory/components/prepared_timed/direct_restore_bank.gd",
+        "res://authoring/production-review-repair-20261021/runtime_tail/spike_instance_seed/v1/banks/patch-00-construct.gd",
+        "res://authoring/production-review-repair-20261021/runtime_tail/spike_instance_seed/v1/banks/seed-program.gdshader",
+        "res://factory/resources/terrain_native/art/T_BarkA1_col.png",
+        "res://authoring/production-review-repair-20261021/terrain_owner/assets-v1/program-2dc54dd63cb5e3570f62.gdshader",
+        "res://factory/resources/terrain_native/art/sm_vines_horizontal_soil.obj",
+        "res://factory/resources/terrain_native/art/T_Leaf_001gray.png",
+        "res://authoring/production-review-repair-20261021/terrain_owner/assets-v1/bf54ecc2419330806b3e.res",
+        "res://authoring/production-review-repair-20261021/terrain_owner/assets-v1/bf54ecc2419330806b3e.scn",
+        "res://factory/components/owned_fields/spike_leaf.gd"
+      ],
+      "res://authoring/production-review-repair-20261021/runtime_tail/spike_instance_seed/v1/banks/patch-01-construct.gd": [],
+      "res://authoring/production-review-repair-20261021/runtime_tail/spike_instance_seed/v1/banks/patch-01.res": [
+        "res://factory/components/prepared_timed/direct_restore_bank.gd",
+        "res://authoring/production-review-repair-20261021/runtime_tail/spike_instance_seed/v1/banks/patch-01-construct.gd",
+        "res://authoring/production-review-repair-20261021/runtime_tail/spike_instance_seed/v1/banks/seed-program.gdshader",
+        "res://factory/resources/terrain_native/art/T_BarkA1_col.png",
+        "res://authoring/production-review-repair-20261021/terrain_owner/assets-v1/program-2dc54dd63cb5e3570f62.gdshader",
+        "res://authoring/production-review-repair-20261021/terrain_owner/assets-v1/6718959dcaea3cdcd4dc.res",
+        "res://authoring/production-review-repair-20261021/terrain_owner/assets-v1/program-327485ff2f40323b8588.gdshader",
+        "res://authoring/production-review-repair-20261021/terrain_owner/assets-v1/6718959dcaea3cdcd4dc.scn",
+        "res://factory/components/owned_fields/spike_leaf.gd"
+      ],
+      "res://authoring/production-review-repair-20261021/runtime_tail/spike_instance_seed/v1/banks/patch-02-construct.gd": [],
+      "res://authoring/production-review-repair-20261021/runtime_tail/spike_instance_seed/v1/banks/patch-02.res": [
+        "res://factory/components/prepared_timed/direct_restore_bank.gd",
+        "res://authoring/production-review-repair-20261021/runtime_tail/spike_instance_seed/v1/banks/patch-02-construct.gd",
+        "res://authoring/production-review-repair-20261021/runtime_tail/spike_instance_seed/v1/banks/seed-program.gdshader",
+        "res://factory/resources/terrain_native/art/T_BarkA1_col.png",
+        "res://authoring/production-review-repair-20261021/terrain_owner/assets-v1/program-2dc54dd63cb5e3570f62.gdshader",
+        "res://authoring/production-review-repair-20261021/terrain_owner/assets-v1/b58956bf102fe6f33e74.res",
+        "res://authoring/production-review-repair-20261021/terrain_owner/assets-v1/program-327485ff2f40323b8588.gdshader",
+        "res://authoring/production-review-repair-20261021/terrain_owner/assets-v1/b58956bf102fe6f33e74.scn",
+        "res://factory/components/owned_fields/spike_leaf.gd"
+      ],
+      "res://authoring/production-review-repair-20261021/runtime_tail/spike_instance_seed/v1/banks/patch-03-construct.gd": [],
+      "res://authoring/production-review-repair-20261021/runtime_tail/spike_instance_seed/v1/banks/patch-03.res": [
+        "res://factory/components/prepared_timed/direct_restore_bank.gd",
+        "res://authoring/production-review-repair-20261021/runtime_tail/spike_instance_seed/v1/banks/patch-03-construct.gd",
+        "res://authoring/production-review-repair-20261021/runtime_tail/spike_instance_seed/v1/banks/seed-program.gdshader",
+        "res://factory/resources/terrain_native/art/T_BarkA1_col.png",
+        "res://authoring/production-review-repair-20261021/terrain_owner/assets-v1/program-2dc54dd63cb5e3570f62.gdshader",
+        "res://factory/resources/terrain_native/art/sm_vines_horizontal_soil.obj",
+        "res://factory/resources/terrain_native/art/T_Leaf_001gray.png",
+        "res://authoring/production-review-repair-20261021/terrain_owner/assets-v1/467f2f086fe6346a6bc6.res",
+        "res://authoring/production-review-repair-20261021/terrain_owner/assets-v1/467f2f086fe6346a6bc6.scn",
+        "res://factory/components/owned_fields/spike_leaf.gd"
+      ],
+      "res://authoring/production-review-repair-20261021/runtime_tail/spike_instance_seed/v1/banks/patch-04-construct.gd": [],
+      "res://authoring/production-review-repair-20261021/runtime_tail/spike_instance_seed/v1/banks/patch-04.res": [
+        "res://factory/components/prepared_timed/direct_restore_bank.gd",
+        "res://authoring/production-review-repair-20261021/runtime_tail/spike_instance_seed/v1/banks/patch-04-construct.gd",
+        "res://authoring/production-review-repair-20261021/runtime_tail/spike_instance_seed/v1/banks/seed-program.gdshader",
+        "res://factory/resources/terrain_native/art/T_BarkA1_col.png",
+        "res://authoring/production-review-repair-20261021/terrain_owner/assets-v1/program-2dc54dd63cb5e3570f62.gdshader",
+        "res://authoring/production-review-repair-20261021/terrain_owner/assets-v1/16e3e01ce252f98d02c5.res",
+        "res://authoring/production-review-repair-20261021/terrain_owner/assets-v1/program-327485ff2f40323b8588.gdshader",
+        "res://authoring/production-review-repair-20261021/terrain_owner/assets-v1/16e3e01ce252f98d02c5.scn",
+        "res://factory/components/owned_fields/spike_leaf.gd"
+      ],
+      "res://authoring/production-review-repair-20261021/runtime_tail/spike_instance_seed/v1/banks/patch-05-construct.gd": [],
+      "res://authoring/production-review-repair-20261021/runtime_tail/spike_instance_seed/v1/banks/patch-05.res": [
+        "res://factory/components/prepared_timed/direct_restore_bank.gd",
+        "res://authoring/production-review-repair-20261021/runtime_tail/spike_instance_seed/v1/banks/patch-05-construct.gd",
+        "res://authoring/production-review-repair-20261021/runtime_tail/spike_instance_seed/v1/banks/seed-program.gdshader",
+        "res://factory/resources/terrain_native/art/T_BarkA1_col.png",
+        "res://authoring/production-review-repair-20261021/terrain_owner/assets-v1/program-2dc54dd63cb5e3570f62.gdshader",
+        "res://authoring/production-review-repair-20261021/terrain_owner/assets-v1/3283ee4c4d9195da7c50.res",
+        "res://authoring/production-review-repair-20261021/terrain_owner/assets-v1/program-327485ff2f40323b8588.gdshader",
+        "res://authoring/production-review-repair-20261021/terrain_owner/assets-v1/3283ee4c4d9195da7c50.scn",
+        "res://factory/components/owned_fields/spike_leaf.gd"
+      ],
+      "res://authoring/production-review-repair-20261021/runtime_tail/spike_instance_seed/v1/banks/patch-06-construct.gd": [],
+      "res://authoring/production-review-repair-20261021/runtime_tail/spike_instance_seed/v1/banks/patch-06.res": [
+        "res://factory/components/prepared_timed/direct_restore_bank.gd",
+        "res://authoring/production-review-repair-20261021/runtime_tail/spike_instance_seed/v1/banks/patch-06-construct.gd",
+        "res://authoring/production-review-repair-20261021/runtime_tail/spike_instance_seed/v1/banks/seed-program.gdshader",
+        "res://factory/resources/terrain_native/art/T_BarkA1_col.png",
+        "res://authoring/production-review-repair-20261021/terrain_owner/assets-v1/program-2dc54dd63cb5e3570f62.gdshader",
+        "res://factory/resources/terrain_native/art/sm_vines_horizontal_soil.obj",
+        "res://factory/resources/terrain_native/art/T_Leaf_001gray.png",
+        "res://authoring/production-review-repair-20261021/terrain_owner/assets-v1/308782b981291d566d5d.res",
+        "res://authoring/production-review-repair-20261021/terrain_owner/assets-v1/308782b981291d566d5d.scn",
+        "res://factory/components/owned_fields/spike_leaf.gd"
+      ],
+      "res://authoring/production-review-repair-20261021/runtime_tail/spike_instance_seed/v1/banks/patch-07-construct.gd": [],
+      "res://authoring/production-review-repair-20261021/runtime_tail/spike_instance_seed/v1/banks/patch-07.res": [
+        "res://factory/components/prepared_timed/direct_restore_bank.gd",
+        "res://authoring/production-review-repair-20261021/runtime_tail/spike_instance_seed/v1/banks/patch-07-construct.gd",
+        "res://authoring/production-review-repair-20261021/runtime_tail/spike_instance_seed/v1/banks/seed-program.gdshader",
+        "res://factory/resources/terrain_native/art/T_BarkA1_col.png",
+        "res://authoring/production-review-repair-20261021/terrain_owner/assets-v1/program-2dc54dd63cb5e3570f62.gdshader",
+        "res://authoring/production-review-repair-20261021/terrain_owner/assets-v1/80bd9ae752586964e350.res",
+        "res://authoring/production-review-repair-20261021/terrain_owner/assets-v1/program-327485ff2f40323b8588.gdshader",
+        "res://authoring/production-review-repair-20261021/terrain_owner/assets-v1/80bd9ae752586964e350.scn",
+        "res://factory/components/owned_fields/spike_leaf.gd"
+      ],
+      "res://authoring/production-review-repair-20261021/runtime_tail/spike_instance_seed/v1/banks/patch-08-construct.gd": [],
+      "res://authoring/production-review-repair-20261021/runtime_tail/spike_instance_seed/v1/banks/patch-08.res": [
+        "res://factory/components/prepared_timed/direct_restore_bank.gd",
+        "res://authoring/production-review-repair-20261021/runtime_tail/spike_instance_seed/v1/banks/patch-08-construct.gd",
+        "res://authoring/production-review-repair-20261021/runtime_tail/spike_instance_seed/v1/banks/seed-program.gdshader",
+        "res://factory/resources/terrain_native/art/T_BarkA1_col.png",
+        "res://authoring/production-review-repair-20261021/terrain_owner/assets-v1/program-2dc54dd63cb5e3570f62.gdshader",
+        "res://authoring/production-review-repair-20261021/terrain_owner/assets-v1/5e21e9c6bd83de5e2fd7.res",
+        "res://authoring/production-review-repair-20261021/terrain_owner/assets-v1/program-327485ff2f40323b8588.gdshader",
+        "res://authoring/production-review-repair-20261021/terrain_owner/assets-v1/5e21e9c6bd83de5e2fd7.scn",
+        "res://factory/components/owned_fields/spike_leaf.gd"
+      ],
+      "res://authoring/production-review-repair-20261021/runtime_tail/spike_instance_seed/v1/banks/seed-program.gdshader": [],
+      "res://authoring/production-review-repair-20261021/terrain_owner/assets-v1/16e3e01ce252f98d02c5.res": [
+        "res://factory/components/prepared_timed/bank.gd",
+        "res://authoring/production-review-repair-20261021/terrain_owner/assets-v1/program-327485ff2f40323b8588.gdshader",
+        "res://factory/resources/terrain_native/art/T_BarkA1_col.png",
+        "res://authoring/production-review-repair-20261021/terrain_owner/assets-v1/16e3e01ce252f98d02c5.scn",
+        "res://factory/components/owned_fields/spike_leaf.gd"
+      ],
+      "res://authoring/production-review-repair-20261021/terrain_owner/assets-v1/16e3e01ce252f98d02c5.scn": [
+        "res://authoring/production-review-repair-20261021/terrain_owner/assets-v1/program-2dc54dd63cb5e3570f62.gdshader",
+        "res://factory/resources/terrain_native/art/T_BarkA1_col.png"
+      ],
+      "res://authoring/production-review-repair-20261021/terrain_owner/assets-v1/308782b981291d566d5d.res": [
+        "res://factory/components/prepared_timed/bank.gd",
+        "res://authoring/production-review-repair-20261021/terrain_owner/assets-v1/308782b981291d566d5d.scn",
+        "res://factory/components/owned_fields/spike_leaf.gd"
+      ],
+      "res://authoring/production-review-repair-20261021/terrain_owner/assets-v1/308782b981291d566d5d.scn": [
+        "res://authoring/production-review-repair-20261021/terrain_owner/assets-v1/program-2dc54dd63cb5e3570f62.gdshader",
+        "res://factory/resources/terrain_native/art/T_BarkA1_col.png",
+        "res://factory/resources/terrain_native/art/sm_vines_horizontal_soil.obj",
+        "res://factory/resources/terrain_native/art/T_Leaf_001gray.png"
+      ],
+      "res://authoring/production-review-repair-20261021/terrain_owner/assets-v1/3283ee4c4d9195da7c50.res": [
+        "res://factory/components/prepared_timed/bank.gd",
+        "res://authoring/production-review-repair-20261021/terrain_owner/assets-v1/program-327485ff2f40323b8588.gdshader",
+        "res://factory/resources/terrain_native/art/T_BarkA1_col.png",
+        "res://authoring/production-review-repair-20261021/terrain_owner/assets-v1/3283ee4c4d9195da7c50.scn",
+        "res://factory/components/owned_fields/spike_leaf.gd"
+      ],
+      "res://authoring/production-review-repair-20261021/terrain_owner/assets-v1/3283ee4c4d9195da7c50.scn": [
+        "res://authoring/production-review-repair-20261021/terrain_owner/assets-v1/program-2dc54dd63cb5e3570f62.gdshader",
+        "res://factory/resources/terrain_native/art/T_BarkA1_col.png"
+      ],
+      "res://authoring/production-review-repair-20261021/terrain_owner/assets-v1/467f2f086fe6346a6bc6.res": [
+        "res://factory/components/prepared_timed/bank.gd",
+        "res://authoring/production-review-repair-20261021/terrain_owner/assets-v1/467f2f086fe6346a6bc6.scn",
+        "res://factory/components/owned_fields/spike_leaf.gd"
+      ],
+      "res://authoring/production-review-repair-20261021/terrain_owner/assets-v1/467f2f086fe6346a6bc6.scn": [
+        "res://authoring/production-review-repair-20261021/terrain_owner/assets-v1/program-2dc54dd63cb5e3570f62.gdshader",
+        "res://factory/resources/terrain_native/art/T_BarkA1_col.png",
+        "res://factory/resources/terrain_native/art/sm_vines_horizontal_soil.obj",
+        "res://factory/resources/terrain_native/art/T_Leaf_001gray.png"
+      ],
+      "res://authoring/production-review-repair-20261021/terrain_owner/assets-v1/5e21e9c6bd83de5e2fd7.res": [
+        "res://factory/components/prepared_timed/bank.gd",
+        "res://authoring/production-review-repair-20261021/terrain_owner/assets-v1/program-327485ff2f40323b8588.gdshader",
+        "res://factory/resources/terrain_native/art/T_BarkA1_col.png",
+        "res://authoring/production-review-repair-20261021/terrain_owner/assets-v1/5e21e9c6bd83de5e2fd7.scn",
+        "res://factory/components/owned_fields/spike_leaf.gd"
+      ],
+      "res://authoring/production-review-repair-20261021/terrain_owner/assets-v1/5e21e9c6bd83de5e2fd7.scn": [
+        "res://authoring/production-review-repair-20261021/terrain_owner/assets-v1/program-2dc54dd63cb5e3570f62.gdshader",
+        "res://factory/resources/terrain_native/art/T_BarkA1_col.png"
+      ],
+      "res://authoring/production-review-repair-20261021/terrain_owner/assets-v1/6718959dcaea3cdcd4dc.res": [
+        "res://factory/components/prepared_timed/bank.gd",
+        "res://authoring/production-review-repair-20261021/terrain_owner/assets-v1/program-327485ff2f40323b8588.gdshader",
+        "res://factory/resources/terrain_native/art/T_BarkA1_col.png",
+        "res://authoring/production-review-repair-20261021/terrain_owner/assets-v1/6718959dcaea3cdcd4dc.scn",
+        "res://factory/components/owned_fields/spike_leaf.gd"
+      ],
+      "res://authoring/production-review-repair-20261021/terrain_owner/assets-v1/6718959dcaea3cdcd4dc.scn": [
+        "res://authoring/production-review-repair-20261021/terrain_owner/assets-v1/program-2dc54dd63cb5e3570f62.gdshader",
+        "res://factory/resources/terrain_native/art/T_BarkA1_col.png"
+      ],
+      "res://authoring/production-review-repair-20261021/terrain_owner/assets-v1/80bd9ae752586964e350.res": [
+        "res://factory/components/prepared_timed/bank.gd",
+        "res://authoring/production-review-repair-20261021/terrain_owner/assets-v1/program-327485ff2f40323b8588.gdshader",
+        "res://factory/resources/terrain_native/art/T_BarkA1_col.png",
+        "res://authoring/production-review-repair-20261021/terrain_owner/assets-v1/80bd9ae752586964e350.scn",
+        "res://factory/components/owned_fields/spike_leaf.gd"
+      ],
+      "res://authoring/production-review-repair-20261021/terrain_owner/assets-v1/80bd9ae752586964e350.scn": [
+        "res://authoring/production-review-repair-20261021/terrain_owner/assets-v1/program-2dc54dd63cb5e3570f62.gdshader",
+        "res://factory/resources/terrain_native/art/T_BarkA1_col.png"
+      ],
+      "res://authoring/production-review-repair-20261021/terrain_owner/assets-v1/b58956bf102fe6f33e74.res": [
+        "res://factory/components/prepared_timed/bank.gd",
+        "res://authoring/production-review-repair-20261021/terrain_owner/assets-v1/program-327485ff2f40323b8588.gdshader",
+        "res://factory/resources/terrain_native/art/T_BarkA1_col.png",
+        "res://authoring/production-review-repair-20261021/terrain_owner/assets-v1/b58956bf102fe6f33e74.scn",
+        "res://factory/components/owned_fields/spike_leaf.gd"
+      ],
+      "res://authoring/production-review-repair-20261021/terrain_owner/assets-v1/b58956bf102fe6f33e74.scn": [
+        "res://authoring/production-review-repair-20261021/terrain_owner/assets-v1/program-2dc54dd63cb5e3570f62.gdshader",
+        "res://factory/resources/terrain_native/art/T_BarkA1_col.png"
+      ],
+      "res://authoring/production-review-repair-20261021/terrain_owner/assets-v1/bf54ecc2419330806b3e.res": [
+        "res://factory/components/prepared_timed/bank.gd",
+        "res://authoring/production-review-repair-20261021/terrain_owner/assets-v1/bf54ecc2419330806b3e.scn",
+        "res://factory/components/owned_fields/spike_leaf.gd"
+      ],
+      "res://authoring/production-review-repair-20261021/terrain_owner/assets-v1/bf54ecc2419330806b3e.scn": [
+        "res://authoring/production-review-repair-20261021/terrain_owner/assets-v1/program-2dc54dd63cb5e3570f62.gdshader",
+        "res://factory/resources/terrain_native/art/T_BarkA1_col.png",
+        "res://factory/resources/terrain_native/art/sm_vines_horizontal_soil.obj",
+        "res://factory/resources/terrain_native/art/T_Leaf_001gray.png"
+      ],
+      "res://authoring/production-review-repair-20261021/terrain_owner/assets-v1/program-2dc54dd63cb5e3570f62.gdshader": [],
+      "res://authoring/production-review-repair-20261021/terrain_owner/assets-v1/program-327485ff2f40323b8588.gdshader": [],
+      "res://factory/components/owned_fields/spike_leaf.gd": [],
+      "res://factory/components/prepared_timed/bank.gd": [],
+      "res://factory/components/prepared_timed/direct_restore_bank.gd": [],
+      "res://factory/resources/terrain_native/art/sm_vines_horizontal_soil.obj": [],
+      "res://integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_blood_premium/VFX/objects/sm_plane_coned_spiked_waved1.obj": [],
+      "res://integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_magic_projectiles_premium_demo_project/VFX/Objects/sm_box2.obj": [],
+      "res://integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_magic_projectiles_premium_demo_project/VFX/Objects/sm_box2_rotated.obj": [],
+      "res://library/lelu/pack_lelu_godot_blood_premium/VFX/objects/sm_plane_coned_spiked_waved1.obj": [],
+      "res://library/lelu/pack_lelu_godot_magic_projectiles_premium_demo_project/VFX/Objects/sm_box2.obj": [],
+      "res://library/lelu/pack_lelu_godot_magic_projectiles_premium_demo_project/VFX/Objects/sm_box2_rotated.obj": []
+    },
+    "shared_clock": "res://assets/vfx/sources/c0017ad639184b208deb/occurrence_clock.gd",
+    "no_runtime_hash_or_graph_work": true
+  },
+  "scoped_aliases": {
+    "resolver": "res://assets/vfx/extensions/spike-seed-20261021/scoped_resource_io.gd",
+    "map": "res://assets/vfx/format/spike-seed-20261021-aliases.json",
+    "resolver_sha256": "6fd1c183393b2a234fd09ae56c4ce2fa8a84dadf6cc3373e97614d91a081b75c",
+    "map_sha256": "447eb37e01e537cb5cae3b1e3794fe241bcfffa641c79d43e97ee0accdaec354",
+    "aliases": 7833,
+    "scope": "Only newly isolated callers; existing aliases and resolver bytes remain unchanged"
+  },
+  "selection_changed": false
+}

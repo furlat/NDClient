@@ -1,0 +1,35 @@
+[gd_resource type="Resource" format=3]
+
+[ext_resource type="Script" path="res://assets/vfx/sources/d60670fa4c3a03cc8f3a/component.gd" id="1_g1s18"]
+[ext_resource type="Script" path="res://assets/vfx/sources/67ebe8ef4f358cad6a4b/phase.gd" id="2_el64m"]
+
+[sub_resource type="Resource" id="Resource_duxtv"]
+script = ExtResource("1_g1s18")
+component_id = "wall"
+constructor_script = "res://assets/vfx/extensions/production-review-20261020/sources/8cae7b7f38ac851d8084/wind.gd"
+input = {
+"wind_bank": "res://assets/vfx/extensions/production-review-20261020/sources/f36ea49fad4921d1f8db/wind-bank.tres"
+}
+provenance = "Native donor geometry/materials. Caller supplies actual wall_uuid, anchor_position, wall_geometry before construction; no embedded review geometry."
+
+[resource]
+script = ExtResource("2_el64m")
+clip_id = "wall-native/wind_wall_corner_native/lifecycle"
+label = "wind actual wall_assembly"
+phase = "lifecycle"
+source_recipe = "factory-path:authoring/production-review-repair-20261020/walls/"
+components = Array[Resource]([SubResource("Resource_duxtv")])
+bindings = [{
+"component": "wall",
+"kind": "sample",
+"offset_seconds": 0.0,
+"rate": 1.0
+}]
+seconds = 2.0
+simulation_hz = 144.0
+options = {
+"construction_operands": ["wall_uuid", "anchor_position", "wall_geometry"],
+"human_approval_inferred": false,
+"owner_lifetime": true,
+"production_integration_performed": false
+}

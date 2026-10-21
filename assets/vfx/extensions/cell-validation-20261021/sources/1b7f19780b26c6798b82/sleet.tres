@@ -1,0 +1,22 @@
+[gd_resource type="Resource" load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://assets/vfx/sources/67ebe8ef4f358cad6a4b/phase.gd" id="phase"]
+[ext_resource type="Script" path="res://assets/vfx/sources/d60670fa4c3a03cc8f3a/component.gd" id="component"]
+
+[sub_resource type="Resource" id="effect"]
+script = ExtResource("component")
+component_id = "effect"
+constructor_script = "res://assets/vfx/extensions/cell-validation-20261021/sources/da95be79bbb696c8d2e9/sleet.gd"
+input = {"owner_uuid": "", "weather_sources": [{"scene": "res://assets/vfx/sources/30d97daa0975dde56681/empty_subject.tscn", "settings": {"animation": ""}, "side": "full", "seed": 47291, "simulation_hz": 144, "clip_normal": [0.70710678, 0, 0.70710678], "layer_shader": "res://assets/vfx/sources/1b57f8e0ddd1f4fa95d3/necrotic_recipient_layer_v3.gdshader", "support_opacity": false, "prepared_recipient_bank": "res://assets/vfx/extensions/cell-validation-20261021/sources/08c424fa77080e4d1042/f6c4d6ccbfc0b32f6506.res"}, {"scene": "res://assets/vfx/sources/30d97daa0975dde56681/empty_subject.tscn", "settings": {"animation": ""}, "side": "ground", "seed": 47291, "simulation_hz": 144, "clip_normal": [0.70710678, 0, 0.70710678], "layer_shader": "res://assets/vfx/sources/1b57f8e0ddd1f4fa95d3/necrotic_recipient_layer_v3.gdshader", "support_opacity": false, "prepared_recipient_bank": "res://assets/vfx/extensions/cell-validation-20261021/sources/8d80f647642c173a803a/4eae811de02703673e4b.res"}]}
+
+[resource]
+script = ExtResource("phase")
+clip_id = "assembled/sleet_storm_native"
+label = "Actual owner native continuation"
+phase = "lifecycle"
+variant = "actual_owner"
+components = Array[Resource]([SubResource("effect")])
+bindings = [{"component":"effect","kind":"sample","rate":1.0,"offset_seconds":0.0}]
+seconds = 1.0
+simulation_hz = 144.0
+options = {"inputs":["owner_state","targets","zone_geometry"],"owner_driven":true}

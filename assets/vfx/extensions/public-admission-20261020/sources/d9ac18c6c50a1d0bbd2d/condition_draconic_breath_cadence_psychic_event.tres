@@ -1,0 +1,22 @@
+[gd_resource type="Resource" format=3]
+
+[ext_resource type="PackedScene" path="res://assets/vfx/conditions/condition_draconic_breath_cadence_psychic_event/prepared.scn" id="1_w3ybe"]
+[ext_resource type="Script" path="res://assets/vfx/extensions/followup-20261020/sources/0fb7351681180386b03a/condition_pose_interface.gd" id="2_vlh67"]
+
+[resource]
+script = ExtResource("2_vlh67")
+scene = ExtResource("1_w3ybe")
+bindings = [{
+"node_index": 2,
+"node_path": "./effect/NativeReceivingMaterial",
+"property_index": 1,
+"property_name": "material_override",
+"shader_path": "res://assets/vfx/shared/resources/e8867fd106f25974b75723946ebbc7243309785b9d2cd7b67220da497e5a6490.res"
+}]
+receipt = {
+"artwork_changed": false,
+"owner_preconstructed": false,
+"scene": "res://assets/vfx/conditions/condition_draconic_breath_cadence_psychic_event/prepared.scn",
+"scene_sha256": "bc85783fc48b786df0e21e530627557578bfada8393e08d8d5272b36c4aedcba",
+"selection": "condition_draconic_breath_cadence_psychic_event"
+}

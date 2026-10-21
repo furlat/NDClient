@@ -1,0 +1,22 @@
+[gd_resource type="Resource" format=3]
+
+[ext_resource type="PackedScene" path="res://assets/vfx/conditions/condition_draconic_breath_cadence_cold_event/prepared.scn" id="1_wbgfy"]
+[ext_resource type="Script" path="res://assets/vfx/extensions/followup-20261020/sources/0fb7351681180386b03a/condition_pose_interface.gd" id="2_f4825"]
+
+[resource]
+script = ExtResource("2_f4825")
+scene = ExtResource("1_wbgfy")
+bindings = [{
+"node_index": 2,
+"node_path": "./effect/NativeReceivingMaterial",
+"property_index": 1,
+"property_name": "material_override",
+"shader_path": "res://assets/vfx/shared/resources/d31372794e676a3d6e1c7a94f8d8a945bfee70f0fc26b9ee6c7cf8b366ba76b1.res"
+}]
+receipt = {
+"artwork_changed": false,
+"owner_preconstructed": false,
+"scene": "res://assets/vfx/conditions/condition_draconic_breath_cadence_cold_event/prepared.scn",
+"scene_sha256": "836e13938361c980d136b77903bca0ad0fa67e589284dac16841a34d4067d75b",
+"selection": "condition_draconic_breath_cadence_cold_event"
+}
