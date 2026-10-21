@@ -19,7 +19,8 @@ results do not qualify the full native inventory.
 
 The latest batch reuses ordinary terrain source closures within each existing
 plan and the actual identical paused composed Timeline across camera views.
-Five affected controls pass with natural exits 0, including full Studio playback.
+It is committed at **c53ab11d**. Five affected controls pass with natural exits 0,
+including full Studio playback.
 The isolated thumbnail-test window now identifies itself explicitly; its bar-only
 layout is intentional and is separate from full Studio.
 
@@ -29,9 +30,21 @@ remaining media holds 0–104 ms and world holds 47–76 ms. Move's correspondin
 holds remain zero and its environment commit is 11–17 ms. Whole-profile maximum
 frames after initial readiness are 43 / 36 / 62 ms, not the smaller command-only
 maxima. No uniform onset/frame gain over the previous source cut is established.
-Door costs, full-profile frame spikes and composed thumbnails (about five seconds
-initial/reset) remain recovery work. Exact source and original measurements are
-preserved; no Factory/backend cause is inferred from wall time alone.
+Door costs, full-profile frame spikes and composed thumbnails remain recovery
+work. A subsequent source guard avoids environment metadata reads for empty
+depth-source input. Its affected material/preview controls pass 135/280 checks,
+with natural exits 0. The preview timing control's competing one/four-view demand
+owners are corrected; stable explicit four-view availability remains about four
+seconds initial/reset and 206 ms changed zoom, above target. This is a different
+measurement scope, not a demonstrated ordinary UI speedup. Earlier five-second
+receipts and the latest uneven live cohort remain preserved; no new quiet live
+comparison was run for this bounded follow-through.
+
+A9's current hit-material audit found all 11 available definitions already share
+Baked bundles; no redundant sibling native-load path was demonstrated, so no
+speculative cache patch was added. Broader Choice/Startup/history handoffs remain
+open at actual source-index/reload ownership. Exact source and original
+measurements are preserved; no Factory/backend cause is inferred from wall time.
 
 This is not clean whole-suite qualification or completion of R1–R8. No new
 assignments precede recovery. See the [current execution record](OPUS_RECOVERY_IMPLEMENTATION_2026-10-22.md)

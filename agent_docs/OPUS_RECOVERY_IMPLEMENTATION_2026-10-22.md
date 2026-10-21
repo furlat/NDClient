@@ -7,7 +7,60 @@ Authority: [corrected recovery plan](OPUS_RECOVERY_AND_COMPLETION_PLAN_2026-10-2
 The plan-only STOPPED statements describe its earlier preparation, not the current
 human-authorized execution.
 
-## Latest qualified boundary — local closures and composed cuts
+## Latest qualified boundary — empty demand and stable preview control
+
+The local-closure/composed-cut batch below is now committed at **c53ab11d**.
+Astra's subsequent review agrees that core restoration is implemented while
+response, frame cost, composed previews and broader ownership remain unfinished.
+The supplied feedback adds no justification for another renderer or new content
+assignment. No full-suite, ordinary-startup, 100+ FPS or art/audio acceptance is
+inferred from the affected receipts.
+
+One additional source-confirmed omission is repaired in SpriteSources:
+`prepare_actor_depth_bands([])` returns the same `true` before looking up the
+environment index. The unconditional empty-input metadata lookup was introduced
+in `291e092c`; there is no per-source/band mutation to skip in this case. Actual
+nonempty preparation, shared allowance and owner cleanup remain unchanged.
+The broader source review found the private support/layer initializer identical
+to `9b73`. Its startup cost is inherited; no exclusive 13–18 ms saving is assigned to
+the new empty guard. Other empty consumers still poll/retire real owners and
+were not bypassed.
+
+The existing preview timing control had two demand owners: its explicit
+four-view request and TimelineView's automatic one-view callback replaced each
+other's signatures and reordered the same queue. The test now pauses only that
+automatic callback during this explicit measurement. Actual Play children,
+source clocks, frame/postdraw waits, all 64 samples, canonical/pixel/reset duties
+and the existing shared remaining allowance plus one cache poll remain. Prior
+processing is restored after measurement; ordinary product scheduling is unchanged.
+
+The two affected existing controls pass with natural exits 0 at
+`.runtime/tests/20261021T235259.013386Z-recovery-empty-demand-preview`:
+actor material preparation 135 checks and preview resources 280 checks. Exact
+source is c53ab11d plus saved source.diff. The saved preview-resource receipt
+records stable four-view availability 3,948.679 / 205.764 / 4,089.127 ms for initial,
+changed zoom and reset. All remain above 200 ms. These are corrected four-view
+control measurements, not proof of an ordinary UI speedup; the older receipts
+with competing request owners remain intact. No new quiet gameplay timing was launched
+for this bounded batch, and the preceding uneven live cohort remains current.
+
+The broader A9 source audit is preserved at
+`.runtime/recovery-plan-20261021/source-sharing-followthrough/owner-audit.md`.
+All 11 available current body-material definitions use recorded bundles already
+shared by Baked. A proposed raw-resource handoff between sibling spell/hit
+consumers has no current positive duplicate-load witness and was stopped before
+implementation or extra tests. Choice/Startup/history owner handoffs remain
+unresolved at their exact source-index/reload boundaries; private job, program,
+surface and clock state is not a sharable immutable Resource. Separate private
+maps do not prove duplicate disk parsing. No global cache or cached-ready
+shortcut was added, and broader A9 is not marked complete.
+
+No Factory/backend/asset defect was established by these additional source
+checks. Current 82a stays installed; later complete a12f delivery and its explicit
+selection/intake remain separate existing work. All artwork/audio remain
+unreviewed.
+
+## Previous qualified boundary — local closures and composed cuts
 
 The preceding recovery is committed at **9dea8d47**, after the initial
 **523d5e02** checkpoint. The next source batch preserves the same installed82a

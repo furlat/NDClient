@@ -50,21 +50,36 @@ func measure(label:String)->Dictionary:
     var before_hits:int=cache.native_store.hits;var before_misses:int=cache.native_store.misses
     var before_loads:int=cache.native_store.disk_loads
     var begin:int=Time.get_ticks_usec()
+    # This measurement owns four-view demand. The automatic one-view process
+    # would replace its signature and reorder the same pending queue each frame.
+    var was_processing:bool=tracks.is_processing()
+    tracks.set_process(false)
     var state:Dictionary=tracks.prepare_visible(true)
     var request_cpu_ms:float=float(Time.get_ticks_usec()-begin)/1000.0
     var deadline:int=Time.get_ticks_msec()+120000
     while not state.ready and state.errors.is_empty() and Time.get_ticks_msec()<deadline:
         await process_frame;await RenderingServer.frame_post_draw
+        # Play/child preparation and the native draw have kept their ordinary
+        # callbacks. Use only the existing remainder for this same cache owner.
+        if tracks._preparation_available():
+            var optional_started:int=Time.get_ticks_usec()
+            tracks._prepare_other_rows()
+            tracks._charge_preparation(optional_started)
+        if tracks._preparation_available():
+            var poll_started:int=Time.get_ticks_usec()
+            cache.poll()
+            tracks._charge_preparation(poll_started)
         state=tracks.prepare_visible(true)
     check(state.ready and state.pending==0 and state.errors.is_empty(),label+": actual visible four-view samples complete through their eligible production path")
     bounded_sources(label)
     await process_frame;await RenderingServer.frame_post_draw
     var available_ms:float=float(Time.get_ticks_usec()-begin)/1000.0
+    tracks.set_process(was_processing)
     var record={"label":label,"request_cpu_ms":request_cpu_ms,"through_post_draw_ms":available_ms,"samples":state.samples,
         "disk_hits":cache.native_store.hits-before_hits,"disk_misses":cache.native_store.misses-before_misses,
         "disk_loads":cache.native_store.disk_loads-before_loads,"available":state.ready,"target_ms":200.0,
         "within_target":state.ready and available_ms<=200.0,"errors":state.errors,
-        "scope":"Input-bearing rows use exact recorded full context; source-only rows may use persisted Resources or normal bounded rendering. Actual disk identity/dependency proof is separate below."}
+        "scope":"Stable explicit four-view demand owner with ordinary Play callbacks and shared remaining preparation budget. Input-bearing rows use exact recorded full context; source-only rows retain normal bounded rendering. This is not an ordinary one-view UI timing. Actual disk identity/dependency proof is separate below."}
     measurements.append(record);print("NATIVE_PREVIEW_RESOURCE_TIME ",JSON.stringify(record))
     check(state.samples>0,label+": the measured timeline actually requests source thumbnails")
     return record

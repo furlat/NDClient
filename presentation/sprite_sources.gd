@@ -271,6 +271,7 @@ func _release_actor_depth_bands(entry:Dictionary)->void:
     entry.actor_depth_bands=[]
 
 func prepare_actor_depth_bands(sources:Array,budget:Dictionary,tracks:Array=[])->bool:
+    if sources.is_empty():return true
     var complete:bool=true
     var programs:Dictionary=Catalog.environment_index(catalog_cache).get("spatial_media",{})
     for entry in sources:
