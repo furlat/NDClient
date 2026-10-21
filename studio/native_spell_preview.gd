@@ -67,7 +67,9 @@ func sample(seconds:float,basis:Basis,_position:Vector3,_scale:float,_history:Ar
         handle.root.scale=Vector3.ONE*float(component.native_cue.get("scale",.18))
         handle.root.show()
     camera.global_basis=basis;camera.global_position=basis.z*10.0
-    var next:float=minf(seconds,maxf(0.0,sampled)+1.0/60.0)
+    # Recorded programs select an absolute source state; only live sources
+    # need incremental simulation. Readiness still requires the actual draw.
+    var next:float=seconds if handle.get("baked",false) else minf(seconds,maxf(0.0,sampled)+1.0/60.0)
     var lifecycle:bool=component.has("lifecycle_phases")
     var opened:float=Persistent.application_end(component) if lifecycle else float(component.lifecycle.get("enter_end_seconds",0)) if component.get("persistent_owner",false) else INF
     if sampled>=opened:next=seconds

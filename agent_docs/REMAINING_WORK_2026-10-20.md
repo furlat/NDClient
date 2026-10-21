@@ -7,15 +7,27 @@ priority. This update supersedes the historical STOPPED/planning-only and active
 queue statements below; their inventories and receipts remain preserved. The
 old broad queue is not running. The automated heartbeat remains paused.
 
-The initial 17-module Opus restoration plus A10 metadata ownership are applied.
-Three quiet current82a gameplay runs pass 83 checks each: Door actual submit to
-first body is 105–124 ms; Move active-group media hold is zero. Door holds and
-36–42 ms maximum frames remain above target. The affected native/Studio batch
-has five passing and three nonpassing rows; Library preview/pointer failures and
-the confirmed native transport access violation remain open. This is not clean
-whole-suite qualification or completion of R1–R8. No new assignments precede
-recovery. See the [current execution record](OPUS_RECOVERY_IMPLEMENTATION_2026-10-22.md)
-for exact scope, original receipts and next recovery boundaries. All art/audio
+The initial 17-module restoration plus A10 are committed at **523d5e02**.
+Retained-history preparation, exact resting-source demand, unchanged sensory
+columns, same-source pane Resource sharing and Astra's material/cookie terminal
+ownership repairs are applied and have affected passing receipts. Current
+Transport passes 61 checks with natural exit 0; the four old dumps remain failed
+historical receipts with the exact task still unidentified. Library's three
+recorded cases pass pixels/pointer/Follow/loop/cleanup controls. These bounded
+results do not qualify the full native inventory.
+
+Three current82a quiet routes pass 83 checks each: Door submit to first sampled
+body is 108–128 ms, with remaining media holds 21–54 ms and world holds 32–48 ms.
+Move's corresponding holds are zero. Whole-profile maximum frames after initial
+readiness remain 34–44 ms; Door environment-update CPU and composed thumbnails
+(about 4–6 seconds cold/reset) remain recovery work. First body and environment
+update are not further improved over the preceding A10 cut. The subsequent
+profiling-window loading presentation has one separate passing live route; it is
+not substituted into the quiet three-run measurement.
+
+This is not clean whole-suite qualification or completion of R1–R8. No new
+assignments precede recovery. See the [current execution record](OPUS_RECOVERY_IMPLEMENTATION_2026-10-22.md)
+for exact scope, clocks, original receipts and remaining costs. All art/audio
 remain unreviewed. No new Factory/backend/asset defect has been established by
 this batch, and delivered fixes are not requested again.
 
@@ -1528,6 +1540,17 @@ while doing this; do not use a rendering rewrite as a substitute for finishing
 these consumers.
 
 ## 7. R6: performance is still unfinished, with exact current costs
+
+**22 October Studio investigation:** four preserved Windows dumps narrow the
+shutdown crash to an unreclaimed WorkerThreadPool task releasing script-bearing
+bound data after language teardown. The exact submitting task remains unknown.
+Final prototype-task collection and ordinary range-cookie collection are missing
+in current source; bounded unapplied corrections and offline dump evidence are
+linked in the existing [native-exit investigation](STUDIO_NATIVE_EXIT_2026-10-21.md#22-october-offline-native-investigation-and-bounded-correction-proposals).
+A separate source-only recorded-thumbnail path unnecessarily advances1/60source
+second per draw; its absolute-sample proposal is also unapplied. Existing preview
+receipts still take4.315–6.652s. No fix/native-exit/performance pass is claimed,
+and this investigation started no competing GPU run during recovery timing.
 
 Latest quiet issued-command Gallery receipt:
 `.runtime/tests/20261020T113039.907232Z/summary.json`.

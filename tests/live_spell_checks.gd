@@ -236,6 +236,11 @@ func _run()->void:
     # unfocusable to leave the user's existing preview/input untouched.
     root.unfocusable=true;root.size=Vector2i(1600,960)
     DisplayServer.window_set_vsync_mode(DisplayServer.VSYNC_DISABLED);Engine.max_fps=0
+    # --script owns this SceneTree and bypasses loading.tscn. Draw the same
+    # notice before this one Play performs its synchronous scene setup. This
+    # startup frame stays inside started/ready_elapsed_ms; no clock is held.
+    show_loading_notice("Connecting the encounter…")
+    await RenderingServer.frame_post_draw
     profile_view_size=12.0
     for argument in OS.get_cmdline_user_args():
         if argument.begins_with("--profile-view-size="):profile_view_size=argument.trim_prefix("--profile-view-size=").to_float()
@@ -265,8 +270,13 @@ func _run()->void:
     evidence.profile_view_size=profile_view_size;evidence.window_size=[root.size.x,root.size.y]
     evidence.source="Unchanged interactive Gallery sorcerer with ordinary AI; actual Fireball native family/level/ground/Confirm events and original live packets." if scene.game_config.get("live_fireball_ui",false) else "Unchanged Gallery sorcerer recipe; actual Play commands for Amber, independent nonrendering SDK Blue; original packets only."
     if "--profile-root-player" in OS.get_cmdline_user_args():evidence.source="Unchanged interactive Gallery sorcerer with ordinary AI; production admitted action handlers and original live packets, without GUI selection dwell."
+    show_loading_notice("Connecting the encounter…")
     if not await until(ready,"Sorcerer actual initial choices",120000):await finish();return
     evidence.ready_frame=Engine.get_process_frames();evidence.ready_elapsed_ms=Time.get_ticks_msec()-started
+    # Keep the original readiness timing marker. The real drawing boundary
+    # precedes notice removal without holding the live display clock.
+    await RenderingServer.frame_post_draw
+    close_loading_notice()
     for id in scene.timeline.state.audience.controlled:
         if scene.timeline.state.actors[id].name==CASTER_NAME:leader=id
     check(not leader.is_empty(),"Original premade sorcerer is controlled by Play")

@@ -2,18 +2,33 @@ extends SceneTree
 # Slow acceptance lane: use the real player scene, its public action handlers,
 # real choices/preview/commands and native animation clocks. No injected state.
 const Player = preload("res://play.tscn")
+const LoadingPresentation=preload("res://loading.gd")
 const Journal = preload("res://sdk/journal.gd")
 const JSONCodec = preload("res://sdk/strict_json.gd")
 const Placement = preload("res://placement.gd")
 const FrameProfile = preload("res://frame_profile.gd")
 const Choices = preload("res://sdk/choices.gd")
 var scene: Node
+var startup_notice:LoadingPresentation
 var checks = 0
 var failures: Array = []
 var evidence: Dictionary = {"actions":[], "jump_offered":false, "reconnect":false}
 var started = Time.get_ticks_msec()
 
 func _initialize() -> void: _run.call_deferred()
+
+func show_loading_notice(message:String)->void:
+    if startup_notice==null:
+        startup_notice=LoadingPresentation.new()
+        startup_notice.start_player=false
+        root.add_child(startup_notice)
+    startup_notice.label.text=message
+    startup_notice.move_to_front()
+
+func close_loading_notice()->void:
+    if startup_notice==null:return
+    startup_notice.queue_free()
+    startup_notice=null
 
 func check(value: bool, message: String) -> void:
     checks += 1
@@ -219,6 +234,9 @@ func finish() -> void:
     file.store_string(JSON.stringify(report,"  ",true,true)); file.close()
     print(JSON.stringify({"checks":checks,"failures":failures,"elapsed_ms":report.elapsed_ms,"actions":evidence.actions.size(),
         "jump_offered":evidence.jump_offered,"direct_arc_steps":direct_arc,"reconnect":evidence.reconnect}))
+    # Populate the existing empty-root teardown draw after saved evidence.
+    # No pre-join draw or shorter synchronous retirement is implied.
+    show_loading_notice("Closing the encounter…")
     scene.queue_free()
     await process_frame
     quit(0 if failures.is_empty() else 1)

@@ -254,6 +254,33 @@ func prepare(compiled_groups:Array,cache:Dictionary,world:Node=null,prefetch_gro
         Effects.hide(handle)
         if not budget.is_empty():budget.used_usec+=Time.get_ticks_usec()-started
         FrameProfile.end_phase(world.profile,"native_prepare_actor_context",started)
+    # Topology allocation above must finish before immutable history requests:
+    # its invalid actor-context hide intentionally suspends pending captures.
+    for component in wanted.values()+(optional.values() if allow_optional else []):
+        if not handles.has(component.id):continue
+        var handle:Dictionary=handles[component.id]
+        if not Inputs.rolling_history(handle):continue
+        var history_key:Array=Inputs.history_key(world,handle,component)
+        if handle.get("history_seeded_key",[])==history_key or handle.get("history_prefix_demand_key",[])!=history_key:continue
+        # A queued source cannot demand a prefix before its actual owner is
+        # admitted. Preserve prepare_history's existing future-owner boundary.
+        if not world.timeline.condition_owners.has(str(component.get("condition_uuid",""))):continue
+        # Retry only an actual sampled owner, with its current endpoint contract.
+        # Ordinary sample still owns unavailable/pending/error classification.
+        var observed:Dictionary=handle.component
+        var cue:Dictionary=observed.native_cue
+        var age:float=maxf(0.0,float(observed.age_ms))/1000.0
+        var points:Dictionary=Sockets.endpoints(world,observed,handle.endpoint_views.get(world.quarter,{}),age<float(cue.launch),inputs.weapon_registration(world,handle,observed))
+        if not points.ready:continue
+        started=Time.get_ticks_usec()
+        var available:int=maxi(0,budget.limit_usec-budget.used_usec) if not budget.is_empty() else 2000
+        var prefix:Dictionary=inputs.prepare_history_prefix(world,handle,observed,_support.viewport.get_texture(),available,wanted.has(component.id))
+        handle.root.hide() # Keep private draws alive; never withdraw actor_context here.
+        # History draw admission already belongs to actual sample readiness.
+        # Do not turn it into a new Timeline/media-ready clock gate.
+        handle.history_prefix_status=prefix
+        if not budget.is_empty():budget.used_usec+=Time.get_ticks_usec()-started
+        FrameProfile.end_phase(world.profile,"native_prepare_history_prefix",started)
     if not budget.is_empty():budget.used_usec+=maxi(0,Time.get_ticks_usec()-admission_started-(budget.used_usec-charged_before))
     return result
 
@@ -378,7 +405,9 @@ func sample(world:Node,components:Array,frame_seconds:float)->void:
                 # draw without publishing a source sample. Keep that admitted
                 # preparation alive; the output is still not displayed.
                 handle.root.hide()
-            else:Inputs.invalidate_history(handle);Effects.hide(handle)
+            else:
+                if Inputs.invalidate_history(handle):preparation_revision+=1
+                Effects.hide(handle)
     FrameProfile.end_phase(world.profile,"native_sample_retention",sample_phase)
     sample_phase=Time.get_ticks_usec()
     for id in active:
@@ -403,7 +432,7 @@ func sample(world:Node,components:Array,frame_seconds:float)->void:
         var registration:Dictionary=inputs.weapon_registration(world,handle,component)
         var points=Sockets.endpoints(world,component,handle.endpoint_views.get(world.quarter,{}),age<float(cue.launch),registration)
         if not points.ready:
-            if points.get("unavailable",false):Inputs.invalidate_history(handle)
+            if points.get("unavailable",false) and Inputs.invalidate_history(handle):preparation_revision+=1
             Effects.hide(handle)
             if points.get("unavailable",false):_unavailable(component,points.reason)
             elif points.get("pending",false):ready=false;_pending(component,points.reason)
@@ -455,6 +484,12 @@ func sample(world:Node,components:Array,frame_seconds:float)->void:
         if not handle.get("baked",false):
             var input_started:int=Time.get_ticks_usec()
             input_bindings=inputs.sync(world,handle,component,points,_support.viewport.get_texture(),false,Playback.source_time(cue,sample_time))
+            if Inputs.rolling_history(handle):
+                var history_key:Array=Inputs.history_key(world,handle,component)
+                if handle.get("history_prefix_demand_key",[])==history_key and handle.get("history_seeded_key",[])!=history_key:
+                    # A newly reached or endpoint-deferred prefix must revisit
+                    # prepare even if its preceding resource result was ready.
+                    preparation_revision+=1
             FrameProfile.end_phase(world.profile,"native_input_bindings",input_started)
             # A source may carry offline observations for authoring. They are
             # never permission to display a successful gameplay outcome.

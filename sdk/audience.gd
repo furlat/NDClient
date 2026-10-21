@@ -98,11 +98,17 @@ static func fold(target:Dictionary,fact:Dictionary,values:Dictionary,changed_act
     var result:Dictionary=held.duplicate()
     result.visible=Cells.mask(points) if topology_changed else held.visible
     result.seen=Cells.union_points(held.seen,added.value)
-    var value_indices:PackedInt64Array=Cells.value_indices(prior_points,points)
+    var value_indices:=PackedInt64Array();var values_indexed:bool=false
     for pair in [["effective_light_levels","light_levels","effective_light_levels_changed"],["hazardous_cells","hazards","hazardous_cells_changed"]]:
         var changed=Cells.selected(values[pair[1]],fact.get(pair[2],{}))
         if not changed.ok:return changed
         if held[pair[0]].get("cells",{})==held.visible:
+            # This exact accepted mask already owns the aligned immutable bytes.
+            # Contact-only changes must not decode/re-encode unchanged columns.
+            if indexed and not topology_changed and changed.value.is_empty():
+                result[pair[0]]=held[pair[0]];continue
+            if not values_indexed:
+                value_indices=Cells.value_indices(prior_points,points);values_indexed=true
             result[pair[0]]=Cells.reindexed_values(held[pair[0]],prior_points.size(),points,changed.value,result.visible,value_indices)
         else:
             var prior=Cells.values_map(held[pair[0]])

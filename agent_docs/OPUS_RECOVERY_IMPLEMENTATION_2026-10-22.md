@@ -7,6 +7,77 @@ Authority: [corrected recovery plan](OPUS_RECOVERY_AND_COMPLETION_PLAN_2026-10-2
 The plan-only STOPPED statements describe its earlier preparation, not the current
 human-authorized execution.
 
+## Latest qualified boundary — 22 October
+
+Initial recovery is committed at **523d5e02**; `d5d2ff1d` remains the untouched
+`almost disaster` starting checkpoint. The follow-through below adds exact rest
+source demand, A11 prefix preparation, unchanged aligned sensory-column reuse,
+narrow completed same-source pane Resource sharing, Astra's two task-ownership
+repairs and actual baked thumbnail sampling. The historical source/receipt
+sections below retain their dates and failures; this section states the latest
+execution boundary. No new content assignments are included.
+
+The four-row shutdown cohort
+`.runtime/tests/20261021T231323.714699Z-opus-recovery-shutdown` passes all rows:
+cookie generation 16, real native effect/source and root-exit ownership 67,
+thumbnail resources 255, Studio Transport 61 checks. Every process exits naturally
+with code 0. The material task was actually unfinished before quit, and the real
+root-exit observer confirms task detachment and bound-cache release. This repairs
+definite ownership gaps and supplies a passing current Transport receipt; it does
+not identify the exact submission responsible for the four historical dumps or
+prove every shutdown interleaving. Original crashes remain failed receipts.
+
+All three final serialized current82a gameplay runs pass 83 checks and exit 0:
+`.runtime/tests/20261021T231513.606290Z-opus-recovery-quiet`. Its exact source is
+523d5e02 plus its saved source.diff; all original profiles and framed pipeline
+clocks remain. `recovery-final-measurements.json` explicitly separates raw SSE,
+consumer entry, compilation, sampled body onset and frame scopes.
+
+| Measurement | Final three recovery runs | Previous A10 same-package cut |
+|---|---|---|
+| Door actual submit to first sampled body | 127.512 / 114.846 / 108.105 ms | 123.752 / 105.255 / 111.067 ms |
+| Door framed SSE-ready to first sampled body | 51.014 / 53.099 / 55.654 ms | Earlier table used a different consumer-entry clock; not relabelled here |
+| Door active-group media hold | 54.489 / 28.823 / 21.337 ms | 132.122 / 139.985 / 149.868 ms |
+| Door active-group world hold | 47.939 / 39.428 / 32.495 ms | Not extracted in the earlier table; not assumed zero |
+| Door environment_commit_updates | 77.902 / 85.903 / 69.565 ms | 63.821 / 53.060 / 67.243 ms |
+| Door character metadata | 30.626 / 32.288 / 28.255 ms | 52.986 / 49.872 / 47.874 ms |
+| Room Move active-group media and world holds | 0 / 0 / 0 ms each | Media 0 / 0 / 0 ms |
+| Maximum frame after initial readiness, whole profile | 38.074 / 43.661 / 33.846 ms | 36.507 / 39.035 / 41.716 ms |
+
+The final source cut contains multiple changes. It reduces later Door media
+holds; it does not demonstrate a further first-body or environment-update speedup
+over A10. Those costs and full-profile frame spikes remain open. Media and world
+hold intervals are separate and not blindly added to inclusive worker phases.
+Command-window maxima (26.935 / 31.123 / 33.846 ms) and local post-command-ready
+windows are separately recorded; they are not the full after-initial-ready metric.
+The exact Reducer entry timestamp is unavailable. Consumer entry precedes Journal
+staging/reduction and must not be called fold start.
+
+Each final route uploads exactly 55 unique Idle paths, about 432.5 MB estimated
+GPU storage, versus 110 unique Idle+Taunt paths and about 865.1 MB before the rest
+closure repair. No duplicate upload is present in either matched union. This
+establishes removed unsolicited work, not its exclusive elapsed cost.
+
+Full-context thumbnail availability remains 5,758.801 / 233.506 / 4,128.273 ms for
+the actual cold, changed-zoom and reset cohorts, above the 200 ms target. The
+baked source-only stepping repair does not close whole composed-context latency.
+
+The human's new blank-window screenshot is from the live-player profiling route.
+Direct script startup bypassed the normal loading scene; the harness now reuses
+its existing pointer-transparent notice and draws it before the same single Play
+is constructed. Readiness clocks and actual live input stay intact. One separate
+current visible route passes 83 checks, exit 0, at
+`.runtime/tests/20261021T232149.705970Z-opus-recovery-window`. It follows the quiet
+three-run cut and is not substituted into that performance comparison. The
+closing notice adds no wait and does not establish paint throughout synchronous
+teardown joins; pre-SceneTree script loading is also outside that startup fence.
+The screenshot alone does not establish which exposure interval it captured.
+
+The older wall/camera screenshot was reopened from the human's earlier attachment
+and mistakenly displayed without a historical label. It is not a fresh capture
+or proof that the repaired wall bug returned. No wall regression was reopened
+from that historical image.
+
 ## Initial source batch
 
 All 17 production modules below are implemented and independently source-reviewed.
@@ -130,8 +201,9 @@ values are in `a10-recovery-measurements.json` in that receipt directory.
 | Room Move active-group media hold | 0 / 0 / 0 ms | 0 / 0 / 0 ms |
 | After-ready maximum frame | 36.507 / 39.035 / 41.716 ms | 51.865 / 40.631 / 39.893 ms |
 
-Door fold-start to first body is 58.853 / 48.938 / 49.269 ms. This starts at
-canonical_consumer.started_us, not raw network receive; submit-to-fold-start is
+Door canonical-consumer entry to first body is 58.853 / 48.938 / 49.269 ms. This starts at
+canonical_consumer.started_us, before staging/reduction and after SSE admission,
+not at exact reducer entry or raw network receive; submit-to-consumer-entry is
 64.899 / 56.317 / 61.798 ms. Do not conflate this boundary with historical
 packet-receipt measurements. Inclusive CPU phases are not additive.
 
@@ -142,14 +214,122 @@ without a stack or lock address, the responsible source owner remains unknown.
 Exact OS evidence is preserved under
 `.runtime/closing-repairs/studio-transport-native-exit-20261022/`.
 
+## Retained-history and exact source-demand follow-through
+
+The initial 20-module recovery, reviewed harness migrations and corrected plan
+are checkpointed as **523d5e02**, `Restore Opus fast paths and current ownership
+contracts`. The original `d5d2ff1d` checkpoint is unchanged. Generated reports
+remain separately preserved, not silently promoted to whole-suite acceptance.
+
+A11 is now applied in native_inputs/native_spell_renderer. Actual nonbirth
+sampling declares prefix demand; existing preparation realizes whole immutable
+requests under its remaining allowance. Actual birth sampling still skips
+predecessors. Endpoint withdrawal, original source/material/clock snapshots,
+exact requested/drawn identities, retained epoch and sample readiness remain.
+Prefix status does not introduce a Timeline media-ready gate. One original
+Factory capture request remains indivisible; no hard 2ms bound is claimed.
+
+Grouped existing-family receipt:
+`.runtime/tests/20261021T225906.979773Z-opus-recovery-history` passes all four rows:
+actor_history_capture 350, material_transition 194, native_history_modes 294,
+native_material_transition 16,432 checks; all process exits 0. Both seats, actual
+history/departure/current-copy paths, all quarters, seek/removal, canonical
+immutability and native pixels are covered by their original controls. This
+functional receipt does not establish improved frame cost or every birth/
+withdrawal scheduling interleaving.
+
+Further Door attribution separates first-body onset from later active-group
+holds. In the three post-A10 profiles, all 132–150 ms of media hold occur after
+continuation metadata is ready; source decode/upload/publication alone remains
+pending. The 110 actor uploads are unique: 55 Idle paths plus 55 unsolicited
+Taunt paths. Their cumulative parallel decoder times are not elapsed hold times.
+The migration added unconditional equipment-clip demand to every living actor's
+rest closure, absent from Opus. This is independent of real equipment tracks.
+
+The reviewed restoration removes that blanket addition in media_warmup and
+restores two existing rest-only oracle lists to Idle. Actual compiled equipment
+tracks retain their own Taunt first-use, outfit witnesses and body scheduling.
+No decode budget, source clock, residency policy or readiness barrier changes.
+The exact saved analysis remains in
+`.runtime/recovery-plan-20261021/door-residual-analysis-20261022.md`.
+
+A bounded Library control correction is also applied: it observes the actual
+atomic production Out-to-In publication, independent original canonical prefixes
+and actual postdraw host, instead of inferring a boundary from external frame
+sampling. Follow-on manual seek still must keep an active recorded track visible
+and retain exact selection. Exact requested-row pixel/gutter inspection uses the
+existing explicit manual Follow control. Reset may retain only released empty,
+disabled spares; close must delete them. All pixel/pointer/loop/close duties
+remain, with no widened thresholds or deadlines. No product navigation defect
+has been established from the prior six failures.
+
+The existing media/first-use/equipment/Library cohort completes at
+`.runtime/tests/20261021T230257.818099Z-opus-recovery-rest-demand`: all four rows
+pass, with 87 / 657 / 1281 / 159 checks and natural exits 0. The Library control
+covers all three actual recorded cases. Post-rest-demand quiet timing is not yet
+available. The prior failed receipts remain failed; this passing Library result
+does not explain the separate native transport access violation.
+
+## Unchanged sensory columns, safe pane reuse and shutdown repairs
+
+A3's explicitly deferred aligned-value work is now reduced within the existing
+retained context. Only an exact already-indexed accepted mask, unchanged topology
+and empty validated selected changes may borrow the prior aligned light/hazard
+column. Cold, changed and mismatched-mask paths keep the original codec and its
+malformed-prior boundary. Shared alignment indices are constructed lazily only
+when a column rewrite needs them. No arbitrary mutated/forged prior context is
+promoted to an accepted canonical cut.
+
+A9 now recovers completed-path sharing for the existing same-source ReplayPanes
+relationship. A genuinely new pane may borrow only joined immutable res://
+Resource entries from the actual reference native renderer. Jobs, errors, private
+occurrences, program/readiness state and clock state remain private. The existing
+same-index/bundle and explicit reload refusal remain; these are not invented
+backend-commit or approach-revision qualification checks. Normal global
+compiler/source/postdraw fences still gate construction. No global cached-as-
+ready shortcut or new registry is introduced. This bounded restoration does not
+prove repeated disk parsing or close every cross-owner A9 opportunity.
+
+The current source-family receipt
+`.runtime/tests/20261021T230850.303577Z-opus-recovery-shared-ownership` passes all
+four rows: exact sensory Journal ownership/rollback 537, independent fold vectors
+901, immutable preparation 35, and native Studio checkpoint 138 checks. All
+natural process exits are 0. It does not qualify all current consumers.
+
+The human subsequently supplied Astra's four-dump shutdown analysis and two
+reviewed patches, now applied at the clean source boundary. Actual saved dump
+candidates and binary/source corroboration identify a pool Task/Callable releasing
+script-bearing data after language destruction, not the exact historical task.
+Two definite client ownership omissions are repaired: final process-root join of
+the exact prototype-material task, and terminal Lighting2D release of its range-
+cookie tasks through existing LightCookies.release. Ordinary page replacement
+still retains reusable cookies and subclass effect-cookie cleanup remains.
+
+Recorded source-only thumbnails now select their actual baked absolute sample
+directly. Live source stepping and actual final postdraw admission stay unchanged.
+Both patches remain unqualified by the preceding passing source cut. The next
+grouped source/thumbnail/transport cohort must preserve actual native exit status;
+a real unpolled material task exercises the process-root collection boundary.
+See [the current crash investigation](STUDIO_NATIVE_EXIT_2026-10-21.md) for the
+four original dumps, introducing ownership gaps and precise causal limitations.
+The earlier narrow WER archive search did not find those separately saved dumps;
+its lack of a local archive stack must not be repeated as a claim that no saved
+dump exists anywhere.
+
+A12's source review found immutable capture reuse, real draw acknowledgement and
+suspension already delivered and consumed. A tight crop needs a complete camera,
+UV, numeric-depth, receiver and live-body coverage contract. Changing size alone
+is unsafe. A source-owned one-shot clear of the otherwise blank departure
+protection pass is an optional follow-through candidate, not an invented missing
+required Factory/backend API or a quantified saving. No source package is changed.
+
 ## Remaining recovery work
 
-A9, A11 and A12 remain follow-through: safe completed-resource sharing, internally
-sliced retained history preparation, and actual capture-region/continuous-view
-cost. A10 is applied and has the bounded qualification above. A11 has a complete
-source-reviewed two-module candidate, not yet applied at this checkpoint. Current
-safe loader/drain/draw ownership is retained while complete adaptations are
-derived. These are not qualified by the initial 17-module batch. No newer Factory package is being
+A9 and A12 remain follow-through: safe completed-resource sharing and actual
+capture-region/continuous-view cost. A10 and A11 are applied with the bounded
+qualification above. Current safe loader/drain/draw ownership is retained while
+complete adaptations are derived. These are not qualified by the initial
+17-module batch, nor is every current native/Studio path complete. No newer Factory package is being
 installed ahead of recovery.
 
 No new Factory/backend/asset defect is established by this source batch. Existing

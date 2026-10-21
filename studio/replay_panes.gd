@@ -1,6 +1,7 @@
 extends RefCounted
 ## Stable viewport owners for offline playback. Mutable render state is never shared.
 const Play=preload("res://play.gd")
+const Admission=preload("res://presentation/native_source_admission.gd")
 const BackgroundRelease=preload("res://presentation/background_release.gd")
 
 static func viewport()->SubViewport:
@@ -54,6 +55,10 @@ static func prepare(parent:Node,restored:RefCounted,source:Dictionary,reference:
         var host=Play.new();host.external_playback=true;host.external_clock=false
         host.component_renderer.audio.set_enabled(false)
         host.catalog_cache=Play.Catalog.source_snapshot(source.cache)
+        if share_sources:
+            # Same existing source-snapshot contract as physical media sharing.
+            # Mutable occurrences/readiness jobs remain private to each renderer.
+            Admission.share_completed(reference.component_renderer.native_spells._resource_cache,host.component_renderer.native_spells._resource_cache)
         host.media_warmup.budget_bytes=budget
         if share_sources:Play.MediaWarmup.share(host.media_warmup,reference.media_warmup)
         else:Play.MediaWarmup.physical(host.media_warmup).source_revision=Play.MediaWarmup.physical(reference.media_warmup).source_revision+1

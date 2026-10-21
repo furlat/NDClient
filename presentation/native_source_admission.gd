@@ -9,6 +9,7 @@ static var settling:bool=false
 static var mutation_frame:int=-1
 static var loads_started:int=0
 static var _material_job:Dictionary={}
+static var _joins_material_at_exit:bool=false
 static var _prepared_material_owners:Dictionary={}
 static var material_profile:Dictionary={}
 static var _source_job:Dictionary={}
@@ -58,6 +59,14 @@ static func begin_mutation()->bool:
     mutation_frame=Engine.get_process_frames()
     return true
 
+## An existing same-source owner can lend only its joined physical Resources.
+## Native admission caches install res:// entries solely after their own LOADED
+## token/get boundary. Never copy job/error/program-state containers or claim
+## readiness here: the ordinary global compiler/source draw fences still apply.
+static func share_completed(source:Dictionary,target:Dictionary)->void:
+    for path in source:
+        if str(path).begins_with("res://") and not target.has(path):target[path]=source[path]
+
 static func prepare(paths:Array,cache:Dictionary,fresh:bool=false,urgent:bool=true)->Dictionary:
     if urgent and not paths.is_empty():_prioritize_source(cache)
     _poll()
@@ -101,8 +110,18 @@ static func prepare_materials(packet:Resource,materials:Array[Material],cache:Di
     # Only retained prototype Material RIDs are initialized; no Node, instance
     # parameters, animation or source clock is touched on the worker.
     _material_job={"packet":packet,"materials":materials,"owner":cache,"revision":cache.get("native_source_revision",0),"elapsed_ms":0.0,"task":-1}
+    if not _joins_material_at_exit:
+        (Engine.get_main_loop() as SceneTree).root.tree_exiting.connect(_join_material_at_exit,CONNECT_ONE_SHOT)
+        _joins_material_at_exit=true
     _material_job.task=WorkerThreadPool.add_task(_prepare_material_programs.bind(_material_job),false,"Native prototype programs")
     return false
+
+## Final process teardown collects even a completed, not-yet-polled task.
+## Do not publish readiness or schedule another draw fence while exiting.
+static func _join_material_at_exit()->void:
+    var job:Dictionary=_material_job
+    _material_job={}
+    if not job.is_empty():WorkerThreadPool.wait_for_task_completion(job.task)
 
 static func _prepare_material_programs(job:Dictionary)->void:
     var started:int=Time.get_ticks_usec()

@@ -171,7 +171,35 @@ func run()->void:
     invalid.node_properties={"missing_source_node":{"visible":false}}
     var owned_before=parent.get_child_count()
     check(not Effects.make(parent,invalid).error.is_empty() and parent.get_child_count()==owned_before,"Rejected source binding leaves no attached occurrence owner")
+    # Keep a real source material and Script, not a fake task/completion flag.
+    var terminal_materials:Array[Material]=[first.subject.ribbons[0].material_override]
     Effects.release(first);Effects.release(second);parent.free()
-    var report={"passed":passed,"failed":failures.size(),"failures":failures,"scope":"Headless real-source geometry/property sampling and immutable instance ownership; GPU particle/composition/palette pixels not claimed"}
-    var file=FileAccess.open("res://generated/native_effect_source_checks.json",FileAccess.WRITE);file.store_string(JSON.stringify(report,"  "));file.close()
-    print(JSON.stringify(report));quit(1 if failures.size() else 0)
+    # Leave the actual constructor's mutation frame before final submission.
+    # No further frame, admission poll or normal readiness publication follows.
+    await process_frame
+    var token:RefCounted=RefCounted.new()
+    var token_weak:WeakRef=weakref(token)
+    var terminal_cache:Dictionary={"unpolled_owner_witness":token}
+    token=null
+    var already_prepared:bool=Package.Admission.prepare_materials(source_script,terminal_materials,terminal_cache)
+    var job:Dictionary=Package.Admission._material_job
+    var submitted:bool=not already_prepared and not job.is_empty() and is_same(job.get("owner"),terminal_cache) and int(job.get("task",-1))>=0
+    check(submitted,"Actual material program task is submitted for terminal root ownership")
+    var terminal:Dictionary={"native_pid":OS.get_process_id(),"submitted":submitted,
+        "task":int(job.get("task",-1)),"unpolled_before_quit":submitted,
+        "worker_complete_before_quit":WorkerThreadPool.is_task_completed(job.task) if submitted else null}
+    # The production callback was connected before its actual task submission.
+    # Observe the real root exit after that callback; never emit it manually.
+    root.tree_exiting.connect(func():
+        check(Package.Admission._material_job.is_empty(),"Actual root exit detaches the unpolled material job")
+        check(token_weak.get_ref()==null,"Actual root exit joins the task and releases its bound cache owner")
+        terminal.root_exit_observed=true
+        terminal.material_job_empty=Package.Admission._material_job.is_empty()
+        terminal.bound_owner_released=token_weak.get_ref()==null
+        var report={"passed":passed,"failed":failures.size(),"failures":failures,"terminal_material":terminal,
+            "scope":"Headless real-source geometry/property sampling and immutable instance ownership; actual unpolled material task root-exit collection. GPU particle/composition/palette pixels and historical crash task identity not claimed"}
+        var file=FileAccess.open("res://generated/native_effect_source_checks.json",FileAccess.WRITE);file.store_string(JSON.stringify(report,"  "));file.close()
+        print(JSON.stringify(report)),CONNECT_ONE_SHOT)
+    # The actual task/global owner is now the sole owner of this witness.
+    job={};terminal_cache={};terminal_materials=[]
+    quit(1 if failures.size() else 0)

@@ -5,6 +5,8 @@ extends Control
 ## worker and replaces itself; the player's own startup notice continues it.
 const PLAYER = "res://play.tscn"
 var label := Label.new()
+## A native harness may reuse this notice while it owns its one real player.
+var start_player:bool=true
 
 func _ready() -> void:
     set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
@@ -17,6 +19,11 @@ func _ready() -> void:
     label.add_theme_color_override("font_color",Color("e9e9df"))
     label.text = "Loading the encounter…"
     add_child(label)
+    if not start_player:
+        mouse_filter=Control.MOUSE_FILTER_IGNORE
+        label.mouse_filter=Control.MOUSE_FILTER_IGNORE
+        set_process(false)
+        return
     var error := ResourceLoader.load_threaded_request(PLAYER)
     if error != OK: _fail(error_string(error))
 

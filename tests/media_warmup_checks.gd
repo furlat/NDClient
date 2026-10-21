@@ -131,16 +131,16 @@ func run() -> void:
     check(not resting.gpu_only.is_empty() and resting.gpu_only.keys().all(func(path):return resting.required.has(path) and not resting.cpu_required.has(path)),
         "Only exact registered geometry companions opt out of CPU picking residency")
     var exact = {}
-    # The current source contract admits the actual resting and equipment
-    # context together. Spell/locomotion families remain outside this closure.
-    for actor in state.actors.values():exact.merge(Characters.sheet_paths(actor,["Idle","Taunt"],cache,Characters.item_looks(actor,state)).value)
+    # A rest-only plan admits the actual resting sources. Equipment and other
+    # action clips remain required when their real authored tracks are present.
+    for actor in state.actors.values():exact.merge(Characters.sheet_paths(actor,["Idle"],cache,Characters.item_looks(actor,state)).value)
     check(resting.required==exact and resting.upcoming.is_empty(),"No eager unrelated clips or outfits: "+str({"unexpected":resting.required.keys().filter(func(path):return not exact.has(path)),"missing":exact.keys().filter(func(path):return not resting.required.has(path)),"value_differences":exact.keys().filter(func(path):return resting.required.has(path) and exact[path]!=resting.required[path])}))
     var unsensed: Dictionary = state.duplicate(true)
     unsensed.senses = null
     var unsensed_plan = Media.plan(unsensed,[],cache)
     var controlled = {}
     for actor in state.actors.values():
-        if actor.uuid in state.audience.controlled: controlled.merge(Characters.sheet_paths(actor,["Idle","Taunt"],cache,Characters.item_looks(actor,state)).value)
+        if actor.uuid in state.audience.controlled: controlled.merge(Characters.sheet_paths(actor,["Idle"],cache,Characters.item_looks(actor,state)).value)
     check(unsensed_plan.errors.is_empty() and unsensed_plan.required==controlled,"Nullable canonical senses retains only controlled actor preparation: "+str({"unexpected":unsensed_plan.required.keys().filter(func(path):return not controlled.has(path)),"missing":controlled.keys().filter(func(path):return not unsensed_plan.required.has(path)),"errors":unsensed_plan.errors}))
     var fighter: Dictionary = state.actors[state.observer_uuid]
     var ranged: Dictionary = fighter.duplicate(true)

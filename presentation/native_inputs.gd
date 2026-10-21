@@ -275,6 +275,7 @@ func prepare_history(world:Node,handle:Dictionary,component:Dictionary,admit:boo
         var observed:Dictionary=world.timeline.history_captures(recipient(component),owner,at,delays)
         if not observed.ready:return {"ready":false,"pending":false,"reason":observed.reason}
         handle.history_prepare_key=key;handle.history_captures=observed.captures
+        handle.history_prefix_cursor=0
         handle.history_allocation_step=0;handle.erase("history_allocated")
         handle.history_capture_range={"from_ms":observed.get("available_from_ms",at),"to_ms":at,"complete_window":observed.get("complete_window",false)}
         handle.history_active_sources={}
@@ -295,49 +296,94 @@ func prepare_history(world:Node,handle:Dictionary,component:Dictionary,admit:boo
     handle.history_sources_ready_key=key
     return {"ready":true,"pending":false}
 
-func seed_history(world:Node,handle:Dictionary,component:Dictionary,receiver_depth:Texture2D)->Dictionary:
+## Realize only complete original capture requests under this existing owner's
+## remaining allowance. The capture array/target are fixed by prepare_history;
+## no current actor sample may interleave until every requested draw is admitted.
+func prepare_history_prefix(world:Node,handle:Dictionary,component:Dictionary,receiver_depth:Texture2D,allowance_usec:int,urgent:bool=true)->Dictionary:
     var key:Array=history_key(world,handle,component)
-    if handle.get("history_seeded_key",[])==key:return {"ready":true}
-    # A normal admission starts with real current observations. The source
-    # correctly omits delayed copies until their original predecessors exist.
-    if float(component.get("age_ms",INF))<=1000.0/60.0:
-        handle.history_seeded_key=key;return {"ready":true}
-    var prepared:Dictionary=prepare_history(world,handle,component)
-    if not prepared.ready:return prepared
+    # Only the real sampling boundary chooses whether predecessors are needed.
+    # Unknown interest must not prevent that first sample or realize a newborn.
+    if handle.get("history_seeded_key",[])==key or handle.get("history_prefix_demand_key",[])!=key:
+        return {"ready":true,"pending":false}
+    if handle.get("history_sources_ready_key",[])!=key or not handle.get("history_allocated",false):
+        return {"ready":false,"pending":true,"reason":"actor_history_prefix_sources_preparing"}
+    var captures:Array=handle.get("history_captures",[])
+    if captures.is_empty():return {"ready":false,"pending":false,"reason":"actor_history_prefix_not_observed"}
+    var started:int=Time.get_ticks_usec()
     var helper:RefCounted=handle.occurrence.actor_history
     if handle.get("history_requested_key",[])!=key:
-        for capture in handle.get("history_captures",[]):
+        var cursor:int=int(handle.get("history_prefix_cursor",0))
+        while cursor<captures.size():
+            if Time.get_ticks_usec()-started>=allowance_usec:
+                return {"ready":false,"pending":true,"reason":"actor_history_prefix_preparing"}
+            # Actual required mutation uses the existing urgent handoff; an
+            # optional prefix never displaces an admitted source worker.
+            if (not urgent and not Effects.Admission.can_mutate()) or not Effects.Admission.begin_mutation():
+                return {"ready":false,"pending":true,"reason":"actor_history_prefix_admission_pending"}
+            var capture:Dictionary=captures[cursor]
             var source:Dictionary=handle.history_sources[_history_source_key(capture)]
             var packet:Dictionary=_private_layer_context(world,source,capture,receiver_depth)
             if not packet.ready:return packet
-            if not handle.occurrence.call(handle.clip.input_setters.actor_context,packet.packet):return {"ready":false,"reason":"actor_history_prefix_not_accepted"}
-            # Only private original layers and the capture sampler see these
-            # historical ages. No displayed occurrence is rewound.
+            if not handle.occurrence.call(handle.clip.input_setters.actor_context,packet.packet):
+                return {"ready":false,"pending":false,"reason":"actor_history_prefix_not_accepted"}
+            # Only the private source helper sees original predecessor ages.
+            # Each request freezes its original clock/material dependencies now.
             var seconds:float=maxf(0.0,float(capture.sample_ms)-float(capture.admitted_at_ms))/1000.0
             helper.sample(seconds)
             if helper.history.is_empty():helper.sample(seconds)
+            cursor+=1;handle.history_prefix_cursor=cursor
+            var submitted:Dictionary=capture_status(handle)
+            if not str(submitted.get("error","")).is_empty():return submitted
         handle.history_requested_key=key
-    else:
-        # The exact active owner can return after an optical withdrawal while
-        # its immutable prefix draws are still unfinished. Re-arm those same
-        # requests; replaying historical source samples would change ownership.
-        for poses in helper.history.values():
-            for pose in poses:
-                if pose.has("capture"):HistoryOwner.Capture.resume(pose.capture)
+    # Resume only the exact outstanding immutable requests after a real source
+    # suspension. Already completed or already armed captures are untouched.
+    for poses in helper.history.values():
+        for pose in poses:
+            if not pose.has("capture") or not pose.capture.get("suspended",false):continue
+            if Time.get_ticks_usec()-started>=allowance_usec:
+                return {"ready":false,"pending":true,"reason":"actor_history_prefix_draw_preparing"}
+            if (not urgent and not Effects.Admission.can_mutate()) or not Effects.Admission.begin_mutation():
+                return {"ready":false,"pending":true,"reason":"actor_history_prefix_admission_pending"}
+            HistoryOwner.Capture.resume(pose.capture)
     var status:Dictionary=capture_status(handle)
     if not status.ready:return status
-    handle.history_seeded_key=key
     for source_key in handle.get("history_sources",{}).keys():
-        if not handle.history_active_sources.has(source_key):
-            release_departure(handle.history_sources[source_key]);handle.history_sources.erase(source_key)
-    return {"ready":true}
+        if handle.history_active_sources.has(source_key):continue
+        if Time.get_ticks_usec()-started>=allowance_usec:
+            return {"ready":false,"pending":true,"reason":"actor_history_prefix_retiring"}
+        var source:Dictionary=handle.history_sources[source_key]
+        for field in ["departure_task","departure_resource_task"]:
+            var task:int=int(source.get(field,-1))
+            if task>=0 and not WorkerThreadPool.is_task_completed(task):
+                return {"ready":false,"pending":true,"reason":"actor_history_prefix_retiring"}
+        if (not urgent and not Effects.Admission.can_mutate()) or not Effects.Admission.begin_mutation():
+            return {"ready":false,"pending":true,"reason":"actor_history_prefix_admission_pending"}
+        release_departure(source);handle.history_sources.erase(source_key)
+    handle.history_seeded_key=key
+    return {"ready":true,"pending":false}
 
-static func invalidate_history(handle:Dictionary)->void:
-    if not rolling_history(handle) or not handle.has("history_seeded_key"):return
-    # A genuine withdrawal breaks observation continuity. Future/admitted
-    # private preparation alone never creates this published-sample marker.
+func seed_history(world:Node,handle:Dictionary,component:Dictionary,_receiver_depth:Texture2D)->Dictionary:
+    var key:Array=history_key(world,handle,component)
+    if handle.get("history_seeded_key",[])==key:return {"ready":true}
+    # Keep the original decision at the actual inputs.sync sampling boundary,
+    # including a pending owner sampled backwards into its live-birth window.
+    if float(component.get("age_ms",INF))<=1000.0/60.0:
+        handle.history_seeded_key=key;return {"ready":true}
+    # Existing preparation owns only demand the real source sample has reached.
+    # No current helper packet/sample replaces this unfinished immutable prefix.
+    if handle.get("history_prefix_demand_key",[])!=key:handle.erase("history_prefix_status")
+    handle.history_prefix_demand_key=key
+    var status:Dictionary=handle.get("history_prefix_status",{})
+    if not status.is_empty() and not status.get("ready",false) and not status.get("pending",false):return status
+    return {"ready":false,"pending":true,"reason":"actor_history_prefix_not_prepared"}
+
+static func invalidate_history(handle:Dictionary)->bool:
+    if not rolling_history(handle) or not handle.has("history_seeded_key"):return false
+    # Preserve the original withdrawal rule. An unseeded prefix is suspended
+    # by Effects.hide and later re-arms the same immutable requests.
     handle.occurrence.actor_history.close()
-    for field in ["history_seeded_key","history_requested_key","history_prepare_key","history_sources_ready_key","history_captures","history_allocated","history_allocation_key","history_allocation_step"]:handle.erase(field)
+    for field in ["history_seeded_key","history_requested_key","history_prepare_key","history_sources_ready_key","history_prefix_cursor","history_prefix_demand_key","history_prefix_status","history_captures","history_allocated","history_allocation_key","history_allocation_step"]:handle.erase(field)
+    return true
 
 static func history_paths(handle:Dictionary)->Dictionary:
     var paths:Dictionary={}
@@ -625,7 +671,7 @@ static func seed_departure(handle:Dictionary,context:Dictionary)->Dictionary:
 
 static func release_departure(handle:Dictionary)->void:
     for source in handle.get("history_sources",{}).values():release_departure(source)
-    for field in ["history_sources","history_active_sources","history_captures","history_prepare_key","history_seeded_key","history_requested_key","history_sources_ready_key","history_allocation_key","history_allocation_step","history_capture_range"]:handle.erase(field)
+    for field in ["history_sources","history_active_sources","history_captures","history_prepare_key","history_seeded_key","history_requested_key","history_sources_ready_key","history_prefix_cursor","history_prefix_demand_key","history_prefix_status","history_allocation_key","history_allocation_step","history_capture_range"]:handle.erase(field)
     for field in ["departure_task","departure_resource_task"]:
         if int(handle.get(field,-1))>=0:WorkerThreadPool.wait_for_task_completion(handle[field])
     if handle.has("departure_source_resources"):Effects.Admission.cancel_source_cache(handle.departure_source_resources)

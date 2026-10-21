@@ -4320,7 +4320,7 @@ func _exit_tree() -> void:
     ground_overlay.close()
     component_renderer.close(self)
     generated_shadows.close()
-    source_lighting.clear_pages()
+    source_lighting.close()
     if session != null: session.close()
     SelectionMedia.close(selection_media)
     MediaWarmup.close(media_warmup)

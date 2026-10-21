@@ -151,6 +151,12 @@ func clear_pages() -> void:
     _canvas_sources.clear()
     _canvas_directionals.clear()
 
+## Terminal teardown only: ordinary page replacement retains range cookies.
+func close() -> void:
+    clear_pages()
+    for cookie in _range_cookies.values():LightCookies.release(cookie)
+    _range_cookies.clear()
+
 func _free_page(page: Dictionary) -> void:
     for collection in [page.nodes,page.directionals]:
         for node in collection.values():

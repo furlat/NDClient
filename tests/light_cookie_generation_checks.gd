@@ -59,5 +59,18 @@ func run() -> void:
             if d > 0: differing += 1; worst = maxi(worst, d)
         results[name] = {"differing_bytes": differing, "worst": worst}
         check(differing == 0, "Generated cookie equals GradientTexture2D: " + name + " " + str(results[name]))
+    # A retiring preview may never poll its range cookie again. Own a real
+    # worker result without asking texture(), which would upload/claim it.
+    var closing := NativeSourceLights.new()
+    var unpolled:Dictionary=LightCookies.start(closing._range_gradient(.4,.8))
+    closing._range_cookies[Vector4(.4,.8,closing.range_profile.very_bright_edge,closing.range_profile.bright_edge)]=unpolled
+    check(unpolled.task>=0 and unpolled.texture==null,"Terminal owner retains a real unpolled range-cookie task")
+    closing.close()
+    check(unpolled.task==-1 and unpolled.image!=null and not unpolled.image.is_empty() and unpolled.texture==null,
+        "Terminal close joins range-cookie generation without uploading its texture")
+    check(closing._range_cookies.is_empty(),"Terminal close releases its range-cookie owners")
+    closing.close()
+    check(unpolled.task==-1 and unpolled.texture==null and closing._range_cookies.is_empty(),
+        "A second terminal close does not reclaim or upload the cookie again")
     print("LIGHT_COOKIE_REPORT ", JSON.stringify({"checks": checks, "failures": failures, "results": results}))
     quit(0 if failures.is_empty() else 1)

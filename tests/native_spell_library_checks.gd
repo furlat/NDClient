@@ -5,6 +5,21 @@ const Studio=preload("res://studio/studio.gd")
 const Thumbnails=preload("res://studio/thumbnail_cache.gd")
 const Recording=preload("res://studio/recording.gd")
 const CAPTURES="res://.captures/native-spell-library"
+# Observe the actual atomic production handoff, not an approximation from the
+# previous externally sampled frame. No state, clock or eligibility is changed.
+class PublicationStudio extends Studio:
+    var loop_publications:Array=[]
+    func _publish_candidate()->void:
+        var observation:Dictionary={}
+        if preparing_loop:
+            observation={"from_ms":world.timeline.display_ms,"in_ms":loop_start,"out_ms":loop_end,
+                "old_world":world.get_instance_id(),"candidate_ms":candidate_world.timeline.display_ms,
+                "candidate_world":candidate_world.get_instance_id(),"old_sequence":world.timeline.sequence,
+                "old_state":world.timeline.state}
+        super._publish_candidate()
+        if not observation.is_empty():
+            observation.to_ms=world.timeline.display_ms;observation.published_world=world.get_instance_id()
+            loop_publications.append(observation)
 const CASES=[
     {"spell":"spell.fireball","case":"spell.fireball/baseline","role":"area","condition_phase":""},
     {"spell":"spell.mage_armor","case":"spell.mage_armor/studio_uuid_lifecycle","role":"attached","condition_phase":"condition"},
@@ -186,6 +201,34 @@ func row_y(row:Dictionary)->float:
         y+=height
     return -1.0
 
+func reveal_phase(row:Dictionary,label:String)->bool:
+    studio.tracks.reveal(row.id)
+    var deadline:int=Time.get_ticks_msec()+120000
+    while Time.get_ticks_msec()<deadline:
+        studio.tracks.prepare_visible()
+        var y:float=row_y(row)
+        if y>=studio.tracks.RULER and y<studio.tracks.size.y:
+            check(true,label+": actual requested row has published pointer geometry")
+            return true
+        await process_frame
+    check(false,label+": requested row publishes within the unchanged finite readiness budget")
+    return false
+
+func follow_seek(row:Dictionary,label:String)->Dictionary:
+    var deadline:int=Time.get_ticks_msec()+120000
+    while Time.get_ticks_msec()<deadline:
+        if studio.tracks.followed_visible() and not studio.tracks.followed_row.is_empty():break
+        await process_frame
+    var followed:Dictionary=studio.tracks.rows_by_id.get(studio.tracks.followed_row,{})
+    var at:float=studio.world.timeline.display_ms
+    check(studio.follow_tracks and not followed.is_empty() and float(followed.start_ms)<=at and at<float(followed.end_ms) \
+        and studio.tracks.followed_visible(),label+": Follow-on manual seek keeps an actual active recorded track visible")
+    check(studio.selected_row.get("id")==row.id,label+": automatic active-track navigation retains the exact manual selection")
+    return {"requested_row":row.id,"followed_row":followed.get("id",""),"followed_kind":followed.get("kind",""),
+        "display_ms":at,"scroll_y":studio.tracks.published_layout.get("scroll_y",0.0),
+        "requested_row_visible":row_y(row)>=studio.tracks.RULER and row_y(row)<studio.tracks.size.y,
+        "scope":"Follow targets an active recorded track; manual selection identity is independent."}
+
 func click_phase(row:Dictionary,at_ms:float,play_clip:bool=false)->void:
     var x:float=studio.tracks._x(at_ms,studio.tracks.published_layout)
     if play_clip:x=studio.tracks.published_layout.gutter-16.0
@@ -237,20 +280,33 @@ func inspect_case(spec:Dictionary)->void:
     if rows.is_empty():return
     var row:Dictionary=rows[0]
     var at:float=(float(row.start_ms)+float(row.end_ms))*.5
-    studio.tracks.reveal(row.id)
-    if not await prepare_previews(spell):return
+    # Exact requested-row pointer/pixel inspection uses the existing manual
+    # Follow toggle. Its active-track seek behavior is exercised independently.
+    studio.follow_button.set_pressed(false)
+    check(not studio.follow_tracks,spell+": explicit Follow control permits manual phase inspection")
+    if not await reveal_phase(row,spell+" phase"):return
     await click_phase(row,at)
     if not await settle(spell+" phase selection"):return
     check(studio.selected_row.get("id")==row.id,spell+": timeline pointer selects the actual native phase")
     active_phase(row,spell+" selected")
+    if not await prepare_previews(spell):return
     var pixels:Dictionary=source_pixels(row,spell)
     await frame();root.get_texture().get_image().save_png(CAPTURES+"/"+spell+"-studio.png")
     studio._seek(0)
     if not await settle(spell+" reverse"):return
     check(studio.world.displayed_components.all(func(sample):return not sample.get("native_spell",false)),spell+": reverse seek to initialization publishes no later native source")
+    var follow_before:Dictionary={"scroll_y":studio.tracks.published_layout.get("scroll_y",0.0),
+        "origin_ms":studio.tracks.published_layout.get("origin_ms",0.0),
+        "requested_row_visible":row_y(row)>=studio.tracks.RULER and row_y(row)<studio.tracks.size.y}
+    studio.follow_button.set_pressed(true)
     studio._seek(at)
     if not await settle(spell+" reseek"):return
     active_phase(row,spell+" reseek")
+    var following:Dictionary=await follow_seek(row,spell)
+    following.before_seek=follow_before
+    studio.follow_button.set_pressed(false)
+    if not await reveal_phase(row,spell+" clip"):return
+    var publication_start:int=studio.loop_publications.size()
     # The actual gutter click invokes Studio's selected-clip loop. A prepared
     # hidden replay must only replace the visible prefix at its Out boundary.
     await click_phase(row,at,true)
@@ -260,19 +316,36 @@ func inspect_case(spec:Dictionary)->void:
         spell+": native clip control retains exact source timing plus ordinary admission/restoration context")
     var deadline:int=Time.get_ticks_msec()+120000
     var previous:float=studio.world.timeline.display_ms
-    var entered:bool=false;var wrapped:bool=false;var maximum:float=-1.0
+    var entered:bool=false;var wrapped:bool=false;var maximum:float=-1.0;var loop_frame:Dictionary={}
     while Time.get_ticks_msec()<deadline and not wrapped:
-        await process_frame
+        await frame()
         var now:float=studio.world.timeline.display_ms
         if now>float(row.start_ms)+minf(10.0,(row.end_ms-row.start_ms)*.1):entered=true;maximum=maxf(maximum,now)
-        if entered and now+0.001<previous and previous>=expected_out-0.01:wrapped=true
+        if entered and studio.loop_publications.size()>publication_start:
+            var handoff:Dictionary=studio.loop_publications[publication_start]
+            var terminal:RefCounted=Recording.restore(studio.index,expected_out)
+            var current:RefCounted=Recording.restore(studio.index,now)
+            check(handoff.from_ms>=expected_out and handoff.in_ms==expected_in and handoff.out_ms==expected_out \
+                and handoff.candidate_ms==expected_in and handoff.to_ms==expected_in,
+                spell+": exact production publication retains Out before restoring In")
+            check(terminal!=null and current!=null and handoff.old_state==terminal.state and handoff.old_sequence==terminal.sequence \
+                and studio.world.timeline.state==current.state and studio.world.timeline.sequence==current.sequence,
+                spell+": loop handoff preserves independently restored original canonical prefixes")
+            check(handoff.old_world!=handoff.published_world and handoff.candidate_world==handoff.published_world \
+                and studio.world.get_instance_id()==handoff.published_world and studio.preview.texture==studio.viewport.get_texture() \
+                and studio.viewport.render_target_update_mode==SubViewport.UPDATE_ALWAYS and studio.world.playback_prepared(),
+                spell+": published loop host owns the actual postdraw preview frame")
+            loop_frame={"from_ms":handoff.from_ms,"to_ms":handoff.to_ms,"postdraw_ms":now,
+                "old_world":handoff.old_world,"published_world":handoff.published_world,
+                "postdraw_frame":Engine.get_process_frames(),"displayed_sequence":studio.world.timeline.sequence}
+            wrapped=now<previous and handoff.to_ms==expected_in
         previous=now
     check(wrapped,spell+": shared display clock crosses the actual loop Out and returns to In")
     studio.loop_enabled=false;studio.loop_button.set_pressed_no_signal(false);studio.world.timeline.paused=true
     await process_frame
     studio._seek(at)
     if await settle(spell+" after loop"):active_phase(row,spell+" after loop")
-    observations.append({"spell":spell,"case":studio.active_case.id,"journal":studio.active_directory,"row":row.id,"condition_phase":row.get("condition_phase",""),"source":row.component.native_clip.id,"at_ms":at,"source_start_ms":row.start_ms,"source_end_ms":row.end_ms,"loop_start_ms":expected_in,"loop_end_ms":expected_out,"loop_wrapped":wrapped,"maximum_observed_ms":maximum,"previews":pixels,"preview_preparation":preview_measurements.get(spell,{}),"library_selection":selection_measurements.get(studio.active_case.id,{}),"paired":false})
+    observations.append({"spell":spell,"case":studio.active_case.id,"journal":studio.active_directory,"row":row.id,"condition_phase":row.get("condition_phase",""),"source":row.component.native_clip.id,"at_ms":at,"source_start_ms":row.start_ms,"source_end_ms":row.end_ms,"loop_start_ms":expected_in,"loop_end_ms":expected_out,"loop_wrapped":wrapped,"maximum_observed_ms":maximum,"previews":pixels,"follow_seek":following,"loop_handoff":loop_frame,"loop_publications":studio.loop_publications.size()-publication_start,"preview_preparation":preview_measurements.get(spell,{}),"library_selection":selection_measurements.get(studio.active_case.id,{}),"paired":false})
     print("SPELL_LIBRARY_CASE ",JSON.stringify(observations.back()))
     await cancel_previews(row,at)
 
@@ -303,11 +376,17 @@ func cancel_previews(row:Dictionary,at:float)->void:
     check(ages==cache.native_composites.map(func(value):return value.node.sampled) and (not composed or cache.textures.keys()==published),
         "Suspended previews neither advance isolated history nor publish a composed restore")
     if recorded_at>=0.0:check(cache.composed_pane.world.timeline.display_ms==recorded_at,"Suspension preserves the exact restored source clock")
+    var generation:int=cache.generation
     cache.reset();await frame()
-    check(cache.native_composites.is_empty() and cache.composed_active.is_empty() and cache.composed_pane.is_empty()
-        and cache.textures.is_empty() and cache.requested.is_empty() and nodes.all(func(node):return not is_instance_valid(node)),
-        "Reset retires private source/pane owners and forbids old-generation publication")
-    cache.close()
+    check(cache.generation==generation+1 and cache.native_composites.is_empty() and cache.composed_active.is_empty() and cache.composed_pane.is_empty() \
+        and cache.textures.is_empty() and cache.requested.is_empty() and nodes.all(func(node):return not is_instance_valid(node) \
+            or node in cache.native_spares and node.handle.is_empty() and node.component.is_empty() \
+                and not is_instance_valid(node.source_parent) and node.output.render_target_update_mode==SubViewport.UPDATE_DISABLED \
+                and node.viewport.render_target_update_mode==SubViewport.UPDATE_DISABLED),
+        "Reset releases every private source/pane and forbids old-generation publication while retaining only disabled empty spare viewports")
+    cache.close();await frame()
+    check(cache.native_spares.is_empty() and nodes.all(func(node):return not is_instance_valid(node)),
+        "Close destroys every retained spare/private owner after ordinary queued deletion")
 
 func run()->void:
     root.unfocusable=true;root.position=Vector2i(-16000,-16000);root.gui_embed_subwindows=true
@@ -316,7 +395,7 @@ func run()->void:
     for argument in OS.get_cmdline_user_args():
         if argument.begins_with("--only="):only=argument.trim_prefix("--only=")
     DirAccess.make_dir_recursive_absolute(CAPTURES)
-    studio=Studio.new();root.add_child(studio);studio.loop_enabled=false
+    studio=PublicationStudio.new();root.add_child(studio);studio.loop_enabled=false
     if await settle("initial Studio"):
         for spec in CASES:
             if only.is_empty() or spec.spell==only or spec.spell.trim_prefix("spell.")==only:await inspect_case(spec)

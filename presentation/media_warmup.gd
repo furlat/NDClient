@@ -3,7 +3,6 @@ extends RefCounted
 # Workers own unpublished images/textures. Only scene publication makes them ready.
 const EMPTY:Dictionary={}
 const Characters = preload("res://presentation/characters.gd")
-const Authoring = preload("res://presentation/authoring.gd")
 const Conditions = preload("res://presentation/conditions.gd")
 const Appearance=preload("res://presentation/condition_appearance.gd")
 const Tracks=preload("res://presentation/tracks.gd")
@@ -1617,12 +1616,6 @@ static func _actor_base(actor: Dictionary, clips: Array, cache: Dictionary, erro
     var rest = Characters.rest_sample(actor,rigs[rig],cache)
     if not rest.ok: errors.append(rest.error.message); return {}
     if rest.value.clip not in wanted: wanted.append(rest.value.clip)
-    # Equipment controls can be used immediately after input readiness. Their
-    # one authored rig clip belongs to this outfit's required closure, including
-    # received post-equip outfits, rather than the optional whole clip family.
-    if actor.get("life_state")=="alive":
-        var equipment:Dictionary=Authoring.body("equipment",actor,{},cache).get("actor",{})
-        if equipment.get("enabled",false) and rigs[rig].clips.has(equipment.get("clip","")) and equipment.clip not in wanted:wanted.append(equipment.clip)
     # An admitted condition may select both resting and locomotion sources.
     # Prepare that finite closure together, before its first movement; actor
     # tracks still name the exact clip for attack/jump/hit/death independently.
