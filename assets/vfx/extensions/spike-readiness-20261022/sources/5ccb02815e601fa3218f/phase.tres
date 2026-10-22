@@ -1,0 +1,22 @@
+[gd_resource type="Resource" load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://assets/vfx/sources/67ebe8ef4f358cad6a4b/phase.gd" id="phase"]
+[ext_resource type="Script" path="res://assets/vfx/sources/d60670fa4c3a03cc8f3a/component.gd" id="component"]
+
+[sub_resource type="Resource" id="effect"]
+script = ExtResource("component")
+component_id = "effect"
+constructor_script = "res://assets/vfx/extensions/spike-readiness-20261022/sources/4e595f448d0154a0b4a2/spike.gd"
+input = {"owner_uuid": "", "patch_sources": [{"scene": "res://assets/vfx/sources/30d97daa0975dde56681/empty_subject.tscn", "settings": {"animation": "", "kind": "thorn", "variant": 0}, "side": "full", "simulation_hz": 144, "seed": 47291, "height_gain": 1.8, "prepared_recipient_bank": "res://assets/vfx/extensions/spike-readiness-20261022/sources/3da6a0853a0475627d9e/patch-00.tres"}, {"scene": "res://assets/vfx/sources/30d97daa0975dde56681/empty_subject.tscn", "settings": {"animation": "", "kind": "thorn", "variant": 1}, "side": "full", "simulation_hz": 144, "seed": 47291, "height_gain": 1.8, "prepared_recipient_bank": "res://assets/vfx/extensions/spike-readiness-20261022/sources/2c09ca7864b7ef7db711/patch-01.tres"}, {"scene": "res://assets/vfx/sources/30d97daa0975dde56681/empty_subject.tscn", "settings": {"animation": "", "kind": "thorn", "variant": 2}, "side": "full", "simulation_hz": 144, "seed": 47291, "height_gain": 1.8, "prepared_recipient_bank": "res://assets/vfx/extensions/spike-readiness-20261022/sources/bd07ffbbff591d491ec4/patch-02.tres"}, {"scene": "res://assets/vfx/sources/30d97daa0975dde56681/empty_subject.tscn", "settings": {"animation": "", "kind": "thorn", "variant": 3}, "side": "full", "simulation_hz": 144, "seed": 47291, "height_gain": 1.8, "prepared_recipient_bank": "res://assets/vfx/extensions/spike-readiness-20261022/sources/96a4e437548d3f3506d5/patch-03.tres"}, {"scene": "res://assets/vfx/sources/30d97daa0975dde56681/empty_subject.tscn", "settings": {"animation": "", "kind": "thorn", "variant": 4}, "side": "full", "simulation_hz": 144, "seed": 47291, "height_gain": 1.8, "prepared_recipient_bank": "res://assets/vfx/extensions/spike-readiness-20261022/sources/ae4cfe5c02020488b73f/patch-04.tres"}, {"scene": "res://assets/vfx/sources/30d97daa0975dde56681/empty_subject.tscn", "settings": {"animation": "", "kind": "thorn", "variant": 5}, "side": "full", "simulation_hz": 144, "seed": 47291, "height_gain": 1.8, "prepared_recipient_bank": "res://assets/vfx/extensions/spike-readiness-20261022/sources/3d9dd5dac4ad3a046b1c/patch-05.tres"}, {"scene": "res://assets/vfx/sources/30d97daa0975dde56681/empty_subject.tscn", "settings": {"animation": "", "kind": "thorn", "variant": 6}, "side": "full", "simulation_hz": 144, "seed": 47291, "height_gain": 1.8, "prepared_recipient_bank": "res://assets/vfx/extensions/spike-readiness-20261022/sources/2e681d5f255481a91f7b/patch-06.tres"}, {"scene": "res://assets/vfx/sources/30d97daa0975dde56681/empty_subject.tscn", "settings": {"animation": "", "kind": "thorn", "variant": 7}, "side": "full", "simulation_hz": 144, "seed": 47291, "height_gain": 1.8, "prepared_recipient_bank": "res://assets/vfx/extensions/spike-readiness-20261022/sources/02ec8b8948e898212904/patch-07.tres"}, {"scene": "res://assets/vfx/sources/30d97daa0975dde56681/empty_subject.tscn", "settings": {"animation": "", "kind": "thorn", "variant": 8}, "side": "full", "simulation_hz": 144, "seed": 47291, "height_gain": 1.8, "prepared_recipient_bank": "res://assets/vfx/extensions/spike-readiness-20261022/sources/97fc03eb19778fc38e1e/patch-08.tres"}], "cells": []}
+
+[resource]
+script = ExtResource("phase")
+clip_id = "assembled/spike_growth_native"
+label = "Actual owner native continuation"
+phase = "lifecycle"
+variant = "actual_owner"
+components = Array[Resource]([SubResource("effect")])
+bindings = [{"component":"effect","kind":"sample","rate":1.0,"offset_seconds":0.0}]
+seconds = 1.0
+simulation_hz = 144.0
+options = {"inputs":["owner_state","targets","zone_geometry"],"owner_driven":true,"immutable_preparation":"res://assets/vfx/extensions/spike-readiness-20261022/sources/e5b7b1dc748a4bff8968/material_readiness.gd"}

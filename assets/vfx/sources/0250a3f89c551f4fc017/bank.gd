@@ -1,4 +1,6 @@
 extends Resource
+const NativeResourceProperty = preload("res://assets/vfx/extensions/spike-readiness-20261022/sources/1793309ffeebd0420d31/native_resource_property.gd")
+var _native_child_properties: Dictionary = {}
 ## The prepared subject of one explicit original recipient-source recipe.
 ## Scene-local materials/process resources remain private. No actor, owner,
 ## event, sampled history or encounter transform is stored here.
@@ -47,6 +49,8 @@ func _prepare_resource(value: Resource, seen: Dictionary) -> void:
 		preload("res://assets/vfx/sources/39ced3e79a9833e731fb/source_materials.gd").declared_uniforms(value.shader)
 	for property in properties:
 		if int(property.usage) & PROPERTY_USAGE_STORAGE:
+			if NativeResourceProperty.can_elide_native_getter(value, property, _native_child_properties):
+				continue
 			var child: Variant = value.get(property.name)
 			if child is Resource:
 				_prepare_resource(child, seen)

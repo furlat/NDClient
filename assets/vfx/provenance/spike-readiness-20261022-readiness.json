@@ -1,0 +1,138 @@
+{
+  "schema": "factory.additive_successor.actual_readiness.v1",
+  "version": "runtime-spike-readiness-20261022-a12f7da61022225f",
+  "index_sha256": "70c8124230ac17191c98f6ba472ceb77c12c2ab2c53e722882fdeb478aec81e9",
+  "native_receipt": "/mnt/c/Users/tommaso/Documents/assets/VFXFactory/.runtime/runtime-spike-readiness-20261022/native-smoke-complete-v1.json",
+  "native_receipt_sha256": "5a14d6340a64d4c1ef37036ffecab49e891347891faef12e45dd47729dce5a5b",
+  "cases": 1,
+  "constructor_flag_count": 1,
+  "unique_reported_immutable_resources": 9,
+  "resources": [
+    {
+      "path": "res://assets/vfx/extensions/spike-readiness-20261022/sources/3da6a0853a0475627d9e/patch-00.tres",
+      "complete": true,
+      "error": "",
+      "first_unit": 1391,
+      "inclusive_us": 447,
+      "last_operation": "publish_complete",
+      "operation": "prepare_spike_resource_batch",
+      "target_overshoot_us": 0,
+      "target_us": 1000,
+      "unit_count": 53
+    },
+    {
+      "path": "res://assets/vfx/extensions/spike-readiness-20261022/sources/2c09ca7864b7ef7db711/patch-01.tres",
+      "complete": true,
+      "error": "",
+      "first_unit": 732,
+      "inclusive_us": 51,
+      "last_operation": "publish_complete",
+      "operation": "prepare_spike_resource_batch",
+      "target_overshoot_us": 0,
+      "target_us": 1000,
+      "unit_count": 6
+    },
+    {
+      "path": "res://assets/vfx/extensions/spike-readiness-20261022/sources/bd07ffbbff591d491ec4/patch-02.tres",
+      "complete": true,
+      "error": "",
+      "first_unit": 566,
+      "inclusive_us": 596,
+      "last_operation": "publish_complete",
+      "operation": "prepare_spike_resource_batch",
+      "target_overshoot_us": 0,
+      "target_us": 1000,
+      "unit_count": 92
+    },
+    {
+      "path": "res://assets/vfx/extensions/spike-readiness-20261022/sources/96a4e437548d3f3506d5/patch-03.tres",
+      "complete": true,
+      "error": "",
+      "first_unit": 1464,
+      "inclusive_us": 517,
+      "last_operation": "publish_complete",
+      "operation": "prepare_spike_resource_batch",
+      "target_overshoot_us": 0,
+      "target_us": 1000,
+      "unit_count": 59
+    },
+    {
+      "path": "res://assets/vfx/extensions/spike-readiness-20261022/sources/ae4cfe5c02020488b73f/patch-04.tres",
+      "complete": true,
+      "error": "",
+      "first_unit": 633,
+      "inclusive_us": 343,
+      "last_operation": "publish_complete",
+      "operation": "prepare_spike_resource_batch",
+      "target_overshoot_us": 0,
+      "target_us": 1000,
+      "unit_count": 25
+    },
+    {
+      "path": "res://assets/vfx/extensions/spike-readiness-20261022/sources/3d9dd5dac4ad3a046b1c/patch-05.tres",
+      "complete": true,
+      "error": "",
+      "first_unit": 646,
+      "inclusive_us": 830,
+      "last_operation": "publish_complete",
+      "operation": "prepare_spike_resource_batch",
+      "target_overshoot_us": 0,
+      "target_us": 1000,
+      "unit_count": 92
+    },
+    {
+      "path": "res://assets/vfx/extensions/spike-readiness-20261022/sources/2e681d5f255481a91f7b/patch-06.tres",
+      "complete": true,
+      "error": "",
+      "first_unit": 1404,
+      "inclusive_us": 308,
+      "last_operation": "publish_complete",
+      "operation": "prepare_spike_resource_batch",
+      "target_overshoot_us": 0,
+      "target_us": 1000,
+      "unit_count": 39
+    },
+    {
+      "path": "res://assets/vfx/extensions/spike-readiness-20261022/sources/02ec8b8948e898212904/patch-07.tres",
+      "complete": true,
+      "error": "",
+      "first_unit": 601,
+      "inclusive_us": 859,
+      "last_operation": "publish_complete",
+      "operation": "prepare_spike_resource_batch",
+      "target_overshoot_us": 0,
+      "target_us": 1000,
+      "unit_count": 137
+    },
+    {
+      "path": "res://assets/vfx/extensions/spike-readiness-20261022/sources/97fc03eb19778fc38e1e/patch-08.tres",
+      "complete": true,
+      "error": "",
+      "first_unit": 514,
+      "inclusive_us": 831,
+      "last_operation": "publish_complete",
+      "operation": "prepare_spike_resource_batch",
+      "target_overshoot_us": 0,
+      "target_us": 1000,
+      "unit_count": 143
+    }
+  ],
+  "rows": [
+    {
+      "clip_id": "assembled/spike_growth_native",
+      "group": "spike_preparation_worker",
+      "native_complete_constructor_us": 2227,
+      "constructor_over2000us": true,
+      "measured_readiness_step_cpu_us": 66266,
+      "maximum_resource_step_cpu_us": 1095,
+      "measured_inclusive_admission_wall_us": null,
+      "maximum_inclusive_admission_wall_us": null,
+      "maximum_readiness_step_cpu_us": 1095,
+      "readiness_steps": 151
+    }
+  ],
+  "maximum_actual_readiness_step_cpu_us": 1095,
+  "scope": "Actual prepublication resource spans and, when supplied by the fixture, complete inclusive main-call wall spans. The maximum includes synchronous render callbacks inside admission; nested spans are never added twice. Cumulative Resource reports are deduplicated by exact address. Async elapsed waiting, full-game input work and wall-clock loading are not characterized as negligible.",
+  "human_approval_inferred": false,
+  "production_integration_performed": false
+}
