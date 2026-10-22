@@ -114,6 +114,7 @@ static func bind_source_values(entry:Dictionary,rig:Dictionary,path:String,layer
     if not parameters.is_read_only() or not is_same(entry.get("bound_condition_parameters"),parameters):
         SourceMaterial.apply(entry,parameters)
         entry.bound_condition_parameters=parameters if parameters.is_read_only() else null
+    if entry.has("geometry_camera_origins"):CharacterGeometry.apply_facing(entry,layer_facing)
 
 static func bind_source(owner:Node,entry:Dictionary,rig:Dictionary,path:String,layer_frame:int,layer_facing:String,parameters:Dictionary)->void:
     # Pose selection, animation clocks, transforms and visibility remain in Play.

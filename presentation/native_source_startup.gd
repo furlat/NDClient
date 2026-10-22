@@ -101,6 +101,80 @@ static func status(request:Dictionary={})->Dictionary:
 
 static func _drawn(active:Dictionary)->void:active.drawn=true
 
+## One unfinished shared resource request has one actual caller lease. This
+## is not a per-host plan registry; completed programs/resources remain global.
+static func _clear_resource_request(cancel:bool)->void:
+    var request:Dictionary=_state.get("resource_request",{})
+    if request.is_empty():return
+    if cancel and not str(request.identity).is_empty():
+        var jobs:Dictionary=_state.resources.get("native_immutable_jobs",{})
+        var job:Dictionary=jobs.get(request.identity,{})
+        if not job.is_empty() and not job.complete:
+            Effects.Admission.cancel_source(job)
+            jobs.erase(request.identity)
+    var host:Node3D=request.host.get_ref()
+    if host!=null and host.tree_exiting.is_connected(request.exiting):host.tree_exiting.disconnect(request.exiting)
+    _state.erase("resource_request")
+
+static func _release_resource_request(owner_id:int)->void:
+    if _state.get("resource_request",{}).get("owner_id",-1)==owner_id:_clear_resource_request(true)
+
+## Existing pane freeze/teardown boundaries withdraw only their exact lease.
+static func release(world:Node3D)->void:
+    if world!=null:_release_resource_request(world.get_instance_id())
+
+static func _next_item(eligible:Array)->Dictionary:
+    for candidate in eligible:
+        if not _state.done.has(_key(candidate.clip)) and not _state.failures.has(_key(candidate.clip)):return candidate
+    return {}
+
+static func _complete_request(request:Dictionary)->Dictionary:
+    if _state.plan.all(func(entry):return _state.done.has(_key(entry.clip))):
+        if is_instance_valid(_state.get("viewport")):_state.viewport.free()
+        _state.owner=null;_state.ready=true
+        _state.elapsed_ms=(Time.get_ticks_usec()-_state.started)/1000.0
+        _state.memory_after=_memory();_state.pipeline_after=Profile.pipeline_compilations()
+    return status(request)
+
+static func _resource_request(world:Node3D,item:Dictionary,urgent:bool)->Dictionary:
+    var previous:Dictionary=_state.get("resource_request",{})
+    if not previous.is_empty():
+        var host:Node3D=previous.host.get_ref()
+        if host==null or not host.can_process() or _state.done.has(previous.key) or _state.failures.has(previous.key):
+            _clear_resource_request(true);previous={}
+    if item.is_empty():
+        release(world)
+        return {}
+    # Ownerless metadata queries cannot claim native preparation or a viewport.
+    if world==null:return {}
+    var key:String=_key(item.clip)
+    if not previous.is_empty() and previous.owner_id!=world.get_instance_id():
+        if previous.key==key:
+            if urgent and not previous.urgent:
+                # The same immutable source can pass to a real required caller
+                # without cancelling its started unit or borrowing a token.
+                item=previous.item;_clear_resource_request(false);previous={}
+            else:return previous.item
+        elif urgent and not previous.urgent:
+            _clear_resource_request(true);previous={}
+        else:
+            # Equal required requests must not cancel each other every frame.
+            return {}
+    if not previous.is_empty() and previous.key!=key:
+        _clear_resource_request(true);previous={}
+    if previous.is_empty():
+        var selected:Dictionary=Effects.choice(item.clip)
+        var identity:String=Effects._preparation_identity(item.clip,selected) if selected.kind!="recorded" and not selected.approaches.is_empty() else ""
+        var exiting:Callable=_release_resource_request.bind(world.get_instance_id())
+        world.tree_exiting.connect(exiting,CONNECT_ONE_SHOT)
+        _state.resource_request={"host":weakref(world),"owner_id":world.get_instance_id(),"key":key,
+            "identity":identity,"item":item,"urgent":urgent,"exiting":exiting}
+    else:previous.urgent=urgent
+    var chosen:Dictionary=_state.resource_request.item
+    Effects.retain_source_preparation(_state.resources,[chosen.clip])
+    return chosen
+
+
 ## Recording-only scalar ownership at the existing frame-context boundary.
 static func profile_state()->Dictionary:
     var active:Dictionary=_state.get("active",{})
@@ -169,7 +243,7 @@ static func _step(world:Node3D,cache:Dictionary,request:Dictionary,budget:Dictio
         request={"plan":_state.get("catalog_plan",[]),"optional":true}
         if request.plan.is_empty():request.plan=_plan(cache)
     if request.plan.is_empty():
-        if _state.has("resources"):Effects.retain_source_preparation(_state.resources,[])
+        release(world)
         return status(request)
     if _state.is_empty():
         _state={"plan":[],"known":{},"done":{},"failures":{},"resources":{},"completed":0,"active":{},"owner":null,"errors":[],
@@ -190,14 +264,13 @@ static func _step(world:Node3D,cache:Dictionary,request:Dictionary,budget:Dictio
     if optional:
         eligible.append_array(request.get("priority",[]))
         eligible.append_array(request.plan)
-    # Only the first currently eligible source can advance resource discovery.
-    # A changed priority abandons its predecessor even before budget admission.
-    var resource_interest:Array=[]
-    for candidate in eligible:
-        if not _state.done.has(_key(candidate.clip)) and not _state.failures.has(_key(candidate.clip)):
-            resource_interest.append(candidate.clip);break
-    Effects.retain_source_preparation(_state.resources,resource_interest)
-    if eligible.is_empty():return status(request)
+    # Only this caller's real unfinished request may claim/reprioritize the
+    # shared resource lane; passive siblings cannot withdraw another pane.
+    var candidate:Dictionary=_next_item(eligible)
+    var item:Dictionary=_resource_request(world,candidate,required.any(func(entry):return not candidate.is_empty() and _key(entry.clip)==_key(candidate.clip)))
+    if item.is_empty():
+        if not candidate.is_empty():return status(request)
+        if _state.active.is_empty():return _complete_request(request)
     if not budget.is_empty() and budget.used_usec>=budget.limit_usec:return status(request)
     if _frame==Engine.get_process_frames():return status(request)
     # The private viewport exists as soon as there is work, in its own frame,
@@ -238,23 +311,16 @@ static func _step(world:Node3D,cache:Dictionary,request:Dictionary,budget:Dictio
         Profile.end_phase(world.profile,"native_startup_close",close_started)
         _state.done[_state.active.key]=true
         _state.active={};_state.completed+=1
-    var item:Dictionary={}
-    for candidate in eligible:
-        if not _state.done.has(_key(candidate.clip)) and not _state.failures.has(_key(candidate.clip)):item=candidate;break
-    if item.is_empty():
-        if _state.plan.all(func(entry):return _state.done.has(_key(entry.clip))):
-            if is_instance_valid(_state.get("viewport")):_state.viewport.free()
-            _state.owner=null;_state.ready=true
-            _state.elapsed_ms=(Time.get_ticks_usec()-_state.started)/1000.0
-            _state.memory_after=_memory();_state.pipeline_after=Profile.pipeline_compilations()
-        return status(request)
+    item=_next_item(eligible)
+    item=_resource_request(world,item,required.any(func(entry):return not item.is_empty() and _key(entry.clip)==_key(item.clip)))
+    if item.is_empty():return _complete_request(request)
     _frame=Engine.get_process_frames()
     # A recording is one file loaded on a worker; a live approach loads its
     # files and compiles its warm materials on workers. Its private warm draw
     # then compiles the pipelines it draws with, ahead of play.
     var item_key:String=_key(item.clip)
     var resources_started:int=Time.get_ticks_usec()
-    var loaded:Dictionary=Effects.prepare([item.clip],_state.resources,required.any(func(entry):return _key(entry.clip)==item_key))
+    var loaded:Dictionary=Effects.prepare([item.clip],_state.resources,bool(_state.resource_request.urgent))
     Profile.end_phase(world.profile,"native_startup_resources",resources_started)
     var worker:Dictionary=Effects.Admission.material_profile
     if not is_same(worker,_state.last_worker_profile):
@@ -264,6 +330,7 @@ static func _step(world:Node3D,cache:Dictionary,request:Dictionary,budget:Dictio
         _state.failures[item_key]="; ".join(loaded.errors)
         return status(request)
     if not loaded.ready:return status(request)
+    _clear_resource_request(false)
     if not is_instance_valid(_state.owner):_state.owner=_owner(world)
     var construct_started:int=Time.get_ticks_usec()
     var handle:Dictionary=Effects.make(_state.owner,item.clip.duplicate(false),SOURCE_LAYER)
@@ -291,6 +358,7 @@ static func reset()->void:
     # Explicit source reload only. Seeking or replacing a Play host does not
     # release the process-owned native program prototypes.
     if not _state.is_empty():
+        _clear_resource_request(false)
         Effects.Admission.cancel_source_cache(_state.resources)
         if not _state.active.is_empty():Effects.close(_state.active.handle)
         if is_instance_valid(_state.get("viewport")):_state.viewport.free()

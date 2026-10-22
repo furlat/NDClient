@@ -24,6 +24,7 @@ static func discard(pane:Dictionary)->void:
 static func freeze(pane:Dictionary,value:bool)->void:
     if pane.is_empty():return
     if value:
+        Play.NativeStartup.release(pane.world)
         if not pane.get("frozen",[]).is_empty():return
         pane.frozen=[]
         var views:Array=[pane.viewport]

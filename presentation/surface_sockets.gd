@@ -121,7 +121,7 @@ static func resolve(world: Node, actor_id: String, clip: String, frame: int,
         var units := float(entry.scale) / Placement.PIXELS_PER_UNIT
         var elevation := deg_to_rad(float(optical.elevation_degrees))
         var decoded := float(source.depth_range[0]) + (depth.r * 255.0 - 32.0) * (float(source.depth_range[1]) - float(source.depth_range[0])) / 192.0
-        var optical_height := ((float(optical.origin[1]) - float(pixel.y) - .5) * cos(elevation) + decoded * sin(elevation)) * units
+        var optical_height := ((Geometry.camera_origin(source,facing).y - float(pixel.y) - .5) * cos(elevation) + decoded * sin(elevation)) * units
         var height := optical_height - float(ground) * units
         var local := Vector3(socket_pixel.x - entry.pivot.x, entry.pivot.y - socket_pixel.y, 0.0) * units
         var painted_height: float = (world.camera.global_basis * local).y

@@ -64,6 +64,50 @@ func described_studies(window:Window,original:Dictionary)->void:
         and observed[-1].scenario.moments==current.moments,"Opening the exact link preserves descriptive expectations and independent actual recorded moments")
     check(joined.by_key["spell:spell.fireball"].approval_status=="needs_review" \
         and joined.by_key["spell:spell.fireball"].presentation_status==original.by_key["spell:spell.fireball"].presentation_status,"Source study linkage does not approve artwork or promote output evidence")
+func staged_methods(window:Window,base_result:Dictionary)->void:
+    # Display the real base BEFORE invoking the optional method producer.
+    # This producer/publication control makes no worker-speed assumption.
+    var base:Dictionary=base_result.report
+    check(base_result.stage=="base" and base.study_state=="loading" \
+        and base.entries.all(func(entry):return entry.requirements.is_empty() and entry.scenarios.is_empty()),"Base publication contains current cases before authored-method enrichment")
+    var entry:Dictionary={};var record:Dictionary={}
+    for candidate in base.entries:
+        for actual_record in candidate.cases:
+            if actual_record.ready:entry=candidate;record=actual_record;break
+        if not record.is_empty():break
+    check(not record.is_empty(),"The actual base Library has an admitted original available without the method scan")
+    if record.is_empty():return
+    var untouched:PackedByteArray=var_to_bytes(base)
+    window.search.set_block_signals(true);window.search.text="";window.search.set_block_signals(false)
+    window.kind_picker.select(0);window.status_picker.select(0);window.report=base
+    window._refresh(entry.key,record.id)
+    if not await prepared(window):return
+    var observed:Array=[]
+    window.recording_selected.connect(func(capability,scenario,chosen):observed.append({"capability":capability.key,"scenario":scenario.id,"record":chosen.id}))
+    check(window.selected_capability.key==entry.key and not window.open_button.disabled \
+        and window.recording_options.size()==1 and window.recording_options[0].id==record.id \
+        and window.summary.text.contains("authored methods loading"),"An actual base-case row exposes ordinary Play while optional methods are not loaded")
+    window._open()
+    check(observed.size()==1 and observed[0].record==record.id,"Explicit Play opens that exact admitted original before optional enrichment")
+    var enriched_result:Dictionary=WindowScript._build({"generation":base_result.generation,"stage":"methods","report":base})
+    var enriched:Dictionary=enriched_result.report
+    var aliases:bool=true;var private_entries:bool=true;var same_categories:bool=true
+    for next in enriched.entries:
+        aliases=aliases and is_same(next,enriched.by_key[next.key])
+        private_entries=private_entries and not is_same(next,base.by_key[next.key])
+    for category in base.categories:
+        same_categories=same_categories and base.categories[category].map(func(row):return row.key)==enriched.categories[category].map(func(row):return row.key)
+        for next in enriched.categories[category]:aliases=aliases and is_same(next,enriched.by_key[next.key])
+    check(enriched_result.generation==base_result.generation and enriched_result.stage=="methods" \
+        and enriched.study_state=="complete" and enriched.entries.any(func(row):return not row.requirements.is_empty()),"Optional enrichment returns its exact generation and actual authored methods")
+    check(var_to_bytes(base)==untouched and is_same(enriched.records,base.records) \
+        and private_entries and aliases and same_categories,"Enrichment owns its entry shells and aliases, preserves category order and leaves displayed cases/receipts unchanged")
+    window.report=enriched;window.refresh_pending=true
+    if not await prepared(window):return
+    check(window.selected_capability.key==entry.key and window.tree.get_selected().get_metadata(0).case.id==record.id \
+        and window.recording_options.size()==1 and window.recording_options[0].id==record.id \
+        and observed.size()==1,"Method adoption preserves the explicitly selected original without automatic playback or fallback")
+
 func run()->void:
     var identity={"commit":"current","protocol_version":1,"player_schema_version":16,"schema_digest":"current-schema"}
     var snapshot={"header":identity,"ids":{"spell":{"spell.fireball":{"level":3,"school":"evocation"},"spell.false_life":{"level":1,"school":"necromancy"}},"condition":{"condition.hidden":{"family":"core"}},"creature":{"creature.goblin":{}},"damage_type":{"Fire":{}}}}
@@ -195,8 +239,11 @@ func run()->void:
     component.native_cue.approach="absent-authored"
     check(Studio.effect_lines(component).any(func(line):return "no approach absent-authored" in line),"Missing explicit authored approach retains its actual unavailable reason")
     await described_studies(window,report)
+    var base_result:Dictionary=WindowScript._build({"generation":1})
+    var actual:Dictionary=base_result.report
+    await staged_methods(window,base_result)
     window.free()
-    var actual=Library.catalog();var expected=0
+    var expected=0
     for kind in actual.counts:expected+=actual.counts[kind]
     check(actual.entries.size()>=expected and expected>1000,"Current official catalog is fully discoverable")
     check(actual.by_key.has("action:action.class.fighter.action_surge") and actual.by_key["action:action.class.fighter.action_surge"].inventory_origin=="typed_source","Current dynamic Action Surge source is no longer hidden by snapshot-only discovery")

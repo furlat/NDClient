@@ -90,18 +90,40 @@ func _start()->void:
     var job:Dictionary=request;request={};worker=Thread.new()
     var started:Error=worker.start(_build.bind(job))
     if started!=OK:
-        worker=null;error=error_string(started);summary.text=error
+        worker=null
+        if job.get("stage","base")=="methods":
+            report.study_state="unavailable"
+            report.study_errors=["Authored methods could not start: "+error_string(started)]
+            refresh_pending=true
+        else:error=error_string(started);summary.text=error
 
 static func _build(job:Dictionary)->Dictionary:
-    var catalog:Dictionary=Library.catalog()
+    var stage:String=job.get("stage","base")
+    if stage=="base":
+        var base:Dictionary=Library.catalog();base.study_state="loading"
+        return {"generation":job.generation,"stage":stage,"report":base}
+    # Only the worker's entry shells are enriched. Actual case/receipt records
+    # remain read-only, and every entry lookup must point at the new shell.
+    var original:Dictionary=job.report
+    var catalog:Dictionary=original.duplicate()
+    catalog.entries=[];catalog.by_key={};catalog.categories={}
+    for previous in original.entries:
+        var entry:Dictionary=previous.duplicate()
+        catalog.entries.append(entry);catalog.by_key[entry.key]=entry
+    for category in original.categories:
+        var entries:Array=[]
+        for previous in original.categories[category]:entries.append(catalog.by_key[previous.key])
+        catalog.categories[category]=entries
     Studies.join_library(catalog,Studies.build({},catalog.records))
-    return {"generation":job.generation,"report":catalog}
+    catalog.study_state="complete"
+    return {"generation":job.generation,"stage":stage,"report":catalog}
 
 func _process(_delta:float)->void:
     if worker!=null and not worker.is_alive():
         var result:Dictionary=worker.wait_to_finish();worker=null
         if result.generation==generation:
             report=result.report;installed_generation=generation;refresh_pending=true
+            if result.stage=="base":request={"generation":generation,"stage":"methods","report":report}
         _start()
     if refresh_pending and installed_generation==generation:
         refresh_pending=false;_filter()
@@ -156,6 +178,7 @@ func _filter()->void:
         if not entry.get("output_witnesses",[]).is_empty():evidenced+=1
         if entry.approval_status=="needs_review":awaiting_review+=1
     summary.text="%d / %d capabilities · %d recorded · %d with linked evidence · %d awaiting art review"%[count,report.get("entries",[]).size(),recorded,evidenced,awaiting_review]
+    if report.get("study_state")=="loading":summary.text+=" · authored methods loading"
     if not report.get("study_errors",[]).is_empty():summary.tooltip_text="Study input issues: "+"; ".join(report.study_errors)
     else:summary.tooltip_text=report.get("study_scope","")
     rebuilding=false
@@ -227,6 +250,9 @@ func _selected(open_recording:bool=true)->void:
     var selected:Variant=item.get_metadata(0)
     if not selected is Dictionary:return
     selected_capability=selected.capability;recording_options=[];recording_picker.clear();selected_scenario={};selected_study=selected.get("study",{})
+    if open_recording:
+        preferred_id=str(selected_capability.get("key",selected_capability.id))
+        preferred_scenario=str(selected.case.get("id",selected_study.get("id","")))
     prefix_record={};prefix_perspectives=[];prefix_button.disabled=true;prefix_button.text="Inspect failed prefix";prefix_button.tooltip_text="Select a failed case with an actual initialized journal prefix."
     var candidates:Array=[selected.case] if not selected.case.is_empty() else selected_capability.cases
     if not selected_study.is_empty():
@@ -276,6 +302,8 @@ func _selected(open_recording:bool=true)->void:
 func _open()->void:
     if recording_picker.selected<0 or recording_picker.selected>=recording_options.size():return
     var record:Dictionary=recording_options[recording_picker.selected]
+    preferred_id=str(selected_capability.get("key",selected_capability.id))
+    preferred_scenario=str(selected_study.get("id",record.id))
     selected_scenario=Library.scenario(record)
     if not selected_study.is_empty():
         selected_scenario=selected_study.duplicate(true)

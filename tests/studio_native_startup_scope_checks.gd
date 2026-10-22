@@ -5,6 +5,8 @@ const Startup=preload("res://presentation/native_source_startup.gd")
 const Recording=preload("res://studio/recording.gd")
 const Fixtures=preload("res://tests/recording_fixtures.gd")
 const Effects=preload("res://presentation/effect_package.gd")
+const READINESS_PATH="res://assets/vfx/sources/7dd1897cdd5ee8a903b9/source_readiness.gd"
+const Readiness=preload(READINESS_PATH)
 var checks:int=0
 var failures:Array=[]
 var recordings:Array=[]
@@ -12,6 +14,67 @@ func _initialize()->void:run.call_deferred()
 func check(value:bool,label:String)->void:
     checks+=1
     if not value:failures.append(label);printerr(label)
+func exhausted()->Dictionary:return {"used_usec":2000,"limit_usec":2000}
+func ownership_requests()->void:
+    # Two real scene callers share Startup's actual resource cache. Exhausted
+    # preparation allowance avoids any source construction/private draw here.
+    var first:Node3D=Node3D.new();var second:Node3D=Node3D.new()
+    root.add_child(first);root.add_child(second)
+    var a:Dictionary=Startup.source_plan([Effects.clip("sorcerer_quickened_native")])[0]
+    var b:Dictionary=Startup.source_plan([Effects.clip("sorcerer_twinned_native")])[0]
+    var due_a={"plan":[a],"required":[a],"optional":false}
+    var due_b={"plan":[b],"required":[b],"optional":false}
+    Startup.step(first,{},due_a,exhausted())
+    var resources:Dictionary=Startup._state.resources
+    var identity:String=Startup._state.resource_request.identity
+    # Real delivered readiness protocol, one harmless Script load. This is an
+    # admission/cancellation control, not an effect warm-draw/output claim.
+    var path:String="res://studio/viewport_layout.gd"
+    var job:Dictionary=Readiness.begin({"components":[{"script":path,"input":{}}]})
+    resources.native_immutable_jobs={identity:job,"completed sibling":{"complete":true}}
+    resources[READINESS_PATH]=Readiness
+    var deadline:int=Time.get_ticks_msec()+5000
+    var started:bool=false
+    while not started and Time.get_ticks_msec()<deadline:
+        var progress:Dictionary=Effects.Admission.step_source(Readiness,job,resources,true)
+        started=progress.get("stepped",false)
+        if not started:await process_frame
+    check(started and Readiness.requests.has(path) and not job.complete,"Actual first caller owns an unfinished threaded resource unit")
+    if started and not job.complete:
+        var passive=Startup.step(second,{}, {"plan":[],"required":[],"optional":false},exhausted())
+        check(passive.ready and job.error.is_empty() and resources.native_immutable_jobs.has(identity),"Foreign empty plan cannot cancel an admitted source request")
+        Startup._state.done[b.key]=true
+        var ready_sibling=Startup.step(second,{},due_b,exhausted())
+        check(ready_sibling.ready and job.error.is_empty(),"Foreign already-warmed plan cannot prune another pane's pending source")
+        Startup._state.done.erase(b.key)
+        Startup.step(second,{},due_b,exhausted())
+        Startup.step(first,{},due_a,exhausted())
+        check(job.error.is_empty() and Startup._state.resource_request.owner_id==first.get_instance_id(),"Different required callers cannot cancel each other every frame")
+        Startup.step(second,{},due_a,exhausted())
+        check(job.error.is_empty() and Startup._state.resource_request.owner_id==first.get_instance_id(),"Same-source helper keeps the original live request and its token owner")
+        Startup.release(second)
+        check(job.error.is_empty(),"Foreign freeze/release does not withdraw the real owner's source")
+        Startup.release(first)
+        check(job.error=="Immutable preparation cancelled" and not resources.native_immutable_jobs.has(identity),"Actual owner withdrawal cancels only its unfinished source")
+        check(resources.native_immutable_jobs.has("completed sibling") and is_same(resources[READINESS_PATH],Readiness) and Startup._state.failures.is_empty(),"Withdrawal preserves completed resources, sibling entries and source failure ledger")
+    else:Effects.Admission.cancel_source(job)
+    deadline=Time.get_ticks_msec()+5000
+    while not Effects.Admission.can_mutate() and Time.get_ticks_msec()<deadline:await process_frame
+    check(Effects.Admission.can_mutate() and not Readiness.requests.has(path),"Cancelled real resource unit is collected at the existing admission boundary")
+    Startup.step(first,{}, {"plan":[a],"required":[],"optional":true},exhausted())
+    Startup.step(second,{},due_b,exhausted())
+    check(Startup._state.resource_request.owner_id==second.get_instance_id() and Startup._state.resource_request.urgent,"A real required caller may replace another host's optional request")
+    check(first.tree_exiting.get_connections().is_empty() and second.tree_exiting.get_connections().size()==1,"Lease transfer disconnects the old exit hook instead of accumulating callbacks")
+    Startup.release(second)
+    check(second.tree_exiting.get_connections().is_empty(),"Explicit pane freeze releases the sole exit hook")
+    Startup.step(first,{},due_a,exhausted())
+    first.process_mode=Node.PROCESS_MODE_DISABLED
+    Startup.step(second,{},due_b,exhausted())
+    check(Startup._state.resource_request.owner_id==second.get_instance_id(),"A valid stopped host cannot orphan shared required preparation")
+    second.free()
+    check(not Startup._state.has("resource_request"),"Actual host teardown releases its unfinished request without retaining the host")
+    first.free();Startup.reset()
+
 func run()->void:
     Startup.reset()
     var empty=Startup.step(null,{}, {"plan":[],"required":[],"optional":false})
@@ -77,6 +140,7 @@ func run()->void:
     var changed=Startup.step(null,{}, {"plan":[another],"required":[another],"optional":false},{"used_usec":2000,"limit_usec":2000})
     check(not changed.ready and changed.pending==1 and not Startup._state.ready,"A new source invalidates completion before the zero-allowance return")
     Startup._state={}
+    await ownership_requests()
     var report={"checks":checks,"failures":failures,"recordings":recordings,"scope":"Recorded source/request closure only; no native draw readiness or timing claimed by a headless fixture."}
     FileAccess.open("res://.runtime/studio-native-startup-scope-checks.json",FileAccess.WRITE).store_string(JSON.stringify(report,"  "))
     print("STUDIO_NATIVE_STARTUP_SCOPE ",checks," failures=",failures," sources=",recordings.map(func(item):return item.sources))

@@ -918,6 +918,7 @@ func _publish_candidate()->void:
     else:
         _discard_spare()
         spare_viewport=previous;spare_world=previous_world;spare_index=index
+        Play.NativeStartup.release(spare_world)
         spare_world.timeline.paused=true;spare_world.process_mode=Node.PROCESS_MODE_DISABLED
         var held:Array=[spare_viewport]
         held.append_array(spare_viewport.find_children("*","SubViewport",true,false))
@@ -1118,7 +1119,16 @@ func _process(_delta: float) -> void:
 func _candidate_frame_ready(view_changed:bool)->bool:
     # Only the exact renderer frame gates publication. Recording-wide optional
     # media and source thumbnails continue through their existing bounded work.
-    return not view_changed and not candidate_world.rotation_pending() and candidate_world.playback_prepared()
+    preparation_measurement.candidate_gate_frame=Engine.get_process_frames()
+    if view_changed:
+        preparation_measurement.candidate_gate="view_changed"
+        return false
+    if candidate_world.rotation_pending():
+        preparation_measurement.candidate_gate="rotation_pending"
+        return false
+    var ready:bool=candidate_world.playback_prepared()
+    preparation_measurement.candidate_gate="ready" if ready else "playback_not_prepared"
+    return ready
 
 func _report_publication(first:bool)->void:
     var media:Dictionary=world.media_warmup
@@ -1182,6 +1192,7 @@ func _freeze_loop_candidate(freeze:bool)->void:
         for child in viewports:
             frozen_candidate_viewports.append([child,child.render_target_update_mode])
             child.render_target_update_mode=SubViewport.UPDATE_DISABLED
+        Play.NativeStartup.release(candidate_world)
         candidate_world.process_mode=Node.PROCESS_MODE_DISABLED
     else:
         if frozen_candidate_viewports.is_empty():return

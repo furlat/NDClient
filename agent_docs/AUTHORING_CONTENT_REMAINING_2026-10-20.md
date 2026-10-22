@@ -1,5 +1,20 @@
 # Remaining production content — updated 21 October 2026
 
+**22 October current main-queue continuation:** recovery source is committed
+at23e14a2e; Factory source choices/Studio linkage at56b8d64c and the four
+equipped Myrmidon bodies plus intrinsic dispatch at a769c40d. All188production
+spell originals completed on that source/a12f:187pass,one Summon Dragon Studio
+installation timeout;69,934checks/two assertions, natural exit1 and no engine/
+script errors. [Exact failed whole batch](../.runtime/main-queue-20261022/public-spell-native/summary.json).
+This is not full-current native/live or performance acceptance. The separate
+shared startup ownership defect is source-confirmed, with its relation to that
+timeout still unproved. The current single R1–R8 inventory remains authoritative.
+
+Dragon depth/normals are supplied. Its independent-normal policy needs the
+existing offline equipped receiver prepared for a reviewed new source revision,
+not another art delivery/API. [Exact Factory handoff](FACTORY_DRAGON_RECEIVER_PROGRAM_HANDOFF_2026-10-22.md).
+All artwork/audio remain UNREVIEWED.
+
 **Four-family body follow-through,22October:** all equipped Myrmidons now use
 own supplied9clip rigs; source conversion and13Action/4Attack assignments are
 complete through existing data schemas. Earth Burrow retains real movement/
@@ -144,6 +159,39 @@ receipts remain historical and are not relabelled. This checks source
 admission/publication and script loading; no per-spell test,
 recording, rendered-output, live or performance pass was started. All artwork
 and audio remain unreviewed.
+
+## Explicit wrapper/passive authoring batch — 22 October
+
+The current audit had101Action-catalog rows without a direct assignment.
+**80now have explicit existing-schema state-only dispositions:**42Multiattack
+composition wrappers and38passive/condition/handler entries. Their real ordered
+Attack, StandUp, save, damage, condition, item and movement children retain their
+own consumers. Only `disposition` and explanatory provenance/ownership notes
+change; all body enablement, effects, icons, status and actual child clocks remain.
+No new cues, generic effects, audible output or human artwork approval are claimed.
+All80rows are independently source-reviewed; combined three-domain publication
+has zero errors/two warnings. Affected authoring/audit/Library/geometry/startup
+controls pass17,059assertions with natural exits0; the original two harness
+parse failures are preserved in the single R1–R8 execution record.
+[Exact source/composer inventory](../.runtime/closing-repairs/action-wrapper-passive-dispositions/source-dispositions.json).
+
+The remaining **21direct Action decisions are still open**; this does not mean
+21missing effects or21backend defects. The source trace must distinguish an
+already-present child owner from an actual missing body/effect:
+
+- Own-body dependent: Cambion Draining Kiss, Deva Concussive Smash, Djinni
+  Sweetplum Gales; Draconic Spirit Breath additionally lacks authentic mouth data.
+- Core/class/item: Ally Help, Help Attack, Divine Sense, Holy Nimbus, Sacred
+  Weapon, Healing Incense, Shield Bash and Elemental Warp.
+- Granted/retained spell actions: Arcane Sword Move/Strike, Dancing Lights Move,
+  Moonbeam Move, Hex Reapply, Hunter's Mark Reapply, Spiritual Weapon Strike,
+  Break Enchantment and the exact Divine Smite reaction declaration.
+
+These rows are not being marked state-only merely to remove an audit warning.
+Their real emitted facts and current resource/renderer owners must establish
+the disposition; existing parent/condition/item/grant source implementations
+remain intact while that trace is completed. This is source authoring progress,
+not whole-current lifecycle/runtime, performance or art acceptance.
 
 ## Shared authoring schema now consumed by the renderer
 

@@ -22,6 +22,9 @@ extends Resource
 @export var sampling_offset: Vector2 = Vector2.ZERO
 ## Reconstruction camera: origin in cell pixels, basis and matrices as delivered.
 @export var camera_origin: Vector2 = Vector2.ZERO
+## Optional body/part-facing reconstruction origins in cell pixels. Empty keeps
+## camera_origin for every view; body keys are the rig's declared facing names.
+@export var camera_origins: Dictionary[String, Vector2] = {}
 @export var matrices: Dictionary = {}
 ## -INF means unprovided; zero is a real ground-relative calibration.
 @export var optical_ground_pixels: float = -INF

@@ -1114,3 +1114,17 @@ new artwork, client renderer or local bank patch request. Keep actual threaded
 completion as the admission boundary: cached/100% is not ready. The client has
 not raised the gate timeout or bypassed loading. Runtime/output qualification,
 performance scope and human review remain separate; all artwork is UNREVIEWED.
+
+
+## 23. Prospective dragon normal-policy receiver program
+
+**22 October — new source-reviewed compatibility request, candidate not applied.**
+The supplied selected dragon already has normal/depth/caster masks. Its
+independent receiving normal needs two explicit source operands in the existing
+modular shader. The reviewed candidate and exact complete source closure are in
+[the dedicated Factory handoff](FACTORY_DRAGON_RECEIVER_PROGRAM_HANDOFF_2026-10-22.md).
+Please re-export the existing offline equipped receiver program for that exact
+revision, preserving the old bank entries and current owner/clock/material
+contracts. No new API, artwork, mask or backend fact is requested. The client
+will adopt both matching source and program together; it keeps the installed
+working shader unchanged meanwhile. This does not reopen delivered §17.

@@ -2,14 +2,66 @@ extends SceneTree
 const Characters = preload("res://presentation/characters.gd")
 const Geometry = preload("res://presentation/character_geometry.gd")
 const Media = preload("res://presentation/media_warmup.gd")
+const Authoring = preload("res://presentation/authoring.gd")
 const Protocol = preload("res://sdk/protocol.gd")
 const BodySources = preload("res://presentation/body_sources.gd")
+const Construction = preload("res://presentation/actor_construction.gd")
 var checks = 0
 var failures: Array = []
 func check(ok: bool, label: String) -> void:
     checks += 1
     if not ok: failures.append(label); print("GEOMETRY_FAIL ",label)
 func _initialize() -> void: run.call_deferred()
+func facing_origins(path:String,cache:Dictionary,rig:Dictionary)->void:
+    # Private registration operands on an actual admitted source; no new art,
+    # anatomical marker or claim about the selected dragon's facing adapter.
+    var original:Dictionary=Geometry.record(path,"body",cache)
+    var scalar:Vector2=Geometry.camera_origin(original)
+    var facings:Array=rig.facing_rows.keys()
+    var current:Dictionary=cache[BodySources.KEY]
+    var owner:Array=current.index.source_owners[path]
+    var layer:Resource=current.loaded[owner[0]]
+    var clip_path:String=layer.clip_sources[owner[1]]
+    var clip:Resource=current.loaded[clip_path]
+    var untouched:PackedByteArray=var_to_bytes(clip.descriptors)
+    var copy:Resource=clip.duplicate(false);copy.descriptors=clip.descriptors.duplicate()
+    var descriptor:Dictionary=BodySources.descriptor(path,"body",cache).duplicate()
+    var source:Dictionary=original.duplicate();source.optical_camera=original.optical_camera.duplicate()
+    var origins:Dictionary={}
+    origins[facings[0]]=[scalar.x-3,scalar.y+2];origins[facings[1]]=[scalar.x+4,scalar.y-1]
+    source.optical_camera.origins_by_facing=origins;descriptor.geometry=source;copy.descriptors.body=descriptor
+    var loaded:Dictionary=current.loaded.duplicate();loaded[clip_path]=copy
+    var own:Dictionary=cache.duplicate();own[BodySources.KEY]={"index":current.index,"loaded":loaded}
+    var ordinary:Dictionary=Geometry.prepare_binding(path,"body",cache,true,true,"original",1.0,1.0)
+    var prepared:Dictionary=Geometry.prepare_binding(path,"body",own,true,true,"original",1.0,1.0)
+    var header:Dictionary=BodySources.header(path,cache)
+    var sheet_size:=Vector2(header.width,header.height)
+    var material:=ShaderMaterial.new();material.shader=Construction.MODULAR_SHADER
+    var entry:Dictionary={"material":material,"actor_layer":{"slot":"body"}}
+    Construction.bind_source_values(entry,rig,path,0,facings[0],null,sheet_size,{},{},{})
+    Geometry.apply_binding_values(entry,prepared)
+    check(entry.source_parameters.component_reconstruction_origin==Vector2(scalar.x-3,scalar.y+2),"First actual facing projects its registration when geometry binds after the source frame")
+    var version:int=entry.source_version
+    Construction.bind_source_values(entry,rig,path,0,facings[1],null,sheet_size,{},{},{})
+    check(entry.geometry_binding==prepared.key and entry.source_version>version \
+        and entry.source_parameters.component_reconstruction_origin==Vector2(scalar.x+4,scalar.y-1),"Facing changes update the real source ledger without rebinding the unchanged sheet")
+    version=entry.source_version
+    Construction.bind_source_values(entry,rig,path,0,facings[1],null,sheet_size,{},{},{})
+    check(entry.source_version==version,"Unchanged facing and source values retain ordinary material coalescing")
+    var future:Dictionary=Geometry.parameters_for_facing(prepared,facings[0])
+    check(future.component_reconstruction_origin==Vector2(scalar.x-3,scalar.y+2) \
+        and prepared.parameters.component_reconstruction_origin==scalar and prepared.camera_origins.is_read_only(),"Future pose registration is private and leaves prepared scalar/map operands immutable")
+    var relative:=Basis(Vector3.RIGHT,-(deg_to_rad(source.optical_camera.elevation_degrees)-PI/6.0))
+    var cell:Array=source.get("cell_size",[128,128]);var covered:bool=true
+    var units:float=1.0/Construction.Placement.PIXELS_PER_UNIT
+    for origin in origins.values():
+        for x in [0.0,float(cell[0])]:
+            for y in [0.0,float(cell[1])]:
+                for depth in source.depth_range:
+                    covered=covered and prepared.bounds.has(relative*Vector3(x-origin[0],origin[1]-y,depth)*units)
+    check(covered,"Prepared bounds cover both facing registrations at every cell/depth extreme")
+    check(not ordinary.has("camera_origins") and is_same(Geometry.parameters_for_facing(ordinary,facings[0]),ordinary.parameters) \
+        and ordinary.parameters.component_reconstruction_origin==scalar and var_to_bytes(clip.descriptors)==untouched,"Default scalar registration and the original admitted source remain unchanged")
 func run() -> void:
     var state_path:String="res://tests/fixtures/schema16/character_sources.json"
     for argument in OS.get_cmdline_user_args():
@@ -65,10 +117,12 @@ func run() -> void:
         var helmet = layers.filter(func(layer):return layer.slot=="helmet")
         check(head.size()==1 and helmet.size()==1,"Current head retention survives equipped helmet: "+actor.name)
         check(actor.life_state=="alive" and actor.conditions.is_empty(),"Original rest control has no terminal or condition pose: "+actor.name)
-        var equipment:Dictionary=Media.Authoring.body("equipment",actor,{},cache).actor
-        check(equipment.enabled and equipment.clip=="Taunt","Immediate equipment closure uses the actual authored Taunt, not all animations: "+actor.name)
-        var closure:Dictionary=Characters.sheet_paths(actor,["Idle",equipment.clip],cache,looks)
-        check(closure.ok,"Exact Idle plus equipment geometry closure resolves: "+actor.name)
+        var equipment:Dictionary=Authoring.body("equipment",actor,{},cache).actor
+        check(equipment.enabled and equipment.clip=="Taunt","Actual equipment events retain their selected authored Taunt: "+actor.name)
+        # This initialization has no equipment event or actor track. Taunt is
+        # demanded by its actual track, never by every resting alive actor.
+        var closure:Dictionary=Characters.sheet_paths(actor,["Idle"],cache,looks)
+        check(closure.ok,"Exact resting Idle geometry closure resolves: "+actor.name)
         if closure.ok:expected_rest.merge(closure.value)
     for category in ["Chest3","Chest7","Shield1","Shield5","NakedBody3"]:
         var slot = "chest" if category.begins_with("Chest") else "body" if category.begins_with("Naked") else "offhand"
@@ -85,8 +139,9 @@ func run() -> void:
     var body_path:String=body_layer.paths_by_slot.body.Idle
     BodySources.prepare_descriptor(body_path,"body",cache)
     check(not Geometry.record(body_path,"body",cache).is_empty() and Geometry.record(body_path,"effect",cache).is_empty(),"A valid admitted body cannot be reassigned to an effect role")
+    facing_origins(body_path,cache,rigs[index.root_rig])
     var resting = Media.plan(state,[],cache)
-    check(resting.errors.is_empty() and resting.required==expected_rest,"Initial demand is exactly actual Idle plus immediate authored equipment geometry, never the whole library")
+    check(resting.errors.is_empty() and resting.required==expected_rest,"Initial rest demand is exactly actual Idle geometry; actual equipment tracks retain their own later demand")
     check(var_to_bytes(state)==held,"Geometry/source preparation preserves original canonical actor/item state")
     var packet = {"sources":sources,"outfits":outfits,"checks":checks,"failures":failures,"state":state_path,"rest_required":resting.required.keys()}
     var output = FileAccess.open("res://generated/character_geometry_cases.json",FileAccess.WRITE)

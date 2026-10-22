@@ -95,6 +95,7 @@ static func _check_parts(state: Dictionary) -> void:
             var surface: Resource = art.surface
             if surface == null or surface.encoding == "none":continue
             _check_normal_profile(surface,report,where)
+            _check_camera_origins(surface,report,where)
             var size: Dictionary = _header(state, _res(art.path))
             for path in [surface.depth] + surface.normals.values() + surface.masks.values():
                 if Common.asset(report, where, path) and _header(state, _res(path)) != size:Common.error(report, where, "surface size differs from its colour: " + path)
@@ -105,6 +106,11 @@ static func _check_normal_profile(surface:Resource,report:Dictionary,where:Strin
     if profile.is_empty():return
     if profile not in PROFILES or not surface.normals.has(profile) or str(surface.normals[profile]).is_empty():
         Common.error(report,where,"source normal profile needs its actual registered map: "+profile)
+
+static func _check_camera_origins(surface:Resource,report:Dictionary,where:String,facings:Array=[])->void:
+    for facing in surface.camera_origins:
+        if not surface.camera_origins[facing].is_finite():Common.error(report,where,"nonfinite optical origin: "+facing)
+        if not facings.is_empty() and facing not in facings:Common.error(report,where,"optical origin names an unknown facing: "+facing)
 
 static func _check_rigs(state: Dictionary) -> void:
     var report: Dictionary = state.report
@@ -130,6 +136,7 @@ static func _check_rigs(state: Dictionary) -> void:
             for layer in clip.art:Common.asset(report, at, clip.art[layer])
             if clip.surface != null and clip.surface.encoding != "none":
                 _check_normal_profile(clip.surface,report,at)
+                _check_camera_origins(clip.surface,report,at,Array(rig.direction_order))
                 var size: Dictionary = _header(state, _res(clip.art.get("body", "")))
                 for path in [clip.surface.depth] + clip.surface.normals.values() + clip.surface.masks.values():
                     if Common.asset(report, at, path) and not size.has("error") and _header(state, _res(path)) != size:Common.error(report, at, "surface size differs from its colour: " + path)
@@ -309,6 +316,16 @@ static func _clip_sheets(state: Dictionary, rig: Resource, clip: Resource) -> Di
             result[category] = "/spritesheets/" + category + "/" + clip.source_clip + ".png"
     return result
 
+static func _optical_camera(surface:Resource,elevation:float)->Dictionary:
+    var camera:Dictionary={"origin":[surface.camera_origin.x,surface.camera_origin.y],"elevation_degrees":elevation,"physical_camera_calibrated":false}
+    if not surface.camera_origins.is_empty():
+        var origins:Dictionary={}
+        for facing in surface.camera_origins:
+            var origin:Vector2=surface.camera_origins[facing]
+            origins[facing]=[origin.x,origin.y]
+        camera.origins_by_facing=origins
+    return camera
+
 ## The record the runtime binds for one sheet in one slot: files relative to
 ## _source_root, depth range, optical camera and ground line.
 static func _part_geometry(part: Resource, action: String, slot: String) -> Dictionary:
@@ -319,7 +336,7 @@ static func _part_geometry(part: Resource, action: String, slot: String) -> Dict
         "files": {"depth": surface.depth, "normal": surface.normals.get("original" if surface.normal_profile.is_empty() else surface.normal_profile,""), "support": surface.masks.support, "normal_valid": surface.masks.normal_valid},
         "depth_range": Array(surface.depth_limits) if surface.depth_limits.size() == 2 else [surface.depth_range.x, surface.depth_range.y],
         "reference": surface.masks.solid, "solid": surface.masks.solid, "measurements": part.measurements,
-        "optical_camera": {"origin": [surface.camera_origin.x, surface.camera_origin.y], "elevation_degrees": art.camera_elevation_degrees, "physical_camera_calibrated": false}}
+        "optical_camera": _optical_camera(surface,art.camera_elevation_degrees)}
     if not surface.normal_profile.is_empty():record.normal_profile=surface.normal_profile
     return record
 
@@ -331,7 +348,7 @@ static func _body_geometry(rig: Resource, clip: Resource) -> Dictionary:
         "normal_profiles": surface.normals.duplicate(),
         "depth_range": Array(surface.depth_limits) if surface.depth_limits.size() == 2 else [surface.depth_range.x, surface.depth_range.y],
         "depth_byte_range": [surface.depth_byte_range.x, surface.depth_byte_range.y],
-        "optical_camera": {"origin": [surface.camera_origin.x, surface.camera_origin.y], "elevation_degrees": rig.camera_elevation_degrees, "physical_camera_calibrated": false},
+        "optical_camera": _optical_camera(surface,rig.camera_elevation_degrees),
         "cell_size": [rig.cell.x, rig.cell.y], "frames": clip.frames, "source_coverage": surface.coverage}
     record.optical_ground_pixels = surface.optical_ground_pixels if is_finite(surface.optical_ground_pixels) else null
     if not surface.normal_profile.is_empty():record.normal_profile=surface.normal_profile

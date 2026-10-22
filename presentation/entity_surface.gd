@@ -175,7 +175,7 @@ func _received_track(world:Node,admission:Dictionary,track:Dictionary,group:Dict
         # Normals may render without supplying a world-space optical surface.
         if binding.ground==null:continue
         received_poses.append({"actor":request.actor,"clip":track.clip,"path":path_name,"slot":layer.slot,"rig":rig,"facing":facing,
-            "frames":initial_frames(track,rig,local),"parameters":binding.parameters,"pivot":Construction.layer_shape(rig,scale).pivot,"ground":binding.ground})
+            "frames":initial_frames(track,rig,local),"parameters":Geometry.parameters_for_facing(binding,facing),"pivot":Construction.layer_shape(rig,scale).pivot,"ground":binding.ground})
 
 ## The exact authored starting frame and at most the next two crossed frames.
 ## Reverse/keyed/looping tracks use their own source range, never extra clips.

@@ -117,6 +117,57 @@ func readiness_leaves(world:Node)->Dictionary:
         "native_support_issues":support.issues.slice(0,3) if support!=null else [],
         "hits_ready":renderer.native_hits.ready,"hit_pending":renderer.native_hits.pending_occurrences.slice(0,3),
         "media":world.media_gate,"errors":world.presentation_errors.slice(0,3)}
+## Progress/failure reads of the existing owners. Never call a preparation or
+## readiness method here: playback_prepared/_media_ready advance admission.
+func installation_diagnostics(studio:Control)->Dictionary:
+    var result:Dictionary={"process_frame":Engine.get_process_frames(),"studio_processing":studio.is_processing(),
+        "installing":studio.installing,"seek_generation":studio.seek_generation,
+        "restore_generation":studio.worker_generation,"installation_generation":studio.installation_generation,
+        "generation_matches":studio.installation_generation==studio.seek_generation,
+        "last_evaluated_gate":studio.preparation_measurement.get("candidate_gate","not_evaluated"),
+        "last_gate_frame":studio.preparation_measurement.get("candidate_gate_frame",-1),
+        "preparing_loop":studio.preparing_loop,"loop_enabled":studio.loop_enabled,
+        "loop_start":studio.loop_start,"loop_end":studio.loop_end,"requested_seek":studio.requested_seek,
+        "displayed_clock_ms":studio.world.timeline.display_ms,"displayed_paused":studio.world.timeline.paused}
+    if studio.candidate_world==null:return result
+    var owner:Node3D=studio.candidate_world
+    var startup:Dictionary=owner.native_startup
+    var cached:Dictionary={}
+    for key in ["ready","pending","required_total","completed","total","background_pending"]:
+        if startup.has(key):cached[key]=startup[key]
+    cached.errors=startup.get("errors",[]).slice(0,3)
+    cached.background_errors=startup.get("background_errors",[]).slice(0,3)
+    result.native_startup_cached=cached
+    result.native_startup_owner=owner.NativeStartup.profile_state()
+    result.native_startup_requested_ms=owner.native_startup_requested_ms
+    result.native_startup_background=owner.native_startup_background
+    result.native_startup_plan_size=owner.native_startup_plan.size() if owner.native_startup_plan!=null else -1
+    result.candidate={"process_mode":owner.process_mode,"processing":owner.is_processing(),
+        "publication_failed":owner.publication_failed,"publishes_receiving":owner.publishes_receiving,
+        "media_initial_ready":owner.media_initial_ready,"media_metadata_ready":owner.media_metadata_ready,
+        "media_issue":owner.media_issue,"media_plan_errors":owner.media_plan.get("errors",[]).slice(0,3),
+        "quarter":owner.quarter,"world_quarter":owner.world_quarter,"requested_quarter":owner.requested_quarter,
+        "viewport_size":[studio.candidate_viewport.size.x,studio.candidate_viewport.size.y],
+        "viewport_update_mode":studio.candidate_viewport.render_target_update_mode,
+        "camera_size":owner.camera.size,"camera_keep_aspect":owner.camera.keep_aspect,
+        "camera_focus":[owner.camera_focus.x,owner.camera_focus.y,owner.camera_focus.z],
+        "native_hit_material":owner.native_spell_hit_material,"playback_speed":owner.playback_speed,
+        "wall_mode":owner.wall_mode,"grid_visible":owner.grid_visible,
+        "budget_used_usec":owner.preparation_admission.used_usec,"budget_limit_usec":owner.preparation_admission.limit_usec}
+    var reference:Node3D=studio.world
+    result.reference={"quarter":reference.quarter,"world_quarter":reference.world_quarter,"requested_quarter":reference.requested_quarter,
+        "viewport_size":[studio.viewport.size.x,studio.viewport.size.y],
+        "preview_row_size":[studio.preview_row.size.x,studio.preview_row.size.y],
+        "camera_size":reference.camera.size,"camera_keep_aspect":reference.camera.keep_aspect,
+        "camera_focus":[reference.camera_focus.x,reference.camera_focus.y,reference.camera_focus.z],
+        "native_hit_material":reference.native_spell_hit_material,"playback_speed":reference.playback_speed,
+        "wall_mode":reference.wall_mode,"grid_visible":reference.grid_visible,
+        "same_directory":studio.candidate_index.directory==studio.active_directory,
+        "same_mutes":owner.presentation_mutes==reference.presentation_mutes,
+        "same_solo":owner.presentation_solo==reference.presentation_solo,
+        "follow_actor_id":studio.follow_actor_id}
+    return result
+
 func settle(studio:Control,requested_time:float=-1.0,requested_directory:String="")->bool:
     var diagnostic_at:int=Time.get_ticks_msec()+3000
     var diagnostic_emitted:bool=false
@@ -124,7 +175,7 @@ func settle(studio:Control,requested_time:float=-1.0,requested_directory:String=
     while (studio.index.is_empty() or studio.loader!=null or (not studio.preparing_loop and (studio.seeker!=null or studio.installing or studio.requested_seek>=0))) and Time.get_ticks_msec()<deadline:
         if not diagnostic_emitted and Time.get_ticks_msec()>=diagnostic_at:
             diagnostic_emitted=true
-            if studio.candidate_world!=null:print("STUDIO_WAIT_DIAGNOSTIC ",JSON.stringify({"requested_ms":requested_time,"candidate":readiness_leaves(studio.candidate_world)}))
+            if studio.candidate_world!=null:print("STUDIO_WAIT_DIAGNOSTIC ",JSON.stringify({"requested_ms":requested_time,"candidate":readiness_leaves(studio.candidate_world),"installation":installation_diagnostics(studio)}))
         await process_frame
     var ready=not studio.index.is_empty() and studio.loader==null and (studio.preparing_loop or (studio.seeker==null and not studio.installing and studio.requested_seek<0))
     ready=ready and not studio.status.text.begins_with("Candidate rejected") and not studio.status.text.begins_with("Recording rejected")
@@ -132,7 +183,7 @@ func settle(studio:Control,requested_time:float=-1.0,requested_directory:String=
     if ready and requested_time>=0:ready=is_equal_approx(studio.world.timeline.display_ms,requested_time)
     if ready and not requested_directory.is_empty():ready=studio.active_directory==requested_directory
     if not ready:
-        var details:Dictionary={"requested_ms":requested_time,"status":studio.status.text,"replay":studio.replay_diagnostics()}
+        var details:Dictionary={"requested_ms":requested_time,"status":studio.status.text,"replay":studio.replay_diagnostics(),"installation":installation_diagnostics(studio)}
         if studio.candidate_world!=null:
             details.candidate=readiness_leaves(studio.candidate_world)
         evidence.append({"installation_failure":details})

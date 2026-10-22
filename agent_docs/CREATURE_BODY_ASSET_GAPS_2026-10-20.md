@@ -20,6 +20,12 @@ substitute. Cambion, Deva and Djinni have no own-body delivery identified in
 these handoffs. Thus four original client rows remain incomplete, with only
 three unidentified artwork deliveries. Authentic dragon mouth registration
 remains separate from its delivered depth/normals. Existing portraits remain.
+The source-reviewed independent-normal receiving change awaits its matching
+[existing offline Factory receiver program](FACTORY_DRAGON_RECEIVER_PROGRAM_HANDOFF_2026-10-22.md);
+no new art, mask or API is requested. Client per-facing optical-origin support
+is applied through the existing source/binder schema and its affected source
+controls pass, with no GLSL
+change while that matching program is unavailable.
 
 | Creature | Exact owner | Current source / remaining boundary |
 |---|---|---|
@@ -37,6 +43,25 @@ remains separate from its delivered depth/normals. Existing portraits remain.
 | Water Myrmidon | [`creature.spell.water_myrmidon`](../authoring/characters/characters/creature.spell.water_myrmidon.tres) | `summon.myrmidon.water` — own equipped9clip body plus compatible derived geometry assigned; source publication/dispatch checked separately from native output, display fit and art review. Bare/weapon-only VFX not selected |
 
 The five elemental Dragon summon forms share `creature.spell.draconic_spirit`; their delivered colour variants are one family, not five missing base rigs. Current game geometry still uses an armoured T-Rex. All four equipped Myrmidons now use their own assigned rigs; their bare comparisons, weapon-only receivers and native body output remain separate.
+
+### Dragon layout proof; production intake remains open
+
+Actual source-image inspection plus the existing projection/facing equations
+establish the standard E,SE,S,SW,W,NW,N,NE rows as source views
+090,135,180,225,270,315,000,045. Normals remain baked; no extra yaw is applied.
+One private Original Dark lossless layout proof retains all15clips/120banks/
+2,088poses with10,440byte-equal source-cell/channel placements and zero failures.
+[Private source/receipt](../.runtime/closing-repairs/dragon-selected-atlas/README.md).
+This chooses no production appearance or context and imports no product assets.
+
+The padded old-rig layout uses7,484,327,424decoded raster bytes for that single
+appearance versus3,349,509,436bytes in actual placed native cells:2.23445x padding.
+These are offline raster cardinalities, not measured GPU/resident memory or a
+client performance result. It stays a layout proof; avoiding that extra padded
+work belongs to client intake through existing source/binder data. It is not
+a defective asset delivery, new artwork request or reason to replace the
+selected normal/depth data. The separate22October shared-material candidate
+stays unselected pending its actual review/selection.
 
 ### Newer delivered files versus active authoring and client intake
 

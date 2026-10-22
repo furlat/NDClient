@@ -393,3 +393,28 @@ Missing creature bodies, pending dragon geometry/normals and genuine supplied
 Factory defects are separate facts. They do not explain the client Door
 regression, broken camera publication or wrong Studio IDs. No new delegation or
 implementation task is created here. **Implementation remains stopped.**
+
+
+## 22October main-queue continuation: shared Startup request cancellation
+
+Source-confirmed introducing cut:`d5d2ff1d` (`almost disaster`) adds both the
+empty-plan whole-cache prune and current-first-eligible prune in
+`presentation/native_source_startup.gd`. The older per-Play request interface
+predates them. Its process-owned resource cache serves multiple Studio panes;
+a passive/ready retained pane could cancel another pane's actual unfinished
+immutable preparation before frame/budget admission. This is a client ownership
+regression, not justified extra backend work or a Factory defect.
+
+The bounded repair retains one actual weak requester and exact immutable job
+identity, preserving required priority and same-owner withdrawal while releasing
+at the existing freeze/exit boundaries. Completed resources/programs, real
+occurrences, draw fences and all private clocks remain at their existing owners.
+The current real two-caller/threaded-load/drain headless controls pass208
+assertions, natural exit0. No registry, scheduler, renderer or loader is added.
+
+The predecessor full188native run retains187passing cases and one Summon Dragon
+installation timeout. Its older diagnostics omitted the actual Startup gate.
+This source finding/repair does not prove that timeout's cause, attribute old
+shutdown dumps or establish quiet performance. The affected/current native
+follow-through is separately recorded in
+[the single execution inventory](../REMAINING_WORK_2026-10-20.md).

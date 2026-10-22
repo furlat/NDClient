@@ -16,6 +16,59 @@ all 130 alternative dispositions stay implemented; stale worklists do not
 reopen them. All artwork/audio remain unreviewed. Engine/Factory sources stay
 read-only; no mutable backend/schema upgrade is implied by the new handoff.
 
+## Main queue shared-owner/Studio checkpoint — 22 October
+
+The80resource dispositions, case-first Library method enrichment, optional
+per-facing body optical origins and shared NativeStartup request ownership are
+source-reviewed and applied. The latter fixes an actual `d5d2ff1d` client defect:
+a retained pane's passive/empty request could cancel another pane's unfinished
+source. One current weak caller/request preserves required priority and exact
+withdrawal/drain at existing freeze/exit boundaries, with no new registry or
+scheduler. Current installation diagnostics now record the actual evaluated
+gate and passive startup evidence; they do not themselves establish the old
+Summon Dragon timeout's cause. The independent-normal shader remains unapplied.
+
+All three authoring domains publish zero errors/two warnings; four retained
+UTF-8 text notices are explicit. Five affected headless rows pass
+**17,059assertions**, natural exits0 and zero unexpected errors. Native-authoring
+retains its two exact intentional negative-control diagnostics. Two initial
+harness parse failures remain preserved: old `Media.Authoring` access and
+invalid Script `resource_path` lookup; explicit imports/path correct the fixture
+carriers, with unchanged ownership/geometry assertions.
+[Initial5row receipt](../.runtime/tests/20261022T015741.088152Z/summary.json),
+[corrected2rows](../.runtime/tests/20261022T015937.602497Z/summary.json),
+[actual208ownership assertions](../.runtime/studio-native-startup-scope-checks.json).
+Native/event/history/current public188 follow-through is separate; no clean
+whole-current native/live, quiet-performance or artwork/audio acceptance is claimed.
+
+## Main queue resource decisions — 22 October
+
+The next coherent resource-only batch makes80previously blank Action decisions
+explicit:42Multiattack wrappers and38passive/condition/handler entries delegate
+to actual child/result/state owners through the existing `state_only` schema.
+Their body/effect/icon/status fields and actual runtime children are unchanged.
+There are21direct Action decisions still requiring source attribution, including
+four body/mouth-dependent creature actions. No new effect/backend request or
+human art approval follows from either count. [Exact remaining Action inventory](AUTHORING_CONTENT_REMAINING_2026-10-20.md#explicit-wrapperpassive-authoring-batch--22-october).
+
+## Current complete public-spell native batch — 22 October
+
+The fixed **a769c40d / Factory a12f / engine9f81 schema16** run completed all
+**188spell cases:187passed,one failed**,69,934checks/two failed assertions.
+The process naturally exits1 with zero script/engine errors and no leftovers;
+it is not a clean whole-inventory pass. `spell.summon_dragon/baseline` times out
+at installation0ms after90s. Earlier reported readiness leaves omit some actual
+publication gates, so the cause is not established and no backend/Factory
+defect is inferred. The failed case and the complete original receipt are
+preserved in [the fixed batch](../.runtime/main-queue-20261022/public-spell-native/summary.json).
+Quiet performance and all human artwork/audio review remain open.
+
+The supplied dragon's independent normal masks need the matching existing
+offline equipped receiver program for a reviewed prospective modular source
+revision. [Exact Factory delegation](FACTORY_DRAGON_RECEIVER_PROGRAM_HANDOFF_2026-10-22.md).
+The new shader is not applied while that program is unavailable; existing
+shader semantics remain unchanged. Independent Studio/body intake proceeds.
+
 ## Main queue content batch — four equipped Myrmidon bodies and intrinsic body dispatch
 
 All four existing Myrmidon IDs now select own supplied equipped rigs through
