@@ -39,6 +39,7 @@ func check(ok:bool,label:String)->void:
     if not ok:failures.append(label);printerr("SPATIAL_INPUT_FAIL "+label)
 
 func run()->void:
+    wall_source_policies()
     for identity in OWNER_CLIPS:
         var path:String="res://authoring/environment/surfaces/"+identity+".tres"
         var entry:Resource=load(path)
@@ -69,6 +70,28 @@ func run()->void:
         seats+=1;total+=read_seat(path,seat,built)
     check(seats==2 and total==2,"Both actual seats independently own their disclosed Acid surface")
     finish()
+
+## Static selected-source policy controls only; actual wall topology/contact
+## and native output still belong to independent original replay evidence.
+func wall_source_policies()->void:
+    var owner:Resource=load("res://authoring/abilities/conditions/spatial_effect.spell.wall_of_thorns.tres")
+    check(owner.effects.size()==2,"Straight and ring wall sources remain explicit independent assignments")
+    for use in owner.effects:
+        var cue:Dictionary=Records.cue_from_effect(use,0)
+        var clip:Dictionary=Effects.for_cue(cue,owner.id,use.role)
+        var policies:Dictionary=cue.get("input_policies",{})
+        check(clip.inputs.size()==3 and policies.size()==2 and policies.has("review_contacts") and policies.has("visual_occupants") \
+            and not policies.has("visual_state") and policies.values().all(func(policy):return policy.mode=="not_applicable" and not str(policy.reason).is_empty()),
+            "Only unused inherited review setters are omitted; actual wall visual_state still requires its current owner/contact packet")
+        var report:Dictionary={"errors":[],"warnings":[]}
+        Build._check_constructor(use,"wall-source-policy",{use.clip:clip},report)
+        check(report.errors.is_empty(),"Selected actual wall source admits its exact unused-review policy: "+use.clip)
+        var invalid:Resource=use.duplicate(true)
+        invalid.extra=use.extra.duplicate(true)
+        invalid.extra.input_policies.visual_state={"mode":"not_applicable","reason":"invalid-control"}
+        report={"errors":[],"warnings":[]}
+        Build._check_constructor(invalid,"wall-source-policy-negative",{use.clip:clip},report)
+        check(not report.errors.is_empty(),"Actual visual_state cannot be disabled with an inherited review policy: "+use.clip)
 
 func source_cache(_built:Dictionary)->Dictionary:
     return {}

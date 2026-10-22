@@ -342,14 +342,17 @@ static func pose_admissions(commit:Dictionary,state:Dictionary,owners:Dictionary
         var finite:Array=retained.duplicate()
         for component in group.get("components",[]):finite.append({"component":component,"group_start_ms":start_ms})
         var source_samples:Array=_history_finite_samples(finite,at_ms)
-        var active:Dictionary=Tracks.samples(group.get("actor_tracks",[]),float(commit.at_ms))
+        var active:Dictionary=Tracks.samples(group.get("actor_tracks",[]),float(commit.at_ms),start_ms,at_ms)
         var ordered_actors:Dictionary=actors.duplicate();var ordered_owners:Dictionary=Appearance.copy_owners(owners)
         for change in rows:
             var id:String=change.actor_uuid
             if not inputs.has(id):continue
             if change.before==null and change.after!=null and Conditions.ConditionPose.departure_requested(change.after,cache):
                 var samples:Array=Conditions.samples(Appearance.copy_owners(ordered_owners),at_ms,cache,{},false)+source_samples
-                var departure:Dictionary=_history_draw_operands(ordered_actors[id],state,active,samples,cache,Compiler.WorldRows.visible_actor(ordered_actors[id],state),ordered_owners,at_ms)
+                var displayed:Dictionary=ordered_actors[id]
+                if displayed.get("last_visual_position")==null and active.get(id,{}).has("terminal_presentation"):
+                    displayed=ActorConstruction.actor_with_loadout(displayed,ActorConstruction.loadouts(active,samples),state)
+                var departure:Dictionary=_history_draw_operands(displayed,state,active,samples,cache,Compiler.WorldRows.visible_actor(displayed,state),ordered_owners,at_ms)
                 if not departure.is_empty():departures[change.after.condition_uuid]=departure
             var next:Dictionary=ordered_actors[id].duplicate(false)
             next.conditions=next.get("conditions",[]).filter(func(condition):return condition.condition_uuid!=change.row.condition_uuid)
@@ -411,11 +414,14 @@ func _record_history_cut(at_ms:float,group:Dictionary,start_ms:float)->void:
         retained.merge(interest,true)
         var staged:bool=group.get("staged_actors",{}).has(id) and at_ms-start_ms>=float(group.get("staged_at_ms",{}).get(id,0.0))
         var actor:Dictionary=state.actors.get(id,group.get("staged_actors",{}).get(id,{}) if staged else {})
+        var tracks:Array=group.get("actor_tracks",[]).filter(func(track):return track.actor_uuid==id)
+        if not actor.is_empty() and actor.get("last_visual_position")==null and tracks.any(func(track):return track.has("terminal_presentation")):
+            var active:Dictionary=Tracks.samples(tracks,at_ms-start_ms,start_ms,at_ms)
+            actor=ActorConstruction.actor_with_loadout(actor,ActorConstruction.loadouts(active,[]),state)
         var local_owners:Dictionary={}
         for key in condition_owners:
             if condition_owners[key].actor_uuid==id:
                 var copy:Dictionary=condition_owners[key].duplicate(false);copy.make_read_only();local_owners[key]=copy
-        var tracks:Array=group.get("actor_tracks",[]).filter(func(track):return track.actor_uuid==id)
         var items:Dictionary={}
         var loadouts:Array=[actor.get("visual_loadout",{})]
         for track in tracks:
@@ -534,7 +540,7 @@ func _history_capture(cut:Dictionary,owner:Dictionary,at_ms:float)->Dictionary:
     var rig:Dictionary=Characters.rigs(appearance_cache).get(rig_id,{})
     var rest:Dictionary=Characters.rest_sample(actor,rig,appearance_cache)
     if not rest.ok:return {"ready":false,"reason":rest.error.message}
-    var active:Dictionary=Tracks.samples(cut.tracks,at_ms-float(cut.group_start_ms))
+    var active:Dictionary=Tracks.samples(cut.tracks,at_ms-float(cut.group_start_ms),float(cut.group_start_ms),at_ms)
     var samples:Array=Conditions.samples(Appearance.copy_owners(cut.owners),at_ms,appearance_cache,{},false)+_history_finite_samples(cut.finite,at_ms)
     var departure:Dictionary=_history_draw_operands(actor,cut.state_inputs,active,samples,appearance_cache,true,cut.owners,at_ms)
     if departure.is_empty():return {"ready":false,"reason":"actor_history_draw_not_disclosed"}
@@ -867,7 +873,7 @@ func _world_candidate(plan: Dictionary) -> Dictionary:
         "preparation_key":[initialization_revision,world_revision,_support_signature(),last.group.get("operation_sequence",sequence),last.group.get("id",""),last.end_commit,last.local_ms,last.complete],
         "source_group_id":last.group.get("id",""),"source_local_ms":last.local_ms,"retained_boundary":plan.segments.is_empty(),
         "state":snapshot,"presentation_state":presented,"staged_tiles":supports,"staged_actors":_actors_for(group,last.local_ms),
-        "actor_samples":_project_actor_samples(Tracks.samples(group.get("actor_tracks",[]),last.local_ms),snapshot.actors,appearance_owners),"actor_layers":actor_layers,
+        "actor_samples":_project_actor_samples(Tracks.samples(group.get("actor_tracks",[]),last.local_ms,float(last.start_ms),float(plan.display_ms)),snapshot.actors,appearance_owners),"actor_layers":actor_layers,
         "changes":changes,"display_ms":plan.display_ms,"revision":next_revision,"world_revision":next_world_revision,
         "sequence":next_sequence,"group_id":group.get("id",""),"operation_sequence":int(last.group.get("operation_sequence",sequence)),
         "resource_revision":resource_revision}
@@ -1061,7 +1067,7 @@ func actor_samples() -> Dictionary:
     # Play and component sampling both read the same instant each frame.
     if not is_same(_actor_samples_group,current) or _actor_samples_at!=display_ms-group_start_ms or _actor_samples_resources!=resource_revision:
         _actor_samples_group=current;_actor_samples_at=display_ms-group_start_ms;_actor_samples_resources=resource_revision
-        _actor_samples=_project_actor_samples(Tracks.samples(current.get("actor_tracks",[]),_actor_samples_at),state.actors,condition_owners)
+        _actor_samples=_project_actor_samples(Tracks.samples(current.get("actor_tracks",[]),_actor_samples_at,group_start_ms,display_ms),state.actors,condition_owners)
     return _actor_samples
 
 ## The compiler and world planner author local start+duration before adding

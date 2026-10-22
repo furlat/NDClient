@@ -51,6 +51,18 @@ static func visible_mask_bytes(mask:Dictionary)->PackedByteArray:
     _mask_mutex.unlock()
     return result
 
+## Single-cell visibility shares the exact immutable-mask byte owner above.
+static func visible_cell(state:Dictionary,position:Array)->bool:
+    var senses:Variant=state.get("senses")
+    if senses==null:return false
+    var mask:Dictionary=senses.get("visible",{})
+    var x:int=int(position[0])-int(mask.get("x0",0));var y:int=int(position[1])-int(mask.get("y0",0))
+    var width:int=int(mask.get("width",0));var height:int=int(mask.get("height",0))
+    if x<0 or y<0 or x>=width or y>=height:return false
+    var data:PackedByteArray=visible_mask_bytes(mask)
+    var index:int=x*height+y
+    return index/8<data.size() and (int(data[index/8])&(1<<(index%8)))!=0
+
 static func cell_key(position: Array) -> String:
     return "%d,%d" % [position[0],position[1]]
 

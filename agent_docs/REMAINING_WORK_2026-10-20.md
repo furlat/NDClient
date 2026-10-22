@@ -72,7 +72,7 @@ camera clipped newly admitted large body artwork. Delivered scale2 is retained;
 the bounded automatic preview framing follow-through is recorded below, without
 changing gameplay camera or canonical occupancy. The body/source witnesses above do not
 qualify framing, final artwork, whole-current native/live or quiet performance.
-[Current captured frame](../.runtime/main-queue-20261022/dragon-native-receiver-registered/captures/creature.spell.draconic_spirit-current_stand_in_intrinsic_retirement-55-primary.png).
+[Preserved initial pre-framing capture](../.runtime/main-queue-20261022/dragon-native-receiver-registered/captures/creature.spell.draconic_spirit-current_stand_in_intrinsic_retirement-55-primary.png).
 
 The current Library is **388cases/383recorded/fivefailed**. Three new exact9f
 originals are imported: positive Incense spatial healing, the failed out-of-range
@@ -80,10 +80,11 @@ Nimbus route and its separately identified offered5ft approach with real10Radian
 contact. Both positive results name their actual disclosed spatial/condition UUID.
 Existing positive Blessed Healer/Destroy Undead originals retain their0c producer
 identities and are reused; no recapture, forced outcome or new fixture framework.
-Current exact native consumer proof passes Blessed Healer, Destroy Undead and
-Incense. Nimbus still lacks its body-bound contact output; the exact later
-refusal is `native_spell_recipient_not_displayed`, not a missing producer
-result. Capture/import alone does not qualify output. All artwork/audio remain unreviewed.
+Earlier exact native consumer proof passed Blessed Healer, Destroy Undead and
+Incense while Nimbus refused `native_spell_recipient_not_displayed`. The current
+shared finite-body closure below now passes all four actual results with exact
+postdraw witnesses; that earlier refusal is retained as history. Capture/import
+alone does not qualify output. All artwork/audio remain unreviewed.
 [Four-family literal result ledger](../.runtime/closing-repairs/class-passive-result-originals/four-family-original-ledger.json),
 [exact import](../.runtime/closing-repairs/class-passive-result-originals/library-import.json).
 
@@ -158,6 +159,103 @@ batch passes real-worker43, input-binding429 and whole-UI72, all natural exits0/
 no engine/script errors or owned leftovers. Earlier72/1preview failure remains.
 [Preserved actual preview failure](../.runtime/tests/20261022T054747.921756Z/summary.json),
 [current affected batch](../.runtime/tests/20261022T055525.756023Z/summary.json).
+
+## Current main consumer closure — 22 October
+
+The shared Studio framing/inspection/pending-source family is committed at
+**0f522660**. The next existing-owner batch is applied: both Thorns forms mark
+only their selected source's unused legacy review setters not applicable;
+actual `visual_state` geometry/occupants/positive contacts remain required.
+Ensnaring application/hold/removal delegate to the actual complete condition
+lifecycle, with its independently attributed turn-start tick unchanged. The
+current static source join has **zero unmatched-provider rows**; five deliberate
+unknown-default refusals remain. This is assignment inspection, not output or
+human acceptance. Three-domain publication passes zero errors/two warnings.
+[Current source join](../.runtime/main-queue-20261022/main-consumer-closure/current-provider-assignment.json),
+[publication](../.runtime/main-queue-20261022/main-consumer-closure/publication-summary.json).
+
+Nimbus's applied finite presentation source uses actual Life371/lineage371,
+separately joined to its explicit immediate no-fact parent completion373 /
+lineage368 / entry368. Earlier analysis incorrectly called368 the Life's own
+first version. The first batch produced no terminal capture; its actual control
+320/1 and four-result9664/two Nimbus failures remain failed. The correction
+requires the exact unique uncanceled direct parent/child and `parent_event`
+relations; it does not search arbitrary ancestors or infer from log/clip names.
+Canonical null position stays unchanged. The same finite BodyTrack operand
+serves preparation/display/history, with current source/observer/support/sight
+and actual held height; held endpoint, revival/removal or source/view changes
+withdraw it. Ordinary partial compiler inputs retain their earlier metadata
+contract. The first corrected controls pass378canonical/finite assertions and
+92Library-navigation assertions, all natural exits0. Its native cohort still fails
+8,136/seven with an actual `prepared_owner:false` first-Death boundary error;
+that receipt remains failed. Source tracing found prepared and displayed finite
+membership could round fractional onset/end on opposite sides. The applied
+correction uses the existing absolute half-open rule for receipt-bearing tracks
+through all five Timeline callers; ordinary tracks and local source interpolation
+are unchanged. Its grouped controls pass392/350/873/194assertions. The next
+native receipt fails8,194/eight, natural1/no engine or script errors/leftovers.
+The earlier prepared-owner error is absent. The test stops on its finite-body
+assertion, so the printed later stall/endpoint failures do not independently
+establish a production stall. Source review identifies its raw Array equality
+between float sampled position and integer canonical point as carrier-sensitive.
+The one-line existing Protocol comparator correction keeps exact numeric equality
+and all source/Life/observer/support/interval guards. The resulting four-family
+native cohort passes **12,053assertions**, natural exit0/no engine/script errors
+or owned leftovers, including actual Nimbus result367/lineage355/condition UUID
+1941e7ff… and its exact receiving Goblin postdraw/constructor/input witness.
+The exit warning reports three leaked ObjectDB instances; no crash, clean-warning-free
+shutdown or isolated final-scene pixel/art acceptance is claimed. The complete
+188production native inventory is now running at this frozen source cut; the
+selected pass does not complete or relabel it.
+[Four-family actual current native receipt](../.runtime/main-queue-20261022/finite-native-exact-point/summary.json).
+[Preserved failed batch](../.runtime/main-queue-20261022/main-consumer-closure/affected-summary.json),
+[exact source-entry correction](../.runtime/closing-repairs/finite-terminal-entry-correction/README.md).
+
+The complete200headless batch now passes **200/200**,258,270assertions, natural
+exit0/no unexpected errors or owned leftovers, after restricting the new
+metadata operands to the terminal branch. The earlier199/200receipt stays
+failed. Selected history modes/material overlap, receiving ownership and Studio
+transport pass at their recorded source cuts. Library navigation's first
+control read its asynchronous catalog before publication; its control-only
+migration now awaits the actual generation/row completion boundary and passes
+92assertions, retaining the full catalog, failed-prefix and two-seat duties.
+No browser/backend/Factory defect is inferred from that obsolete immediate-read
+assertion. The later fractional-membership source changes have their separate
+affected receipt; the200/200receipt is not relabelled to that later cut.
+Quiet R6, whole-current native/live, the scenario matrix and all artwork/audio
+review remain open.
+[Preserved complete fast failure](../.runtime/tests/20261022T062432.307815Z/summary.json),
+[complete corrected fast receipt](../.runtime/tests/20261022T063513.349836Z/summary.json),
+[corrected controls and preserved native failure](../.runtime/main-queue-20261022/main-consumer-closure-corrected/summary.json),
+[current absolute-membership cohort](../.runtime/main-queue-20261022/finite-absolute-and-current-native/summary.json).
+
+The current installed53075public reader sweep now qualifies **188/188**
+production spell baselines across both seats,13,245assertions, natural exit0,
+zero errors/warnings. The one native-descriptor developer fixture remains
+explicitly excluded with its original failure preserved. This current-source
+reader/compiler/immutable-prefix receipt does not qualify shader preparation,
+actual submitted pixels, live commands or artwork.
+[Whole current reader receipt](../.runtime/main-queue-20261022/current530-public-reader/report.json).
+
+A bounded current R1/R2 source reconciliation found no additional immediately
+executable broad provider family. Existing21Action choices/130alternative
+dispositions/six legacy class assignments and selected grant/variant/coating/body
+families remain implemented. Actual object-target impact placement, animated
+door/destruction original-face registrations, authentic Dragon mouth/aerial
+contexts, three missing own-body deliveries and authenticated foot/audio
+choices remain explicit authored-data boundaries. Existing pinned9f Landing/
+Arcane operands are documented separately; the five unknown selector defaults
+remain deliberate refusals. None is a reason for a new framework or a claim
+that zero static unmatched providers completes all source/content/output.
+[Exact source remainder and owners](../.runtime/closing-repairs/r1-r2-source-remainder-audit/README.md).
+
+The single fixed ranged-Shield Action Surge original executed four real longbow
+attacks, both paid Attack batches/earned Extras and actual Action Surge39. All
+four attacks29/35/45/51 naturally missed and no Shield reaction occurred. Both
+seat originals and the failed receipt are preserved; no retry, seed/profile
+change, Library import or new backend defect is inferred. A positive ranged
+Shield original remains absent.
+[Exact failed recording and handoff](../.runtime/closing-repairs/shield-ranged-action-surge-original/README.md).
 
 ## Earlier source-registration checkpoint ae4fb4a6 — 22 October
 
@@ -1873,7 +1971,7 @@ to the engine.
 | Optional Cone native bank — delivered§19 | Complete8dd corrects19 packaged interface identity prefixes, retaining source bytes and ordinary recorded default. | Client optional-approach qualification pending; no automatic activation or weakened identity assertion. [Source proof/delivery](FACTORY_REVIEW_2026-10-20.md#19-rebase-packaged-cone-interface-identities-after-source-relocation). |
 | Default heavy-electric bank — delivered§20 | Installed/source-published8dd corrects both retained default GPU banks in place. Actual7ca fatal receipts and subsequent override-qualified Call/Bolt passes remain scoped to their own sources. | Six temporary static bank overrides and their unused transport are removed, preserving actual area/contact inputs and source clock/art. Bare-default current client proof remains pending. [Exact scope](FACTORY_REVIEW_2026-10-20.md#20-re-export-the-default-heavy-electric-bank-metadata). |
 | Wind Wall observed-cell coverage — delivered§21 | Complete82a supplied the mask-compatible source and it is retained in installeda12f. Current client receiving assignment preserves actual observed/suppressed cells and original source materials. | No outstanding Factory/API request; affected current native/live qualification remains client work. [Original request/delivery](FACTORY_REVIEW_2026-10-20.md#21-wind-wall-debris-needs-current-observed-cell-coverage). |
-| Art/audio | Four elemental and four equipped Myrmidon bodies are delivered/assigned; dragon body/depth/normals are delivered but await client intake. Cambion, Deva and Djinni have no identified own-body delivery. Authentic Draconic mouth/pose sockets remain absent. Sound selections/contact authoring and all human review remain open. | [Body list](CREATURE_BODY_ASSET_GAPS_2026-10-20.md), [audio/art handoff](ASSET_AUDIO_REVIEW_2026-10-20.md). All artwork/audio remains unreviewed. |
+| Art/audio | Four elemental and four equipped Myrmidon bodies are delivered/assigned; dragon body/depth/normals are delivered, installed and assigned through the current53075receiver. Cambion, Deva and Djinni have no identified own-body delivery. Authentic Draconic mouth/pose sockets remain absent. Sound selections/contact authoring and all human review remain open. | [Body list](CREATURE_BODY_ASSET_GAPS_2026-10-20.md), [audio/art handoff](ASSET_AUDIO_REVIEW_2026-10-20.md). All artwork/audio remains unreviewed. |
 
 Sleep, the GPU Insect Plague owner, general Counterspell inputs, held-item
 rebinding, historical capture, finite Deafness, Magic/Sacred memberships,
@@ -2190,9 +2288,11 @@ after the delivered7ca package, the atlas check already defaults to the real
 Gallery journal, and supplied arguments do not resolve historical exact-oracle
 comparisons automatically. The genuine continuous Gallery original already
 contains the mixed-spell and Shield-interrupted opportunity-attack/resumed-walk
-duties in both seats; those are no longer missing corpus. Current Gallery
+duties in both seats; those are no longer missing corpus. That earlier Gallery
 qualification exposed a Follow visibility failure and old harness assumptions
-that all native components carry a spell ID; those client repairs remain open.
+that all native components carry a spell ID. Those repairs are now in source;
+the current whole UI72 and Transport61 controls pass. This does not qualify
+every remaining scenario branch.
 The separate ranged Shield duty still lacks a positive original: one fixed
 single-attack capture and one fixed legal Attack/earned ExtraAttack exchange
 both naturally missed without Shield. Their original actors/seed/outcomes remain

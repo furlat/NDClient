@@ -734,6 +734,22 @@ static func _schedule(node: Dictionary, start: float, state: Dictionary, group: 
                     track.erase("source_time_keys")
                     track.duration_ms=0.0
                 finish = start + track.duration_ms
+                var terminal:Dictionary=graph.get("terminal_body_inputs",{}).get(str(node.id),{})
+                if fact.new_state=="dead" and float(track.duration_ms)>0.0 and not terminal.is_empty():
+                    # The receipt permits finite visibility; it cannot invent or
+                    # snap an existing held position, occupancy or elevation.
+                    var same_point:bool=track.get("from_position")==terminal.position and track.get("to_position")==terminal.position
+                    var has_height:bool=track.has("from_elevation_feet") and track.has("to_elevation_feet")
+                    var held_height:float=float(track.get("from_elevation_feet",NAN))
+                    var same_height:bool=has_height and is_finite(held_height) and held_height==float(track.to_elevation_feet)
+                    var ground:bool=terminal.actor.get("occupancy_layer")=="ground" and held_height==float(terminal.support.elevation_steps)*5.0
+                    var motion:Dictionary=graph.last_motion.get(fact.entity_uuid,{})
+                    var exact_motion:bool=motion.get("to_position")==terminal.position and motion.has("to_elevation_feet") and float(motion.to_elevation_feet)==held_height
+                    if same_point and same_height and (ground or exact_motion):
+                        track.terminal_presentation=terminal
+                        for field in track.presentation_actor:
+                            if terminal.actor.has(field):track.presentation_actor[field]=terminal.actor[field]
+                        group.has_terminal_presentation=true
         for child in children: finish = maxf(finish,_schedule(child,start,state,group,graph,cache))
     else:
         for child in children: finish = maxf(finish,_schedule(child,start,state,group,graph,cache,jump))
@@ -916,8 +932,11 @@ static func _actor_cut(cuts:Dictionary,at:float,id:String,duration:float)->void:
     cuts[at][id]=true
 
 static func _actor_structure_inputs(actor:Dictionary,state:Dictionary,staged:bool,loadouts:Dictionary)->Array:
-    if actor.is_empty() or not WorldRows.visible_actor(actor,state,staged):return []
-    var selected=ActorConstruction.actor_with_loadout(actor,loadouts)
+    if actor.is_empty():return []
+    var visible:bool=WorldRows.visible_actor(actor,state,staged)
+    if not visible and not loadouts.get(actor.uuid,{}).has("terminal_presentation"):return []
+    var selected=ActorConstruction.actor_with_loadout(actor,loadouts,state)
+    if not visible and not WorldRows.visible_actor(selected,state,staged):return []
     return [selected.get("creature_content_ref"),selected.appearance,selected.visual_loadout,selected.get("presentation_layers",[]),Authoring.Characters.item_looks(selected,state)]
 
 static func _actor_structure_value(actor:Dictionary,loadouts:Dictionary,inputs:Array,cache:Dictionary)->Dictionary:
@@ -957,6 +976,19 @@ static func _actor_structure_requirements(before:Dictionary,groups:Array,cache:D
     # touched actors and authored selector edges, never all actors at every cut.
     var actors:Dictionary={}
     var state={"senses":before.senses,"audience":before.audience,"items":before.items.duplicate()}
+    # Only actual terminal receipts need support during this passive selector
+    # pass. Ordinary operations gain no tile-store copy or tile-row walk.
+    var terminal_cells:Dictionary={}
+    for group in groups:
+        if not group.get("has_terminal_presentation",false):continue
+        for track in group.actor_tracks:
+            var terminal:Dictionary=track.get("terminal_presentation",{})
+            if not terminal.is_empty():terminal_cells[Reducer.Audience.point_key(terminal.position)]=true
+    if not terminal_cells.is_empty():
+        state.generation=before.get("generation");state.observer_uuid=before.get("observer_uuid")
+        state.tiles={}
+        for key in terminal_cells:
+            if before.tiles.has(key):state.tiles[key]=before.tiles[key]
     var retained:Array=[]
     var appearance_owners:Dictionary={}
     Conditions.observe(appearance_owners,before.actors,0.0,true)
@@ -1011,6 +1043,11 @@ static func _actor_structure_requirements(before:Dictionary,groups:Array,cache:D
                     actors[id]=actor
                 Conditions.observe(appearance_owners,commit.delta.get("actors",{}),start+commit.at_ms,false,commit.get("condition_rows",[]))
                 for id in commit.delta.get("items",{}):state.items[id]=commit.delta.items[id]
+                if not terminal_cells.is_empty():
+                    for key in commit.delta.get("tiles_removed",[]):
+                        if terminal_cells.has(key):state.tiles.erase(key)
+                    for key in commit.delta.get("tiles",{}):
+                        if terminal_cells.has(key):state.tiles[key]=commit.delta.tiles[key]
                 if commit.delta.get("set",{}).has("senses"):state.senses=commit.delta.set.senses
                 cursor+=1
             var active_layers:Array=layers.filter(func(item):return item.start_ms<=start+at and start+at<item.start_ms+item.component.duration_ms).map(func(item):return item.component)
@@ -1033,6 +1070,11 @@ static func _actor_structure_requirements(before:Dictionary,groups:Array,cache:D
         # Commits with no actor selector edge still carry the next sensory view.
         while cursor<group.commits.size():
             var commit:Dictionary=group.commits[cursor]
+            if not terminal_cells.is_empty():
+                for key in commit.delta.get("tiles_removed",[]):
+                    if terminal_cells.has(key):state.tiles.erase(key)
+                for key in commit.delta.get("tiles",{}):
+                    if terminal_cells.has(key):state.tiles[key]=commit.delta.tiles[key]
             if commit.delta.get("set",{}).has("senses"):state.senses=commit.delta.set.senses
             cursor+=1
         group.actor_structure_times=boundaries.keys();group.actor_structure_times.sort()
@@ -1073,6 +1115,7 @@ static func compile_recorded(before: Dictionary, packet: Dictionary, cache: Dict
                 if not target.tiles.has(key) and not group.staged_tiles.has(key):group.staged_tiles[key]=captured.delta.tiles[key]
         var graph = {"nodes":{},"first":{},"times":{},"starts":{},"ends":{},"recipes":{},"visited":{},"positions":{},"actor_inputs":{},"item_inputs":{},"object_inputs":{},"contacts":{},"impact_contacts":{},"reaction_contacts":{},"last_motion":{},"casts":{},"damage_timings":{},"spell_sources":{},"spell_choices":{},"spell_facts":{},"application_indices":{},"condition_cues":{}}
         graph.body_records=lineage.get("bodies",[])
+        graph.terminal_body_inputs=recorded.get("terminal_inputs",{})
         graph.contact_inputs={}
         graph.condition_response_inputs={}
         # Retain only authoritative blood receiving cells needed to reveal a

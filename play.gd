@@ -1759,7 +1759,7 @@ func _sync_actor_membership() -> void:
         if id not in ids: actor_facings.erase(id)
     for id in ids:
         var actor: Dictionary = timeline.state.actors.get(id,staged.get(id,{}))
-        actor=ActorConstruction.actor_with_loadout(actor,loadouts)
+        actor=ActorConstruction.actor_with_loadout(actor,loadouts,timeline.state)
         if not WorldRows.visible_actor(actor,timeline.state,staged.has(id)):
             _retire_actor(id)
             continue
@@ -2799,6 +2799,8 @@ func _sample_actors() -> void:
             row.facing=_facing(Vector2(points[1][0]-points[0][0],points[1][1]-points[0][1]))
         elif external_playback: row.facing="SW"
         var actor: Dictionary = timeline.state.actors.get(id,staged.get(id,{}))
+        if not actor.is_empty() and actor.get("last_visual_position")==null and sampled_loadouts.get(id,{}).has("terminal_presentation"):
+            actor=ActorConstruction.actor_with_loadout(actor,sampled_loadouts,timeline.state)
         if actor.is_empty() or not visual.valid or actor.get("last_visual_position") == null:
             visual.erase("sampled_pose")
             for entry in visual.entries: entry.node.visible = false

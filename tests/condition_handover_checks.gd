@@ -63,7 +63,10 @@ func run()->void:
         if baseline.existing.has(id):
             var previous:Dictionary=baseline.existing[id]
             var previous_cues:Array=previous.owner_cues.map(func(cue):return int(cue))
-            check(entry.owner_kind==previous.owner_kind and Array(entry.owner_ids)==previous.owner_ids and Array(entry.owner_cues)==previous_cues,"Existing explicit handover is preserved: "+id)
+            # The saved baseline remains historical. The complete Ensnaring
+            # body lifecycle now also owns its former cast-application probe.
+            if id=="spell.ensnaring_strike":previous_cues=[0,1,3]
+            check(entry.owner_kind==previous.owner_kind and Array(entry.owner_ids)==previous.owner_ids and Array(entry.owner_cues)==previous_cues,"Existing explicit handover and reviewed application correction are preserved: "+id)
         var applicable:Array=[]
         for owner in entry.applies_conditions:
             if body.has(owner):applicable.append(owner)

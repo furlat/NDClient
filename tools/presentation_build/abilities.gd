@@ -811,7 +811,8 @@ static func _check_constructor(use:Resource,where:String,clips:Dictionary,report
         if use.extra.input_policies.has("live_particles"):_check_static_liquid_policy(use,clips,where,report)
         else:_check_unused_geometry_policy(use,clips,where,report)
         return
-    if not use.extra.get("input_policies",{}).is_empty() and binding.get("kind") not in ["propagation_links","area_links","spell_strike","observed_event","condition_application","quarry_owner"]:
+    var wall_review_policy:bool=binding.get("kind")=="spatial_owner" and binding.get("cell_input")=="wall_assembly"
+    if not use.extra.get("input_policies",{}).is_empty() and not wall_review_policy and binding.get("kind") not in ["propagation_links","area_links","spell_strike","observed_event","condition_application","quarry_owner"]:
         Common.error(report,where,"explicit input policy has no qualified source constructor");return
     if binding.is_empty():return
     var identity_projection:String=str(binding.get("projection",""))
@@ -1227,6 +1228,14 @@ static func _check_constructor(use:Resource,where:String,clips:Dictionary,report
                 or "grant_state" not in clips[use.clip].get("inputs",[]):
                 Common.error(report,where,"breath phase must consume the exact delivered grant state, selected element and original phase")
         if binding.get("kind")=="spatial_owner" and binding.get("cell_input")=="wall_assembly":
+            var wall_policies:Dictionary=use.extra.get("input_policies",{})
+            if not wall_policies.is_empty():
+                var expected_wall_policy:Dictionary={"review_contacts":{"mode":"not_applicable","reason":"selected_actual_wall_source_uses_observed_visual_state_contacts"},
+                    "visual_occupants":{"mode":"not_applicable","reason":"selected_actual_wall_source_uses_observed_visual_state_occupants"}}
+                if wall_policies!=expected_wall_policy or use.approach!="runtime-prepared-production-review-20261020" \
+                    or component.get("script")!="res://assets/vfx/extensions/production-review-20261020/sources/0ccf258744a7a69592fc/thorns.gd" \
+                    or not phase.options.get("owner_lifetime",false) or "visual_state" not in clips[use.clip].get("inputs",[]):
+                    Common.error(report,where,"unused review inputs require the selected actual Thorns wall source; visual_state remains mandatory")
             var setter:String=str(clips[use.clip].get("input_setters",{}).get("visual_state",""))
             var declared_assembly:bool=binding.get("argument")==component.id \
                 and phase.options.get("construction_operands",[])==["wall_uuid","anchor_position","wall_geometry"] \

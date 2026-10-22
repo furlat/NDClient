@@ -75,7 +75,7 @@ cuts fit; the viewport projection control passes139. The whole existing UI gate 
 owned-surface pending-classification repair, with real-worker43/input-binding429.
 Earlier failures remain preserved. This is selected framing/interaction evidence,
 not the entire UI matrix or art acceptance.
-[Actual current capture](../.runtime/main-queue-20261022/dragon-native-receiver-registered/captures/creature.spell.draconic_spirit-current_stand_in_intrinsic_retirement-55-primary.png).
+[Preserved initial clipped capture](../.runtime/main-queue-20261022/dragon-native-receiver-registered/captures/creature.spell.draconic_spirit-current_stand_in_intrinsic_retirement-55-primary.png).
 
 **Earlier receipts retain their earlier source.** Equipped Myrmidon source/
 dispatch passed20,434assertions; Air/Fire/Water actual native originals passed

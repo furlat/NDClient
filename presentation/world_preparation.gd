@@ -555,7 +555,7 @@ static func _complete_actors(input:Dictionary,forecast:Dictionary)->Dictionary:
         var actor_started:int=Time.get_ticks_usec() if measured else 0
         if measured:actor_profile.actors_seen+=1
         var actor:Dictionary=input.actor_state.actors.get(id,input.staged_actors.get(id,{}))
-        actor=ActorConstruction.actor_with_loadout(actor,input.actor_loadouts)
+        actor=ActorConstruction.actor_with_loadout(actor,input.actor_loadouts,input.actor_state)
         var visible_actor:bool=WorldRows.visible_actor(actor,input.actor_state,input.staged_actors.has(id))
         _record_actor_worker_phase(actor_profile,"loadout_visibility",actor_started)
         if not visible_actor:continue

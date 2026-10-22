@@ -68,8 +68,16 @@ that Goblin's visual contact at370 before publishing its actual death at371;
 pinned Python/Godot canonical folding intentionally clears the unseen living
 position. This is not a reducer mismatch, missing producer result or permission
 to restore canonical visibility. Its actual finite Death BodyTrack retains the
-disclosed contact/source clock; a bounded client terminal-presentation cut is
-being reviewed. Do not forward this as another backend/Factory API request.
+disclosed contact/source clock. The applied client correction uses the exact
+Life371/lineage371 and its unique immediate parent373/lineage368 entry368; the
+earlier claim that368 was the Life fact's own lineage was wrong. Current source/
+observer/support/sight and finite-clock guards preserve canonical null position;
+its current actual four-result native cohort now passes12,053assertions/natural
+exit0/no engine or script errors/owned leftovers, with an exact Nimbus367/355
+postdraw witness. Earlier failed receipts remain preserved; whole-current
+native/live and art acceptance are separate. Do not forward this as another
+backend/Factory API request.
+[Current selected native closure](../.runtime/main-queue-20261022/finite-native-exact-point/summary.json).
 [Exact current refusal](../.runtime/main-queue-20261022/terminal-response-diagnostics/native-receipt.json),
 [source/canonical analysis](../.runtime/closing-repairs/nimbus-contact-visibility/canonical-visibility-analysis.md).
 

@@ -10,6 +10,7 @@ const CharacterGeometry=preload("res://presentation/character_geometry.gd")
 const Modular=preload("res://modular.gd")
 const MODULAR_SHADER=preload("res://modular.gdshader")
 const Placement=preload("res://placement.gd")
+const WorldRows=preload("res://presentation/world.gd")
 const QuadShapes=preload("res://presentation/quad_shapes.gd")
 
 static func source_cache(cache:Dictionary)->Dictionary:
@@ -24,7 +25,9 @@ static func matches(row:Dictionary,other:Dictionary)->bool:
 
 static func loadouts(samples:Dictionary,components:Array)->Dictionary:
     var result:Dictionary={}
-    for id in samples:result[id]={"loadout":samples[id].get("visual_loadout"),"effects":[]}
+    for id in samples:
+        result[id]={"loadout":samples[id].get("visual_loadout"),"effects":[]}
+        if samples[id].has("terminal_presentation"):result[id].terminal_presentation=samples[id].terminal_presentation
     for component in components:
         if component.kind not in ["sprite_layer","appearance_layer"]:continue
         var id:String=component.actor_uuid
@@ -33,10 +36,27 @@ static func loadouts(samples:Dictionary,components:Array)->Dictionary:
         result[id].effects.append(effect)
     return result
 
-static func actor_with_loadout(actor:Dictionary,loadouts:Dictionary)->Dictionary:
+static func actor_with_loadout(actor:Dictionary,loadouts:Dictionary,state:Dictionary={})->Dictionary:
     if not loadouts.has(actor.uuid):return actor
     var result:Dictionary=actor.duplicate()
     var selected:Dictionary=loadouts[actor.uuid]
+    var terminal:Dictionary=selected.get("terminal_presentation",{})
+    # Only the finite actual Life track can carry this private display operand.
+    # Current canonical visibility/position is never repaired or mutated here.
+    if not terminal.is_empty() and actor.get("last_visual_position")==null \
+        and actor.get("present",false) and actor.get("life_state")=="dead" \
+        and actor.get("spatial_disposition","present")=="present" and actor.get("remains_disposition","intact")=="intact" \
+        and terminal.get("source_cut") in ["first_real_life_version","immediate_parent_entry"] and terminal.get("new_state")=="dead" \
+        and terminal.get("generation")==state.get("generation") and terminal.get("observer_uuid")==state.get("observer_uuid") \
+        and terminal.actor.get("uuid")==actor.uuid and state.get("senses")!=null:
+        var same:bool=true
+        for field in ["character_body_id","creature_content_ref","appearance","visual_loadout","structural_base_size","manifestation","occupancy_layer"]:
+            same=same and actor.get(field)==terminal.actor.get(field)
+        var position:Array=terminal.position
+        var support:Dictionary=state.get("tiles",{}).get(WorldRows.cell_key(position),{})
+        if same and WorldRows.visible_cell(state,position) and support.has("elevation_steps") \
+            and support.get("tile_uuid")==terminal.support.get("tile_uuid") and support.elevation_steps==terminal.support.elevation_steps:
+            result.last_visual_position=position
     if selected.loadout!=null:result.visual_loadout=selected.loadout
     result.presentation_layers=selected.effects
     return result

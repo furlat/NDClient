@@ -20,16 +20,24 @@ static func sample_seconds(seconds:float,length:float,loop:bool)->float:
     var weight:float=PackedFloat32Array([PackedFloat32Array([time])[0]/PackedFloat32Array([length])[0]])[0]
     return length*weight
 
-static func samples(tracks: Array, local: float) -> Dictionary:
+static func samples(tracks: Array, local: float, group_start_ms:float=NAN, at_ms:float=NAN) -> Dictionary:
     var result: Dictionary = {}
     for track in tracks:
         var start = float(track.start_ms)
         var end = start+float(track.duration_ms)
-        if local < start or (local >= end and not track.get("holding_pose",false)): continue
+        var before:bool=local<start;var ended:bool=local>=end
+        # Finite terminal visibility must agree with the prepared absolute cut.
+        # Subtracting its fractional origin can round across an authored edge;
+        # source-frame interpolation still uses the unchanged local clock below.
+        if track.has("terminal_presentation") and is_finite(group_start_ms) and is_finite(at_ms):
+            before=at_ms<group_start_ms+start;ended=at_ms>=group_start_ms+end
+        if before or (ended and not track.get("holding_pose",false)):continue
         var id: String = track.actor_uuid
         if result.has(id) and int(result[id].priority) > int(track.get("priority",0)): continue
         var fraction = clampf((local-start)/maxf(0.000001,float(track.duration_ms)),0,1)
         var sample: Dictionary = track.duplicate()
+        # Holding the terminal endpoint never extends its private visibility.
+        if track.has("terminal_presentation") and ended:sample.erase("terminal_presentation")
         if track.has("visible_until_ms"):sample.body_visible=local-start<float(track.visible_until_ms)
         if not track.get("spatial_only",false):sample.source_seconds = lerpf(track.get("source_start_seconds",0.0),track.get("source_end_seconds",0.0),fraction)
         if not track.get("spatial_only",false) and track.has("source_time_keys"):

@@ -189,7 +189,7 @@ event_cues = PackedInt32Array()
 excluded_cues = PackedInt32Array()
 owner_kind = "condition"
 owner_ids = PackedStringArray("condition.spell.ensnaring_strike")
-owner_cues = PackedInt32Array(1, 3)
+owner_cues = PackedInt32Array(0, 1, 3)
 contact_cues = PackedInt32Array()
 light_multiplier = 0.0
 feedback_ramp = PackedStringArray()
@@ -203,4 +203,4 @@ staging_unported = {
 "source": "assets/vfx/index.json:/selections/ensnaring_strike_native/staging"
 }
 notes = "Cast body is a stand-in (Attack5, release 7, the most common old gesture) until the spell has its own (coverage fill).
-Plays its imported Factory staging (coverage fill)."
+Actual complete Ensnaring Vines condition lifecycle owns application, hold and removal on the real recipient membership; legacy application cue0 is inspectable but not replayed on the cast. Actual attributed Piercing turn-start tick cue2 retains its independent event clock. Source assignment and human artwork/audio review remain separate."

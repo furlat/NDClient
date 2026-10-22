@@ -1,5 +1,46 @@
 # Remaining production content — updated 22 October 2026
 
+**Latest source follow-through:** Studio framing/source inspection and owned
+surface readiness are committed at **0f522660**. Both Thorns forms now require
+only the selected source's actual `visual_state`, with unused legacy review
+setters explicitly omitted. Ensnaring's actual condition lifecycle owns
+application/hold/removal; its factual positive tick remains independent. The
+current static assignment join has zero unmatched-provider rows and five
+explicit unknown-default refusals. Publication passes zero errors/two warnings;
+this is source completion for those rows, not native output or human acceptance.
+The finite actual Life/direct-parent presentation correction and current grouped
+qualification are recorded in the single R1–R8 backlog; failed initial receipts
+remain failed. All artwork/audio remain UNREVIEWED.
+
+**Current bounded source reconciliation:** no additional immediately executable
+broad R1/R2 provider family was established after the three source-policy rows
+above. All21Action choices,130alternative dispositions, six legacy class
+assignments, selected grant/coating/variant families and nine own-body
+assignments are already present. Zero unmatched static provider rows does not
+qualify all actual inputs/native output or complete every authored context.
+The concrete remaining authoring boundaries are:
+
+- Actual object-target weapon impacts need supported source-local receiving
+  registration; a disclosed object cell alone is not that authored point.
+- Animated doors/destruction need frame/view/leaf/fragment correspondence to
+  their original face planes before the existing motif route can consume them.
+- Dragon needs authentic per-pose mouth sockets/bounded optical region and
+  remaining supported aerial contexts; existing body/normal/receiver delivery
+  is already installed and must not be requested again.
+- Cambion, Deva and Djinni still lack an identified own-body delivery.
+- Goblin Run/CrouchWalk foot contacts need authenticated source frames; the
+  existing eight sound categories and all human artwork/audio review stay open.
+- Pinned9f Earth Landing identity and independent Arcane Sword anchor are
+  already documented producer boundaries. No client text/coordinate fallback.
+
+[Exact source-backed remainder](../.runtime/closing-repairs/r1-r2-source-remainder-audit/README.md),
+[body/socket data](CREATURE_BODY_ASSET_GAPS_2026-10-20.md),
+[face/audio registration handoff](ASSET_AUDIO_REVIEW_2026-10-20.md),
+[producer evidence](BACKEND_CONTENT_BLOCKERS_2026-10-20.md).
+Positive ranged-Shield original coverage remains absent after the one fixed
+Action Surge capture naturally missed four times; it is an R4 original gap,
+not missing Shield consumer code or a new backend request.
+
 **22 October current main-queue continuation:** recovery source is committed
 at23e14a2e; Factory source choices/Studio linkage at56b8d64c and the four
 equipped Myrmidon bodies plus intrinsic dispatch at a769c40d. All188production
@@ -52,10 +93,14 @@ and input-binding429also pass. These are affected controls, not the full matrix.
 Current Library: **388cases/383recorded/fivefailed**. New real9f Incense positive
 healing and Nimbus positive contact originals are imported, with the separate
 failed out-of-range Nimbus route preserved. Existing positive Blessed Healer/
-Destroy Undead originals retain0c provenance. Exact native consumer proof passes Blessed Healer, Destroy Undead and Incense.
-Nimbus' positive result is real, but receiving output refuses its absent current
-body; the finite terminal presentation cut remains open. The later four-family
-receipt stays9,804/two failures/natural1; no backend/Factory defect is inferred.
+Destroy Undead originals retain0c provenance. Current exact native consumer proof
+passes all four actual results with12,053assertions/natural exit0/no engine or
+script errors or owned leftovers, after the shared finite actual-Life body
+closure. Earlier9,804/two,8,136/seven and8,194/eight receipts remain failed.
+The current188production reader passes13,245assertions; whole current native
+is still running. No backend/Factory defect is inferred from those client cuts.
+[Actual selected native receipt](../.runtime/main-queue-20261022/finite-native-exact-point/summary.json),
+[current reader](../.runtime/main-queue-20261022/current530-public-reader/report.json).
 
 **Four-family body follow-through,22October:** all equipped Myrmidons now use
 own supplied9clip rigs; source conversion and13Action/4Attack assignments are

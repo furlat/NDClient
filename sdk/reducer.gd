@@ -161,12 +161,44 @@ static func reduce_nodes(target:Dictionary,nodes:Array,versions:Dictionary,bodie
 static func _reduce_nodes_owned(result:Dictionary,nodes:Array,versions:Dictionary,bodies:Array,updates:Array,rows:Dictionary={},recorded:Variant=null,profile:Variant=null,resolutions:Array=[],sensory_cells:Dictionary={},world_context:Dictionary={})->Dictionary:
     var composed=Audience.composed_values(rows)
     if not composed.ok:return composed
-    var casts:Dictionary={}
+    var casts:Dictionary={};var terminal_starts:Variant=null;var terminal_cursor:int=0
     if recorded!=null:
-        var owners:Array=node_lineages(nodes,versions)
+        terminal_starts=[]
+        var owners:Array=node_lineages(nodes,versions);var terminal_nodes:Dictionary={};var terminal_first:Dictionary={}
         for i in range(nodes.size()):
             var declared:Variant=nodes[i].get("fact")
             if declared!=null and declared.kind=="spell" and declared.get("source_entity_uuid")!=null:casts[owners[i]]=declared.source_entity_uuid
+            if declared!=null and declared.kind=="life" and declared.get("new_state")=="dead" \
+                and nodes[i].get("phase")=="completion" and not nodes[i].get("canceled",false):terminal_nodes[owners[i]]=nodes[i]
+        if not terminal_nodes.is_empty():
+            # Native versions distinguish the Life lineage from its actual
+            # immediate no-fact wrapper. Never rename an ancestor as Life.
+            var version_owners:Dictionary={};var parents:Dictionary={}
+            for i in range(versions.occurrences.size()):
+                var identity:int=int(versions.lineages[i]);var occurrence:int=int(versions.occurrences[i])
+                version_owners[occurrence]=identity
+                terminal_first[identity]=mini(int(terminal_first.get(identity,occurrence)),occurrence)
+            for i in range(nodes.size()):
+                for child in nodes[i].get("children_lineages",[]):
+                    if terminal_nodes.has(int(child)):
+                        if not parents.has(int(child)):parents[int(child)]=[]
+                        parents[int(child)].append(i)
+            for identity in terminal_nodes:
+                var node:Dictionary=terminal_nodes[identity]
+                var entry:Dictionary={};var source:int=int(terminal_first[identity])
+                var claims:Array=parents.get(identity,[])
+                if claims.size()==1 and node.get("parent_event")!=null:
+                    var index:int=int(claims[0]);var parent:Dictionary=nodes[index];var owner:int=int(owners[index])
+                    var parent_event:int=int(node.parent_event)
+                    if owner!=int(identity) and parent.get("fact")==null and parent.get("phase")=="completion" \
+                        and not parent.get("canceled",false) and parent.get("children_lineages",[])==[identity] \
+                        and version_owners.get(parent_event)!=null and int(version_owners[parent_event])==owner \
+                        and int(terminal_first[owner])<=parent_event and parent_event<int(node.occurrence) \
+                        and int(parent.occurrence)>int(node.occurrence):
+                        source=int(terminal_first[owner]);entry={"lineage":owner,"occurrence":int(parent.occurrence)}
+                terminal_starts.append({"node":node,"lineage":identity,"source_index":source,"entry":entry})
+            terminal_starts.sort_custom(func(a,b):return a.source_index<b.source_index)
+            recorded.terminal_inputs={}
     var order:Array=range(bodies.size());order.sort_custom(func(a,b):return a<b if bodies[a].occurrence==bodies[b].occurrence else bodies[a].occurrence<bodies[b].occurrence)
     var pending:Array=[]
     for index in order:pending.append(bodies[index])
@@ -174,6 +206,17 @@ static func _reduce_nodes_owned(result:Dictionary,nodes:Array,versions:Dictionar
     for update in updates:world_updates[int(update.occurrence)]=update
     for node in nodes:
         var admitted:Array=[];var item_rows:Array=[];var changed_items={};var changed_actors={}
+        # Split the same ordered body cursor at the actual Life/unique immediate
+        # parent entry. No fact/world fold is repeated or reordered.
+        while recorded!=null and terminal_cursor<terminal_starts.size() and terminal_starts[terminal_cursor].source_index<=node.occurrence:
+            var first:Dictionary=terminal_starts[terminal_cursor]
+            while next<pending.size() and pending[next].occurrence<=first.source_index:
+                var entered=Bodies.enter_body(result,pending[next],item_rows,changed_actors,changed_items)
+                if not entered.ok:return entered
+                admitted.append(pending[next]);next+=1
+            var capture:Dictionary=Transitions.terminal_input(result,first.node,int(first.lineage),int(first.source_index),first.entry)
+            if not capture.is_empty():recorded.terminal_inputs[str(first.node.occurrence)]=capture
+            terminal_cursor+=1
         while next<pending.size() and pending[next].occurrence<=node.occurrence:
             var entered=Bodies.enter_body(result,pending[next],item_rows,changed_actors,changed_items)
             if not entered.ok:return entered

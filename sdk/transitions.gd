@@ -1,4 +1,5 @@
 extends RefCounted
+const ReducerCells=preload("res://sdk/fold_cells.gd")
 ## Immutable event-time captures emitted by the SDK fold; no authoring or scene resources.
 static func empty_delta()->Dictionary:
     return {"set":{},"actors":{},"items":{},"tiles":{},"tiles_removed":[],"objects":{},"objects_removed":[],"spatial_commit_cursors":{}}
@@ -22,6 +23,30 @@ static func item_inputs(target:Dictionary,actors:Dictionary)->Dictionary:
         for layer in actor.get("visual_loadout",{}).get("layers",[]):
             if target.items.has(layer.item_uuid):result[layer.item_uuid]=target.items[layer.item_uuid]
     return result
+
+## Actual Life/unique immediate-parent entry cut, never a canonical position.
+static func terminal_input(target:Dictionary,node:Dictionary,lineage:int,source_index:int,entry:Dictionary={})->Dictionary:
+    var fact:Variant=node.get("fact")
+    if fact==null or fact.get("kind")!="life" or fact.get("new_state")!="dead" \
+        or node.get("phase")!="completion" or node.get("canceled",false):return {}
+    var identity:String=str(fact.entity_uuid)
+    var actor:Dictionary=target.actors.get(identity,{})
+    var senses:Variant=target.get("senses")
+    if actor.is_empty() or senses==null or not actor.get("present",false) \
+        or actor.get("life_state")!=fact.previous_state or actor.get("spatial_disposition","present")!="present" \
+        or actor.get("remains_disposition","intact")!="intact":return {}
+    var position:Variant=actor.get("last_visual_position")
+    var contact:Dictionary=senses.entities.get(identity,{})
+    if position==null or not contact.get("visual",false) or contact.get("position")!=position \
+        or not ReducerCells.contains(senses.visible,position):return {}
+    var key:String=ReducerCells.key(position)
+    var support:Dictionary=target.tiles.get(key,{})
+    if not support.has("elevation_steps"):return {}
+    return {"actor":actor,"contact":contact,"support":support,"position":position,
+        "generation":target.generation,"observer_uuid":target.observer_uuid,
+        "life_event_uuid":str(node.occurrence),"life_lineage":str(lineage),"source_index":source_index,
+        "source_lineage":str(entry.get("lineage",lineage)),"source_event_uuid":str(entry.get("occurrence",node.occurrence)),
+        "new_state":fact.new_state,"source_cut":"first_real_life_version" if entry.is_empty() else "immediate_parent_entry"}
 
 static func capture_delta(target:Dictionary,node:Dictionary,bodies:Array,update:Variant,_snapshots:Dictionary={},_retained:bool=false,disclosed:Dictionary={},changed_actors:Dictionary={},changed_items:Dictionary={})->Dictionary:
     var delta=empty_delta();var identities=changed_actors.duplicate();var fact:Variant=node.get("fact")

@@ -4,7 +4,7 @@ const HANDOVERS={
     "acid_arrow":{"owner":"condition.spell.acid_arrow","cues":[2],"keep":[0,1,3,4],"lifecycle":"condition_acid_arrow_persistent"},
     "branding_smite":{"owner":"condition.spell.branding_smite","cues":[1,2],"keep":[],"results":{0:"weapon_component"},"lifecycle":"condition_branding_smite_persistent","producer_gap":true},
     "divine_favor":{"owner":"condition.spell.divine_favor","cues":[1,2,3],"keep":[0],"lifecycle":"condition_divine_favor_persistent"},
-    "ensnaring_strike":{"owner":"condition.spell.ensnaring_strike","cues":[1,3],"keep":[0],"lifecycle":"condition_ensnaring_vines_persistent","producer_gap":true},
+    "ensnaring_strike":{"owner":"condition.spell.ensnaring_strike","cues":[0,1,3],"keep":[],"results":{2:"condition_contact"},"lifecycle":"condition_ensnaring_vines_persistent","producer_gap":true},
     "hex":{"owner":"condition.spell.hex.quarry","cues":[],"keep":[0,1],"lifecycle":"condition_hex_persistent","mode":"quarry"},
     "hunters_mark":{"owner":"condition.spell.hunters_mark.quarry","cues":[],"keep":[0,1],"lifecycle":"condition_hunters_mark_persistent","mode":"quarry"},
     "magic_weapon":{"owner":"condition.spell.magic_weapon","cues":[2,3],"owned":[],"keep":[],"lifecycle":"condition_magic_weapon_persistent","baseline_has_owner":false,"mode":"item"},

@@ -17,6 +17,14 @@ func settle(s:Control)->bool:
     while not ready(s) and Time.get_ticks_msec()<deadline:await process_frame
     check(ready(s),"Requested Library selection becomes ready: "+s.status.text)
     return ready(s)
+func library_prepared(panel:Window)->bool:
+    # open()/Refresh return before the generation worker and bounded Tree
+    # publication finish. Use the current browser control's finite allowance.
+    var deadline:int=Time.get_ticks_msec()+60000
+    while not panel.is_prepared() and panel.error.is_empty() and Time.get_ticks_msec()<deadline:await process_frame
+    var complete:bool=panel.is_prepared()
+    check(complete,"Requested Library generation and bounded rows publish: "+panel.error)
+    return complete
 func choose(picker:OptionButton,text:String)->void:
     var choice=-1
     for i in picker.item_count:
@@ -82,8 +90,12 @@ func inspect_failed_prefix(s:Control)->void:
     # control. No current index/status or journal bytes are rewritten.
     s.case_records=s.case_records.filter(func(record):return record.id!=original.id)+[original]
     s._show_study_library();var panel:Window=s.study_library
+    # Complete the actual catalog owner before installing this preserved
+    # failed-original control; a live worker must not overwrite its report.
+    if not await library_prepared(panel):return
     panel.report=Library.build(Library._read(Library.SERVER_IDS),{}, {"engine":original.engine,"cases":[original]})
     panel._refresh("spell:spell.dragons_breath",original.id)
+    if not await library_prepared(panel):return
     await click_tree(panel,original.id)
     check(panel.visible and panel.open_button.disabled and not panel.prefix_button.disabled \
         and not requested(s),"Failed case exposes an explicit prefix action without automatic playback or ready promotion")
@@ -141,7 +153,9 @@ func run()->void:
     if started and await settle(s):selection(s,hide.capability,hide.interaction)
     s._show_study_library()
     var panel=s.study_library
-    check(not panel.report.is_empty(),"Full current authoring catalog is ready")
+    if not await library_prepared(panel):await finish(s);return
+    check(not panel.report.get("entries",[]).is_empty() and panel.report.get("study_state")=="complete","Full current authoring catalog is ready")
+    if panel.report.get("entries",[]).is_empty():await finish(s);return
     var unrecorded:Dictionary={}
     for entry in panel.report.entries:
         if entry.cases.is_empty() and entry.scenario_status=="missing":unrecorded=entry;break
@@ -156,7 +170,8 @@ func run()->void:
     if started and await settle(s):
         selection(s,hide.capability,hide.interaction)
         check(s.study_scenario.get("id")==hide.id and not panel.visible,"Actual study and scene publish together and Library closes")
-        s._show_study_library();await process_frame
+        s._show_study_library()
+        if not await library_prepared(panel):await finish(s);return
         check(panel.visible and not requested(s),"Reopening Library does not trigger playback")
         await click_tree(panel,"action.hide")
         check(requested(s),"Clicking the same recorded case reopens it")

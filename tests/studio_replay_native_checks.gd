@@ -4,6 +4,7 @@ const Fixtures=preload("res://tests/recording_fixtures.gd")
 const Studio=preload("res://studio/studio.gd")
 const Recording=preload("res://studio/recording.gd")
 const BodyGeometryProof=preload("res://presentation/character_geometry.gd")
+const Construction=preload("res://presentation/actor_construction.gd")
 var checks=0
 var failures:Array=[]
 var evidence:Array=[]
@@ -223,6 +224,30 @@ func yielded_recorded_prefix(index:Dictionary,timeline)->RefCounted:
     world_cut=world_cut or float(item.group.duration_ms) in item.group.get("actor_structure_times",[])+item.group.get("actor_effect_times",[]) or not item.group.get("staged_tiles",{}).is_empty()
     if not world_cut and not timeline.waiting_for_media and not timeline.waiting_for_world:return null
     return Recording.restore_boundary(index,count-1,item.group.commits.size())
+## A canonical null position still forbids an ordinary remembered ghost.
+## The separate actual-journal structural gate proves the Life receipt's raw
+## origin; here only its selected, finite, current-source display is eligible.
+func finite_terminal_body(world:Node,id:String)->bool:
+    var actual:RefCounted=world.timeline
+    var actor:Dictionary=actual.state.actors[id]
+    if actor.get("last_visual_position")!=null or not world.visual_actors.has(id):return false
+    var sample:Dictionary=actual.actor_samples().get(id,{})
+    var terminal:Dictionary=sample.get("terminal_presentation",{})
+    if terminal.is_empty():return false
+    var tracks:Array=actual.current.get("actor_tracks",[]).filter(func(track):return track.actor_uuid==id \
+        and track.get("trace_track_id")==sample.get("trace_track_id") and track.get("terminal_presentation",{}).get("life_event_uuid")==terminal.get("life_event_uuid"))
+    if tracks.size()!=1:return false
+    var track:Dictionary=tracks[0]
+    var begin:float=actual.group_start_ms+float(track.start_ms)
+    var end:float=actual.group_start_ms+(float(track.start_ms)+float(track.duration_ms))
+    if float(track.duration_ms)<=0.0 or actual.display_ms<begin or actual.display_ms>=end \
+        or str(track.get("source_event_uuid"))!=str(terminal.get("life_event_uuid")):return false
+    var projected:Dictionary=Construction.actor_with_loadout(actor,Construction.loadouts({id:sample},[]),actual.state)
+    if projected.get("last_visual_position")==null or not Studio.Play.WorldRows.visible_actor(projected,actual.state):return false
+    var row:Dictionary=world.visual_actors[id].row
+    return Recording.Journal.Protocol._equal(row.position,terminal.position) and row.rig==track.rig and row.life_state=="dead" \
+        and world.playbacks.has(id) and world.playbacks[id].clip==track.clip
+
 func verify_prefix(studio:Control,label:String,allow_atomic_yield:bool=false)->void:
     for pane in [{"world":studio.world,"perspective_id":studio.active_perspective}]:
         var actual=pane.world.timeline
@@ -248,7 +273,7 @@ func verify_prefix(studio:Control,label:String,allow_atomic_yield:bool=false)->v
         check(pane.world.session==null,label+": no live Session")
         for id in actual.state.actors:
             var disclosed=Studio.Play.WorldRows.visible_actor(actual.state.actors[id],actual.state,actual.staged_actors().has(id))
-            check(disclosed or not pane.world.visual_actors.has(id),label+": undisclosed actor absent from native pane")
+            check(disclosed or not pane.world.visual_actors.has(id) or finite_terminal_body(pane.world,id),label+": undisclosed actor absent unless its exact finite Life body is admitted")
     check(studio.world.component_renderer.audio.enabled,label+": selected faction is audible")
     check(studio.world.presentation_errors.is_empty() and not studio.world.publication_failed,label+": displayed native owner has no publication errors")
     for owner in [studio.world]:

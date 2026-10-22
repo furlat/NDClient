@@ -18,7 +18,7 @@ fade_out = 0.6
 immutable_preparation = "res://assets/vfx/extensions/production-review-20261020/sources/7dd1897cdd5ee8a903b9/source_readiness.gd"
 constructor_input = {"kind": "spatial_owner", "component_path": ["wall"], "input_field": "", "cell_input": "wall_assembly", "content_id": "spatial_effect.spell.wall_of_thorns", "contact_behavior_id": "spell.wall_of_thorns"}
 staging_from = "factory@runtime-production-review-20261020-937fdd136d621742"
-extra = {"wall_forms": ["segment"]}
+extra = {"wall_forms": ["segment"], "input_policies": {"review_contacts": {"mode": "not_applicable", "reason": "selected_actual_wall_source_uses_observed_visual_state_contacts"}, "visual_occupants": {"mode": "not_applicable", "reason": "selected_actual_wall_source_uses_observed_visual_state_occupants"}}}
 
 [sub_resource type="Resource" id="Wall1"]
 script = ExtResource("effect")
@@ -35,7 +35,7 @@ fade_out = 0.6
 immutable_preparation = "res://assets/vfx/extensions/production-review-20261020/sources/7dd1897cdd5ee8a903b9/source_readiness.gd"
 constructor_input = {"kind": "spatial_owner", "component_path": ["wall"], "input_field": "", "cell_input": "wall_assembly", "content_id": "spatial_effect.spell.wall_of_thorns", "contact_behavior_id": "spell.wall_of_thorns"}
 staging_from = "factory@runtime-production-review-20261020-937fdd136d621742"
-extra = {"wall_forms": ["ring"]}
+extra = {"wall_forms": ["ring"], "input_policies": {"review_contacts": {"mode": "not_applicable", "reason": "selected_actual_wall_source_uses_observed_visual_state_contacts"}, "visual_occupants": {"mode": "not_applicable", "reason": "selected_actual_wall_source_uses_observed_visual_state_occupants"}}}
 
 [resource]
 script = ExtResource("owner")
