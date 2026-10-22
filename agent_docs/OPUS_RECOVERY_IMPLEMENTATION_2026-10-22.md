@@ -20,6 +20,44 @@ Authority: [corrected recovery plan](OPUS_RECOVERY_AND_COMPLETION_PLAN_2026-10-2
 The plan-only STOPPED statements describe its earlier preparation, not the current
 human-authorized execution.
 
+## Further recovery — blood preparation lookup
+
+`BloodRenderer.prepare` now builds a call-local lookup by receiving-field key
+on the first actual reveal. Both existing preparation passes use ordered
+references to the same retained jobs. New jobs enter the retained list and
+lookup together. Matching still requires the exact source identity and equal
+after-value; worker startup/join, task readiness, group leases, allocation,
+adoption and retirement are unchanged. Empty reveal demand performs no index
+scan. This removes repeated linear searches inherited from Opus, rather than
+restoring an absent Opus mechanism.
+
+The existing exact Fireball four-view preview control passes 352 checks on
+original, candidate and original-control runs. A temporary phase timer isolated
+the optional blood preparation phase and was removed after each run. Median
+CPU time per profiled frame carrying that phase is:
+
+| Preview / owner (ms) | Before | Candidate | Original-code control |
+| --- | ---: | ---: | ---: |
+| Fresh / reference Play | 0.2655 | 0.2115 | 0.252 |
+| Fresh / composed pane | 0.262 | 0.212 | 0.251 |
+| Reset / reference Play | 0.276 | 0.216 | 0.261 |
+| Reset / composed pane | 0.270 | 0.213 | 0.254 |
+
+This supports a modest reduction in preparation CPU. It does **not** establish
+an elapsed-preview speedup: the original-code control completed faster overall
+than the candidate. The profile accumulates calls within each frame; these are
+frame samples, not verified individual-call counts. Cumulative CPU totals also
+span different frame populations.
+The preview and broader performance targets remain open.
+[Raw comparison and scope](../.runtime/performance-recovery-20261022/optional-blood/comparison.json).
+
+The [affected checks](../.runtime/tests/20261022T192819.772545Z/summary.json)
+pass: kernel cache 2,888, native shape preparation 50,714 and native world
+preparation 34. They retain the independent kernel output oracle, copied-value
+adoption, source changes, worker completion and group retirement controls.
+The subsequent [full fast suite](../.runtime/tests/20261022T192911.725664Z/summary.json)
+passes all 208 tests with no leftover test processes.
+
 ## Further recovery — decoded world columns
 
 The resumed recovery removes two repeated operations inside `sdk/fold_world.gd`.

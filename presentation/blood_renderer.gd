@@ -393,14 +393,17 @@ func _start_kernel_jobs(budget:Dictionary)->void:
         for prepared in rows:prepared.task=task
         kernel_jobs.append({"task":task,"rows":rows,"control":control})
 
-func _prepare_kernels(key:String,reveal:Dictionary,pattern:String,group_id:String,budget:Dictionary,asset:Dictionary)->bool:
-    for prepared in kernel_preparations:
-        if prepared.key==key and is_same(prepared.source,asset) and prepared.value==reveal.after:
+func _prepare_kernels(key:String,reveal:Dictionary,pattern:String,group_id:String,budget:Dictionary,asset:Dictionary,prepared_by_key:Dictionary)->bool:
+    for prepared in prepared_by_key.get(key,[]):
+        if is_same(prepared.source,asset) and prepared.value==reveal.after:
             prepared.groups[group_id]=true
             return prepared.task==-1 and prepared.output.has("cache")
     var input={"value":reveal.after,"position":reveal.position.duplicate(),"source":asset,"reveal":reveal,"pattern":pattern}
     var output:Dictionary={}
-    kernel_preparations.append({"key":key,"value":reveal.after,"source":asset,"groups":{group_id:true},"input":input,"output":output,"task":-2})
+    var prepared={"key":key,"value":reveal.after,"source":asset,"groups":{group_id:true},"input":input,"output":output,"task":-2}
+    kernel_preparations.append(prepared)
+    if not prepared_by_key.has(key):prepared_by_key[key]=[]
+    prepared_by_key[key].append(prepared)
     return false
 
 func _adopt_kernel_cache(handle:Dictionary,key:String,value:Dictionary,prefer_landing:bool=false,asset:Dictionary={})->void:
@@ -434,11 +437,20 @@ func prepare(world:Node,groups:Array,budget:Dictionary={})->bool:
             var asset:Dictionary=component.get("asset_metadata",{})
             if asset.is_empty():return false
             sources[str(component.get("residue_id","residue.blood"))]=asset
+    var prepared_by_key:Dictionary={}
+    var preparations_indexed:bool=false
     for group in groups:
         for component in group.get("components",[]):
             if component.kind!="residue_deposit" or component.get("status")=="missing":continue
             var asset:Dictionary=sources[str(component.get("residue_id","residue.blood"))]
-            for reveal in component.reveals:_prepare_kernels(Blood.field_key(reveal.position,str(component.get("residue_id","residue.blood"))),reveal,component.body_release.pattern,group.id,budget,asset)
+            for reveal in component.reveals:
+                if not preparations_indexed:
+                    # Keep exact row references and their matching order for both passes.
+                    for prepared in kernel_preparations:
+                        if not prepared_by_key.has(prepared.key):prepared_by_key[prepared.key]=[]
+                        prepared_by_key[prepared.key].append(prepared)
+                    preparations_indexed=true
+                _prepare_kernels(Blood.field_key(reveal.position,str(component.get("residue_id","residue.blood"))),reveal,component.body_release.pattern,group.id,budget,asset,prepared_by_key)
     _start_kernel_jobs(budget)
     var complete=true
     for group in groups:
@@ -447,7 +459,7 @@ func prepare(world:Node,groups:Array,budget:Dictionary={})->bool:
             var asset:Dictionary=sources[str(component.get("residue_id","residue.blood"))]
             for reveal in component.reveals:
                 var key=Blood.field_key(reveal.position,str(component.get("residue_id","residue.blood")))
-                var shapes_ready:bool=_prepare_kernels(key,reveal,component.body_release.pattern,group.id,budget,asset)
+                var shapes_ready:bool=_prepare_kernels(key,reveal,component.body_release.pattern,group.id,budget,asset,prepared_by_key)
                 complete=complete and shapes_ready
                 if deposits.has(key):continue
                 if not pending_deposits.has(key):
