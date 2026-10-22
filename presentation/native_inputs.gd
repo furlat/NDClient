@@ -249,13 +249,17 @@ static func history_key(world:Node,handle:Dictionary,component:Dictionary)->Arra
     return [world.timeline.initialization_revision,component.get("condition_uuid"),world.quarter,capture_view_key(world),
         world.source_depth,world.source_normals,world.character_light_profile]
 
-static func _history_source_key(capture:Dictionary)->Array:
+static func _history_source_key(capture:Dictionary,world:Node)->Array:
     var value:Dictionary=capture.departure
     # Frames, position, facing and treatment age bind at seeding, not construction.
     # Shared source topology/private layer ownership survives a view recapture.
-    return [capture.rig,capture.clip,value.row.equipment_layers,capture.hidden_slots,
+    var result:Array=[capture.rig,capture.clip,value.row.equipment_layers,capture.hidden_slots,
         value.row.scale,value.row.get("scale_x",1.0),value.layer_samples.map(func(row):return row.get("clip","")),
         value.material.get("ramp",{}).get("texture"),value.material.get("flash",{}).get("material",{}).get("palette",{}).get("noiseSheet")]
+    if world.rigs.get(capture.rig,{}).get("native_banks",false):
+        result.append(capture.world_facing)
+        result.append(value.layer_samples.map(func(row):return [row.get("clip",""),row.get("source_track",{}).get("from_position"),row.get("source_track",{}).get("target_position",row.get("source_track",{}).get("to_position"))]))
+    return result
 
 func prepare_history(world:Node,handle:Dictionary,component:Dictionary,admit:bool=true)->Dictionary:
     var owner:String=str(component.get("condition_uuid",""))
@@ -283,13 +287,13 @@ func prepare_history(world:Node,handle:Dictionary,component:Dictionary,admit:boo
     handle.history_sources=sources
     var representatives:Dictionary={}
     for capture in handle.history_captures:
-        var source_key:Array=_history_source_key(capture)
+        var source_key:Array=_history_source_key(capture,world)
         if representatives.has(source_key):continue
         representatives[source_key]=true
         handle.history_active_sources[source_key]=true
         if not sources.has(source_key):sources[source_key]={"occurrence":handle.occurrence,"clip":handle.clip,"root":handle.root}
         var row:Dictionary=sources[source_key]
-        row.history_draw_captures=handle.history_captures.filter(func(value):return _history_source_key(value)==source_key)
+        row.history_draw_captures=handle.history_captures.filter(func(value):return _history_source_key(value,world)==source_key)
         var bound:Dictionary=component.duplicate(false);bound.logical_pose=row.get("departure_capture",capture)
         var prepared:Dictionary=prepare_departure(world,row,bound)
         if not prepared.ready:return prepared
@@ -321,7 +325,7 @@ func prepare_history_prefix(world:Node,handle:Dictionary,component:Dictionary,re
             if (not urgent and not Effects.Admission.can_mutate()) or not Effects.Admission.begin_mutation():
                 return {"ready":false,"pending":true,"reason":"actor_history_prefix_admission_pending"}
             var capture:Dictionary=captures[cursor]
-            var source:Dictionary=handle.history_sources[_history_source_key(capture)]
+            var source:Dictionary=handle.history_sources[_history_source_key(capture,world)]
             var packet:Dictionary=_private_layer_context(world,source,capture,receiver_depth)
             if not packet.ready:return packet
             if not handle.occurrence.call(handle.clip.input_setters.actor_context,packet.packet):
@@ -417,11 +421,13 @@ static func _departure_metadata(capture:Dictionary,cache:Dictionary,config:Dicti
     for layer in prepared.value:
         if layer.slot=="shadow" or layer.slot in capture.hidden_slots:continue
         var selected:Dictionary=_departure_layer(layer,capture,rig,config.quarter,config.cycle)
-        if not layer.paths.has(selected.clip):output.merge({"complete":true,"reason":"departure_layer_clip_not_authored:"+str(layer.slot)});return
-        var path:String=layer.paths[selected.clip]
+        var path:String=Characters.source_path(layer,selected.clip,selected.facing)
+        if path.is_empty():output.merge({"complete":true,"reason":"departure_layer_clip_not_authored:"+str(layer.slot)});return
         var binding:Dictionary=Construction.prepare_binding(rig,layer,path,cache,config.depth,config.normals,config.profile,
             128.0/float(departure.tile_width)*float(row.scale),float(row.get("scale_x",1.0)))
-        layers[layers.size()]={"layer":layer,"binding":binding,"frame":selected.frame}
+        var index:int=layers.size()
+        layers[index]={"layer":layer,"binding":binding,"frame":selected.frame}
+        if rig.get("native_banks",false):layers[index].facing=selected.facing
         paths[path]=true
         for companion in binding.geometry.textures.values():paths[companion]=true
         var noise:Variant=layer.get("effect",{}).get("palette",{}).get("noiseSheet")
@@ -441,6 +447,7 @@ func prepare_departure(world:Node,handle:Dictionary,component:Dictionary,admit:b
     if capture.is_empty():return {"ready":false,"pending":false,"reason":"condition_original_departure_not_observed"}
     if not str(capture.departure.reason).is_empty():return {"ready":false,"pending":false,"reason":capture.departure.reason}
     var key:Array=[capture,world.source_depth,world.source_normals,world.character_light_profile]
+    if world.rigs.get(capture.rig,{}).get("native_banks",false):key.append(world.quarter)
     if handle.get("departure_key",[])==key and handle.has("departure_entries"):
         handle.departure_draw_status=_prepare_draw_sources(world,handle,handle.get("history_draw_captures",[capture]),admit)
         return handle.departure_draw_status
@@ -592,6 +599,9 @@ func _private_layer_context(world:Node,handle:Dictionary,capture:Dictionary,rece
     for entry in handle.departure_entries:
         var selected:Dictionary=_departure_layer(entry.actor_layer,capture,rig,world.quarter,world.rig_config.FACING_CYCLE)
         var binding:Dictionary=entry.prepared_source_binding
+        if rig.get("native_banks",false):
+            if Characters.source_path(entry.actor_layer,selected.clip,selected.facing)!=binding.path:return {"ready":false,"reason":"departure_native_view_not_prepared"}
+            if not Construction.apply_source_shape(entry,rig,binding.path,binding.get("source_layout",{})):return {"ready":false,"reason":"departure_native_shape_not_prepared"}
         Construction.bind_source_values(entry,rig,binding.path,selected.frame,selected.facing,binding.sheet,binding.sheet_size,
             world.textures,world.resources,parameters)
         entry.node.global_transform=Construction.layer_transform(world.camera.basis,row,rig,capture.departure.motion,entry.role,
@@ -741,7 +751,7 @@ func endpoint_packet(world:Node,handle:Dictionary,component:Dictionary,points:Di
         if socket=="ground" and component.get("native_body_owner",false) and not Sockets.displayed(visual):
             var actual:Dictionary=Sockets.effect_owned_ground(world,component,actor)
             if actual.ready:
-                result.append({"actor":actor if cue.get("endpoint_actor_uuids",false) else selector,"actor_uuid":actor,"socket":socket,"point":actual.point})
+                result.append({"actor":actor if authored.get("endpoint_actor_uuids",cue.get("endpoint_actor_uuids",false)) else selector,"actor_uuid":actor,"socket":socket,"point":actual.point})
                 continue
         if not Sockets.displayed(visual):return {"rows":[],"reason":"native_spell_endpoint_actor_not_displayed"}
         var resolved:Dictionary={"ready":true}
@@ -754,7 +764,7 @@ func endpoint_packet(world:Node,handle:Dictionary,component:Dictionary,points:Di
         if authored.has("optical_miss"):
             resolved=Sockets.miss_point(world,visual.row,resolved.point,authored.optical_miss)
             if not resolved.ready:return {"rows":[],"reason":resolved.reason}
-        var endpoint:Dictionary={"actor":actor if cue.get("endpoint_actor_uuids",false) else selector,"actor_uuid":actor,"socket":socket,"point":resolved.point}
+        var endpoint:Dictionary={"actor":actor if authored.get("endpoint_actor_uuids",cue.get("endpoint_actor_uuids",false)) else selector,"actor_uuid":actor,"socket":socket,"point":resolved.point}
         if authored.get("view_basis",false):endpoint.view_basis=world.camera.global_basis
         if authored.has("surface_slots"):
             var slots:Array=Array(authored.surface_slots)

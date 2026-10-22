@@ -1851,6 +1851,7 @@ func _sync_actor_membership() -> void:
         if prepared.has("condition_parameters"):visual.condition_parameters=prepared.condition_parameters
         if prepared.get("outfit_profile","")==character_light_profile and prepared.has("outfit_clip"):
             visual.outfit_binding=[prepared.outfit_clip,character_light_profile,MediaWarmup.physical(media_warmup).source_revision]
+            if rig.get("native_banks",false):visual.outfit_binding.append(prepared.get("outfit_facing",""))
         visual_actors[id] = visual
     actor_revision = timeline.revision
 
@@ -2335,9 +2336,14 @@ func _release_replay_media() -> void:
 
 func _combined_media_plan(plans:Array)->Dictionary:
     var result={"character":{},"environment":{},"fixtures":{},"gpu_only":{},"cpu_required":{},"normal_sets":{},"errors":[],"source_records":{}}
-    var seen_records:Dictionary={}
+    var seen_records:Dictionary={};var native_cells:Dictionary={}
     for plan in plans:
         for field in ["character","environment","fixtures","gpu_only","cpu_required","normal_sets"]:result[field].merge(plan.get(field,{}))
+        for profile in plan.get("source_families",{}):
+            var cells:Dictionary=plan.source_families[profile].get("native_cells",{})
+            if cells.is_empty():continue
+            if not native_cells.has(profile):native_cells[profile]={}
+            native_cells[profile].merge(cells)
         for issue in plan.get("errors",[]):
             if issue not in result.errors:result.errors.append(issue)
         for profile in plan.get("source_records",{}):
@@ -2345,6 +2351,9 @@ func _combined_media_plan(plans:Array)->Dictionary:
                 result.source_records[profile]=[];seen_records[profile]={}
             MediaWarmup.append_source_records(result.source_records[profile],seen_records[profile],plan.source_records[profile])
     for path in result.cpu_required:result.gpu_only.erase(path)
+    if not native_cells.is_empty():
+        for cells in native_cells.values():cells.make_read_only()
+        native_cells.make_read_only();result.native_cells=native_cells
     return result
 
 func _replay_media_ready(plan:Dictionary)->bool:
@@ -2365,7 +2374,7 @@ func _replay_media_ready(plan:Dictionary)->bool:
         if issue not in presentation_errors:presentation_errors.append(issue)
     return _native_startup_ready(float(plan.display_ms)) and media_metadata_ready and media_issue.is_empty() and media_plan.errors.is_empty() \
         and MediaWarmup.ready(media_warmup,media_plan.required) and _environment_sources_ready() \
-        and MediaWarmup.boot_ready(media_warmup) and native.ready and world_revision>=0 \
+        and MediaWarmup.boot_ready(media_warmup) and native.ready and generated_shadows.source_cells_ready(_character_native_cells()) and world_revision>=0 \
         and not (pending_world!=null and pending_world.admitted)
 
 func _source_group_ready(group:Dictionary)->bool:
@@ -2425,8 +2434,24 @@ func _character_source_paths(group:Dictionary={},at_ms:float=-1.0)->Dictionary:
             paths=CharacterGeometry.for_profile(due,plan.get("normal_sets",media_normal_sets),character_light_profile,catalog_cache,"character_due")
     return paths
 
+func _character_native_cells(group:Dictionary={},at_ms:float=-1.0)->Dictionary:
+    var ready:Dictionary=media_plan.get("projection",{}).get("ready",{})
+    var family:Dictionary=ready.get("source_families",{}).get(character_light_profile,{})
+    var cells:Dictionary=ready.get("native_cells",{}).get(character_light_profile,family.get("native_cells",EMPTY_PATHS))
+    if external_playback:return cells
+    if group.is_empty():group=timeline.current
+    if group.is_empty() and not timeline.queue.is_empty():group=timeline.queue[0]
+    if group.is_empty():return cells
+    var plan:Dictionary=media_group_plans.get(group.id,{})
+    var selected_cells:Dictionary=plan.get("source_families",{}).get(character_light_profile,{}).get("native_cells",EMPTY_PATHS)
+    if selected_cells.is_empty():return selected_cells
+    var start:float=timeline.group_start_ms if is_same(group,timeline.current) else timeline.display_ms
+    start=maxf(start,float(group.get("preview_start_ms",start)))
+    var local:float=(timeline.display_ms if at_ms<0 else at_ms)-start
+    return MediaWarmup.native_cells_at(plan.get("source_cuts",{}).get(character_light_profile,{}),local,selected_cells)
+
 func _character_sources_ready(group:Dictionary={},at_ms:float=-1.0)->bool:
-    return MediaWarmup.ready(media_warmup,_character_source_paths(group,at_ms)) and MediaWarmup.ready(media_warmup,media_condition_paths) and MediaWarmup.ready(media_warmup,native_media_paths)
+    return MediaWarmup.ready(media_warmup,_character_source_paths(group,at_ms)) and MediaWarmup.ready(media_warmup,media_condition_paths) and MediaWarmup.ready(media_warmup,native_media_paths) and generated_shadows.source_cells_ready(_character_native_cells(group,at_ms))
 
 func _environment_source_paths(group:Dictionary={},at_ms:float=-1.0)->Dictionary:
     var paths:Dictionary=media_environment_required
@@ -2663,6 +2688,12 @@ func _warm_media(required_only:bool=false,budget:Dictionary={},through_ms:float=
     # boundary can be prepared during its preceding animation.
     var required_at:float=maxf(timeline.display_ms,timeline.media_target_ms) if through_ms<0 else through_ms
     var due:Dictionary=_prioritize_media(required_at)
+    var native_cells:Dictionary=_character_native_cells({},required_at)
+    if not native_cells.is_empty():
+        var shape_started:int=Time.get_ticks_usec();var shape_before:int=budget.get("used_usec",0)
+        generated_shadows.prepare_source_cells(native_cells,budget)
+        _charge_preparation("native_body_cells",shape_started,shape_before)
+        FrameProfile.end_phase(profile,"native_body_cells",shape_started)
     var background_handoff:bool=false
     if required_only and media_metadata_ready and MediaWarmup.ready(media_warmup,due):
         # Completed private textures release finite decode slots independently
@@ -2860,6 +2891,7 @@ func _sample_actors() -> void:
             continue
         visual.sampled_pose={"key":pose_key,"parameters":material_parameters,"body_scale":material_state.body_scale}
         var binding_key:Array=[playback.clip,character_light_profile,MediaWarmup.physical(media_warmup).source_revision]
+        if rig.get("native_banks",false):binding_key.append(facing)
         var check_outfit:bool=layer_sample_actors.has(id) or visual.get("outfit_binding",[])!=binding_key
         var complete_outfit = true
         if check_outfit:sampling_counts.validated_outfits+=1
@@ -2868,8 +2900,9 @@ func _sample_actors() -> void:
                 var layer: Dictionary = entry.actor_layer
                 var effect: Dictionary=layer_samples.get(layer.get("effect",{}).get("component_id"),{})
                 var layer_clip: String=effect.get("clip",playback.clip)
-                if not layer.paths.has(layer_clip) or layer.slot in sample.get("hidden_slots",[]): continue
-                var path: String = layer.paths[layer_clip]
+                if not Characters.has_clip(layer,layer_clip) or layer.slot in sample.get("hidden_slots",[]): continue
+                var selected_facing:String=ActorConstruction.layer_facing(facing,effect,quarter,cycle)
+                var path:String=Characters.source_path(layer,layer_clip,selected_facing)
                 if not textures.has(path) or not source_images.has(path): complete_outfit = false; break
                 for companion in CharacterGeometry.paths(path,layer.slot,catalog_cache,character_light_profile):
                     if not textures.has(companion): complete_outfit = false; break
@@ -2898,11 +2931,11 @@ func _sample_actors() -> void:
                 if from!=null and to!=null:
                     var direction=Vector2(to[0]-from[0],to[1]-from[1])
                     if not direction.is_zero_approx():layer_facing=cycle[posmod(cycle.find(_facing(direction))+quarter*2,8)]
-            entry.node.visible = show and layer.paths.has(layer_clip) and not layer.slot in sample.get("hidden_slots",[])
+            entry.node.visible = show and Characters.has_clip(layer,layer_clip) and not layer.slot in sample.get("hidden_slots",[])
             if not entry.node.visible:
                 FrameProfile.end_phase(profile,"actor_sprite_layer_selection",selection_started)
                 continue
-            var path: String = layer.paths[layer_clip]
+            var path:String=Characters.source_path(layer,layer_clip,layer_facing)
             # Current sampling never falls back to synchronous disk/decode.
             # A missing initial sheet remains hidden until preparation finishes;
             # an active group's full exact demand was gated before its commits.
@@ -2913,9 +2946,16 @@ func _sample_actors() -> void:
             MediaWarmup.touch(media_warmup,path)
             FrameProfile.end_phase(profile,"actor_sprite_layer_selection",selection_started)
             sampling_counts.visible_layers+=1
+            if rig.get("native_banks",false):entry.source_frame_loop=Tracks.character_loops(rig,layer_clip)
             var source_version_before:int=entry.get("source_version",0)
             var bind_started:int=Time.get_ticks_usec()
-            ActorConstruction.bind_source(self,entry,rig,path,layer_frame,layer_facing,material_parameters)
+            if not ActorConstruction.bind_source(self,entry,rig,path,layer_frame,layer_facing,material_parameters):
+                entry.node.hide();visual.erase("sampled_pose")
+                FrameProfile.end_phase(profile,"actor_sprite_binding",bind_started)
+                var message:String="Character native source shape was not privately prepared: "+id+"/"+path
+                if message not in presentation_errors:presentation_errors.append(message)
+                media_issue=message
+                continue
             FrameProfile.end_phase(profile,"actor_sprite_binding",bind_started)
             if source_version_before!=int(entry.get("source_version",0)):
                 sampling_counts.source_changes+=1
@@ -3496,6 +3536,10 @@ func _prepare_rotation() -> void:
     # view, input and the authoritative presentation clock keep running.
     if not retiring_views.is_empty(): return
     if not rotation_pending() or not _environment_media_ready(): return
+    var native_cells:Dictionary=_character_native_cells({},timeline.display_ms)
+    if not generated_shadows.source_cells_ready(native_cells):
+        generated_shadows.prepare_source_cells(native_cells,budget)
+        return
     if pending_view != null and pending_view.generation != world_generation: _cancel_rotation()
     if pending_view == null:
         if static_views.has(requested_quarter):

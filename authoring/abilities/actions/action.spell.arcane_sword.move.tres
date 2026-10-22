@@ -8,7 +8,7 @@
 [sub_resource type="Resource" id="Resource_w62rs"]
 script = ExtResource("1_jtlta")
 role = "cast"
-enabled = false
+clip = "Special1"
 hidden_slots = PackedStringArray()
 
 [sub_resource type="Resource" id="Resource_rypj3"]
@@ -22,9 +22,11 @@ source = "Existing Arcane Sword spell glyph deliberately shared by its repositio
 [resource]
 script = ExtResource("1_gr7bu")
 id = "action.spell.arcane_sword.move"
+disposition = "authored"
 kind = "action"
 family = "spell"
 icon = SubResource("Resource_rypj3")
 body = SubResource("Resource_w62rs")
 effect_sources = PackedStringArray()
-notes = "Body role from the server's body kind (area_ability); the rig resolves it to a clip once roles are built (coverage fill)."
+notes = "Deliberate existing Special1 caster command gesture, without invented contact/release. The retained sword anchor remains a separate incomplete consumer: pinned public ActionFact.target_position is not populated by MoveArcaneSword and its condition snapshot omits private position. No command trace, caster position or recipient proximity substitutes for that anchor. This provisional gesture does not qualify sword movement; all art/audio remain unreviewed."
+status = "partial"

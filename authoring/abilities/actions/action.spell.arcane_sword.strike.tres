@@ -8,7 +8,7 @@
 [sub_resource type="Resource" id="Resource_jxosg"]
 script = ExtResource("1_rxrxy")
 role = "cast"
-enabled = false
+clip = "Special1"
 hidden_slots = PackedStringArray()
 
 [sub_resource type="Resource" id="Resource_dpw68"]
@@ -20,9 +20,12 @@ source = "ui-delivery-20261018 srd22.action.arcane_sword.repeat"
 [resource]
 script = ExtResource("1_lki7j")
 id = "action.spell.arcane_sword.strike"
+disposition = "authored"
 kind = "action"
 family = "spell"
 icon = SubResource("Resource_dpw68")
 body = SubResource("Resource_jxosg")
+body_fact_kind = "spell"
 effect_sources = PackedStringArray()
-notes = "Body role from the server's body kind (targeted_ability); the rig resolves it to a clip once roles are built (coverage fill)."
+notes = "Deliberate existing Special1 caster command gesture, without invented contact/release. The actual recorded repeat is SpellFact with this Action behavior identity and actual attack_outcome; body_fact_kind selects the existing Action body scheduler without rewriting that fact. The independent blade anchor remains unbound because the actual public fact exposes caster source_position, not private effect_source_position. No command trace/caster/victim position substitutes for the blade. This gesture does not qualify independent-blade placement/contact; all art/audio remain unreviewed."
+status = "partial"

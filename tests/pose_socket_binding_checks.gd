@@ -98,6 +98,25 @@ func run()->void:
     var mapped:Dictionary=Sockets.pose_point(world,row,"hand",{"Taunt":"clasped_hands"})
     var packet:Dictionary=inputs.endpoint_packet(world,{"root":drawn},mapped_component,{},{})
     check(packet.reason.is_empty() and packet.rows[0].point.is_equal_approx(mapped.point),"Other endpoint roles use the same per-clip socket contract")
+    # Existing cue-wide labels remain default; one receiving source needs
+    # a literal caster alias beside the actual recipient UUID in the tuple.
+    mapped_component.native_cue.live_endpoints=[
+        {"actor":"caster","socket":"cast_hand"},
+        {"actor":"target","socket":"body_center","pose_socket":"hand","pose_socket_by_clip":{"Taunt":"clasped_hands"}}]
+    packet=inputs.endpoint_packet(world,{"root":drawn},mapped_component,{"hand":mapped.point},{})
+    check(packet.reason.is_empty() and packet.rows.map(func(endpoint):return endpoint.actor)==["caster","target"],
+        "Default cue retains logical labels for both actual endpoint roles")
+    mapped_component.native_cue.endpoint_actor_uuids=true
+    packet=inputs.endpoint_packet(world,{"root":drawn},mapped_component,{"hand":mapped.point},{})
+    check(packet.reason.is_empty() and packet.rows.map(func(endpoint):return endpoint.actor)==["actual_actor","actual_actor"],
+        "Existing whole-cue UUID mode retains both actual identities")
+    mapped_component.native_cue.endpoint_actor_uuids=false
+    mapped_component.native_cue.live_endpoints[1].endpoint_actor_uuids=true
+    packet=inputs.endpoint_packet(world,{"root":drawn},mapped_component,{"hand":mapped.point},{})
+    check(packet.reason.is_empty() and packet.rows.map(func(endpoint):return endpoint.actor)==["caster","actual_actor"] \
+        and packet.rows.all(func(endpoint):return endpoint.actor_uuid=="actual_actor") \
+        and packet.rows[0].point.is_equal_approx(mapped.point) and packet.rows[1].point.is_equal_approx(mapped.point),
+        "Per-endpoint opt-in mixes caster alias and recipient UUID without changing actual point provenance")
     # Actual shipping Special1/SW contains one null other-hand frame between
     # two real markers. Null intervals remain hidden on the same body clock;
     # absent channels and fixed release-frame authoring still refuse.

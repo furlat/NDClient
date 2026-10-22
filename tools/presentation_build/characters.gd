@@ -134,6 +134,7 @@ static func _check_rigs(state: Dictionary) -> void:
             for marker in clip.markers:
                 if clip.markers[marker] < 0 or clip.markers[marker] >= clip.frames:Common.error(report, at, "marker %s outside the clip's %d frames" % [marker, clip.frames])
             for layer in clip.art:Common.asset(report, at, clip.art[layer])
+            if not clip.body_banks.is_empty():_check_body_banks(state,rig,clip,at)
             if clip.surface != null and clip.surface.encoding != "none":
                 _check_normal_profile(clip.surface,report,at)
                 _check_camera_origins(clip.surface,report,at,Array(rig.direction_order))
@@ -150,7 +151,51 @@ static func _check_rigs(state: Dictionary) -> void:
             if context.enabled and not names.has(context.clip):Common.error(report, where, context.role + " context names a missing clip: " + context.clip)
         Common.asset(report, where, rig.measurements)
 
-## The rigs the game binds: the player body's (root) and each creature's, by content id.
+## Validate actual native banks before emitting any source Resources.
+static func _check_body_banks(state:Dictionary,rig:Resource,clip:Resource,where:String)->void:
+    var report:Dictionary=state.report
+    if rig.kind=="layered" or not rig.slot_categories.has("body"):
+        Common.error(report,where,"native body banks require an own-sheet body slot")
+    if clip.body_banks.size()!=rig.direction_order.size():Common.error(report,where,"native body banks must name every declared facing")
+    if rig.pivot.x!=float(rig.cell.x)*.5:Common.error(report,where,"native registered reference requires the supported horizontal-centre contact")
+    if not state.has("bank_definitions"):state.bank_definitions={}
+    for facing in clip.body_banks:
+        var at:String=where+"/"+facing
+        var art:Resource=clip.body_banks[facing]
+        if facing not in rig.direction_order:Common.error(report,at,"native bank names an unknown facing")
+        if art==null:Common.error(report,at,"missing native bank");continue
+        if art.container!="atlas" or art.directions!="single" or not art.files.is_empty():Common.error(report,at,"native body bank requires one actual atlas")
+        if art.frames!=clip.frames or art.fps!=clip.fps or art.rects.size()!=clip.frames:Common.error(report,at,"native body bank must retain the clip frame clock and exact frame rectangles")
+        if art.cell.x<=0 or art.cell.y<=0 or not art.pivot.is_finite() or art.scale!=1.0:Common.error(report,at,"native bank cell/contact must be finite with unscaled pixels")
+        var registered:=Rect2(rig.pivot-art.pivot,Vector2(art.cell))
+        if not Rect2(Vector2.ZERO,Vector2(rig.cell)).encloses(registered):
+            Common.error(report,at,"native bank crop exceeds its declared registered reference canvas")
+        if not Common.asset(report,at,art.path):continue
+        var size:Dictionary=_header(state,_res(art.path))
+        if size.has("error"):Common.error(report,at,size.error);continue
+        var bounds:=Rect2i(Vector2i.ZERO,Vector2i(size.width,size.height))
+        for rect in art.rects:
+            if rect.size!=art.cell or not bounds.encloses(rect):Common.error(report,at,"native frame rectangle differs from its cell or exceeds the actual PNG")
+        var surface:Resource=art.surface
+        if surface==null or surface.encoding!="normal_rgb_depth_byte":Common.error(report,at,"native body needs its declared optical surface");continue
+        _check_normal_profile(surface,report,at)
+        var normal_profile:String="original" if surface.normal_profile.is_empty() else surface.normal_profile
+        if not surface.normals.has(normal_profile) or str(surface.normals[normal_profile]).is_empty():Common.error(report,at,"native surface has no actual selected normal map")
+        _check_camera_origins(surface,report,at,[facing])
+        if not surface.camera_origin.is_finite() or not is_finite(surface.optical_ground_pixels) or surface.depth_range.y<=surface.depth_range.x or surface.depth_byte_range!=Vector2i(32,224):
+            Common.error(report,at,"native surface must retain explicit optical registration and supported depth encoding")
+        if surface.sampling_scale!=1.0 or surface.sampling_offset!=Vector2.ZERO:Common.error(report,at,"native companions must retain the same pixel grid")
+        for field in ["support","normal_valid"]:
+            if not surface.masks.has(field):Common.error(report,at,"native surface missing actual mask: "+field)
+        for path in [surface.depth]+surface.normals.values()+surface.masks.values():
+            if Common.asset(report,at,path) and _header(state,_res(path))!=size:Common.error(report,at,"native companion size differs from actual bank: "+path)
+        var definition:Array=[art.cell,art.pivot,art.rects,art.frames,art.fps,art.camera_elevation_degrees,surface.encoding,surface.depth,
+            surface.normals,surface.normal_profile,surface.masks,surface.depth_range,surface.depth_byte_range,surface.camera_origin,surface.camera_origins,surface.optical_ground_pixels]
+        var colour:String=_res(art.path)
+        if state.bank_definitions.has(colour) and state.bank_definitions[colour]!=definition:Common.error(report,at,"one physical native colour path has conflicting layout/surface definitions")
+        else:state.bank_definitions[colour]=definition
+
+## The rigs the game binds: the player's (root) and each creature's, by content id.
 static func _check_characters(state: Dictionary, characters: Dictionary) -> Dictionary:
     var report: Dictionary = state.report
     var result := {"root": "", "creatures": {}, "effects":{}}
@@ -265,6 +310,13 @@ static func _rig_record(state: Dictionary, rig: Resource) -> Dictionary:
     for clip in rig.clips:
         var value := {"source_clip": clip.source_clip, "frames": clip.frames, "fps": clip.fps, "sheets": _clip_sheets(state, rig, clip)}
         if clip.loop != "rig":value.loop = clip.loop == "loop"
+        if not clip.body_banks.is_empty():
+            var shapes:Dictionary={}
+            for facing in clip.body_banks:
+                var bank:Resource=clip.body_banks[facing]
+                shapes[facing]={"path":_res(bank.path),"cell":[bank.cell.x,bank.cell.y],"pivot":[bank.pivot.x,bank.pivot.y]}
+            value.bank_shapes=shapes
+            record.native_banks=true
         if not clip.effect_layers.is_empty():
             var layers := []
             for category in clip.effect_layers:layers.append({"slot": _slot_of(rig, category), "category": category, "enabled": clip.effect_layers[category]})
@@ -305,6 +357,10 @@ static func _slot_of(rig: Resource, category: String) -> String:
 ## plus the effect parts the clip names.
 static func _clip_sheets(state: Dictionary, rig: Resource, clip: Resource) -> Dictionary:
     var result := {}
+    if not clip.body_banks.is_empty():
+        for category in clip.sheets:result[category]=clip.sheets[category]
+        for category in rig.slot_categories.get("body",[]):result[category]="/rigs/"+rig.id+"/body/"+clip.name+".png"
+        return result
     if not clip.sheets.is_empty() or rig.kind != "layered":
         for category in clip.sheets:result[category] = clip.sheets[category]
         return result
@@ -423,6 +479,47 @@ static func _resolve(state: Dictionary, rig: Resource, clip: Resource, key: Stri
         return {}
     return {"raw": _res(clip.art[slot]), "colour": _res(clip.art[slot]), "geometry": {}}
 
+## One exact native view, using only the shared ArtSource/Surface schema.
+static func _bank_descriptor(state:Dictionary,rig:Resource,clip:Resource,facing:String)->Dictionary:
+    var art:Resource=clip.body_banks[facing];var surface:Resource=art.surface
+    var geometry:Dictionary={"status":art.status,"role":"body","slots":["body"],"_source_root":ROOT,
+        "files":{"depth":surface.depth,"normal":surface.normals.get("original" if surface.normal_profile.is_empty() else surface.normal_profile,""),
+            "support":surface.masks.support,"normal_valid":surface.masks.normal_valid},
+        "normal_profiles":surface.normals.duplicate(),"depth_range":[surface.depth_range.x,surface.depth_range.y],
+        "depth_byte_range":[surface.depth_byte_range.x,surface.depth_byte_range.y],"optical_camera":_optical_camera(surface,art.camera_elevation_degrees),
+        "cell_size":[art.cell.x,art.cell.y],"frames":clip.frames,"source_coverage":surface.coverage,
+        "optical_ground_pixels":surface.optical_ground_pixels}
+    if not surface.normal_profile.is_empty():geometry.normal_profile=surface.normal_profile
+    # No reference/solid contract is inferred from a normal-admission mask.
+    var descriptor:Dictionary=_descriptor(state,_res(art.path),geometry)
+    var frames:Array=[]
+    for rect in art.rects:frames.append([rect.position.x,rect.position.y,rect.size.x,rect.size.y])
+    var header:Dictionary=_header(state,descriptor.path)
+    descriptor.source_layout=_plain({"cell":[art.cell.x,art.cell.y],"pivot":[art.pivot.x,art.pivot.y],
+        "frame_rects":frames,"sheet_size":[header.width,header.height]})
+    return descriptor
+
+static func _bank_slot(state:Dictionary,rig:Resource,clip:Resource,name:String,slot:String,layer:Resource,path:String,selected:Resource,record:Dictionary)->void:
+    var banks:Dictionary={};var views:Dictionary={}
+    for facing in rig.direction_order:
+        var descriptor:Dictionary=_bank_descriptor(state,rig,clip,facing)
+        var colour:String=descriptor.path
+        for profile in descriptor.source_records:
+            descriptor.source_records[profile].source_id=StringName(path+"::"+name+"/"+slot+"/"+facing+"/"+profile)
+            descriptor.source_records[profile].native_body_cell=descriptor.source_layout.cell
+            descriptor.source_records[profile].native_body_colour=colour
+        descriptor.native_record.source_id=StringName(path+"::"+name+"/"+slot+"/"+facing+"/native")
+        banks[colour]=descriptor;views[facing]=colour;state.descriptors+=1
+        if descriptor.geometry.get("optical_ground_pixels")==null:record.generated_shadow=false
+        var all:Dictionary={colour:true};all.merge(descriptor.companions)
+        for file in all:
+            layer.headers[file]=_header(state,file)
+            if not state.index.source_owners.has(file):state.index.source_owners[file]=[path,name]
+    selected.descriptors[slot]={"banks":banks}
+    layer.clips[name][slot]={"banks":views}
+    if not layer.bank_paths_by_slot.has(slot):layer.bank_paths_by_slot[slot]={}
+    layer.bank_paths_by_slot[slot][name]=views
+
 static func _rig(state: Dictionary, rig: Resource) -> void:
     var index: Index = state.index
     var record: Dictionary = _rig_record(state, rig)
@@ -449,6 +546,9 @@ static func _rig(state: Dictionary, rig: Resource) -> void:
             var selected := Clip.new()
             var clip_path: String = state.out.path_join(rig.id + "--" + category + "--" + name + ".res")
             for slot in categories[category]:
+                if slot=="body" and not clip.body_banks.is_empty():
+                    _bank_slot(state,rig,clip,name,slot,layer,path,selected,record)
+                    continue
                 var resolved: Dictionary = _resolve(state, rig, clip, key, slot)
                 if resolved.is_empty():continue
                 var colour: String = resolved.colour

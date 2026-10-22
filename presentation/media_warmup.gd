@@ -660,7 +660,10 @@ static func _source_partition(record:Dictionary,roles:Dictionary,reuse:Dictionar
                 if not reuse.current.has(prior):reuse.current.append(prior)
                 return prior.value
     roles.make_read_only()
-    var selected:Dictionary={"roles":roles};selected.make_read_only()
+    var selected:Dictionary={"roles":roles}
+    if record.has("native_body_cell") and roles.has(record.native_body_colour):
+        selected.native_body_cell=record.native_body_cell;selected.native_body_colour=record.native_body_colour
+    selected.make_read_only()
     reuse.current.append({"source":record,"roles":roles,"value":selected})
     return selected
 
@@ -684,20 +687,38 @@ static func _source_cut_schedule(records:Array,character_times:Dictionary,enviro
                 # its immutable role rows, without inventing a physical ID.
                 by_time[at].append(_source_partition(record,partitions[at],reuse))
     var initial:Array=by_time.get(0.0,[]);initial.make_read_only()
+    var initial_cells:Dictionary={}
+    for record in initial:
+        if record.has("native_body_cell"):initial_cells[Vector2i(record.native_body_cell[0],record.native_body_cell[1])]=true
+    initial_cells.make_read_only()
+    var cells:Dictionary=initial_cells
     var changes:Array=[]
     var keys:Array=by_time.keys();keys.sort()
     var cumulative:Array=initial
     for at in keys:
         if at<=0:continue
         cumulative=cumulative.duplicate();cumulative.append_array(by_time[at]);cumulative.make_read_only()
-        var change:Dictionary={"at_ms":at,"records":cumulative};change.make_read_only();changes.append(change)
+        var next_cells:Dictionary=cells
+        for record in by_time[at]:
+            if not record.has("native_body_cell"):continue
+            var cell:=Vector2i(record.native_body_cell[0],record.native_body_cell[1])
+            if next_cells.has(cell):continue
+            if is_same(next_cells,cells):next_cells=cells.duplicate()
+            next_cells[cell]=true
+        next_cells.make_read_only();cells=next_cells
+        var change:Dictionary={"at_ms":at,"records":cumulative}
+        if not cells.is_empty():change.native_cells=cells
+        change.make_read_only();changes.append(change)
     changes.make_read_only()
-    var schedule:Dictionary={"initial":initial,"changes":changes};schedule.make_read_only()
+    var schedule:Dictionary={"initial":initial,"changes":changes}
+    if not initial_cells.is_empty():schedule.initial_native_cells=initial_cells
+    schedule.make_read_only()
     return schedule
 
 static func _source_family(records:Array,sizes:Dictionary)->Dictionary:
-    var paths:Dictionary={};var environment:Dictionary={};var fixtures:Dictionary={};var cpu:Dictionary={};var gpu:Dictionary={}
+    var paths:Dictionary={};var environment:Dictionary={};var fixtures:Dictionary={};var cpu:Dictionary={};var gpu:Dictionary={};var native_cells:Dictionary={}
     for record in records:
+        if record.has("native_body_cell"):native_cells[Vector2i(record.native_body_cell[0],record.native_body_cell[1])]=true
         for path in record.roles:
             var role:Array=record.roles[path]
             paths[path]=role[0]
@@ -709,7 +730,9 @@ static func _source_family(records:Array,sizes:Dictionary)->Dictionary:
     var ordered:Array=paths.keys();ordered.make_read_only()
     for values in [paths,environment,fixtures,cpu,gpu]:values.make_read_only()
     var family:Dictionary={"paths":paths,"environment":environment,"fixtures":fixtures,"cpu_required":cpu,"gpu_only":gpu,
-        "ordered_paths":ordered,"source_sizes":sizes};family.make_read_only()
+        "ordered_paths":ordered,"source_sizes":sizes}
+    if not native_cells.is_empty():native_cells.make_read_only();family.native_cells=native_cells
+    family.make_read_only()
     return family
 
 static func _retained_source_family(records:Array,sizes:Dictionary,cache:Dictionary)->Dictionary:
@@ -727,16 +750,19 @@ static func _combine_source_families(parts:Array)->Dictionary:
     # their native maps only for a new selection, instead of re-walking every
     # descriptor and header once per profile on every operation.
     var paths:Dictionary={};var environment:Dictionary={};var fixtures:Dictionary={}
-    var cpu:Dictionary={};var gpu:Dictionary={};var sizes:Dictionary={}
+    var cpu:Dictionary={};var gpu:Dictionary={};var sizes:Dictionary={};var native_cells:Dictionary={}
     for part in parts:
         if part.is_empty():continue
         paths.merge(part.paths,false);environment.merge(part.environment);fixtures.merge(part.fixtures)
         cpu.merge(part.cpu_required);gpu.merge(part.gpu_only);sizes.merge(part.source_sizes)
+        native_cells.merge(part.get("native_cells",{}))
     for path in cpu:gpu.erase(path)
     var ordered:Array=paths.keys();ordered.make_read_only()
     for values in [paths,environment,fixtures,cpu,gpu,sizes]:values.make_read_only()
     var family:Dictionary={"paths":paths,"environment":environment,"fixtures":fixtures,"cpu_required":cpu,
-        "gpu_only":gpu,"ordered_paths":ordered,"source_sizes":sizes};family.make_read_only()
+        "gpu_only":gpu,"ordered_paths":ordered,"source_sizes":sizes}
+    if not native_cells.is_empty():native_cells.make_read_only();family.native_cells=native_cells
+    family.make_read_only()
     return family
 
 static func _source_publications(plan:Dictionary,cache:Dictionary,initial_only:bool=false)->void:
@@ -753,12 +779,16 @@ static func _source_publications(plan:Dictionary,cache:Dictionary,initial_only:b
         var profile_cuts:Dictionary={};var profile_families:Dictionary={};var profile_paths:Dictionary={}
         for profile in plan.source_records[id]:
             var records:Array=plan.source_records[id][profile]
+            var family:Dictionary=_retained_source_family(records,sizes,cache)
             if initial_only:
                 var changes:Array=[];changes.make_read_only()
-                var opening:Dictionary={"initial":records,"changes":changes};opening.make_read_only()
+                var opening:Dictionary={"initial":records,"changes":changes}
+                var cells:Dictionary=family.get("native_cells",{})
+                if not cells.is_empty():opening.initial_native_cells=cells
+                opening.make_read_only()
                 profile_cuts[profile]=opening
             else:profile_cuts[profile]=_source_cut_schedule(records,character_times,environment_times,reuse)
-            profile_families[profile]=_retained_source_family(records,sizes,cache)
+            profile_families[profile]=family
             # The existing union owner also owns its profile projection. Turn,
             # HP and log packets can select the same immutable source union;
             # their distinct operation clocks need no new path-map identity.
@@ -792,6 +822,15 @@ static func records_at(schedule:Dictionary,local_ms:float,fallback:Array=[])->Ar
         if float(change.at_ms)>local_ms+0.000001:break
         records=change.records
     return records
+
+## Same existing cut clock, projected on the metadata worker. No source scan.
+static func native_cells_at(schedule:Dictionary,local_ms:float,fallback:Dictionary)->Dictionary:
+    if not schedule.has("initial"):return fallback
+    var cells:Dictionary=schedule.get("initial_native_cells",{})
+    for change in schedule.changes:
+        if float(change.at_ms)>local_ms+0.000001:break
+        if change.has("native_cells"):cells=change.native_cells
+    return cells
 
 static func _character_assets(character:Dictionary,groups:Array,state:Dictionary,cache:Dictionary)->Dictionary:
     # Borrow completed actor packet families, not the unfinished combined plan.

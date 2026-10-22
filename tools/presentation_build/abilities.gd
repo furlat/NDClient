@@ -162,6 +162,11 @@ static func documents(entries: Dictionary, paths: Dictionary = {}) -> Dictionary
             var binding: Dictionary = bindings.get(id, {})
             binding.applies_conditions = Array(e.applies_conditions)
             bindings[id] = binding
+        if not e.body_fact_kind.is_empty():
+            var binding:Dictionary=bindings.get(id,{})
+            binding.body_fact_kind=e.body_fact_kind
+            binding.body_fact_kind_source=str(paths.get("actions",{}).get(id,""))+"::body_fact_kind"
+            bindings[id]=binding
         if not e.delivers_spell.is_empty():deliveries[id] = e.delivers_spell
     docs["catalog/body_action_recipes.json"] = _ordered(order, "catalog/body_action_recipes.json", bodies)
     docs["catalog/shove_recipes.json"] = _ordered(order, "catalog/shove_recipes.json", shoves)
@@ -608,6 +613,10 @@ static func _validate(entries: Dictionary, report: Dictionary) -> void:
     for id in entries.get("actions", {}):
         var e: Resource = entries.actions[id]
         var where: String = "abilities/actions/" + id
+        if e.body_fact_kind not in ["","spell"] or not e.body_fact_kind.is_empty() and (e.kind!="action" \
+            or not Common.server_ids().get("ids",{}).get("action",{}).has(id) \
+            or e.body==null or not e.body.enabled or e.body.clip.is_empty() or e.disposition!="authored"):
+            Common.error(report,where,"body fact selector needs an actual catalog Action and explicit authored body for its public SpellFact")
         if e.body!=null and e.body.enabled and not e.body.clip.is_empty() and e.disposition.is_empty():
             Common.error(report,where,"selected enabled body requires an explicit disposition; otherwise its recipe is not emitted")
         for outcome in e.reaction_feedback:
@@ -830,7 +839,7 @@ static func _check_constructor(use:Resource,where:String,clips:Dictionary,report
         if binding.get("outcome") not in ["cast","attack","heal","damage","removal","revival","condition_application"] or use.scope not in ["source","recipient","cast"] or binding.get("geometry_actor") not in ["caster","target"]:
             Common.error(report,where,"observed event needs an outcome, declared event scope and actual geometry role");return
         var projection:String=str(binding.get("projection","event"))
-        if projection not in ["event","owned_outcome","condition_outcome","owner_activity","spatial_contact","applied_contact","cast_completion","healing_return","owned_fire_contact","finite_contact","condition_set_outcome","condition_contact","immediate_blast","retired_payload_blast","breath_grant","breath_exhale","weapon_component","quarry_application","attack_attempt","effective_handler","accepted_area_blast","portable_payload_blast","prismatic_outcomes","spatial_fire_contact"] \
+        if projection not in ["event","owned_outcome","condition_outcome","owner_activity","spatial_contact","applied_contact","cast_completion","healing_return","owned_fire_contact","finite_contact","condition_set_outcome","condition_contact","immediate_blast","retired_payload_blast","breath_grant","breath_exhale","weapon_component","quarry_application","attack_attempt","owner_removal","effective_handler","accepted_area_blast","portable_payload_blast","prismatic_outcomes","spatial_fire_contact"] \
             or projection in ["applied_contact","cast_completion"] and use.scope!="cast" \
             or projection=="applied_contact" and (binding.outcome!="damage" or str(binding.get("damage_type","")).is_empty() or use.at!="cast" or use.delay!=0.0) \
             or projection=="cast_completion" and (binding.outcome!="cast" or binding.get("recipient_role")!="target") \
@@ -889,6 +898,12 @@ static func _check_constructor(use:Resource,where:String,clips:Dictionary,report
                 or use.scope!="cast" or use.at!=("event.start" if retained else "cast") or use.delay!=0.0 \
                 or use.role!="attached" or binding.get("component_path")!=["owned_quarry"] or binding.get("input_field")!="":
                 Common.error(report,where,"quarry application needs its exact created or retained root and actual recipient admission");return
+        if projection=="owner_removal" and (binding.outcome!="removal" or use.scope!="recipient" or use.at!="event.start" \
+            or use.delay!=0.0 or use.role!="attached" or binding.get("input_field")!="" \
+            or not Common.server_ids().get("ids",{}).get("action",{}).has(binding.get("behavior_id")) \
+            or not Common.server_ids().get("ids",{}).get("condition",{}).has(binding.get("owner_condition_id")) \
+            or binding.geometry_actor!="target"):
+            Common.error(report,where,"owner removal needs an actual consumed caster member and exact committed recipient/removal role");return
         if projection=="attack_attempt" and (binding.outcome!="attack" or use.scope!="cast" or use.at!="event.start" \
             or use.delay!=0.0 or use.role!="attached" or binding.get("input_field")!="" \
             or not Common.server_ids().get("ids",{}).get("action",{}).has(binding.get("behavior_id")) \
@@ -1147,6 +1162,11 @@ static func _check_constructor(use:Resource,where:String,clips:Dictionary,report
                 var policies:Dictionary=use.extra.get("input_policies",{})
                 if smite and policies!={"condition_input":{"mode":"not_applicable","reason":"selected_smite_impact_does_not_consume_condition"},"tick_input":{"mode":"not_applicable","reason":"selected_smite_impact_does_not_consume_tick"}}:
                     Common.error(report,where,"smite finite impact must expose unused condition/tick methods accurately")
+            elif projection=="owner_removal":
+                if input.get("mode")!="response" \
+                    or not ["lease_input","event_input"].all(func(channel):return channel in clips[use.clip].get("inputs",[])) \
+                    or use.extra.get("input_policies",{})!={"lease_input":{"mode":"not_applicable","reason":"selected_response_consumes_actual_removal_event_without_held_lease"}}:
+                    Common.error(report,where,"owner removal needs the selected finite event-owned response and explicitly unused held-lease method")
             elif projection=="attack_attempt":
                 if input.get("phase")!="strike" or not ["owner_state","targets"].all(func(channel):return channel in clips[use.clip].get("inputs",[])):
                     Common.error(report,where,"attack attempt needs the selected autonomous strike source interface")

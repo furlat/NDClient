@@ -199,6 +199,12 @@ static func _selectors(value:Dictionary)->Dictionary:
 static func recipe(value:Dictionary,source:String,events:Array=[],cache:Dictionary={})->Array:
     var result:Array=[]
     if value.get("disposition")=="state_only":return result
+    if not str(value.get("bodyFactKind","")).is_empty():
+        var dispatch=row("body_fact_dispatch","Actual fact selects Action body",source+"/bodyFactKind","implemented","projected",[value.bodyFactKind],"source",
+            "The exact actual fact kind selects this Action's body gesture and source clock only. The public fact, outcome, ancestry and normal spell/native delivery processing remain unchanged.")
+        dispatch.authored_fact_kind=value.bodyFactKind
+        dispatch.execution_owner="res://presentation/compiler.gd::_action_body"
+        result.append(dispatch)
     var cast:Dictionary=value.get("cast",{})
     if not cast.is_empty() and cast.get("enabled",true):
         var equipment:Dictionary=cast.get("equipment",{}) if cast.get("equipment")!=null else {}

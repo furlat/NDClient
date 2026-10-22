@@ -78,6 +78,50 @@ func reference_trail(recipe:Dictionary,fact:Dictionary,actor:Dictionary,cache:Di
                     "impact_source_id":str(trail.get("impact_source_id","")),"contact_seconds":float(trail.contact_seconds),
                     "end_seconds":float(trail.end_seconds),"source":str(trail.get("source",""))}
     return {}
+# Actual typed body choices on existing substitute rigs; these are source and
+# selector controls, not a recording, contact measurement or rendered approval.
+func provisional_creature_choices(actor:Dictionary,cache:Dictionary)->void:
+    for choice in [
+            {"id":"action.cambion.draining_kiss","creature":"creature.spell.cambion","rig":"smallscale.demonelite01","clip":"Attack4"},
+            {"id":"action.djinni.sweetplum_gales","creature":"creature.spell.djinni","rig":"smallscale.characters.6mage","clip":"Special1"},
+            {"id":"action.draconic_spirit.breath","creature":"creature.spell.draconic_spirit","rig":"smallscale.dinosaurs.elite-armored-t-rex","clip":"Taunt"}]:
+        var entry:Resource=load("res://authoring/abilities/actions/"+choice.id+".tres")
+        var owner:Dictionary=actor.duplicate(true);owner.creature_content_ref=choice.creature
+        var fact:Dictionary={"kind":"action","behavior_id":choice.id,"source_entity_uuid":owner.uuid}
+        var original:PackedByteArray=var_to_bytes(fact)
+        var selected:Dictionary=Authoring.action(fact,cache,owner)
+        var clip:Dictionary=Authoring.clip(owner,choice.clip,cache)
+        check(entry.disposition=="authored" and entry.status=="partial" and entry.body.rig==choice.rig \
+            and selected.actor.enabled and selected.actor.clip==choice.clip and selected.get("anchors",[]).is_empty() \
+            and Authoring.rig_id(owner,cache)==choice.rig and clip.frames==15 and clip.fps==12.0 \
+            and var_to_bytes(fact)==original,
+            choice.id+": explicit current substitute keeps its actual clip clock without invented contact/fact")
+        check(Authoring.action(fact,cache,actor).is_empty(),choice.id+": exact rig refuses an unrelated body")
+    var deva:Dictionary=actor.duplicate(true);deva.creature_content_ref="creature.spell.deva"
+    var fact:Dictionary={"kind":"attack","behavior_id":"action.deva.concussive_smash","weapon_slot":"MELEE_MAIN", \
+        "attack_outcome":"Hit","source_item_id":"weapon.spell_summon.deva","attack_source_kind":"equipped","damage_types":["Bludgeoning","Radiant"]}
+    var selected:Dictionary=Authoring.attack(fact,deva,cache)
+    var clip:Dictionary=Authoring.clip(deva,"Attack1",cache)
+    check(selected.get("selected_variant")=="actual-deva-bound-mace-stand-in" and selected.actor.enabled \
+        and selected.actor.clip=="Attack1" and selected.anchors.is_empty() and not selected.has("sourceTiming") \
+        and Authoring.rig_id(deva,cache)=="smallscale.characters.4paladin" and clip.frames==15 and clip.fps==12.0,
+        "Actual Deva equipped bound-Mace Attack selects only its provisional real clip with unmarked scheduling")
+    for changed in [{"weapon_slot":"MELEE_OFF"},{"attack_source_kind":"natural"},{"source_item_id":"weapon.mace"}]:
+        var wrong:Dictionary=fact.merged(changed,true)
+        check(not Authoring.attack(wrong,deva,cache).actor.enabled,"Deva source/item/slot mismatch retains disabled default: "+str(changed))
+    check(not Authoring.attack(fact,actor,cache).actor.enabled,"Wrong creature cannot borrow Deva's attack body")
+    var admission:Dictionary=Characters.BodySources.admission(cache)
+    var private_index:Resource=admission.index.duplicate()
+    private_index.creature_rigs=admission.index.creature_rigs.duplicate()
+    private_index.creature_rigs["creature.spell.deva"]=Authoring.rig_id(actor,cache)
+    var private_cache:Dictionary=cache.duplicate()
+    var private_admission:Dictionary=admission.duplicate();private_admission.index=private_index
+    private_cache[Characters.BodySources.KEY]=private_admission
+    check(not Authoring.attack(fact,deva,private_cache).actor.enabled,"Future body replacement cannot inherit the current4Paladin stand-in")
+    var wrapper:Resource=load("res://authoring/abilities/actions/action.deva.concussive_smash.tres")
+    check(wrapper.disposition=="state_only" and not wrapper.body.enabled,
+        "Deva wrapper delegates the actual Attack instead of adding an unused second gesture")
+
 func run()->void:
     var cache:Dictionary={}
     var actual:Dictionary=Authoring.load_data("catalog/attack_recipes.json",cache)
@@ -207,6 +251,7 @@ func run()->void:
         input_graph.condition_response_inputs["18"].erase("selector-source")
         check(Components.ApplicationResults.observed(node,descriptor,input_graph).is_empty(),
             "Undisclosed current source contact cannot become an origin from an opaque actor record")
+    provisional_creature_choices(actor,cache)
     check(owners==actual.size(),"Built table has exactly the actual authored attack owners")
     check(unique.size()==135,"All135 original measured poses are independently qualified")
     check(var_to_bytes(actual)==prior,"Every selector and document admission leaves immutable source table unchanged")

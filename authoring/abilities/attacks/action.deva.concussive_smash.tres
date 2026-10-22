@@ -1,0 +1,67 @@
+[gd_resource type="Resource" script_class="PresentationAttack" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/abilities/body_use.gd" id="body"]
+[ext_resource type="Script" path="res://presentation/source/abilities/attack.gd" id="attack"]
+[ext_resource type="Script" path="res://presentation/source/abilities/attack_variant.gd" id="variant"]
+[ext_resource type="Script" path="res://presentation/source/abilities/feedback.gd" id="feedback"]
+
+[sub_resource type="Resource" id="disabled_body"]
+script = ExtResource("body")
+role = "attack"
+enabled = false
+
+[sub_resource type="Resource" id="selected_body"]
+script = ExtResource("body")
+role = "attack"
+clip = "Attack1"
+rig = "smallscale.characters.4paladin"
+
+[sub_resource type="Resource" id="selected_variant"]
+script = ExtResource("variant")
+id = "actual-deva-bound-mace-stand-in"
+match = {
+"creatureIds": ["creature.spell.deva"],
+"delivery": "melee",
+"kind": "attack",
+"rigIds": ["smallscale.characters.4paladin"],
+"sourceItemIds": ["weapon.spell_summon.deva"],
+"sourceKinds": ["equipped"],
+"weaponSlots": ["MELEE_MAIN"]
+}
+body = SubResource("selected_body")
+
+[sub_resource type="Resource" id="critical_feedback"]
+script = ExtResource("feedback")
+text = "Critical!!"
+colour = Color(1, 0.8, 0, 1)
+
+[sub_resource type="Resource" id="critical_miss_feedback"]
+script = ExtResource("feedback")
+text = "Critical miss"
+colour = Color(0.53333336, 0.53333336, 0.53333336, 1)
+
+[sub_resource type="Resource" id="miss_feedback"]
+script = ExtResource("feedback")
+text = "Miss"
+colour = Color(0.53333336, 0.53333336, 0.53333336, 1)
+
+[resource]
+script = ExtResource("attack")
+id = "action.deva.concussive_smash"
+body = SubResource("disabled_body")
+outcome_texts = Dictionary[String, ExtResource("feedback")]({
+"critical": SubResource("critical_feedback"),
+"critical_miss": SubResource("critical_miss_feedback"),
+"miss": SubResource("miss_feedback")
+})
+variants = Array[ExtResource("variant")]([SubResource("selected_variant")])
+status = "partial"
+unported = {
+"anchors": [],
+"compatibleCueKinds": ["attack"],
+"disposition": "authored",
+"mediaFailurePolicy": "fail_transaction",
+"previewChildCueKinds": ["damage"],
+"projectile": null
+}
+notes = "Actual ConcussiveSmash inherits Attack through MyrmidonStrike; pinned bound_weapon installs HELD weapon.spell_summon.deva in MELEE_MAIN. Deliberately reuse the selected4Paladin stand-in's real Attack1 only under exact creature/rig/equipped/item/slot guards. The disabled default refuses other sources and future rig replacement. Keep its supplied fifteen poses at twelve fps with empty anchors, no sourceTiming, no invented contact/release/trail/socket or authentic mace-pose claim; contact retains existing unmarked-recipe scheduling. Actual damage, save and Dazed children remain unchanged. Own Deva artwork and all art/audio remain unreviewed."

@@ -12,6 +12,7 @@ static func build_private(inputs:Dictionary,textures:Dictionary,resources:Dictio
     for id in inputs:
         var actor:Dictionary=inputs[id];var packets:Dictionary={}
         rows[id]=packets
+        var native_shapes:Dictionary=Construction.prepare_native_shapes(actor.rig,actor.scale) if actor.rig.get("native_banks",false) else {}
         var condition_parameters:Dictionary=Construction.Conditions.parameters(actor.material if actor.has("material") else Construction.Conditions.material(id,[]),textures,resources)
         condition_parameters.make_read_only()
         for index in actor.layers:
@@ -26,16 +27,24 @@ static func build_private(inputs:Dictionary,textures:Dictionary,resources:Dictio
             SourceMaterial.set_parameter(entry,"shadow",layer.slot=="shadow")
             SourceMaterial.apply(entry,actor.light_parameters)
             SourceMaterial.set_parameter(entry,"tint",Construction.Modular.rgb(layer.tint))
-            var shape:Dictionary=Construction.layer_shape(rig,actor.scale)
+            var layout:Dictionary=source.binding.get("source_layout",{})
+            var shape:Dictionary=Construction.layer_shape(rig,actor.scale,layout)
+            if rig.get("native_banks",false) and ((layout.is_empty() and native_shapes.has(source.binding.path)) or native_shapes.get(source.binding.path if not layout.is_empty() else "",{}).get("shape",{})!=shape):
+                output.merge({"complete":true,"error":"Private native source shape/layout is not declared: "+str(source.binding.path)});return
+            if rig.get("native_banks",false):
+                entry.native_shapes=native_shapes;entry.native_shape_rig=rig;entry.native_shape_scale=actor.scale
+                entry.native_shape_key=source.binding.path if not layout.is_empty() else ""
+                entry.source_layout=layout
             var mesh:=QuadShapes.mesh(shape.mesh_size,shape.mesh_center)
-            material.set_shader_parameter("source_quad_size",shape.mesh_size)
+            if rig.get("native_banks",false):SourceMaterial.set_parameter(entry,"source_quad_size",shape.mesh_size,true)
+            else:material.set_shader_parameter("source_quad_size",shape.mesh_size)
             entry.cell=shape.cell;entry.pivot=shape.pivot;entry.scale=shape.scale
             var origin:Vector2=Placement.project(Vector2(row.position[0],row.position[1]),row.base_height_steps,actor.quarter)
             entry.screen_rect=Rect2(origin-entry.pivot*entry.scale,entry.cell*entry.scale)
             SourceMaterial.apply(entry,condition_parameters);entry.bound_condition_parameters=condition_parameters
             var ready:Dictionary=Construction.realize_private_binding(source.binding,textures)
             entry.prepared_source_binding=ready
-            Construction.bind_source_values(entry,rig,source.binding.path,source.frame,actor.facing,ready.sheet,ready.sheet_size,textures,resources,condition_parameters)
+            Construction.bind_source_values(entry,rig,source.binding.path,source.frame,source.get("facing",actor.facing),ready.sheet,ready.sheet_size,textures,resources,condition_parameters)
             Construction.CharacterGeometry.apply_binding_values(entry,ready.geometry)
             var bounds:AABB=Construction.CharacterGeometry.binding_bounds(mesh.get_aabb(),ready.geometry.bounds)
             var pending:Dictionary={}

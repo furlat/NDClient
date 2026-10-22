@@ -3,6 +3,7 @@ const SourceMaterial=preload("res://presentation/source_material.gd")
 ## One assembled-alpha contour, shared by all physical outfit layers.
 const ShaderSource=preload("res://presentation/condition_outline.gdshader")
 const Characters=preload("res://presentation/characters.gd")
+const Construction=preload("res://presentation/actor_construction.gd")
 var owners: Dictionary={}
 var pulse_masks: Dictionary={}
 
@@ -29,12 +30,34 @@ func pulse_mask(size: Vector2i) -> Texture2D:
 static func _parts(actor:Dictionary,visible_only:bool=true)->Array:
     return actor.entries.filter(func(entry):return (not visible_only or entry.node.visible) and entry.role!="shadow" and entry.actor_layer.slot not in Characters.EFFECT_SLOTS)
 
+## The registered rig canvas and its prepared reference quad share one UV
+## domain. Cropped native views are translated into it, never stretched.
+static func _native_reference(parts:Array,rig:Dictionary)->Dictionary:
+    var reference:Dictionary=Construction.prepared_reference_shape(parts[0],rig)
+    if reference.is_empty():return {}
+    var pivot:Vector2=reference.shape.pivot
+    var bounds:=Rect2(Vector2.ZERO,reference.shape.cell)
+    for part in parts:
+        var own:Dictionary=Construction.prepared_reference_shape(part,rig)
+        if own.is_empty() or own.mesh!=reference.mesh:return {}
+        if not bounds.encloses(Rect2(pivot-part.pivot,part.cell)):return {}
+    return reference
+
 func prepare(world:Node,actor_id:String,budget:Dictionary={})->Dictionary:
     var actor:Dictionary=world.visual_actors.get(actor_id,{})
     if actor.is_empty():return {"ready":true,"pending":0}
     var parts:Array=_parts(actor,false)
     if parts.is_empty():return {"ready":true,"pending":0}
     var rig:Dictionary=world.rigs[actor.row.rig]
+    var native:bool=rig.get("native_banks",false)
+    var reference:Dictionary=_native_reference(parts,rig) if native else {}
+    if native and reference.is_empty():
+        if owners.has(actor_id):_hide(owners[actor_id])
+        return {"ready":false,"pending":1,"reason":"native_outline_reference_not_prepared"}
+    if owners.has(actor_id):
+        var prior:Dictionary=owners[actor_id]
+        if prior.get("native_reference",false)!=native or native and (not is_same(prior.reference_rig,rig) or prior.reference_mesh!=reference.mesh or prior.view.size!=Vector2i(reference.shape.cell)):
+            _hide(prior);erase(world,actor_id)
     if not owners.has(actor_id):
         if not budget.is_empty() and budget.used_usec>=budget.limit_usec:return {"ready":false,"pending":1}
         var started:int=Time.get_ticks_usec()
@@ -45,6 +68,11 @@ func prepare(world:Node,actor_id:String,budget:Dictionary={})->Dictionary:
         shader.set_shader_parameter("pulse_mask",pulse_mask(view.size))
         var entry={"id":actor_id+":condition_outline","node":node,"material":shader,"placement":actor.row,"role":"native_effect","layer":100}
         owners[actor_id]={"view":view,"entry":entry,"key":[],"drawn":false,"sprites":{},"published":false}
+        if native:
+            var created:Dictionary=owners[actor_id]
+            created.native_reference=true;created.reference_rig=rig;created.reference_mesh=reference.mesh
+            created.reference_pivot=reference.shape.pivot
+            node.mesh=reference.mesh
         if not budget.is_empty():budget.used_usec+=Time.get_ticks_usec()-started
     var owner:Dictionary=owners[actor_id]
     for part in parts:
@@ -64,6 +92,7 @@ func prepare(world:Node,actor_id:String,budget:Dictionary={})->Dictionary:
 
 func _assemble(actor_id:String,owner:Dictionary,parts:Array)->void:
     var key:Array=parts.map(func(entry):return [entry.id,entry.texture_path,SourceMaterial.value(entry,"frame_uv"),entry.actor_layer.alpha])
+    if owner.get("native_reference",false):key.append([owner.reference_pivot,parts.map(func(part):return part.pivot)])
     if owner.key==key:return
     owner.key=key
     for sprite in owner.sprites.values():sprite.visible=false;sprite.texture=null
@@ -72,9 +101,15 @@ func _assemble(actor_id:String,owner:Dictionary,parts:Array)->void:
         sprite.texture=SourceMaterial.value(part,"sheet")
         var uv:Vector4=SourceMaterial.value(part,"frame_uv")
         sprite.region_rect=Rect2(uv.x*sprite.texture.get_width(),uv.y*sprite.texture.get_height(),uv.z*sprite.texture.get_width(),uv.w*sprite.texture.get_height())
+        if owner.get("native_reference",false):sprite.position=owner.reference_pivot-part.pivot
         sprite.modulate.a=part.actor_layer.alpha;sprite.visible=true
     owner.view.render_target_update_mode=SubViewport.UPDATE_ONCE
-    RenderingServer.frame_post_draw.connect(func():if is_same(owners.get(actor_id),owner):owner.drawn=true,CONNECT_ONE_SHOT)
+    if owner.get("native_reference",false):
+        var submitted:Array=key
+        RenderingServer.frame_post_draw.connect(func():
+            if is_same(owners.get(actor_id),owner) and owner.key==submitted:owner.drawn=true,CONNECT_ONE_SHOT)
+    else:
+        RenderingServer.frame_post_draw.connect(func():if is_same(owners.get(actor_id),owner):owner.drawn=true,CONNECT_ONE_SHOT)
 
 func sample(world: Node,actor_id: String,material: Dictionary) -> bool:
     var actor:Dictionary=world.visual_actors.get(actor_id,{})
@@ -89,13 +124,21 @@ func sample(world: Node,actor_id: String,material: Dictionary) -> bool:
     # published outfit returns to preparation instead of allocating on a sample.
     if not owners.has(actor_id):return false
     var owner:Dictionary=owners[actor_id]
+    var rig:Dictionary=world.rigs[actor.row.rig]
+    if rig.get("native_banks",false):
+        var reference:Dictionary=_native_reference(parts,rig)
+        if reference.is_empty() or not owner.get("native_reference",false) or not is_same(owner.reference_rig,rig) or owner.reference_mesh!=reference.mesh or owner.view.size!=Vector2i(reference.shape.cell):
+            _hide(owner);return false
+    elif owner.get("native_reference",false):
+        _hide(owner);return false
     for part in parts:
         if not owner.sprites.has(part.id):return false
     if not owner.published:
         world.actor_entries.append(owner.entry);world.draw_order_dirty=true;owner.published=true
     _assemble(actor_id,owner,parts)
     var entry:Dictionary=owner.entry
-    entry.node.mesh=parts[0].node.mesh;entry.node.transform=parts[0].node.transform;entry.placement=actor.row
+    entry.node.mesh=owner.reference_mesh if owner.get("native_reference",false) else parts[0].node.mesh
+    entry.node.transform=parts[0].node.transform;entry.placement=actor.row
     bind(entry.material,material)
     entry.node.visible=owner.drawn
     return owner.drawn

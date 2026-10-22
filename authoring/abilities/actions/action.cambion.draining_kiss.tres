@@ -8,7 +8,8 @@
 [sub_resource type="Resource" id="Resource_jh28y"]
 script = ExtResource("1_igapw")
 role = "cast"
-enabled = false
+clip = "Attack4"
+rig = "smallscale.demonelite01"
 hidden_slots = PackedStringArray()
 
 [sub_resource type="Resource" id="Resource_2hfb6"]
@@ -20,9 +21,11 @@ source = "ui-delivery-20261018 srd22.creature_action.draining_kiss"
 [resource]
 script = ExtResource("1_vakd3")
 id = "action.cambion.draining_kiss"
+disposition = "authored"
 kind = "action"
 family = "summon_form"
 icon = SubResource("Resource_2hfb6")
 body = SubResource("Resource_jh28y")
 effect_sources = PackedStringArray()
-notes = "Body role from the server's body kind (targeted_ability); the rig resolves it to a clip once roles are built (coverage fill)."
+status = "partial"
+notes = "Deliberate provisional caster gesture on the actually selected demonelite01 stand-in, selecting its supplied concrete Attack4 clip. Keep all fifteen poses at twelve fps, with no invented kiss contact/release marker, socket or pose hold. The real completed Action owns its Wisdom save, actual Psychic damage and consumed Charm Person removal through existing child consumers. This body choice is not authentic Cambion artwork or a measured kiss/contact; the own-body commission and all artwork/audio remain unreviewed."

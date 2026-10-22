@@ -30,10 +30,19 @@ static func playback_rate(actor: Dictionary, cache: Dictionary) -> float:
         value *= float(rates.get(condition.get("behavior_id"), 1.0))
     return value
 
+static func action_body_fact(fact:Dictionary,cache:Dictionary)->bool:
+    if fact.get("kind")!="spell":return false
+    var binding:Dictionary=load_data("catalog/body_action_bindings.json",cache).get(str(fact.get("behavior_id","")),{})
+    if binding.get("body_fact_kind")!=fact.kind:return false
+    var key:String=str(binding.get("source_recipe",fact.get("behavior_id","")))
+    var recipe:Dictionary=load_data("catalog/body_action_recipes.json",cache).get(key,{})
+    return recipe.get("disposition")=="authored" and recipe.get("actor",{}).get("enabled",false) \
+        and not str(recipe.get("actor",{}).get("clip","")).is_empty()
+
 static func action(fact: Dictionary, cache: Dictionary, actor:Dictionary={}) -> Dictionary:
     var path = "catalog/shove_recipes.json" if fact.kind=="shove" else "catalog/body_action_recipes.json"
     var key: String = fact.get("behavior_id","")
-    var binding:Dictionary=load_data("catalog/body_action_bindings.json",cache).get(key,{}) if fact.kind=="action" else {}
+    var binding:Dictionary=load_data("catalog/body_action_bindings.json",cache).get(key,{}) if fact.kind in ["action","spell"] else {}
     key=str(binding.get("source_recipe",key))
     var selected:Dictionary=load_data(path,cache).get(key,{})
     if selected.has("rigId") and not actor.is_empty() and selected.rigId!=rig_id(actor,cache):return {}

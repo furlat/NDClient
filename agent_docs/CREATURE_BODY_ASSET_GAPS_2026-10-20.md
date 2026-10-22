@@ -11,8 +11,10 @@ Air/Earth/Fire/Water Elementals and all four equipped Myrmidons now select their
 own supplied bodies through existing typed rigs. The Myrmidon batch imports
 36banks/4,320poses plus the eight Action bodies/four exact AttackFact recipes;
 Earth Burrow keeps actual PortalTransfer/Landing ownership. The combined source build has zero errors/two warnings and its
-affected3suite source/dispatch batch passes20,434assertions. Myrmidon native
-output, display scale/placement and all artwork remain unqualified/unreviewed.
+affected3suite source/dispatch batch passes20,434assertions. The later Air/Fire/
+Water native originals have selected body/binding evidence below; Earth retains
+its real missing Landing identity. Display scale/placement and all artwork
+remain unqualified/unreviewed.
 
 Selected dragon colour/reconstructed depth/Sprite Fusion Default normals are
 delivered but not client-integrated; the current rig remains the explicit T-Rex
@@ -23,9 +25,25 @@ remains separate from its delivered depth/normals. Existing portraits remain.
 The source-reviewed independent-normal receiving change awaits its matching
 [existing offline Factory receiver program](FACTORY_DRAGON_RECEIVER_PROGRAM_HANDOFF_2026-10-22.md);
 no new art, mask or API is requested. Client per-facing optical-origin support
-is applied through the existing source/binder schema and its affected source
-controls pass, with no GLSL
-change while that matching program is unavailable.
+and exact per-view native-bank transport are applied through the existing
+source/binder/preparation schema. Their grouped source/default-path controls
+pass; no actual Dragon/native bank is selected yet. The private15clip/120bank
+candidate preserves delivered grids without the earlier padded-atlas overhead.
+Source fit2, unsupported pose/ground-air contexts and the matching receiver
+program still gate activation. Cropped-body Outline reference registration is
+source-closed and its technical native pixel/lifetime gate passes27assertions;
+this does not qualify actual Dragon artwork.
+No GLSL changes while that matching program is unavailable.
+[Exact selected data and gates](../.runtime/closing-repairs/dragon-selected-native-data/README.md),
+[current transport/default native receipt](../.runtime/main-queue-20261022/native-bank-action-native/summary.json).
+
+The current Cambion/Deva/Djinni and T-Rex substitutions now have explicit
+provisional intrinsic-body choices with exact rig/source guards. Authentic
+final artwork is still missing/unreviewed, but it no longer falsely blocks
+every authoring assignment. Deva uses an actual guarded equipped-Attack recipe;
+the other three use their actual Action body branch. This supplies no dragon
+mouth/contact or selected native ground/air context.
+[Source and affected follow-through](REMAINING_WORK_2026-10-20.md#four-creature-choices-and-native-reference-outline-follow-through).
 
 | Creature | Exact owner | Current source / remaining boundary |
 |---|---|---|

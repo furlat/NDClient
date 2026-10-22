@@ -8,7 +8,7 @@
 [sub_resource type="Resource" id="Resource_v8ywk"]
 script = ExtResource("1_atbf5")
 role = "cast_alt"
-enabled = false
+clip = "Special1"
 hidden_slots = PackedStringArray()
 
 [sub_resource type="Resource" id="Resource_dpc3o"]
@@ -22,9 +22,11 @@ source = "ui/resources.json icon:ui.filter-actions"
 [resource]
 script = ExtResource("1_uxeik")
 id = "action.class.paladin.sacred_weapon"
+disposition = "authored"
 kind = "action"
 family = "class"
 icon = SubResource("Resource_dpc3o")
 body = SubResource("Resource_v8ywk")
 effect_sources = PackedStringArray()
-notes = "Body role from the server's body kind (self_ability); the rig resolves it to a clip once roles are built (coverage fill)."
+notes = "Deliberate existing Special1 self-ability onset gesture on the current admitted rig, with no invented hand marker or coating hit. The actual selected held Item/effect UUID, slots and existing SacredWeaponItem lifecycle own the weapon source and light. This body is a provisional stand-in and all art/audio remain unreviewed."
+status = "partial"

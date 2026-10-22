@@ -178,6 +178,10 @@ func _evaluate(visual: Dictionary, camera: Camera3D, relayout: bool) -> bool:
     var snapshots := _snapshots(visual.entries,camera,state.get("snapshots",[]))
     _timed("snapshots",phase_started)
     if snapshots.is_empty(): return _unlit(state)
+    for snapshot in snapshots:
+        if not snapshot.entry.get("source_layout",{}).is_empty():
+            var mesh:QuadMesh=_meshes.get(Vector2i(snapshot.component_cell_size))
+            if mesh==null or not mesh.has_meta(&"native_bank_prepared"):return _unlit(state)
     phase_started=Time.get_ticks_usec()
     var origin := Placement.contact(row)
     var units: float=snapshots[0].component_units
@@ -565,6 +569,27 @@ func _caster_mesh(cell: Vector2) -> QuadMesh:
         mesh.subdivide_depth=size.y-1
         _meshes[size]=mesh
     return _meshes[size]
+
+## The current media cut owns this finite cell set. No request queue or clock.
+## One native grid is an indivisible unit, charged to the caller's existing allowance.
+func prepare_source_cells(cells:Dictionary,budget:Dictionary)->bool:
+    for cell in cells:
+        var current:QuadMesh=_meshes.get(cell)
+        if current!=null and current.has_meta(&"native_bank_prepared"):continue
+        if budget.is_empty() or int(budget.get("used_usec",0))>=int(budget.get("limit_usec",0)):return false
+        var started:int=Time.get_ticks_usec()
+        var mesh:QuadMesh=_caster_mesh(Vector2(cell))
+        mesh.get_rid()
+        mesh.set_meta(&"native_bank_prepared",true)
+        budget.used_usec=int(budget.get("used_usec",0))+Time.get_ticks_usec()-started
+        return source_cells_ready(cells)
+    return true
+
+func source_cells_ready(cells:Dictionary)->bool:
+    for cell in cells:
+        var mesh:QuadMesh=_meshes.get(cell)
+        if mesh==null or not mesh.has_meta(&"native_bank_prepared"):return false
+    return true
 
 func prepare_actor_step(owner:Node3D,prepared:Dictionary)->bool:
     # The accepted actor boundary owns these disabled native objects until

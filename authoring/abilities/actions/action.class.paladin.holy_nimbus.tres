@@ -8,7 +8,7 @@
 [sub_resource type="Resource" id="Resource_i06st"]
 script = ExtResource("1_avnib")
 role = "cast_alt"
-enabled = false
+clip = "Special1"
 hidden_slots = PackedStringArray()
 
 [sub_resource type="Resource" id="Resource_25lnv"]
@@ -22,9 +22,11 @@ source = "ui/resources.json icon:ui.filter-actions"
 [resource]
 script = ExtResource("1_khgnh")
 id = "action.class.paladin.holy_nimbus"
+disposition = "authored"
 kind = "action"
 family = "class"
 icon = SubResource("Resource_25lnv")
 body = SubResource("Resource_i06st")
 effect_sources = PackedStringArray()
-notes = "Body role from the server's body kind (self_ability); the rig resolves it to a clip once roles are built (coverage fill)."
+notes = "Deliberate existing Special1 self-ability onset gesture on the current admitted rig, with no new contact/release or duplicate aura. The actual HolyNimbus condition/light and attributed Radiant contact retain their existing owners and clocks. This body is a provisional stand-in and all art/audio remain unreviewed."
+status = "partial"

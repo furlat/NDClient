@@ -317,6 +317,28 @@ static func _portal_body(node:Dictionary,actor:Dictionary,point:Dictionary,start
         "lift_pixels_keys":keys,"activity":"act","source":"canonical_portal_transfer"},true)
     return track
 
+## The existing Action body clock can be selected without changing a fact's
+## wire family or bypassing its ordinary Spell delivery/result processing.
+static func _action_body(group:Dictionary,node:Dictionary,actor:Dictionary,recipe:Dictionary,
+        start:float,graph:Dictionary,cache:Dictionary)->Dictionary:
+    var fact:Dictionary=node.fact
+    var finish:float=start
+    var contact = start
+    if recipe.get("actor",{}).get("enabled",false):
+        var rate = recipe.actor.playbackSpeed*Authoring.playback_rate(actor,cache)
+        var track = _track(group,node,actor,recipe.actor.clip,start,rate,20,cache,graph)
+        if not track.is_empty():
+            _held_contact(track,fact.source_entity_uuid,graph)
+            Tracks.body_keys(track,recipe,Authoring.clip(actor,recipe.actor.clip,cache))
+            track.source=Authoring.recipe_source(recipe,"actor/clip",cache)
+            track.target_uuid=fact.get("target_entity_uuid")
+            track.target_position=graph.positions.get(track.target_uuid)
+            for anchor in recipe.get("anchors",[]):
+                if anchor.name in ["contact","effect","release"]: contact=start+float(anchor.frame)/Authoring.clip(actor,recipe.actor.clip,cache).fps*1000/rate
+            track.contact_ms=contact
+            finish=start+track.duration_ms
+    return {"contact":contact,"finish":finish,"drawn":finish>start}
+
 static func _schedule(node: Dictionary, start: float, state: Dictionary, group: Dictionary,
         graph: Dictionary, cache: Dictionary, jump: Dictionary = {}) -> float:
     if graph.visited.has(node.lineage_id): return start
@@ -444,20 +466,9 @@ static func _schedule(node: Dictionary, start: float, state: Dictionary, group: 
         var actor = _actor(state,group,fact.source_entity_uuid,node,graph)
         var recipe = Authoring.action(fact,cache,actor)
         graph.recipes[node.id] = recipe
-        var contact = start
-        if recipe.get("actor",{}).get("enabled",false):
-            var rate = recipe.actor.playbackSpeed*Authoring.playback_rate(actor,cache)
-            var track = _track(group,node,actor,recipe.actor.clip,start,rate,20,cache,graph)
-            if not track.is_empty():
-                _held_contact(track,fact.source_entity_uuid,graph)
-                Tracks.body_keys(track,recipe,Authoring.clip(actor,recipe.actor.clip,cache))
-                track.source=Authoring.recipe_source(recipe,"actor/clip",cache)
-                track.target_uuid=fact.get("target_entity_uuid")
-                track.target_position=graph.positions.get(track.target_uuid)
-                for anchor in recipe.get("anchors",[]):
-                    if anchor.name in ["contact","effect","release"]: contact=start+float(anchor.frame)/Authoring.clip(actor,recipe.actor.clip,cache).fps*1000/rate
-                track.contact_ms=contact
-                finish=start+track.duration_ms
+        var body:Dictionary=_action_body(group,node,actor,recipe,start,graph,cache)
+        var contact:float=body.contact
+        finish=body.finish
         for child in children:
             # Aggregate weapon actions preserve actual child order. Other effects
             # begin at the authored action contact and can overlap its recovery.
@@ -544,6 +555,7 @@ static func _schedule(node: Dictionary, start: float, state: Dictionary, group: 
         var recipe: Dictionary = sources.recipe
         # The selected resource decides whether an actually admitted result
         # owns this occurrence without an additional casting body gesture.
+        var body_replaced:bool=false
         var body_cues:Array=[] if sources.selection.is_empty() else Components.NativeSpells.event_cues(sources.selection)
         for cue in body_cues:
             if not cue.get("replaces_cast_body",false):continue
@@ -551,6 +563,7 @@ static func _schedule(node: Dictionary, start: float, state: Dictionary, group: 
             if descriptor.get("kind")!="observed_event":continue
             if Components.ApplicationResults.observed(node,descriptor,graph).is_empty():continue
             recipe=recipe.duplicate();recipe.cast={"enabled":false}
+            body_replaced=true
             break
         graph.recipes[node.id]=recipe
         var cast: Dictionary=recipe.get("cast",{})
@@ -559,7 +572,13 @@ static func _schedule(node: Dictionary, start: float, state: Dictionary, group: 
         if not selected.is_empty():selected_delivery=SpellDelivery.for_occurrence(SpellDelivery.selected_for(selected,fact),node,has_applications)
         var cast_key: String=SpellDelivery.cast_key(node,graph)
         var contact=start
-        if not graph.casts.has(cast_key) and not cast.is_empty() and cast.get("enabled",true):
+        var action_body:Dictionary=Authoring.action(fact,cache,actor) if not application and not body_replaced and Authoring.action_body_fact(fact,cache) else {}
+        if not graph.casts.has(cast_key) and not action_body.is_empty():
+            var body:Dictionary=_action_body(group,node,actor,action_body,start,graph,cache)
+            contact=body.contact;finish=body.finish
+            if body.drawn:
+                graph.casts[cast_key]={"start":start,"prepare":start,"release":contact,"finish":finish,"recipe":recipe,"source_event_uuid":node.id}
+        elif not graph.casts.has(cast_key) and not cast.is_empty() and cast.get("enabled",true):
             var rate=cast.get("bodyPlaybackSpeed",1.0)*Authoring.playback_rate(actor,cache)
             var track=_cast_track(group,node,actor,recipe,str(fact.behavior_id),start,SpellDelivery.aim_position(fact,graph),graph,cache)
             if not track.is_empty():

@@ -251,6 +251,7 @@ static func observed(node:Dictionary,descriptor:Dictionary,graph:Dictionary)->Ar
     if projection=="weapon_component":return _weapon_component(node,descriptor,graph)
     if projection=="quarry_application":return _quarry_application(node,descriptor,graph)
     if projection=="attack_attempt":return _attack_attempt(node,descriptor,graph)
+    if projection=="owner_removal":return _owner_removal(node,descriptor,graph)
     if projection=="accepted_area_blast":return _accepted_area_blast(node,descriptor,graph)
     if projection=="portable_payload_blast":return _portable_blast(node,descriptor,graph)
     if projection=="owned_fire_contact":return _owned_fire_contact(node,descriptor,graph)
@@ -652,6 +653,47 @@ static func _weapon_component(node:Dictionary,descriptor:Dictionary,graph:Dictio
                 observed.evidence.condition_uuid=str(member.condition_uuid)
             result.append(observed)
     return result
+
+## A finite consumed-owner response uses actual same-action removals. The
+## remaining Condition lifecycle still owns its real lifetime/removal source.
+static func _owner_removal(node:Dictionary,descriptor:Dictionary,graph:Dictionary)->Array:
+    var fact:Variant=node.get("fact")
+    if node.get("canceled",false) or node.get("phase")!="completion" or fact==null or fact.get("kind")!="action" \
+        or fact.get("behavior_id")!=descriptor.get("behavior_id") or fact.get("source_entity_uuid")==null \
+        or fact.get("target_entity_uuid")==null:return []
+    var source:String=str(fact.source_entity_uuid);var recipient:String=str(fact.target_entity_uuid)
+    var removals:Array=graph.get("observed_results",{}).get(str(node.id),[]).filter(func(row):
+        return row.kind=="removal" and row.node.get("phase")=="completion" and _cast_owns_result(node,row.node,graph))
+    var owners:Array=[]
+    for row in removals:
+        if row.target_uuid!=source:continue
+        for cue in graph.get("condition_cues",{}).get(str(row.node.id),[]):
+            if cue.phase=="removal" and str(cue.actor_uuid)==source \
+                and cue.condition.get("behavior_id")==descriptor.owner_condition_id:owners.append({"row":row,"member":cue.condition})
+    if owners.size()!=1:return []
+    var owner:Dictionary=owners[0];var identity:String=str(owner.member.condition_uuid)
+    var actual:Dictionary=owner.row;var ended:Array=[];var publications:Array=[str(actual.node.id)]
+    for row in removals:
+        if row.target_uuid!=recipient:continue
+        var ids:Array=row.event.get("removed_condition_uuids",[]).filter(func(value):return str(value)!=identity)
+        if ids.is_empty():continue
+        actual=row
+        if str(row.node.id) not in publications:publications.append(str(row.node.id))
+        for value in ids:
+            if str(value) not in ended:ended.append(str(value))
+    if ended.is_empty():return []
+    var event:Dictionary={"uuid":str(actual.node.id),"source_entity_uuid":source,"target_entity_uuid":recipient,
+        "canceled":false,"ward_uuid":identity,"condition_uuid":identity,"removed_condition_uuids":ended,
+        "behavior_id":str(fact.behavior_id)}
+    return [{"node":actual.node,"target_uuid":recipient,"publication_occurrences":publications,
+        "values":{"source_entity_uuid":source,"recipient_entity_uuid":recipient,"owner_uuid":identity,"ward_uuid":identity,
+            "condition_id":str(descriptor.owner_condition_id),"event_uuid":str(actual.node.id),
+            "geometry_actor":recipient,"actor_roles":{"caster":source,"target":recipient},
+            "native_behavior_id":str(fact.behavior_id),"lease":{},"event":{},"plan_only":false},
+        "inputs":{"lease_input":{},"event_input":event},"evidence":{"source_occurrence":str(node.id),
+            "source_lineage":str(node.lineage_id),"owner_removal_occurrence":str(owner.row.node.id),
+            "owner_uuid":identity,"actual_removed_condition_uuids":ended,"publication_occurrences":publications,
+            "event_kind":"actual_same_action_committed_removals"}}]
 
 ## An autonomous source executes this actual attack attempt. Its original
 ## source owns the stroke clock; only real outcomes admit contact artwork.

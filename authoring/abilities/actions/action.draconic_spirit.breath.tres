@@ -8,7 +8,8 @@
 [sub_resource type="Resource" id="Resource_xfids"]
 script = ExtResource("1_c6002")
 role = "attack"
-enabled = false
+clip = "Taunt"
+rig = "smallscale.dinosaurs.elite-armored-t-rex"
 hidden_slots = PackedStringArray()
 
 [sub_resource type="Resource" id="Resource_yjoth"]
@@ -22,9 +23,11 @@ source = "Existing breath-weapon action glyph deliberately shared by the real Dr
 [resource]
 script = ExtResource("1_kkip2")
 id = "action.draconic_spirit.breath"
+disposition = "authored"
 kind = "action"
 family = "summon_form"
 icon = SubResource("Resource_yjoth")
 body = SubResource("Resource_xfids")
 effect_sources = PackedStringArray()
-notes = "Body role from the server's body kind (area_attack); the rig resolves it to a clip once roles are built (coverage fill)."
+status = "partial"
+notes = "Deliberate partial body gesture only for the current armoured-T-Rex substitute, using its real Taunt clip at its supplied fifteen-pose/twelve-fps clock with no inferred contact, release or mouth marker. The actual NativeSaveBurst remains an Action with real saves/damage children. This does not provide authentic mouth geometry, mouth readiness, a breath origin, finite breath VFX or a grounded/airborne dragon-body choice. The exact rig guard refuses this gesture after a future body replacement until that body is deliberately authored. Authentic mouth data, native dragon ground/air presentation and all art/audio remain unreviewed."

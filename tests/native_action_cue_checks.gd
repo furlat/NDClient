@@ -7,6 +7,8 @@ const Use=preload("res://presentation/source/effect_use.gd")
 const Body=preload("res://presentation/source/abilities/body_use.gd")
 const Build=preload("res://tools/presentation_build/abilities.gd")
 const Actions=preload("res://presentation/native_action_authoring.gd")
+const Authoring=preload("res://presentation/authoring.gd")
+const Requirements=preload("res://presentation/requirements.gd")
 const Components=preload("res://presentation/components.gd")
 const Renderer=preload("res://presentation/native_spell_renderer.gd")
 const BodyIndex=preload("res://presentation/resources/body_source_index.gd")
@@ -30,6 +32,76 @@ func _initialize()->void:run.call_deferred()
 func check(value:bool,label:String)->void:
     checks+=1
     if not value:failures.append(label);print("NATIVE_ACTION_CUE_FAIL ",label)
+
+func remaining_action_choices()->void:
+    for identity in ["action.class.paladin.divine_sense","action.class.paladin.holy_nimbus","action.class.paladin.sacred_weapon",
+            "action.help_attack","action.spell.arcane_sword.move","action.spell.arcane_sword.strike",
+            "action.spell.dispel_evil_and_good.break_enchantment"]:
+        var entry:Resource=load("res://authoring/abilities/actions/"+identity+".tres")
+        var recipe:Dictionary=Records.action_recipe(entry)
+        check(entry.disposition=="authored" and entry.status=="partial" and entry.body.enabled \
+            and entry.body.clip=="Special1" and entry.body.markers.is_empty() \
+            and recipe.actor.enabled and recipe.actor.clip=="Special1" and recipe.get("anchors",[]).is_empty(),
+            identity+": explicit current-rig gesture preserves original clip clock without invented contact")
+    var repeat_id:String="action.spell.arcane_sword.strike"
+    var repeat_path:String="res://authoring/abilities/actions/"+repeat_id+".tres"
+    var repeat_source:Resource=load(repeat_path)
+    var selected:Dictionary=Build.documents({"actions":{repeat_id:repeat_source}},{"actions":{repeat_id:repeat_path}})
+    var repeat_cache:Dictionary=selected.docs.duplicate(true)
+    var repeated:Dictionary={"kind":"spell","behavior_id":repeat_id,"source_entity_uuid":"caster","target_entity_uuid":"recipient","attack_outcome":"Hit"}
+    var actual_bytes:PackedByteArray=var_to_bytes(repeated)
+    var recipe:Dictionary=Authoring.action(repeated,repeat_cache)
+    check(repeat_source.body_fact_kind=="spell" and Authoring.action_body_fact(repeated,repeat_cache) \
+        and recipe.actor.enabled and recipe.actor.clip=="Special1" and var_to_bytes(repeated)==actual_bytes,
+        "Actual recorded SpellFact/Action identity selects only the explicit body without rewriting its outcome")
+    var binding:Dictionary=repeat_cache["catalog/body_action_bindings.json"][repeat_id]
+    var dispatch:Array=Requirements.recipe(recipe,"catalog/body_action_recipes.json:/"+repeat_id,[],repeat_cache).filter(func(row):return row.kind=="body_fact_dispatch")
+    check(recipe.bodyFactKind=="spell" and recipe._source_fields.bodyFactKind==repeat_path+"::body_fact_kind" \
+        and binding.body_fact_kind=="spell" and binding.body_fact_kind_source==repeat_path+"::body_fact_kind" \
+        and dispatch.size()==1 and dispatch[0].source==repeat_path+"::body_fact_kind" \
+        and dispatch[0].event_kinds==["spell"] and not dispatch[0].rendered,
+        "Recipe, binding and existing inspection retain exact body-only fact selector provenance without output credit")
+    var imported:Resource=Action.new();Records.action_from_recipe(imported,recipe)
+    check(imported.body_fact_kind=="spell" and Records.action_recipe(imported).bodyFactKind=="spell",
+        "Typed Action import/export retains the actual fact-kind body selector")
+    var ordinary:Dictionary=repeated.duplicate();ordinary.behavior_id="spell.fireball"
+    check(not Authoring.action_body_fact(ordinary,repeat_cache),"Ordinary SpellFact cannot enter an Action body merely because the table exists")
+    ordinary=repeated.duplicate();ordinary.kind="action"
+    check(not Authoring.action_body_fact(ordinary,repeat_cache),"Selector requires the actual authored fact kind")
+    repeat_cache["catalog/body_action_recipes.json"][repeat_id].actor.enabled=false
+    check(not Authoring.action_body_fact(repeated,repeat_cache),"Disabled Action body leaves normal Spell dispatch intact")
+    var source:Resource=load("res://authoring/abilities/actions/action.spell.dispel_evil_and_good.break_enchantment.tres")
+    check(source.effects.size()==1 and source.effects[0].clip=="high-level-22/dispel-evil-and-good/break_enchantment" \
+        and source.effects[0].source_end==0.8,
+        "Break selects one finite recipient response; the existing Condition lifecycle owns ward retirement")
+    var descriptor:Dictionary=source.effects[0].constructor_input
+    var action:Dictionary={"id":"40","lineage_id":"4","parent_lineage":null,"phase":"completion","canceled":false,
+        "fact":{"kind":"action","behavior_id":source.id,"source_entity_uuid":"caster","target_entity_uuid":"recipient"}}
+    var ward:Dictionary={"id":"31","lineage_id":"5","parent_lineage":"4","phase":"completion","canceled":false,"fact":{"kind":"actor_change"}}
+    var cured:Dictionary={"id":"32","lineage_id":"6","parent_lineage":"4","phase":"completion","canceled":false,"fact":{"kind":"actor_change"}}
+    var owner:Dictionary={"condition_uuid":"actual-consumed-ward","behavior_id":"condition.spell.dispel_evil_and_good"}
+    var control:Dictionary={"condition_uuid":"actual-removed-control","behavior_id":"condition.charmed"}
+    var graph:Dictionary={"nodes":{"4":action,"5":ward,"6":cured},"condition_cues":{
+        "31":[{"phase":"removal","actor_uuid":"caster","condition":owner}],
+        "32":[{"phase":"removal","actor_uuid":"recipient","condition":control}]}}
+    graph.observed_results=Results.observed_index([ward,cured,action],graph)
+    var before:PackedByteArray=var_to_bytes(graph)
+    var rows:Array=Results.observed(action,descriptor,graph)
+    check(rows.size()==1 and rows[0].values.owner_uuid=="actual-consumed-ward" \
+        and rows[0].inputs.lease_input.is_empty() and rows[0].inputs.event_input.ward_uuid=="actual-consumed-ward" \
+        and rows[0].inputs.event_input.removed_condition_uuids==["actual-removed-control"] \
+        and rows[0].inputs.event_input.uuid=="32" and rows[0].publication_occurrences==["31","32"] \
+        and var_to_bytes(graph)==before,
+        "Actual same-Action ward and recipient removals supply the exact finite event without a fabricated held lease")
+    graph.condition_cues["31"]=[]
+    check(Results.observed(action,descriptor,graph).is_empty(),"Undisclosed consumed ward cannot borrow another condition UUID")
+    graph.condition_cues["31"]=[{"phase":"removal","actor_uuid":"caster","condition":owner},{"phase":"removal","actor_uuid":"caster","condition":owner.duplicate(true)}]
+    check(Results.observed(action,descriptor,graph).is_empty(),"Ambiguous consumed ward is refused")
+    graph.condition_cues["31"]=[{"phase":"removal","actor_uuid":"caster","condition":owner}]
+    cured.parent_lineage="unrelated-action"
+    check(Results.observed(action,descriptor,graph).is_empty(),"Unrelated recipient removal cannot qualify the paid Action")
+    cured.parent_lineage="4";action.canceled=true
+    check(Results.observed(action,descriptor,graph).is_empty(),"Canceled Action never borrows otherwise observed removals")
 
 func authored()->void:
     var entries={};var paths={};var index=BodyIndex.new()
@@ -420,6 +492,6 @@ func run()->void:
     Components.compile(group,{"events":[node]},graph,cache)
     check(group.components.size()==1 and group.components[0].status=="missing" and group.components[0].reason=="native_action_position_unavailable","Missing public placement never creates an effect at a fixture origin")
     check(fact==original,"Cue preparation and component dispatch do not mutate authoritative facts")
-    authored();observations();held_conditions();factual_events();retained_occurrences();legacy_six()
+    authored();observations();held_conditions();factual_events();retained_occurrences();legacy_six();remaining_action_choices()
     print(JSON.stringify({"checks":checks,"failures":failures,"legacy_six_scope":"Actual authored six-resource import/export and production compiler outputs from explicit synthetic witness/membership controls; shared source-time values only, no recorded/native/art evidence."}))
     quit(0 if failures.is_empty() else 1)

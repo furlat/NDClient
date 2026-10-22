@@ -160,13 +160,22 @@ static func prepare_layers(row:Dictionary,rig:Dictionary,cache:Dictionary)->Dict
             if BodySources.prepare_descriptor(noise_path,layer.slot,cache).is_empty():return _error("Cannot admit body noise source: "+str(noise))
         if effect.has("sourceSheet"):
             layer.paths={}
+            layer.bank_paths={}
             var path:String=_sheet_path(layer.slot,effect.sourceSheet,{},{},cache)
             if BodySources.prepare_descriptor(path,layer.slot,cache).is_empty():return _error("Cannot admit body sourceSheet: "+effect.sourceSheet)
             for clip in rig.clips:layer.paths[clip]=path
         else:
             layer.paths=resource.paths_by_slot.get(layer.slot,{})
-        if layer.paths.is_empty():return _error("No admitted body clips for selected category: "+layer.category)
+            layer.bank_paths=resource.bank_paths_by_slot.get(layer.slot,{})
+        if layer.paths.is_empty() and layer.bank_paths.is_empty():return _error("No admitted body clips for selected category: "+layer.category)
     return {"ok":true,"value":result}
+
+static func has_clip(layer:Dictionary,clip:String)->bool:
+    return layer.paths.has(clip) or layer.get("bank_paths",{}).has(clip)
+
+static func source_path(layer:Dictionary,clip:String,facing:String)->String:
+    var banks:Dictionary=layer.get("bank_paths",{})
+    return str(banks[clip].get(facing,"")) if banks.has(clip) else str(layer.paths.get(clip,""))
 
 static func layers(row:Dictionary,rig:Dictionary,cache:Dictionary)->Array:
     # Standalone fixtures and the pre-prepared startup compatibility path use
@@ -216,24 +225,38 @@ static func sheet_paths(actor:Dictionary,clips:Array,cache:Dictionary,looks:Dict
                 if source==null:return _error("Cannot admit body clip: "+layer.category+"/"+clip)
                 descriptor=source.descriptors.get(layer.slot,{})
             if descriptor.is_empty():continue
-            for profile in source_refs:
-                var reference:Dictionary=descriptor.source_records[profile]
-                if not source_seen[profile].has(reference.source_id):
-                    source_seen[profile][reference.source_id]=true;source_refs[profile].append(reference)
-            var native_reference:Dictionary=descriptor.native_record
-            if not native_reference.roles.is_empty() and not native_seen.has(native_reference.source_id):
-                native_seen[native_reference.source_id]=true;native_refs.append(native_reference)
-            var path:String=descriptor.path
-            paths[path]=true;colours[path]=true
-            paths.merge(descriptor.companions);gpu_only.merge(descriptor.companions)
-            normal_sets.merge(descriptor.normal_sets)
-            if (effect.is_empty() or effect.get("kind")=="condition_appearance") and not descriptor.companions.is_empty():geometry_slots[path]=layer.slot
+            # One old sheet contains every view; a native clip retains the same
+            # horizon by admitting only this already-needed clip's declared views.
+            var descriptors:Array=descriptor.banks.values() if descriptor.has("banks") else [descriptor]
+            for bank in descriptors:
+                if descriptor.has("banks"):
+                    if bank.get("source_layout",{}).is_empty():return _error("Native bank has no admitted source layout: "+str(bank.get("path","")))
+                    for reference in bank.source_records.values():
+                        if reference.get("native_body_colour")!=bank.path or reference.get("native_body_cell")!=bank.source_layout.cell:
+                            return _error("Native bank has no exact caster cell contribution: "+bank.path)
+                _sheet_descriptor(bank,layer,effect,paths,colours,gpu_only,normal_sets,geometry_slots,source_refs,source_seen,native_refs,native_seen)
     for path in colours:gpu_only.erase(path)
     normal_sets.make_read_only()
     for records in source_refs.values():records.make_read_only()
     source_refs.make_read_only();native_refs.make_read_only()
     return {"ok":true,"value":paths,"gpu_only":gpu_only,"cpu_required":colours,"geometry_slots":geometry_slots,
         "normal_sets":normal_sets,"source_records":source_refs,"native_records":native_refs}
+
+static func _sheet_descriptor(descriptor:Dictionary,layer:Dictionary,effect:Dictionary,paths:Dictionary,colours:Dictionary,
+        gpu_only:Dictionary,normal_sets:Dictionary,geometry_slots:Dictionary,source_refs:Dictionary,source_seen:Dictionary,
+        native_refs:Array,native_seen:Dictionary)->void:
+    for profile in source_refs:
+        var reference:Dictionary=descriptor.source_records[profile]
+        if not source_seen[profile].has(reference.source_id):
+            source_seen[profile][reference.source_id]=true;source_refs[profile].append(reference)
+    var native_reference:Dictionary=descriptor.native_record
+    if not native_reference.roles.is_empty() and not native_seen.has(native_reference.source_id):
+        native_seen[native_reference.source_id]=true;native_refs.append(native_reference)
+    var path:String=descriptor.path
+    paths[path]=true;colours[path]=true
+    paths.merge(descriptor.companions);gpu_only.merge(descriptor.companions)
+    normal_sets.merge(descriptor.normal_sets)
+    if (effect.is_empty() or effect.get("kind")=="condition_appearance") and not descriptor.companions.is_empty():geometry_slots[path]=layer.slot
 
 static func rest_sample(actor: Dictionary, rig: Dictionary, cache: Dictionary) -> Dictionary:
     var index: Dictionary = _read("catalog-index.json", cache)

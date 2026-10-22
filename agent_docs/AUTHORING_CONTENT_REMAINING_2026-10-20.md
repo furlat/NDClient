@@ -165,7 +165,7 @@ and audio remain unreviewed.
 
 ## Actual active Action owners and originals — 22 October
 
-The next coherent24file resource/shared-compiler batch resolves ten previously
+The qualified24file resource/shared-compiler batch resolved ten previously
 blank Action decisions: six explicit existing owners (AllyHelp, ElementalWarp,
 HealingIncense, DancingLights.move, Moonbeam.move, learned DivineSmite), exact
 ShieldBash/SpiritualWeaponStrike Attack recipes, and Hex/Hunter retained-root
@@ -174,9 +174,11 @@ Spiritual uses its own finite source, typed source timing and actual Miss/Hit
 contact decision. Reapplication preserves original root UUID/age and real later
 recipient/publication cuts. No per-spell renderer branch or new clock.
 
-Eight actual native-producer originals are now in Library380/376recorded:
-four attack/quarry successes, three Myrmidon successes and the exact failed
-Earth Landing identity. Source publication passes zero errors/two warnings;
+That batch added eight actual native-producer original outcomes: four attack/
+quarry successes, three Myrmidon successes and the exact failed Earth Landing
+identity. After the additional Arcane Sword original, the actual Library now
+contains381cases/377recorded/fourfailed before the next creature captures. The
+failed originals remain preserved. Source publication passes zero errors/two warnings;
 the initial three external-declaration-order syntax errors are preserved and
 corrected. Four initial headless rows pass19,148assertions. The final two
 current-contact controls pass3,457 and the complete final four-original native
@@ -189,13 +191,71 @@ retains its actual pre-contact-repair source; whole-current/quiet/live/art
 acceptance does not follow from these separate receipts.
 [Single execution record and exact receipts](REMAINING_WORK_2026-10-20.md#main-queue-actual-actioncreature-originals--22-october).
 
-**Eleven direct decisions remain:** four own-body/mouth-dependent actions;
-DivineSense/HolyNimbus/SacredWeapon independent onsets; HelpAttack presentation;
-ArcaneSword Move/Strike independent blade inputs/presentation; BreakEnchantment
-removal projection/presentation. These are being resolved as the next coherent
-resource/shared-input family. The earlier21-row list below is the source trace
-before this ten-row resolution, not21still-unassigned effects. All art/audio
-remain UNREVIEWED.
+**All21original direct Action decisions now have explicit authored or delegated
+source choices.** The ten decisions above retain their historical qualified
+receipts. The next seven-decision source family is applied and source-reviewed;
+its source assignment alone does not establish full native lifecycle output. DivineSense,
+HolyNimbus, SacredWeapon, HelpAttack and ArcaneSword Move/Strike deliberately
+reuse the current rig's `Special1` as provisional onset/command gestures, without
+invented contact/release markers. Existing Condition/Item owners keep their real
+UUIDs and clocks. BreakEnchantment adds its actual consumed-ward/recipient-removal
+response; the existing Condition lifecycle retains ward retirement. These are
+authored choices, not accepted artwork or a native-output pass.
+[Applied18file source proposal](../.runtime/closing-repairs/remaining-active-action-choices/remaining-active-action-choices.patch),
+[exact ownership/source limits](../.runtime/closing-repairs/remaining-active-action-choices/README.md).
+
+**The final four body decisions are explicit provisional choices too.** Cambion
+Draining Kiss uses concrete `Attack4` on its actual `smallscale.demonelite01`
+substitute; Djinni Sweetplum Gales uses the real `Special1` on its selected6Mage;
+Draconic Spirit Breath uses the real current-T-Rex `Taunt`. Each is an actual
+ActionEvent/BaseAction route with an exact current-rig guard and its unchanged
+fifteen-pose/twelve-fps clock, without invented contact/release markers.
+ConcussiveSmash is instead an actual AttackEvent: its exact Attack recipe selects
+4Paladin `Attack1` only for `creature.spell.deva`, equipped
+`weapon.spell_summon.deva`, MELEE_MAIN and that current rig. The default refuses
+other sources; its Action wrapper delegates the real Attack instead of adding a
+second body. Save/damage/Dazed, Sweetplum field/recipient membership and Cambion's
+actual Charm consumption keep their existing child owners.
+[Exact seven-file source family and limits](../.runtime/closing-repairs/provisional-creature-action-choices/README.md),
+[source patch](../.runtime/closing-repairs/provisional-creature-action-choices/provisional-creature-action-choices.patch).
+
+The coherent current publication covers all three domains with zero errors/two
+warnings; geometry911, Attack3274 and rooted native Outline27 controls all pass
+with natural exits0, no engine/script errors or owned leftovers. The earlier
+Cambion alias refusal and native exit5 remain preserved. The corrected Cambion
+choice names the actual `Attack4` RigClip directly; no builder alias exception or
+new artwork was invented. These bounded controls do not establish all-native,
+whole-current live, performance or human-art acceptance.
+[Exact publication/control receipt](../.runtime/main-queue-20261022/creature-choice-outline-final/summary.json).
+
+Authentic Cambion/Deva/Djinni bodies are still missing final-art deliveries.
+Draconic authentic mouth geometry and finite breath output remain partial; the
+current-T-Rex gesture supplies no mouth fallback and does not qualify future
+native grounded/airborne dragon-body choices. Missing final art/input data is
+separate from these now-explicit provisional body assignments. The four actual-
+producer scenarios are source-reviewed but not yet captured here; Library stays
+381/377/fourfailed until actual new receipts are imported.
+[Proposed single four-case original cohort](../.runtime/closing-repairs/provisional-creature-action-choices/provisional-creature-originals.patch),
+[legal setup/outcome and retirement limits](../.runtime/closing-repairs/provisional-creature-action-choices/scenario-note.md).
+
+**Arcane Sword's independent anchor is separately partial.** Its actual new
+original confirms the repeat is a `SpellFact` with the Action behavior identity
+and real Hit, while Move is an `ActionFact`. The explicit typed
+[`body_fact_kind`](../authoring/abilities/actions/action.spell.arcane_sword.strike.tres)
+selects only the Action gesture/clock inside ordinary Spell processing; it does
+not rewrite the fact, outcome, native delivery or children. Initial/repeated
+facts expose caster `[3,7]`, while the accepted independent `[5,7]` then `[5,6]`
+anchor is absent from the public operands. The client does not infer blade
+placement or contact from commands/caster/victim position. This genuine producer
+boundary is not another unassigned Action onset.
+[Actual original](../.runtime/closing-repairs/arcane-sword-original/index.json),
+[exact two-seat public facts](../.runtime/closing-repairs/remaining-active-action-choices/arcane-original-public-facts.json),
+[backend anchor handoff](BACKEND_CONTENT_BLOCKERS_2026-10-20.md#arcane-sword-independent-anchor--actual9f-moverepeat-original22october).
+
+The earlier21-row list below is the historical source trace before the ten-plus-
+seven-plus-four decisions, not21still-unassigned effects. All artwork/audio remain
+**UNREVIEWED**. Further original/native lifecycle qualification belongs to the
+single execution record; none is inferred from source presence or review here.
 
 ## Explicit wrapper/passive authoring batch — 22 October
 
@@ -212,8 +272,8 @@ controls pass17,059assertions with natural exits0; the original two harness
 parse failures are preserved in the single R1–R8 execution record.
 [Exact source/composer inventory](../.runtime/closing-repairs/action-wrapper-passive-dispositions/source-dispositions.json).
 
-The earlier **21direct Action decisions** before the ten-row follow-through above
-were not closed by the80wrapper/passive choices; this does not mean
+The earlier **21direct Action decisions**, before the ten-plus-seven-plus-four
+follow-through above, were not closed by the80wrapper/passive choices; this does not mean
 21missing effects or21backend defects. The source trace must distinguish an
 already-present child owner from an actual missing body/effect:
 
@@ -225,10 +285,12 @@ already-present child owner from an actual missing body/effect:
   Moonbeam Move, Hex Reapply, Hunter's Mark Reapply, Spiritual Weapon Strike,
   Break Enchantment and the exact Divine Smite reaction declaration.
 
-These rows are not being marked state-only merely to remove an audit warning.
-Their real emitted facts and current resource/renderer owners must establish
-the disposition; existing parent/condition/item/grant source implementations
-remain intact while that trace is completed. This is source authoring progress,
+These rows were not marked state-only merely to remove an audit warning.
+All21source decisions above follow their real emitted facts and current
+resource/renderer owners; final body/mouth artwork and the named input/output
+boundaries remain partial. Existing
+parent/condition/item/grant implementations and their original receipts stay
+intact. This is source authoring progress,
 not whole-current lifecycle/runtime, performance or art acceptance.
 
 ## Shared authoring schema now consumed by the renderer

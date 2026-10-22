@@ -22,6 +22,9 @@ const Feedback = preload("res://presentation/source/abilities/feedback.gd")
 @export_group("Body")
 ## Clip role, markers and hidden slots; empty when the action has no body.
 @export var body: BodyUse
+## Optional actual public fact kind for this catalog Action's body only.
+## Empty keeps ordinary dispatch; the wire fact/outcome/ancestry never change.
+@export var body_fact_kind: String = ""
 ## Another action's recipe this one plays (door close plays the lever pull).
 @export var plays: String = ""
 ## Shove's own recipe (shove facts read it instead of the action recipe).

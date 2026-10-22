@@ -3,6 +3,7 @@ extends Resource
 ## One clip of a rig: the role it plays, the source animation that draws it
 ## (named exactly as the files name it) and the facts of that animation.
 const BodySurface = preload("res://presentation/source/characters/body_surface.gd")
+const ArtSource = preload("res://presentation/source/art_source.gd")
 ## The clip key recipes and contexts use ("Attack1", "Death", "PhysicalGesture").
 @export var name: String = ""
 ## Shared role vocabulary: idle, walk, run, attack_1, cast, block_start, hurt, die ...
@@ -34,6 +35,8 @@ const BodySurface = preload("res://presentation/source/characters/body_surface.g
 @export var owns_cast_preparation: bool = false
 ## Depth and normals of the body layer.
 @export var surface: BodySurface
+## Exact native atlas per declared display facing. Empty preserves the ordinary sheet.
+@export var body_banks: Dictionary[String, ArtSource] = {}
 ## true when this clip stands in for a role the art does not have.
 @export var stand_in: bool = false
 @export_multiline var notes: String = ""

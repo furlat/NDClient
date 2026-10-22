@@ -68,6 +68,7 @@ EVENT_PROJECTIONS = {
     "weapon_component": {"strike_input"},
     "quarry_application": {"owner_input", "quarry_input"},
     "attack_attempt": {"owner_state"},
+    "owner_removal": {"event_input"},
     "accepted_area_blast": {"blast_event"},
     "portable_payload_blast": {"observed_explosion"},
 }

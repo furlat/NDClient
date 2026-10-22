@@ -61,21 +61,90 @@ static func layer(owner:Node,row:Dictionary,rig:Dictionary,source:Dictionary,ind
     var shape:Dictionary=layer_shape(rig,128.0/owner.rig_config.TILE_W*row.scale)
     entry.node.mesh=QuadShapes.mesh(shape.mesh_size,shape.mesh_center)
     entry.material.set_shader_parameter("source_quad_size",shape.mesh_size)
+    if rig.get("native_banks",false):
+        entry.native_shapes=prepare_native_shapes(rig,shape.scale)
+        entry.native_shape_rig=rig;entry.native_shape_scale=shape.scale
     entry.node.custom_aabb=entry.node.mesh.get_aabb()
     entry.cell=shape.cell;entry.pivot=shape.pivot;entry.scale=shape.scale
     owner.update_bounds(entry)
     return entry
 
-static func layer_shape(rig:Dictionary,scale:float)->Dictionary:
+static func layer_shape(rig:Dictionary,scale:float,layout:Dictionary={})->Dictionary:
     var cell:=Vector2(rig.cell_width,rig.cell_height)
     var pivot:=Vector2(cell.x*.5,cell.y-rig.origin_y_from_ground)
+    if not layout.is_empty():
+        cell=Vector2(layout.cell[0],layout.cell[1]);pivot=Vector2(layout.pivot[0],layout.pivot[1])
     return {"cell":cell,"pivot":pivot,"scale":scale,"mesh_size":cell*scale/Placement.PIXELS_PER_UNIT,
         "mesh_center":Vector3((cell.x*.5-pivot.x)*scale/Placement.PIXELS_PER_UNIT,(pivot.y-cell.y*.5)*scale/Placement.PIXELS_PER_UNIT,0.0)}
+
+## Finite private construction prepares the declared shapes at this exact scale.
+## The existing global QuadShapes map remains the only native mesh cache.
+static func prepare_native_shapes(rig:Dictionary,scale:float)->Dictionary:
+    var result:Dictionary={}
+    var fixed:Dictionary=layer_shape(rig,scale)
+    result[""]={"shape":fixed,"mesh":QuadShapes.mesh(fixed.mesh_size,fixed.mesh_center)}
+    for clip in rig.clips.values():
+        for bank in clip.get("bank_shapes",{}).values():
+            if result.has(bank.path):continue
+            var shape:Dictionary=layer_shape(rig,scale,bank)
+            result[bank.path]={"shape":shape,"mesh":QuadShapes.mesh(shape.mesh_size,shape.mesh_center)}
+    result.make_read_only()
+    return result
+
+static func source_uv(rig:Dictionary,layout:Dictionary,frame:int,facing:String,size:Vector2)->Vector4:
+    if layout.is_empty():
+        return Vector4(frame*rig.cell_width/size.x,rig.facing_rows[facing]*rig.cell_height/size.y,float(rig.cell_width)/size.x,float(rig.cell_height)/size.y)
+    var rect:Array=layout.frame_rects[frame]
+    return Vector4(rect[0]/size.x,rect[1]/size.y,rect[2]/size.x,rect[3]/size.y)
+
+## Passive exact adoption proof. Missing prepared native shape never allocates.
+static func source_shape_ready(entry:Dictionary,rig:Dictionary,path:String,layout:Dictionary)->bool:
+    if not rig.get("native_banks",false):return layout.is_empty()
+    if not is_same(entry.get("native_shape_rig"),rig) or entry.get("native_shape_scale")!=entry.scale:return false
+    if layout.is_empty() and entry.get("native_shapes",{}).has(path):return false
+    var key:String=path if not layout.is_empty() else ""
+    var prepared:Dictionary=entry.get("native_shapes",{}).get(key,{})
+    if prepared.is_empty():return false
+    var shape:Dictionary=layer_shape(rig,entry.scale,layout)
+    return prepared.shape==shape
+
+## Passive registered-canvas proof for an existing native body assembly.
+## The finite actor owner already prepared this reference quad at actual scale.
+static func prepared_reference_shape(entry:Dictionary,rig:Dictionary)->Dictionary:
+    if not rig.get("native_banks",false):return {}
+    if not is_same(entry.get("native_shape_rig"),rig) or entry.get("native_shape_scale")!=entry.scale:return {}
+    var prepared:Dictionary=entry.get("native_shapes",{}).get("",{})
+    if prepared.is_empty() or prepared.shape!=layer_shape(rig,entry.scale):return {}
+    return prepared
+
+static func apply_source_shape(entry:Dictionary,rig:Dictionary,path:String,layout:Dictionary)->bool:
+    if not source_shape_ready(entry,rig,path,layout):return false
+    if not rig.get("native_banks",false):return true
+    var key:String=path if not layout.is_empty() else ""
+    if entry.get("native_shape_key")==key:return true
+    var prepared:Dictionary=entry.native_shapes[key];var shape:Dictionary=prepared.shape
+    entry.node.mesh=prepared.mesh
+    entry.cell=shape.cell;entry.pivot=shape.pivot
+    var before:int=int(entry.get("source_binding_revision",0))
+    SourceMaterial.set_parameter(entry,"source_quad_size",shape.mesh_size,true)
+    if before==int(entry.get("source_binding_revision",0)):SourceMaterial.structural_change(entry)
+    entry.native_shape_key=key
+    entry.source_layout=layout
+    entry.erase("geometry_binding") # Recompute expanded bounds against the newly adopted quad.
+    return true
+
+static func layer_facing(base:String,sample:Dictionary,quarter:int,cycle:Array)->String:
+    if sample.is_empty():return base
+    var track:Dictionary=sample.get("source_track",{})
+    var from:Variant=track.get("from_position");var to:Variant=track.get("target_position",track.get("to_position"))
+    if from!=null and to!=null and from!=to:return cycle[posmod(cycle.find(Placement.facing(Vector2(to[0]-from[0],to[1]-from[1]),cycle))+quarter*2,8)]
+    return base
 
 static func prepare_binding(rig:Dictionary,layer:Dictionary,path:String,cache:Dictionary,depth:bool,normals:bool,profile:String,scale:float,scale_x:float)->Dictionary:
     CharacterGeometry.BodySources.prepare_descriptor(path,layer.slot,cache)
     var header:Dictionary=CharacterGeometry.BodySources.header(path,cache)
     return {"path":path,"sheet_size":Vector2(header.get("width",0),header.get("height",0)),
+        "source_layout":CharacterGeometry.BodySources.descriptor(path,layer.slot,cache).get("source_layout",{}),
         "geometry":CharacterGeometry.prepare_binding(path,layer.slot,cache,depth,normals,profile,scale,scale_x)}
 
 static func realize_binding(owner:Node,value:Dictionary)->Dictionary:
@@ -108,26 +177,31 @@ static func bind_source_values(entry:Dictionary,rig:Dictionary,path:String,layer
     if entry.get("bound_frame_key",[])!=frame_key:
         entry.bound_frame_key=frame_key
         SourceMaterial.set_parameter(entry,"sheet",sheet)
-        SourceMaterial.set_parameter(entry,"material_cell_size",Vector2(rig.cell_width,rig.cell_height))
-        SourceMaterial.set_parameter(entry,"frame_uv",Vector4(layer_frame*rig.cell_width/sheet_size.x,rig.facing_rows[layer_facing]*rig.cell_height/sheet_size.y,float(rig.cell_width)/sheet_size.x,float(rig.cell_height)/sheet_size.y))
+        var layout:Dictionary=entry.get("source_layout",{})
+        SourceMaterial.set_parameter(entry,"material_cell_size",Vector2(rig.cell_width,rig.cell_height) if layout.is_empty() else Vector2(layout.cell[0],layout.cell[1]))
+        SourceMaterial.set_parameter(entry,"frame_uv",source_uv(rig,layout,layer_frame,layer_facing,sheet_size))
     SourceMaterial.apply(entry,Palette.parameters(layer,layer_facing,layer_frame,textures,resources))
     if not parameters.is_read_only() or not is_same(entry.get("bound_condition_parameters"),parameters):
         SourceMaterial.apply(entry,parameters)
         entry.bound_condition_parameters=parameters if parameters.is_read_only() else null
     if entry.has("geometry_camera_origins"):CharacterGeometry.apply_facing(entry,layer_facing)
 
-static func bind_source(owner:Node,entry:Dictionary,rig:Dictionary,path:String,layer_frame:int,layer_facing:String,parameters:Dictionary)->void:
+static func bind_source(owner:Node,entry:Dictionary,rig:Dictionary,path:String,layer_frame:int,layer_facing:String,parameters:Dictionary)->bool:
     # Pose selection, animation clocks, transforms and visibility remain in Play.
     var layer:Dictionary=entry.actor_layer
     var row:Dictionary=entry.placement
     var prepared:Dictionary=entry.get("prepared_source_binding",{})
     var prepared_key:Array=[path,owner.source_depth,owner.source_normals,entry.scale,row.get("scale_x",1.0),owner.character_light_profile]
     var source_prepared:bool=not prepared.is_empty() and prepared.geometry.key==prepared_key
+    if rig.get("native_banks",false):
+        var layout:Dictionary=prepared.get("source_layout",{}) if source_prepared else CharacterGeometry.BodySources.descriptor(path,layer.slot,owner.catalog_cache).get("source_layout",{})
+        if not apply_source_shape(entry,rig,path,layout):return false
     var sheet:Texture2D=prepared.sheet if source_prepared else owner.textures[path]
     var size:Vector2=prepared.sheet_size if source_prepared else Vector2(sheet.get_width(),sheet.get_height())
     bind_source_values(entry,rig,path,layer_frame,layer_facing,sheet,size,owner.textures,owner.resources,parameters)
     if source_prepared:CharacterGeometry.apply_binding(entry,prepared.geometry)
     else:CharacterGeometry.bind(entry,path,owner.catalog_cache,owner.texture,owner.source_depth,owner.source_normals,owner.character_light_profile)
+    return true
 
 static func realize_private_binding(value:Dictionary,textures:Dictionary)->Dictionary:
     # Missing texture operands stay explicitly named until the scene owner's

@@ -7,3 +7,5 @@ extends Resource
 @export var headers: Dictionary = {}
 @export var clip_sources: Dictionary = {}
 @export var paths_by_slot: Dictionary = {}
+## Native body slot -> clip -> display facing -> actual colour path.
+@export var bank_paths_by_slot: Dictionary = {}

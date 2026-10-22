@@ -185,8 +185,9 @@ func configure(owner:Node,candidate:Dictionary,first:bool=false,forecast:Diction
         "actor_state":candidate.state,"staged_actors":candidate.get("staged_actors",{}),
         "actor_samples":candidate.get("actor_samples",{}),
         "profile_actor_worker":bool(host.profile.get("recording",false)),
+        "layer_samples":candidate.get("actor_layers",[]).reduce(func(values,row):values[row.id]=row;return values,{}),
         "layer_clips":candidate.get("actor_layers",[]).filter(func(row):return row.kind=="sprite_layer").reduce(func(values,row):values[row.id]=row.get("clip","");return values,{}),
-        "source_options":{"depth":host.source_depth,"normals":host.source_normals,"profile":host.character_light_profile,"tile_width":host.rig_config.TILE_W},
+        "source_options":{"depth":host.source_depth,"normals":host.source_normals,"profile":host.character_light_profile,"tile_width":host.rig_config.TILE_W,"quarter":quarter,"cycle":host.rig_config.FACING_CYCLE,"external":host.external_playback},
         "actor_loadouts":ActorConstruction.loadouts(candidate.get("actor_samples",{}),candidate.get("actor_layers",[])),"existing_actors":existing_actors},true)
     if forecast.is_empty():task=WorkerThreadPool.add_task(_derive.bind(input),false,"Prepare displayed world")
     else:task=WorkerThreadPool.add_task(_derive_forecast.bind(input,forecast),false,"Prepare current world actors")
@@ -595,14 +596,22 @@ static func _complete_actors(input:Dictionary,forecast:Dictionary)->Dictionary:
         var layers:Array=selected.value
         var source_bindings:Dictionary={}
         var options:Dictionary=input.get("source_options",{})
+        var cycle:Array=options.get("cycle",[])
+        var base_facing:String=""
+        if rig.get("native_banks",false):
+            base_facing=source_sample.get("world_facing","SW" if options.external else row.facing)
+            base_facing=cycle[posmod(cycle.find(base_facing)+int(options.quarter)*2,8)]
         for layer in layers:
             var selection_started:int=Time.get_ticks_usec() if measured else 0
             if measured:actor_profile.layers_seen+=1
             var selected_clip:String=input.get("layer_clips",{}).get(layer.get("effect",{}).get("component_id",""),source_sample.get("clip",""))
-            if not layer.paths.has(selected_clip):
+            var layer_sample:Dictionary=input.get("layer_samples",{}).get(layer.get("effect",{}).get("component_id",""),{})
+            var selected_facing:String=ActorConstruction.layer_facing(base_facing,layer_sample,int(options.quarter),cycle) if rig.get("native_banks",false) else ""
+            var selected_path:String=Characters.source_path(layer,selected_clip,selected_facing)
+            if selected_path.is_empty():
                 _record_actor_worker_phase(actor_profile,"source_selection",selection_started)
                 continue
-            var source_key:Array=[layer.paths[selected_clip],options.get("depth",true),options.get("normals",true),
+            var source_key:Array=[selected_path,options.get("depth",true),options.get("normals",true),
                 128.0/float(options.get("tile_width",128))*row.scale,row.get("scale_x",1.0),options.get("profile","original")]
             var retained_binding:bool=same_structure and before.get("binding_keys",{}).get(layer.slot)==source_key
             _record_actor_worker_phase(actor_profile,"source_selection",selection_started)
@@ -610,14 +619,14 @@ static func _complete_actors(input:Dictionary,forecast:Dictionary)->Dictionary:
                 if measured:actor_profile.bindings_retained+=1
                 continue
             var binding_started:int=Time.get_ticks_usec() if measured else 0
-            source_bindings[layer.slot]=ActorConstruction.prepare_binding(rig,layer,layer.paths[selected_clip],input.cache,
+            source_bindings[layer.slot]=ActorConstruction.prepare_binding(rig,layer,selected_path,input.cache,
                 options.get("depth",true),options.get("normals",true),options.get("profile","original"),
                 128.0/float(options.get("tile_width",128))*row.scale,row.get("scale_x",1.0))
             _record_actor_worker_phase(actor_profile,"binding_geometry",binding_started)
             if measured:actor_profile.bindings_prepared+=1
             if layer.slot!="shadow" and (layer.get("effect",{}).is_empty() or layer.get("effect",{}).get("kind")=="condition_appearance"):
                 var optical_started:int=Time.get_ticks_usec() if measured else 0
-                var optical:Dictionary=ActorConstruction.CharacterGeometry.BodySources.descriptor(layer.paths[selected_clip],layer.slot,input.cache).get("optical_paths",{})
+                var optical:Dictionary=ActorConstruction.CharacterGeometry.BodySources.descriptor(selected_path,layer.slot,input.cache).get("optical_paths",{})
                 if not optical.is_empty():future_solid_paths[optical.solid]=true
                 _record_actor_worker_phase(actor_profile,"source_descriptor_optical",optical_started)
                 if measured:actor_profile.optical_lookups+=1
@@ -626,7 +635,11 @@ static func _complete_actors(input:Dictionary,forecast:Dictionary)->Dictionary:
         var retained_geometry_started:int=Time.get_ticks_usec() if measured else 0
         for layer in layers:
             if not retained_slots.has(layer.slot):continue
-            var source:Dictionary=ActorConstruction.CharacterGeometry.record(layer.paths.get(source_sample.get("clip",""),""),layer.slot,input.cache)
+            var retained_clip:String=input.get("layer_clips",{}).get(layer.get("effect",{}).get("component_id",""),source_sample.get("clip",""))
+            var retained_sample:Dictionary=input.get("layer_samples",{}).get(layer.get("effect",{}).get("component_id",""),{})
+            var retained_facing:String=ActorConstruction.layer_facing(base_facing,retained_sample,int(options.quarter),cycle) if rig.get("native_banks",false) else ""
+            var retained_path:String=Characters.source_path(layer,retained_clip,retained_facing) if rig.get("native_banks",false) else str(layer.paths.get(source_sample.get("clip",""),""))
+            var source:Dictionary=ActorConstruction.CharacterGeometry.record(retained_path,layer.slot,input.cache)
             var prior_geometry:Dictionary=before.geometry[layer.slot]
             var cell:Array=source.get("cell_size",[128,128])
             if prior_geometry.present!=(not source.is_empty()) or (not source.is_empty() and prior_geometry.cell!=Vector2(cell[0],cell[1])):
@@ -634,7 +647,7 @@ static func _complete_actors(input:Dictionary,forecast:Dictionary)->Dictionary:
         _record_actor_worker_phase(actor_profile,"retained_geometry",retained_geometry_started)
         actors[id]={"row":row,"rig":rig,"layers":layers,"entries":[],"new_entries":[],"playback":null,
             "reuse_actor":same_rig,"retained_slots":retained_slots,"source_sample":source_sample,"source_bindings":source_bindings,
-            "layer_clips":input.get("layer_clips",{}),"source_ready":{},"source_cursor":0}
+            "layer_clips":input.get("layer_clips",{}),"layer_samples":input.get("layer_samples",{}),"source_ready":{},"source_cursor":0}
     worker_phases.actors=(Time.get_ticks_usec()-phase_started)/1000.0
     if measured:actor_profile.actor_elapsed_usec=Time.get_ticks_usec()-phase_started
     var source_only:bool=not input.get("initial",false) and not input.get("world_changed",true) and not input.global_rows and actors.is_empty() \
@@ -819,6 +832,15 @@ func step(budget_usec: int = 2000) -> void:
                 var value:Dictionary=binding.get("prepared",{})
                 if value.is_empty():value=ActorConstruction.realize_binding(host,binding.value)
                 if value.is_empty():break
+                if binding.entry.has("native_shapes") and not ActorConstruction.source_shape_ready(binding.entry,Characters.rigs(host.catalog_cache)[binding.entry.placement.rig],value.path,value.get("source_layout",{})):
+                    media_issue="Retained actor has no exact native source shape: "+value.path;phase="failed";break
+                if not value.get("source_layout",{}).is_empty():
+                    var cell:=Vector2i(value.source_layout.cell[0],value.source_layout.cell[1])
+                    var cells:Dictionary={cell:true}
+                    if not host.generated_shadows.source_cells_ready(cells):
+                        var allowance:Dictionary={"used_usec":Time.get_ticks_usec()-started,"limit_usec":budget_usec}
+                        host.generated_shadows.prepare_source_cells(cells,allowance)
+                        break
                 binding.prepared=value
                 var optical:Dictionary=host.component_renderer.native_spells.prepare_actor_binding(value.path,binding.entry.actor_layer.slot,host)
                 if not optical.ready:break
@@ -998,7 +1020,9 @@ func _prepare_actor_resources()->void:
                 media_issue="Prepared actor has no selected source for "+str(id)+" / "+layer.slot+" / "+clip;phase="failed";return
             var clip_time:float=Tracks.sample_seconds(float(actor.source_sample.get("source_seconds",0.0)),maxf(float(actor.rig.clips[clip].frames)/float(actor.rig.clips[clip].fps),.001),Tracks.character_loops(actor.rig,clip))
             var frame:int=clampi(int(clip_time*actor.rig.clips[clip].fps),0,int(actor.rig.clips[clip].frames)-1)
+            var selected_facing:String=ActorConstruction.layer_facing(facing,actor.get("layer_samples",{}).get(layer.get("effect",{}).get("component_id",""),{}),quarter,cycle)
             layers[index]={"layer":layer,"binding":binding,"frame":frame}
+            if actor.rig.get("native_banks",false):layers[index].facing=selected_facing
             actor_resource_textures[binding.path]=host.textures.get(binding.path)
             for path in binding.geometry.textures.values():actor_resource_textures[path]=host.textures.get(path)
             var palette:Dictionary=layer.get("effect",{}).get("palette",{}) if layer.get("effect",{}).get("palette")!=null else {}
@@ -1113,6 +1137,9 @@ func _prepare_actor_step(prepared:Dictionary,deadline:int)->bool:
         prepared.complete=true;actor_cursor+=1
         prepared.outfit_clip=prepared.source_sample.get("clip","")
         prepared.outfit_profile=host.character_light_profile
+        var facing:String=prepared.source_sample.get("world_facing","SW" if host.external_playback else prepared.row.facing)
+        var cycle:Array=host.rig_config.FACING_CYCLE
+        prepared.outfit_facing=cycle[posmod(cycle.find(facing)+quarter*2,8)]
     return true
 
 func _record_actor_phase(name:String,started:int)->void:
@@ -1291,12 +1318,16 @@ func _prepare_actor_source_step(prepared:Dictionary,entry:Dictionary,private:boo
     var clip:String=prepared.get("layer_clips",{}).get(layer.get("effect",{}).get("component_id",""),selected.get("clip",""))
     var admission:Dictionary={"status":"no_selected_clip","clip":clip}
     blocked_actor={"actor":prepared.row.id,"slot":layer.slot,"clip":clip,"status":"checking"}
-    if not layer.paths.has(clip) or not prepared.rig.clips.has(clip):
+    var facing:String=selected.get("world_facing","SW" if host.external_playback else prepared.row.facing)
+    var cycle:Array=host.rig_config.FACING_CYCLE
+    facing=cycle[posmod(cycle.find(facing)+quarter*2,8)]
+    if prepared.rig.get("native_banks",false):facing=ActorConstruction.layer_facing(facing,prepared.get("layer_samples",{}).get(layer.get("effect",{}).get("component_id",""),{}),quarter,cycle)
+    var path:String=Characters.source_path(layer,clip,facing)
+    if path.is_empty() or not prepared.rig.clips.has(clip):
         _record_actor_phase("actor_source_readiness",readiness_started)
         media_issue="Prepared actor has no authored source for "+str(prepared.row.id)+" / "+layer.slot+" / "+clip
         phase="failed"
         return false
-    var path:String=layer.paths[clip]
     # This only initializes hidden material resources. It never requests media
     # or samples a graph; the displayed actor still chooses its current pose.
     admission.path=path
@@ -1330,15 +1361,13 @@ func _prepare_actor_source_step(prepared:Dictionary,entry:Dictionary,private:boo
     if not private:
         if not source_binding.is_empty():actor_bindings.append({"entry":entry,"value":source_binding,"actor":prepared.row.id,"owner":prepared.actor_base})
         return true
-    var facing:String=selected.get("world_facing","SW" if host.external_playback else prepared.row.facing)
-    var cycle:Array=host.rig_config.FACING_CYCLE
-    facing=cycle[posmod(cycle.find(facing)+quarter*2,8)]
     # A valid source frame is enough to prepare all non-frame bindings. The
     # actual first sample either certifies the adjacent UV change or fully binds.
     var clip_time:float=Tracks.sample_seconds(float(selected.get("source_seconds",0.0)),maxf(float(prepared.rig.clips[clip].frames)/float(prepared.rig.clips[clip].fps),.001),Tracks.character_loops(prepared.rig,clip))
     var frame:int=clampi(int(clip_time*prepared.rig.clips[clip].fps),0,int(prepared.rig.clips[clip].frames)-1)
     var binding_started:int=Time.get_ticks_usec() if measured else 0
-    ActorConstruction.bind_source(host,entry,prepared.rig,path,frame,facing,prepared.condition_parameters)
+    if not ActorConstruction.bind_source(host,entry,prepared.rig,path,frame,facing,prepared.condition_parameters):
+        media_issue="Prepared actor has no exact native source shape: "+str(prepared.row.id)+" / "+path;phase="failed";return false
     _record_actor_phase("actor_source_bind",binding_started)
     admission.status="source_bound"
     return true

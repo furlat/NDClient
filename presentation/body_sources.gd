@@ -115,7 +115,8 @@ static func descriptor(path:String,slot:String,cache:Dictionary)->Dictionary:
     var clip:Clip=current.loaded.get(resource.clip_sources.get(owner[1],"")) as Clip
     if clip==null:return {}
     var slots:Dictionary=clip.descriptors
-    return slots.get(slot,slots.get("*",{}))
+    var selected:Dictionary=slots.get(slot,slots.get("*",{}))
+    return selected.banks.get(path,{}) if selected.has("banks") else selected
 
 static func prepare_descriptor(path:String,slot:String,cache:Dictionary)->Dictionary:
     # Media/world preparation workers explicitly admit the selected metadata.

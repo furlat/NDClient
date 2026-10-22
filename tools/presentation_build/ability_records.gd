@@ -611,6 +611,7 @@ const ACTION_TEXT := {"text": ["text", "string", true], "colour": ["color", "col
 static func action_from_recipe(e: Resource, recipe: Dictionary) -> void:
     var raw: Dictionary = recipe.duplicate(true)
     F.move(raw, "disposition", e, "disposition", "string", true)
+    F.move(raw,"bodyFactKind",e,"body_fact_kind","string")
     e.body = body_from_actor(raw, "actor", "act")
     markers_from(raw, "anchors", e.body)
     if e.body != null:F.move(raw, "rigId", e.body, "rig", "string", true)
@@ -626,6 +627,10 @@ static func action_from_recipe(e: Resource, recipe: Dictionary) -> void:
 static func action_recipe(e: Resource) -> Dictionary:
     var record: Dictionary = e.unported.duplicate(true)
     F.emit(record, "disposition", e, "disposition", "string", true)
+    F.emit(record,"bodyFactKind",e,"body_fact_kind","string")
+    if not e.body_fact_kind.is_empty() and not e.resource_path.is_empty():
+        record._source_fields=record.get("_source_fields",{}).duplicate()
+        record._source_fields.bodyFactKind=e.resource_path+"::body_fact_kind"
     if not e.media.is_empty():record.media=e.media.duplicate(true)
     if not e.observed_fact.is_empty():record.observedFact=e.observed_fact.duplicate(true)
     if (not e.media.is_empty() or not e.observed_fact.is_empty()) and not e.resource_path.is_empty():

@@ -8,7 +8,7 @@
 [sub_resource type="Resource" id="Resource_na73f"]
 script = ExtResource("1_fsch6")
 role = "act"
-enabled = false
+clip = "Special1"
 hidden_slots = PackedStringArray()
 
 [sub_resource type="Resource" id="Resource_5pxan"]
@@ -21,9 +21,11 @@ source = "ui-delivery-20261018 action.ally_help"
 [resource]
 script = ExtResource("1_b4vm8")
 id = "action.help_attack"
+disposition = "authored"
 kind = "action"
 family = "core"
 icon = SubResource("Resource_5pxan")
 body = SubResource("Resource_na73f")
 effect_sources = PackedStringArray()
-notes = "Body role from the server's body kind (assist); the rig resolves it to a clip once roles are built (coverage fill)."
+notes = "Deliberate existing Special1 assist gesture on the current admitted rig. This does not perform an Attack, invent contact, or make the rules-only AttackAssistance member visible. Actual Action completion and actual Condition application remain separate. The gesture is a provisional stand-in and all art/audio remain unreviewed."
+status = "partial"

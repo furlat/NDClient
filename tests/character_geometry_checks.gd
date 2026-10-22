@@ -6,6 +6,7 @@ const Authoring = preload("res://presentation/authoring.gd")
 const Protocol = preload("res://sdk/protocol.gd")
 const BodySources = preload("res://presentation/body_sources.gd")
 const Construction = preload("res://presentation/actor_construction.gd")
+const NativeBankShadows = preload("res://presentation/canvas_shadows.gd")
 var checks = 0
 var failures: Array = []
 func check(ok: bool, label: String) -> void:
@@ -62,6 +63,161 @@ func facing_origins(path:String,cache:Dictionary,rig:Dictionary)->void:
     check(covered,"Prepared bounds cover both facing registrations at every cell/depth extreme")
     check(not ordinary.has("camera_origins") and is_same(Geometry.parameters_for_facing(ordinary,facings[0]),ordinary.parameters) \
         and ordinary.parameters.component_reconstruction_origin==scalar and var_to_bytes(clip.descriptors)==untouched,"Default scalar registration and the original admitted source remain unchanged")
+## Deliberately technical in-memory atlas. These are not producer/Dragon/art
+## facts: six labelled cells, eight view URLs, complete coupled optical data.
+## The existing real-source controls below remain the separate default oracle.
+func technical_native_banks()->Dictionary:
+    var facings:Array=["E","SE","S","SW","W","NW","N","NE"]
+    var root_path:String="res://.runtime/technical-native-bank"
+    var layer_path:String=root_path+"/body.res";var clip_path:String=root_path+"/clip.res"
+    var rig_id:String="technical.native-bank";var category:String="TechnicalBody"
+    var index=BodySources.Index.new();var layer=BodySources.Layer.new();var clip=BodySources.Clip.new()
+    var banks:Dictionary={};var views:Dictionary={};var shapes:Dictionary={};var textures:Dictionary={}
+    var palette:Array=[Color.RED,Color.GREEN,Color.BLUE,Color.YELLOW,Color.MAGENTA,Color.CYAN]
+    for ordinal in facings.size():
+        var facing:String=facings[ordinal];var path:String=root_path+"/"+facing+".png"
+        var cell:Array=[8,5] if ordinal>=6 else [6,4]
+        var pivot:Array=[2+ordinal%2,3];var origin:Array=[3+ordinal,2]
+        var rects:Array=[]
+        var colour:Image=Image.create(cell[0]*3,cell[1]*2,false,Image.FORMAT_RGBA8)
+        for frame in 6:
+            var rect:Array=[(frame%3)*cell[0],(frame/3)*cell[1],cell[0],cell[1]]
+            rects.append(rect);colour.fill_rect(Rect2i(rect[0],rect[1],rect[2],rect[3]),palette[frame])
+        textures[path]=ImageTexture.create_from_image(colour)
+        var files:Dictionary={};var companions:Dictionary={};var roles:Dictionary={path:[path,1,0,0]}
+        for field in ["depth","normal","support","normal_valid"]:
+            var relative:String=facing+"-"+field+".png";var absolute:String=root_path+"/"+relative
+            var image:Image=Image.create(colour.get_width(),colour.get_height(),false,Image.FORMAT_RGBA8)
+            image.fill(Color(.5,.5,1,1) if field=="normal" else Color(.5,.5,.5,1) if field=="depth" else Color.WHITE)
+            textures[absolute]=ImageTexture.create_from_image(image)
+            files[field]=relative;companions[absolute]=true;roles[absolute]=[absolute,0,0,0]
+        var layout:Dictionary={"cell":cell,"pivot":pivot,"frame_rects":rects,"sheet_size":[colour.get_width(),colour.get_height()]}
+        var normal:String=root_path+"/"+files.normal
+        var geometry:Dictionary={"status":"ready","role":"body","slots":["body"],"_source_root":root_path,
+            "files":files,"cell_size":cell,"frames":6,"depth_range":[-2,2],"depth_byte_range":[32,224],
+            "optical_camera":{"origin":origin,"elevation_degrees":30.0},"optical_ground_pixels":0.0}
+        var records:Dictionary={}
+        for profile in ["original","gentle","reference"]:
+            records[profile]={"source_id":StringName(path+"/"+profile),"roles":roles,
+                "native_body_cell":cell,"native_body_colour":path}
+        banks[path]={"path":path,"geometry":geometry,"source_layout":layout,"companions":companions,
+            "normal_paths":{"original":normal},"normal_sets":{path:{"original":normal}},
+            "source_records":records,"native_record":{"source_id":StringName(path+"/native"),"roles":{}}}
+        views[facing]=path;shapes[path]={"path":path,"cell":cell,"pivot":pivot}
+        layer.headers[path]={"width":colour.get_width(),"height":colour.get_height()}
+        index.source_owners[path]=[layer_path,"Grid"]
+    clip.descriptors={"body":{"banks":banks}}
+    layer.rig_id=rig_id;layer.category=category;layer.clip_sources={"Grid":clip_path}
+    layer.bank_paths_by_slot={"body":{"Grid":views}}
+    var rig:Dictionary={"native_banks":true,"cell_width":12,"cell_height":12,"origin_y_from_ground":3,
+        "generated_shadow":true,"slot_order":["body"],"slot_categories":{"body":[category]},
+        "facing_rows":{"E":0,"SE":1,"S":2,"SW":3,"W":4,"NW":5,"N":6,"NE":7},
+        "clips":{"Grid":{"frames":6,"fps":12.0,"bank_shapes":shapes}}}
+    index.root_rig="technical.other-root";index.rigs={rig_id:rig}
+    index.creature_rigs={"technical.native-bank":rig_id};index.layers={rig_id:{category:layer_path}}
+    var loaded:Dictionary={layer_path:layer,clip_path:clip};loaded.make_read_only()
+    var admission:Dictionary={"index":index,"loaded":loaded};admission.make_read_only()
+    var cache:Dictionary={BodySources.KEY:admission}
+    var actor:Dictionary={"uuid":"technical-actor","creature_content_ref":"technical.native-bank",
+        "appearance":{},"presentation_layers":[]}
+    var original:PackedByteArray=var_to_bytes([index.rigs,index.source_owners,layer.headers,clip.descriptors])
+    var prepared:Dictionary=Characters.prepare_layers({"equipment_layers":[{"slot":"body","category":category,"source_path":layer_path}]},rig,cache)
+    check(prepared.ok,"Technical native body admits its one exact typed category/clip owner")
+    if not prepared.ok:return {}
+    var actual:Dictionary=prepared.value[0]
+    var closure:Dictionary=Characters.sheet_paths(actor,["Grid"],cache)
+    check(closure.ok,"Technical selected clip admits all eight views and complete coupled companions")
+    if not closure.ok:return {}
+    for facing in facings:
+        var selected:String=Characters.source_path(actual,"Grid",facing)
+        check(selected==root_path+"/"+facing+".png" and closure.value.has(selected),"Exact technical view URL is selected: "+facing)
+        check(is_same(BodySources.descriptor(selected,"body",cache),banks[selected]),"Exact typed descriptor is borrowed: "+facing)
+    check(Characters.source_path(actual,"Grid","unknown").is_empty(),"An absent native view cannot borrow another facing")
+    var path:String=views.E;var layout:Dictionary=banks[path].source_layout
+    check(Construction.source_uv(rig,layout,2,"E",Vector2(18,8))==Vector4(2.0/3.0,0,1.0/3.0,.5)
+        and Construction.source_uv(rig,layout,3,"E",Vector2(18,8))==Vector4(0,.5,1.0/3.0,.5),"Hand-authored frame2→3 crosses an atlas row without changing cell size or selecting unused cells")
+    var scale:float=2.0;var units:float=scale/Construction.Placement.PIXELS_PER_UNIT
+    var shape:Dictionary=Construction.layer_shape(rig,scale,layout)
+    check(shape.mesh_size==Vector2(12,8)/Construction.Placement.PIXELS_PER_UNIT
+        and shape.mesh_center==Vector3(units,units,0),"Hand-authored contact(2,3) controls the exact scale2 quad centre and extent")
+    var node:=MeshInstance3D.new();var material:=ShaderMaterial.new();material.shader=Construction.MODULAR_SHADER
+    var entry:Dictionary={"node":node,"material":material,"actor_layer":{"slot":"body"},"scale":scale,
+        "native_shapes":Construction.prepare_native_shapes(rig,scale),"native_shape_rig":rig,"native_shape_scale":scale}
+    for ordinal in facings.size():
+        var facing:String=facings[ordinal];var selected:String=Characters.source_path(actual,"Grid",facing)
+        var view_binding:Dictionary=Construction.realize_private_binding(Construction.prepare_binding(rig,entry.actor_layer,selected,cache,true,true,"original",scale,1.0),textures)
+        var admitted:bool=Construction.apply_source_shape(entry,rig,selected,banks[selected].source_layout)
+        Construction.bind_source_values(entry,rig,selected,3,facing,view_binding.sheet,view_binding.sheet_size,textures,{},{})
+        Geometry.apply_binding(entry,view_binding.geometry)
+        check(admitted and entry.texture_path==root_path+"/"+facing+".png"
+            and entry.source_parameters.sheet==textures[root_path+"/"+facing+".png"]
+            and entry.source_parameters.frame_uv==Vector4(0,.5,1.0/3.0,.5)
+            and entry.source_parameters.component_reconstruction_origin==Vector2(3+ordinal,2),"Actual technical view binding publishes its own texture, cross-row UV and optical origin: "+facing)
+    check(Construction.apply_source_shape(entry,rig,path,layout),"Selected technical cell adopts its actually prepared painted quad")
+    var binding:Dictionary=Construction.prepare_binding(rig,entry.actor_layer,path,cache,true,true,"original",scale,1.0)
+    var realised:Dictionary=Construction.realize_private_binding(binding,textures)
+    Construction.bind_source_values(entry,rig,path,3,"E",realised.sheet,realised.sheet_size,textures,{},{})
+    Geometry.apply_binding(entry,realised.geometry)
+    check(entry.cell==Vector2(6,4) and entry.pivot==Vector2(2,3)
+        and entry.source_parameters.component_reconstruction_origin==Vector2(3,2)
+        and entry.source_parameters.component_units==units
+        and entry.source_parameters.component_depth==textures[root_path+"/E-depth.png"]
+        and entry.source_parameters.component_normal==textures[root_path+"/E-normal.png"],"Coupled original geometry receives the selected cell/contact/origin, scale and exact independent texture operands")
+    var expected_point:=Vector3(-2.5*units,1.5*units,-1.5*units)
+    check(node.custom_aabb.has_point(expected_point),"Prepared geometry bounds include an independently hand-computed optical point inside the source domain")
+    var version:int=entry.source_version;var revision:int=entry.source_binding_revision
+    var previous_mesh:QuadMesh=entry.node.mesh;entry.geometry_binding=["must invalidate"]
+    check(Construction.apply_source_shape(entry,rig,views.SE,banks[views.SE].source_layout)
+        and entry.node.mesh!=previous_mesh and entry.node.mesh.size==previous_mesh.size
+        and entry.source_parameters.source_quad_size==Vector2(12,8)/Construction.Placement.PIXELS_PER_UNIT
+        and entry.source_version>version and entry.source_binding_revision>revision and not entry.has("geometry_binding"),
+        "Equal-size bank with a different contact updates native mesh, structural revision and expanded-bound invalidation")
+    version=entry.source_version;revision=entry.source_binding_revision
+    Construction.apply_source_shape(entry,rig,views.SE,banks[views.SE].source_layout)
+    check(entry.source_version==version and entry.source_binding_revision==revision,"Unchanged native bank keeps ordinary material coalescing")
+    var wrong_scale:Dictionary=entry.duplicate();wrong_scale.scale=1.0
+    var altered:Dictionary=banks[views.SE].source_layout.duplicate();altered.pivot=[0,0]
+    check(not Construction.source_shape_ready(wrong_scale,rig,views.SE,banks[views.SE].source_layout)
+        and not Construction.source_shape_ready(entry,rig.duplicate(),views.SE,banks[views.SE].source_layout)
+        and not Construction.source_shape_ready(entry,rig,views.SE,altered)
+        and not Construction.source_shape_ready(entry,rig,"unprepared.png",layout),"Wrong actor scale, rig owner, undeclared contact or missing source refuses the prepared-shape proof")
+    check(entry.source_version==version and entry.node.mesh.size==previous_mesh.size,"Refused/passive shape checks leave the displayed mesh and material unchanged")
+    var missing:Resource=clip.duplicate(false);missing.descriptors={"body":{"banks":banks.duplicate()}}
+    missing.descriptors.body.banks[path]=banks[path].duplicate();missing.descriptors.body.banks[path].source_layout={}
+    var missing_cache:Dictionary={BodySources.KEY:{"index":index,"loaded":{layer_path:layer,clip_path:missing}}}
+    check(not Characters.sheet_paths(actor,["Grid"],missing_cache).ok,"Missing admitted native layout cannot certify source readiness")
+    missing.descriptors.body.banks[path]=banks[path].duplicate()
+    missing.descriptors.body.banks[path].source_records=banks[path].source_records.duplicate()
+    missing.descriptors.body.banks[path].source_records.original=banks[path].source_records.original.duplicate()
+    missing.descriptors.body.banks[path].source_records.original.native_body_cell=[7,4]
+    check(not Characters.sheet_paths(actor,["Grid"],missing_cache).ok,"A caster-cell contribution inconsistent with its actual admitted bank cannot certify readiness")
+    var source_records:Array=closure.source_records.original
+    var first_use:Dictionary={}
+    for source in source_records:
+        for demand in source.roles:first_use[demand]=30.0 if source.native_body_cell==[8,5] else 0.0
+    var schedule:Dictionary=Media._source_cut_schedule(source_records,first_use,{}, {"previous":[],"current":[]})
+    var complete:Dictionary=Media._source_family(source_records,{})
+    var early:Dictionary=Media.native_cells_at(schedule,0,complete.native_cells)
+    var due:Dictionary=Media.native_cells_at(schedule,30,complete.native_cells)
+    check(early=={Vector2i(6,4):true} and due=={Vector2i(6,4):true,Vector2i(8,5):true},"Native caster demand follows actual selected first-use cuts and deduplicates equal cells")
+    var shadows:=NativeBankShadows.new()
+    var exhausted:Dictionary={"used_usec":5,"limit_usec":5}
+    check(not shadows.prepare_source_cells(due,exhausted) and exhausted.used_usec==5
+        and not shadows.source_cells_ready(early),"Exhausted allowance cannot allocate a native caster grid, and passive readiness cannot create one")
+    var allowance:Dictionary={"used_usec":0,"limit_usec":1000000}
+    check(not shadows.prepare_source_cells(due,allowance) and shadows.source_cells_ready(early)
+        and not shadows.source_cells_ready({Vector2i(8,5):true}),"One preparation call realizes only one actual selected grid/RID")
+    var charged:int=allowance.used_usec
+    check(shadows.prepare_source_cells({},allowance) and allowance.used_usec==charged
+        and not shadows.source_cells_ready({Vector2i(8,5):true}),"Withdrawn empty demand performs no allocation or leftover stepping")
+    allowance={"used_usec":0,"limit_usec":1000000}
+    check(shadows.prepare_source_cells(due,allowance) and shadows.source_cells_ready(due),"A later actual demanded unit completes the remaining selected grid")
+    shadows.close()
+    node.free()
+    check(var_to_bytes([index.rigs,index.source_owners,layer.headers,clip.descriptors])==original,"All native-bank controls preserve their owned admitted metadata")
+    return {"scope":"Technical in-memory API/metadata/mesh/material admission only; not Dragon/producer/raster/art evidence",
+        "facings":facings,"frames":6,"cross_row_frames":[2,3],"source_urls":views.values(),"early_cells":[[6,4]],"due_cells":[[6,4],[8,5]],"canonical_actor_scale_unchanged":true}
+
 func run() -> void:
     var state_path:String="res://tests/fixtures/schema16/character_sources.json"
     for argument in OS.get_cmdline_user_args():
@@ -143,7 +299,8 @@ func run() -> void:
     var resting = Media.plan(state,[],cache)
     check(resting.errors.is_empty() and resting.required==expected_rest,"Initial rest demand is exactly actual Idle geometry; actual equipment tracks retain their own later demand")
     check(var_to_bytes(state)==held,"Geometry/source preparation preserves original canonical actor/item state")
-    var packet = {"sources":sources,"outfits":outfits,"checks":checks,"failures":failures,"state":state_path,"rest_required":resting.required.keys()}
+    var native_bank_control:Dictionary=technical_native_banks()
+    var packet = {"native_bank_control":native_bank_control,"sources":sources,"outfits":outfits,"checks":checks,"failures":failures,"state":state_path,"rest_required":resting.required.keys()}
     var output = FileAccess.open("res://generated/character_geometry_cases.json",FileAccess.WRITE)
     output.store_string(JSON.stringify(packet,"  ")); output.close()
     print("CHARACTER_GEOMETRY_CHECKS ",JSON.stringify({"checks":checks,"failures":failures,"numeric_sources":sources.size()}))

@@ -225,7 +225,7 @@ def first_cohort():
                   {'do':'action.move','by':'caster','target':[11,6]},
                   {'do':'action.environment.directional_door.open','by':'caster','target':{'object':'Burial hall'}},
                   {'do':'action.move','by':'caster','target':[13,6]}],
-         'required_behaviors':['action.environment.directional_door.open'],'required_facts':['movement']}, gallery_sorcerer(), equipped_weapon_study(), poison_weapon_contact_study(), poison_weapon_runtime_study(), water_create_dry_study(), *glyph_warding_trigger_studies(), power_word_heal_poison_study(), goodberry_consumption_study(), shillelagh_equipped_move_study(), flaming_sphere_lifecycle_study()] + interaction_cohort() + traversal_and_utility_cohort() + survival_cohort() + perspective_and_reaction_cohort() + direct_character_cohort() + passive_handler_cohort() + [interaction_media_study(), vampiric_positive_study(), banishment_departure_study()] + native_persistent_studio_studies() + option_identity_studies() + intrinsic_weapon_studies() + [flame_blade_weapon_study(subjects)] + coating_weapon_studies() + event_family_studies(actors, subjects) + projectile_variant_studies(actors, subjects) + production_review_studies(actors, subjects) + legacy_six_studies(subjects) + [skeleton_mark_lifecycle_study()] + coating_slot_lifecycle_studies() + class_held_lifecycle_studies() + elemental_body_lifecycle_studies() + [false_life_grant_study()] + [shield_ranged_lifecycle_study()] + action_dispatch_owner_studies() + myrmidon_body_lifecycle_studies()
+         'required_behaviors':['action.environment.directional_door.open'],'required_facts':['movement']}, gallery_sorcerer(), equipped_weapon_study(), poison_weapon_contact_study(), poison_weapon_runtime_study(), water_create_dry_study(), *glyph_warding_trigger_studies(), power_word_heal_poison_study(), goodberry_consumption_study(), shillelagh_equipped_move_study(), flaming_sphere_lifecycle_study()] + interaction_cohort() + traversal_and_utility_cohort() + survival_cohort() + perspective_and_reaction_cohort() + direct_character_cohort() + passive_handler_cohort() + [interaction_media_study(), vampiric_positive_study(), banishment_departure_study()] + native_persistent_studio_studies() + option_identity_studies() + intrinsic_weapon_studies() + [flame_blade_weapon_study(subjects)] + coating_weapon_studies() + event_family_studies(actors, subjects) + projectile_variant_studies(actors, subjects) + production_review_studies(actors, subjects) + legacy_six_studies(subjects) + [skeleton_mark_lifecycle_study()] + coating_slot_lifecycle_studies() + class_held_lifecycle_studies() + elemental_body_lifecycle_studies() + [false_life_grant_study()] + [shield_ranged_lifecycle_study()] + action_dispatch_owner_studies() + myrmidon_body_lifecycle_studies() + [arcane_sword_granted_lifecycle_study()] + provisional_creature_body_studies()
     cohort += hardware_studies(subjects)
     return [repair_item_owner_requirements(case) for case in cohort]
 
@@ -2120,4 +2120,131 @@ def myrmidon_body_lifecycle_studies():
                        'is fabricated. Both factions retain original packets and any legal-admission failure. '
                        'Native body output, gameplay scale, light/shadow acceptance and human art/audio review '
                        'remain separate from capture.'})
+    return result
+
+
+def arcane_sword_granted_lifecycle_study():
+    """Actual initial declaration, granted command/repeats and owner retirement."""
+    return {
+        'id': 'spell.arcane_sword/independent_anchor_move_repeat_end',
+        'title': 'Arcane Sword: actual independent anchor, move, two repeats and retirement',
+        'kind': 'spell', 'seed': 2, 'battlefield': 'battlefield.open_floor_bright',
+        'subjects': subjects(['spell.arcane_sword'], ['action.spell.arcane_sword.move',
+            'action.spell.arcane_sword.strike', 'action.drop_concentration']),
+        'actors': [
+            {'role': 'caster', 'side': 'amber', 'creature': 'creature.generic_caster',
+             'level': 20, 'caster_level': 20, 'spells': ['spell.arcane_sword'], 'at': [3, 7]},
+            {'role': 'target', 'side': 'blue', 'creature': 'creature.generic_caster', 'level': 20, 'at': [6, 7]},
+        ],
+        'steps': [
+            {'do': 'spell.arcane_sword', 'by': 'caster', 'target': 'target', 'then': [5, 7], 'level': 7, 'capture_choices': True},
+            {'do': 'end_turn', 'by': 'caster'},
+            {'do': 'action.spell.arcane_sword.strike', 'by': 'caster', 'target': 'target', 'then': [5, 7], 'capture_choices': True},
+            {'do': 'end_turn', 'by': 'caster'},
+            {'do': 'action.spell.arcane_sword.move', 'by': 'caster', 'target': [5, 6], 'capture_choices': True},
+            {'do': 'end_turn', 'by': 'caster'},
+            {'do': 'action.spell.arcane_sword.strike', 'by': 'caster', 'target': 'target', 'then': [5, 6], 'capture_choices': True},
+            {'do': 'action.drop_concentration', 'by': 'caster', 'target': 'self'},
+        ],
+        'required_behaviors': ['spell.arcane_sword', 'action.spell.arcane_sword.move',
+            'action.spell.arcane_sword.strike', 'action.drop_concentration'],
+        'required_conditions': ['condition.concentrating', 'condition.spell.arcane_sword'],
+        'required_condition_ends': ['condition.concentrating', 'condition.spell.arcane_sword'],
+        'purpose': 'One real caster chooses an independent initial point and actual later granted Move. '
+                   'Two predetermined repeat attempts use ordinary separate turns and unchosen native results. '
+                   'The ordinary level20 Generic Caster retains native160HP/equipment and can survive the first two '
+                   'maximum critical sword results; no attack, save, HP, grant or coordinate is manufactured. '
+                   'Original public fact kind, accepted source/target coordinates, condition UUIDs, outcomes '
+                   'and retirement are preserved. The recorded command points are evidence of offered choices '
+                   'and omissions only, never rendering operands. Missing actual public anchor remains a gap.'}
+
+
+
+def provisional_creature_body_studies():
+    """Four native roster families; no grants, edited stats or selected outcomes.
+
+    These originals can qualify current substitute-body decisions. They do not
+    activate selected native dragon banks or supply authentic mouth geometry.
+    The one Cambion Charm Person prerequisite remains a real save: a refusal
+    is preserved, never retried with another seed or forced condition.
+    """
+    specs = (
+        ('cambion', 'action.cambion.draining_kiss', [], ()),
+        ('deva', 'action.deva.concussive_smash', [('action.attack', 'target')], (5, 6)),
+        ('djinni', 'action.djinni.sweetplum_gales', [('action.attack', 'target')], (5, 6, 7, 2)),
+        ('draconic_spirit', 'action.draconic_spirit.breath', [('action.attack', 'target')], ()),
+    )
+    result = []
+    for form, intrinsic, earlier, cleanup_levels in specs:
+        creature = 'creature.spell.' + form
+        spells = ['spell.magic_missile', 'spell.power_word_kill']
+        actions = ['action.disengage', 'action.move', intrinsic]
+        actions += [identity for identity, _ in earlier]
+        if form == 'cambion':
+            spells += ['spell.charm_person']
+        inventory = subjects(spells, actions)
+        inventory['creature'] = [creature, 'creature.generic_caster']
+        if form == 'djinni':
+            inventory['spatial_effect'] = ['spatial_effect.summon.sweetplum_gales']
+        steps = [
+            {'do': 'action.disengage', 'by': 'caster', 'target': 'self', 'capture_choices': True},
+            {'do': 'action.move', 'by': 'caster', 'target': [2, 6]},
+            {'do': 'action.move', 'by': 'caster', 'target': [3, 6]},
+            {'do': 'end_turn', 'by': 'caster'},
+            {'do': 'spell.magic_missile', 'by': 'cleaner', 'target': 'caster', 'level': 1,
+             'recipients': ['caster'] * 3, 'capture_choices': True},
+            {'do': 'end_turn', 'by': 'cleaner'},
+        ]
+        for identity, recipient in earlier:
+            steps += [{'do': identity, 'by': 'caster', 'target': recipient,
+                       'weapon_slot': 'MELEE_MAIN', 'capture_choices': True},
+                      {'do': 'end_turn', 'by': 'caster'}]
+        if form == 'cambion':
+            steps += [{'do': 'spell.charm_person', 'by': 'caster', 'target': 'target', 'capture_choices': True},
+                      {'do': 'end_turn', 'by': 'caster'}]
+        target = [4, 5] if form in ('djinni', 'draconic_spirit') else 'target'
+        steps += [{'do': intrinsic, 'by': 'caster', 'target': target, 'capture_choices': True},
+                  {'do': 'end_turn', 'by': 'caster'}]
+        for level in cleanup_levels:
+            steps += [{'do': 'spell.magic_missile', 'by': 'cleaner', 'target': 'caster', 'level': level,
+                       'recipients': ['caster'] * (level + 2), 'capture_choices': True},
+                      {'do': 'end_turn', 'by': 'cleaner'}]
+        steps += [{'do': 'spell.power_word_kill', 'by': 'cleaner', 'target': 'caster', 'level': 9,
+                   'capture_choices': True},
+                  {'do': 'action.move', 'by': 'cleaner', 'target': [10, 5]}]
+        caster = {'role': 'caster', 'side': 'amber', 'creature': creature, 'at': [3, 6]}
+        target_actor = {'role': 'target', 'side': 'blue', 'creature': 'creature.generic_caster',
+                        'level': 20, 'at': [4, 5]}
+        required_facts = ['movement', 'damage', 'life']
+        if earlier:
+            required_facts += ['attack']
+        scenario = {
+            'id': creature + '/current_stand_in_intrinsic_retirement',
+            'title': form.replace('_', ' ').title() + ': current substitute, real intrinsic and retirement',
+            'kind': 'creature', 'seed': 2, 'battlefield': 'battlefield.open_floor_bright',
+            'subjects': inventory,
+            'actors': [caster, target_actor,
+                {'role': 'cleaner', 'side': 'blue', 'creature': 'creature.generic_caster',
+                 'level': 20, 'caster_level': 20, 'spells': ['spell.magic_missile', 'spell.power_word_kill'],
+                 'at': [10, 6]}],
+            'steps': steps,
+            'required_behaviors': actions + spells,
+            'required_facts': required_facts,
+            'purpose': 'Existing native roster factory supplies the actual family, equipped/natural weapon, '
+                       'intrinsic actions, spellcasting and unedited creature HP. No action/condition grant, '
+                       'private position, selected save/Hit/Crit or source timing is inserted. Real movement '
+                       'and L1 injury precede the intrinsic; fixed real missile slots then ordinary Power Word '
+                       'Kill provide retirement from pinned native HP82/136/161/20. Actual failures and both '
+                       'seat journals are retained. The current substitute-body gesture is separate from '
+                       'authentic final artwork, optical mouth, native grounded/airborne bank activation, '
+                       'receiving/output qualification and all human art/audio review.'}
+        scenario['purpose'] += {
+            'cambion': ' The actual Humanoid Generic Caster recipient has native160HP; Charm Person chooses a real save, and Kiss maximum55 cannot defeat it before its completed consequence.',
+            'deva': ' The actual Generic Caster recipient has native160HP; the first bound-Mace maximum critical is80 (2d6+8d8+4), so the later intrinsic remains legal. That second actual attack may naturally defeat the recipient.',
+            'djinni': ' The actual Generic Caster recipient has native160HP; the first bound-Scimitar maximum critical is58 (2d6+4d10+6), so the later Gales still has its real recipient.',
+            'draconic_spirit': ' The actual Generic Caster recipient has native160HP; default Rend maximum critical is18 (2d6+6), so the paid Breath still has its real recipient.'}[form]
+        if form == 'cambion':
+            scenario['required_conditions'] = ['condition.charmed']
+            scenario['required_condition_ends'] = ['condition.charmed']
+        result.append(scenario)
     return result

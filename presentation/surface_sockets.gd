@@ -14,7 +14,11 @@ static func painted_point(world:Node,row:Dictionary,pixel:Vector2)->Vector3:
     var visual:Dictionary=world.visual_actors.get(row.id,{})
     for entry in visual.get("entries",[]):
         if entry.role=="shadow" or not entry.actor_layer.get("effect",{}).is_empty():continue
-        var local:Vector3=Vector3(pixel.x-entry.pivot.x,entry.pivot.y-pixel.y,0.0)*float(entry.scale)/Placement.PIXELS_PER_UNIT
+        var pivot:Vector2=entry.pivot
+        if not entry.get("source_layout",{}).is_empty():
+            var native_rig:Dictionary=world.rigs[visual.row.rig]
+            pivot=Vector2(native_rig.cell_width*.5,native_rig.cell_height-native_rig.origin_y_from_ground)
+        var local:Vector3=Vector3(pixel.x-pivot.x,pivot.y-pixel.y,0.0)*float(entry.scale)/Placement.PIXELS_PER_UNIT
         var lift:float=float(row.get("visual_height",0.0))-float(visual.row.get("visual_height",0.0))
         return entry.node.global_transform*local+Placement.contact(row)-Placement.contact(visual.row)+Vector3.UP*lift*Placement.HEIGHT_UNIT
     var rig:Dictionary=world.rigs[row.rig]
@@ -51,15 +55,26 @@ static func resolve(world: Node, actor_id: String, clip: String, frame: int,
         var slot: String = layer.slot
         if slot == "shadow" or slot in Characters.EFFECT_SLOTS or slot in hidden_slots:
             continue
-        if not layer.paths.has(clip) or float(layer.get("alpha", 1.0)) <= 0.0:
+        if not Characters.has_clip(layer,clip) or float(layer.get("alpha", 1.0)) <= 0.0:
             continue
-        var source_path: String = layer.paths[clip]
+        var source_path:String=Characters.source_path(layer,clip,facing)
+        var layout:Dictionary=Geometry.BodySources.descriptor(source_path,slot,world.catalog_cache).get("source_layout",{})
+        var sample_pixel:Vector2i=pixel
+        var sample_sheet_pixel:Vector2i=sheet_pixel
+        if not layout.is_empty():
+            var source_pivot:=Vector2(layout.pivot[0],layout.pivot[1])
+            var rig_pivot:=Vector2(rig.cell_width*.5,rig.cell_height-rig.origin_y_from_ground)
+            var selected_pixel:Vector2=socket_pixel-rig_pivot+source_pivot
+            sample_pixel=Vector2i(floori(selected_pixel.x),floori(selected_pixel.y))
+            if sample_pixel.x<0 or sample_pixel.y<0 or sample_pixel.x>=layout.cell[0] or sample_pixel.y>=layout.cell[1]:continue
+            var rect:Array=layout.frame_rects[frame]
+            sample_sheet_pixel=sample_pixel+Vector2i(rect[0],rect[1])
         if not world.source_images.has(source_path):
             return _missing(result, "source_colour_not_prepared")
         var colour: Image = world.source_images[source_path]
-        if not _contains(colour, sheet_pixel):
+        if not _contains(colour, sample_sheet_pixel):
             return _missing(result, "source_colour_layout_mismatch")
-        var alpha := colour.get_pixelv(sheet_pixel).a
+        var alpha := colour.get_pixelv(sample_sheet_pixel).a
         if alpha <= 0.0: continue
         result.owner = entry.id
         result.source = source_path
@@ -73,7 +88,7 @@ static func resolve(world: Node, actor_id: String, clip: String, frame: int,
         if not world.catalog_cache.has(Geometry.BodySources.KEY):
             return _missing(result, "source_geometry_catalog_not_prepared")
         var source := Geometry.record(source_path, slot, world.catalog_cache)
-        if source.is_empty() or not source.has("reference"):
+        if not layout.is_empty() or source.is_empty() or not source.has("reference"):
             return _missing(result, "source_geometry_not_registered")
         var root := Geometry._root(source)
         var reference := root.path_join(source.reference)

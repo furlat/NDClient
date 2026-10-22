@@ -20,9 +20,11 @@ source = "ui-delivery-20261018 srd22.creature_action.concussive_smash"
 [resource]
 script = ExtResource("1_nqo16")
 id = "action.deva.concussive_smash"
+disposition = "state_only"
 kind = "action"
 family = "summon_form"
 icon = SubResource("Resource_xrbeu")
 body = SubResource("Resource_lvge1")
 effect_sources = PackedStringArray()
-notes = "Body role from the server's body kind (attack); the rig resolves it to a clip once roles are built (coverage fill)."
+status = "partial"
+notes = "The actual ConcussiveSmash is an equipped MELEE_MAIN Attack, not a separate Action body. The exact attacks/action.deva.concussive_smash Resource selects the current4Paladin Attack1 only for the actual Deva, current rig, equipped bound Mace item and slot. This wrapper adds no second gesture or impact. Actual attack outcome, damage and failed-save Dazed remain their original children. The current body is an explicit unreviewed substitute; authentic Deva artwork remains missing and no contact/release/socket measurement is invented."

@@ -16,6 +16,102 @@ all 130 alternative dispositions stay implemented; stale worklists do not
 reopen them. All artwork/audio remain unreviewed. Engine/Factory sources stay
 read-only; no mutable backend/schema upgrade is implied by the new handoff.
 
+## Shared body-source and Action family — 22 October
+
+The complete reviewed native-bank transport and its existing geometry control
+are applied, with no new bitmap, GLSL or active Dragon assignment. Existing
+ArtSource/RigClip data now carries actual per-facing grids/contacts/optical
+origins; existing preparation owns exact painted shapes and demanded caster
+cells before publication. Ordinary families retain their empty fast path.
+All three authoring domains publish with zero errors/two warnings and the same
+four retained UTF-8 notices. Six affected headless suites pass22,763assertions,
+all natural exits0/no unexpected errors. The grouped native follow-through passes
+four rows/10,172assertions, every process naturally exits0 with zero script/engine
+errors or owned leftovers: media91, shadow154, default Outline17, and the five
+actual attack/quarry/Arcane originals9,910. Arcane's actual Move and two Spell
+repeat occurrences all compile the selected Resource track, with submitted
+visible body/source witnesses per Move/Strike family. This does not establish
+both repeats' isolated pixels or the absent independent blade anchor.
+Active Dragon pixels, quiet performance and art remain unqualified.
+[Current publication](../.runtime/main-queue-20261022/native-bank-action-publication/summary.json),
+[current affected controls](../.runtime/tests/20261022T032719.865811Z/summary.json),
+[current native cohort](../.runtime/main-queue-20261022/native-bank-action-native/summary.json).
+
+The selected Dragon packet has a full private18Resource candidate:15clips,
+120banks/2,088poses and600verbatim planned PNG paths with shared numeric data.
+A neutral Violet astral style is a provisional unreviewed authoring choice,
+not human acceptance or an inferred elemental palette. The actual source
+fit2, safely scoped unsupported attack/motion contexts and independent-normal
+prepared receiver program remain gates before Character activation. The native
+cropped-source Outline/reference registration is now closed in source and its
+technical native gate below; no actual Dragon/native bank is activated. The
+measured generic Idle paint centre is not a mouth/socket/release marker.
+[Exact gated data/fit ledger](../.runtime/closing-repairs/dragon-selected-native-data/README.md).
+
+A real Arcane Sword move/two-repeat/end original now succeeds and is imported
+(Library381/377recorded/four failed). Repeat is an actual **SpellFact** with
+Hit; Move is an ActionFact. Its independent accepted blade anchor is missing
+from both public streams; caster position remains correctlycaster position.
+[Exact narrow producer review](BACKEND_CONTENT_BLOCKERS_2026-10-20.md#arcane-sword-independent-anchor--actual9f-moverepeat-original22october).
+The applied18-file resource family uses an explicit typed body-kind selector for
+that actual event representation within ordinary Spell processing. Existing
+source selection, delivery, outcome children and cast-owner coalescing remain
+on their shared paths. Seven explicit provisional Special1 gestures and Break
+Enchantment's actual same-Action removed-ward/recipient response are authored.
+The response preserves both publication cuts and real removed UUIDs; it does not
+use a fixture event/lease or duplicate the existing ward-removal lifecycle.
+This seven-decision batch brought the21 direct Action decisions to17explicit
+choices; the four-creature follow-through below now resolves the other four.
+Arcane independent-blade placement stays a separate partial producer-operand
+boundary; all artwork/audio remain unreviewed.
+[Exact source family](../.runtime/closing-repairs/remaining-active-action-choices/README.md).
+
+### Four-creature choices and native reference-outline follow-through
+
+All21direct Action decisions now have explicit current-source assignments or
+actual child/Attack ownership. Missing authentic final bodies are separate from
+whether a current provisional choice can be authored. Cambion uses its real
+demonelite01 Attack4; Djinni its current6Mage Special1; current Draconic Spirit
+its T-Rex Taunt. Exact rig guards prevent those choices surviving a future body
+replacement accidentally. Deva's Concussive Smash is a real equipped Attack,
+with an exact creature/rig/bound-item/MELEE_MAIN recipe and disabled default.
+All use original clip clocks without invented source contact/release markers.
+Own Cambion/Deva/Djinni artwork, authentic dragon mouth/native motion contexts,
+actual rendered follow-through and all human review remain separate.
+[Exact four-choice source boundaries](../.runtime/closing-repairs/provisional-creature-action-choices/README.md).
+
+The four fixed native-producer originals now all capture successfully once,
+including Cambion's genuine Charm prerequisite/Kiss, Deva's real held-weapon
+Attack, Djinni Gales and default Draconic Rend/Breath plus ordinary retirement.
+No edited stats, grants, forced outcomes or retries. All four are imported;
+the current Library is385cases/381recorded/fourfailed, preserving every earlier
+failed original. Native body follow-through remains in progress.
+[Exact current originals](../.runtime/closing-repairs/provisional-creature-originals/README.md).
+
+Native cropped bodies now assemble condition alpha in their declared reference
+canvas, translating actual cropped pivots and borrowing the already-prepared
+reference quad. Native source admission refuses out-of-reference crops and
+unsupported noncentered reference pivots. Existing admitted animation visibility
+is preserved; no mesh/viewport allocation is moved into sampling. The existing
+native Outline gate checks actual independently expected alpha pixels, initial/
+restored draw acknowledgement, reuse and drained close; default controls remain.
+
+The final all-three-domain publication has zero errors/two warnings, retaining
+the four old UTF-8 notices. Final affected geometry911, Attack3,274 and native
+Outline27 assertions pass with natural exits0, no errors and no owned leftovers.
+The initial new headless control emitted916passing assertions then exited5;
+that receipt remains failed, with no identified native stack/cause. Renderer-
+owned duties moved to the existing rooted/drawing native gate instead of
+claiming pending headless setup as output. The first creature publication also
+retains its failed Cambion Special1 alias admission; concrete Attack4 corrects
+the resource choice without changing the supplied source or builder policy.
+[Final affected receipt](../.runtime/main-queue-20261022/creature-choice-outline-final/summary.json),
+[preserved916/exit5](../.runtime/main-queue-20261022/native-bank-outline-closure/summary.json),
+[preserved alias failure](../.runtime/main-queue-20261022/creature-choice-outline-closure/summary.json).
+Earlier6-suite/5-original receipts above retain their exact predecessor source
+scope, rather than being merged into a full-latest-build pass. Quiet performance,
+complete current native/live qualification and all artwork/audio remain open.
+
 ## Main queue actual Action/creature originals — 22 October
 
 Eight new native-producer scenarios are captured once in coherent families.
@@ -62,7 +158,7 @@ Actual Spiritual Miss/Hit source witnesses retain false/true contact flags.
 [Preserved initial native failure and three-body pass](../.runtime/main-queue-20261022/active-actions-native/summary.json),
 [final contact controls](../.runtime/tests/20261022T030031.618904Z/summary.json),
 [final four-original native receipt](../.runtime/main-queue-20261022/active-actions-native-current-contacts/summary.json).
-Eleven direct decisions remain:
+At the8c438cc1 checkpoint, eleven direct decisions remained:
 four body/mouth boundaries, three Paladin onset choices and four active
 Help/ArcaneSword/BreakEnchantment consumer/choice boundaries. All artwork/audio
 remain unreviewed; no whole-current live/quiet-performance acceptance is claimed.
@@ -105,9 +201,12 @@ The next coherent resource-only batch makes80previously blank Action decisions
 explicit:42Multiattack wrappers and38passive/condition/handler entries delegate
 to actual child/result/state owners through the existing `state_only` schema.
 Their body/effect/icon/status fields and actual runtime children are unchanged.
-There are21direct Action decisions still requiring source attribution, including
-four body/mouth-dependent creature actions. No new effect/backend request or
-human art approval follows from either count. [Exact remaining Action inventory](AUTHORING_CONTENT_REMAINING_2026-10-20.md#explicit-wrapperpassive-authoring-batch--22-october).
+That checkpoint retained21direct Action decisions; the subsequent24-file and
+18-file families resolved17, and the subsequent four-creature choices resolve
+the other four. Authentic creature bodies/mouth and the separately documented
+Arcane anchor/output boundary remain partial. No new effect/API request or human
+art approval follows from those counts.
+[Exact remaining Action inventory](AUTHORING_CONTENT_REMAINING_2026-10-20.md#explicit-wrapperpassive-authoring-batch--22-october).
 
 ## Current complete public-spell native batch — 22 October
 

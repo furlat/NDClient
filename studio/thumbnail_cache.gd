@@ -6,6 +6,7 @@ const Recording=preload("res://studio/recording.gd")
 const ReplayPanes=preload("res://studio/replay_panes.gd")
 const BackgroundRelease=preload("res://presentation/background_release.gd")
 const Characters=preload("res://presentation/characters.gd")
+const BodySources=preload("res://presentation/body_sources.gd")
 const Tracks=preload("res://presentation/tracks.gd")
 const Components=preload("res://presentation/components.gd")
 const Palette=preload("res://presentation/palette.gd")
@@ -121,7 +122,7 @@ func seed_source_images(sources:Dictionary)->bool:
     var needed={}
     for job in pending:
         for layer in job.get("layers",[]):
-            var path:String=layer.paths.get(job.clip,"")
+            var path:String=layer.get("thumbnail_source",{}).get("path",layer.paths.get(job.clip,""))
             if not path.is_empty():needed[path]=true
             var noise:String=job.resources.get(layer.get("effect",{}).get("palette",{}).get("noiseSheet"),"")
             if not noise.is_empty():needed[noise]=true
@@ -249,6 +250,23 @@ func request(row: Dictionary,sample_ms: float,quarter: int,prepare_views: bool=t
         if path.is_empty():errors[key]="Unresolved layer source: "+layer.category+"/"+clip_name;return key
         layers=[{"slot":layer.slot,"category":layer.category,"tint":0xffffff,"alpha":1.0,"effect":layer,"paths":{clip_name:path}}]
     if row.kind=="part":layers=layers.filter(func(layer):return layer.slot==row.slot)
+    # Resolve only this view's admitted passive descriptor before dispatch.
+    # The decode worker receives no live body-source cache or metadata owner.
+    var source_layers:Array=[]
+    for layer in layers:
+        if layer.slot=="shadow" or layer.slot in track.get("hidden_slots",[]):continue
+        if not Characters.has_clip(layer,clip_name):continue
+        var path:String=Characters.source_path(layer,clip_name,facing)
+        if path.is_empty():errors[key]="No source bank for "+str(layer.category)+"/"+clip_name+"/"+facing;return key
+        var layout:Dictionary={}
+        if layer.get("bank_paths",{}).has(clip_name):
+            var descriptor:Dictionary=BodySources.prepare_descriptor(path,str(layer.slot),cache)
+            layout=descriptor.get("source_layout",{})
+            if layout.is_empty():errors[key]="No admitted native source layout: "+path;return key
+        var selected:Dictionary=layer.duplicate(false)
+        selected.thumbnail_source={"path":path,"layout":layout}
+        source_layers.append(selected)
+    layers=source_layers
     job.merge({"rig":rig,"clip":clip_name,"frame":frame,"facing":facing,"layers":layers,
         "hidden":track.get("hidden_slots",[]),"scale_x":actor.get("scale_x",1.0),"material":material})
     _queue(job,prepare_views)
@@ -581,26 +599,51 @@ func _image(path: String) -> Image:
 func _decode(job: Dictionary) -> Dictionary:
     if image_generation!=job.generation:
         images.clear();image_bytes=0;image_generation=job.generation;source_reads=0;source_hits=0;source_evictions=0
-    var parts: Array=[];var auxiliary={}
+    var parts: Array=[];var auxiliary={};var native_layout:bool=false
     var resources:Dictionary=job.resources
     for layer in job.layers:
-        if layer.slot=="shadow" or layer.slot in job.hidden or not layer.paths.has(job.clip): continue
-        var source=_image(layer.paths[job.clip])
-        if source==null: return {"error":"Missing source: "+str(layer.paths[job.clip]),"job":job}
+        if layer.slot=="shadow" or layer.slot in job.hidden:continue
+        var selected:Dictionary=layer.get("thumbnail_source",{})
+        var path:String=str(selected.get("path",layer.paths.get(job.clip,"")))
+        if path.is_empty():continue
+        var source=_image(path)
+        if source==null:return {"error":"Missing source: "+path,"job":job}
+        var layout:Dictionary=selected.get("layout",{})
         var size=Vector2i(job.rig.cell_width,job.rig.cell_height)
-        var cell=source.get_region(Rect2i(Vector2i(job.frame*size.x,int(job.rig.facing_rows[job.facing])*size.y),size))
-        parts.append({"layer":layer,"image":cell})
+        var pivot=Vector2(size.x*.5,size.y-float(job.rig.origin_y_from_ground))
+        var rect=Rect2i(Vector2i(job.frame*size.x,int(job.rig.facing_rows[job.facing])*size.y),size)
+        if not layout.is_empty():
+            if job.frame>=layout.frame_rects.size():return {"error":"Native source has no actual frame: "+path,"job":job}
+            var actual:Array=layout.frame_rects[job.frame]
+            size=Vector2i(int(layout.cell[0]),int(layout.cell[1]));pivot=Vector2(float(layout.pivot[0]),float(layout.pivot[1]))
+            rect=Rect2i(int(actual[0]),int(actual[1]),int(actual[2]),int(actual[3]));native_layout=true
+            if rect.size!=size or not Rect2i(Vector2i.ZERO,source.get_size()).encloses(rect):
+                return {"error":"Native source frame exceeds actual cell/image: "+path,"job":job}
+        var cell=source.get_region(rect)
+        parts.append({"layer":layer,"image":cell,"pivot":pivot,"offset":Vector2i.ZERO})
         var noise: String=resources.get(layer.get("effect",{}).get("palette",{}).get("noiseSheet"),"")
         if not noise.is_empty(): auxiliary[noise]=_image(noise)
     var film: String=resources.get(job.material.ramp.get("texture"),"")
     if not film.is_empty():auxiliary[film]=_image(film)
     if parts.is_empty():return {"error":"No authored layers for this source pose","job":job}
+    var extent=Vector2i(job.rig.cell_width,job.rig.cell_height)
+    if native_layout:
+        # Align actual per-view contacts inside this temporary swatch only.
+        # No production source bank, cell, pivot or pixels are repacked.
+        var bounds=Rect2(-parts[0].pivot,Vector2(parts[0].image.get_size()))
+        for part in parts:bounds=bounds.merge(Rect2(-part.pivot,Vector2(part.image.get_size())))
+        var begin=Vector2i(floori(bounds.position.x),floori(bounds.position.y))
+        var end=Vector2i(ceili(bounds.end.x),ceili(bounds.end.y))
+        extent=end-begin
+        for part in parts:part.offset=Vector2(-begin)-part.pivot
     var mask: Image
     if not job.material.outline.is_empty():
-        mask=Image.create_empty(job.rig.cell_width,job.rig.cell_height,false,Image.FORMAT_RGBA8)
+        if native_layout and parts.any(func(part):return Vector2(part.offset)!=Vector2(Vector2i(part.offset))):
+            return {"error":"Native outline preview needs an exact whole-pixel contact alignment","job":job}
+        mask=Image.create_empty(extent.x,extent.y,false,Image.FORMAT_RGBA8)
         for part in parts:
-            if part.layer.slot not in Characters.EFFECT_SLOTS:mask.blend_rect(part.image,Rect2i(Vector2i.ZERO,mask.get_size()),Vector2i.ZERO)
-    return {"job":job,"parts":parts,"auxiliary":auxiliary,"resources":resources,"mask":mask}
+            if part.layer.slot not in Characters.EFFECT_SLOTS:mask.blend_rect(part.image,Rect2i(Vector2i.ZERO,part.image.get_size()),Vector2i(part.offset))
+    return {"job":job,"parts":parts,"auxiliary":auxiliary,"resources":resources,"mask":mask,"extent":extent}
 
 func _decode_batch(jobs:Array)->Array:
     # One worker owns the decoded-image LRU. Multiple ordinary swatches share
@@ -828,7 +871,7 @@ func _compose(decoded: Dictionary,prepare_hit:bool=true) -> Dictionary:
         var source_parent=Node3D.new();host.add_child(source_parent)
         return {"kind":"body","job":job,"decoded":decoded,"preparing_hit":true,"hit_renderer":renderer,"hit_parent":source_parent,"drawn":false,"started_ms":Time.get_ticks_msec()}
     var view=SubViewport.new();view.disable_3d=true;view.transparent_bg=true
-    view.size=Vector2i(job.rig.cell_width,job.rig.cell_height);view.render_target_update_mode=SubViewport.UPDATE_ONCE;host.add_child(view)
+    view.size=decoded.extent;view.render_target_update_mode=SubViewport.UPDATE_ONCE;host.add_child(view)
     var resources: Dictionary=decoded.resources;var aux={}
     for path in decoded.auxiliary:
         if decoded.auxiliary[path]!=null:aux[path]=ImageTexture.create_from_image(decoded.auxiliary[path])
@@ -839,10 +882,12 @@ func _compose(decoded: Dictionary,prepare_hit:bool=true) -> Dictionary:
         shader.set_shader_parameter("sheet",sprite.texture);shader.set_shader_parameter("frame_uv",Vector4(0,0,1,1))
         shader.set_shader_parameter("tint",Palette.rgb(part.layer.tint));shader.set_shader_parameter("layer_alpha",part.layer.alpha)
         Palette.bind(shader,part.layer,job.facing,job.frame,aux,resources);Conditions.bind(shader,state,aux,resources)
-        shader.set_shader_parameter("material_cell_size",Vector2(job.rig.cell_width,job.rig.cell_height))
+        shader.set_shader_parameter("material_cell_size",Vector2(part.image.get_size()))
         sprite.scale.x=absf(job.scale_x)
         if job.scale_x<0: sprite.flip_h=true
-        sprite.position.x=(view.size.x-view.size.x*absf(job.scale_x))*.5
+        var offset:Vector2=part.offset
+        if job.scale_x<0:offset.x=view.size.x-offset.x-part.image.get_width()
+        sprite.position=Vector2((view.size.x-view.size.x*absf(job.scale_x))*.5+offset.x*absf(job.scale_x),offset.y)
         view.add_child(sprite)
     if decoded.mask!=null:
         var overlay=Sprite2D.new();overlay.centered=false;overlay.texture=ImageTexture.create_from_image(decoded.mask)

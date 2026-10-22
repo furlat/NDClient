@@ -74,6 +74,49 @@ same-contract producer repair separate from adoption of unrelated schema18
 summon-control work. Independent client assignments/Studio work continue.
 
 
+## Arcane Sword independent anchor — actual9f move/repeat original,22October
+
+One fixed real lifecycle succeeds: initial cast, two actual repeat attempts,
+accepted independent move, then real Drop Concentration. Both journals preserve
+its original conditions and UUIDs. The successful command sequence is evidence
+of the public omission only; selected command coordinates are not rendering data.
+
+| Actual public completion | Amber / Blue occurrence | Published coordinate/outcome |
+| --- | --- | --- |
+| Initial SpellFact, packet2 |42 /42| `source_position:[3,7]` (caster), Hit; no independent anchor |
+| Repeat SpellFact, packet7 |86 /86| behavior `action.spell.arcane_sword.strike`, caster source position, Hit; no independent anchor |
+| Move ActionFact, packet12 |112 /111| behavior `action.spell.arcane_sword.move`, no target_position |
+| Repeat SpellFact, packet17 |156 /154| same repeat behavior, caster source position, Hit; no independent anchor |
+
+[Literal two-seat facts](../.runtime/closing-repairs/arcane-sword-original/public-anchor-evidence.json),
+[original capture index](../.runtime/closing-repairs/arcane-sword-original/index.json).
+The actual independent initial/repeat point is [5,7], then the accepted move
+and later repeat select [5,6], while the actual caster stays [3,7]. A body gesture
+can be authored independently; the blade must not be moved from caster or victim
+proximity. In particular the repeat **is a SpellFact with attack_outcome**, even
+though its declaration ID belongs to the Action catalog. Earlier source-only
+claims that it was an ActionFact without an outcome were wrong and are superseded.
+
+Pinned `dnd/spells/evocation.py::ArcaneSwordEffect.position` has no public
+snapshot override; creation/repeat keeps the anchor in private
+`effect_source_position`/retained origin, and Move changes the private condition
+position. Generic BaseAction declaration does not fill the existing
+`ActionEvent.target_position`. No currently observed SpatialEffect/condition
+state or applied-damage component in these originals supplies the independent
+anchor. Read-only inspection of current source agrees at those sites; current
+schema18 was not adopted or reproduced here.
+
+**Narrow producer review:** expose this actually accepted, observed independent
+anchor at creation, move and repeat, retaining enough actual owner observation
+for resumed playback. Populate the existing ActionFact.target_position for the
+move where applicable; choose the appropriate public declaration/member route
+for initial/repeat/retained position. Keep caster SpellFact.source_position as
+caster and preserve actual SpellFact outcomes. If the current public contract
+has no suitable retained coordinate, identify the smallest required extension
+instead of assigning another field the wrong meaning. No rule solver, new
+VFX family, private client lookup, fixture grant or guessed blade trajectory is
+requested. Client Resource/body routing continues without waiting on this.
+
 ## Stable zero-HP healing discovery — delivered in 9f81d5267, original 0c failure retained
 
 The unchanged `survival.stabilize/heal_and_walk` original on `0c2e5a0d7`

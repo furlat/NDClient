@@ -8,7 +8,8 @@
 [sub_resource type="Resource" id="Resource_uhmo8"]
 script = ExtResource("1_5nu6m")
 role = "cast"
-enabled = false
+clip = "Special1"
+rig = "smallscale.characters.6mage"
 hidden_slots = PackedStringArray()
 
 [sub_resource type="Resource" id="Resource_l7ert"]
@@ -20,9 +21,11 @@ source = "ui-delivery-20261018 srd22.creature_action.sweetplum_gales"
 [resource]
 script = ExtResource("1_hu432")
 id = "action.djinni.sweetplum_gales"
+disposition = "authored"
 kind = "action"
 family = "summon_form"
 icon = SubResource("Resource_l7ert")
 body = SubResource("Resource_uhmo8")
 effect_sources = PackedStringArray()
-notes = "Body role from the server's body kind (area_ability); the rig resolves it to a clip once roles are built (coverage fill)."
+status = "partial"
+notes = "Deliberate provisional command gesture on the actually selected6Mage stand-in, using its real Special1 clip at its original fifteen-pose/twelve-fps clock and no contact/release markers. Actual Sweetplum field/owner UUIDs and actual failed-save restrained recipients retain their existing consumers; this gesture creates no teleport, bulk wind/fog, guessed saved outcome or extra field. An authentic Djinni body and all artwork/audio remain unreviewed."

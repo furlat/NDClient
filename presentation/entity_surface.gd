@@ -136,7 +136,7 @@ func prepare_received_tracks(world:Node,groups:Array,interests:Array)->void:
         var size:Vector2=Vector2(packet.images.colour.get_width(),packet.images.colour.get_height())
         var p:Dictionary=source.parameters
         for frame in source.frames:
-            var uv:=Vector4(frame*source.rig.cell_width/size.x,source.rig.facing_rows[source.facing]*source.rig.cell_height/size.y,float(source.rig.cell_width)/size.x,float(source.rig.cell_height)/size.y)
+            var uv:Vector4=Construction.source_uv(source.rig,source.layout,frame,source.facing,size)
             var pose:Array=[uv,p.component_units,p.component_elevation,p.component_reconstruction_origin,p.component_depth_range,source.pivot,source.ground,world.camera.global_basis]
             var key:Array=_source_key(source.path,world.character_light_profile,packet.images,pose)
             if received_requested.has(key):continue
@@ -166,7 +166,8 @@ func _received_track(world:Node,admission:Dictionary,track:Dictionary,group:Dict
         if layer.slot not in request.slots or layer.slot in track.get("hidden_slots",[]) or not layer.get("effect",{}).is_empty():continue
         var source:Resource=Geometry.BodySources.prepared_layer(layer.source_path,world.catalog_cache)
         if source==null:continue
-        var path_name:String=source.paths_by_slot.get(layer.slot,{}).get(track.clip,"")
+        var banks:Dictionary=source.bank_paths_by_slot.get(layer.slot,{})
+        var path_name:String=banks[track.clip].get(facing,"") if banks.has(track.clip) else source.paths_by_slot.get(layer.slot,{}).get(track.clip,"")
         if path_name.is_empty():continue
         var scale:float=128.0/float(world.rig_config.TILE_W)*float(actor.appearance.visual_scale)
         var binding:Dictionary=Geometry.prepare_binding(path_name,layer.slot,world.catalog_cache,true,true,world.character_light_profile,scale,float(actor.appearance.visual_scale_x))
@@ -174,8 +175,9 @@ func _received_track(world:Node,admission:Dictionary,track:Dictionary,group:Dict
         # Library-only companions explicitly retain unknown ground registration.
         # Normals may render without supplying a world-space optical surface.
         if binding.ground==null:continue
+        var layout:Dictionary=Geometry.BodySources.descriptor(path_name,layer.slot,world.catalog_cache).get("source_layout",{})
         received_poses.append({"actor":request.actor,"clip":track.clip,"path":path_name,"slot":layer.slot,"rig":rig,"facing":facing,
-            "frames":initial_frames(track,rig,local),"parameters":Geometry.parameters_for_facing(binding,facing),"pivot":Construction.layer_shape(rig,scale).pivot,"ground":binding.ground})
+            "frames":initial_frames(track,rig,local),"layout":layout,"parameters":Geometry.parameters_for_facing(binding,facing),"pivot":Construction.layer_shape(rig,scale,layout).pivot,"ground":binding.ground})
 
 ## The exact authored starting frame and at most the next two crossed frames.
 ## Reverse/keyed/looping tracks use their own source range, never extra clips.
@@ -247,12 +249,24 @@ func _capture(world:Node,actor:String,slots:Array,priority:bool=true)->Dictionar
         result.revision.append([key,slot,entry.node.global_basis,entry.node.global_position-result.origin])
         # The current sheet row owns its facing. Adjacent source frames are
         # preparation candidates only; they do not advance any actor clock.
-        var columns:int=maxi(1,roundi(1.0/frame.z))
-        var column:int=roundi(frame.x/frame.z)
-        for step in mini(FRAME_LEAD,columns-1):
-            var next_pose:Array=pose.duplicate();var next_frame:Vector4=frame
-            next_frame.x=((column+step+1)%columns)*frame.z;next_pose[0]=next_frame
-            lead.append({"key":_source_key(entry.texture_path,world.character_light_profile,images,next_pose),"images":images,"pose":next_pose})
+        var layout:Dictionary=entry.get("source_layout",{})
+        if not layout.is_empty():
+            var count:int=layout.frame_rects.size()
+            var bound:Array=entry.bound_frame_key
+            for step in mini(FRAME_LEAD,count-1):
+                var next:int=int(bound[1])+step+1
+                if not entry.get("source_frame_loop",false) and next>=count:break
+                next=posmod(next,count)
+                var next_pose:Array=pose.duplicate()
+                next_pose[0]=Construction.source_uv(world.rigs[row.rig],layout,next,str(bound[2]),Vector2(images.colour.get_width(),images.colour.get_height()))
+                lead.append({"key":_source_key(entry.texture_path,world.character_light_profile,images,next_pose),"images":images,"pose":next_pose})
+        else:
+            var columns:int=maxi(1,roundi(1.0/frame.z))
+            var column:int=roundi(frame.x/frame.z)
+            for step in mini(FRAME_LEAD,columns-1):
+                var next_pose:Array=pose.duplicate();var next_frame:Vector4=frame
+                next_frame.x=((column+step+1)%columns)*frame.z;next_pose[0]=next_frame
+                lead.append({"key":_source_key(entry.texture_path,world.character_light_profile,images,next_pose),"images":images,"pose":next_pose})
     for candidate in lead:_request(candidate.key,candidate.images,candidate.pose,false)
     _start()
     result.reason="" if result.selected.all(func(row):return sources.has(row.key)) else "surface_source_preparing"
