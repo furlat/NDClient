@@ -1,5 +1,12 @@
 # Opus recovery implementation — 22 October 2026
 
+**Latest request: implement the approved [remaining structural recovery plan](OPUS_REMAINING_STRUCTURAL_RECOVERY_PLAN_2026-10-22.md), with explicit Studio optical-context invalidation.**
+The source families are implemented in the existing SDK, Studio and shared
+preparation/publication owners. The prior eight-file diff remains present.
+Their affected sixteen-case cohort passes below; this is not complete current
+native/live or performance acceptance. The automated heartbeat remains paused.
+The plan-preparation freeze below is historical.
+
 The human explicitly resumed implementation after the four Astra plan corrections.
 Recovery of lost responsiveness and behavior takes priority over new assignments.
 The immutable starting checkpoint remains `d5d2ff1d` (`almost disaster`).
@@ -7,7 +14,83 @@ Authority: [corrected recovery plan](OPUS_RECOVERY_AND_COMPLETION_PLAN_2026-10-2
 The plan-only STOPPED statements describe its earlier preparation, not the current
 human-authorized execution.
 
-## Latest qualified boundary — empty demand and stable preview control
+## Latest affected checkpoint — indexed disclosure, held preparation and composed replay
+
+The human approved the remaining structural plan with the explicit Studio
+optical-context correction. The coherent source batch now implements:
+
+- Exact accepted-state disclosure lookup for object supports, construction
+  suppressions and connector endpoints. Private copy-on-write index ownership,
+  cold fallback/initial seeding, actual insertion/reentry order and durable
+  refusal/rollback remain in the SDK. No canonical field or wire schema changed.
+- A Session continuation milestone transfers completed immutable actor-family
+  metadata while environment planning continues. Compiled/opening queue order
+  is preserved. Play intercepts this local stage before Timeline admission;
+  exact accepted group/epoch/observer ownership, optional demand, full-plan
+  promotion and error/retirement/close withdrawal use existing owners. It does
+  not grant metadata, event, required-image or draw readiness.
+- Persistent preparation is charged before audio/presenter/outline/retirement
+  admissions. A single complete operand prefix is retained at the exact held
+  clock, source/membership owner and required/prefetch references, so the next
+  frame can progress construction instead of repeatedly spending its allowance
+  on discovery. Due-time selection stays live. Separate required/future surface
+  coverage remains ordered; moving accounting does not make atomics hard2ms.
+- Effects lends only its actual completed exact PhaseResource under the existing
+  mutex/invalidate owner. Target request tokens, discovered resources,
+  constructors, immutable preparation, materials/programs and native/global
+  mutation/draw fences remain. This is the bounded phase case, not all of A9.
+- Composed thumbnails advance one private scene-owned Timeline with existing
+  replay preparation/publication. A completed plan can publish next frame
+  without repeating preparation. Backward/reset/reload retain cold restoration.
+  Shared replay records the same activation history cut as direct restoration.
+  Nested thumbnail/Play charges are counted once against the shared allowance.
+- Studio compares actual extent/camera/render/profile settings before resident
+  composed-image cache hits and uses existing generation invalidation. Reused
+  panes explicitly resize; changed source-depth/normal mode takes the existing
+  fresh-owner path. Current request priority, source clocks, receiving, framing
+  and actual postdraw output remain.
+
+Independent source/adherence reviews are preserved in
+[the implementation review](../.runtime/recovery-plan-20261021/remaining-opus-diff/review/structural-implementation-source-review-20261022.md),
+[SDK source/controls](../.runtime/closing-repairs/schema16-disclosure-index/README.md),
+[prefix/asset peer review](../.runtime/closing-repairs/schema16-disclosure-index/component-prefix-peer-review.md)
+and [Studio source notes](../.runtime/closing-repairs/structural-studio/README.md).
+There is no new framework, scheduler, renderer or source clock.
+
+The single affected batch is complete at
+[the exact source and results](../.runtime/tests/20261022T003122.459206Z-structural-recovery/summary.json).
+It contains **16 passing cases / 8,660 assertions**, every process naturally
+exits0, with zero script/unexpected errors. Source is7c2114d9 plus its saved
+`source.diff`; installed Factory remains complete82a. The native Studio
+checkpoint passes138, current composed preview control352, native positive
+history modes294, actual-journal replay-prefix parity4,521, indexed fold
+vectors1,253 and sensory/Journal589. The other affected source/ownership controls
+also pass. Assertions are not a percentage of general completion.
+
+The preview control proves fresh-versus-retained full-context pixels, later-cut
+same Timeline/epoch, backward cold restoration, actual reused extent, and
+same-recording/same-cut resident-image invalidation for extent, camera size,
+material, source-depth and source-normal changes. Fireball's empty history
+collections alone would not prove actual history: the separate existing logical
+and native history gates above retain their positive duties.
+
+Recorded explicit64-image four-view availability is **3,428.401ms initial /
+224.126ms changed zoom / 2,686.187ms reset**. All exceed200ms. A separate dragon
+preview was running throughout this functional cohort, so these are neither a
+quiet comparison with the earlier3,949/206/4,089ms cohort nor ordinary Studio-open
+timing. No fresh quiet gameplay route has been launched, and no Door/frame/FPS
+target recovery is claimed. Authorization to close that separate application's
+preview was requested; absent a reply it remains untouched.
+
+The two affected Studio manifest entries now describe their current passing
+functional receipts instead of obsolete known-red source diagnoses. Historical
+failures, timing misses and other current R7 inventory remain preserved. No new
+Factory/backend/asset blocker was found. Factory/engine sources stay read-only;
+schema17/successor intake, wider A9/A12 costs and all human art/audio review
+remain separate existing duties. The immutable `almost disaster` checkpoint is
+preserved.
+
+## Previous qualified boundary — empty demand and stable preview control
 
 The local-closure/composed-cut batch below is now committed at **c53ab11d**.
 Astra's subsequent review agrees that core restoration is implemented while

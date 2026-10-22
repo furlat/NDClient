@@ -302,17 +302,21 @@ static func floor_residue_record(row:Dictionary,cache:Dictionary)->Dictionary:
 static func wall_residue_record(row:Dictionary,quarter:int,record:Dictionary,cache:Dictionary)->Dictionary:
     var image:String=str(record.get("source_image_id",""))
     if image.is_empty() or row.get("kind")!="wall":return record
-    var profiles:Dictionary=environment_index(cache).get("wall_residue_sources",{})
+    var profiles:Dictionary={};var profiles_loaded:bool=false
     var faces:Array=[]
     for member in row.get("wall_members",[row]):
-        if member.get("boundaries",[]).size()!=1:continue
+        var residues:Array=member.get("surface_residues",[])
+        if residues.is_empty() or member.get("boundaries",[]).size()!=1:continue
+        if not profiles_loaded:
+            profiles=environment_index(cache).get("wall_residue_sources",{})
+            profiles_loaded=true
         var direction:String=str(member.boundaries[0])
         var vertical:bool=direction in ["east","west"]
         var sign:int=1 if direction in ["east","north"] else -1
         var line_twice:int=int(member.position[0] if vertical else member.position[1])*2+sign
         var along:int=int(member.position[1] if vertical else member.position[0])
         var tangent:Vector2=Placement.project(Vector2(0,1) if vertical else Vector2(1,0),0,quarter)
-        for residue in member.get("surface_residues",[]):
+        for residue in residues:
             var profile:Dictionary=profiles.get(residue.residue_id,{})
             var planes:Array=profile.get("images",{}).get(image,{}).get(Placement.pose(direction,quarter),[])
             if planes.is_empty() or not residue.faces.any(func(face):return face in member.get("residue_observed_faces",[]) and Placement.pose(face,quarter) in ["e","s"]):continue

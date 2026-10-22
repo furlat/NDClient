@@ -1,5 +1,13 @@
 # Recover the Opus fast paths, integrate the pending repairs, finish the client
 
+**Latest implementation authority — 22 October:** the approved
+[remaining structural recovery plan](OPUS_REMAINING_STRUCTURAL_RECOVERY_PLAN_2026-10-22.md)
+supersedes the recovery sequencing below after the already-committed
+restorations. The human authorized its existing families after the explicit
+Studio optical-context correction; source work is active, with grouped affected
+qualification afterward. This document's literal historical/adapted code and patch archive
+remain preserved; no historical module is a fresh wholesale replacement order.
+
 ## Current execution — 22 October 2026
 
 The human subsequently authorized implementation: “let's go priority is restoring

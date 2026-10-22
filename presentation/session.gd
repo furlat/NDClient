@@ -324,7 +324,10 @@ func _prepare_operation(next:int,handoff:Dictionary)->void:
             prepared.append(compiled)
             if not first.is_empty():prepared.append(first)
             mutex.unlock()
-        message.media = MediaWarmup.prepare_handoff(before,result.value.groups,authoring_cache,result.value.final_state)
+        # Opening/compiled are already queued. Transfer only completed passive
+        # character families while this continuation plans its environment.
+        var assets_ready:Callable=_publish_asset_sources.bind(next) if deliver_compiled_operations else Callable()
+        message.media = MediaWarmup.prepare_handoff(before,result.value.groups,authoring_cache,result.value.final_state,assets_ready)
         media_ms = (Time.get_ticks_usec()-compiled_at)/1000.0
     if _stopping(): return
     transport.profile_preparation(next,packet_started,started,Time.get_ticks_usec(),result.ok,handoff.is_empty() or handoff.get("from_disk",false),compiled_at,media_ms,false,
@@ -344,6 +347,13 @@ func _prepare_operation(next:int,handoff:Dictionary)->void:
     preparation_cursor = packet.cursor.duplicate(true)
     preparation_metrics.compiled_operations += 1
     if used_records: preparation_metrics.recorded_handoff_hits += 1
+    mutex.unlock()
+
+func _publish_asset_sources(assets:Dictionary,sequence:int)->void:
+    var message:Dictionary={"kind":"operation","stage":"asset_sources","sequence":sequence,"groups":assets.groups,"assets":assets}
+    message.make_read_only()
+    mutex.lock()
+    if not cancelled:prepared.append(message)
     mutex.unlock()
 
 func take_prepared() -> Array:

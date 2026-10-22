@@ -1,5 +1,14 @@
 # Everything remaining: client, Factory migration and Studio
 
+**Latest request — 22 October: implement the approved [remaining structural recovery plan](OPUS_REMAINING_STRUCTURAL_RECOVERY_PLAN_2026-10-22.md),
+including the explicit Studio optical-context correction.** These source
+families are implemented; one affected batch passes16cases/8,660assertions with
+natural exits0. Quiet performance comparison is still pending; the external
+dragon preview remains untouched without authorization to close it.
+The plan supersedes recovery sequencing and preserves this R1–R8 inventory.
+This is not whole-current-native/live, performance or art acceptance. The automated heartbeat remains
+paused; older queue/planning-freeze language below is historical.
+
 ## Recovery execution update — 22 October 2026
 
 The human resumed implementation with restoration of every regression as the

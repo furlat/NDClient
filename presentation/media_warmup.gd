@@ -464,14 +464,16 @@ static func request_plan(data: Dictionary, key: Array, state: Dictionary, groups
     data.optional_pending = {}
     _start_plan(data)
 
-static func prepare_handoff(state: Dictionary, groups: Array, cache: Dictionary, final_state: Dictionary = {}) -> Dictionary:
+static func prepare_handoff(state: Dictionary, groups: Array, cache: Dictionary, final_state: Dictionary = {}, assets_ready:Callable=Callable()) -> Dictionary:
     # Called by the existing session preparer, before publishing these groups.
     # This cache belongs exclusively to that worker; no scene residency changes.
     if groups.is_empty(): return {}
     var selected: Array = groups.slice(0,mini(2,groups.size()))
     var result = {}
-    _plan_sources({"key":[],"state":_snapshot(state),"groups":selected,
-        "origin_state":state,"final_state":final_state,"tail_groups":groups.slice(selected.size())},result,cache)
+    var request:Dictionary={"key":[],"state":_snapshot(state),"groups":selected,
+        "origin_state":state,"final_state":final_state,"tail_groups":groups.slice(selected.size())}
+    if assets_ready.is_valid():request.assets_ready=assets_ready
+    _plan_sources(request,result,cache)
     result.generation = state.generation
     result.observer_uuid = state.observer_uuid
     result.groups = selected
@@ -791,12 +793,40 @@ static func records_at(schedule:Dictionary,local_ms:float,fallback:Array=[])->Ar
         records=change.records
     return records
 
+static func _character_assets(character:Dictionary,groups:Array,state:Dictionary,cache:Dictionary)->Dictionary:
+    # Borrow completed actor packet families, not the unfinished combined plan.
+    # Keep their roles intact without re-flattening all image records per profile.
+    var families:Dictionary={};var packets:Array=[]
+    for group in groups:
+        var profiles:Dictionary={}
+        for profile in CharacterGeometry.PROFILES:
+            var parts:Array=[]
+            for packet in character.actor_records.get(group.id,[]):
+                var family:Dictionary=packet.source_families[profile]
+                if not parts.any(func(part):return is_same(part,family)):parts.append(family)
+                if not packets.any(func(part):return is_same(part,packet)):packets.append(packet)
+            parts.make_read_only();profiles[profile]=parts
+        profiles.make_read_only();families[group.id]=profiles
+    var sizes:Dictionary={};var headers:Dictionary={}
+    for packet in packets:
+        sizes.merge(packet.source_sizes);headers.merge(packet.source_headers)
+    var owners:Array=groups.duplicate();owners.make_read_only()
+    for value in [families,sizes,headers]:value.make_read_only()
+    var assets:Dictionary={"generation":state.generation,"observer_uuid":state.observer_uuid,"groups":owners,
+        "source_families":families,"source_sizes":sizes,"source_headers":headers,
+        "source_files":Characters.Catalog.source_snapshot(cache)}
+    assets.make_read_only()
+    return assets
+
 static func _plan_sources(request: Dictionary, result: Dictionary, cache: Dictionary) -> void:
     var started = Time.get_ticks_usec()
     result.key = request.key
     result.stage = "required"
     result.value = plan(request.state,request.groups,cache)
     var characters_done = Time.get_ticks_usec()
+    var assets_ready:Callable=request.get("assets_ready",Callable())
+    if assets_ready.is_valid():assets_ready.call(_character_assets(result.value,request.groups,request.origin_state,cache))
+    var assets_done:int=Time.get_ticks_usec()
     var tail:Array=request.get("tail_groups",[])
     var environment = EnvironmentMedia.plan(request.state,request.groups,cache,request.get("origin_state",{}),
         request.get("final_state",{}) if tail.is_empty() else {},request.get("partial",false))
@@ -819,7 +849,8 @@ static func _plan_sources(request: Dictionary, result: Dictionary, cache: Dictio
     result.optional_request = {"key":request.key,"state":request.state,"groups":request.groups,"required":result.value}
     result.source_files = Characters.Catalog.source_snapshot(cache)
     result.phases = {"characters":(characters_done-started)/1000.0,
-        "environment":(environment_done-characters_done)/1000.0,"roles":(roles_done-environment_done)/1000.0,
+        "asset_publication":(assets_done-characters_done)/1000.0,
+        "environment":(environment_done-assets_done)/1000.0,"roles":(roles_done-environment_done)/1000.0,
         "source_sizes":(sizes_done-roles_done)/1000.0,"source_publications":(publications_done-sizes_done)/1000.0,
         "environment_tail":(tail_done-publications_done)/1000.0,"source_files":(Time.get_ticks_usec()-tail_done)/1000.0}
     result.phases.source_headers_cached_count=cache.get("__required_headers",{}).size()
@@ -1957,7 +1988,7 @@ static func plan(state: Dictionary, groups: Array, cache: Dictionary) -> Diction
             # occurrence. Later damage/death/outfit witnesses are demanded
             # ahead below, but cannot block this earlier authored source cue.
             var exact:Dictionary=track.get("presentation_actor",{})
-            var track_actors:Array=[{"actor":exact,"looks":track.get("presentation_item_looks",Characters.item_looks(exact,{"items":disclosed_items}))}] if not exact.is_empty() else witnesses.get(track.actor_uuid,[])
+            var track_actors:Array=[{"actor":exact,"looks":(track.presentation_item_looks if track.has("presentation_item_looks") else Characters.item_looks(exact,{"items":disclosed_items}))}] if not exact.is_empty() else witnesses.get(track.actor_uuid,[])
             for witness in track_actors:
                 var actor:Dictionary=witness.actor
                 if Characters.rig_id(actor,cache)!=track.rig:continue

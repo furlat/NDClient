@@ -54,6 +54,7 @@ var requested: Dictionary={}
 var worker: Thread
 var generation=0
 var effect_revision:int=Effects.revision
+var composed_optics:Array=[]
 # Preserve the previous 256-sample working set for all four authored views.
 # Published swatches also share a byte budget, including higher precision sources.
 var limit=1024
@@ -81,7 +82,9 @@ var source_evictions=0
 var pinned:Dictionary={}
 
 func refresh_effect_revision()->bool:
-    if effect_revision==Effects.revision:return false
+    var optics:Array=ReplayPanes.optical_settings(reference_world) if is_instance_valid(reference_world) and is_instance_valid(reference_world.camera) else []
+    if composed_optics.is_empty():composed_optics=optics
+    if effect_revision==Effects.revision and composed_optics==optics:return false
     # Keep the exact admitted source/index and actual hosts. Existing reset
     # owns cancellation, generation barriers, parked-source release and cache
     # clearing; it does not rebuild timeline rows or change their clocks.
@@ -92,6 +95,7 @@ func refresh_effect_revision()->bool:
     reset()
     cache=sources;recording=actual_recording
     reference_world=reference;displayed_world=displayed
+    composed_optics=optics
     return true
 
 func set_demand(keys:Dictionary)->void:
@@ -284,9 +288,9 @@ func _start_composed(job:Dictionary)->void:
     if not composed_pane.is_empty() and is_instance_valid(composed_pane.get("world")) \
         and is_same(composed_pane.index,job.recording) and not composed_pane.get("frozen",[]).is_empty():
         var owner:Node3D=composed_pane.world
-        # Keep only this actual unchanged parked Timeline, never a quantized
-        # neighbor, another recording, or a synthetic source-only occurrence.
-        if owner.external_clock and owner.timeline.paused and owner.timeline.display_ms==float(job.sample_ms) \
+        # A later cut advances this same private prefix through normal replay
+        # preparation. Earlier cuts retain the ordinary fresh restore below.
+        if owner.external_clock and owner.timeline.paused and owner.timeline.display_ms<=float(job.sample_ms) \
             and owner.media_issue.is_empty() and owner.presentation_errors.is_empty():
             _prepare_composed(job,owner.timeline)
             return
@@ -304,7 +308,46 @@ func _prepare_composed(job:Dictionary,restored:RefCounted)->void:
     owner.native_startup_background=false
     owner.component_renderer.audio.set_enabled(false);composed_pane.viewport.audio_listener_enable_3d=false
     owner.presentation_mutes={};owner.presentation_solo={}
-    composed_active={"job":job,"started_ms":Time.get_ticks_msec(),"drawn":false,"framing":false}
+    owner.native_startup_requested_ms=float(job.sample_ms)
+    composed_active={"job":job,"started_ms":Time.get_ticks_msec(),"drawn":false,"framing":false,"replay_plan":{}}
+
+func _advance_composed(owner:Node3D,target_ms:float)->bool:
+    if owner.timeline.display_ms==target_ms:return true
+    var budget:Dictionary=owner._preparation_budget()
+    if budget.used_usec>=budget.limit_usec:return false
+    var plan:Dictionary=composed_active.replay_plan
+    var started:int;var charged:int
+    if plan.is_empty() or not owner.timeline.replay_plan_current(plan):
+        owner.timeline.replay_cancel_preparation()
+        started=Time.get_ticks_usec();charged=budget.used_usec
+        plan=owner.timeline.replay_plan(target_ms)
+        composed_active.replay_plan=plan
+        owner._charge_preparation("studio_prefix_plan",started,charged)
+    if budget.used_usec>=budget.limit_usec:return false
+    # A completed plan may have spent the previous frame's allowance. Its
+    # existing base/membership fence admits publication without repeating that
+    # completed preparation on every retry. A changed fence prepares normally.
+    if not owner.can_publish_replay_advance(plan):
+        started=Time.get_ticks_usec();charged=budget.used_usec
+        var ready:bool=owner.timeline.replay_prepare(plan)
+        owner._charge_preparation("studio_prefix_prepare",started,charged)
+        if not ready:return false
+    if budget.used_usec>=budget.limit_usec or not owner.can_publish_replay_advance(plan):return false
+    started=Time.get_ticks_usec();charged=budget.used_usec
+    var published:bool=owner.publish_replay_advance(plan)
+    owner._charge_preparation("studio_prefix_publish",started,charged)
+    if not published:return false
+    composed_active.replay_plan={}
+    composed_active.framing=false;composed_active.drawn=false;composed_active.erase("draw_signature")
+    # An authored appearance boundary may publish before the requested cut.
+    # Its next plan still starts from the exact actual clock, not elapsed wait.
+    return owner.timeline.display_ms==target_ms
+
+func _cancel_composed_advance()->void:
+    if composed_active.get("replay_plan",{}).is_empty():return
+    if not composed_pane.is_empty() and is_instance_valid(composed_pane.get("world")):
+        composed_pane.world.timeline.replay_cancel_preparation()
+    composed_active.replay_plan={}
 
 func set_displayed_world(value:Node3D)->void:
     var changed:bool=not is_same(displayed_world,value)
@@ -342,6 +385,7 @@ func _claim_composed_receiving(owner:Node3D)->bool:
     return true
 
 func _finish_composed()->void:
+    _cancel_composed_advance()
     _release_composed_receiving()
     if not composed_pane.is_empty() and is_instance_valid(composed_pane.get("world")):ReplayPanes.freeze(composed_pane,true)
     composed_active={}
@@ -376,6 +420,7 @@ func _poll_composed()->bool:
         requested.erase(job.key);_finish_composed();return true
     if Time.get_ticks_msec()-int(composed_active.started_ms)>NATIVE_READY_TIMEOUT_MS:
         errors[job.key]="Actual composed source did not become ready within the thumbnail budget";requested.erase(job.key);_finish_composed();return true
+    if not _advance_composed(owner,float(job.sample_ms)):return false
     if not owner.playback_prepared() or owner.rotation_pending() or int(owner.quarter)!=int(job.quarter):return false
     var component:Dictionary=job.component
     var source_stamp:Array=[];var focus:Variant=null
@@ -434,7 +479,8 @@ func _poll_composed()->bool:
         owner.camera_focus=focus;owner.position_camera()
         composed_active.framing=true;composed_active.drawn=false;return false
     if not _claim_composed_receiving(owner):return false
-    var signature:Array=[owner.timeline.initialization_revision,owner.world_revision,owner.quarter,owner.timeline.display_ms,owner.camera.transform,owner.camera.size,source_stamp]
+    var signature:Array=[owner.timeline.initialization_revision,owner.world_revision,owner.quarter,owner.timeline.display_ms,
+        composed_pane.viewport.size,owner.camera.transform,owner.camera.size,composed_optics,source_stamp]
     if composed_active.get("draw_signature",[])!=signature:
         composed_active.draw_signature=signature;composed_active.drawn=false
         var sample_owner:Dictionary=composed_active
@@ -579,7 +625,12 @@ func poll() -> bool:
         break
     if not is_instance_valid(host):
         _release_composed_receiving();return false
+    var preparation:Dictionary=reference_world._preparation_budget() if is_instance_valid(reference_world) else {}
+    var charged_before:int=preparation.get("used_usec",0)
     var composed_changed:bool=_poll_composed()
+    # Forward replay has already charged nested Play preparation. Leave later
+    # optional units for the next shared allowance once that work spends it.
+    if not preparation.is_empty() and preparation.used_usec>charged_before and preparation.used_usec>=preparation.limit_usec:return composed_changed
     if suspended:
         if active.get("kind")=="native_effect":active.started_ms=Time.get_ticks_msec()
         for composite in native_composites:composite.started_ms=Time.get_ticks_msec()
@@ -854,6 +905,7 @@ func _close_hit(composite:Dictionary)->void:
 func reset() -> void:
     effect_revision=Effects.revision
     Recording.cancel(composed_token)
+    _cancel_composed_advance()
     _release_composed_receiving()
     ReplayPanes.discard(composed_pane);composed_pane={};composed_active={};recording={};reference_world=null;displayed_world=null
     generation+=1;pending.clear();warm_pending.clear();warm_requested.clear();requested.clear();pinned.clear();textures.clear();texture_sizes.clear();texture_bytes=0;errors.clear();inactive.clear();cache.clear();_clear_active()
@@ -865,7 +917,7 @@ func reset() -> void:
         if composite.has("hit_renderer"):_close_hit(composite)
         if composite.has("viewport"):composite.viewport.queue_free()
     composites.clear()
-    hit_templates.clear()
+    hit_templates.clear();composed_optics=[]
 
 func close() -> void:
     reset()

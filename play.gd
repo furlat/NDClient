@@ -240,6 +240,7 @@ var media_metadata_ready = false
 var media_metadata_ms = 0.0
 var media_source_issue:String=""
 var media_group_plans: Dictionary = {}
+var media_pending_assets:Dictionary={}
 var media_interest:Dictionary={}
 var displayed_source_records:Array=[]
 var replay_media_groups: Array = []
@@ -663,6 +664,9 @@ func _receive_prepared_operations()->bool:
     if session==null:return false
     var messages:Array=session.take_prepared()
     for message in messages:
+        if message.get("stage","")=="asset_sources":
+            _adopt_asset_sources(message)
+            continue
         if message.get("stage","")!="media":
             timeline.accept(message)
             if message.get("stage","")=="compiled":
@@ -1873,7 +1877,7 @@ func _reset_media_epoch() -> void:
     selection_media_demand_paths={}
     selection_media_preview={}
     media_normal_sets={}
-    media_group_plans.clear();media_interest={}
+    media_group_plans.clear();media_pending_assets.clear();media_interest={}
     _release_replay_media()
     media_received_owners.clear()
     media_empty_key = []
@@ -1907,6 +1911,37 @@ func _media_group_owner(id: String) -> Dictionary:
         if group.id == id: return group
     return {}
 
+func _adopt_asset_sources(message:Dictionary)->void:
+    _reset_media_epoch()
+    var assets:Dictionary=message.assets
+    if timeline.state.is_empty() or session==null or not session.issue.is_empty():return
+    if assets.generation!=timeline.state.generation or assets.observer_uuid!=timeline.state.observer_uuid:return
+    for group in assets.groups:
+        if not is_same(_media_group_owner(group.id),group):return
+        if not message.groups.any(func(supplied):return is_same(supplied,group)):return
+    var needed:bool=false
+    for group in assets.groups:
+        var plan:Dictionary=media_group_plans.get(group.id,{})
+        if not plan.is_empty() and not plan.has("coverage_until_ms"):continue
+        media_pending_assets[group.id]={"owner":group,"assets":assets}
+        needed=true
+    if not needed:return
+    Catalog.adopt_snapshot(catalog_cache,assets.source_files)
+    MediaWarmup.adopt_source_sizes(media_warmup,assets.source_sizes,timeline.initialization_revision)
+
+func _pending_asset_families()->Array:
+    var families:Array=[]
+    for id in media_pending_assets.keys():
+        var held:Dictionary=media_pending_assets[id]
+        var plan:Dictionary=media_group_plans.get(id,{})
+        if session==null or not session.issue.is_empty() or not is_same(_media_group_owner(id),held.owner) \
+                or (not plan.is_empty() and not plan.has("coverage_until_ms")):
+            media_pending_assets.erase(id)
+            continue
+        for family in held.assets.source_families.get(id,{}).get(character_light_profile,[]):
+            if not family.is_empty() and not families.any(func(value):return is_same(value,family)):families.append(family)
+    return families
+
 func _adopt_received_media(message: Dictionary) -> void:
     _reset_media_epoch()
     var received: Dictionary = message.get("media",{})
@@ -1925,6 +1960,11 @@ func _adopt_received_media(message: Dictionary) -> void:
     media_requested_key = key
     var completed = MediaWarmup.receive_handoff(media_warmup,received,key)
     _adopt_media_plan(completed,false)
+    # Required records and temporary optional families change together at the
+    # next demand publication, never withdraw a shared path a frame early.
+    if not received.has("coverage_until_ms"):
+        for group in received.groups:
+            if is_same(media_pending_assets.get(group.id,{}).get("owner"),group):media_pending_assets.erase(group.id)
     for group in received.groups: media_received_owners[group.id] = group
     # Pins/readiness are still selected by _prepare_media's displayed window.
     media_plan_key = []
@@ -2103,6 +2143,7 @@ func _prepare_media(first: Dictionary = {}) -> void:
         FrameProfile.end_phase(profile,"media_plan_request",request_started)
     media_metadata_ready = not ready.is_empty()
     if not media_metadata_ready:
+        _publish_media_interest(maxf(timeline.display_ms,timeline.media_target_ms))
         FrameProfile.end_phase(profile,"media_plan",started)
         return
     if external_playback:MediaWarmup.adopt_required(media_warmup,timeline.initialization_revision)
@@ -2163,11 +2204,16 @@ static func _same_source_refs(a:Array,b:Array)->bool:
     return true
 
 func _publish_media_interest(at_ms:float)->void:
-    if not media_metadata_ready:return
-    var record_sets:Array=[];var families:Array=[]
+    var families:Array=_pending_asset_families()
+    if not media_metadata_ready and families.is_empty() and media_interest.is_empty():return
+    var record_sets:Array=[]
     var group:Dictionary=timeline.current if not timeline.current.is_empty() else timeline.queue[0] if not timeline.queue.is_empty() else {}
     var current_plan:Dictionary=media_group_plans.get(group.get("id",""),media_empty_plan)
-    if group.is_empty():
+    if not media_metadata_ready:
+        # Keep the displayed/current leases while passive character discovery
+        # adds optional interest. No incomplete group becomes a ready plan.
+        record_sets.append(media_interest.get("records",[]))
+    elif group.is_empty():
         # The terminal plan describes the previous operation's final sources;
         # its initial cut is not the outfit currently on screen.
         record_sets.append(current_plan.get("source_records",{}).get(character_light_profile,[]))
@@ -4326,6 +4372,7 @@ func _exit_tree() -> void:
     if session != null: session.close()
     SelectionMedia.close(selection_media)
     MediaWarmup.close(media_warmup)
+    media_pending_assets.clear()
     # Retired nodes remain scene children, so ordinary tree teardown owns them.
     retiring_views = []
     BackgroundRelease.join()

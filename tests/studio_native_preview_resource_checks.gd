@@ -5,6 +5,7 @@ const Library=preload("res://studio/case_library.gd")
 const Play=preload("res://play.gd")
 const Effects=preload("res://presentation/effect_package.gd")
 const Recording=preload("res://studio/recording.gd")
+const ReplayPanes=preload("res://studio/replay_panes.gd")
 const TimelineView=preload("res://studio/timeline_view.gd")
 const Thumbnails=preload("res://studio/thumbnail_cache.gd")
 const Store=preload("res://studio/native_preview_store.gd")
@@ -15,6 +16,7 @@ var checks:int=0
 var failures:Array=[]
 var measurements:Array=[]
 var observed_sources:Array=[]
+var replay_controls:Array=[]
 var tracks:Control
 var finished:bool=false
 var reference:Node3D
@@ -67,8 +69,9 @@ func measure(label:String)->Dictionary:
             tracks._charge_preparation(optional_started)
         if tracks._preparation_available():
             var poll_started:int=Time.get_ticks_usec()
+            var charged_before:int=tracks.preparation_admission.get("used_usec",0)
             cache.poll()
-            tracks._charge_preparation(poll_started)
+            tracks._charge_preparation(poll_started,charged_before)
         state=tracks.prepare_visible(true)
     check(state.ready and state.pending==0 and state.errors.is_empty(),label+": actual visible four-view samples complete through their eligible production path")
     bounded_sources(label)
@@ -129,6 +132,99 @@ func phase_samples(rows:Array)->Dictionary:
     check(fresh_multi_view_cuts>0,"At least one exact composed cut publishes multiple fresh view images from its retained Timeline")
     bounded_sources("actual phase/retained-tail coverage")
     return samples
+
+func same_recorded_cut(actual:RefCounted,index:Dictionary,at:float,label:String)->void:
+    var fresh:RefCounted=Recording.restore(index,at)
+    check(actual.display_ms==fresh.display_ms and actual.sequence==fresh.sequence and actual.state==fresh.state,
+        label+": retained replay agrees with fresh canonical state, sequence and absolute clock")
+    check(actual.condition_owners==fresh.condition_owners and actual.temporary_hp_owners==fresh.temporary_hp_owners \
+        and actual.item_effect_owners==fresh.item_effect_owners and actual.spatial_effect_owners==fresh.spatial_effect_owners \
+        and actual.actor_history_cuts==fresh.actor_history_cuts and actual.retained_components==fresh.retained_components \
+        and actual.retained_directions==fresh.retained_directions and actual.resolved_impacts==fresh.resolved_impacts,
+        label+": actual owner lifetimes, history cuts and retained presentation agree with fresh restore")
+
+func retained_prefix_and_optics(rows:Array,index:Dictionary)->void:
+    var composed:Array=rows.filter(func(row):return Thumbnails._composed_row(row))
+    check(not composed.is_empty(),"Recorded prefix controls use an actual input-bearing composed row")
+    if composed.is_empty():return
+    composed.sort_custom(func(a,b):return a.end_ms-a.start_ms>b.end_ms-b.start_ms)
+    var row:Dictionary=composed[0]
+    var first:float=lerpf(row.start_ms,row.end_ms,.2)
+    var later:float=lerpf(row.start_ms,row.end_ms,.7)
+    var backward:float=lerpf(row.start_ms,row.end_ms,.4)
+    var was_processing:bool=tracks.is_processing()
+    tracks.set_process(false);tracks.set_index(index);bind_recording(index)
+    var cache:RefCounted=tracks.thumbnails
+    var first_key:String=cache.request(row,first,0,false)
+    var first_image:Texture2D=await source_texture(cache,first_key,"Retained prefix initial cut",row,first,0)
+    if first_image==null:tracks.set_process(was_processing);return
+    var initial:RefCounted=cache.composed_pane.world.timeline
+    var epoch:int=initial.initialization_revision
+    var later_key:String=cache.request(row,later,0,false)
+    check(later_key!=first_key,"Later prefix control requests a distinct actual sample bin")
+    var later_image:Texture2D=await source_texture(cache,later_key,"Retained prefix later cut",row,later,0)
+    if later_image==null:tracks.set_process(was_processing);return
+    var advanced:RefCounted=cache.composed_pane.world.timeline
+    check(is_same(initial,advanced) and advanced.initialization_revision==epoch,
+        "A later cut keeps the same private Timeline and admitted epoch")
+    same_recorded_cut(advanced,index,later,"Later composed cut")
+    # This independent cache has no parked prefix. Its ordinary cold restore
+    # and production draw remain the output oracle for the retained path.
+    var cold=Thumbnails.new();cold.host=root;cold.cache=Thumbnails.Catalog.source_snapshot(index.cache)
+    cold.recording=index;cold.reference_world=reference;cold.set_displayed_world(reference)
+    var cold_key:String=cold.request(row,later,0,false)
+    var cold_image:Texture2D=await source_texture(cold,cold_key,"Independent cold later cut",row,later,0)
+    if cold_image!=null:
+        check(cold_image.get_image().get_data()==later_image.get_image().get_data(),
+            "Cold and retained paths draw identical full-context pixels at the same actual cut and view")
+    cold.close()
+    var back_key:String=cache.request(row,backward,0,false)
+    check(back_key not in [first_key,later_key],"Backward prefix control requests an uncached actual cut")
+    var back_image:Texture2D=await source_texture(cache,back_key,"Backward composed cut",row,backward,0)
+    if back_image==null:tracks.set_process(was_processing);return
+    var restored:RefCounted=cache.composed_pane.world.timeline
+    check(not is_same(restored,advanced),"An earlier cut uses ordinary fresh restoration instead of rewinding mutable history")
+    same_recorded_cut(restored,index,backward,"Backward composed cut")
+    replay_controls.append({"row":row.id,"first_ms":first,"later_ms":later,"backward_ms":backward,
+        "scope":"Actual same-recording private forward replay, independent cold output and backward restore; no source-only substitution."})
+    var extent:Vector2i=reference_view.size
+    var camera_size:float=reference.camera.size
+    var hit_material:bool=reference.native_spell_hit_material
+    var depth:bool=reference.source_depth;var normals:bool=reference.source_normals
+    # Exercise the pane API too: output invalidation below deliberately retires
+    # a pane, so it alone cannot establish reused-target extent synchronization.
+    reference_view.size=extent+Vector2i(32,16)
+    var pane:Dictionary=ReplayPanes.prepare(root,restored,index,reference,cache.composed_pane,0,true,true,0)
+    check(is_same(pane.world.timeline,restored) and pane.viewport.size==reference_view.size,
+        "Existing same-cut replay pane explicitly adopts the actual resized extent")
+    pane.world.external_clock=true;ReplayPanes.freeze(pane,true)
+    for setting in ["extent","camera","material","depth","normals"]:
+        var previous:int=cache.generation
+        var old_key:String=back_key
+        if setting=="camera":reference.camera.size=camera_size*1.125
+        elif setting=="material":reference.native_spell_hit_material=not hit_material
+        elif setting=="depth":reference.source_depth=not depth
+        elif setting=="normals":reference.source_normals=not normals
+        # The Timeline's pre-signature path must invalidate resident images
+        # even when no direct thumbnail request/poll has run since the change.
+        tracks.prepare_visible(false)
+        check(cache.generation==previous+1 and not cache.textures.has(old_key),
+            "Same-cut "+setting+" change invalidates old composed output before a cache hit")
+        back_key=cache.request(row,backward,0,false);cache.set_demand({back_key:true})
+        check(back_key!=old_key,"Changed "+setting+" output has a new existing generation key")
+        var image:Texture2D=await source_texture(cache,back_key,"Same-cut changed "+setting,row,backward,0)
+        if image==null:break
+        var stored_extent:=Vector2(128,roundi(128.0*reference_view.size.y/reference_view.size.x))
+        check(image.get_size()==stored_extent and cache.composed_pane.viewport.size==reference_view.size \
+            and cache.composed_pane.world.camera.size==reference.camera.size \
+            and cache.composed_pane.world.native_spell_hit_material==reference.native_spell_hit_material \
+            and cache.composed_pane.world.source_depth==reference.source_depth and cache.composed_pane.world.source_normals==reference.source_normals,
+            "Changed "+setting+" output uses the actual target extent, camera size and render setting")
+        same_recorded_cut(cache.composed_pane.world.timeline,index,backward,"Changed "+setting+" cut")
+    reference_view.size=extent;reference.camera.size=camera_size;reference.native_spell_hit_material=hit_material
+    reference.source_depth=depth;reference.source_normals=normals
+    reference.position_camera()
+    tracks.set_process(was_processing)
 
 func identity_and_authoring(row:Dictionary,index:Dictionary)->void:
     check(not Thumbnails._composed_row(row),"Persisted-source identity reuse uses an actual source-only recorded phase, without clearing operands")
@@ -297,6 +393,7 @@ func run()->void:
     await measure("changed zoom and actual late-source bins")
     tracks.set_index(index);bind_recording(index);tracks.filter="native_effect";tracks.rebuild_rows();tracks.fit()
     await measure("reset/reload exact recording context")
+    await retained_prefix_and_optics(rows,index)
     incremental_pages(snapshots.values())
     # Disk identity remains a source-only contract. Select a genuine eligible
     # phase from these exact existing originals; never strip required inputs.
@@ -316,7 +413,7 @@ func run()->void:
 func finish()->void:
     if finished:return
     finished=true
-    var report={"checks":checks,"failed":failures.size(),"failures":failures,"measurements":measurements,"sources":observed_sources,
+    var report={"checks":checks,"failed":failures.size(),"failures":failures,"measurements":measurements,"sources":observed_sources,"replay_controls":replay_controls,
         "scope":"Actual current Fireball Recording/Timeline previews, exact composed context where inputs require it, four views/tails/zoom/reset and existing budgets; separately eligible actual source-only identity, persisted Resource/dependency revision and bounded-page controls. Full-context pixels are not isolated-effect evidence. No full Library timing, current-engine qualification or artwork approval is inferred."}
     FileAccess.open(REPORT,FileAccess.WRITE).store_string(JSON.stringify(report,"  "))
     print("NATIVE_PREVIEW_RESOURCE ",JSON.stringify(report));quit(0 if failures.is_empty() else 1)

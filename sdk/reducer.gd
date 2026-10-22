@@ -18,15 +18,15 @@ static func copy_target(target:Dictionary)->Dictionary:return target.duplicate(t
 static func _retained_target(target:Dictionary)->Dictionary:
     var result=target.duplicate()
     for field in ["tiles","objects","object_members","connectors","actors","items","spatial_content","spatial_commit_cursors","entity_members","object_contact_members","effect_members","light_sources","remembered_effects"]:result[field]=target[field].duplicate()
-    result.static=target.static.duplicate()
-    for field in target.static:result.static[field]=target.static[field].duplicate()
+    # Static definitions are immutable after-values. Their only writers fork
+    # the static shell and the particular table before assigning a new row.
     return result
 static func enter_body(target:Dictionary,record:Dictionary)->Dictionary:return Bodies.enter_body(target,record)
 static func enter_item(target:Dictionary,record:Dictionary)->Dictionary:return Bodies.enter_item(target,record)
 static func apply_actor_change_fact(target:Dictionary,fact:Dictionary,condition_rows:Array=[],item_rows:Array=[])->Dictionary:return Bodies.actor_change(target,fact,condition_rows,item_rows)
 static func clear_unseen_positions(target:Dictionary)->void:Audience.clear_unseen_positions(target)
-static func apply_world_update(target:Dictionary,update:Dictionary,disclosed:Dictionary={})->Dictionary:
-    return World.fold(target,update,disclosed)
+static func apply_world_update(target:Dictionary,update:Dictionary,disclosed:Dictionary={},world_context:Dictionary={})->Dictionary:
+    return World.fold(target,update,disclosed,world_context)
 static func stage_actors(target:Dictionary,bodies:Array)->Dictionary:
     var result=_retained_target(target)
     for record in bodies:
@@ -158,7 +158,7 @@ static func check_spell_declarations(nodes:Array,versions:Dictionary,resolutions
     return success(null)
 static func reduce_nodes(target:Dictionary,nodes:Array,versions:Dictionary,bodies:Array,updates:Array,rows:Dictionary={})->Dictionary:
     return _reduce_nodes_owned(copy_target(target),nodes,versions,bodies,updates,rows)
-static func _reduce_nodes_owned(result:Dictionary,nodes:Array,versions:Dictionary,bodies:Array,updates:Array,rows:Dictionary={},recorded:Variant=null,profile:Variant=null,resolutions:Array=[],sensory_cells:Dictionary={})->Dictionary:
+static func _reduce_nodes_owned(result:Dictionary,nodes:Array,versions:Dictionary,bodies:Array,updates:Array,rows:Dictionary={},recorded:Variant=null,profile:Variant=null,resolutions:Array=[],sensory_cells:Dictionary={},world_context:Dictionary={})->Dictionary:
     var composed=Audience.composed_values(rows)
     if not composed.ok:return composed
     var casts:Dictionary={}
@@ -187,7 +187,7 @@ static func _reduce_nodes_owned(result:Dictionary,nodes:Array,versions:Dictionar
         var item_inputs:Dictionary=Transitions.item_inputs(result,inputs) if recorded!=null else {}
         var update:Variant=world_updates.get(int(node.occurrence));var disclosed={}
         if update!=null:
-            var folded=apply_world_update(result,update,disclosed)
+            var folded=apply_world_update(result,update,disclosed,world_context)
             if not folded.ok:return folded
             if recorded!=null:recorded.world[int(node.occurrence)]=disclosed
         if profile!=null:_profile_elapsed(profile,"world",started)
@@ -241,17 +241,21 @@ static func displayed_initiative(target:Dictionary)->Array:
 static func reduce_initialization(initialization:Dictionary,content_additions:Array=[])->Dictionary:
     var target=empty_state(initialization.generation,initialization.observer_uuid,initialization.world,initialization.get("audience"));var checked=check_spell_declarations(initialization.nodes,initialization.version_rows,initialization.get("resolutions",[]))
     if not checked.ok:return checked
-    var folded=_reduce_nodes_owned(target,initialization.nodes,initialization.version_rows,initialization.get("bodies",[]),initialization.get("world_updates",[]),initialization.get("sensory_rows",{}),null,null,initialization.get("resolutions",[]))
+    var cells:Dictionary={};var world_context:Dictionary=World.fork_context(target)
+    var folded=_reduce_nodes_owned(target,initialization.nodes,initialization.version_rows,initialization.get("bodies",[]),initialization.get("world_updates",[]),initialization.get("sensory_rows",{}),null,null,initialization.get("resolutions",[]),cells,world_context)
     if not folded.ok:return folded
     target.reducer_cursor=initialization.end_cursor
     if initialization.get("hud")!=null:
         var status=apply_hud(target,initialization.hud)
         if not status.ok:return status
-    target.content=content_additions.duplicate();target.content.sort_custom(func(a,b):return content_key(a)<content_key(b));return success(target)
+    target.content=content_additions.duplicate();target.content.sort_custom(func(a,b):return content_key(a)<content_key(b))
+    var accepted:Dictionary=success(target)
+    accepted.sensory_context={"state":target,"senses":target.senses,"cells":cells,"world":World.retained_context(world_context)}
+    return accepted
 static func reduce_lineage(target:Dictionary,lineage:Dictionary)->Dictionary:return _reduce_lineage_owned(copy_target(target),lineage)
-static func _reduce_lineage_owned(target:Dictionary,lineage:Dictionary,recorded:Variant=null,profile:Variant=null,sensory_cells:Dictionary={})->Dictionary:
+static func _reduce_lineage_owned(target:Dictionary,lineage:Dictionary,recorded:Variant=null,profile:Variant=null,sensory_cells:Dictionary={},world_context:Dictionary={})->Dictionary:
     if lineage.end_cursor<=target.reducer_cursor:return failure("player lineage precedes this reduction position")
-    var folded=_reduce_nodes_owned(target,lineage.events,lineage.version_rows,lineage.get("bodies",[]),lineage.get("world_updates",[]),lineage.get("sensory_rows",{}),recorded,profile,lineage.get("resolutions",[]),sensory_cells)
+    var folded=_reduce_nodes_owned(target,lineage.events,lineage.version_rows,lineage.get("bodies",[]),lineage.get("world_updates",[]),lineage.get("sensory_rows",{}),recorded,profile,lineage.get("resolutions",[]),sensory_cells,world_context)
     if not folded.ok:return folded
     target.reducer_cursor=lineage.end_cursor
     if recorded!=null:recorded.trailing.set.reducer_cursor=target.reducer_cursor
@@ -264,6 +268,9 @@ static func _reduce_operation(target:Dictionary,update:Dictionary,record_events:
     var cells:Dictionary={}
     if retained and is_same(sensory_context.get("state"),target):cells=sensory_context.get("cells",{}).duplicate()
     var result=_retained_target(target) if retained else copy_target(target)
+    var prior_world:Dictionary=sensory_context.get("world",{}) if retained and is_same(sensory_context.get("state"),target) else {}
+    var world_context:Dictionary=World.fork_context(target,prior_world)
+    world_context.source_objects=result.objects;world_context.source_connectors=result.connectors
     var records:Variant={"lineages":[]} if record_events else null
     var content={}
     if not update.get("content_additions",[]).is_empty():
@@ -279,7 +286,7 @@ static func _reduce_operation(target:Dictionary,update:Dictionary,record_events:
         var checked=check_spell_declarations(lineage.events,lineage.version_rows,lineage.get("resolutions",[]))
         if not checked.ok:return checked
         var recorded:Variant={"lineage":int(lineage.lineage),"lineage_uuid":int(lineage.lineage),"start_cursor":lineage.start_cursor,"end_cursor":lineage.end_cursor,"events":[],"trailing":Transitions.empty_delta(),"trailing_item_rows":[],"world":{}} if record_events else null
-        var folded=_reduce_lineage_owned(result,lineage,recorded,profile,cells)
+        var folded=_reduce_lineage_owned(result,lineage,recorded,profile,cells,world_context)
         if not folded.ok:return folded
         if record_events:records.lineages.append(recorded)
     if update.get("hud")!=null:
@@ -292,7 +299,7 @@ static func _reduce_operation(target:Dictionary,update:Dictionary,record_events:
     if not update.get("combat_log_appends",[]).is_empty():result.combat_log_appends=result.combat_log_appends.duplicate();result.combat_log_appends.append_array(update.combat_log_appends)
     var accepted=success(result)
     if record_events:accepted.transitions=records
-    if retained:accepted.sensory_context={"state":result,"senses":result.senses,"cells":cells}
+    if retained:accepted.sensory_context={"state":result,"senses":result.senses,"cells":cells,"world":World.retained_context(world_context)}
     return accepted
 
 static func state_before_event(before:Dictionary,lineage:Dictionary,event:Dictionary)->Dictionary:

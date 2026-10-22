@@ -38,12 +38,21 @@ static func freeze(pane:Dictionary,value:bool)->void:
             if is_instance_valid(item[0]):item[0].render_target_update_mode=item[1]
         pane.frozen=[]
 
+## Only reference settings used by the composed renderer. Its source focus and
+## requested quarter belong to the actual row/sample, not the reference pose.
+static func optical_settings(reference:Node3D)->Array:
+    return [reference.get_viewport().size,reference.camera.size,reference.camera.keep_aspect,
+        reference.wall_mode,reference.grid_visible,reference.native_spell_hit_material,
+        reference.source_depth,reference.source_normals,reference.character_light_profile,
+        reference.light_strength,reference.fire_light_flicker,reference.light_cap_enabled]
+
 static func prepare(parent:Node,restored:RefCounted,source:Dictionary,reference:Node3D,
         spare:Dictionary,budget:int,share_sources:bool,retain_view:bool,target_quarter:int=-1)->Dictionary:
     var view_quarter:int=reference.quarter if target_quarter<0 else posmod(target_quarter,4)
     var pane={}
     if not spare.is_empty():
-        if share_sources and is_same(spare.index,source):
+        if share_sources and is_same(spare.index,source) \
+            and spare.world.source_depth==reference.source_depth and spare.world.source_normals==reference.source_normals:
             freeze(spare,false)
             spare.viewport.audio_listener_enable_3d=false
             spare.world.component_renderer.audio.set_enabled(false)
@@ -52,7 +61,7 @@ static func prepare(parent:Node,restored:RefCounted,source:Dictionary,reference:
         else:discard(spare)
     var reused=not pane.is_empty()
     if not reused:
-        var view=viewport();view.size=reference.get_viewport().size;parent.add_child(view)
+        var view=viewport();parent.add_child(view)
         var host=Play.new();host.external_playback=true;host.external_clock=false
         host.component_renderer.audio.set_enabled(false)
         host.catalog_cache=Play.Catalog.source_snapshot(source.cache)
@@ -65,6 +74,8 @@ static func prepare(parent:Node,restored:RefCounted,source:Dictionary,reference:
         else:Play.MediaWarmup.physical(host.media_warmup).source_revision=Play.MediaWarmup.physical(reference.media_warmup).source_revision+1
         host.attach_media_sources()
         pane={"world":host,"viewport":view,"index":source,"frozen":[]}
+    # An exact same-cut reuse still has to adopt a resized reference target.
+    pane.viewport.size=reference.get_viewport().size
     var owner:Node3D=pane.world
     owner.external_clock=false
     # Host rendering allowance is shared even during an authoring reload, when
@@ -82,8 +93,17 @@ static func prepare(parent:Node,restored:RefCounted,source:Dictionary,reference:
     # the ordinary prepared view publication, preserving source/billboard basis.
     if not reused:owner.quarter=view_quarter;owner.requested_quarter=view_quarter
     owner.wall_mode=reference.wall_mode;owner.grid_visible=reference.grid_visible
+    owner.source_depth=reference.source_depth;owner.source_normals=reference.source_normals
     if not reused:pane.viewport.add_child(owner)
     owner.native_spell_hit_material=reference.native_spell_hit_material
+    if owner.character_light_profile!=reference.character_light_profile:
+        owner.character_light_profile=reference.character_light_profile
+        owner.media_warmup.light_profile=reference.character_light_profile
+        owner.media_plan_key=[]
+    owner.light_strength=reference.light_strength;owner.source_lighting.light_strength=reference.light_strength
+    owner.fire_light_flicker=reference.fire_light_flicker;owner.source_lighting.fire_light_flicker=reference.fire_light_flicker
+    owner.light_cap_enabled=reference.light_cap_enabled
+    owner.camera.keep_aspect=reference.camera.keep_aspect
     owner.camera.size=reference.camera.size if retain_view else 6.0
     owner.camera_focus=reference.camera_focus;owner.initial_focus=retain_view
     owner.playback_speed=reference.playback_speed

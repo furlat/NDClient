@@ -27,13 +27,13 @@ static func difference(actual:Variant,expected:Variant,path:String="$")->String:
             if not child.is_empty():return child
         return ""
     return "" if actual==expected else path+" actual "+JSON.stringify(actual)+" expected "+JSON.stringify(expected)
-func fold(state:Dictionary,input:Dictionary)->Dictionary:
+func fold(state:Dictionary,input:Dictionary,world_context:Dictionary={})->Dictionary:
     if input.has("update"):
         # Preserve the previous full-store diff as an independent test oracle.
         # Only this oracle copies/scans retained stores; production records the
         # exact row references at its existing mutation sites.
         var prior_tiles:Dictionary=state.tiles.duplicate();var prior_objects:Dictionary=state.objects.duplicate()
-        var disclosed:Dictionary={};var result:Dictionary=Reducer.apply_world_update(state,input.update,disclosed)
+        var disclosed:Dictionary={};var result:Dictionary=Reducer.apply_world_update(state,input.update,disclosed,world_context)
         if result.ok:
             var expected:Dictionary={"tiles":{},"objects":{},"tiles_removed":[],"objects_removed":[]}
             for key in state.tiles:
@@ -163,6 +163,70 @@ func sparse_disclosure_cases()->void:
         var expected_order:Array=prior_order.duplicate();expected_order.erase(removed_key);expected_order.append(removed_key)
         check(restored.ok and restored.value.tiles.keys()==expected_order,"Original tile after-value returns at its actual insertion position")
 
+func indexed_update(state:Dictionary,update:Dictionary,context:Dictionary)->Dictionary:
+    var candidate:Dictionary=Reducer._retained_target(state)
+    var owned:Dictionary=Reducer.World.fork_context(state,context)
+    owned.source_objects=candidate.objects;owned.source_connectors=candidate.connectors
+    var disclosed:Dictionary={};var result:Dictionary=Reducer.apply_world_update(candidate,update,disclosed,owned)
+    if result.ok:result.context=Reducer.World.retained_context(owned);result.disclosed=disclosed
+    return result
+
+func indexed_world_vectors(document:Dictionary,label:String)->void:
+    var state:Dictionary=document.initial.duplicate(true)
+    var context:Dictionary=Reducer.World.retained_context(Reducer.World.fork_context(state))
+    for i in document.steps.size():
+        var step:Dictionary=document.steps[i];var prior:Dictionary=state.duplicate(true);var prior_context:Dictionary=context.duplicate(true)
+        var result:Dictionary=indexed_update(state,step.input.update,context)
+        check(result.ok,label+" indexed original step "+str(i)+" folds")
+        check(state==prior and context==prior_context,label+" indexed candidate leaves previous canonical/index owner immutable")
+        if not result.ok:return
+        var cold_state:Dictionary=state.duplicate(true);var cold_context:Dictionary={};var cold_disclosed:Dictionary={}
+        var cold:Dictionary=Reducer.apply_world_update(cold_state,step.input.update,cold_disclosed,cold_context)
+        check(cold.ok and difference(result.value,cold.value).is_empty(),label+" hot/ownerless fold canonical values agree")
+        check(result.disclosed==cold_disclosed,label+" hot/ownerless fold keeps exact preimages, removals and order")
+        state=result.value;context=result.context
+        check(difference(state,step.expected).is_empty(),label+" indexed result equals frozen Python step "+str(i))
+        for family in ["tiles","objects","connectors"]:check(state[family].keys()==step.expected[family].keys(),label+" indexed "+family+" preserves independent Python key order")
+        check(is_same(context.source_objects,state.objects) and is_same(context.source_connectors,state.connectors),label+" index refers only to actual accepted store shells")
+
+func indexed_disclosure_cases()->void:
+    # Original resolved placements include a boundary far cell and a support
+    # away from the anchor. These are private API cuts, not new recordings.
+    var geometry:Dictionary=_document("w11_")
+    var initial:Dictionary=indexed_update(geometry.initial.duplicate(true),geometry.steps[0].input.update,{})
+    check(initial.ok,"Original resolved geometry seeds the private disclosure index")
+    if not initial.ok:return
+    var ids:Array=initial.value.objects.keys()
+    for sample in [[[0,1],[ids[0]]],[[3,0],[ids[2],ids[3],ids[5]]]]:
+        var result:Dictionary=indexed_update(initial.value,{"occurrence":1,"entered":Cells.mask([sample[0]])},initial.context)
+        check(result.ok and result.disclosed.objects_removed==sample[1],"Indexed entered scope removes exact original far/support owners "+str(sample[0]))
+
+    var ordered:Dictionary=_document("w13_")
+    initial=indexed_update(ordered.initial.duplicate(true),ordered.steps[0].input.update,{})
+    if not initial.ok:check(false,"Original ordered objects seed the disclosure index");return
+    ids=initial.value.objects.keys()
+    var reentry:Dictionary=ordered.steps[0].input.update.duplicate(true);reentry.objects_removed=[ids[0]]
+    var appended:Dictionary=indexed_update(initial.value,reentry,initial.context)
+    check(appended.ok and appended.value.objects.keys()==[ids[1],ids[0]],"Indexed same-key reentry appends behind its held peer")
+    if appended.ok:
+        var points:Array=[]
+        for id in appended.value.objects:points.append(appended.value.objects[id].placement.position)
+        var gone:Dictionary=indexed_update(appended.value,{"occurrence":2,"entered":Cells.mask(points)},appended.context)
+        check(gone.ok and gone.disclosed.objects_removed==[ids[1],ids[0]],"Later indexed removal uses current insertion order, not the old UUID rank")
+    var before:Dictionary=initial.value.duplicate(true);var context_before:Dictionary=initial.context.duplicate(true)
+    var refused:Dictionary=indexed_update(initial.value,{"occurrence":3,"objects_removed":[ids[0],"not-held"]},initial.context)
+    check(not refused.ok and initial.value==before and initial.context==context_before,"Late world refusal leaves accepted canonical and reverse-index values unchanged")
+
+    var suppressed:Dictionary=_document("w5_");var current:Dictionary=suppressed.initial.duplicate(true);var context:Dictionary={}
+    for step in suppressed.steps:
+        var next:Dictionary=indexed_update(current,step.input.update,context)
+        check(next.ok,"Original suppression after-value is indexed")
+        if not next.ok:return
+        current=next.value;context=next.context
+    var identity:String=current.objects.keys()[0]
+    var clipped:Dictionary=indexed_update(current,{"occurrence":3,"entered":Cells.mask([[0,0],[1,0]]),"tiles_unchanged":Cells.mask([[0,0]]),"objects_unchanged":[identity]},context)
+    check(clipped.ok and clipped.value.objects.has(identity) and clipped.value.objects[identity].item.construction_suppressions[0].positions.is_empty(),"Kept original owner still clips suppression cells and preserves its empty provider row")
+
 func attack_source_cases()->void:
     var document:Dictionary=_document("v1_a_first_record")
     var state:Dictionary=fold(document.initial.duplicate(true),document.steps[0].input).value
@@ -176,6 +240,7 @@ func run()->void:
     var index:Dictionary=JSON.parse_string(FileAccess.get_file_as_string(ROOT+"index.json"));check(index.fixtures.size()==32,"All 32 reference vector files are included")
     for name in index.fixtures:
         var document:Dictionary=JSON.parse_string(FileAccess.get_file_as_string(ROOT+name));var state:Dictionary=document.initial.duplicate(true)
+        if document.family=="world":indexed_world_vectors(document,name)
         for i in range(document.steps.size()):
             var step:Dictionary=document.steps[i];var prior=state.duplicate(true);var result=fold(state,step.input)
             check(result.ok,name+" step "+str(i)+" folds "+str(result.get("error",{})))
@@ -186,5 +251,5 @@ func run()->void:
                 check(state[family].keys()==step.expected[family].keys(),name+" step "+str(i)+" exact Python "+family+" insertion order")
             if step.input.has("group"):
                 var group:Dictionary=step.input.group;var branch=Reducer.lineage_branch(group,group.events[group.root]);check(branch.ok and branch.value.events.size()>0,name+" chronological branch preserved")
-    error_cases();transition_cases();attack_source_cases();sparse_disclosure_cases()
+    error_cases();transition_cases();attack_source_cases();sparse_disclosure_cases();indexed_disclosure_cases()
     var report={"passed":passed,"failures":failures,"vectors":index.fixtures.size()};print(JSON.stringify(report));quit(0 if failures.is_empty() else 1)

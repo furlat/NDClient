@@ -100,6 +100,100 @@ static func support_cells(at:Dictionary)->Dictionary:
         var delta:Dictionary={"north":[0,1],"south":[0,-1],"east":[1,0],"west":[-1,0]};var offset:Array=delta[at.boundary_direction];var far=[at.position[0]+offset[0],at.position[1]+offset[1]];result[Cells.key(far)]=far
     return result
 
+# Derived query data stays with the exact accepted reducer context, never state.
+# A candidate owns only the outer maps/buckets that its actual writes change.
+static func fork_context(target:Dictionary,prior:Dictionary={})->Dictionary:
+    var reuse:bool=prior.get("initialized",false) and is_same(prior.get("source_objects"),target.objects) and is_same(prior.get("source_connectors"),target.connectors)
+    var result:Dictionary=prior.duplicate() if reuse else {"initialized":target.objects.is_empty() and target.connectors.is_empty(),
+        "by_support":{},"by_suppression":{},"by_endpoint":{},"object_keys":{},"connector_keys":{},"object_order":{},"next_object_order":0}
+    result.source_objects=target.objects;result.source_connectors=target.connectors
+    result.owned_maps={};result.owned_buckets={}
+    if not reuse:
+        for field in ["by_support","by_suppression","by_endpoint","object_keys","connector_keys","object_order"]:result.owned_maps[field]=true
+    return result
+
+static func retained_context(context:Dictionary)->Dictionary:
+    var result:Dictionary=context.duplicate();result.erase("owned_maps");result.erase("owned_buckets");return result
+
+static func _bind_context(context:Dictionary,target:Dictionary)->void:
+    if is_same(context.get("source_objects"),target.objects) and is_same(context.get("source_connectors"),target.connectors):return
+    context.clear();context.merge(fork_context(target),true)
+
+static func _own_index(context:Dictionary,field:String)->Dictionary:
+    if not context.owned_maps.has(field):context[field]=context[field].duplicate();context.owned_maps[field]=true
+    return context[field]
+
+static func _own_bucket(context:Dictionary,field:String,key:String)->Dictionary:
+    var table:Dictionary=_own_index(context,field)
+    if not context.owned_buckets.has(field):context.owned_buckets[field]={}
+    var owned:Dictionary=context.owned_buckets[field]
+    if not table.has(key):table[key]={};owned[key]=true
+    elif not owned.has(key):table[key]=table[key].duplicate();owned[key]=true
+    return table[key]
+
+static func _replace_memberships(context:Dictionary,field:String,identity:String,before:Dictionary,after:Dictionary)->void:
+    for key in before:
+        if after.has(key):continue
+        var bucket:Dictionary=_own_bucket(context,field,key);bucket.erase(identity)
+        if bucket.is_empty():context[field].erase(key)
+    for key in after:
+        if not before.has(key):_own_bucket(context,field,key)[identity]=true
+
+static func _suppression_cells(rows:Array)->Dictionary:
+    var result:Dictionary={}
+    for row in rows:
+        for point in row.positions:result[Cells.key(point)]=true
+    return result
+
+static func _index_object(context:Dictionary,identity:String,row:Dictionary,supplied_supports:Variant=null)->void:
+    var prior:Dictionary=context.object_keys.get(identity,{})
+    var supports:Dictionary
+    if supplied_supports!=null:supports=supplied_supports
+    elif not prior.is_empty() and prior.placement==row.placement:supports=prior.support_keys
+    else:supports=support_cells(row.placement)
+    var suppressions:Array=row.item.construction_suppressions
+    var cells:Dictionary=prior.suppression_keys if not prior.is_empty() and prior.suppressions==suppressions else _suppression_cells(suppressions)
+    _replace_memberships(context,"by_support",identity,prior.get("support_keys",{}),supports)
+    _replace_memberships(context,"by_suppression",identity,prior.get("suppression_keys",{}),cells)
+    _own_index(context,"object_keys")[identity]={"placement":row.placement,"suppressions":suppressions,"support_keys":supports,"suppression_keys":cells}
+    if not context.object_order.has(identity):
+        _own_index(context,"object_order")[identity]=int(context.next_object_order);context.next_object_order+=1
+
+static func _forget_object(context:Dictionary,identity:String)->void:
+    var prior:Dictionary=context.object_keys.get(identity,{})
+    _replace_memberships(context,"by_support",identity,prior.get("support_keys",{}),{})
+    _replace_memberships(context,"by_suppression",identity,prior.get("suppression_keys",{}),{})
+    _own_index(context,"object_keys").erase(identity);_own_index(context,"object_order").erase(identity)
+
+static func _index_connector(context:Dictionary,identity:String,row:Dictionary)->void:
+    var cells:Dictionary=Cells.point_set(row.endpoints)
+    _replace_memberships(context,"by_endpoint",identity,context.connector_keys.get(identity,{}),cells)
+    _own_index(context,"connector_keys")[identity]=cells
+
+static func _forget_connector(context:Dictionary,identity:String)->void:
+    _replace_memberships(context,"by_endpoint",identity,context.connector_keys.get(identity,{}),{})
+    _own_index(context,"connector_keys").erase(identity)
+
+static func _query_members(table:Dictionary,entered:Dictionary)->Dictionary:
+    var result:Dictionary={}
+    for key in entered:
+        for identity in table.get(key,{}):result[identity]=true
+    return result
+
+static func _entered_candidates(context:Dictionary,target:Dictionary,entered:Dictionary)->Dictionary:
+    var support:Dictionary=_query_members(context.by_support,entered)
+    var suppression:Dictionary=_query_members(context.by_suppression,entered)
+    var objects:Dictionary=support.duplicate();objects.merge(suppression,true)
+    var connectors:Dictionary=_query_members(context.by_endpoint,entered)
+    # Cheap selected-row consistency only. Completeness is established by the
+    # accepted owner and writer closure, not a hidden whole-store validation.
+    for identity in objects:
+        if not target.objects.has(identity) or not context.object_keys.has(identity) or not context.object_order.has(identity):return {}
+    for identity in connectors:
+        if not target.connectors.has(identity) or not context.connector_keys.has(identity):return {}
+    var ordered:Array=objects.keys();ordered.sort_custom(func(a,b):return int(context.object_order[a])<int(context.object_order[b]))
+    return {"objects":ordered,"support":support,"suppression":suppression,"connectors":connectors}
+
 static func _merged_faces(prior:Array,current:Array,faces:Array)->Dictionary:
     var kept={}
     for residue in prior:
@@ -209,7 +303,8 @@ static func _tiles(target:Dictionary,update:Dictionary,prior_tiles:Dictionary)->
         var tile:Dictionary=target.tiles[key].duplicate();tile.residues=rows;tile.condition_names=names;target.tiles[key]=tile
     return success(target)
 
-static func fold(target:Dictionary,update:Dictionary,disclosed:Dictionary={})->Dictionary:
+static func fold(target:Dictionary,update:Dictionary,disclosed:Dictionary={},world_context:Dictionary={})->Dictionary:
+    _bind_context(world_context,target)
     # Keep only the first value of rows this update actually writes or erases.
     # Final comparison handles repeated writes and remove/re-add without
     # copying or diffing the unrelated retained tile/object stores.
@@ -220,9 +315,11 @@ static func fold(target:Dictionary,update:Dictionary,disclosed:Dictionary={})->D
         if not prior_objects.has(identity):prior_objects[identity]=target.objects.get(identity)
         if not target.objects.erase(identity):return failure("An object removal names an object the client holds")
         target.object_members.erase(identity)
+        if world_context.initialized:_forget_object(world_context,identity)
         order.append({"kind":"objects","id":identity,"remove":true})
     for identity in update.get("connectors_removed",[]):
         if not target.connectors.erase(identity):return failure("A connector removal names a connector the client holds")
+        if world_context.initialized:_forget_connector(world_context,identity)
     var entered=Cells.point_set(Cells.mask_points(update.get("entered",{})))
     if not entered.is_empty():
         var unchanged=Cells.point_set(Cells.mask_points(update.get("tiles_unchanged",{})));var kept={}
@@ -243,38 +340,66 @@ static func fold(target:Dictionary,update:Dictionary,disclosed:Dictionary={})->D
             if not prior_tiles.has(key):prior_tiles[key]=target.tiles.get(key)
             if not target.tiles.has(key):order.append({"kind":"tiles","id":key,"remove":false})
             target.tiles[key]=tiles.value[key]
-        var resent:Array=update.objects.item_uuids if update.get("objects")!=null else []
-        for identity in target.objects.keys():
-            var held:Dictionary=target.objects[identity];var touched=false
-            for key in support_cells(held.placement):
-                if entered.has(key):touched=true;break
-            if not identity in resent and not kept.has(identity) and touched:
+        var resent:Dictionary={}
+        for identity in (update.objects.item_uuids if update.get("objects")!=null else []):resent[identity]=true
+        var candidates:Dictionary={}
+        if world_context.initialized:candidates=_entered_candidates(world_context,target,entered)
+        var cold:bool=candidates.is_empty()
+        if cold:
+            # Keep the original complete scan/refusal path for a missing or
+            # mismatched owner; seed only this private candidate as it visits.
+            world_context.clear();world_context.merge(fork_context(target),true);world_context.initialized=false
+        var identities:Array=target.objects.keys() if cold else candidates.objects
+        for identity in identities:
+            var held:Dictionary=target.objects[identity];var supports:Dictionary={};var touched:bool=false
+            if cold:
+                supports=support_cells(held.placement)
+                for key in supports:
+                    if entered.has(key):touched=true;break
+            else:touched=candidates.support.has(identity)
+            if not resent.has(identity) and not kept.has(identity) and touched:
                 if not prior_objects.has(identity):prior_objects[identity]=held
                 target.objects.erase(identity);target.object_members.erase(identity)
+                if not cold:_forget_object(world_context,identity)
                 order.append({"kind":"objects","id":identity,"remove":true});continue
-            var suppressions:Array=[];var changed=false
-            for row in held.item.construction_suppressions:
-                var points:Array=[]
-                for point in row.positions:
-                    if entered.has(Cells.key(point)):changed=true
-                    else:points.append(point)
-                var next:Dictionary=row.duplicate();next.positions=points;suppressions.append(next)
-            if changed:
-                if not prior_objects.has(identity):prior_objects[identity]=held
-                var next:Dictionary=held.duplicate();next.item=held.item.duplicate();next.item.construction_suppressions=suppressions;target.objects[identity]=next
-        for identity in target.connectors.keys():
-            for point in target.connectors[identity].endpoints:
-                if entered.has(Cells.key(point)):target.connectors.erase(identity);break
+            if cold or candidates.suppression.has(identity):
+                var suppressions:Array=[];var changed:bool=false
+                for row in held.item.construction_suppressions:
+                    var points:Array=[]
+                    for point in row.positions:
+                        if entered.has(Cells.key(point)):changed=true
+                        else:points.append(point)
+                    var next:Dictionary=row.duplicate();next.positions=points;suppressions.append(next)
+                if changed:
+                    if not prior_objects.has(identity):prior_objects[identity]=held
+                    var next:Dictionary=held.duplicate();next.item=held.item.duplicate();next.item.construction_suppressions=suppressions;target.objects[identity]=next
+                    if not cold:_index_object(world_context,identity,next)
+            if cold:_index_object(world_context,identity,target.objects[identity],supports)
+        if cold:
+            for identity in target.connectors.keys():
+                var removed:bool=false
+                for point in target.connectors[identity].endpoints:
+                    if entered.has(Cells.key(point)):target.connectors.erase(identity);removed=true;break
+                if not removed:_index_connector(world_context,identity,target.connectors[identity])
+            # Both old scans are complete. Later upserts must maintain this
+            # private index even though the operation is not accepted yet.
+            world_context.initialized=true
+        else:
+            for identity in candidates.connectors:
+                target.connectors.erase(identity);_forget_connector(world_context,identity)
     var decoded=object_rows(update.get("objects"))
     if not decoded.ok:return decoded
     for row in decoded.value:
         result=_object(target,row,prior_objects,order)
         if not result.ok:return result
+        if world_context.initialized:_index_object(world_context,str(row.item_uuid),target.objects[row.item_uuid])
     result=_contents(target,update,prior_objects)
     if not result.ok:return result
     result=_tiles(target,update,prior_tiles)
     if not result.ok:return result
-    for row in update.get("connectors",[]):target.connectors[row.connector_uuid]=row
+    for row in update.get("connectors",[]):
+        target.connectors[row.connector_uuid]=row
+        if world_context.initialized:_index_connector(world_context,str(row.connector_uuid),row)
     disclosed.tiles={};disclosed.tiles_removed=[];disclosed.objects={};disclosed.objects_removed=[]
     for key in prior_tiles:
         var current:Variant=target.tiles.get(key)

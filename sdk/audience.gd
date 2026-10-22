@@ -27,7 +27,12 @@ static func composed_values(rows:Dictionary)->Dictionary:
     var positions:Array=rows.get("contact_positions",[]);var visual=Cells.row_indices(rows.get("contact_visual",{}),positions.size())
     if not visual.ok:return visual
     var contacts:Array=[];var senses:Array=rows.get("contact_special_senses",[])
-    for i in range(positions.size()):contacts.append({"position":positions[i],"visual":i in visual.value,"special_senses":senses[i] if not senses.is_empty() else []})
+    var visual_at:int=0
+    for i in range(positions.size()):
+        # row_indices already returns unique indices in ascending order.
+        while visual_at<visual.value.size() and int(visual.value[visual_at])<i:visual_at+=1
+        var shown:bool=visual_at<visual.value.size() and int(visual.value[visual_at])==i
+        contacts.append({"position":positions[i],"visual":shown,"special_senses":senses[i] if not senses.is_empty() else []})
     return success({"rows":rows,"contacts":contacts,"cells":Cells.mask_points(rows.get("cells",{})),"light_levels":Cells.layered(rows.get("light_levels",[])),"hazards":Cells.layered(rows.get("hazards",[]))})
 
 static func _members(column:Array,index:int,count:int)->Dictionary:
@@ -115,7 +120,9 @@ static func fold(target:Dictionary,fact:Dictionary,values:Dictionary,changed_act
             for row in changed.value:prior[Cells.key(row.position)]=row.value
             result[pair[0]]=Cells.values(points,prior,result.visible)
     for pair in [["entities","entity_members","entity_contacts_changed","entity_contacts_removed"],["objects","object_contact_members","object_contacts_changed","object_contacts_removed"]]:
-        var contacts:Dictionary=held[pair[0]].duplicate();result[pair[0]]=contacts;var members:Dictionary=target[pair[1]];var named={}
+        var edited:bool=not fact.get(pair[2],[]).is_empty() or not fact.get(pair[3],[]).is_empty()
+        var contacts:Dictionary=held[pair[0]].duplicate() if edited else held[pair[0]]
+        result[pair[0]]=contacts;var members:Dictionary=target[pair[1]];var named={}
         for index in fact.get(pair[3],[]):
             var identity:String=uuids[index]
             if named.has(identity) or not contacts.erase(identity):return failure("A removed contact is one the seat perceives, named once")
@@ -128,7 +135,9 @@ static func fold(target:Dictionary,fact:Dictionary,values:Dictionary,changed_act
             if not membership.ok:return membership
             contacts[identity]=values.contacts[index];members[identity]=membership.value
     target.spatial_content.merge(fact.get("spatial_effect_content",{}),true)
-    var effects:Dictionary=held.spatial_effects.duplicate();var left={};var named={}
+    var effects_edited:bool=not fact.get("spatial_effects_removed",[]).is_empty() or not fact.get("spatial_effects_patched",[]).is_empty() or not fact.get("spatial_effects_added",[]).is_empty()
+    var effects:Dictionary=held.spatial_effects.duplicate() if effects_edited else held.spatial_effects
+    var left={};var named={}
     for index in fact.get("spatial_effects_removed",[]):
         var identity:String=uuids[index]
         if named.has(identity) or not effects.has(identity):return failure("A removed effect is one the seat perceives, named once")
@@ -190,7 +199,8 @@ static func fold(target:Dictionary,fact:Dictionary,values:Dictionary,changed_act
     result.paths_dirty=held.paths_dirty or fact.get("paths_dirty",false)
     for field in ["sense_modes","passive_perception","visual_access"]:
         if fact.get(field+"_changed",false) and fact.get(field)!=null:result[field]=fact[field]
-    result.sense_modes_key=modes_key(result.sense_modes);target.senses=result
+    if not held.has("sense_modes_key") or (fact.get("sense_modes_changed",false) and fact.get("sense_modes")!=null):result.sense_modes_key=modes_key(result.sense_modes)
+    target.senses=result
     if fact.get("observer_position")!=null and target.actors.has(target.observer_uuid):
         var actor:Dictionary=target.actors[target.observer_uuid].duplicate();actor.last_visual_position=fact.observer_position;target.actors[target.observer_uuid]=actor;changed_actors[target.observer_uuid]=true
     for index in fact.get("entity_contacts_changed",[]):

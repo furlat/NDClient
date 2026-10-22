@@ -32,6 +32,7 @@ static var _condition_selection_keys:Dictionary={}
 static var _conditions:Dictionary={}
 static var _client:Dictionary={}
 static var _phases:Dictionary={}
+static var _source_rows:Variant=null
 static var _clock:Script
 static var _immutable_preparation:String=""
 static var _loaded:bool=false
@@ -51,7 +52,7 @@ static func set_requested(kind:String)->void:
 ## Reload: the next request reads the package index again.
 static func invalidate()->void:
     _mutex.lock()
-    _loaded=false;_clips={};_selections={};_condition_selection_keys={};_conditions={};_client={};_phases={};_immutable_preparation=""
+    _loaded=false;_clips={};_selections={};_condition_selection_keys={};_conditions={};_client={};_phases={};_source_rows=null;_immutable_preparation=""
     _mutex.unlock()
 
 static func _load()->void:
@@ -113,8 +114,12 @@ static func for_cue(cue:Dictionary,spell:String="",role:String="")->Dictionary:
     _mutex.lock()
     if _client.has(identity):
         var cached:Dictionary=_client[identity];_mutex.unlock();return cached
-    var table:Variant=JSON.parse_string(FileAccess.get_file_as_string(SOURCE_TABLE)) if FileAccess.file_exists(SOURCE_TABLE) else null
-    var rows:Array=table.get("resources",[]) if table is Dictionary else []
+    # This installed table belongs to the same immutable package-index owner.
+    # Distinct cue inputs reuse its parse until explicit source invalidation.
+    if _source_rows==null:
+        var table:Variant=JSON.parse_string(FileAccess.get_file_as_string(SOURCE_TABLE)) if FileAccess.file_exists(SOURCE_TABLE) else null
+        _source_rows=table.get("resources",[]) if table is Dictionary else []
+    var rows:Array=_source_rows
     var matches:Array=rows.filter(func(row):return row.get("phase")==path)
     if matches.size()!=1 or setters.is_empty():_mutex.unlock();return {}
     if not _phases.has(path):_phases[path]=Metadata.read(path,ResourceLoader.CACHE_MODE_REUSE)
@@ -278,6 +283,14 @@ static func prepare(clips:Array,cache:Dictionary,urgent:bool=true,interests:Arra
         for path in resource_paths(value):paths[path]=true
         var preparation:String=str(value.get("immutable_preparation",_immutable_preparation))
         if not preparation.is_empty():paths[preparation]=true
+        # Metadata admission already joined this exact physical phase. Borrow
+        # only that completed data; any active target token still drains via
+        # Admission.prepare/can_mutate below, along with all native fences.
+        if not cache.has(approach.source_phase) and not cache.get("native_load_errors",{}).has(approach.source_phase):
+            _mutex.lock()
+            var completed:Resource=_phases.get(approach.source_phase)
+            if completed!=null:cache[approach.source_phase]=completed
+            _mutex.unlock()
         var phase:Resource=cache.get(approach.source_phase)
         if phase!=null:
             if not cache.has("effect_package_phase_paths"):cache.effect_package_phase_paths={}

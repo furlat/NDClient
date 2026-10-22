@@ -245,6 +245,7 @@ static func world_media_sample(program:Dictionary,role:String,token:String,owner
     return {"frame":frame,"visible":true}
 
 func sample_world_media(owners:Dictionary,at_ms:float,samples:Array)->bool:
+    if world_media_entries.is_empty():return false
     var visibility_changed:bool=false
     var finite:Dictionary={}
     for component in samples:

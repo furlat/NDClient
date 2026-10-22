@@ -367,8 +367,9 @@ func _process(_delta: float) -> void:
     var optional=Time.get_ticks_usec()
     if _preparation_available():
         var poll_started:int=Time.get_ticks_usec()
+        var charged_before:int=preparation_admission.get("used_usec",0)
         if thumbnails.poll():queue_redraw()
-        _charge_preparation(poll_started)
+        _charge_preparation(poll_started,charged_before)
     var finished=Time.get_ticks_usec()
     frame_cpu_ms={"visible":(prepared-started)/1000.0,"optional":(optional-prepared)/1000.0,
         "poll":(finished-optional)/1000.0,"total":(finished-started)/1000.0,"frame":Engine.get_process_frames()}
@@ -380,10 +381,11 @@ func _preparation_available()->bool:
         preparation_admission.phase_usec={};preparation_admission.optional_order=[];preparation_admission.minimum_cleanup=0
     return preparation_admission.used_usec<preparation_admission.limit_usec
 
-func _charge_preparation(started:int)->void:
+func _charge_preparation(started:int,charged_before:int=-1)->void:
     if preparation_admission.is_empty():return
     var elapsed:int=Time.get_ticks_usec()-started
-    preparation_admission.used_usec+=elapsed
+    var nested:int=0 if charged_before<0 else int(preparation_admission.used_usec)-charged_before
+    preparation_admission.used_usec+=maxi(0,elapsed-nested)
     preparation_admission.phase_usec.studio_thumbnails=preparation_admission.phase_usec.get("studio_thumbnails",0)+elapsed
 
 func _prepare_other_rows()->void:

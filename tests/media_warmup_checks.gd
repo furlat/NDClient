@@ -170,6 +170,21 @@ func run() -> void:
     var sources = EnvironmentMedia.plan(state,[],cache)
     check(not sources.required.is_empty() and sources.upcoming.is_empty(),"Captured disclosed world resolves exact four-view environment sources")
     check(not sources.fixtures.is_empty(),"Captured disclosed lit fixtures retain exact authored frame sources")
+    var milestones:Array=[]
+    var canonical_before:PackedByteArray=var_to_bytes(state)
+    var continuation:Dictionary=Media.prepare_handoff(state,[current],cache,{},func(assets):milestones.append(assets))
+    check(milestones.size()==1 and is_same(milestones[0].groups[0],current),
+        "One continuation discovery retains the exact compiled group before full media returns")
+    if not milestones.is_empty():
+        var assets:Dictionary=milestones[0]
+        check(assets.is_read_only() and assets.groups.is_read_only() and assets.source_families.is_read_only()
+            and assets.source_families[current.id].values().all(func(parts):return parts.is_read_only() and parts.all(func(part):return part.is_read_only())),
+            "Completed actor packet families cross the worker boundary as immutable role contributions")
+        check(not assets.source_sizes.is_empty() and assets.source_sizes.keys().all(func(path):return continuation.value.source_sizes.has(path))
+            and assets.generation==state.generation and assets.observer_uuid==state.observer_uuid,
+            "Early character sizes and owner match the later complete captured-source handoff")
+    check(var_to_bytes(state)==canonical_before and continuation.complete,
+        "Character discovery and full metadata publish no canonical state or source clocks")
     var metadata = Media.create()
     var snapshot: Dictionary = state.duplicate(true)
     Media.request_plan(metadata,[1,[],0],snapshot,[])

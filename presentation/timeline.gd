@@ -879,6 +879,7 @@ func _apply_world_plan(plan: Dictionary) -> void:
             group_start_ms = segment.start_ms; commit_index = 0
             EventTrace.activate(trace,current.get("events",[]),group_start_ms)
             _resolve_preparation_issue(current)
+            _record_history_cut(group_start_ms,current,group_start_ms)
         for i in range(segment.first_commit,segment.end_commit):
             var commit: Dictionary = current.commits[i]
             var delta: Dictionary = commit.delta

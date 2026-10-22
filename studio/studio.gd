@@ -709,7 +709,9 @@ static func _read_selection(directory:String,record:Dictionary,perspective_id:St
         var matches=record.perspectives.filter(func(view):return str(view.id)==perspective_id)
         if matches.is_empty():return {"ok":false,"error":"Unknown recorded faction: "+perspective_id}
         directory=matches[0].journal
-    var selected=Recording.read(directory,token)
+    # This independent single-view renderer never constructs a comparison
+    # schedule. Keep raw-cause correspondence for explicit comparison readers.
+    var selected=Recording.read(directory,token,{},{},false)
     var stages={"selected_read_ms":(Time.get_ticks_usec()-started)/1000.0,"audiences_read":1,"comparison_ms":0.0}
     if not selected.get("ok",false):return selected
     selected.moments=CaseLibrary.resolve_moments(selected,record.get("moments",[]),perspective_id)
@@ -923,9 +925,10 @@ func _publish_candidate()->void:
             frozen_spare_viewports.append([child,child.render_target_update_mode])
             child.render_target_update_mode=SubViewport.UPDATE_DISABLED
     index=candidate_index;candidate_index={};pending_index={};active_directory=index.directory
-    if not pending_study_selection.is_empty():
+    var study_changed:bool=not pending_study_selection.is_empty()
+    if study_changed:
         study_capability=pending_study_selection.capability;study_scenario=pending_study_selection.scenario;pending_study_selection={}
-    _show_study_expectations()
+    if changed or study_changed:_show_study_expectations()
     if changed:
         var previous_tracks=tracks
         tracks=candidate_tracks;candidate_tracks=null

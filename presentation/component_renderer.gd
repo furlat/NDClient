@@ -31,6 +31,7 @@ var media_handles: Dictionary={}
 var _prepared_resource_scope:Array=[]
 var _prepared_resource_groups:Array=[]
 var _prepared_resource_result:Dictionary={}
+var _preparation_prefix:Dictionary={}
 var _next_resource_cue_ms:float=-INF
 var _next_optional_cue_ms:float=INF
 var _resource_membership_revision:int=0
@@ -221,6 +222,24 @@ static func due_groups(groups:Array,world:Node,through_ms:float)->Array:
         start+=float(group.get("duration_ms",0.0))
     return result
 
+static func _charge_elapsed(budget:Dictionary,started:int,charged_before:int)->void:
+    budget.used_usec+=maxi(0,Time.get_ticks_usec()-started-(budget.used_usec-charged_before))
+
+static func _same_refs(a:Array,b:Array)->bool:
+    if a.size()!=b.size():return false
+    for i in a.size():
+        if not is_same(a[i],b[i]):return false
+    return true
+
+func _prefix_scope(world:Node,cache:Dictionary)->Array:
+    var timeline:RefCounted=world.timeline
+    # Complete operands at one actual cut. Constructor progress is output and
+    # deliberately absent: retries must be able to spend their next allowance.
+    return [world,timeline,timeline.initialization_revision,timeline.revision,timeline.resource_revision,
+        timeline.display_ms,timeline.group_start_ms,world.quarter,world.get_viewport().get_visible_rect().size,
+        _resource_membership_revision,world.native_spell_hit_material,NativeAuthoring.Effects.revision,
+        cache.get(Catalog.BodySources.KEY,{}).get("index"),cache.get(NativeAuthoring.Sources.CACHE_KEY,{}).get("index")]
+
 func prepare(groups: Array,cache: Dictionary,world: Node=null,admission:Dictionary={},allow_optional:bool=true,through_ms:float=INF) -> Dictionary:
     var budget:Dictionary=_native_budget if admission.is_empty() else admission
     if budget.frame!=Engine.get_process_frames():budget.frame=Engine.get_process_frames();budget.used_usec=0
@@ -272,23 +291,47 @@ func prepare(groups: Array,cache: Dictionary,world: Node=null,admission:Dictiona
         var persistent_charged_before:int=budget.used_usec
         var required_groups:Array=groups.filter(func(group):return not group.is_empty())
         if not world.timeline.current.is_empty() and not required_groups.any(func(item):return item.get("id")==world.timeline.current.id):required_groups.push_front(world.timeline.current)
-        var retained_components:Array=world.timeline.retained_components.map(func(item):return item.component)
-        if not retained_components.is_empty():required_groups.append({"components":retained_components,"preparation_always_due":true})
-        # Sampling may prune expired membership, so lend private shallow map
-        # shells. Owner after-values and actual clocks remain Timeline-owned.
-        var persistent:Array=Conditions.samples(world.timeline.condition_owners.duplicate(),world.timeline.display_ms,cache,{},false)
-        persistent.append_array(Conditions.NativePersistent.spatial_samples(world.timeline.spatial_effect_owners.duplicate(),world.timeline.display_ms,cache))
-        persistent.append_array(NativeItems.samples(world.timeline.item_effect_owners,world.timeline.state,world.timeline.display_ms))
-        persistent.append_array(Conditions.NativePersistent.grant_samples(world.timeline.temporary_hp_owners.duplicate(),world.timeline.display_ms,cache,{}, {},false))
+        # Media completion can change this horizon while the display is held.
+        # Check actual prefetched references even when canonical time is equal.
+        var prefetched:Array=_native_prefetch(required_groups,world)
+        var scope:Array=_prefix_scope(world,cache)
+        var reuse_prefix:bool=not _preparation_prefix.is_empty() and _preparation_prefix.scope==scope \
+            and is_same(_preparation_prefix.current,world.timeline.current) \
+            and _same_refs(_preparation_prefix.groups,required_groups) and _same_refs(_preparation_prefix.prefetched,prefetched)
+        var persistent:Array;var future:Array;var required:Array
+        if reuse_prefix:
+            persistent=_preparation_prefix.persistent;future=_preparation_prefix.future;required=_preparation_prefix.required
+        else:
+            var required_sources:Array=required_groups.duplicate();var future_sources:Array=prefetched.duplicate()
+            var retained_components:Array=world.timeline.retained_components.map(func(item):return item.component)
+            if not retained_components.is_empty():
+                var retained:Dictionary={"components":retained_components,"preparation_always_due":true}
+                required_sources.append(retained);future_sources.insert(required_groups.size(),retained)
+            # Sampling may prune expired membership, so lend private shallow map
+            # shells. Owner after-values and actual clocks remain Timeline-owned.
+            persistent=Conditions.samples(world.timeline.condition_owners.duplicate(),world.timeline.display_ms,cache,{},false)
+            persistent.append_array(Conditions.NativePersistent.spatial_samples(world.timeline.spatial_effect_owners.duplicate(),world.timeline.display_ms,cache))
+            persistent.append_array(NativeItems.samples(world.timeline.item_effect_owners,world.timeline.state,world.timeline.display_ms))
+            persistent.append_array(Conditions.NativePersistent.grant_samples(world.timeline.temporary_hp_owners.duplicate(),world.timeline.display_ms,cache,{}, {},false))
+            # These passes keep separate ordered coverage maps, exactly as the
+            # uncached path. Never publish a partial requirements calculation.
+            future=live_requirements(preparation_groups(future_sources,persistent,world),world)
+            required=live_requirements(preparation_groups(required_sources,persistent,world),world)
+            _preparation_prefix={"scope":_prefix_scope(world,cache),"current":world.timeline.current,"groups":required_groups,
+                "prefetched":prefetched,"persistent":persistent,"future":future,"required":required}
         _native_base_groups=groups.duplicate();_native_persistent=persistent
-        var future:Array=live_requirements(preparation_groups(_native_prefetch(required_groups,world),persistent,world),world)
-        var required:Array=live_requirements(preparation_groups(required_groups,persistent,world),world)
+        # Target time may change while readiness holds; reselect due components
+        # without rebuilding their unchanged full current-cut operands.
         var due:Array=due_groups(required,world,through_ms)
         var due_components:Array=[]
         for group in due:due_components.append_array(group.components)
         _native_prepare_groups=due;_native_prepare_components=due_components;_native_optical_groups=required
+        # Flush unbilled owner/group work before a consumer decides whether
+        # there is room. Nested charges are subtracted from this same prefix.
+        _charge_elapsed(budget,stage_started,persistent_charged_before)
         var audio_errors:Array=audio.prepare(due_components,world,budget)
         var audio_ready:bool=audio.ready(due_components)
+        _charge_elapsed(budget,stage_started,persistent_charged_before)
         var presentation_ready:bool=_prepare_presenters(world,due_components,budget,required)
         var outline_ready:bool=true
         var outline_actors:Dictionary={}
@@ -296,6 +339,7 @@ func prepare(groups: Array,cache: Dictionary,world: Node=null,admission:Dictiona
             if component.get("kind")=="condition_outline":outline_actors[component.actor_uuid]=true
             elif component.get("kind")=="condition" and component.get("recipe",{}).get("persistent",{}).has("bodyOutline"):outline_actors[component.actor_uuid]=true
         for actor_id in outline_actors:
+            _charge_elapsed(budget,stage_started,persistent_charged_before)
             if not outlines.prepare(world,actor_id,budget).ready:outline_ready=false
         readiness.audio=audio_ready;readiness.presenters=presentation_ready;readiness.outlines=outline_ready
         # A sound still loading never holds the picture: its voice starts when
@@ -308,8 +352,9 @@ func prepare(groups: Array,cache: Dictionary,world: Node=null,admission:Dictiona
         for group in future:
             for component in group.get("components",[]):retained_presenters[component.id]=true
         for component in world.displayed_components:retained_presenters[component.id]=true
+        _charge_elapsed(budget,stage_started,persistent_charged_before)
         _retire_presenters(world,retained_presenters,budget)
-        budget.used_usec+=maxi(0,Time.get_ticks_usec()-stage_started-(budget.used_usec-persistent_charged_before))
+        _charge_elapsed(budget,stage_started,persistent_charged_before)
         FrameProfile.end_phase(world.profile,"component_prepare_persistent",stage_started)
         stage_started=Time.get_ticks_usec()
         # Required owners always get the shared frame budget first. Optional
@@ -902,7 +947,7 @@ func close(world: Node) -> void:
     native_hits.close()
     blood.close(world)
     outlines.close(world)
-    _prepared_resource_scope=[];_prepared_resource_groups=[];_prepared_resource_result={};_next_resource_cue_ms=-INF;_next_optional_cue_ms=INF
+    _prepared_resource_scope=[];_prepared_resource_groups=[];_prepared_resource_result={};_preparation_prefix={};_next_resource_cue_ms=-INF;_next_optional_cue_ms=INF
     _resource_membership_revision+=1
     for id in handles.keys(): _release(world,id)
     for label in numbers.values(): label.queue_free()

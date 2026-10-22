@@ -60,7 +60,7 @@ static func _movement_allowances(before:Dictionary,after:Dictionary,sequence:int
                 "operation_sequence":sequence,"source":"PlayerOperation.hud.sheets[].resources[movement]"}
     return result
 
-static func read(directory: String, token: Dictionary={}, projection:Dictionary={}, source_cache:Dictionary={}) -> Dictionary:
+static func read(directory: String, token: Dictionary={}, projection:Dictionary={}, source_cache:Dictionary={}, collect_correspondence:bool=true) -> Dictionary:
     var started = Time.get_ticks_usec()
     if not DirAccess.dir_exists_absolute(directory): return {"ok":false,"error":"Recording directory does not exist: "+directory}
     var journal = Journal.new()
@@ -106,7 +106,7 @@ static func read(directory: String, token: Dictionary={}, projection:Dictionary=
         read_profile.decode_ms+=packet_profile.decode_ms
         if not decoded.ok: return decoded
         if int(decoded.value.cursor.sequence)!=sequence: return {"ok":false,"error":"Recording filename/cursor mismatch"}
-        result.correspondence_candidates.merge(ReplayComparison.packet_causes(decoded.value))
+        if collect_correspondence:result.correspondence_candidates.merge(ReplayComparison.packet_causes(decoded.value))
         var before: Dictionary = journal.state
         phase_started=Time.get_ticks_usec()
         var admitted = journal._consume_admitted(decoded.value,raw,true)

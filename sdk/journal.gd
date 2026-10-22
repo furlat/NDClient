@@ -6,7 +6,7 @@ var protocol := Protocol.new()
 var directory := ""
 var state: Dictionary = {}
 var cursor: Dictionary = {}
-# Derived sensory indexes belong to this exact committed state. Candidate
+# Derived sensory/disclosure indexes belong to this exact committed state. Candidate
 # reductions fork them; failed folds/writes never publish their replacements.
 var _sensory_context: Dictionary = {}
 # Optional payload-free timing for the transport owner; no work history retained.

@@ -58,6 +58,12 @@ func original(directory:String,seat:Dictionary,states:ZIPReader)->void:
             if plain.ok and recorded.ok:
                 check(not plain.has("transitions") and recorded.has("transitions") and Compare.difference(plain.value,recorded.value).is_empty(),str(seat.id)+": capture omission preserves the complete canonical result")
                 check(is_same(plain.sensory_context.state,plain.value) and is_same(recorded.sensory_context.state,recorded.value),str(seat.id)+": each reduction publishes only its own accepted-state index owner")
+                for result in [plain,recorded]:
+                    var world:Dictionary=result.sensory_context.world
+                    check(world.initialized and is_same(world.source_objects,result.value.objects) and is_same(world.source_connectors,result.value.connectors),str(seat.id)+": disclosure lookup belongs to the exact recording-on/off candidate stores")
+                var mismatched:Dictionary=context.duplicate();mismatched.state=owned.duplicate(true)
+                var cold:Dictionary=Reducer._reduce_operation_retained(owned,packet,true,null,mismatched)
+                check(cold.ok and Compare.difference(cold.value,recorded.value).is_empty() and cold.transitions==recorded.transitions,str(seat.id)+": another state owner takes the cold path without changing canonical/capture output")
             check(journal.state==before and context==context_copy,str(seat.id)+": both private candidates leave the committed state/index unchanged")
             var invalid:Dictionary=packet.duplicate(true)
             # Deliberately malformed final HUD resource key. Every original
@@ -89,6 +95,8 @@ func original(directory:String,seat:Dictionary,states:ZIPReader)->void:
         var expected:Variant=JSON.parse_string(states.read_file(record.expected).get_string_from_utf8())
         var issue:String=Compare.difference(journal.state,expected)
         check(issue.is_empty(),str(seat.id)+": full independent Python prefix "+str(sequence)+" "+issue)
+        var world_context:Dictionary=journal._sensory_context.world
+        check(world_context.initialized and is_same(world_context.source_objects,journal.state.objects) and is_same(world_context.source_connectors,journal.state.connectors),str(seat.id)+": committed disclosure index has the actual canonical store owner")
         for i in held.size():check(held[i]==frozen[i],str(seat.id)+": later publication leaves earlier native cut unchanged "+str(i))
         for i in captures.size():check(captures[i]==capture_copies[i],str(seat.id)+": later retry preserves earlier event-time captures "+str(i))
         held.append(journal.state);frozen.append(journal.snapshot())
@@ -124,7 +132,11 @@ func original(directory:String,seat:Dictionary,states:ZIPReader)->void:
             exercised=true
     var terminal:Dictionary=journal.snapshot()
     check(journal.replay().ok and journal.state==terminal,str(seat.id)+": strict cold replay equals complete original live result")
-    check(journal.replay(0).ok and journal._sensory_context.is_empty() and Compare.difference(journal.state,JSON.parse_string(states.read_file(seat.records[0].expected).get_string_from_utf8())).is_empty(),str(seat.id)+": initialization seek restores original native masks and drops all future index/source state")
+    var initial_replay:Dictionary=journal.replay(0)
+    check(initial_replay.ok and Compare.difference(journal.state,JSON.parse_string(states.read_file(seat.records[0].expected).get_string_from_utf8())).is_empty(),str(seat.id)+": initialization seek restores original native masks and canonical values")
+    var initial_context:Dictionary=journal._sensory_context
+    check(is_same(initial_context.state,journal.state) and initial_context.world.initialized and is_same(initial_context.world.source_objects,journal.state.objects) and is_same(initial_context.world.source_connectors,journal.state.connectors),str(seat.id)+": initialization replaces future lookup ownership with its own seeded context")
+    check(initial_context.world.object_keys.keys()==journal.state.objects.keys() and initial_context.world.connector_keys.keys()==journal.state.connectors.keys(),str(seat.id)+": initialization contains only actual original world members, no future UUIDs")
     evidence.append({"case":seat.id,"records":seat.records.size(),"control_sequence":selected,"semantic_refusal":exercised,"durable_refusal":exercised,"replay_rollback":exercised,"later_original_available":later})
     for name in DirAccess.get_files_at(path):DirAccess.remove_absolute(path.path_join(name))
     DirAccess.remove_absolute(path)
