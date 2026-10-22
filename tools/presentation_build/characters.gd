@@ -102,6 +102,8 @@ static func _check_parts(state: Dictionary) -> void:
         if not part.measurements.is_empty():Common.asset(report, "parts/" + id, part.measurements)
 
 static func _check_normal_profile(surface:Resource,report:Dictionary,where:String)->void:
+    if not is_finite(surface.normal_alpha_threshold) or surface.normal_alpha_threshold<0.0 or surface.normal_alpha_threshold>1.0:
+        Common.error(report,where,"source normal alpha threshold must be finite and within [0,1]")
     var profile:String=surface.normal_profile
     if profile.is_empty():return
     if profile not in PROFILES or not surface.normals.has(profile) or str(surface.normals[profile]).is_empty():
@@ -201,7 +203,7 @@ static func _check_body_banks(state:Dictionary,rig:Resource,clip:Resource,where:
         for path in [surface.depth]+surface.normals.values()+surface.masks.values():
             if Common.asset(report,at,path) and _header(state,_res(path))!=size:Common.error(report,at,"native companion size differs from actual bank: "+path)
         var definition:Array=[art.cell,art.pivot,art.scale,art.rects,art.frames,art.fps,art.camera_elevation_degrees,surface.encoding,surface.depth,
-            surface.normals,surface.normal_profile,surface.masks,surface.depth_range,surface.depth_byte_range,surface.camera_origin,surface.camera_origins,surface.optical_ground_pixels]
+            surface.normals,surface.normal_profile,surface.normal_requires_depth,surface.normal_alpha_threshold,surface.masks,surface.depth_range,surface.depth_byte_range,surface.camera_origin,surface.camera_origins,surface.optical_ground_pixels]
         var colour:String=_res(art.path)
         if state.bank_definitions.has(colour) and state.bank_definitions[colour]!=definition:Common.error(report,at,"one physical native colour path has conflicting layout/surface definitions")
         else:state.bank_definitions[colour]=definition
@@ -410,6 +412,7 @@ static func _part_geometry(part: Resource, action: String, slot: String) -> Dict
         "reference": surface.masks.solid, "solid": surface.masks.solid, "measurements": part.measurements,
         "optical_camera": _optical_camera(surface,art.camera_elevation_degrees)}
     if not surface.normal_profile.is_empty():record.normal_profile=surface.normal_profile
+    record.normal_receiving={"requires_depth":surface.normal_requires_depth,"alpha_threshold":surface.normal_alpha_threshold}
     return record
 
 static func _body_geometry(rig: Resource, clip: Resource) -> Dictionary:
@@ -424,6 +427,7 @@ static func _body_geometry(rig: Resource, clip: Resource) -> Dictionary:
         "cell_size": [rig.cell.x, rig.cell.y], "frames": clip.frames, "source_coverage": surface.coverage}
     record.optical_ground_pixels = surface.optical_ground_pixels if is_finite(surface.optical_ground_pixels) else null
     if not surface.normal_profile.is_empty():record.normal_profile=surface.normal_profile
+    record.normal_receiving={"requires_depth":surface.normal_requires_depth,"alpha_threshold":surface.normal_alpha_threshold}
     if clip.art.get("body", "").begins_with("art/geometry/"):record.colour_path = clip.art.body
     return record
 
@@ -506,6 +510,7 @@ static func _bank_descriptor(state:Dictionary,rig:Resource,clip:Resource,facing:
         "cell_size":[art.cell.x,art.cell.y],"frames":clip.frames,"source_coverage":surface.coverage,
         "optical_ground_pixels":surface.optical_ground_pixels}
     if not surface.normal_profile.is_empty():geometry.normal_profile=surface.normal_profile
+    geometry.normal_receiving={"requires_depth":surface.normal_requires_depth,"alpha_threshold":surface.normal_alpha_threshold}
     if art.scale!=1.0:geometry.source_scale=art.scale
     # No reference/solid contract is inferred from a normal-admission mask.
     var descriptor:Dictionary=_descriptor(state,_res(art.path),geometry)

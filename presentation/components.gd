@@ -201,6 +201,10 @@ static func cast_layers(cast: Dictionary, actor: Dictionary, cache: Dictionary) 
         if layer.get("enabled",true) and not layer.get("hidden",false): layers.append(layer)
     var rig: Dictionary=Authoring.rigs(cache).get(Authoring.rig_id(actor,cache),{})
     if rig.is_empty(): return []
+    # Cast overlays are authored for real rig slots/categories. A fixed body
+    # does not acquire the modular caster's hand sheet or a replacement part.
+    layers=layers.filter(func(layer):return layer.get("slot","") in rig.slot_order \
+        and layer.get("category","") in rig.slot_categories.get(layer.get("slot",""),[]))
     return layers.map(func(layer): return Palette.prepare(layer,rig,cast.actionClip,cache))
 
 static func add(group: Dictionary, node: Dictionary, kind: String, start: float, duration: float, source: String, parameters: Dictionary) -> Dictionary:

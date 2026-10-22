@@ -38,15 +38,20 @@ The stable-zero-HP healing request below is **delivered in 9f81d5267**; its
 original 0c failure is retained alongside the successful 9f original. Historical
 requests below are retained as history only.
 
-The separate Dragon receiving-program dependency is now **DELIVERED / CLIENT
-INTAKE PENDING**, not a backend or missing-Factory request. Complete
+The separate Dragon receiving-program dependency is now **DELIVERED AND
+INSTALLED / CLIENT POLICY QUALIFICATION PENDING**, not a backend or missing-Factory request. Complete
 `runtime-dragon-receiver-20261022-53075ee7ed11481f` supplies the exact proposed
 raw/expanded normal-policy aliases and retains 81 typed rows, the Spirit helper,
 465 condition Scene preload bindings and 504 defaults.
 [Factory delivery](/mnt/c/Users/tommaso/Documents/assets/VFXFactory/docs/DRAGON_RECEIVER_PROGRAM_DELIVERY_2026-10-22.md).
-The frozen client still runs package a12f; receiver/policy intake and current
-qualification are separate from the 9f public facts reviewed below. Applied
-fit2 runtime source does not select the private Dragon Resources or copy assets.
+The complete53075 namespace is installed with the a12f predecessor preserved;
+the paired client normal-policy source and selected native Dragon resources are
+applied; grouped native qualification remains pending.
+[Installation receipt](../.runtime/vfx-successor-dragon-receiver/namespace-installation.json).
+This renderer work is separate from the 9f public facts reviewed below. Applied
+fit2 runtime support is now consumed by the selected native Dragon resources;
+600 supplied PNGs were copied verbatim. Canonical creature mechanics and the
+separate producer questions below are unchanged.
 [Current creature intake boundary](CREATURE_BODY_ASSET_GAPS_2026-10-20.md).
 
 

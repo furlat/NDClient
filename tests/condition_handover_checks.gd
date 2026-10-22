@@ -5,12 +5,32 @@ const Build=preload("res://tools/presentation_build/abilities.gd")
 const Records=preload("res://tools/presentation_build/ability_records.gd")
 const Spells=preload("res://presentation/native_spell_authoring.gd")
 const Effects=preload("res://presentation/effect_package.gd")
+const NativeInputs=preload("res://presentation/native_inputs.gd")
 var checks=0
 var failures:Array=[]
 func _initialize()->void:run.call_deferred()
 func check(ok:bool,label:String)->void:
     checks+=1
     if not ok:failures.append(label);printerr("HANDOVER_FAIL "+label)
+## A deliberate unavailable independent owner is not a successful handover.
+## Keep this exact refusal separate from every real delegated output owner.
+func arcane_anchor_refusal(condition:Resource,spell:Resource,item_uses:Array)->void:
+    check(condition.id=="condition.spell.arcane_sword" and condition.status=="partial" \
+        and not condition.play_package_lifecycle and condition.disposition!="state_only" \
+        and condition.lifecycle_selections.is_empty() and condition.effects.is_empty() \
+        and condition.responses.is_empty() and item_uses.is_empty() \
+        and Effects.conditions(condition.id).is_empty(),
+        "Arcane Sword's missing independent anchor selects no substitute condition/item/native lifecycle")
+    var selected:Dictionary=Records.spell_selection(spell,"arcane_sword",{})
+    var cues:Array=selected.get("staging",{}).get("cues",[])
+    check(spell.id=="spell.arcane_sword" and Array(spell.excluded_cues)==[0] and cues.size()==1 \
+        and Spells.event_cues(selected).is_empty() and Spells.effect_clips(selected).is_empty(),
+        "The partial independent blade cue is explicitly excluded rather than falsely handed to the caster condition")
+    if cues.size()!=1:return
+    var refusal:Dictionary=NativeInputs.new().endpoint_packet(null,{}, {"native_cue":cues[0]}, {}, {})
+    check(refusal.rows.is_empty() and refusal.reason=="review_endpoint_position_not_bound",
+        "Retained Arcane review coordinates remain unavailable as gameplay blade anchors")
+
 func run()->void:
     var report:Dictionary=Common.report();var source:Dictionary=Common.load_root("res://authoring/abilities.tres",report)
     var entries:Dictionary=source.entries;var package:Dictionary=JSON.parse_string(FileAccess.get_file_as_string("res://assets/vfx/index.json"))
@@ -31,7 +51,8 @@ func run()->void:
         if condition==null:continue
         if not condition.play_package_lifecycle:
             var item_uses:Array=entries.contexts.item_attachments.effects.filter(func(use):return use.item_effect_behavior_id==owner)
-            check(not condition.effects.is_empty() or not condition.responses.is_empty() or (condition.disposition=="state_only" and not item_uses.is_empty()),"Disabled package lifecycle retains its actual authored native/finite/item owner: "+owner)
+            if owner=="condition.spell.arcane_sword":arcane_anchor_refusal(condition,entries.spells["spell.arcane_sword"],item_uses)
+            else:check(not condition.effects.is_empty() or not condition.responses.is_empty() or (condition.disposition=="state_only" and not item_uses.is_empty()),"Disabled package lifecycle retains its actual authored native/finite/item owner: "+owner)
             if not item_uses.is_empty():check(condition.disposition=="state_only" and condition.effects.is_empty() and condition.look==null,"An item-effect delegate adds no duplicate actor treatment: "+owner)
             for index in condition.responses.size():check(not Effects.for_cue(Records.cue_from_effect(condition.responses[index],index),owner,condition.responses[index].role).is_empty(),"Delegated finite response retains a real selected source: "+owner)
 

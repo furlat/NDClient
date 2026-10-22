@@ -13,6 +13,9 @@ uniform float authored_base_light = 1.0;
 uniform bool calibrated_component_receiver = true;
 uniform bool use_component_depth = true;
 uniform bool use_component_normals = true;
+// Source-owned receiving admission only; geometric receivers still require depth.
+uniform bool component_normal_requires_depth = true;
+uniform float component_normal_alpha_threshold = 0.5;
 // Exact authored lower aperture lip, evaluated on the unchanged painted body.
 // It is unrelated to native receiver/ray depth and never rewrites source pixels.
 uniform bool body_aperture_enabled = false;
@@ -46,9 +49,10 @@ void fragment() {
     if (has_component_geometry && !shadow && use_component_normals && abs(component_scale_x) > 0.00001) {
         vec4 depth = texture(component_depth, source_uv);
         vec4 normal = texture(component_normal, source_uv);
-        bool valid = texture(component_support, source_uv).r > 0.5
-            && texture(component_normal_valid, source_uv).r > 0.5
-            && depth.a > 0.5 && normal.a > 0.5;
+        bool valid = texture(component_normal_valid, source_uv).r > 0.5
+            && normal.a > component_normal_alpha_threshold
+            && (!component_normal_requires_depth
+                || (texture(component_support, source_uv).r > 0.5 && depth.a > 0.5));
         if (valid) {
             // All RGB channels are linear numeric data; facing is already
             // baked. Inverse horizontal component scale applies exactly once.

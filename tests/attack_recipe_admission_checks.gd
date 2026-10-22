@@ -84,7 +84,7 @@ func provisional_creature_choices(actor:Dictionary,cache:Dictionary)->void:
     for choice in [
             {"id":"action.cambion.draining_kiss","creature":"creature.spell.cambion","rig":"smallscale.demonelite01","clip":"Attack4"},
             {"id":"action.djinni.sweetplum_gales","creature":"creature.spell.djinni","rig":"smallscale.characters.6mage","clip":"Special1"},
-            {"id":"action.draconic_spirit.breath","creature":"creature.spell.draconic_spirit","rig":"smallscale.dinosaurs.elite-armored-t-rex","clip":"Taunt"}]:
+            {"id":"action.draconic_spirit.breath","creature":"creature.spell.draconic_spirit","rig":"summon.draconic_spirit.violet-astral","clip":"Ground_Breathe","frames":24}]:
         var entry:Resource=load("res://authoring/abilities/actions/"+choice.id+".tres")
         var owner:Dictionary=actor.duplicate(true);owner.creature_content_ref=choice.creature
         var fact:Dictionary={"kind":"action","behavior_id":choice.id,"source_entity_uuid":owner.uuid}
@@ -93,10 +93,26 @@ func provisional_creature_choices(actor:Dictionary,cache:Dictionary)->void:
         var clip:Dictionary=Authoring.clip(owner,choice.clip,cache)
         check(entry.disposition=="authored" and entry.status=="partial" and entry.body.rig==choice.rig \
             and selected.actor.enabled and selected.actor.clip==choice.clip and selected.get("anchors",[]).is_empty() \
-            and Authoring.rig_id(owner,cache)==choice.rig and clip.frames==15 and clip.fps==12.0 \
+            and Authoring.rig_id(owner,cache)==choice.rig and clip.frames==choice.get("frames",15) and clip.fps==12.0 \
             and var_to_bytes(fact)==original,
-            choice.id+": explicit current substitute keeps its actual clip clock without invented contact/fact")
+            choice.id+": explicit current body choice keeps its actual clip clock without invented contact/fact")
         check(Authoring.action(fact,cache,actor).is_empty(),choice.id+": exact rig refuses an unrelated body")
+    # Source selector operands from the real Draconic original: public kind
+    # equipped, despite the producer's internal BODY/natural weapon usage.
+    var dragon:Dictionary=actor.duplicate(true);dragon.creature_content_ref="creature.spell.draconic_spirit"
+    var rend:Dictionary={"kind":"attack","behavior_id":"action.attack","weapon_slot":"MELEE_MAIN",
+        "attack_outcome":"Miss","source_item_id":"weapon.spell_summon.draconic_spirit","attack_source_kind":"equipped","damage_types":["Piercing"]}
+    var dragon_recipe:Dictionary=Authoring.attack(rend,dragon,cache)
+    var dragon_clip:Dictionary=Authoring.clip(dragon,"Ground_Attack",cache)
+    check(dragon_recipe.get("selected_variant")=="draconic-native-bound-rend-grounded-presentation" and dragon_recipe.actor.enabled
+        and dragon_recipe.actor.clip=="Ground_Attack" and dragon_recipe.anchors.is_empty() and not dragon_recipe.has("sourceTiming")
+        and dragon_recipe.get("projectile")==null and dragon_recipe.get("weaponTrail")==null
+        and dragon_clip.frames==16 and dragon_clip.fps==12.0,
+        "Actual equipped Rend selects own16-pose grounded body without generic contact8/recover10/trail inheritance")
+    for changed in [{"weapon_slot":"MELEE_OFF"},{"attack_source_kind":"natural"},{"source_item_id":"weapon.claws"}]:
+        var refused:Dictionary=Authoring.attack(rend.merged(changed,true),dragon,cache)
+        check(refused.get("selected_variant")=="draconic-native-rig-unmatched-refusal" and not refused.actor.enabled and refused.anchors.is_empty(),
+            "Unmatched selected-dragon source/item/slot retains explicit body refusal: "+str(changed))
     var deva:Dictionary=actor.duplicate(true);deva.creature_content_ref="creature.spell.deva"
     var fact:Dictionary={"kind":"attack","behavior_id":"action.deva.concussive_smash","weapon_slot":"MELEE_MAIN", \
         "attack_outcome":"Hit","source_item_id":"weapon.spell_summon.deva","attack_source_kind":"equipped","damage_types":["Bludgeoning","Radiant"]}

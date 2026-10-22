@@ -5,9 +5,20 @@
 requested below, preserving old programs/defaults. The Factory namespace gate
 passes127 functional checks; its static exit diagnostics and runtime costs remain
 explicit. [Actual delivery](/mnt/c/Users/tommaso/Documents/assets/VFXFactory/docs/DRAGON_RECEIVER_PROGRAM_DELIVERY_2026-10-22.md).
-Client offline extraction is complete; adoption/source integration is next.
-This is no longer an outstanding Factory request. The original request below
-preserves its historical source boundary; client pixels/art remain unqualified.
+The complete namespace is installed with its predecessor preserved. The paired
+four-file client policy and selected native Dragon resources are now applied;
+the exact canonical raw key matches the delivered alias. Current three-domain
+publication passes zero errors/two warnings after listing all15child clips in
+the existing root inventory. The five actual-original body/Arcane cohort passes
+30,795native assertions, natural exit0/no engine or script errors or leftovers;
+Outline passes27 and the corrected weapon withdrawal/re-entry control passes119.
+This is no longer an outstanding Factory request. The original request below preserves its
+historical source boundary. These selected native witnesses do not qualify
+whole-current native/live, quiet performance, Studio framing or artwork.
+[Client installation](../.runtime/vfx-successor-dragon-receiver/namespace-installation.json),
+[current source/qualification boundary](../.runtime/main-queue-20261022/dragon-native-receiver-registered/source.json).
+
+## Original request before the delivered client intake
 
 22 October 2026 — prospective client source compatibility, under the existing
 creature intake and R2/R3 renderer scope.

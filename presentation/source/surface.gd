@@ -13,6 +13,9 @@ extends Resource
 @export var normals: Dictionary[String, String] = {}
 ## Empty follows the global setting; a declared source profile stays exact.
 @export var normal_profile: String = ""
+## Receiving light only. Depth-based points, native receivers and casters remain separate.
+@export var normal_requires_depth: bool = true
+@export_range(0.0, 1.0) var normal_alpha_threshold: float = 0.5
 ## Masks: support, normal_valid, solid, lighting_valid.
 @export var masks: Dictionary[String, String] = {}
 @export var depth_range: Vector2 = Vector2.ZERO

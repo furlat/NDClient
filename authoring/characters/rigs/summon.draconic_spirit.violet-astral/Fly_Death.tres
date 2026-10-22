@@ -1,0 +1,272 @@
+[gd_resource type="Resource" script_class="PresentationRigClip" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/characters/rig_clip.gd" id="clip"]
+[ext_resource type="Script" path="res://presentation/source/art_source.gd" id="art"]
+[ext_resource type="Script" path="res://presentation/source/surface.gd" id="surface"]
+
+[sub_resource type="Resource" id="surface_E"]
+script = ExtResource("surface")
+encoding = "normal_rgb_depth_byte"
+depth = "art/media/dragons/selected-20261021/shared/spirit/Fly_Death/090/depth.png"
+normals = Dictionary[String, String]({"original": "art/media/dragons/selected-20261021/shared/spirit/Fly_Death/090/normal.png"})
+normal_profile = "original"
+normal_requires_depth = false
+normal_alpha_threshold = 0.027450980392156862
+masks = Dictionary[String, String]({"normal_valid": "art/media/dragons/selected-20261021/masks/spirit/Fly_Death/090/normal-admission.png", "support": "art/media/dragons/selected-20261021/masks/spirit/Fly_Death/090/depth-support.png"})
+depth_range = Vector2(-180, 309)
+depth_byte_range = Vector2i(32, 224)
+camera_origin = Vector2(199.0, 328.0)
+optical_ground_pixels = 0.0
+source = "dragon-selected-depth-normals-v1; Sprite Fusion Default independent receiving admission; artwork UNREVIEWED"
+
+[sub_resource type="Resource" id="art_E"]
+script = ExtResource("art")
+container = "atlas"
+path = "art/media/dragons/selected-20261021/colour/violet-astral/Fly_Death/090.png"
+rects = Array[Rect2i]([Rect2i(0, 0, 340, 497), Rect2i(340, 0, 340, 497), Rect2i(680, 0, 340, 497), Rect2i(1020, 0, 340, 497), Rect2i(1360, 0, 340, 497), Rect2i(0, 497, 340, 497), Rect2i(340, 497, 340, 497), Rect2i(680, 497, 340, 497), Rect2i(1020, 497, 340, 497), Rect2i(1360, 497, 340, 497), Rect2i(0, 994, 340, 497), Rect2i(340, 994, 340, 497), Rect2i(680, 994, 340, 497), Rect2i(1020, 994, 340, 497), Rect2i(1360, 994, 340, 497), Rect2i(0, 1491, 340, 497), Rect2i(340, 1491, 340, 497), Rect2i(680, 1491, 340, 497), Rect2i(1020, 1491, 340, 497), Rect2i(1360, 1491, 340, 497), Rect2i(0, 1988, 340, 497), Rect2i(340, 1988, 340, 497), Rect2i(680, 1988, 340, 497), Rect2i(1020, 1988, 340, 497)])
+cell = Vector2i(340, 497)
+frames = 24
+fps = 12.0
+directions = "single"
+pivot = Vector2(202, 328)
+scale = 2.0
+camera_elevation_degrees = 45.0
+surface = SubResource("surface_E")
+source = "dragon-selected-depth-normals-v1/violet-astral/Fly_Death/090"
+status = "ready"
+notes = "Source files available, NOT art/native accepted. Preserve clean RGBA, source alpha, native grid and clock; packet display-scale2 is explicitly authored in existing ArtSource.scale; PRIVATE activation data; matching independent-normal program/publication/native qualification still required. No physical socket or release data."
+
+[sub_resource type="Resource" id="surface_SE"]
+script = ExtResource("surface")
+encoding = "normal_rgb_depth_byte"
+depth = "art/media/dragons/selected-20261021/shared/spirit/Fly_Death/135/depth.png"
+normals = Dictionary[String, String]({"original": "art/media/dragons/selected-20261021/shared/spirit/Fly_Death/135/normal.png"})
+normal_profile = "original"
+normal_requires_depth = false
+normal_alpha_threshold = 0.027450980392156862
+masks = Dictionary[String, String]({"normal_valid": "art/media/dragons/selected-20261021/masks/spirit/Fly_Death/135/normal-admission.png", "support": "art/media/dragons/selected-20261021/masks/spirit/Fly_Death/135/depth-support.png"})
+depth_range = Vector2(-180, 309)
+depth_byte_range = Vector2i(32, 224)
+camera_origin = Vector2(180.0, 327.0)
+optical_ground_pixels = 0.0
+source = "dragon-selected-depth-normals-v1; Sprite Fusion Default independent receiving admission; artwork UNREVIEWED"
+
+[sub_resource type="Resource" id="art_SE"]
+script = ExtResource("art")
+container = "atlas"
+path = "art/media/dragons/selected-20261021/colour/violet-astral/Fly_Death/135.png"
+rects = Array[Rect2i]([Rect2i(0, 0, 408, 462), Rect2i(408, 0, 408, 462), Rect2i(816, 0, 408, 462), Rect2i(1224, 0, 408, 462), Rect2i(1632, 0, 408, 462), Rect2i(0, 462, 408, 462), Rect2i(408, 462, 408, 462), Rect2i(816, 462, 408, 462), Rect2i(1224, 462, 408, 462), Rect2i(1632, 462, 408, 462), Rect2i(0, 924, 408, 462), Rect2i(408, 924, 408, 462), Rect2i(816, 924, 408, 462), Rect2i(1224, 924, 408, 462), Rect2i(1632, 924, 408, 462), Rect2i(0, 1386, 408, 462), Rect2i(408, 1386, 408, 462), Rect2i(816, 1386, 408, 462), Rect2i(1224, 1386, 408, 462), Rect2i(1632, 1386, 408, 462), Rect2i(0, 1848, 408, 462), Rect2i(408, 1848, 408, 462), Rect2i(816, 1848, 408, 462), Rect2i(1224, 1848, 408, 462)])
+cell = Vector2i(408, 462)
+frames = 24
+fps = 12.0
+directions = "single"
+pivot = Vector2(180, 327)
+scale = 2.0
+camera_elevation_degrees = 45.0
+surface = SubResource("surface_SE")
+source = "dragon-selected-depth-normals-v1/violet-astral/Fly_Death/135"
+status = "ready"
+notes = "Source files available, NOT art/native accepted. Preserve clean RGBA, source alpha, native grid and clock; packet display-scale2 is explicitly authored in existing ArtSource.scale; PRIVATE activation data; matching independent-normal program/publication/native qualification still required. No physical socket or release data."
+
+[sub_resource type="Resource" id="surface_S"]
+script = ExtResource("surface")
+encoding = "normal_rgb_depth_byte"
+depth = "art/media/dragons/selected-20261021/shared/spirit/Fly_Death/180/depth.png"
+normals = Dictionary[String, String]({"original": "art/media/dragons/selected-20261021/shared/spirit/Fly_Death/180/normal.png"})
+normal_profile = "original"
+normal_requires_depth = false
+normal_alpha_threshold = 0.027450980392156862
+masks = Dictionary[String, String]({"normal_valid": "art/media/dragons/selected-20261021/masks/spirit/Fly_Death/180/normal-admission.png", "support": "art/media/dragons/selected-20261021/masks/spirit/Fly_Death/180/depth-support.png"})
+depth_range = Vector2(-180, 309)
+depth_byte_range = Vector2i(32, 224)
+camera_origin = Vector2(256.0, 316.0)
+optical_ground_pixels = 0.0
+source = "dragon-selected-depth-normals-v1; Sprite Fusion Default independent receiving admission; artwork UNREVIEWED"
+
+[sub_resource type="Resource" id="art_S"]
+script = ExtResource("art")
+container = "atlas"
+path = "art/media/dragons/selected-20261021/colour/violet-astral/Fly_Death/180.png"
+rects = Array[Rect2i]([Rect2i(0, 0, 510, 415), Rect2i(510, 0, 510, 415), Rect2i(1020, 0, 510, 415), Rect2i(1530, 0, 510, 415), Rect2i(2040, 0, 510, 415), Rect2i(0, 415, 510, 415), Rect2i(510, 415, 510, 415), Rect2i(1020, 415, 510, 415), Rect2i(1530, 415, 510, 415), Rect2i(2040, 415, 510, 415), Rect2i(0, 830, 510, 415), Rect2i(510, 830, 510, 415), Rect2i(1020, 830, 510, 415), Rect2i(1530, 830, 510, 415), Rect2i(2040, 830, 510, 415), Rect2i(0, 1245, 510, 415), Rect2i(510, 1245, 510, 415), Rect2i(1020, 1245, 510, 415), Rect2i(1530, 1245, 510, 415), Rect2i(2040, 1245, 510, 415), Rect2i(0, 1660, 510, 415), Rect2i(510, 1660, 510, 415), Rect2i(1020, 1660, 510, 415), Rect2i(1530, 1660, 510, 415)])
+cell = Vector2i(510, 415)
+frames = 24
+fps = 12.0
+directions = "single"
+pivot = Vector2(256, 316)
+scale = 2.0
+camera_elevation_degrees = 45.0
+surface = SubResource("surface_S")
+source = "dragon-selected-depth-normals-v1/violet-astral/Fly_Death/180"
+status = "ready"
+notes = "Source files available, NOT art/native accepted. Preserve clean RGBA, source alpha, native grid and clock; packet display-scale2 is explicitly authored in existing ArtSource.scale; PRIVATE activation data; matching independent-normal program/publication/native qualification still required. No physical socket or release data."
+
+[sub_resource type="Resource" id="surface_SW"]
+script = ExtResource("surface")
+encoding = "normal_rgb_depth_byte"
+depth = "art/media/dragons/selected-20261021/shared/spirit/Fly_Death/225/depth.png"
+normals = Dictionary[String, String]({"original": "art/media/dragons/selected-20261021/shared/spirit/Fly_Death/225/normal.png"})
+normal_profile = "original"
+normal_requires_depth = false
+normal_alpha_threshold = 0.027450980392156862
+masks = Dictionary[String, String]({"normal_valid": "art/media/dragons/selected-20261021/masks/spirit/Fly_Death/225/normal-admission.png", "support": "art/media/dragons/selected-20261021/masks/spirit/Fly_Death/225/depth-support.png"})
+depth_range = Vector2(-180, 309)
+depth_byte_range = Vector2i(32, 224)
+camera_origin = Vector2(216.0, 314.0)
+optical_ground_pixels = 0.0
+source = "dragon-selected-depth-normals-v1; Sprite Fusion Default independent receiving admission; artwork UNREVIEWED"
+
+[sub_resource type="Resource" id="art_SW"]
+script = ExtResource("art")
+container = "atlas"
+path = "art/media/dragons/selected-20261021/colour/violet-astral/Fly_Death/225.png"
+rects = Array[Rect2i]([Rect2i(0, 0, 384, 461), Rect2i(384, 0, 384, 461), Rect2i(768, 0, 384, 461), Rect2i(1152, 0, 384, 461), Rect2i(1536, 0, 384, 461), Rect2i(0, 461, 384, 461), Rect2i(384, 461, 384, 461), Rect2i(768, 461, 384, 461), Rect2i(1152, 461, 384, 461), Rect2i(1536, 461, 384, 461), Rect2i(0, 922, 384, 461), Rect2i(384, 922, 384, 461), Rect2i(768, 922, 384, 461), Rect2i(1152, 922, 384, 461), Rect2i(1536, 922, 384, 461), Rect2i(0, 1383, 384, 461), Rect2i(384, 1383, 384, 461), Rect2i(768, 1383, 384, 461), Rect2i(1152, 1383, 384, 461), Rect2i(1536, 1383, 384, 461), Rect2i(0, 1844, 384, 461), Rect2i(384, 1844, 384, 461), Rect2i(768, 1844, 384, 461), Rect2i(1152, 1844, 384, 461)])
+cell = Vector2i(384, 461)
+frames = 24
+fps = 12.0
+directions = "single"
+pivot = Vector2(216, 314)
+scale = 2.0
+camera_elevation_degrees = 45.0
+surface = SubResource("surface_SW")
+source = "dragon-selected-depth-normals-v1/violet-astral/Fly_Death/225"
+status = "ready"
+notes = "Source files available, NOT art/native accepted. Preserve clean RGBA, source alpha, native grid and clock; packet display-scale2 is explicitly authored in existing ArtSource.scale; PRIVATE activation data; matching independent-normal program/publication/native qualification still required. No physical socket or release data."
+
+[sub_resource type="Resource" id="surface_W"]
+script = ExtResource("surface")
+encoding = "normal_rgb_depth_byte"
+depth = "art/media/dragons/selected-20261021/shared/spirit/Fly_Death/270/depth.png"
+normals = Dictionary[String, String]({"original": "art/media/dragons/selected-20261021/shared/spirit/Fly_Death/270/normal.png"})
+normal_profile = "original"
+normal_requires_depth = false
+normal_alpha_threshold = 0.027450980392156862
+masks = Dictionary[String, String]({"normal_valid": "art/media/dragons/selected-20261021/masks/spirit/Fly_Death/270/normal-admission.png", "support": "art/media/dragons/selected-20261021/masks/spirit/Fly_Death/270/depth-support.png"})
+depth_range = Vector2(-180, 309)
+depth_byte_range = Vector2i(32, 224)
+camera_origin = Vector2(143.0, 316.0)
+optical_ground_pixels = 0.0
+source = "dragon-selected-depth-normals-v1; Sprite Fusion Default independent receiving admission; artwork UNREVIEWED"
+
+[sub_resource type="Resource" id="art_W"]
+script = ExtResource("art")
+container = "atlas"
+path = "art/media/dragons/selected-20261021/colour/violet-astral/Fly_Death/270.png"
+rects = Array[Rect2i]([Rect2i(0, 0, 347, 480), Rect2i(347, 0, 347, 480), Rect2i(694, 0, 347, 480), Rect2i(1041, 0, 347, 480), Rect2i(1388, 0, 347, 480), Rect2i(0, 480, 347, 480), Rect2i(347, 480, 347, 480), Rect2i(694, 480, 347, 480), Rect2i(1041, 480, 347, 480), Rect2i(1388, 480, 347, 480), Rect2i(0, 960, 347, 480), Rect2i(347, 960, 347, 480), Rect2i(694, 960, 347, 480), Rect2i(1041, 960, 347, 480), Rect2i(1388, 960, 347, 480), Rect2i(0, 1440, 347, 480), Rect2i(347, 1440, 347, 480), Rect2i(694, 1440, 347, 480), Rect2i(1041, 1440, 347, 480), Rect2i(1388, 1440, 347, 480), Rect2i(0, 1920, 347, 480), Rect2i(347, 1920, 347, 480), Rect2i(694, 1920, 347, 480), Rect2i(1041, 1920, 347, 480)])
+cell = Vector2i(347, 480)
+frames = 24
+fps = 12.0
+directions = "single"
+pivot = Vector2(139, 315)
+scale = 2.0
+camera_elevation_degrees = 45.0
+surface = SubResource("surface_W")
+source = "dragon-selected-depth-normals-v1/violet-astral/Fly_Death/270"
+status = "ready"
+notes = "Source files available, NOT art/native accepted. Preserve clean RGBA, source alpha, native grid and clock; packet display-scale2 is explicitly authored in existing ArtSource.scale; PRIVATE activation data; matching independent-normal program/publication/native qualification still required. No physical socket or release data."
+
+[sub_resource type="Resource" id="surface_NW"]
+script = ExtResource("surface")
+encoding = "normal_rgb_depth_byte"
+depth = "art/media/dragons/selected-20261021/shared/spirit/Fly_Death/315/depth.png"
+normals = Dictionary[String, String]({"original": "art/media/dragons/selected-20261021/shared/spirit/Fly_Death/315/normal.png"})
+normal_profile = "original"
+normal_requires_depth = false
+normal_alpha_threshold = 0.027450980392156862
+masks = Dictionary[String, String]({"normal_valid": "art/media/dragons/selected-20261021/masks/spirit/Fly_Death/315/normal-admission.png", "support": "art/media/dragons/selected-20261021/masks/spirit/Fly_Death/315/depth-support.png"})
+depth_range = Vector2(-180, 309)
+depth_byte_range = Vector2i(32, 224)
+camera_origin = Vector2(225.0, 297.0)
+optical_ground_pixels = 0.0
+source = "dragon-selected-depth-normals-v1; Sprite Fusion Default independent receiving admission; artwork UNREVIEWED"
+
+[sub_resource type="Resource" id="art_NW"]
+script = ExtResource("art")
+container = "atlas"
+path = "art/media/dragons/selected-20261021/colour/violet-astral/Fly_Death/315.png"
+rects = Array[Rect2i]([Rect2i(0, 0, 418, 395), Rect2i(418, 0, 418, 395), Rect2i(836, 0, 418, 395), Rect2i(1254, 0, 418, 395), Rect2i(1672, 0, 418, 395), Rect2i(0, 395, 418, 395), Rect2i(418, 395, 418, 395), Rect2i(836, 395, 418, 395), Rect2i(1254, 395, 418, 395), Rect2i(1672, 395, 418, 395), Rect2i(0, 790, 418, 395), Rect2i(418, 790, 418, 395), Rect2i(836, 790, 418, 395), Rect2i(1254, 790, 418, 395), Rect2i(1672, 790, 418, 395), Rect2i(0, 1185, 418, 395), Rect2i(418, 1185, 418, 395), Rect2i(836, 1185, 418, 395), Rect2i(1254, 1185, 418, 395), Rect2i(1672, 1185, 418, 395), Rect2i(0, 1580, 418, 395), Rect2i(418, 1580, 418, 395), Rect2i(836, 1580, 418, 395), Rect2i(1254, 1580, 418, 395)])
+cell = Vector2i(418, 395)
+frames = 24
+fps = 12.0
+directions = "single"
+pivot = Vector2(225, 297)
+scale = 2.0
+camera_elevation_degrees = 45.0
+surface = SubResource("surface_NW")
+source = "dragon-selected-depth-normals-v1/violet-astral/Fly_Death/315"
+status = "ready"
+notes = "Source files available, NOT art/native accepted. Preserve clean RGBA, source alpha, native grid and clock; packet display-scale2 is explicitly authored in existing ArtSource.scale; PRIVATE activation data; matching independent-normal program/publication/native qualification still required. No physical socket or release data."
+
+[sub_resource type="Resource" id="surface_N"]
+script = ExtResource("surface")
+encoding = "normal_rgb_depth_byte"
+depth = "art/media/dragons/selected-20261021/shared/spirit/Fly_Death/000/depth.png"
+normals = Dictionary[String, String]({"original": "art/media/dragons/selected-20261021/shared/spirit/Fly_Death/000/normal.png"})
+normal_profile = "original"
+normal_requires_depth = false
+normal_alpha_threshold = 0.027450980392156862
+masks = Dictionary[String, String]({"normal_valid": "art/media/dragons/selected-20261021/masks/spirit/Fly_Death/000/normal-admission.png", "support": "art/media/dragons/selected-20261021/masks/spirit/Fly_Death/000/depth-support.png"})
+depth_range = Vector2(-180, 309)
+depth_byte_range = Vector2i(32, 224)
+camera_origin = Vector2(255.0, 268.0)
+optical_ground_pixels = 0.0
+source = "dragon-selected-depth-normals-v1; Sprite Fusion Default independent receiving admission; artwork UNREVIEWED"
+
+[sub_resource type="Resource" id="art_N"]
+script = ExtResource("art")
+container = "atlas"
+path = "art/media/dragons/selected-20261021/colour/violet-astral/Fly_Death/000.png"
+rects = Array[Rect2i]([Rect2i(0, 0, 512, 378), Rect2i(512, 0, 512, 378), Rect2i(1024, 0, 512, 378), Rect2i(1536, 0, 512, 378), Rect2i(2048, 0, 512, 378), Rect2i(0, 378, 512, 378), Rect2i(512, 378, 512, 378), Rect2i(1024, 378, 512, 378), Rect2i(1536, 378, 512, 378), Rect2i(2048, 378, 512, 378), Rect2i(0, 756, 512, 378), Rect2i(512, 756, 512, 378), Rect2i(1024, 756, 512, 378), Rect2i(1536, 756, 512, 378), Rect2i(2048, 756, 512, 378), Rect2i(0, 1134, 512, 378), Rect2i(512, 1134, 512, 378), Rect2i(1024, 1134, 512, 378), Rect2i(1536, 1134, 512, 378), Rect2i(2048, 1134, 512, 378), Rect2i(0, 1512, 512, 378), Rect2i(512, 1512, 512, 378), Rect2i(1024, 1512, 512, 378), Rect2i(1536, 1512, 512, 378)])
+cell = Vector2i(512, 378)
+frames = 24
+fps = 12.0
+directions = "single"
+pivot = Vector2(255, 268)
+scale = 2.0
+camera_elevation_degrees = 45.0
+surface = SubResource("surface_N")
+source = "dragon-selected-depth-normals-v1/violet-astral/Fly_Death/000"
+status = "ready"
+notes = "Source files available, NOT art/native accepted. Preserve clean RGBA, source alpha, native grid and clock; packet display-scale2 is explicitly authored in existing ArtSource.scale; PRIVATE activation data; matching independent-normal program/publication/native qualification still required. No physical socket or release data."
+
+[sub_resource type="Resource" id="surface_NE"]
+script = ExtResource("surface")
+encoding = "normal_rgb_depth_byte"
+depth = "art/media/dragons/selected-20261021/shared/spirit/Fly_Death/045/depth.png"
+normals = Dictionary[String, String]({"original": "art/media/dragons/selected-20261021/shared/spirit/Fly_Death/045/normal.png"})
+normal_profile = "original"
+normal_requires_depth = false
+normal_alpha_threshold = 0.027450980392156862
+masks = Dictionary[String, String]({"normal_valid": "art/media/dragons/selected-20261021/masks/spirit/Fly_Death/045/normal-admission.png", "support": "art/media/dragons/selected-20261021/masks/spirit/Fly_Death/045/depth-support.png"})
+depth_range = Vector2(-180, 309)
+depth_byte_range = Vector2i(32, 224)
+camera_origin = Vector2(174.0, 312.0)
+optical_ground_pixels = 0.0
+source = "dragon-selected-depth-normals-v1; Sprite Fusion Default independent receiving admission; artwork UNREVIEWED"
+
+[sub_resource type="Resource" id="art_NE"]
+script = ExtResource("art")
+container = "atlas"
+path = "art/media/dragons/selected-20261021/colour/violet-astral/Fly_Death/045.png"
+rects = Array[Rect2i]([Rect2i(0, 0, 394, 422), Rect2i(394, 0, 394, 422), Rect2i(788, 0, 394, 422), Rect2i(1182, 0, 394, 422), Rect2i(1576, 0, 394, 422), Rect2i(0, 422, 394, 422), Rect2i(394, 422, 394, 422), Rect2i(788, 422, 394, 422), Rect2i(1182, 422, 394, 422), Rect2i(1576, 422, 394, 422), Rect2i(0, 844, 394, 422), Rect2i(394, 844, 394, 422), Rect2i(788, 844, 394, 422), Rect2i(1182, 844, 394, 422), Rect2i(1576, 844, 394, 422), Rect2i(0, 1266, 394, 422), Rect2i(394, 1266, 394, 422), Rect2i(788, 1266, 394, 422), Rect2i(1182, 1266, 394, 422), Rect2i(1576, 1266, 394, 422), Rect2i(0, 1688, 394, 422), Rect2i(394, 1688, 394, 422), Rect2i(788, 1688, 394, 422), Rect2i(1182, 1688, 394, 422)])
+cell = Vector2i(394, 422)
+frames = 24
+fps = 12.0
+directions = "single"
+pivot = Vector2(174, 312)
+scale = 2.0
+camera_elevation_degrees = 45.0
+surface = SubResource("surface_NE")
+source = "dragon-selected-depth-normals-v1/violet-astral/Fly_Death/045"
+status = "ready"
+notes = "Source files available, NOT art/native accepted. Preserve clean RGBA, source alpha, native grid and clock; packet display-scale2 is explicitly authored in existing ArtSource.scale; PRIVATE activation data; matching independent-normal program/publication/native qualification still required. No physical socket or release data."
+
+[resource]
+script = ExtResource("clip")
+name = "Fly_Death"
+role = "flight_die"
+source_clip = "Fly_Death"
+frames = 24
+fps = 12.0
+loop = "once"
+body_banks = Dictionary[String, ExtResource("art")]({"E": SubResource("art_E"), "SE": SubResource("art_SE"), "S": SubResource("art_S"), "SW": SubResource("art_SW"), "W": SubResource("art_W"), "NW": SubResource("art_NW"), "N": SubResource("art_N"), "NE": SubResource("art_NE")})
+notes = "Native source poses retained exactly. Review clock12fps; vendor clock unknown. No event contact/release markers inferred. All art UNREVIEWED."

@@ -3073,6 +3073,41 @@ unported = {
 }
 }
 
+[sub_resource type="Resource" id="dragon_disabled_body"]
+script = ExtResource("1_lqdy0")
+role = "attack"
+enabled = false
+
+[sub_resource type="Resource" id="dragon_own_rig_refusal"]
+script = ExtResource("4_hoa1v")
+id = "draconic-native-rig-unmatched-refusal"
+precedence = 1000.0
+match = {"kind": "attack", "rigIds": ["summon.draconic_spirit.violet-astral"]}
+body = SubResource("dragon_disabled_body")
+unported = {"anchors": [], "projectile": null, "weaponTrail": null}
+
+[sub_resource type="Resource" id="dragon_ground_attack"]
+script = ExtResource("1_lqdy0")
+role = "attack"
+clip = "Ground_Attack"
+rig = "summon.draconic_spirit.violet-astral"
+
+[sub_resource type="Resource" id="dragon_actual_rend"]
+script = ExtResource("4_hoa1v")
+id = "draconic-native-bound-rend-grounded-presentation"
+precedence = 1100.0
+match = {
+"creatureIds": ["creature.spell.draconic_spirit"],
+"delivery": "melee",
+"kind": "attack",
+"rigIds": ["summon.draconic_spirit.violet-astral"],
+"sourceItemIds": ["weapon.spell_summon.draconic_spirit"],
+"sourceKinds": ["equipped"],
+"weaponSlots": ["MELEE_MAIN"]
+}
+body = SubResource("dragon_ground_attack")
+unported = {"anchors": [], "projectile": null, "weaponTrail": null}
+
 [resource]
 script = ExtResource("3_g8l0w")
 id = "action.attack"
@@ -3082,7 +3117,7 @@ outcome_texts = Dictionary[String, ExtResource("2_s8hhx")]({
 "critical_miss": SubResource("Resource_jnwfx"),
 "miss": SubResource("Resource_07vdt")
 })
-variants = Array[ExtResource("4_hoa1v")]([SubResource("Resource_hlti2"), SubResource("Resource_tk7kf"), SubResource("Resource_jx7jt"), SubResource("Resource_jdg26"), SubResource("Resource_3qkbf"), SubResource("Resource_psggd"), SubResource("Resource_663gu"), SubResource("Resource_ayl7r"), SubResource("Resource_siqvl"), SubResource("Resource_toj6v"), SubResource("Resource_4gts8"), SubResource("Resource_44p0j"), SubResource("Resource_ljjje"), SubResource("Resource_rhh7d"), SubResource("Resource_srnq5"), SubResource("Resource_cnlr3"), SubResource("Resource_k72ut"), SubResource("Resource_oxo72"), SubResource("Resource_ajvj8"), SubResource("Resource_ujsbj"), SubResource("Resource_gihiu"), SubResource("Resource_aqxhu"), SubResource("Resource_b2out"), SubResource("Resource_6sv5r"), SubResource("Resource_ma5km"), SubResource("Resource_g5t8v"), SubResource("Resource_vaa3o"), SubResource("Resource_dmq18"), SubResource("Resource_skse4"), SubResource("Resource_e71xa"), SubResource("Resource_ct48g"), SubResource("Resource_ko6re"), SubResource("Resource_gdb6s"), SubResource("Resource_ksi4j"), SubResource("Resource_kfbci"), SubResource("Resource_34eio"), SubResource("Resource_f3k02"), SubResource("Resource_edhma"), SubResource("Resource_gm2d8"), SubResource("Resource_oawys"), SubResource("Resource_enhd1"), SubResource("Resource_lfihh"), SubResource("Resource_f6s7v"), SubResource("Resource_ccu3d"), SubResource("Resource_uxn5a"), SubResource("Resource_fckma"), SubResource("Resource_gh66u"), SubResource("Resource_70o0n"), SubResource("Resource_adfwm"), SubResource("Resource_wkxcm"), SubResource("Resource_6naux"), SubResource("Resource_yngha"), SubResource("Resource_nyh73"), SubResource("Resource_vsfkf"), SubResource("Resource_hn1on"), SubResource("Resource_h5sc1"), SubResource("Resource_bc5hf"), SubResource("Resource_8gjox"), SubResource("Resource_8wqqp"), SubResource("Resource_xnm88"), SubResource("Resource_gpeo3"), SubResource("Resource_jfs4m"), SubResource("Resource_4sevv"), SubResource("Resource_um2k5"), SubResource("Resource_q7xd0"), SubResource("Resource_saau3"), SubResource("Resource_st4v5"), SubResource("Resource_1mhr5"), SubResource("Resource_41lr8"), SubResource("Resource_t0a66"), SubResource("Resource_xhk68"), SubResource("Resource_d860g"), SubResource("Resource_ouq6h")])
+variants = Array[ExtResource("4_hoa1v")]([SubResource("Resource_hlti2"), SubResource("Resource_tk7kf"), SubResource("Resource_jx7jt"), SubResource("Resource_jdg26"), SubResource("Resource_3qkbf"), SubResource("Resource_psggd"), SubResource("Resource_663gu"), SubResource("Resource_ayl7r"), SubResource("Resource_siqvl"), SubResource("Resource_toj6v"), SubResource("Resource_4gts8"), SubResource("Resource_44p0j"), SubResource("Resource_ljjje"), SubResource("Resource_rhh7d"), SubResource("Resource_srnq5"), SubResource("Resource_cnlr3"), SubResource("Resource_k72ut"), SubResource("Resource_oxo72"), SubResource("Resource_ajvj8"), SubResource("Resource_ujsbj"), SubResource("Resource_gihiu"), SubResource("Resource_aqxhu"), SubResource("Resource_b2out"), SubResource("Resource_6sv5r"), SubResource("Resource_ma5km"), SubResource("Resource_g5t8v"), SubResource("Resource_vaa3o"), SubResource("Resource_dmq18"), SubResource("Resource_skse4"), SubResource("Resource_e71xa"), SubResource("Resource_ct48g"), SubResource("Resource_ko6re"), SubResource("Resource_gdb6s"), SubResource("Resource_ksi4j"), SubResource("Resource_kfbci"), SubResource("Resource_34eio"), SubResource("Resource_f3k02"), SubResource("Resource_edhma"), SubResource("Resource_gm2d8"), SubResource("Resource_oawys"), SubResource("Resource_enhd1"), SubResource("Resource_lfihh"), SubResource("Resource_f6s7v"), SubResource("Resource_ccu3d"), SubResource("Resource_uxn5a"), SubResource("Resource_fckma"), SubResource("Resource_gh66u"), SubResource("Resource_70o0n"), SubResource("Resource_adfwm"), SubResource("Resource_wkxcm"), SubResource("Resource_6naux"), SubResource("Resource_yngha"), SubResource("Resource_nyh73"), SubResource("Resource_vsfkf"), SubResource("Resource_hn1on"), SubResource("Resource_h5sc1"), SubResource("Resource_bc5hf"), SubResource("Resource_8gjox"), SubResource("Resource_8wqqp"), SubResource("Resource_xnm88"), SubResource("Resource_gpeo3"), SubResource("Resource_jfs4m"), SubResource("Resource_4sevv"), SubResource("Resource_um2k5"), SubResource("Resource_q7xd0"), SubResource("Resource_saau3"), SubResource("Resource_st4v5"), SubResource("Resource_1mhr5"), SubResource("Resource_41lr8"), SubResource("Resource_t0a66"), SubResource("Resource_xhk68"), SubResource("Resource_d860g"), SubResource("Resource_ouq6h"), SubResource("dragon_own_rig_refusal"), SubResource("dragon_actual_rend")])
 trail_palette = PackedStringArray()
 trail_outcomes = PackedStringArray("critical")
 trail_behaviours = PackedStringArray("action.class.barbarian.frenzied_strike", "action.feature.extra_attack")
@@ -3121,3 +3156,5 @@ unported = {
 "previewChildCueKinds": ["damage"],
 "projectile": null
 }
+
+notes = "Exact selected native dragon rig explicitly presents actual Rend grounded, using supplied Ground_Attack16 at12fps with no event contact/release markers. Public AttackFact source kind is equipped even though the bound weapon is internally BODY/natural. Match actual creature, own rig, weapon.spell_summon.draconic_spirit and MELEE_MAIN; unmatched operands on this rig select disabled body. Empty anchors explicitly override generic contact8/recover10; no sourceTiming, projectile or measured modular trail is inherited. Other rigs and generic defaults remain unchanged. Grounded is an authored body policy, not current canonical grounding; no flying melee/mouth/breath VFX/art acceptance claim."

@@ -1,0 +1,272 @@
+[gd_resource type="Resource" script_class="PresentationRigClip" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/characters/rig_clip.gd" id="clip"]
+[ext_resource type="Script" path="res://presentation/source/art_source.gd" id="art"]
+[ext_resource type="Script" path="res://presentation/source/surface.gd" id="surface"]
+
+[sub_resource type="Resource" id="surface_E"]
+script = ExtResource("surface")
+encoding = "normal_rgb_depth_byte"
+depth = "art/media/dragons/selected-20261021/shared/spirit/Ground_Breathe/090/depth.png"
+normals = Dictionary[String, String]({"original": "art/media/dragons/selected-20261021/shared/spirit/Ground_Breathe/090/normal.png"})
+normal_profile = "original"
+normal_requires_depth = false
+normal_alpha_threshold = 0.027450980392156862
+masks = Dictionary[String, String]({"normal_valid": "art/media/dragons/selected-20261021/masks/spirit/Ground_Breathe/090/normal-admission.png", "support": "art/media/dragons/selected-20261021/masks/spirit/Ground_Breathe/090/depth-support.png"})
+depth_range = Vector2(-180, 309)
+depth_byte_range = Vector2i(32, 224)
+camera_origin = Vector2(210.0, 266.0)
+optical_ground_pixels = 0.0
+source = "dragon-selected-depth-normals-v1; Sprite Fusion Default independent receiving admission; artwork UNREVIEWED"
+
+[sub_resource type="Resource" id="art_E"]
+script = ExtResource("art")
+container = "atlas"
+path = "art/media/dragons/selected-20261021/colour/violet-astral/Ground_Breathe/090.png"
+rects = Array[Rect2i]([Rect2i(0, 0, 342, 420), Rect2i(342, 0, 342, 420), Rect2i(684, 0, 342, 420), Rect2i(1026, 0, 342, 420), Rect2i(1368, 0, 342, 420), Rect2i(0, 420, 342, 420), Rect2i(342, 420, 342, 420), Rect2i(684, 420, 342, 420), Rect2i(1026, 420, 342, 420), Rect2i(1368, 420, 342, 420), Rect2i(0, 840, 342, 420), Rect2i(342, 840, 342, 420), Rect2i(684, 840, 342, 420), Rect2i(1026, 840, 342, 420), Rect2i(1368, 840, 342, 420), Rect2i(0, 1260, 342, 420), Rect2i(342, 1260, 342, 420), Rect2i(684, 1260, 342, 420), Rect2i(1026, 1260, 342, 420), Rect2i(1368, 1260, 342, 420), Rect2i(0, 1680, 342, 420), Rect2i(342, 1680, 342, 420), Rect2i(684, 1680, 342, 420), Rect2i(1026, 1680, 342, 420)])
+cell = Vector2i(342, 420)
+frames = 24
+fps = 12.0
+directions = "single"
+pivot = Vector2(213, 266)
+scale = 2.0
+camera_elevation_degrees = 45.0
+surface = SubResource("surface_E")
+source = "dragon-selected-depth-normals-v1/violet-astral/Ground_Breathe/090"
+status = "ready"
+notes = "Source files available, NOT art/native accepted. Preserve clean RGBA, source alpha, native grid and clock; packet display-scale2 is explicitly authored in existing ArtSource.scale; PRIVATE activation data; matching independent-normal program/publication/native qualification still required. No physical socket or release data."
+
+[sub_resource type="Resource" id="surface_SE"]
+script = ExtResource("surface")
+encoding = "normal_rgb_depth_byte"
+depth = "art/media/dragons/selected-20261021/shared/spirit/Ground_Breathe/135/depth.png"
+normals = Dictionary[String, String]({"original": "art/media/dragons/selected-20261021/shared/spirit/Ground_Breathe/135/normal.png"})
+normal_profile = "original"
+normal_requires_depth = false
+normal_alpha_threshold = 0.027450980392156862
+masks = Dictionary[String, String]({"normal_valid": "art/media/dragons/selected-20261021/masks/spirit/Ground_Breathe/135/normal-admission.png", "support": "art/media/dragons/selected-20261021/masks/spirit/Ground_Breathe/135/depth-support.png"})
+depth_range = Vector2(-180, 309)
+depth_byte_range = Vector2i(32, 224)
+camera_origin = Vector2(198.0, 278.0)
+optical_ground_pixels = 0.0
+source = "dragon-selected-depth-normals-v1; Sprite Fusion Default independent receiving admission; artwork UNREVIEWED"
+
+[sub_resource type="Resource" id="art_SE"]
+script = ExtResource("art")
+container = "atlas"
+path = "art/media/dragons/selected-20261021/colour/violet-astral/Ground_Breathe/135.png"
+rects = Array[Rect2i]([Rect2i(0, 0, 419, 395), Rect2i(419, 0, 419, 395), Rect2i(838, 0, 419, 395), Rect2i(1257, 0, 419, 395), Rect2i(1676, 0, 419, 395), Rect2i(0, 395, 419, 395), Rect2i(419, 395, 419, 395), Rect2i(838, 395, 419, 395), Rect2i(1257, 395, 419, 395), Rect2i(1676, 395, 419, 395), Rect2i(0, 790, 419, 395), Rect2i(419, 790, 419, 395), Rect2i(838, 790, 419, 395), Rect2i(1257, 790, 419, 395), Rect2i(1676, 790, 419, 395), Rect2i(0, 1185, 419, 395), Rect2i(419, 1185, 419, 395), Rect2i(838, 1185, 419, 395), Rect2i(1257, 1185, 419, 395), Rect2i(1676, 1185, 419, 395), Rect2i(0, 1580, 419, 395), Rect2i(419, 1580, 419, 395), Rect2i(838, 1580, 419, 395), Rect2i(1257, 1580, 419, 395)])
+cell = Vector2i(419, 395)
+frames = 24
+fps = 12.0
+directions = "single"
+pivot = Vector2(198, 278)
+scale = 2.0
+camera_elevation_degrees = 45.0
+surface = SubResource("surface_SE")
+source = "dragon-selected-depth-normals-v1/violet-astral/Ground_Breathe/135"
+status = "ready"
+notes = "Source files available, NOT art/native accepted. Preserve clean RGBA, source alpha, native grid and clock; packet display-scale2 is explicitly authored in existing ArtSource.scale; PRIVATE activation data; matching independent-normal program/publication/native qualification still required. No physical socket or release data."
+
+[sub_resource type="Resource" id="surface_S"]
+script = ExtResource("surface")
+encoding = "normal_rgb_depth_byte"
+depth = "art/media/dragons/selected-20261021/shared/spirit/Ground_Breathe/180/depth.png"
+normals = Dictionary[String, String]({"original": "art/media/dragons/selected-20261021/shared/spirit/Ground_Breathe/180/normal.png"})
+normal_profile = "original"
+normal_requires_depth = false
+normal_alpha_threshold = 0.027450980392156862
+masks = Dictionary[String, String]({"normal_valid": "art/media/dragons/selected-20261021/masks/spirit/Ground_Breathe/180/normal-admission.png", "support": "art/media/dragons/selected-20261021/masks/spirit/Ground_Breathe/180/depth-support.png"})
+depth_range = Vector2(-180, 309)
+depth_byte_range = Vector2i(32, 224)
+camera_origin = Vector2(245.0, 268.0)
+optical_ground_pixels = 0.0
+source = "dragon-selected-depth-normals-v1; Sprite Fusion Default independent receiving admission; artwork UNREVIEWED"
+
+[sub_resource type="Resource" id="art_S"]
+script = ExtResource("art")
+container = "atlas"
+path = "art/media/dragons/selected-20261021/colour/violet-astral/Ground_Breathe/180.png"
+rects = Array[Rect2i]([Rect2i(0, 0, 480, 340), Rect2i(480, 0, 480, 340), Rect2i(960, 0, 480, 340), Rect2i(1440, 0, 480, 340), Rect2i(1920, 0, 480, 340), Rect2i(0, 340, 480, 340), Rect2i(480, 340, 480, 340), Rect2i(960, 340, 480, 340), Rect2i(1440, 340, 480, 340), Rect2i(1920, 340, 480, 340), Rect2i(0, 680, 480, 340), Rect2i(480, 680, 480, 340), Rect2i(960, 680, 480, 340), Rect2i(1440, 680, 480, 340), Rect2i(1920, 680, 480, 340), Rect2i(0, 1020, 480, 340), Rect2i(480, 1020, 480, 340), Rect2i(960, 1020, 480, 340), Rect2i(1440, 1020, 480, 340), Rect2i(1920, 1020, 480, 340), Rect2i(0, 1360, 480, 340), Rect2i(480, 1360, 480, 340), Rect2i(960, 1360, 480, 340), Rect2i(1440, 1360, 480, 340)])
+cell = Vector2i(480, 340)
+frames = 24
+fps = 12.0
+directions = "single"
+pivot = Vector2(245, 268)
+scale = 2.0
+camera_elevation_degrees = 45.0
+surface = SubResource("surface_S")
+source = "dragon-selected-depth-normals-v1/violet-astral/Ground_Breathe/180"
+status = "ready"
+notes = "Source files available, NOT art/native accepted. Preserve clean RGBA, source alpha, native grid and clock; packet display-scale2 is explicitly authored in existing ArtSource.scale; PRIVATE activation data; matching independent-normal program/publication/native qualification still required. No physical socket or release data."
+
+[sub_resource type="Resource" id="surface_SW"]
+script = ExtResource("surface")
+encoding = "normal_rgb_depth_byte"
+depth = "art/media/dragons/selected-20261021/shared/spirit/Ground_Breathe/225/depth.png"
+normals = Dictionary[String, String]({"original": "art/media/dragons/selected-20261021/shared/spirit/Ground_Breathe/225/normal.png"})
+normal_profile = "original"
+normal_requires_depth = false
+normal_alpha_threshold = 0.027450980392156862
+masks = Dictionary[String, String]({"normal_valid": "art/media/dragons/selected-20261021/masks/spirit/Ground_Breathe/225/normal-admission.png", "support": "art/media/dragons/selected-20261021/masks/spirit/Ground_Breathe/225/depth-support.png"})
+depth_range = Vector2(-180, 309)
+depth_byte_range = Vector2i(32, 224)
+camera_origin = Vector2(196.0, 305.0)
+optical_ground_pixels = 0.0
+source = "dragon-selected-depth-normals-v1; Sprite Fusion Default independent receiving admission; artwork UNREVIEWED"
+
+[sub_resource type="Resource" id="art_SW"]
+script = ExtResource("art")
+container = "atlas"
+path = "art/media/dragons/selected-20261021/colour/violet-astral/Ground_Breathe/225.png"
+rects = Array[Rect2i]([Rect2i(0, 0, 402, 444), Rect2i(402, 0, 402, 444), Rect2i(804, 0, 402, 444), Rect2i(1206, 0, 402, 444), Rect2i(1608, 0, 402, 444), Rect2i(0, 444, 402, 444), Rect2i(402, 444, 402, 444), Rect2i(804, 444, 402, 444), Rect2i(1206, 444, 402, 444), Rect2i(1608, 444, 402, 444), Rect2i(0, 888, 402, 444), Rect2i(402, 888, 402, 444), Rect2i(804, 888, 402, 444), Rect2i(1206, 888, 402, 444), Rect2i(1608, 888, 402, 444), Rect2i(0, 1332, 402, 444), Rect2i(402, 1332, 402, 444), Rect2i(804, 1332, 402, 444), Rect2i(1206, 1332, 402, 444), Rect2i(1608, 1332, 402, 444), Rect2i(0, 1776, 402, 444), Rect2i(402, 1776, 402, 444), Rect2i(804, 1776, 402, 444), Rect2i(1206, 1776, 402, 444)])
+cell = Vector2i(402, 444)
+frames = 24
+fps = 12.0
+directions = "single"
+pivot = Vector2(196, 305)
+scale = 2.0
+camera_elevation_degrees = 45.0
+surface = SubResource("surface_SW")
+source = "dragon-selected-depth-normals-v1/violet-astral/Ground_Breathe/225"
+status = "ready"
+notes = "Source files available, NOT art/native accepted. Preserve clean RGBA, source alpha, native grid and clock; packet display-scale2 is explicitly authored in existing ArtSource.scale; PRIVATE activation data; matching independent-normal program/publication/native qualification still required. No physical socket or release data."
+
+[sub_resource type="Resource" id="surface_W"]
+script = ExtResource("surface")
+encoding = "normal_rgb_depth_byte"
+depth = "art/media/dragons/selected-20261021/shared/spirit/Ground_Breathe/270/depth.png"
+normals = Dictionary[String, String]({"original": "art/media/dragons/selected-20261021/shared/spirit/Ground_Breathe/270/normal.png"})
+normal_profile = "original"
+normal_requires_depth = false
+normal_alpha_threshold = 0.027450980392156862
+masks = Dictionary[String, String]({"normal_valid": "art/media/dragons/selected-20261021/masks/spirit/Ground_Breathe/270/normal-admission.png", "support": "art/media/dragons/selected-20261021/masks/spirit/Ground_Breathe/270/depth-support.png"})
+depth_range = Vector2(-180, 309)
+depth_byte_range = Vector2i(32, 224)
+camera_origin = Vector2(132.0, 271.0)
+optical_ground_pixels = 0.0
+source = "dragon-selected-depth-normals-v1; Sprite Fusion Default independent receiving admission; artwork UNREVIEWED"
+
+[sub_resource type="Resource" id="art_W"]
+script = ExtResource("art")
+container = "atlas"
+path = "art/media/dragons/selected-20261021/colour/violet-astral/Ground_Breathe/270.png"
+rects = Array[Rect2i]([Rect2i(0, 0, 336, 416), Rect2i(336, 0, 336, 416), Rect2i(672, 0, 336, 416), Rect2i(1008, 0, 336, 416), Rect2i(1344, 0, 336, 416), Rect2i(0, 416, 336, 416), Rect2i(336, 416, 336, 416), Rect2i(672, 416, 336, 416), Rect2i(1008, 416, 336, 416), Rect2i(1344, 416, 336, 416), Rect2i(0, 832, 336, 416), Rect2i(336, 832, 336, 416), Rect2i(672, 832, 336, 416), Rect2i(1008, 832, 336, 416), Rect2i(1344, 832, 336, 416), Rect2i(0, 1248, 336, 416), Rect2i(336, 1248, 336, 416), Rect2i(672, 1248, 336, 416), Rect2i(1008, 1248, 336, 416), Rect2i(1344, 1248, 336, 416), Rect2i(0, 1664, 336, 416), Rect2i(336, 1664, 336, 416), Rect2i(672, 1664, 336, 416), Rect2i(1008, 1664, 336, 416)])
+cell = Vector2i(336, 416)
+frames = 24
+fps = 12.0
+directions = "single"
+pivot = Vector2(128, 270)
+scale = 2.0
+camera_elevation_degrees = 45.0
+surface = SubResource("surface_W")
+source = "dragon-selected-depth-normals-v1/violet-astral/Ground_Breathe/270"
+status = "ready"
+notes = "Source files available, NOT art/native accepted. Preserve clean RGBA, source alpha, native grid and clock; packet display-scale2 is explicitly authored in existing ArtSource.scale; PRIVATE activation data; matching independent-normal program/publication/native qualification still required. No physical socket or release data."
+
+[sub_resource type="Resource" id="surface_NW"]
+script = ExtResource("surface")
+encoding = "normal_rgb_depth_byte"
+depth = "art/media/dragons/selected-20261021/shared/spirit/Ground_Breathe/315/depth.png"
+normals = Dictionary[String, String]({"original": "art/media/dragons/selected-20261021/shared/spirit/Ground_Breathe/315/normal.png"})
+normal_profile = "original"
+normal_requires_depth = false
+normal_alpha_threshold = 0.027450980392156862
+masks = Dictionary[String, String]({"normal_valid": "art/media/dragons/selected-20261021/masks/spirit/Ground_Breathe/315/normal-admission.png", "support": "art/media/dragons/selected-20261021/masks/spirit/Ground_Breathe/315/depth-support.png"})
+depth_range = Vector2(-180, 309)
+depth_byte_range = Vector2i(32, 224)
+camera_origin = Vector2(226.0, 228.0)
+optical_ground_pixels = 0.0
+source = "dragon-selected-depth-normals-v1; Sprite Fusion Default independent receiving admission; artwork UNREVIEWED"
+
+[sub_resource type="Resource" id="art_NW"]
+script = ExtResource("art")
+container = "atlas"
+path = "art/media/dragons/selected-20261021/colour/violet-astral/Ground_Breathe/315.png"
+rects = Array[Rect2i]([Rect2i(0, 0, 433, 351), Rect2i(433, 0, 433, 351), Rect2i(866, 0, 433, 351), Rect2i(1299, 0, 433, 351), Rect2i(1732, 0, 433, 351), Rect2i(0, 351, 433, 351), Rect2i(433, 351, 433, 351), Rect2i(866, 351, 433, 351), Rect2i(1299, 351, 433, 351), Rect2i(1732, 351, 433, 351), Rect2i(0, 702, 433, 351), Rect2i(433, 702, 433, 351), Rect2i(866, 702, 433, 351), Rect2i(1299, 702, 433, 351), Rect2i(1732, 702, 433, 351), Rect2i(0, 1053, 433, 351), Rect2i(433, 1053, 433, 351), Rect2i(866, 1053, 433, 351), Rect2i(1299, 1053, 433, 351), Rect2i(1732, 1053, 433, 351), Rect2i(0, 1404, 433, 351), Rect2i(433, 1404, 433, 351), Rect2i(866, 1404, 433, 351), Rect2i(1299, 1404, 433, 351)])
+cell = Vector2i(433, 351)
+frames = 24
+fps = 12.0
+directions = "single"
+pivot = Vector2(226, 228)
+scale = 2.0
+camera_elevation_degrees = 45.0
+surface = SubResource("surface_NW")
+source = "dragon-selected-depth-normals-v1/violet-astral/Ground_Breathe/315"
+status = "ready"
+notes = "Source files available, NOT art/native accepted. Preserve clean RGBA, source alpha, native grid and clock; packet display-scale2 is explicitly authored in existing ArtSource.scale; PRIVATE activation data; matching independent-normal program/publication/native qualification still required. No physical socket or release data."
+
+[sub_resource type="Resource" id="surface_N"]
+script = ExtResource("surface")
+encoding = "normal_rgb_depth_byte"
+depth = "art/media/dragons/selected-20261021/shared/spirit/Ground_Breathe/000/depth.png"
+normals = Dictionary[String, String]({"original": "art/media/dragons/selected-20261021/shared/spirit/Ground_Breathe/000/normal.png"})
+normal_profile = "original"
+normal_requires_depth = false
+normal_alpha_threshold = 0.027450980392156862
+masks = Dictionary[String, String]({"normal_valid": "art/media/dragons/selected-20261021/masks/spirit/Ground_Breathe/000/normal-admission.png", "support": "art/media/dragons/selected-20261021/masks/spirit/Ground_Breathe/000/depth-support.png"})
+depth_range = Vector2(-180, 309)
+depth_byte_range = Vector2i(32, 224)
+camera_origin = Vector2(236.0, 205.0)
+optical_ground_pixels = 0.0
+source = "dragon-selected-depth-normals-v1; Sprite Fusion Default independent receiving admission; artwork UNREVIEWED"
+
+[sub_resource type="Resource" id="art_N"]
+script = ExtResource("art")
+container = "atlas"
+path = "art/media/dragons/selected-20261021/colour/violet-astral/Ground_Breathe/000.png"
+rects = Array[Rect2i]([Rect2i(0, 0, 484, 323), Rect2i(484, 0, 484, 323), Rect2i(968, 0, 484, 323), Rect2i(1452, 0, 484, 323), Rect2i(1936, 0, 484, 323), Rect2i(0, 323, 484, 323), Rect2i(484, 323, 484, 323), Rect2i(968, 323, 484, 323), Rect2i(1452, 323, 484, 323), Rect2i(1936, 323, 484, 323), Rect2i(0, 646, 484, 323), Rect2i(484, 646, 484, 323), Rect2i(968, 646, 484, 323), Rect2i(1452, 646, 484, 323), Rect2i(1936, 646, 484, 323), Rect2i(0, 969, 484, 323), Rect2i(484, 969, 484, 323), Rect2i(968, 969, 484, 323), Rect2i(1452, 969, 484, 323), Rect2i(1936, 969, 484, 323), Rect2i(0, 1292, 484, 323), Rect2i(484, 1292, 484, 323), Rect2i(968, 1292, 484, 323), Rect2i(1452, 1292, 484, 323)])
+cell = Vector2i(484, 323)
+frames = 24
+fps = 12.0
+directions = "single"
+pivot = Vector2(236, 205)
+scale = 2.0
+camera_elevation_degrees = 45.0
+surface = SubResource("surface_N")
+source = "dragon-selected-depth-normals-v1/violet-astral/Ground_Breathe/000"
+status = "ready"
+notes = "Source files available, NOT art/native accepted. Preserve clean RGBA, source alpha, native grid and clock; packet display-scale2 is explicitly authored in existing ArtSource.scale; PRIVATE activation data; matching independent-normal program/publication/native qualification still required. No physical socket or release data."
+
+[sub_resource type="Resource" id="surface_NE"]
+script = ExtResource("surface")
+encoding = "normal_rgb_depth_byte"
+depth = "art/media/dragons/selected-20261021/shared/spirit/Ground_Breathe/045/depth.png"
+normals = Dictionary[String, String]({"original": "art/media/dragons/selected-20261021/shared/spirit/Ground_Breathe/045/normal.png"})
+normal_profile = "original"
+normal_requires_depth = false
+normal_alpha_threshold = 0.027450980392156862
+masks = Dictionary[String, String]({"normal_valid": "art/media/dragons/selected-20261021/masks/spirit/Ground_Breathe/045/normal-admission.png", "support": "art/media/dragons/selected-20261021/masks/spirit/Ground_Breathe/045/depth-support.png"})
+depth_range = Vector2(-180, 309)
+depth_byte_range = Vector2i(32, 224)
+camera_origin = Vector2(215.0, 272.0)
+optical_ground_pixels = 0.0
+source = "dragon-selected-depth-normals-v1; Sprite Fusion Default independent receiving admission; artwork UNREVIEWED"
+
+[sub_resource type="Resource" id="art_NE"]
+script = ExtResource("art")
+container = "atlas"
+path = "art/media/dragons/selected-20261021/colour/violet-astral/Ground_Breathe/045.png"
+rects = Array[Rect2i]([Rect2i(0, 0, 411, 394), Rect2i(411, 0, 411, 394), Rect2i(822, 0, 411, 394), Rect2i(1233, 0, 411, 394), Rect2i(1644, 0, 411, 394), Rect2i(0, 394, 411, 394), Rect2i(411, 394, 411, 394), Rect2i(822, 394, 411, 394), Rect2i(1233, 394, 411, 394), Rect2i(1644, 394, 411, 394), Rect2i(0, 788, 411, 394), Rect2i(411, 788, 411, 394), Rect2i(822, 788, 411, 394), Rect2i(1233, 788, 411, 394), Rect2i(1644, 788, 411, 394), Rect2i(0, 1182, 411, 394), Rect2i(411, 1182, 411, 394), Rect2i(822, 1182, 411, 394), Rect2i(1233, 1182, 411, 394), Rect2i(1644, 1182, 411, 394), Rect2i(0, 1576, 411, 394), Rect2i(411, 1576, 411, 394), Rect2i(822, 1576, 411, 394), Rect2i(1233, 1576, 411, 394)])
+cell = Vector2i(411, 394)
+frames = 24
+fps = 12.0
+directions = "single"
+pivot = Vector2(215, 272)
+scale = 2.0
+camera_elevation_degrees = 45.0
+surface = SubResource("surface_NE")
+source = "dragon-selected-depth-normals-v1/violet-astral/Ground_Breathe/045"
+status = "ready"
+notes = "Source files available, NOT art/native accepted. Preserve clean RGBA, source alpha, native grid and clock; packet display-scale2 is explicitly authored in existing ArtSource.scale; PRIVATE activation data; matching independent-normal program/publication/native qualification still required. No physical socket or release data."
+
+[resource]
+script = ExtResource("clip")
+name = "Ground_Breathe"
+role = "cast"
+source_clip = "Ground_Breathe"
+frames = 24
+fps = 12.0
+loop = "once"
+body_banks = Dictionary[String, ExtResource("art")]({"E": SubResource("art_E"), "SE": SubResource("art_SE"), "S": SubResource("art_S"), "SW": SubResource("art_SW"), "W": SubResource("art_W"), "NW": SubResource("art_NW"), "N": SubResource("art_N"), "NE": SubResource("art_NE")})
+notes = "Native source poses retained exactly. Review clock12fps; vendor clock unknown. No event contact/release markers inferred. All art UNREVIEWED."

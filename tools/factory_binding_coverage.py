@@ -236,7 +236,11 @@ def report() -> dict:
     clips = {c["clip_id"]: c for c in factory["clips"]}
     selections = {s.get("spell_id", s["key"]): s for s in factory["selections"]}
     condition_selections = {s["key"]: s for s in factory["selections"] if s.get("condition")}
-    standalone = json.loads((ROOT / "assets/vfx/format/spike-readiness-20261022-source-resources.json").read_text()).get("resources", [])
+    source_table = re.search(r'^const SOURCE_TABLE\s*:=\s*"(res://[^"]+)"',
+                             (ROOT / "presentation/effect_package.gd").read_text(), re.M)
+    if source_table is None:
+        raise ValueError("The production EffectPackage source table is not declared")
+    standalone = json.loads((ROOT / source_table[1].removeprefix("res://")).read_text()).get("resources", [])
     typed = [typed_source(p, section) for section in ["spells", "conditions", "actions"]
              for p in sorted((ROOT / "authoring/abilities" / section).glob("*.tres"))]
     by_id = defaultdict(list)

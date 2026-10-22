@@ -126,6 +126,7 @@ static func prepare_binding(path:String,slot:String,cache:Dictionary,depth:bool,
         var absolute:String=profiles[profile] if field=="normal" else root.path_join(source.files[field])
         value.textures[PARAMETERS[field]]=absolute;value.paths[absolute]=true
     var optical:Dictionary=source.optical_camera
+    var normal_receiving:Dictionary=source.get("normal_receiving",{})
     var origins:Dictionary=_camera_origins(source)
     if not origins.is_empty():value.camera_origins=origins
     var cell:Array=source.get("cell_size",[128,128])
@@ -133,6 +134,8 @@ static func prepare_binding(path:String,slot:String,cache:Dictionary,depth:bool,
     value.parameters.merge({"component_depth_range":Vector2(source.depth_range[0],source.depth_range[1]),
         "component_units":pixel_scale/Placement.PIXELS_PER_UNIT,"component_scale_x":scale_x,
         "component_reconstruction_origin":Vector2(optical.origin[0],optical.origin[1]),"component_elevation":deg_to_rad(optical.elevation_degrees),
+        "component_normal_requires_depth":normal_receiving.get("requires_depth",true),
+        "component_normal_alpha_threshold":normal_receiving.get("alpha_threshold",0.5),
         "use_component_depth":depth,"use_component_normals":normals,"has_component_geometry":true})
     var relative:=Basis(Vector3.RIGHT,-(deg_to_rad(optical.elevation_degrees)-PI/6.0))
     var units:float=pixel_scale/Placement.PIXELS_PER_UNIT
@@ -234,6 +237,9 @@ static func bind(entry: Dictionary, path: String, cache: Dictionary, loader: Cal
     SourceMaterial.set_parameter(entry,"component_elevation",deg_to_rad(optical.elevation_degrees))
     SourceMaterial.set_parameter(entry,"use_component_depth",depth)
     SourceMaterial.set_parameter(entry,"use_component_normals",normals)
+    var normal_receiving:Dictionary=source.get("normal_receiving",{})
+    SourceMaterial.set_parameter(entry,"component_normal_requires_depth",normal_receiving.get("requires_depth",true))
+    SourceMaterial.set_parameter(entry,"component_normal_alpha_threshold",normal_receiving.get("alpha_threshold",0.5))
     SourceMaterial.set_parameter(entry,"has_component_geometry",true)
 
     # Reconstructed points can lie outside the painted quad. Expand the native

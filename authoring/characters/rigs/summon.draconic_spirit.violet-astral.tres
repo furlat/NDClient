@@ -1,0 +1,73 @@
+[gd_resource type="Resource" script_class="PresentationRig" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/characters/rig.gd" id="rig"]
+[ext_resource type="Script" path="res://presentation/source/characters/rig_clip.gd" id="clip"]
+[ext_resource type="Script" path="res://presentation/source/characters/rig_context.gd" id="context"]
+[ext_resource type="Resource" path="res://authoring/characters/rigs/summon.draconic_spirit.violet-astral/Ground_Idle.tres" id="clip_0"]
+[ext_resource type="Resource" path="res://authoring/characters/rigs/summon.draconic_spirit.violet-astral/Ground_Walk.tres" id="clip_1"]
+[ext_resource type="Resource" path="res://authoring/characters/rigs/summon.draconic_spirit.violet-astral/Ground_Attack.tres" id="clip_2"]
+[ext_resource type="Resource" path="res://authoring/characters/rigs/summon.draconic_spirit.violet-astral/Ground_Breathe.tres" id="clip_3"]
+[ext_resource type="Resource" path="res://authoring/characters/rigs/summon.draconic_spirit.violet-astral/Fly_Cycle.tres" id="clip_4"]
+[ext_resource type="Resource" path="res://authoring/characters/rigs/summon.draconic_spirit.violet-astral/Fly_Glide.tres" id="clip_5"]
+[ext_resource type="Resource" path="res://authoring/characters/rigs/summon.draconic_spirit.violet-astral/Fly_Breathe.tres" id="clip_6"]
+[ext_resource type="Resource" path="res://authoring/characters/rigs/summon.draconic_spirit.violet-astral/Ground_Hit.tres" id="clip_7"]
+[ext_resource type="Resource" path="res://authoring/characters/rigs/summon.draconic_spirit.violet-astral/Fly_Hit.tres" id="clip_8"]
+[ext_resource type="Resource" path="res://authoring/characters/rigs/summon.draconic_spirit.violet-astral/Fly_TakeOff.tres" id="clip_9"]
+[ext_resource type="Resource" path="res://authoring/characters/rigs/summon.draconic_spirit.violet-astral/Fly_Land.tres" id="clip_10"]
+[ext_resource type="Resource" path="res://authoring/characters/rigs/summon.draconic_spirit.violet-astral/Transition_Fly_to_Glide.tres" id="clip_11"]
+[ext_resource type="Resource" path="res://authoring/characters/rigs/summon.draconic_spirit.violet-astral/Transition_Glide_to_Fly.tres" id="clip_12"]
+[ext_resource type="Resource" path="res://authoring/characters/rigs/summon.draconic_spirit.violet-astral/Ground_Death.tres" id="clip_13"]
+[ext_resource type="Resource" path="res://authoring/characters/rigs/summon.draconic_spirit.violet-astral/Fly_Death.tres" id="clip_14"]
+
+[sub_resource type="Resource" id="context_walking"]
+script = ExtResource("context")
+role = "movement"
+qualifier = {"kind": "movement", "movement_mode": "walking", "trajectory": "path"}
+clip = "Ground_Walk"
+playback = "loop"
+
+[sub_resource type="Resource" id="context_flying"]
+script = ExtResource("context")
+role = "movement"
+qualifier = {"kind": "movement", "movement_mode": "flying", "trajectory": "path"}
+clip = "Fly_Cycle"
+playback = "loop"
+
+[sub_resource type="Resource" id="context_hurt"]
+script = ExtResource("context")
+role = "damage"
+qualifier = {"kind": "default"}
+clip = "Ground_Hit"
+playback = "once"
+
+[sub_resource type="Resource" id="context_death"]
+script = ExtResource("context")
+role = "death"
+qualifier = {"kind": "default"}
+clip = "Ground_Death"
+playback = "once"
+
+[resource]
+script = ExtResource("rig")
+id = "summon.draconic_spirit.violet-astral"
+kind = "fixed"
+pack = "dragons-selected-20261021"
+variant = "violet-astral"
+source = "dragon-selected-depth-normals-v1"
+cell = Vector2i(768, 768)
+pivot = Vector2(384, 448)
+anchor = Vector2(382.25, 350.0)
+feedback_anchor = "painted_body_anchor"
+camera_elevation_degrees = 45.0
+direction_order = PackedStringArray("E", "SE", "S", "SW", "W", "NW", "N", "NE")
+slot_order = PackedStringArray("body")
+slot_categories = Dictionary[String, PackedStringArray]({"body": PackedStringArray("DraconicSpiritVioletAstral")})
+clips = Array[ExtResource("clip")]([ExtResource("clip_0"), ExtResource("clip_1"), ExtResource("clip_2"), ExtResource("clip_3"), ExtResource("clip_4"), ExtResource("clip_5"), ExtResource("clip_6"), ExtResource("clip_7"), ExtResource("clip_8"), ExtResource("clip_9"), ExtResource("clip_10"), ExtResource("clip_11"), ExtResource("clip_12"), ExtResource("clip_13"), ExtResource("clip_14")])
+fallbacks = Dictionary[String, String]({"Idle": "Ground_Idle", "Walk": "Ground_Walk", "Hit": "Ground_Hit", "Death": "Ground_Death", "Die": "Ground_Death"})
+contexts = Array[ExtResource("context")]([SubResource("context_walking"), SubResource("context_flying"), SubResource("context_hurt"), SubResource("context_death")])
+shadow = "generated"
+native_wings = true
+hold_clips = PackedStringArray("Ground_Death", "Fly_Death")
+ground_pixels = 0.0
+status = "partial"
+notes = "Provisional Violet astral body for all5 actual elemental forms, all artwork/audio UNREVIEWED. Use the supplied15 source clips and120 native facing banks at source fit2, preserving canonical actor scale, source pixels, contacts, origins and clocks. Rest/hurt/death, melee gesture and Breath body are deliberately presented grounded without claiming current canonical ground/air state. Actual walking/flying MovementFacts select Ground_Walk/Fly_Cycle; no sustained flight state, glide, takeoff, landing or aerial melee is inferred. Idle painted-body anchor is a generic measured alpha anchor, never mouth/contact/solid/support. Optional source shadow is off; existing dynamic caster remains. Mouth geometry, breath release/contact and finite breath VFX remain unbound; no supplied normal/depth mask becomes solid. Matching independent-normal program and ordinary publication/native qualification remain required before activation."

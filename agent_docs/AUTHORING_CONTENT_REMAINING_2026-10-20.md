@@ -1,4 +1,4 @@
-# Remaining production content — updated 21 October 2026
+# Remaining production content — updated 22 October 2026
 
 **22 October current main-queue continuation:** recovery source is committed
 at23e14a2e; Factory source choices/Studio linkage at56b8d64c and the four
@@ -13,10 +13,43 @@ installation context. This does not relabel the earlier full188receipt or prove
 the timeout's cause. This is not full-current native/live or performance acceptance.
 [Current affected receipt](../.runtime/main-queue-20261022/native-shared-owner/summary.json). The current single R1–R8 inventory remains authoritative.
 
-Dragon depth/normals are supplied. Its independent-normal policy needs the
-existing offline equipped receiver prepared for a reviewed new source revision,
-not another art delivery/API. [Exact Factory handoff](FACTORY_DRAGON_RECEIVER_PROGRAM_HANDOFF_2026-10-22.md).
-All artwork/audio remain UNREVIEWED.
+**Latest Dragon source and affected qualification:** nine of the original
+twelve summon own-body assignments are written: four Elementals, four equipped
+Myrmidons and `summon.draconic_spirit.violet-astral`. Cambion, Deva and Djinni
+still have no identified own-body delivery. The Dragon uses600 verbatim PNGs,
+15clips/120banks/2,088poses at source fit2, with complete installed Factory
+`runtime-dragon-receiver-20261022-53075ee7ed11481f` and its matching independent-
+normal receiver policy. The sealed text namespace is committed at **ee542eaf**.
+Existing source geometry, canonical actor scale/occupancy, clocks, scheduler,
+publication and lighting remain their established owners.
+
+Current three-domain publication passes zero errors/two warnings. The first
+15-error receipt remains failed; listing all15external clips in the existing
+root Resource inventory corrects the client omission. Five real-original body/
+Arcane cases now pass **30,795 native assertions**, natural exit0/no engine or
+script errors/leftovers; Outline passes27. The old weapon control read its
+binding after `hide` correctly withdrew it; the corrected control passes119
+and checks withdrawal, ordinary re-admission and positive pixels. The full200
+fast run remains199passing/one stale Arcane oracle; its separately corrected
+handover control passes646. These are affected receipts, not a relabelled
+whole-current native/live or quiet-performance qualification.
+[Current source and grouped receipt, including initial control failures](../.runtime/main-queue-20261022/dragon-native-receiver-registered/summary.json),
+[corrected handover](../.runtime/tests/20261022T045446.793799Z/summary.json),
+[corrected weapon control](../.runtime/tests/20261022T050423.282733Z/summary.json).
+
+Grounded rest/hurt/death/Rend/Breath are explicit provisional presentation
+choices. Real walking/flying MovementFacts choose their corresponding clips.
+Authentic mouth/finite breath VFX, further aerial context and human art review
+remain partial. A fresh current Studio frame also exposes large-body clipping;
+its bounded view-framing repair is being prepared without shrinking delivered
+scale2 or changing gameplay camera. All artwork/audio remain UNREVIEWED.
+[Exact body/asset inventory](CREATURE_BODY_ASSET_GAPS_2026-10-20.md).
+
+Current Library: **388cases/383recorded/fivefailed**. New real9f Incense positive
+healing and Nimbus positive contact originals are imported, with the separate
+failed out-of-range Nimbus route preserved. Existing positive Blessed Healer/
+Destroy Undead originals retain0c provenance. Four-family native consumer
+qualification is pending; capture/import success alone is not output acceptance.
 
 **Four-family body follow-through,22October:** all equipped Myrmidons now use
 own supplied9clip rigs; source conversion and13Action/4Attack assignments are
@@ -49,8 +82,8 @@ and exposes actual audio cue/file/contact/voice policy. Missing historical
 study references stay described/unplayable; they are not invented originals
 or125mandatory capture tasks. Current recording, native output and human review
 remain separate. All art/audio are unreviewed. Latest asset notes distinguish
-assigned equipped Myrmidons from the delivered but still-unintegrated dragon
-packet and its absent anatomical mouth data.
+assigned Elemental/Myrmidon/Dragon own-body sources from the three remaining
+substitutes and the selected Dragon's absent anatomical mouth data.
 
 
 This is a source/code inventory for the approved migration, after the backend
@@ -207,9 +240,14 @@ authored choices, not accepted artwork or a native-output pass.
 **The final four body decisions are explicit provisional choices too.** Cambion
 Draining Kiss uses concrete `Attack4` on its actual `smallscale.demonelite01`
 substitute; Djinni Sweetplum Gales uses the real `Special1` on its selected6Mage;
-Draconic Spirit Breath uses the real current-T-Rex `Taunt`. Each is an actual
-ActionEvent/BaseAction route with an exact current-rig guard and its unchanged
-fifteen-pose/twelve-fps clock, without invented contact/release markers.
+Draconic Spirit Breath now selects own-rig `Ground_Breathe`,24poses at12fps,
+replacing its earlier T-Rex `Taunt` body choice. Each is an actual
+ActionEvent/BaseAction route with an exact current-rig guard and unchanged
+source clock,without invented contact/release markers. Exact public-equipped
+Draconic Rend separately selects `Ground_Attack`,16poses at12fps,with explicit
+empty anchors and an unmatched own-rig refusal instead of inherited modular
+contact8/recover10. These grounded presentations are provisional authored policy,
+not a current canonical ground/air claim.
 ConcussiveSmash is instead an actual AttackEvent: its exact Attack recipe selects
 4Paladin `Attack1` only for `creature.spell.deva`, equipped
 `weapon.spell_summon.deva`, MELEE_MAIN and that current rig. The default refuses
@@ -219,8 +257,8 @@ actual Charm consumption keep their existing child owners.
 [Exact seven-file source family and limits](../.runtime/closing-repairs/provisional-creature-action-choices/README.md),
 [source patch](../.runtime/closing-repairs/provisional-creature-action-choices/provisional-creature-action-choices.patch).
 
-The coherent current publication covers all three domains with zero errors/two
-warnings; geometry911, Attack3274 and rooted native Outline27 controls all pass
+The earlier provisional-creature publication covered all three domains with zero
+errors/two warnings; geometry911, Attack3274 and rooted native Outline27 passed
 with natural exits0, no engine/script errors or owned leftovers. The earlier
 Cambion alias refusal and native exit5 remain preserved. The corrected Cambion
 choice names the actual `Attack4` RigClip directly; no builder alias exception or
@@ -229,15 +267,21 @@ whole-current live, performance or human-art acceptance.
 [Exact publication/control receipt](../.runtime/main-queue-20261022/creature-choice-outline-final/summary.json).
 
 Authentic Cambion/Deva/Djinni bodies are still missing final-art deliveries.
-Draconic authentic mouth geometry and finite breath output remain partial; the
-current-T-Rex gesture supplies no mouth fallback and does not qualify future
-native grounded/airborne dragon-body choices. Missing final art/input data is
+Draconic authentic mouth geometry and finite breath output remain partial. The
+new own-rig grounded gestures supply no mouth fallback or inferred airborne
+state; additional aerial-context/output and artwork qualification remain open. Missing final art/input data is
 separate from these now-explicit provisional body assignments. All four actual-
 producer originals were captured once successfully, including real Cambion
 Charm followed by Draining Kiss, and imported into the ordinary Library:
 385cases/381recorded/fourfailed. Both audience journals and older failed
-originals remain preserved. Native body follow-through is pending; successful
-capture/import does not qualify rendered body or finite VFX output.
+originals remain preserved. The historical five-original native cohort had
+22,960checks/two failures,natural1/no engine or script errors/leftovers: Deva,
+Djinni,the then-T-Rex Draconic gesture and Arcane commands passed; Cambion's
+actual Charm prerequisite rejected unsupported modular weaponGlow/Magic2. That
+shared cast-layer selector repair is now applied,with new qualification pending.
+The failed receipt is unchanged and does not qualify the new Dragon banks;
+successful capture/import supplies no finite breath VFX or art acceptance.
+[Preserved failed native scope](../.runtime/main-queue-20261022/fit-registration-native/summary.json).
 [Exact four-original capture index](../.runtime/closing-repairs/provisional-creature-originals/index.json),
 [confirmed ordinary-Library import](../.runtime/closing-repairs/provisional-creature-originals/library-import.json),
 [source-reviewed single four-case original cohort](../.runtime/closing-repairs/provisional-creature-action-choices/provisional-creature-originals.patch),
@@ -571,9 +615,10 @@ finish rather than selecting one of two spell palettes.
   [the reconciled Factory status](FACTORY_REVIEW_2026-10-20.md).
 
 - **Draconic readiness:** Factory now supplies the public ready/breath-type gate
-  and matching direct constructors. The actual Draconic Spirit currently uses
-  the armoured T-Rex body, whose current socket metadata has no authored mouth.
-  The delivered four Head1/Idle/frame1 source pixels cannot stand in for it.
+  and matching direct constructors. The actual Draconic Spirit source now selects
+  the Violet astral own-body rig,whose current source/pose metadata has no
+  authentic mouth socket or bounded optical region. The supplied generic body
+  anchor and four Head1/Idle/frame1 source pixels cannot stand in for it.
   The shared consumer must report absent authentic mouth geometry until the
   actual body/pose socket and bounded optical region are authored. This is
   client asset data, not another private-grant/backend API request.
@@ -647,8 +692,9 @@ finish rather than selecting one of two spell palettes.
   `generated/reports/ui-art-coverage.json`; internal or explicitly permitted
   stand-ins need a truthful disposition, not automatic replacement.
   The separate [exact creature-body inventory](CREATURE_BODY_ASSET_GAPS_2026-10-20.md)
-  names the twelve summon stand-ins, including Dragon, and distinguishes those
-  assignments from the wider 63 flagged creature-body population.
+  tracks the original twelve summon substitutions: nine own-body assignments
+  including Dragon and three unidentified own deliveries. It distinguishes
+  those source choices from the historical wider63flagged-body population.
 
 Authority and evidence: the approved
 [plan](SCHEMA_AUTHORING_CONDITIONS_STUDIO_PLAN_2026-10-19.md), current typed

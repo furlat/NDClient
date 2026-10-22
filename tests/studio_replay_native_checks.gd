@@ -286,9 +286,10 @@ func verify_body_geometry(studio:Control,label:String)->void:
             var owner:Array=index.source_owners.get(path,[])
             var layer:Resource=BodyGeometryProof.BodySources.prepared_layer(str(owner[0]),world.catalog_cache) if not owner.is_empty() else null
             var clip:String=str(world.playbacks[actor_id].clip)
+            var frame_key:Array=entry.get("bound_frame_key",[])
             check((world.timeline.state.actors.has(actor_id) or staged.has(actor_id))
-                and layer!=null and layer.rig_id==rig_id
-                and entry.actor_layer.paths.get(clip,"")==path,
+                and layer!=null and layer.rig_id==rig_id and frame_key.size()>=3
+                and Recording.Characters.source_path(entry.actor_layer,clip,str(frame_key[2]))==path,
                 label+": actual visible actor/rig/clip owns this exact whole-body source: "+str(actor_id)+" "+rig_id+" "+clip)
             check(not str(source.get("status","")).is_empty() and entry.get("geometry_status")==source.status
                 and material.get_shader_parameter("has_component_geometry")==true
@@ -325,6 +326,7 @@ func authored_attack_bodies(index:Dictionary,scenario:Dictionary,label:String)->
     var result:Array=[]
     var root_source:Resource=load("res://authoring/abilities.tres")
     var selected:Array=[]
+    var declared_creatures:Array=scenario.get("subjects",{}).get("creature",[])
     for behavior in scenario.get("required_behaviors",[]):
         var path:String=str(root_source.sections.get("attacks",{}).get(behavior,""))
         if path.is_empty():continue
@@ -332,7 +334,8 @@ func authored_attack_bodies(index:Dictionary,scenario:Dictionary,label:String)->
         # Only an explicit creature/own-rig assignment belongs to this control;
         # generic attack templates and effect-bodied finite strikes keep theirs.
         if entry.variants.any(func(variant):return variant.body!=null and variant.body.enabled \
-                and not variant.body.rig.is_empty() and not variant.match.get("creatureIds",[]).is_empty()):
+                and not variant.body.rig.is_empty() \
+                and variant.match.get("creatureIds",[]).any(func(creature):return creature in declared_creatures)):
             selected.append({"behavior":behavior,"path":path,"entry":entry})
     if selected.is_empty():return result
     var journal=Recording.Journal.new()
@@ -432,14 +435,25 @@ func observed_attack_body(world:Node,requirement:Dictionary,observed:Dictionary)
             if entry.role=="shadow" or entry.actor_layer.slot!="body" or not entry.actor_layer.get("effect",{}).is_empty() or not world.component_renderer._entry_visible(world,entry):continue
             var material:ShaderMaterial=entry.material
             var path:String=str(entry.get("texture_path",""));var frame_key:Array=entry.get("bound_frame_key",[])
-            if path.is_empty() or entry.actor_layer.paths.get(requirement.clip,"")!=path or not world.textures.has(path) or not world.source_images.has(path) or frame_key.size()<3:continue
+            if path.is_empty() or not world.textures.has(path) or not world.source_images.has(path) or frame_key.size()<3:continue
+            if Recording.Characters.source_path(entry.actor_layer,requirement.clip,str(frame_key[2]))!=path:continue
             if int(frame_key[1])!=frame or not is_same(frame_key[0],world.textures[path]) or not is_same(material.get_shader_parameter("sheet"),world.textures[path]):continue
             if float(material.get_shader_parameter("condition_alpha"))<=0.0 or float(material.get_shader_parameter("layer_alpha"))<=0.0:continue
             var rig:Dictionary=world.rigs[requirement.rig];var image:Image=world.source_images[path]
             var uv:Vector4=material.get_shader_parameter("frame_uv")
             var expected:=Vector4(float(frame)*rig.cell_width/image.get_width(),float(rig.facing_rows[frame_key[2]])*rig.cell_height/image.get_height(),float(rig.cell_width)/image.get_width(),float(rig.cell_height)/image.get_height())
+            var frame_rect:=Rect2i(frame*int(rig.cell_width),int(rig.facing_rows[frame_key[2]])*int(rig.cell_height),int(rig.cell_width),int(rig.cell_height))
+            var layout:Dictionary=entry.get("source_layout",{})
+            if not layout.is_empty():
+                var admitted:Dictionary=BodyGeometryProof.BodySources.descriptor(path,"body",world.catalog_cache)
+                if admitted.get("source_layout",{})!=layout or frame>=layout.frame_rects.size() \
+                        or image.get_size()!=Vector2i(layout.sheet_size[0],layout.sheet_size[1]):continue
+                var rect:Array=layout.frame_rects[frame]
+                frame_rect=Rect2i(rect[0],rect[1],rect[2],rect[3])
+                expected=Vector4(float(rect[0])/image.get_width(),float(rect[1])/image.get_height(),float(rect[2])/image.get_width(),float(rect[3])/image.get_height())
+                if material.get_shader_parameter("material_cell_size")!=Vector2(layout.cell[0],layout.cell[1]):continue
             if not uv.is_equal_approx(expected):continue
-            var original:Image=image.get_region(Rect2i(frame*int(rig.cell_width),int(rig.facing_rows[frame_key[2]])*int(rig.cell_height),int(rig.cell_width),int(rig.cell_height)))
+            var original:Image=image.get_region(frame_rect)
             original.convert(Image.FORMAT_RGBA8)
             var pixels:int=0;var bytes:PackedByteArray=original.get_data()
             for at in range(3,bytes.size(),4):
@@ -501,14 +515,25 @@ func observed_action_bodies(world:Node,required:Array,observed:Dictionary)->void
                 if entry.role=="shadow" or entry.actor_layer.slot!="body" or not entry.actor_layer.get("effect",{}).is_empty() or not world.component_renderer._entry_visible(world,entry):continue
                 var material:ShaderMaterial=entry.material
                 var path:String=str(entry.get("texture_path",""));var frame_key:Array=entry.get("bound_frame_key",[])
-                if path.is_empty() or entry.actor_layer.paths.get(requirement.clip,"")!=path or not world.textures.has(path) or not world.source_images.has(path) or frame_key.size()<3:continue
+                if path.is_empty() or not world.textures.has(path) or not world.source_images.has(path) or frame_key.size()<3:continue
+                if Recording.Characters.source_path(entry.actor_layer,requirement.clip,str(frame_key[2]))!=path:continue
                 if int(frame_key[1])!=frame or not is_same(frame_key[0],world.textures[path]) or not is_same(material.get_shader_parameter("sheet"),world.textures[path]):continue
                 if float(material.get_shader_parameter("condition_alpha"))<=0.0 or float(material.get_shader_parameter("layer_alpha"))<=0.0:continue
                 var rig:Dictionary=world.rigs[requirement.rig];var image:Image=world.source_images[path]
                 var uv:Vector4=material.get_shader_parameter("frame_uv")
                 var expected:=Vector4(float(frame)*rig.cell_width/image.get_width(),float(rig.facing_rows[frame_key[2]])*rig.cell_height/image.get_height(),float(rig.cell_width)/image.get_width(),float(rig.cell_height)/image.get_height())
+                var frame_rect:=Rect2i(frame*int(rig.cell_width),int(rig.facing_rows[frame_key[2]])*int(rig.cell_height),int(rig.cell_width),int(rig.cell_height))
+                var layout:Dictionary=entry.get("source_layout",{})
+                if not layout.is_empty():
+                    var admitted:Dictionary=BodyGeometryProof.BodySources.descriptor(path,"body",world.catalog_cache)
+                    if admitted.get("source_layout",{})!=layout or frame>=layout.frame_rects.size() \
+                            or image.get_size()!=Vector2i(layout.sheet_size[0],layout.sheet_size[1]):continue
+                    var rect:Array=layout.frame_rects[frame]
+                    frame_rect=Rect2i(rect[0],rect[1],rect[2],rect[3])
+                    expected=Vector4(float(rect[0])/image.get_width(),float(rect[1])/image.get_height(),float(rect[2])/image.get_width(),float(rect[3])/image.get_height())
+                    if material.get_shader_parameter("material_cell_size")!=Vector2(layout.cell[0],layout.cell[1]):continue
                 if not uv.is_equal_approx(expected):continue
-                var original:Image=image.get_region(Rect2i(frame*int(rig.cell_width),int(rig.facing_rows[frame_key[2]])*int(rig.cell_height),int(rig.cell_width),int(rig.cell_height)))
+                var original:Image=image.get_region(frame_rect)
                 original.convert(Image.FORMAT_RGBA8)
                 var pixels:int=0;var bytes:PackedByteArray=original.get_data()
                 for at in range(3,bytes.size(),4):

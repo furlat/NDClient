@@ -8,8 +8,8 @@
 [sub_resource type="Resource" id="Resource_xfids"]
 script = ExtResource("1_c6002")
 role = "attack"
-clip = "Taunt"
-rig = "smallscale.dinosaurs.elite-armored-t-rex"
+clip = "Ground_Breathe"
+rig = "summon.draconic_spirit.violet-astral"
 hidden_slots = PackedStringArray()
 
 [sub_resource type="Resource" id="Resource_yjoth"]
@@ -30,4 +30,4 @@ icon = SubResource("Resource_yjoth")
 body = SubResource("Resource_xfids")
 effect_sources = PackedStringArray()
 status = "partial"
-notes = "Deliberate partial body gesture only for the current armoured-T-Rex substitute, using its real Taunt clip at its supplied fifteen-pose/twelve-fps clock with no inferred contact, release or mouth marker. The actual NativeSaveBurst remains an Action with real saves/damage children. This does not provide authentic mouth geometry, mouth readiness, a breath origin, finite breath VFX or a grounded/airborne dragon-body choice. The exact rig guard refuses this gesture after a future body replacement until that body is deliberately authored. Authentic mouth data, native dragon ground/air presentation and all art/audio remain unreviewed."
+notes = "Deliberate partial body gesture for the selected Violet astral own rig using supplied Ground_Breathe24 at12fps, no contact/release markers. The actual NativeSaveBurst remains ActionFact with real save/damage children. This is explicit provisional grounded body presentation, not a current canonical ground/air inference; exact rig guard refuses other body assignments. No authentic mouth/hand geometry, breath origin, finite breath VFX or flying breath selection is supplied. Source images/clocks remain exact; all artwork/audio remain unreviewed."

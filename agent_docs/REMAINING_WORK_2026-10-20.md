@@ -16,7 +16,72 @@ all 130 alternative dispositions stay implemented; stale worklists do not
 reopen them. All artwork/audio remain unreviewed. Engine/Factory sources stay
 read-only; no mutable backend/schema upgrade is implied by the new handoff.
 
-## Current native source registration and unavailable Arcane placement — 22 October
+## Current Dragon/body receiver batch — 22 October
+
+Complete Factory `runtime-dragon-receiver-20261022-53075ee7ed11481f` is installed
+with a12f preserved. It retains1,246clip IDs/504defaults, supplies81typed rows,
+465corrected static-condition Scene warm bindings and the exact prepared receiver
+aliases requested for independent normals. The paired client policy is applied;
+old sources retain coupled depth/normal admission by default. No renderer,
+scheduler, publication owner, lighting equation or clock is replaced. The runtime
+and offline source audit now follow the same selected source table.
+
+Draconic Spirit selects its own `summon.draconic_spirit.violet-astral` rig:
+15clips/120actual facing banks/2,088poses,600verbatim supplied PNGs. Existing
+source fit2 preserves canonical actor scale/size/footprint and original pixels,
+contacts, optical origins and clocks. Grounded rest/hurt/death/Rend/Breath are
+explicit provisional presentation choices, not canonical ground-state claims.
+The real public equipped Rend selects Ground_Attack16@12; its own-rig unmatched
+guard disables unrelated bodies, and empty anchors remove inherited modular
+8/10markers. Actual walking/flying MovementFacts select their own source clips.
+No mouth, breath contact/release, finite breath VFX or sustained airborne state
+is fabricated. Nine of the original twelve own-body assignments are now present;
+Cambion, Deva and Djinni still lack an identified own-body art delivery.
+[Exact body/asset boundaries](CREATURE_BODY_ASSET_GAPS_2026-10-20.md).
+
+Cambion's fixed-rig Charm prerequisite now selects only cast overlay slots and
+categories that its actual rig can own. The shared constructor still refuses
+independently supplied invalid layers; compatible modular casts retain their
+existing layers/body clocks. No per-creature renderer branch is added.
+
+Current three-domain publication passes **zero errors/two warnings**, retaining
+the same four UTF-8 notices. The initial15-error publication remains failed:
+all15new external RigClip Resources needed listing in the existing root inventory.
+One `rig_clips` section corrects that data omission without weakening the scanner
+or adding a consumer. The complete200fast run has199passes/one old Arcane
+handover oracle failure; its one corrected control passes646 with natural exit0.
+The full receipt stays failed. Five real-original own-body/Arcane cases pass
+30,795native assertions, natural exit0/no engine or script errors/leftovers;
+native Outline passes27. The first weapon-surface control reads a binding after
+`hide` correctly withdrew it, producing a retained script error. Its repaired
+control proves actual withdrawal/ordinary re-admission and positive pixels in
+all119assertions, natural exit0/no errors/leftovers. No product workaround or
+Factory defect was inferred from that stale control.
+[Preserved root-registration failure](../.runtime/main-queue-20261022/dragon-native-receiver/summary.json),
+[corrected source/grouped receipt, including initial control failures](../.runtime/main-queue-20261022/dragon-native-receiver-registered/summary.json),
+[complete fast receipt](../.runtime/tests/20261022T044634.355067Z/summary.json),
+[corrected handover control](../.runtime/tests/20261022T045446.793799Z/summary.json),
+[corrected weapon control](../.runtime/tests/20261022T050423.282733Z/summary.json).
+
+A fresh actual Dragon frame exposes a remaining R4 issue: the default Studio
+camera can clip newly admitted large body artwork. Delivered scale2 is retained;
+automatic preview framing is a separate client follow-through, without changing
+gameplay camera or canonical occupancy. The body/source witnesses above do not
+qualify framing, final artwork, whole-current native/live or quiet performance.
+[Current captured frame](../.runtime/main-queue-20261022/dragon-native-receiver-registered/captures/creature.spell.draconic_spirit-current_stand_in_intrinsic_retirement-55-primary.png).
+
+The current Library is **388cases/383recorded/fivefailed**. Three new exact9f
+originals are imported: positive Incense spatial healing, the failed out-of-range
+Nimbus route and its separately identified offered5ft approach with real10Radiant
+contact. Both positive results name their actual disclosed spatial/condition UUID.
+Existing positive Blessed Healer/Destroy Undead originals retain their0c producer
+identities and are reused; no recapture, forced outcome or new fixture framework.
+Their four-family current native consumer proof is next; successful original
+capture/import alone does not qualify output. All artwork/audio remain unreviewed.
+[Four-family literal result ledger](../.runtime/closing-repairs/class-passive-result-originals/four-family-original-ledger.json),
+[exact import](../.runtime/closing-repairs/class-passive-result-originals/library-import.json).
+
+## Earlier source-registration checkpoint ae4fb4a6 — 22 October
 
 The existing native source path now consumes uniform `ArtSource.scale` through
 prepared and direct geometry, optical units, bounds/picking, sockets, retained

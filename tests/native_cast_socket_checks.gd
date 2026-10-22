@@ -6,6 +6,7 @@ const Records=preload("res://tools/presentation_build/ability_records.gd")
 const Native=preload("res://presentation/native_spell_renderer.gd")
 const Timeline=preload("res://presentation/timeline.gd")
 const Construction=preload("res://presentation/actor_construction.gd")
+const Components=preload("res://presentation/components.gd")
 class Lighting extends RefCounted:
     var native_preparation_ready:bool=true
     func sample_handles(_handles:Dictionary)->void:pass
@@ -43,6 +44,24 @@ func component(recipe:Dictionary)->Dictionary:
         "from_position":[3,4],"to_position":[3,4],"from_elevation_feet":10.0,"to_elevation_feet":10.0,
         "cast_recipe":recipe.cast,"recipe":recipe.get("projectile",{}),
         "native_cue":{"role":"attached","attachment":"caster_ground","launch":1.0,"live_endpoints":[{"actor":"caster","socket":"cast_hand"}]}}
+## Passive actual-source selector operands, not fabricated producer actors.
+## The original Cambion Charm/Kiss bytes remain a separate native replay duty.
+func cast_overlay_compatibility(cache:Dictionary)->void:
+    var recipe:Dictionary=Components.NativeSpells.recipe({"behavior_id":"spell.charm_person"},cache)
+    var original:PackedByteArray=var_to_bytes(recipe)
+    var modular:Array=Components.cast_layers(recipe.cast,{"creature_content_ref":null},cache)
+    check(modular.size()==1 and modular[0].slot=="weaponGlow" and modular[0].category=="Magic2",
+        "Actual Charm keeps its compatible selected modular hand layer without the disabled caster aura")
+    var fixed:Array=Components.cast_layers(recipe.cast,{"creature_content_ref":"creature.spell.cambion"},cache)
+    check(fixed.is_empty(),"A fixed demon rig never inherits unsupported modular Magic2 or aura layers")
+    check(var_to_bytes(recipe)==original and recipe.cast.actionClip=="Attack5",
+        "Rig-compatible overlay selection leaves the authored cast body, timing and source recipe unchanged")
+    if modular.is_empty():return
+    var invalid:Dictionary={"creature_content_ref":"creature.spell.cambion","appearance":{},"presentation_layers":[modular[0]]}
+    var refused:Dictionary=Characters.structure(invalid,cache)
+    check(not refused.ok and refused.error.message=="Unsupported authored rig layer weaponGlow/Magic2",
+        "The constructor still refuses independently supplied invalid layers instead of silently hiding bad source data")
+
 func run()->void:
     var world:World=World.new();root.add_child(world)
     world.camera=Camera3D.new();world.add_child(world.camera)
@@ -50,6 +69,7 @@ func run()->void:
     var rig_id:String="neuroclient.modular"
     check(world.rigs.has(rig_id),"Test uses the actual shipping modular rig")
     if not world.rigs.has(rig_id):finish(world);return
+    cast_overlay_compatibility(world.catalog_cache)
     var rig:Dictionary=world.rigs[rig_id]
     var row:Dictionary={"id":"caster","rig":rig_id,"position":[3,4],"base_height_steps":2.0,"scale":1.0,"facing":"SW"}
     var shape:Dictionary=Construction.layer_shape(rig,128.0/float(world.rig_config.TILE_W)*row.scale)

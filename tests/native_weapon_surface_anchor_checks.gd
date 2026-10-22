@@ -117,15 +117,30 @@ func pixels(world:Node,view:SubViewport,components:Array,label:String)->void:
     for component in components:
         var handle:Dictionary=native.handles[component.id]
         await frame();await frame();world.set_process(false)
+        # Hide withdraws the source's real binding; retain only observed evidence.
+        var binding:Dictionary=handle.occurrence.receiving.weapon_binding.duplicate(true)
+        var slot:String=handle.endpoints.weapon_registration.weapon.render_slot
+        var owner:Node3D=handle.occurrence
+        check(binding.get("render_slot")==slot and binding.get("item_uuid")==component.item_owner_uuid \
+            and binding.get("holder_uuid")==component.actor_uuid,"Pixel control starts from the exact admitted item/holder/slot")
         var shown:Image=view.get_texture().get_image()
         Effects.hide(handle);await frame();await frame()
+        check(handle.occurrence.receiving.weapon_binding.is_empty() and not handle.occurrence.receiving.admitted_geometry,
+            "Hide withdraws this measured item's actual receiver admission")
         var hidden:Image=view.get_texture().get_image();var count:int=changed(shown,hidden)
-        check(count>0,"Exact real "+handle.occurrence.receiving.weapon_binding.render_slot+" source contributes pixels: "+label)
-        var stem:String="res://.runtime/weapon-surface-captures/"+label+"-"+handle.occurrence.receiving.weapon_binding.render_slot
+        check(count>0,"Exact real "+slot+" source contributes pixels: "+label)
+        var stem:String="res://.runtime/weapon-surface-captures/"+label+"-"+slot
         shown.save_png(stem+"-shown.png");hidden.save_png(stem+"-hidden.png")
         evidence.append({"cut":label,"at_ms":world.timeline.display_ms,"item_uuid":component.item_owner_uuid,"pixels":count,
-            "binding":handle.occurrence.receiving.weapon_binding.duplicate(true),"capture":stem+"-shown.png"})
-        handle.root.show();world.set_process(true)
+            "binding":binding,"capture":stem+"-shown.png"})
+        world.set_process(true)
+        var restored:bool=await Support.settle(self,world,[component.id])
+        check(restored,"Ordinary presenter restores the withdrawn real item source: "+label+"/"+slot)
+        if not restored:return
+        check(native.handles[component.id].occurrence==owner \
+            and native.handles[component.id].occurrence.receiving.weapon_binding==binding \
+            and native.handles[component.id].occurrence.receiving.admitted_geometry,
+            "Re-entry restores the same occurrence and exact actual binding after native draw")
 
 func close_world(world:Node,view:SubViewport)->void:
     world.component_renderer.native_spells.close(world)
