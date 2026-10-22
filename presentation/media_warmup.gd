@@ -1677,6 +1677,7 @@ static func _drawable(actor: Dictionary) -> bool:
 static func _actor_base(actor: Dictionary, clips: Array, cache: Dictionary, errors: Array, looks:Dictionary={}) -> Dictionary:
     if not _drawable(actor): return {}
     if Characters.effect_owned(actor,cache):return {}
+    for condition in actor.get("conditions",[]):Conditions.prepare_geometry_metadata(condition,cache)
     var wanted = clips.duplicate()
     var rigs: Dictionary = Characters.rigs(cache)
     var rig = Characters.rig_id(actor,cache)
@@ -1831,6 +1832,9 @@ static func _add_actor_once(paths: Dictionary, actor: Dictionary, clips: Array, 
         if not is_same(prior.actor,actor) or prior.looks!=looks:continue
         if is_same(prior.paths,paths) and prior.clips==clips:return
         selector=prior.get("selector",[])
+    # A new owner can reuse the same artwork closure while selecting different
+    # receiver metadata. Admit its actual conditions before borrowing that base.
+    for condition in actor.get("conditions",[]):Conditions.prepare_geometry_metadata(condition,cache)
     if selector.is_empty():
         var prior:Dictionary=reuse.get("selected_actors",{}).get(actor.uuid,reuse.get("selectors",{}).get(actor.uuid,{}))
         selector=prior.selector if _same_actor_source_inputs(prior.get("actor",{}),actor) and prior.get("looks",{})==looks else _actor_selector(actor,cache,looks)

@@ -601,6 +601,9 @@ static func _validate(entries: Dictionary, report: Dictionary) -> void:
                 Common.error(report,"abilities/conditions/"+id,"public readiness requires an explicit scoped current mouth receiving source")
             elif region.get("status")=="missing":
                 Common.warn(report,"abilities/conditions/"+id,"authentic_mouth_region_not_authored; public gate/source opt-in does not supply anatomical pixels")
+            elif region.get("kind")=="authored_pixels":
+                var issue:String=_authored_mouth_error(e.lifecycle_geometry,id)
+                if not issue.is_empty():Common.error(report,"abilities/conditions/"+id,issue)
             elif region.get("socket")!="mouth" or not is_finite(float(region.get("radius_cells",0.0))) or float(region.get("radius_cells",0.0))<=0.0:
                 Common.error(report,"abilities/conditions/"+id,"scoped optical region requires authored source placement")
         for response in e.responses:
@@ -1589,6 +1592,32 @@ static func _check_lifecycle_selections(conditions:Dictionary,package:Dictionary
                     Common.error(report,where,"explicit lifecycle phase needs its real owner clock and declared recipient mount input: "+str(key)+"/"+phase)
                 if "appearance_provider" in inputs and entry.appearance_layers.is_empty():
                     Common.error(report,where,"explicit appearance lifecycle needs its actual recipient outfit declaration: "+str(key)+"/"+phase)
+
+## This route selects the installed Dragon's authored source pixels. It is
+## deliberately separate from socket/radius regions and optional body imports.
+static func _authored_mouth_error(geometry:Dictionary,condition_id:String)->String:
+    const OVERLAY="res://dragon_overlay/index.json"
+    if not FileAccess.file_exists(OVERLAY):return "authored mouth overlay is not installed"
+    var overlay:Variant=JSON.parse_string(FileAccess.get_file_as_string(OVERLAY))
+    if not overlay is Dictionary or overlay.get("schema")!="factory.dragon_creature_overlay.v1":return "authored mouth overlay identity is unavailable"
+    var mouth:Dictionary=overlay.get("mouth",{})
+    var region:Dictionary=geometry.get("region",{})
+    if geometry.get("actor")!="target" or geometry.get("slots")!=["body"] \
+        or region.get("id")!="mouth" or region.get("status")!="authored" or region.get("kind")!="authored_pixels" \
+        or region.get("layout")!="selected768" or region.get("rig")!=mouth.get("rig") or condition_id!=mouth.get("condition_id"):
+        return "authored mouth requires its exact selected Dragon body/condition/768 registration"
+    if region.get("table")!=mouth.get("data") or region.get("receiver_inputs")!=mouth.get("receiver_inputs"):
+        return "authored mouth requires its installed pixel table and receiver inputs"
+    for path in [str(region.get("table","")),str(region.get("receiver_inputs","")),str(mouth.get("helper",""))]:
+        if path.is_empty() or not FileAccess.file_exists(path):return "authored mouth input is unavailable: "+path
+    var table:Variant=JSON.parse_string(FileAccess.get_file_as_string(region.table))
+    if not table is Dictionary or table.get("schema")!="dragon_mouth.authored_surfaces.v1" or table.get("banks",{}).is_empty():
+        return "authored mouth pixel registrations are unavailable"
+    var receivers:Variant=JSON.parse_string(FileAccess.get_file_as_string(region.receiver_inputs))
+    if not receivers is Dictionary or receivers.get("schema")!="factory.dragon_mouth.receiver_inputs.v1" \
+        or receivers.get("condition_id")!=condition_id or receivers.get("rig")!=region.rig or receivers.get("rows",[]).is_empty():
+        return "authored mouth receiver inputs do not match its condition and rig"
+    return ""
 
 ## This delivered table is authoring input only. Runtime recipes retain the
 ## explicit public gate/direct-constructor pairing; no second runtime loader.

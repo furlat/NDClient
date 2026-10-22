@@ -396,6 +396,7 @@ func sample(world:Node,components:Array,frame_seconds:float)->void:
     sample_phase=Time.get_ticks_usec()
     var retained=_queued_ids(world)
     for id in active:retained[id]=true
+    inputs.retire(retained)
     for id in handles.keys():
         if not retained.has(id):Inputs.release_departure(handles[id]);Effects.close(handles[id]);handles.erase(id);diagnostics.erase(id);preparation_revision+=1
         elif not active.has(id):

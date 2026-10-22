@@ -871,6 +871,7 @@ static func _interrupted_draw_cut(group:Dictionary,commit:Dictionary,owners:Dict
 
 static func _native_requirement_cut(group: Dictionary, previous: Dictionary, owners: Dictionary,
         areas: Dictionary, at_ms: float, local_ms: float, cache: Dictionary,item_owners:Dictionary={},item_state:Dictionary={},grants:Dictionary={}) -> void:
+    for owner in owners.values():Conditions.prepare_geometry_metadata(owner.condition,cache)
     var samples: Array = Conditions.samples(owners,at_ms,cache,{},false)
     samples.append_array(Conditions.NativePersistent.spatial_samples(areas,at_ms,cache))
     samples.append_array(NativeItems.samples(item_owners,item_state,at_ms))

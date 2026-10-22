@@ -228,17 +228,29 @@ static func lifecycle_samples(common:Dictionary,selections:Array,cache:Dictionar
         var opt_ins:Array=common.get("recipe",{}).get("persistent",{}).get("lifecycleOptIns",[])
         var public_rows:Array=opt_ins.filter(func(row):return row.key==selection.key)
         var public_source:Dictionary=public_rows[0] if public_rows.size()==1 else {}
+        var region:Dictionary=common.get("recipe",{}).get("persistent",{}).get("lifecycleGeometry",{}).get("region",{})
+        var authored_pixels:bool=not public_source.is_empty() and region.get("kind")=="authored_pixels" and region.get("status")=="authored"
+        var receiver_path:String=str(region.get("receiver_inputs","")) if authored_pixels else ""
+        var receivers:Dictionary=cache.get(receiver_path,{}) if authored_pixels else {}
         var phases:Dictionary={}
         if public_source.is_empty():
             for phase in ["application","sustain","removal"]:phases[phase]=Effects.clip(str(lifecycle.phases[phase]))
         else:
             var source_key:String="public-condition-lifecycle:"+str(selection.key)+":"+str(common.recipe.get("_resource_source",""))
+            # An early display sample may precede its passive metadata snapshot.
+            # The admitted variant must not borrow those constructor defaults.
+            if not receivers.is_empty():source_key+=":"+receiver_path
             if not cache.has(source_key):
                 var selected:Dictionary={}
                 for phase in ["application","sustain","removal"]:
                     var source:Dictionary=public_source.phases[phase]
                     var clip:Dictionary=Effects.clip(str(source.clip_id)).duplicate(false)
                     clip.approach_id=str(source.approach_id);clip.seconds=float(source.source_seconds)
+                    var matching:Array=receivers.get("rows",[]).filter(func(row):return row.get("clip_id")==clip.get("id") and row.get("phase")==phase)
+                    if matching.size()==1:
+                        var operands:Array=clip.get("construction_inputs",[]).duplicate()
+                        operands.append_array(matching[0].native_constructor_inputs)
+                        operands.make_read_only();clip.construction_inputs=operands
                     selected[phase]=clip
                 cache[source_key]=selected
             phases=cache[source_key]
@@ -290,6 +302,10 @@ static func lifecycle_samples(common:Dictionary,selections:Array,cache:Dictionar
         if not public_source.is_empty():
             row.native_readiness_gate=public_source.event_gate
             row.native_observation_revision=int(common.get("observation_revision",0))
+            if authored_pixels and receivers.is_empty():
+                row.status="missing";row.reason="authored_receiver_metadata_unavailable"
+            if phases.application.has("construction_inputs"):
+                row.native_constructor_inputs=phases.application.construction_inputs
         result.append(row)
     return result
 

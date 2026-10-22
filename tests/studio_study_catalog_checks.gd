@@ -44,9 +44,9 @@ func run()->void:
     for asset in migration.assets:check(index.has(asset.asset_id),"Unmapped VFX source remains visible: "+asset.asset_id)
     check(index.has("spell.aegis_spark") and index["spell.aegis_spark"].requirements.any(func(row):return row.status=="missing"),"Spell with missing draft is visible without a replay or render implementation")
     check(index["spell.aegis_spark"].scenarios.is_empty(),"No generic invented study fills an unauthored spell sequence")
-    # The active Studio library now joins schema16 capabilities and original
-    # current journals. Old generated native-spell-* IDs are not a second
-    # playback library and cannot authorize a recording fallback.
+    # The active Studio library joins current capabilities with original journals
+    # under their exact current or archived producer contract. Old generated
+    # native-spell-* IDs are not a second playback library or recording fallback.
     var current:Dictionary=Cases.catalog()
     var original_records:PackedByteArray=var_to_bytes(current.records)
     Study.join_library(current,built)
@@ -61,13 +61,16 @@ func run()->void:
         and current.by_key["spell:spell.fireball"].requirements.all(func(requirement):return not requirement.rendered),"Current selected spell methods are visible in the main Library without rendered promotion")
     var goblin:Dictionary=current.by_key["creature:creature.goblin"]
     check(goblin.requirements.any(func(requirement):return requirement.source==goblin.source_path),"An actual creature's existing owner-prefixed methods join through its exact selected Resource")
+    var wire_fields:Array=["protocol_version","player_schema_version","schema_digest"]
+    var supported_contracts:Array=[Cases._read("res://sdk/protocol-identity.json")]
+    for paths in Cases.Journal.Protocol.RECORDED_CONTRACTS:supported_contracts.append(Cases._read(paths[1]))
     for id in NATIVE_SPELLS:
         var key:String="spell:spell."+id
         check(current.by_key.has(key),"Native recording retains the actual current spell capability: "+id)
         if not current.by_key.has(key):continue
         var capability:Dictionary=current.by_key[key]
         var sequences:Array=capability.cases.filter(func(row):return "spell."+id in row.subjects.get("spell",[]) and row.ready)
-        check(not sequences.is_empty(),"Each previously selected spell retains an openable real same-contract study: "+id)
+        check(not sequences.is_empty(),"Each previously selected spell retains an openable real study under an admitted producer contract: "+id)
         var identities:Dictionary={}
         for record in sequences:
             check(not identities.has(record.id),"Real study identity appears once for its exact capability: "+id)
@@ -77,7 +80,10 @@ func run()->void:
             check(record.perspectives.map(func(view):return view.id)==expected_seats,"Every actual independent recorded seat remains selectable: "+id+" / "+record.id)
             for view in record.perspectives:
                 var packet:Dictionary=JSON.parse_string(FileAccess.get_file_as_string(view.journal.path_join("0000000000000000.json")))
-                check(packet.protocol.player_schema_version==16,"Study uses an original schema16 initialization: "+id+" / "+view.id)
+                check(wire_fields.all(func(field):return packet.protocol.has(field) \
+                    and packet.protocol[field]==record.capture_engine.get(field)),"Original initialization matches its recorded producer contract: "+id+" / "+record.id+" / "+view.id)
+                check(supported_contracts.any(func(identity):return wire_fields.all(func(field):return packet.protocol.has(field) \
+                    and packet.protocol[field]==identity.get(field))),"Original study uses an exact supported current or archived contract: "+id+" / "+record.id+" / "+view.id)
         check(sequences.any(func(record):return record.perspectives.map(func(view):return view.id)==["amber","blue"]),"An original independent Amber/Blue spell study remains selectable: "+id)
         check(capability.scenario_status=="recorded","Real admitted spell study reports its scenario coverage: "+id)
         if capability.cases.all(func(row):return row.get("presentation",{}).is_empty()):

@@ -1,0 +1,443 @@
+{
+  "schema": "factory.dragon_creature_overlay.v1",
+  "version": "dragon-mouth-20261022-6172f0936bd5df0f",
+  "source_manifest": "res://dragon_overlay/source_manifest.json",
+  "source_manifest_sha256": "3f4c41d29a22d35cb706da5941880029a19281f4010db339dece03c99faa1926",
+  "data_root": "",
+  "actor": "res://factory/components/dragon_texture_ready/actor_v2.gd",
+  "residency": "res://factory/components/dragon_texture_ready/residency_admission_v2.gd",
+  "data_root_policy": "Empty metadata-key prefix for the existing Actor.texture argument construction, NOT a PNG folder or disk fallback. Native texture lookup trims the leading slash then uses exact manifest relative source_paths.",
+  "readiness": "res://factory/components/dragon_texture_ready/readiness_v2.gd",
+  "numeric_bank_script": "res://factory/components/dragon_texture_ready/bank_v2.gd",
+  "bank_paths": {
+    "Ground_Idle/000": "res://authoring/production-review-repair-20261022/dragon_texture_ready/roster_v1/assets/ground_idle-000.res",
+    "Ground_Idle/045": "res://authoring/production-review-repair-20261022/dragon_texture_ready/roster_v1/assets/ground_idle-045.res",
+    "Ground_Idle/090": "res://authoring/production-review-repair-20261022/dragon_texture_ready/v1/assets-v2/ground_idle-090.res",
+    "Ground_Idle/135": "res://authoring/production-review-repair-20261022/dragon_texture_ready/roster_v1/assets/ground_idle-135.res",
+    "Ground_Idle/180": "res://authoring/production-review-repair-20261022/dragon_texture_ready/roster_v1/assets/ground_idle-180.res",
+    "Ground_Idle/225": "res://authoring/production-review-repair-20261022/dragon_texture_ready/roster_v1/assets/ground_idle-225.res",
+    "Ground_Idle/270": "res://authoring/production-review-repair-20261022/dragon_texture_ready/roster_v1/assets/ground_idle-270.res",
+    "Ground_Idle/315": "res://authoring/production-review-repair-20261022/dragon_texture_ready/roster_v1/assets/ground_idle-315.res",
+    "Ground_Walk/000": "res://authoring/production-review-repair-20261022/dragon_texture_ready/roster_v1/assets/ground_walk-000.res",
+    "Ground_Walk/045": "res://authoring/production-review-repair-20261022/dragon_texture_ready/roster_v1/assets/ground_walk-045.res",
+    "Ground_Walk/090": "res://authoring/production-review-repair-20261022/dragon_texture_ready/roster_v1/assets/ground_walk-090.res",
+    "Ground_Walk/135": "res://authoring/production-review-repair-20261022/dragon_texture_ready/roster_v1/assets/ground_walk-135.res",
+    "Ground_Walk/180": "res://authoring/production-review-repair-20261022/dragon_texture_ready/roster_v1/assets/ground_walk-180.res",
+    "Ground_Walk/225": "res://authoring/production-review-repair-20261022/dragon_texture_ready/roster_v1/assets/ground_walk-225.res",
+    "Ground_Walk/270": "res://authoring/production-review-repair-20261022/dragon_texture_ready/roster_v1/assets/ground_walk-270.res",
+    "Ground_Walk/315": "res://authoring/production-review-repair-20261022/dragon_texture_ready/roster_v1/assets/ground_walk-315.res",
+    "Ground_Attack/000": "res://authoring/production-review-repair-20261022/dragon_texture_ready/roster_v1/assets/ground_attack-000.res",
+    "Ground_Attack/045": "res://authoring/production-review-repair-20261022/dragon_texture_ready/roster_v1/assets/ground_attack-045.res",
+    "Ground_Attack/090": "res://authoring/production-review-repair-20261022/dragon_texture_ready/roster_v1/assets/ground_attack-090.res",
+    "Ground_Attack/135": "res://authoring/production-review-repair-20261022/dragon_texture_ready/roster_v1/assets/ground_attack-135.res",
+    "Ground_Attack/180": "res://authoring/production-review-repair-20261022/dragon_texture_ready/roster_v1/assets/ground_attack-180.res",
+    "Ground_Attack/225": "res://authoring/production-review-repair-20261022/dragon_texture_ready/roster_v1/assets/ground_attack-225.res",
+    "Ground_Attack/270": "res://authoring/production-review-repair-20261022/dragon_texture_ready/roster_v1/assets/ground_attack-270.res",
+    "Ground_Attack/315": "res://authoring/production-review-repair-20261022/dragon_texture_ready/roster_v1/assets/ground_attack-315.res",
+    "Ground_Breathe/000": "res://authoring/production-review-repair-20261022/dragon_texture_ready/roster_v1/assets/ground_breathe-000.res",
+    "Ground_Breathe/045": "res://authoring/production-review-repair-20261022/dragon_texture_ready/roster_v1/assets/ground_breathe-045.res",
+    "Ground_Breathe/090": "res://authoring/production-review-repair-20261022/dragon_texture_ready/roster_v1/assets/ground_breathe-090.res",
+    "Ground_Breathe/135": "res://authoring/production-review-repair-20261022/dragon_texture_ready/roster_v1/assets/ground_breathe-135.res",
+    "Ground_Breathe/180": "res://authoring/production-review-repair-20261022/dragon_texture_ready/roster_v1/assets/ground_breathe-180.res",
+    "Ground_Breathe/225": "res://authoring/production-review-repair-20261022/dragon_texture_ready/roster_v1/assets/ground_breathe-225.res",
+    "Ground_Breathe/270": "res://authoring/production-review-repair-20261022/dragon_texture_ready/roster_v1/assets/ground_breathe-270.res",
+    "Ground_Breathe/315": "res://authoring/production-review-repair-20261022/dragon_texture_ready/roster_v1/assets/ground_breathe-315.res",
+    "Fly_Cycle/000": "res://authoring/production-review-repair-20261022/dragon_texture_ready/roster_v1/assets/fly_cycle-000.res",
+    "Fly_Cycle/045": "res://authoring/production-review-repair-20261022/dragon_texture_ready/roster_v1/assets/fly_cycle-045.res",
+    "Fly_Cycle/090": "res://authoring/production-review-repair-20261022/dragon_texture_ready/v1/assets-v2/fly_cycle-090.res",
+    "Fly_Cycle/135": "res://authoring/production-review-repair-20261022/dragon_texture_ready/roster_v1/assets/fly_cycle-135.res",
+    "Fly_Cycle/180": "res://authoring/production-review-repair-20261022/dragon_texture_ready/roster_v1/assets/fly_cycle-180.res",
+    "Fly_Cycle/225": "res://authoring/production-review-repair-20261022/dragon_texture_ready/roster_v1/assets/fly_cycle-225.res",
+    "Fly_Cycle/270": "res://authoring/production-review-repair-20261022/dragon_texture_ready/roster_v1/assets/fly_cycle-270.res",
+    "Fly_Cycle/315": "res://authoring/production-review-repair-20261022/dragon_texture_ready/roster_v1/assets/fly_cycle-315.res",
+    "Fly_Glide/000": "res://authoring/production-review-repair-20261022/dragon_texture_ready/roster_v1/assets/fly_glide-000.res",
+    "Fly_Glide/045": "res://authoring/production-review-repair-20261022/dragon_texture_ready/roster_v1/assets/fly_glide-045.res",
+    "Fly_Glide/090": "res://authoring/production-review-repair-20261022/dragon_texture_ready/roster_v1/assets/fly_glide-090.res",
+    "Fly_Glide/135": "res://authoring/production-review-repair-20261022/dragon_texture_ready/roster_v1/assets/fly_glide-135.res",
+    "Fly_Glide/180": "res://authoring/production-review-repair-20261022/dragon_texture_ready/roster_v1/assets/fly_glide-180.res",
+    "Fly_Glide/225": "res://authoring/production-review-repair-20261022/dragon_texture_ready/roster_v1/assets/fly_glide-225.res",
+    "Fly_Glide/270": "res://authoring/production-review-repair-20261022/dragon_texture_ready/roster_v1/assets/fly_glide-270.res",
+    "Fly_Glide/315": "res://authoring/production-review-repair-20261022/dragon_texture_ready/roster_v1/assets/fly_glide-315.res",
+    "Fly_Breathe/000": "res://authoring/production-review-repair-20261022/dragon_texture_ready/roster_v1/assets/fly_breathe-000.res",
+    "Fly_Breathe/045": "res://authoring/production-review-repair-20261022/dragon_texture_ready/roster_v1/assets/fly_breathe-045.res",
+    "Fly_Breathe/090": "res://authoring/production-review-repair-20261022/dragon_texture_ready/roster_v1/assets/fly_breathe-090.res",
+    "Fly_Breathe/135": "res://authoring/production-review-repair-20261022/dragon_texture_ready/roster_v1/assets/fly_breathe-135.res",
+    "Fly_Breathe/180": "res://authoring/production-review-repair-20261022/dragon_texture_ready/roster_v1/assets/fly_breathe-180.res",
+    "Fly_Breathe/225": "res://authoring/production-review-repair-20261022/dragon_texture_ready/roster_v1/assets/fly_breathe-225.res",
+    "Fly_Breathe/270": "res://authoring/production-review-repair-20261022/dragon_texture_ready/roster_v1/assets/fly_breathe-270.res",
+    "Fly_Breathe/315": "res://authoring/production-review-repair-20261022/dragon_texture_ready/roster_v1/assets/fly_breathe-315.res",
+    "Ground_Hit/000": "res://authoring/production-review-repair-20261022/dragon_texture_ready/roster_v1/assets/ground_hit-000.res",
+    "Ground_Hit/045": "res://authoring/production-review-repair-20261022/dragon_texture_ready/roster_v1/assets/ground_hit-045.res",
+    "Ground_Hit/090": "res://authoring/production-review-repair-20261022/dragon_texture_ready/v1/assets-v2/ground_hit-090.res",
+    "Ground_Hit/135": "res://authoring/production-review-repair-20261022/dragon_texture_ready/roster_v1/assets/ground_hit-135.res",
+    "Ground_Hit/180": "res://authoring/production-review-repair-20261022/dragon_texture_ready/roster_v1/assets/ground_hit-180.res",
+    "Ground_Hit/225": "res://authoring/production-review-repair-20261022/dragon_texture_ready/roster_v1/assets/ground_hit-225.res",
+    "Ground_Hit/270": "res://authoring/production-review-repair-20261022/dragon_texture_ready/roster_v1/assets/ground_hit-270.res",
+    "Ground_Hit/315": "res://authoring/production-review-repair-20261022/dragon_texture_ready/roster_v1/assets/ground_hit-315.res",
+    "Fly_Hit/000": "res://authoring/production-review-repair-20261022/dragon_texture_ready/roster_v1/assets/fly_hit-000.res",
+    "Fly_Hit/045": "res://authoring/production-review-repair-20261022/dragon_texture_ready/roster_v1/assets/fly_hit-045.res",
+    "Fly_Hit/090": "res://authoring/production-review-repair-20261022/dragon_texture_ready/roster_v1/assets/fly_hit-090.res",
+    "Fly_Hit/135": "res://authoring/production-review-repair-20261022/dragon_texture_ready/roster_v1/assets/fly_hit-135.res",
+    "Fly_Hit/180": "res://authoring/production-review-repair-20261022/dragon_texture_ready/roster_v1/assets/fly_hit-180.res",
+    "Fly_Hit/225": "res://authoring/production-review-repair-20261022/dragon_texture_ready/roster_v1/assets/fly_hit-225.res",
+    "Fly_Hit/270": "res://authoring/production-review-repair-20261022/dragon_texture_ready/roster_v1/assets/fly_hit-270.res",
+    "Fly_Hit/315": "res://authoring/production-review-repair-20261022/dragon_texture_ready/roster_v1/assets/fly_hit-315.res",
+    "Fly_TakeOff/000": "res://authoring/production-review-repair-20261022/dragon_texture_ready/roster_v1/assets/fly_take_off-000.res",
+    "Fly_TakeOff/045": "res://authoring/production-review-repair-20261022/dragon_texture_ready/roster_v1/assets/fly_take_off-045.res",
+    "Fly_TakeOff/090": "res://authoring/production-review-repair-20261022/dragon_texture_ready/roster_v1/assets/fly_take_off-090.res",
+    "Fly_TakeOff/135": "res://authoring/production-review-repair-20261022/dragon_texture_ready/roster_v1/assets/fly_take_off-135.res",
+    "Fly_TakeOff/180": "res://authoring/production-review-repair-20261022/dragon_texture_ready/roster_v1/assets/fly_take_off-180.res",
+    "Fly_TakeOff/225": "res://authoring/production-review-repair-20261022/dragon_texture_ready/roster_v1/assets/fly_take_off-225.res",
+    "Fly_TakeOff/270": "res://authoring/production-review-repair-20261022/dragon_texture_ready/roster_v1/assets/fly_take_off-270.res",
+    "Fly_TakeOff/315": "res://authoring/production-review-repair-20261022/dragon_texture_ready/roster_v1/assets/fly_take_off-315.res",
+    "Fly_Land/000": "res://authoring/production-review-repair-20261022/dragon_texture_ready/roster_v1/assets/fly_land-000.res",
+    "Fly_Land/045": "res://authoring/production-review-repair-20261022/dragon_texture_ready/roster_v1/assets/fly_land-045.res",
+    "Fly_Land/090": "res://authoring/production-review-repair-20261022/dragon_texture_ready/roster_v1/assets/fly_land-090.res",
+    "Fly_Land/135": "res://authoring/production-review-repair-20261022/dragon_texture_ready/roster_v1/assets/fly_land-135.res",
+    "Fly_Land/180": "res://authoring/production-review-repair-20261022/dragon_texture_ready/roster_v1/assets/fly_land-180.res",
+    "Fly_Land/225": "res://authoring/production-review-repair-20261022/dragon_texture_ready/roster_v1/assets/fly_land-225.res",
+    "Fly_Land/270": "res://authoring/production-review-repair-20261022/dragon_texture_ready/roster_v1/assets/fly_land-270.res",
+    "Fly_Land/315": "res://authoring/production-review-repair-20261022/dragon_texture_ready/roster_v1/assets/fly_land-315.res",
+    "Transition_Fly_to_Glide/000": "res://authoring/production-review-repair-20261022/dragon_texture_ready/roster_v1/assets/transition_fly_to_glide-000.res",
+    "Transition_Fly_to_Glide/045": "res://authoring/production-review-repair-20261022/dragon_texture_ready/roster_v1/assets/transition_fly_to_glide-045.res",
+    "Transition_Fly_to_Glide/090": "res://authoring/production-review-repair-20261022/dragon_texture_ready/roster_v1/assets/transition_fly_to_glide-090.res",
+    "Transition_Fly_to_Glide/135": "res://authoring/production-review-repair-20261022/dragon_texture_ready/roster_v1/assets/transition_fly_to_glide-135.res",
+    "Transition_Fly_to_Glide/180": "res://authoring/production-review-repair-20261022/dragon_texture_ready/roster_v1/assets/transition_fly_to_glide-180.res",
+    "Transition_Fly_to_Glide/225": "res://authoring/production-review-repair-20261022/dragon_texture_ready/roster_v1/assets/transition_fly_to_glide-225.res",
+    "Transition_Fly_to_Glide/270": "res://authoring/production-review-repair-20261022/dragon_texture_ready/roster_v1/assets/transition_fly_to_glide-270.res",
+    "Transition_Fly_to_Glide/315": "res://authoring/production-review-repair-20261022/dragon_texture_ready/roster_v1/assets/transition_fly_to_glide-315.res",
+    "Transition_Glide_to_Fly/000": "res://authoring/production-review-repair-20261022/dragon_texture_ready/roster_v1/assets/transition_glide_to_fly-000.res",
+    "Transition_Glide_to_Fly/045": "res://authoring/production-review-repair-20261022/dragon_texture_ready/roster_v1/assets/transition_glide_to_fly-045.res",
+    "Transition_Glide_to_Fly/090": "res://authoring/production-review-repair-20261022/dragon_texture_ready/roster_v1/assets/transition_glide_to_fly-090.res",
+    "Transition_Glide_to_Fly/135": "res://authoring/production-review-repair-20261022/dragon_texture_ready/roster_v1/assets/transition_glide_to_fly-135.res",
+    "Transition_Glide_to_Fly/180": "res://authoring/production-review-repair-20261022/dragon_texture_ready/roster_v1/assets/transition_glide_to_fly-180.res",
+    "Transition_Glide_to_Fly/225": "res://authoring/production-review-repair-20261022/dragon_texture_ready/roster_v1/assets/transition_glide_to_fly-225.res",
+    "Transition_Glide_to_Fly/270": "res://authoring/production-review-repair-20261022/dragon_texture_ready/roster_v1/assets/transition_glide_to_fly-270.res",
+    "Transition_Glide_to_Fly/315": "res://authoring/production-review-repair-20261022/dragon_texture_ready/roster_v1/assets/transition_glide_to_fly-315.res",
+    "Ground_Death/000": "res://authoring/production-review-repair-20261022/dragon_texture_ready/roster_v1/assets/ground_death-000.res",
+    "Ground_Death/045": "res://authoring/production-review-repair-20261022/dragon_texture_ready/roster_v1/assets/ground_death-045.res",
+    "Ground_Death/090": "res://authoring/production-review-repair-20261022/dragon_texture_ready/roster_v1/assets/ground_death-090.res",
+    "Ground_Death/135": "res://authoring/production-review-repair-20261022/dragon_texture_ready/roster_v1/assets/ground_death-135.res",
+    "Ground_Death/180": "res://authoring/production-review-repair-20261022/dragon_texture_ready/roster_v1/assets/ground_death-180.res",
+    "Ground_Death/225": "res://authoring/production-review-repair-20261022/dragon_texture_ready/roster_v1/assets/ground_death-225.res",
+    "Ground_Death/270": "res://authoring/production-review-repair-20261022/dragon_texture_ready/roster_v1/assets/ground_death-270.res",
+    "Ground_Death/315": "res://authoring/production-review-repair-20261022/dragon_texture_ready/roster_v1/assets/ground_death-315.res",
+    "Fly_Death/000": "res://authoring/production-review-repair-20261022/dragon_texture_ready/roster_v1/assets/fly_death-000.res",
+    "Fly_Death/045": "res://authoring/production-review-repair-20261022/dragon_texture_ready/roster_v1/assets/fly_death-045.res",
+    "Fly_Death/090": "res://authoring/production-review-repair-20261022/dragon_texture_ready/v1/assets-v2/fly_death-090.res",
+    "Fly_Death/135": "res://authoring/production-review-repair-20261022/dragon_texture_ready/roster_v1/assets/fly_death-135.res",
+    "Fly_Death/180": "res://authoring/production-review-repair-20261022/dragon_texture_ready/roster_v1/assets/fly_death-180.res",
+    "Fly_Death/225": "res://authoring/production-review-repair-20261022/dragon_texture_ready/roster_v1/assets/fly_death-225.res",
+    "Fly_Death/270": "res://authoring/production-review-repair-20261022/dragon_texture_ready/roster_v1/assets/fly_death-270.res",
+    "Fly_Death/315": "res://authoring/production-review-repair-20261022/dragon_texture_ready/roster_v1/assets/fly_death-315.res"
+  },
+  "bank_count": 120,
+  "styles": 10,
+  "consumer_contract": "Inject ONE actual existing native_source_admission Script into all host residencies. begin\u2192step through actual Admission\u2192retain_ready after can_mutate/join/postdraw before make_actor/changed bank; poll clear until true before releasing Residency. Caller owns Root visibility. Do not use independent Admission copies or replace pinned renderer.",
+  "residency_policy": "Two strong recent banks per host; completed untaken jobs retain physical banks; committed weak refs allow live actors to keep earlier bank. Actual actor-root metadata owns its active bank; no all120 resident preload.",
+  "programs": [
+    "res://factory/components/dragon_shared_geometry/shaders/body.gdshader",
+    "res://factory/components/dragon_shared_geometry/shaders/effect_glow.gdshader",
+    "res://factory/components/dragon_shared_geometry/shaders/effect_wisps.gdshader",
+    "res://factory/components/dragon_shared_geometry/shaders/effect_motes.gdshader"
+  ],
+  "import_contract": "Manual explicit creature-overlay consumer import preserving these exact paths. This is NOT an assets/vfx index/ordinary spell importer or a production installation.",
+  "upstream_handoff": "res://dragon_overlay/upstream/HANDOFF.md",
+  "rights": "Preserve supplied provenance and limits. Supplied HANDOFF contains no explicit license grant; none is inferred for the source or generated banks.",
+  "qualification": {
+    "representative_banks": 4,
+    "native_checks": 971,
+    "admission_checks": 114,
+    "positive_exact_image_pairs": 3,
+    "native_flags": 17,
+    "shutdown_clean": false,
+    "retention": "3 unclassified ObjectDB instances in each nonverbose native/admission log.",
+    "limits": "All120 byte/format preparation; four-bank timing/visual scope. No2088 poses/production caster/human art approval, consumer adoption or whole-renderer budget claim."
+  },
+  "canonical_spell_package_modified": false,
+  "automatic_activation": false,
+  "supersedes": "dragon-creature-20261022-8fc8abae50459b08",
+  "mouth": {
+    "data": "res://authoring/production-review-repair-20261022/dragon_mouth/v1/mouth-surfaces-v2.json",
+    "helper": "res://factory/components/dragon_mouth/surface.gd",
+    "guide": "res://authoring/production-review-repair-20261022/dragon_mouth/v1/RECEIVING_FINAL.md",
+    "receiver_inputs": "res://authoring/production-review-repair-20261022/dragon_mouth/v1/receiver-inputs-v1.json",
+    "source_delivery": "res://authoring/production-review-repair-20261022/dragon_mouth/v1/source_delivery.json",
+    "surface_membership_qualification": "res://authoring/production-review-repair-20261022/dragon_mouth/v1/qualification-primary-surface-membership-v2.json",
+    "rig": "summon.draconic_spirit.violet-astral",
+    "condition_id": "condition.summon.draconic_breath_cadence",
+    "region_id": "mouth",
+    "point_slot": "body",
+    "bank_count": 120,
+    "pose_count": 2088,
+    "authored_point_count": 3191,
+    "status_counts": {
+      "no_exposed_tissue": 1131,
+      "visible_lip": 882,
+      "occluded": 75
+    },
+    "primary_actions": [
+      "Ground_Idle",
+      "Ground_Walk",
+      "Fly_Cycle",
+      "Ground_Breathe"
+    ],
+    "primary_banks": 32,
+    "primary_poses": 600,
+    "primary_visible_poses": 525,
+    "primary_rear_occluded_poses": 75,
+    "primary_static_admitted_points": 1672,
+    "primary_outer_pixels_rejected_by_unchanged_surface": 55,
+    "primary_static_layout": "new512",
+    "receiver_input_rows": 39,
+    "native_scope": {
+      "checks": 294,
+      "failures": 0,
+      "cost_flags": 0,
+      "engine_errors": 0,
+      "exit": 0,
+      "cases": [
+        {
+          "frame": 0,
+          "key": "Ground_Idle/090",
+          "layout": "new512",
+          "selected_points": 4,
+          "source_measure_us": 18901,
+          "source_points": 12301,
+          "visible_types": [
+            "Fire",
+            "Cold",
+            "Lightning",
+            "Acid",
+            "Poison"
+          ]
+        },
+        {
+          "frame": 12,
+          "key": "Ground_Breathe/090",
+          "layout": "new512",
+          "selected_points": 5,
+          "source_measure_us": 26246,
+          "source_points": 15698,
+          "visible_types": [
+            "Fire",
+            "Cold",
+            "Lightning",
+            "Acid",
+            "Poison"
+          ]
+        },
+        {
+          "frame": 0,
+          "key": "Ground_Idle/090",
+          "layout": "selected768",
+          "selected_points": 4,
+          "source_measure_us": 19061,
+          "source_points": 12301,
+          "visible_types": [
+            "Fire",
+            "Cold",
+            "Lightning",
+            "Acid",
+            "Poison"
+          ]
+        }
+      ],
+      "public_palettes": [
+        "Fire",
+        "Cold",
+        "Lightning",
+        "Acid",
+        "Poison"
+      ],
+      "phase_ages": [
+        1.2,
+        0,
+        0.25,
+        0.5,
+        0.75,
+        1,
+        1.5,
+        2,
+        2.5,
+        3,
+        3.5,
+        3.99
+      ],
+      "all180_closeup_palette_probes_positive": true,
+      "sparse_prepare_us": [
+        60,
+        73
+      ],
+      "sparse_first_us": [
+        36,
+        40
+      ],
+      "sparse_held_us": [
+        11,
+        20
+      ],
+      "sparse_moved_us": [
+        12,
+        13
+      ],
+      "public_publication_sample_us": [
+        46,
+        213
+      ],
+      "constructor_in_timing": false,
+      "source_local_reference_measurement_us": [
+        18901,
+        26246
+      ],
+      "source_local_preparation_in_sparse_timing": false,
+      "historical_utf8_diagnostics_retained": 15
+    },
+    "final_table_operands_bridge": {
+      "executed_table": "res://authoring/production-review-repair-20261022/dragon_mouth/v1/mouth-surfaces-smoke-v1.json",
+      "final_table": "res://authoring/production-review-repair-20261022/dragon_mouth/v1/mouth-surfaces-v2.json",
+      "cases": [
+        {
+          "key": "Ground_Idle/090",
+          "frame": 0,
+          "pixels_equal": true,
+          "status_equal": true,
+          "entire_layouts_equal": true
+        },
+        {
+          "key": "Ground_Breathe/090",
+          "frame": 12,
+          "pixels_equal": true,
+          "status_equal": true,
+          "entire_layouts_equal": true
+        }
+      ],
+      "scope": "The two sampled poses and complete old768/new512 registration layouts are unchanged. Final table revision is an opaque publication identity; no new native run or all-pose render count is inferred."
+    },
+    "limits": [
+      "Production validator/NativeInputs/construction-operand port is required and has not been applied or tested.",
+      "Actual current768 registration has one representative source-image Quad native case; the32bank static membership gate covers new512 only.",
+      "Other action rows retain explicit unavailable/unauthored limits; authored subsets are not full anatomical segmentation.",
+      "Full original source-local measurement remains18.9\u201326.2ms preparation/reference work; it is excluded from hot sparse selection timing.",
+      "Native fixture uses actual public cadence constructors in Factory reference context; no full currentWorld/NativeInputs, finite breath firing, human art approval or whole-game performance claim."
+    ],
+    "production_installation": false,
+    "production_port_implemented": false,
+    "automatic_activation": false,
+    "qualification": {
+      "schema": "factory.dragon_mouth.native_qualification.v2",
+      "checks": 294,
+      "failures": 0,
+      "cost_flags": [],
+      "engine_errors": 0,
+      "exit": 0,
+      "renderer": "Official Windows Godot4.7.2 Forward+/Vulkan RTX5090; fixed144Hz",
+      "raw": "evidence/production-review-repair-20261022/dragon_mouth/smoke-native-v2/checks.json",
+      "raw_sha256": "e86f7b8962e697ea8ca4dba4613dddce6d7465eccee260c3931f12995f7c93cc",
+      "log": ".runtime/vfx-package-20261018/dragon-mouth-smoke-native-v2.log",
+      "log_sha256": "8fe2093f43d849d2078fc8d15e9073d80e1e871b4ce69b2e8d2f6fd40f21a4bf",
+      "source_guard": "authoring/production-review-repair-20261022/dragon_mouth/v1/root-guard-smoke-v2.json",
+      "source_guard_unchanged": true,
+      "current_decoder_witness": "root-guard-smoke-v1.json exact three invoked current production methods, not identical complete reference file",
+      "representative_cases": [
+        {
+          "frame": 0,
+          "key": "Ground_Idle/090",
+          "layout": "new512",
+          "selected_points": 4,
+          "source_measure_us": 18901,
+          "source_points": 12301,
+          "visible_types": [
+            "Fire",
+            "Cold",
+            "Lightning",
+            "Acid",
+            "Poison"
+          ]
+        },
+        {
+          "frame": 12,
+          "key": "Ground_Breathe/090",
+          "layout": "new512",
+          "selected_points": 5,
+          "source_measure_us": 26246,
+          "source_points": 15698,
+          "visible_types": [
+            "Fire",
+            "Cold",
+            "Lightning",
+            "Acid",
+            "Poison"
+          ]
+        },
+        {
+          "frame": 0,
+          "key": "Ground_Idle/090",
+          "layout": "selected768",
+          "selected_points": 4,
+          "source_measure_us": 19061,
+          "source_points": 12301,
+          "visible_types": [
+            "Fire",
+            "Cold",
+            "Lightning",
+            "Acid",
+            "Poison"
+          ]
+        }
+      ],
+      "sparse_selection_prepare_us": [
+        60,
+        73
+      ],
+      "sparse_first_us": [
+        36,
+        40
+      ],
+      "sparse_held_us": [
+        11,
+        20
+      ],
+      "sparse_moved_us": [
+        12,
+        13
+      ],
+      "public_publication_us": [
+        46,
+        213
+      ],
+      "public_timing_excludes_constructor": true,
+      "source_reference_measurement_us": [
+        18901,
+        26246
+      ],
+      "source_reference_measurement_is_hot_candidate_cost": false,
+      "visible_palettes": [
+        "Fire",
+        "Cold",
+        "Lightning",
+        "Acid",
+        "Poison"
+      ],
+      "sampled_phase_ages": [
+        1.2,
+        0,
+        0.25,
+        0.5,
+        0.75,
+        1,
+        1.5,
+        2,
+        2.5,
+        3,
+        3.5,
+        3.99
+      ],
+      "all_sampled_closeup_probes_positive": true,
+      "historical_utf8_diagnostics": 15,
+      "exit_warning_lines": [],
+      "historical_failure": "V1 retains69checks/one whole-view Lightning visibility failure. Same source/helper/data passes closeup at every sampled age; no pulse or material repair inferred.",
+      "scope": "Actual original source actor/new512, actual selected768 source-image unshaded Quad and original current optical decoder; actual public constructors, sparse current points, whole-actor movement, private owners, hidden/unavailable input, suppression and ready=false. No current production World/NativeInputs port, full2088-pose visual review, finite breath action, automatic activation or human art approval."
+    }
+  }
+}

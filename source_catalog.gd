@@ -100,6 +100,20 @@ static func read_file(relative_path: String, cache: Dictionary) -> Variant:
             cache[relative_path] = NativeAuthoring.overlay(relative_path, _document(root.path_join(relative_path)), cache)
     return cache[relative_path]
 
+## Explicit project metadata, admitted by a passive source owner. The exact
+## JSON path travels in source_snapshot; display queries only borrow it.
+static func read_document(path:String,cache:Dictionary)->Dictionary:
+    if not path.begins_with("res://") or not path.ends_with(".json"):
+        NativeAuthoring._error(cache,"Invalid project metadata path: "+path)
+        return {}
+    if not cache.has(path):
+        var document:Variant=_document(path) if FileAccess.file_exists(path) else null
+        if not document is Dictionary:
+            NativeAuthoring._error(cache,"Missing or invalid project metadata: "+path)
+            document={}
+        cache[path]=document
+    return cache[path]
+
 static func _document(path:String)->Variant:
     var raw:=FileAccess.get_file_as_bytes(path)
     _documents_mutex.lock();var known:Array=_documents.get(path,[]);_documents_mutex.unlock()

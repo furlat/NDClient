@@ -526,7 +526,7 @@ static func _bank_descriptor(state:Dictionary,rig:Resource,clip:Resource,facing:
     return descriptor
 
 static func _bank_slot(state:Dictionary,rig:Resource,clip:Resource,name:String,slot:String,layer:Resource,path:String,selected:Resource,record:Dictionary)->void:
-    var banks:Dictionary={};var views:Dictionary={}
+    var banks:Dictionary={};var views:Dictionary={};var summaries:Dictionary={}
     for facing in rig.direction_order:
         var descriptor:Dictionary=_bank_descriptor(state,rig,clip,facing)
         var colour:String=descriptor.path
@@ -536,13 +536,16 @@ static func _bank_slot(state:Dictionary,rig:Resource,clip:Resource,name:String,s
             descriptor.source_records[profile].native_body_colour=colour
         descriptor.native_record.source_id=StringName(path+"::"+name+"/"+slot+"/"+facing+"/native")
         banks[colour]=descriptor;views[facing]=colour;state.descriptors+=1
+        var thin:Dictionary={"path":colour,"companions":descriptor.companions}
+        if rig.kind=="layered" and not descriptor.normal_sets.is_empty():thin.profiles=descriptor.normal_paths
+        summaries[facing]=thin
         if descriptor.geometry.get("optical_ground_pixels")==null:record.generated_shadow=false
         var all:Dictionary={colour:true};all.merge(descriptor.companions)
         for file in all:
             layer.headers[file]=_header(state,file)
             if not state.index.source_owners.has(file):state.index.source_owners[file]=[path,name]
     selected.descriptors[slot]={"banks":banks}
-    layer.clips[name][slot]={"banks":views}
+    layer.clips[name][slot]={"banks":views,"bank_summaries":summaries}
     if not layer.bank_paths_by_slot.has(slot):layer.bank_paths_by_slot[slot]={}
     layer.bank_paths_by_slot[slot][name]=views
 

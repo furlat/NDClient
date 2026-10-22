@@ -228,7 +228,7 @@ def first_cohort():
                   {'do':'action.move','by':'caster','target':[11,6]},
                   {'do':'action.environment.directional_door.open','by':'caster','target':{'object':'Burial hall'}},
                   {'do':'action.move','by':'caster','target':[13,6]}],
-         'required_behaviors':['action.environment.directional_door.open'],'required_facts':['movement']}, gallery_sorcerer(), equipped_weapon_study(), poison_weapon_contact_study(), poison_weapon_runtime_study(), water_create_dry_study(), *glyph_warding_trigger_studies(), power_word_heal_poison_study(), goodberry_consumption_study(), shillelagh_equipped_move_study(), flaming_sphere_lifecycle_study()] + interaction_cohort() + traversal_and_utility_cohort() + survival_cohort() + perspective_and_reaction_cohort() + direct_character_cohort() + passive_handler_cohort() + [interaction_media_study(), vampiric_positive_study(), banishment_departure_study()] + native_persistent_studio_studies() + option_identity_studies() + intrinsic_weapon_studies() + [flame_blade_weapon_study(subjects)] + coating_weapon_studies() + event_family_studies(actors, subjects) + projectile_variant_studies(actors, subjects) + production_review_studies(actors, subjects) + legacy_six_studies(subjects) + [skeleton_mark_lifecycle_study()] + coating_slot_lifecycle_studies() + class_held_lifecycle_studies() + elemental_body_lifecycle_studies() + [false_life_grant_study()] + action_dispatch_owner_studies() + myrmidon_body_lifecycle_studies() + [arcane_sword_granted_lifecycle_study()] + provisional_creature_body_studies() + granted_repeat_contact_studies() + [protection_party_prefix_study()] + retained_field_studies(subjects) + wall_continuation_studies(subjects) + positive_outcome_studies(subjects)
+         'required_behaviors':['action.environment.directional_door.open'],'required_facts':['movement']}, gallery_sorcerer(), equipped_weapon_study(), poison_weapon_contact_study(), poison_weapon_runtime_study(), water_create_dry_study(), *glyph_warding_trigger_studies(), power_word_heal_poison_study(), goodberry_consumption_study(), shillelagh_equipped_move_study(), flaming_sphere_lifecycle_study()] + interaction_cohort() + traversal_and_utility_cohort() + survival_cohort() + perspective_and_reaction_cohort() + direct_character_cohort() + passive_handler_cohort() + [interaction_media_study(), vampiric_positive_study(), banishment_departure_study()] + native_persistent_studio_studies() + option_identity_studies() + intrinsic_weapon_studies() + [flame_blade_weapon_study(subjects)] + coating_weapon_studies() + event_family_studies(actors, subjects) + projectile_variant_studies(actors, subjects) + production_review_studies(actors, subjects) + legacy_six_studies(subjects) + [skeleton_mark_lifecycle_study()] + coating_slot_lifecycle_studies() + class_held_lifecycle_studies() + elemental_body_lifecycle_studies() + [false_life_grant_study()] + action_dispatch_owner_studies() + myrmidon_body_lifecycle_studies() + [arcane_sword_granted_lifecycle_study()] + provisional_creature_body_studies() + granted_repeat_contact_studies() + [protection_party_prefix_study()] + retained_field_studies(subjects) + wall_continuation_studies(subjects) + positive_outcome_studies(subjects) + [draconic_readiness_study()]
     cohort += hardware_studies(subjects)
     return [repair_item_owner_requirements(case) for case in cohort]
 
@@ -2511,3 +2511,30 @@ def protection_party_prefix_study():
             'not a condition invented from the legal build-choice ID. Actual missing handler or movement '
             'still fails. The old failed case, original bytes, reason and source identity remain history. '
             'This is a legal original route; current rendering and art/audio review remain separate.'}
+
+
+def draconic_readiness_study():
+    """Paid native Multiattack supplies public readiness; Breath consumes it."""
+    multi = 'action.monster.multiattack'
+    breath = 'action.draconic_spirit.breath'
+    condition = 'condition.summon.draconic_breath_cadence'
+    inventory = subjects(actions=[multi, breath], conditions=[condition])
+    inventory['creature'] = ['creature.spell.draconic_spirit', 'creature.generic_caster']
+    return {
+        'id': condition + '/multiattack_breath_readiness',
+        'title': 'Draconic Spirit: paid Multiattack readiness and free Breath retirement',
+        'kind': 'condition', 'seed': 2, 'battlefield': 'battlefield.open_floor_bright',
+        'subjects': inventory,
+        'actors': [
+            {'role': 'caster', 'side': 'amber', 'creature': 'creature.spell.draconic_spirit', 'at': [3, 6]},
+            {'role': 'target', 'side': 'blue', 'creature': 'creature.generic_caster', 'level': 20, 'at': [4, 5]}],
+        'steps': [
+            {'do': multi, 'by': 'caster', 'target': 'target', 'capture_choices': True},
+            {'do': breath, 'by': 'caster', 'target': [4, 5], 'capture_choices': True},
+            {'do': 'end_turn', 'by': 'caster'}],
+        'required_behaviors': [multi, breath], 'required_facts': ['attack'],
+        'purpose': 'The native creature factory supplies the unchanged dragon and its cadence. '
+                   'A paid Multiattack publishes readiness, then the offered free Breath consumes it '
+                   'in the same turn. Commands use actual SDK discovery/preview/submit; no condition, '
+                   'readiness value, die result or action allowance is inserted. Rendering checks '
+                   'must independently find both public readiness transitions in these journals.'}

@@ -56,6 +56,14 @@ static func observe(owners: Dictionary, actors: Dictionary, at_ms: float, initia
 static func recipe(condition: Dictionary, cache: Dictionary) -> Dictionary:
     return Authoring.load_data("catalog/condition_recipes.json",cache).get(Authoring.Catalog.condition_key(condition),{})
 
+## Called only by received-operation and actual-actor metadata preparation.
+## A condition-free boot never admits the authored pixel tables.
+static func prepare_geometry_metadata(condition:Dictionary,cache:Dictionary)->void:
+    var region:Dictionary=recipe(condition,cache).get("persistent",{}).get("lifecycleGeometry",{}).get("region",{})
+    if region.get("kind")!="authored_pixels" or region.get("status")!="authored":return
+    for field in ["table","receiver_inputs"]:
+        Authoring.Catalog.read_document(str(region.get(field,"")),cache)
+
 static func suppressed(condition: Dictionary) -> bool:
     var state:Variant=condition.get("state")
     return state!=null and not state.get("suppression_provider_uuids",[]).is_empty()

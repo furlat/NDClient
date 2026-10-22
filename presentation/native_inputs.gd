@@ -3,6 +3,7 @@ extends RefCounted
 ## its clocks/material leases; source optical samples share by source pose.
 const Effects=preload("res://presentation/effect_package.gd")
 const Surface=preload("res://presentation/entity_surface.gd")
+const MouthSurface=preload("res://factory/components/dragon_mouth/surface.gd")
 const SourceMaterial=preload("res://presentation/source_material.gd")
 const Sockets=preload("res://presentation/spell_placement.gd")
 const Weapons=preload("res://presentation/native_weapon_inputs.gd")
@@ -23,6 +24,7 @@ const HistoryOwner=preload("res://assets/vfx/extensions/production-review-202610
 const HistoryClock=preload("res://assets/vfx/sources/c0017ad639184b208deb/occurrence_clock.gd")
 var appearances:RefCounted=Appearances.new()
 var surfaces:RefCounted=Surface.new()
+var mouth_surfaces:Dictionary={}
 
 ## Retained constructors lexically preload their previous helper. Rebind only
 ## this delivered owner before its first packet, retaining its real clock slot.
@@ -161,6 +163,7 @@ func geometry_sample(world:Node,component:Dictionary,channel:String,weapon:Dicti
         return Weapons.surface(surfaces.sample(world,weapon.actor,weapon.slots),weapon)
     var request:Dictionary=geometry_request(component,channel)
     if not request.reason.is_empty():return {"actor":"","actor_uuid":"","ready":false,"reason":request.reason,"points":[],"origin":Vector3.ZERO,"gpu_geometry_key":[]}
+    if request.region.get("kind")=="authored_pixels":return mouth_geometry(world,component,channel,request)
     var region:Dictionary={}
     if not request.region.is_empty():
         var visual:Dictionary=world.visual_actors.get(request.actor,{})
@@ -179,6 +182,46 @@ func geometry_sample(world:Node,component:Dictionary,channel:String,weapon:Dicti
     result.geometry_slots=request.slots
     if not request.region.is_empty() and request.region.has("id"):result.region_id=str(request.region.id)
     return result
+
+## The table is admitted by compiler/media preparation. Each receiving owner
+## retains only its current sparse local rows; ordinary Surface owns measurement.
+func mouth_geometry(world:Node,component:Dictionary,channel:String,request:Dictionary)->Dictionary:
+    var key:Array=[str(component.id),channel]
+    var result:Dictionary={"actor":request.actor,"actor_uuid":request.actor,"ready":false,"pending":false,
+        "points":[],"origin":Vector3.ZERO,"gpu_geometry_key":[],"reason":"mouth_source_layout_not_bound"}
+    var region:Dictionary=request.region
+    var visual:Dictionary=world.visual_actors.get(request.actor,{})
+    var authored:Dictionary=world.catalog_cache.get(str(region.get("table","")),{})
+    var exact:bool=region.get("id")=="mouth" and region.get("status")=="authored" \
+        and region.get("rig")=="summon.draconic_spirit.violet-astral" and region.get("layout")=="selected768" \
+        and request.slots==["body"] and visual.get("row",{}).get("rig")==region.get("rig")
+    if not exact or authored.is_empty():
+        if mouth_surfaces.has(key):mouth_surfaces[key].selector.clear()
+        if authored.is_empty():result.reason="mouth_region_metadata_not_prepared"
+        return result
+    if not mouth_surfaces.has(key):mouth_surfaces[key]={"selector":MouthSurface.new(),"authored":{},"source":"","bank":""}
+    var owner:Dictionary=mouth_surfaces[key]
+    var captured:Dictionary=surfaces._capture(world,request.actor,request.slots)
+    var selected:Array=captured.selected
+    var entry:Dictionary=selected[0].entry if selected.size()==1 else {}
+    var path:String=str(entry.get("texture_path",""))
+    if not is_same(owner.authored,authored) or owner.source!=path:
+        owner.selector.clear();owner.authored=authored;owner.source=path;owner.bank=""
+        for bank in authored.get("banks",{}):
+            if authored.banks[bank].get("layouts",{}).get(region.layout,{}).get("source_path")==path:
+                owner.bank=bank;break
+    var bound:Array=entry.get("bound_frame_key",[])
+    var frame:int=int(bound[1]) if bound.size()>=2 else -1
+    # A completed component preparation is reused across animation frames.
+    # Sparse selection may refresh here, but only over already admitted rows:
+    # no image decode, table read or whole-body world transform occurs here.
+    owner.selector.prepare(captured,surfaces.sources,authored,owner.bank,frame,region.layout)
+    return owner.selector.select(captured,surfaces.sources,authored,owner.bank,frame,region.layout,request.actor)
+
+func retire(retained:Dictionary)->void:
+    for key in mouth_surfaces.keys():
+        if retained.has(key[0]):continue
+        mouth_surfaces[key].selector.clear();mouth_surfaces.erase(key)
 
 static func actor_layers(world:Node,actor:String)->Dictionary:
     var visual:Dictionary=world.visual_actors.get(actor,{})
@@ -1407,5 +1450,6 @@ static func interrupted_packets(world:Node,component:Dictionary)->Dictionary:
             "world_transform":Transform3D(transform.basis,point)}]}}
 
 func clear()->void:
+    retire({})
     surfaces.clear()
     appearances.clear()

@@ -3033,6 +3033,16 @@
    "reason": ""
   },
   {
+   "name": "presentation_build_coverage_checks",
+   "script": "res://tests/presentation_build_coverage_checks.gd",
+   "mode": "headless",
+   "tier": "fast",
+   "args": [],
+   "timeout": 300,
+   "status": "ok",
+   "reason": "Isolated coverage publication preserves untouched domains and replaces every selected kind, including removed IDs; no artwork build."
+  },
+  {
    "name": "presentation_capture",
    "script": "res://tests/presentation_capture.gd",
    "mode": "none",
@@ -6926,6 +6936,47 @@
    "timeout": 600,
    "status": "ok",
    "reason": "Actual two-seat Glyph ground trace and Flaming optical preparation passed 423 native checks on 2026-10-21 without arguments: four views, source inputs/timing/pixels, reverse seek/loop and cleanup. Armed/payload/body/trail and art acceptance remain separate."
+  },
+  {
+   "name": "dragon_encounter_sources_checks",
+   "script": "res://tests/dragon_encounter_sources_checks.gd",
+   "mode": "headless",
+   "tier": "fast",
+   "args": [],
+   "options": ["--index"],
+   "timeout": 300,
+   "status": "needs-args",
+   "reason": "Requires the current paid Multiattack/Breath original recording index; checks all authored native bank paths, companions, priority and residency without admitting full clip geometry."
+  },
+  {
+   "name": "dragon_mouth_authoring_checks",
+   "script": "res://tests/dragon_mouth_authoring_checks.gd",
+   "mode": "headless",
+   "tier": "fast",
+   "args": [],
+   "timeout": 300,
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "dragon_mouth_runtime_checks",
+   "script": "res://tests/dragon_mouth_runtime_checks.gd",
+   "mode": "headless",
+   "tier": "fast",
+   "args": [],
+   "timeout": 300,
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "native_dragon_mouth_render_checks",
+   "script": "res://tests/native_dragon_mouth_render_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "status": "needs-args",
+   "reason": "Requires current backend paid Multiattack/Breath capture; --index selects its preserved Library index."
   }
  ]
 }

@@ -109,14 +109,18 @@ static func plan(state:Dictionary,environment:Dictionary,fixtures:Dictionary,cac
             if not selected.worn and not selected.rest.has(clip):continue
             var descriptor:Dictionary=selected.resource.clips[clip].get(selected.slot,{})
             if descriptor.is_empty():continue
-            paths[descriptor.path]=true;cpu_required[descriptor.path]=true
-            var unselected:Dictionary=_unselected_normals(descriptor,profile)
-            var kept:Dictionary={}
-            for companion in descriptor.companions:
-                if not unselected.has(companion):kept[companion]=true
-            paths.merge(kept);gpu_only.merge(kept)
-            if selected.priority.has(clip):
-                priority[descriptor.path]=true;priority.merge(kept)
+            if descriptor.has("banks") and not descriptor.has("bank_summaries"):
+                errors.append("Native body bank summaries are missing; rebuild characters: "+str(clip));continue
+            var descriptors:Array=descriptor.bank_summaries.values() if descriptor.has("banks") else [descriptor]
+            for source in descriptors:
+                paths[source.path]=true;cpu_required[source.path]=true
+                var unselected:Dictionary=_unselected_normals(source,profile)
+                var kept:Dictionary={}
+                for companion in source.companions:
+                    if not unselected.has(companion):kept[companion]=true
+                paths.merge(kept);gpu_only.merge(kept)
+                if selected.priority.has(clip):
+                    priority[source.path]=true;priority.merge(kept)
     for path in cpu_required:gpu_only.erase(path)
     var ordered:Dictionary=priority.duplicate();ordered.merge(paths);paths=ordered
     var retained:Dictionary=cache.get("__encounter_closure",{})
