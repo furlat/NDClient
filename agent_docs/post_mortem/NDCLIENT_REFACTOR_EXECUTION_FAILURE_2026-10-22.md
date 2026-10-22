@@ -3,8 +3,8 @@
 **Later human authorization,22October:** bring the two reviewed pending proposals
 into the client, commit, retime and update this record. The cancellation account
 below preserves its original stopping boundary. Only this bounded follow-through
-is resumed; the broader queue and heartbeat remain stopped/paused. Follow-through
-results will be appended after completion; no speed improvement is inferred from
+is resumed; the broader queue and heartbeat remain stopped/paused. The completed
+follow-through and retiming are appended below; no causal speed improvement is inferred from
 adding scenarios and diagnostics.
 
 22 October 2026. Written at the human's explicit instruction to give up the
@@ -272,6 +272,62 @@ for the three Python action-ID literal corrections.
 [Fast batch](../../.runtime/tests/20261022T104227.508507Z/summary.json),
 [affected native batch and exact source](../../.runtime/client-owned-closure-20261022/adopted-affected-gpu/summary.json).
 
-A source checkpoint and the same-route retiming follow; final measured results
-will be appended below. The prior cancellation-state statements above remain
-historical; they must not be used to call these now-applied patches pending.
+Source checkpoint **2a094492e85f72caaab5dce525791be44f0028e9** commits the four
+implementation/data files and both documentation records. The prior cancellation
+statements remain historical; the two reviewed patches are now integrated and
+committed. No completion-cursor, further preview optimization or broader
+implementation was added.
+
+### Completed retiming on committed2a094492
+
+All preceding owned CPU/GPU jobs had finished before these timed windows. Three
+serialized fresh native GUI Gallery runs repeated the same five commands,
+1600×960 view, camera12, pinned9f engine and complete530Factory package. The
+source files stayed identical to committed2a094492. Each run passed83 checks,
+with natural exit0, zero script/engine errors and no owned leftovers. Their
+before/after native Godot snapshots are empty; no external process was closed.
+This is not continuous whole-host contention monitoring or OS/driver-cold testing.
+
+| Actual submit → first sampled animation,ms | Previous three-run median | Committed retime1 | Retime2 | Retime3 |
+|---|---:|---:|---:|---:|
+| Door |133.893|112.045|110.202|106.010|
+| Move |139.151|122.768|126.322|121.981|
+| First Fireball |110.382|96.522|103.502|103.171|
+| Second Fireball |126.436|117.569|112.594|114.273|
+
+| Complete after-initial-ready frames,ms | Retime1 | Retime2 | Retime3 |
+|---|---:|---:|---:|
+| p50 |7.899|7.022|6.844|
+| p95 |11.895|11.293|11.099|
+| p99 |17.249|17.109|15.974|
+| Maximum |43.940|34.812|35.569|
+| Initial ready observation |1173|1127|1355|
+
+Initial readiness is a separate observation, not Studio case-switch latency.
+The four-view preview process also exited naturally0,352checks/no errors or
+owned leftovers. Its exact work scopes remain distinct:
+
+| Preview availability through actual postdraw | Prior before-patch observation,ms | Committed retime,ms |200ms target |
+|---|---:|---:|---|
+| Fresh,64keys |2822.808|2479.001|Miss|
+| Changed zoom,52keys |214.589|174.283|Pass for this batch only|
+| Reset/reload,64keys |2250.176|2088.833|Miss|
+
+Door/Move remain above100ms; frame tails and cold/reset preview availability
+still miss their targets. Several observed values are lower, but these patches
+add scenario data and instrumentation rather than an implemented performance
+optimization. Three sequential observations with no cache flush/randomization
+do not establish that the diagnostic patch caused the difference. The source
+completion-scan and old accumulated-process stall causes remain unclosed.
+
+[Complete current process receipts](../../.runtime/client-owned-closure-20261022/adopted-retime/summary.json),
+[concise exact measurements](../../.runtime/client-owned-closure-20261022/adopted-retime/measurements.json),
+[offline raw/phase/frame comparison](../../.runtime/closing-repairs/accumulated-studio-cost-20261022/adopted-retime-comparison.json).
+The offline comparison reads preserved records only; it launches no additional
+benchmark, server or client. Its nested phases are inclusive and not added as
+exclusive time. Source/package/producer and command joins remain explicit.
+
+This completes the bounded integrate/commit/retime/document request. The broader
+implementation/qualification queue remains stopped, the heartbeat remains
+paused, all art/audio remains pending human review, and no additional work is
+resumed by this record.

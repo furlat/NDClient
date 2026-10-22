@@ -15,8 +15,14 @@ ordinary third-success stabilization (seed7). Three other stabilization seeds
 ended in death. The initial Shield scenario had an incorrect ActionSurge ID;
 its corrected public-ID version completed legally but did not trigger Shield.
 Both Shield originals remain failed and ranged Shield remains open. No further
-seed search or broad qualification queue is resumed. Source checkpoint/retiming
-and the post-mortem update are the remaining bounded follow-through.
+seed search or broad qualification queue is resumed. Source checkpoint
+**2a094492** now commits both patches. The same-route retime completed with
+Door106.010–112.045ms, Move121.981–126.322ms and maximum after-ready frames
+34.812–43.940ms. Explicit four-view preview fresh/reset availability remains
+2479.001/2088.833ms; only changed zoom52keys reaches174.283ms. Observations
+are lower in places, but no causal speed fix is established by adding diagnostics.
+The post-mortem contains exact before/after metrics and preserved failures. This
+bounded follow-through is complete; the broader queue/heartbeat remain stopped/paused.
 
 **STOPPED — 22 October, explicit human cancellation.** Implementation and
 qualification have ended. Running same-task reviewers were interrupted; the
