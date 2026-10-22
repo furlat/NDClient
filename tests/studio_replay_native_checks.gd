@@ -29,6 +29,12 @@ func register_case(studio:Control,record:Dictionary)->void:
 func check(value:bool,label:String)->void:
     checks+=1
     if not value:failures.append(label);print("REPLAY_NATIVE_FAIL ",label)
+## Passive snapshot of the existing shared allowance; never reset/admit it.
+func preparation_budget_snapshot(world:Node)->Dictionary:
+    var budget:Dictionary=world.preparation_admission
+    return {"process_frame":Engine.get_process_frames(),"frame":budget.get("frame",-1),
+        "limit_usec":budget.get("limit_usec",0),"used_usec":budget.get("used_usec",0),
+        "phase_usec":budget.get("phase_usec",{}).duplicate(),"optional_order":budget.get("optional_order",[]).duplicate()}
 func readiness_leaves(world:Node)->Dictionary:
     var renderer=world.component_renderer
     var blood_pending:Array=[]
@@ -50,7 +56,13 @@ func readiness_leaves(world:Node)->Dictionary:
             "actor_binding_path":prepared_world.actor_bindings[prepared_world.binding_cursor].value.get("path","") if prepared_world.binding_cursor<prepared_world.actor_bindings.size() else "",
             "blood_rows":prepared_world.result.get("blood_rows",{}).size(),"blood_handles":prepared_world.blood_preparation.handles.size(),
             "blocked_actor":prepared_world.blocked_actor.duplicate(true),"blocked_source":prepared_world.blocked_source.duplicate(true),
-            "native_phase_usec":prepared_world.phase_usec.duplicate()}
+            "native_phase_usec":prepared_world.phase_usec.duplicate(),
+            "construction_turn":prepared_world.construction_turn,
+            "construction_completed":{"actors":prepared_world.actor_cursor,"objects":prepared_world.objects_complete.size(),
+                "ground":prepared_world.ground_complete.size(),"cookie_sources":prepared_world.cookie_source_cursor,
+                "lights":prepared_world.light_preparation.get("complete",false)},
+            "construction_total":{"actors":prepared_world.actor_ids.size(),"objects":prepared_world.object_target_count,
+                "ground":prepared_world.ground_target_count,"cookie_sources":prepared_world.result.get("light_resolution",{}).get("sources",[]).size()}}
         if prepared_world.binding_cursor<prepared_world.actor_bindings.size():
             var binding:Dictionary=prepared_world.actor_bindings[prepared_world.binding_cursor];var value:Dictionary=binding.value
             var missing:Array=[]
@@ -108,7 +120,8 @@ func readiness_leaves(world:Node)->Dictionary:
         if world.MediaWarmup.ready(world.media_warmup,requested):continue
         missing_count+=1
         if required_missing.size()<8:required_missing.append({"path":path,"texture_present":world.textures.has(path),"image_present":world.source_images.has(path)})
-    return {"pending_world":pending,"required_missing":{"count":missing_count,"examples":required_missing},
+    return {"pending_world":pending,"preparation_budget":preparation_budget_snapshot(world),
+        "required_missing":{"count":missing_count,"examples":required_missing},
         "display_ms":world.timeline.display_ms,"state":not world.timeline.state.is_empty(),
         "world_epoch":world.world_prepare_epoch,"timeline_epoch":world.timeline.initialization_revision,
         "world_revision":world.world_revision,"timeline_world_revision":world.timeline.world_revision,
@@ -144,6 +157,9 @@ func installation_diagnostics(studio:Control)->Dictionary:
     result.native_startup_requested_ms=owner.native_startup_requested_ms
     result.native_startup_background=owner.native_startup_background
     result.native_startup_plan_size=owner.native_startup_plan.size() if owner.native_startup_plan!=null else -1
+    var startup_global:Dictionary=owner.NativeStartup._state
+    result.native_startup_global={"plan":startup_global.get("plan",[]).size(),
+        "known":startup_global.get("known",{}).size(),"done":startup_global.get("done",{}).size()}
     result.candidate={"process_mode":owner.process_mode,"processing":owner.is_processing(),
         "publication_failed":owner.publication_failed,"publishes_receiving":owner.publishes_receiving,
         "media_initial_ready":owner.media_initial_ready,"media_metadata_ready":owner.media_metadata_ready,
@@ -155,7 +171,8 @@ func installation_diagnostics(studio:Control)->Dictionary:
         "camera_focus":[owner.camera_focus.x,owner.camera_focus.y,owner.camera_focus.z],
         "native_hit_material":owner.native_spell_hit_material,"playback_speed":owner.playback_speed,
         "wall_mode":owner.wall_mode,"grid_visible":owner.grid_visible,
-        "budget_used_usec":owner.preparation_admission.used_usec,"budget_limit_usec":owner.preparation_admission.limit_usec}
+        "budget_used_usec":owner.preparation_admission.used_usec,"budget_limit_usec":owner.preparation_admission.limit_usec,
+        "preparation_budget":preparation_budget_snapshot(owner)}
     var reference:Node3D=studio.world
     result.reference={"quarter":reference.quarter,"world_quarter":reference.world_quarter,"requested_quarter":reference.requested_quarter,
         "viewport_size":[studio.viewport.size.x,studio.viewport.size.y],
@@ -167,7 +184,8 @@ func installation_diagnostics(studio:Control)->Dictionary:
         "same_directory":studio.candidate_index.directory==studio.active_directory,
         "same_mutes":owner.presentation_mutes==reference.presentation_mutes,
         "same_solo":owner.presentation_solo==reference.presentation_solo,
-        "follow_actor_id":studio.follow_actor_id}
+        "follow_actor_id":studio.follow_actor_id,"preparation_budget":preparation_budget_snapshot(reference),
+        "same_preparation_budget":is_same(owner.preparation_admission,reference.preparation_admission)}
     return result
 
 func settle(studio:Control,requested_time:float=-1.0,requested_directory:String="")->bool:

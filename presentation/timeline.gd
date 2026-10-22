@@ -576,6 +576,9 @@ func _advance_with_world_preparation(delta_ms: float) -> void:
     waiting_for_world = false; waiting_for_media = false
     var target: float = display_ms+maxf(0,delta_ms)
     while true:
+        # An admitted boundary can publish its exact authored clock just past
+        # the requested target. Continuation must not undo that accepted cut.
+        target=maxf(target,display_ms)
         var first: Dictionary = current if not current.is_empty() else (queue[0] if not queue.is_empty() else {})
         var started:int=Time.get_ticks_usec()
         var ready:bool=not media_ready.is_valid() or media_ready.call(first)
@@ -593,7 +596,8 @@ func _advance_with_world_preparation(delta_ms: float) -> void:
                 if plan.media_wait or plan.segments.is_empty() or not plan.segments.back().complete:
                     return
                 # Completion changes source ownership. Only now may the next
-                # group prove readiness, using this call's original target.
+                # group prove readiness, retaining this call's target or any
+                # exact boundary already published beyond it.
                 continue
             _world_plan = plan
             started=Time.get_ticks_usec()

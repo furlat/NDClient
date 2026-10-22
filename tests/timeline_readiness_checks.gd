@@ -1,6 +1,7 @@
 extends SceneTree
 ## Timeline input/output contracts. No old scheduler or callback-count oracle.
 const Timeline=preload("res://presentation/timeline.gd")
+const Recording=preload("res://studio/recording.gd")
 const Protocol=preload("res://sdk/protocol.gd")
 const Reducer=preload("res://sdk/reducer.gd")
 const Compiler=preload("res://presentation/compiler.gd")
@@ -55,6 +56,30 @@ func ready_groups()->void:
     timeline=setup(initial(),[group("short",0,2),group("zero-tail",1,0,true)])
     timeline.advance(2)
     check(timeline.display_ms==2 and timeline.sequence==1 and not timeline.busy(),"Exact target includes the ordered zero-time tail")
+func promoted_final_cut()->void:
+    # Explicit test timing mirrors the saved Arcane final group's 500ms origin
+    # and 11/6s duration. No producer event/fact or artwork is fabricated here.
+    var value=group("fractional-final",0,1000.0*11.0/6.0,true)
+    value.preview_start_ms=500.0
+    value.actor_structure_times=[float(value.duration_ms)]
+    value.commits.append({"at_ms":value.duration_ms,"delta":{"set":{"marker":"final"}}})
+    var groups:Array=[value];var original:PackedByteArray=var_to_bytes(groups)
+    var end:float=float(value.preview_start_ms)+float(value.duration_ms)
+    # A deliberate sub-microsecond requested cut exercises the unchanged exact
+    # boundary-admission rule without relying on JSON's rounded low bits.
+    var requested:float=end-0.0000005
+    var timeline=setup(initial(),groups)
+    timeline.world_published=func(_candidate):return true
+    timeline.advance(requested)
+    check(timeline.display_ms==end and timeline.display_ms>=requested,"Admitted final constructor clock cannot retreat to the earlier frame target")
+    check(timeline.completed_group_count==1 and timeline.current.is_empty() and timeline.queue.is_empty() and timeline.sequence==1 and timeline.state.marker=="final","Exact final cut keeps its one completed source ordinal and ordered tail")
+    var index={"initialization":{"kind":"initialization","state":initial(),"sequence":0},
+        "cache":{},"groups":[{"start_ms":value.preview_start_ms,"group":value}]}
+    var expected=Recording.restore(index,timeline.display_ms)
+    check(observed(timeline)==observed(expected) and timeline.commit_index==expected.commit_index and timeline.current==expected.current,"Public live advance and Recording.restore own the same exact ordered final prefix")
+    var before=observed(timeline)
+    timeline.advance(0.0)
+    check(observed(timeline)==before and var_to_bytes(groups)==original,"Zero advance cannot retreat, duplicate or mutate the accepted final cut")
 func media_wait()->void:
     var timeline=setup(initial(),[group("first",0,2),group("second",1,100,true)])
     var gate={"ready":false,"wrong_owner":false}
@@ -234,7 +259,7 @@ func run()->void:
     if recordings.is_empty():
         printerr("Usage: --recording=<current-schema journal> [--recording=<another journal>]")
         quit(2);return
-    ready_groups();media_wait();world_wait();replay_wait()
+    ready_groups();promoted_final_cut();media_wait();world_wait();replay_wait()
     await crossed_audio()
     membership_order()
     var records={}

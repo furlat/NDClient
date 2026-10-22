@@ -204,9 +204,13 @@ native cohort passes **12,053assertions**, natural exit0/no engine/script errors
 or owned leftovers, including actual Nimbus result367/lineage355/condition UUID
 1941e7ff… and its exact receiving Goblin postdraw/constructor/input witness.
 The exit warning reports three leaked ObjectDB instances; no crash, clean-warning-free
-shutdown or isolated final-scene pixel/art acceptance is claimed. The complete
-188production native inventory is now running at this frozen source cut; the
-selected pass does not complete or relabel it.
+shutdown or isolated final-scene pixel/art acceptance is claimed. The broad188production native invocation completed89cases/84passes/five
+failures before root stopped only its owned process after repeated90s
+installation nonprogress. Its explicit stop exits255, not naturally0. The
+preexisting mutable all-spells raw was archived before stopping so it cannot
+be mislabeled as this current run. Exact completed console markers/logs and
+five failures remain preserved; the selected pass does not complete or
+relabel that partial invocation.
 [Four-family actual current native receipt](../.runtime/main-queue-20261022/finite-native-exact-point/summary.json).
 [Preserved failed batch](../.runtime/main-queue-20261022/main-consumer-closure/affected-summary.json),
 [exact source-entry correction](../.runtime/closing-repairs/finite-terminal-entry-correction/README.md).
@@ -256,6 +260,47 @@ seat originals and the failed receipt are preserved; no retry, seed/profile
 change, Library import or new backend defect is inferred. A positive ranged
 Shield original remains absent.
 [Exact failed recording and handoff](../.runtime/closing-repairs/shield-ranged-action-surge-original/README.md).
+
+### Main consumer checkpoint and bounded runtime follow-through
+
+The source/data/control/documentation batch above is committed at **4511b697**
+(22explicit paths). The recovery checkpoint23e14a2e and preserved almost-disaster
+checkpoint remain intact. Generated diagnostic churn/private originals were not
+swept into that commit.
+
+The broad current native pass preserves Arcane Sword's final ordinal/clock
+mismatch and four installation timeouts (Animal Friendship, Sacred Flame, Acid
+Splash and True Strike). Canonical Arcane state agrees; the live owner can
+publish an exact tolerated endpoint and then retreat to the earlier original
+frame target. Its minimal current-owner monotonic-target correction is applied
+with the existing public Timeline/Recording.restore control. This interacting
+code predates9b73; no recent finite-body regression is inferred from it.
+The timeout receipts contain only about3ms cumulative construction work over
+90s; the actual shared budget phase snapshot was missing. Existing construction
+lanes already rotate, and no Factory/backend defect or actual spending owner
+is established. Passive diagnostics now retain actual shared budget/phase/order,
+construction progress and process-global warmup sizes; deadlines and gates are
+unchanged. The existing Timeline/public-restore control passes208assertions,
+and the affected five-case native cohort passes1,988assertions, both natural
+exit0/no engine/script errors/owned leftovers. Arcane now preserves exact
+ordered endpoint parity. The four installation timeouts did not recur in this
+smaller fresh process; their actual accumulated-process cost/spender remains
+unattributed and is not claimed fixed by the independent clock correction.
+No repeated full188rerun precedes independent scenario/content work.
+[Preserved broad partial cases](../.runtime/main-queue-20261022/finite-native-exact-point/preserved-partial-cases.json),
+[exact intentional stop](../.runtime/main-queue-20261022/finite-native-exact-point/interruption.json),
+[current bounded follow-through](../.runtime/main-queue-20261022/published-clock-and-affected-preparation/summary.json).
+
+Current source inspection also found actual original-coverage holes: Eyebite/
+Sunbeam have initial cast originals but no accepted granted-repeat original;
+Divine Favor's lifecycle has an active Miss while later Hits follow concentration
+removal, so it does not prove an active attributed Radiant contact. Current cloud/
+wall baselines do not close all positive turn/traversal/retirement branches.
+Existing payload releases, five Exhale elements, Vampiric repeat, sphere Ram and
+hardware originals remain reusable. This is R4corpus/output work, not another
+unimplemented provider claim. Coherent scenario-data batches are being prepared
+through the existing recorder while runtime diagnosis proceeds. All original
+failures, producer identities and unreviewed art/audio remain separate.
 
 ## Earlier source-registration checkpoint ae4fb4a6 — 22 October
 

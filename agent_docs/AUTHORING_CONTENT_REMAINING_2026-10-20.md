@@ -98,7 +98,7 @@ passes all four actual results with12,053assertions/natural exit0/no engine or
 script errors or owned leftovers, after the shared finite actual-Life body
 closure. Earlier9,804/two,8,136/seven and8,194/eight receipts remain failed.
 The current188production reader passes13,245assertions; whole current native
-is still running. No backend/Factory defect is inferred from those client cuts.
+remains incomplete after the deliberately stopped89-case invocation. No backend/Factory defect is inferred from those client cuts.
 [Actual selected native receipt](../.runtime/main-queue-20261022/finite-native-exact-point/summary.json),
 [current reader](../.runtime/main-queue-20261022/current530-public-reader/report.json).
 
