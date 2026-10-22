@@ -18,7 +18,7 @@ from devtools.player_server_acceptance.fixtures import combat_configuration
 from server.protocol import InitializationResponse
 
 PROJECT = Path(__file__).resolve().parents[1]
-ENGINE = Path('/home/tommaso/.cache/ndclient/dnd_engine-bedc3d92dc')
+ENGINE = Path('/home/tommaso/.cache/ndclient/dnd_engine-1f044792b1')
 
 async def run():
     output = PROJECT / '.runtime' / ('targeting-preview-' + uuid4().hex[:8])

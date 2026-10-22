@@ -13,7 +13,7 @@ python3 tools/studio_cases/record.py --only spell.fire_bolt
 python3 tools/studio_cases/record.py --only failed
 ```
 
-The default frozen engine is `/home/tommaso/.cache/ndclient/dnd_engine-bedc3d92dc`.
+The default frozen engine is `/home/tommaso/.cache/ndclient/dnd_engine-1f044792b1`.
 Use `--engine` to select a deliberately refreshed export, and `--out` for an
 independent library. One recorder owns one backend at a time. Each attempt gets
 a new directory; original Amber and Blue journal bytes are never rewritten.

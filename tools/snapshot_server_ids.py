@@ -20,7 +20,7 @@ import subprocess
 import sys
 import uuid
 
-DEFAULT_ENGINE = "/home/tommaso/.cache/ndclient/dnd_engine-bedc3d92dc"
+DEFAULT_ENGINE = "/home/tommaso/.cache/ndclient/dnd_engine-1f044792b1"
 DEFAULT_PYTHON = "/home/tommaso/.cache/dnd-engine/venv/bin/python"
 DEFAULT_OUTPUT = "authoring/server_ids.json"
 

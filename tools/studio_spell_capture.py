@@ -222,7 +222,7 @@ async def run(args):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('--engine', type=Path, default=Path("/home/tommaso/.cache/ndclient/dnd_engine-bedc3d92dc"))
+    parser.add_argument('--engine', type=Path, default=Path("/home/tommaso/.cache/ndclient/dnd_engine-1f044792b1"))
     parser.add_argument('--output', type=Path, default=PROJECT/'.runtime/studio-spells-20261015')
     parser.add_argument('--inventory', type=Path, default=PROJECT/'generated/studio_spell_case_inventory.json')
     parser.add_argument('--seed', type=int, help='Explicit diagnostic seed override; default is the reviewed per-case seed')

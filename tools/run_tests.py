@@ -23,7 +23,7 @@ import time
 
 PROJECT = Path(__file__).resolve().parents[1]
 GODOT = PROJECT.parent / "Tools/Godot-4.7.2/Godot_v4.7.2-stable_win64_console.exe"
-ENGINE = Path("/home/tommaso/.cache/ndclient/dnd_engine-bedc3d92dc")
+ENGINE = Path("/home/tommaso/.cache/ndclient/dnd_engine-1f044792b1")
 PYTHON = "/home/tommaso/.cache/dnd-engine/venv/bin/python"
 
 
