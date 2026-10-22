@@ -4,6 +4,7 @@ extends SceneTree
 const Conditions=preload("res://presentation/conditions.gd")
 const Recording=preload("res://studio/recording.gd")
 const Fixtures=preload("res://tests/recording_fixtures.gd")
+const NativeInputs=preload("res://presentation/native_inputs.gd")
 var checks=0
 var failures:Array=[]
 var cache:Dictionary={}
@@ -38,12 +39,37 @@ func sample_case(owners:Dictionary,at:float,label:String)->Array:
     check(owners.values().all(func(value):return not value.has("native_cue")),label+" source owners remain data without visual cue mutation")
     return actual
 
+## This one independent source is intentionally unavailable: a partial
+## missing-anchor refusal is not a delegated output owner or state-only art.
+func missing_arcane_anchor(authored:Resource)->void:
+    check(authored.id=="condition.spell.arcane_sword" and not authored.play_package_lifecycle \
+        and authored.status=="partial" and authored.disposition!="state_only" \
+        and authored.lifecycle_selections.is_empty() and authored.effects.is_empty() and authored.responses.is_empty(),
+        "Arcane Sword explicitly refuses its unbound independent anchor without claiming a substitute lifecycle owner")
+    var live:Dictionary=owner(authored.id);var owners:Dictionary={live.id:live}
+    var original:PackedByteArray=var_to_bytes(owners)
+    check(Conditions.NativePersistent.lifecycles(live.condition,cache).is_empty() \
+        and Conditions.native_samples(owners,300.0,cache).is_empty() and var_to_bytes(owners)==original,
+        "Missing Arcane anchor emits no owner lifecycle while preserving the actual condition UUID and clock")
+    var selected:Dictionary=Conditions.NativePersistent.Spells.selection("spell.arcane_sword",cache)
+    var cues:Array=selected.get("staging",{}).get("cues",[])
+    check(selected.get("excluded_cue_indices",[])==[0] and cues.size()==1 \
+        and Conditions.NativePersistent.Spells.event_cues(selected).is_empty() \
+        and Conditions.NativePersistent.Spells.effect_clips(selected).is_empty(),
+        "The finite independent blade cue is explicitly excluded beside the refused owner lifecycle")
+    if cues.size()!=1:return
+    var refusal:Dictionary=NativeInputs.new().endpoint_packet(null,{}, {"native_cue":cues[0]}, {}, {})
+    check(refusal.rows.is_empty() and refusal.reason=="review_endpoint_position_not_bound",
+        "Its retained review trajectory cannot supply an actual independent blade endpoint")
+
 func phase_isolation(behavior:String)->void:
     var selections:Array=Conditions.NativePersistent.Effects.conditions(behavior)
     var original=selections.duplicate(true)
     if selections.is_empty():
         var root_source:Resource=load("res://authoring/abilities.tres")
         var authored:Resource=load(root_source.sections.conditions[behavior])
+        if behavior=="condition.spell.arcane_sword":
+            missing_arcane_anchor(authored);return
         check(not authored.play_package_lifecycle and (authored.disposition=="state_only" or not authored.effects.is_empty() or not authored.responses.is_empty()),behavior+" explicitly delegates package lifecycles to its exact item/finite/native owner")
         return
     var common={"id":"condition:one","actor_uuid":"actor","condition":{"behavior_id":behavior,"state":{}},"start_ms":100.0,"absolute_start_ms":100.0,

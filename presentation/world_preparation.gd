@@ -173,12 +173,15 @@ func configure(owner:Node,candidate:Dictionary,first:bool=false,forecast:Diction
     for id in host.visual_actors:
         var row:Dictionary=host.visual_actors[id].row
         var geometry:Dictionary={};var layers:Array=[];var binding_keys:Dictionary={}
+        var native_rig:Dictionary={}
         for entry in host.visual_actors[id].entries:
             layers.append(entry.actor_layer)
+            if entry.has("native_shape_rig"):native_rig=entry.native_shape_rig
             binding_keys[entry.actor_layer.slot]=entry.get("prepared_source_binding",{}).get("geometry",{}).get("key",[])
             geometry[entry.actor_layer.slot]={"present":bool(SourceMaterial.value(entry,"has_component_geometry")),
                 "cell":entry.get("geometry_cell_size",Vector2(128,128))}
         existing_actors[id]={"rig":row.rig,"appearance":row.appearance,"equipment_layers":row.equipment_layers,"geometry":geometry,"layers":layers,"binding_keys":binding_keys}
+        if not native_rig.is_empty():existing_actors[id].native_rig=native_rig
         actor_bases[id]={"actor":host.visual_actors[id],"playback":host.playbacks[id]}
     input.merge({"state":candidate.presentation_state,"changes":candidate.changes,
         "initial":first,"world_changed":first or candidate.get("world_revision",-1)!=host.world_revision,
@@ -568,8 +571,9 @@ static func _complete_actors(input:Dictionary,forecast:Dictionary)->Dictionary:
         var row:Dictionary=resolved.value
         actor_members[id]=row
         var before:Dictionary=input.existing_actors.get(id,{})
-        var same_structure:bool=ActorConstruction.matches(row,before)
         var rig:Dictionary=Characters.rigs(input.cache)[row.rig]
+        var same_source_owner:bool=not rig.get("native_banks",false) or is_same(before.get("native_rig"),rig)
+        var same_structure:bool=ActorConstruction.matches(row,before) and same_source_owner
         var source_sample:Dictionary=input.actor_samples.get(id,{})
         if source_sample.is_empty():
             var condition:Dictionary=ActorConstruction.Conditions.pose(actor,row.rig,input.cache)
@@ -578,7 +582,7 @@ static func _complete_actors(input:Dictionary,forecast:Dictionary)->Dictionary:
                 return {"complete":false,"error":resting.error.message,"worker_ms":(Time.get_ticks_usec()-started)/1000.0}
             source_sample=resting.value
         var retained_slots:Dictionary={}
-        var same_rig:bool=not before.is_empty() and row.rig==before.rig
+        var same_rig:bool=not before.is_empty() and row.rig==before.rig and same_source_owner
         if same_rig and row.appearance==before.appearance:
             var selectors:Dictionary={}
             for layer in before.equipment_layers:selectors[layer.slot]=layer
@@ -613,6 +617,7 @@ static func _complete_actors(input:Dictionary,forecast:Dictionary)->Dictionary:
                 continue
             var source_key:Array=[selected_path,options.get("depth",true),options.get("normals",true),
                 128.0/float(options.get("tile_width",128))*row.scale,row.get("scale_x",1.0),options.get("profile","original")]
+            if rig.get("source_scale",1.0)!=1.0:source_key.append(rig.source_scale)
             var retained_binding:bool=same_structure and before.get("binding_keys",{}).get(layer.slot)==source_key
             _record_actor_worker_phase(actor_profile,"source_selection",selection_started)
             if retained_binding:

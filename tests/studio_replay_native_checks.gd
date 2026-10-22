@@ -318,6 +318,142 @@ func verify_body_geometry(studio:Control,label:String)->void:
                 "declared_optical_ground_pixels":ground,"bound_optical_ground_pixels":entry.get("geometry_ground_pixels"),
                 "texture_paths":paths,"scope":"Actual visible source-declared whole-body material/companion preservation; not lighting parity, pixel-difference evidence or human artwork approval."}
 
+## Optional companion to the Action gesture proof: the catalog identity may
+## actually publish AttackFact. Read its real original; never manufacture an
+## Action or use one recorded roll as an outcome requirement for another run.
+func authored_attack_bodies(index:Dictionary,scenario:Dictionary,label:String)->Array:
+    var result:Array=[]
+    var root_source:Resource=load("res://authoring/abilities.tres")
+    var selected:Array=[]
+    for behavior in scenario.get("required_behaviors",[]):
+        var path:String=str(root_source.sections.get("attacks",{}).get(behavior,""))
+        if path.is_empty():continue
+        var entry:Resource=load(path)
+        # Only an explicit creature/own-rig assignment belongs to this control;
+        # generic attack templates and effect-bodied finite strikes keep theirs.
+        if entry.variants.any(func(variant):return variant.body!=null and variant.body.enabled \
+                and not variant.body.rig.is_empty() and not variant.match.get("creatureIds",[]).is_empty()):
+            selected.append({"behavior":behavior,"path":path,"entry":entry})
+    if selected.is_empty():return result
+    var journal=Recording.Journal.new()
+    var opened:Dictionary=journal.open(index.directory,true,false)
+    check(opened.ok,label+": actual Attack-body original selects its recorded producer contract")
+    if not opened.ok:return result
+    var packets:Dictionary={}
+    for chosen in selected:
+        var events:Array=[];var tracks:Dictionary={};var witness:Dictionary={}
+        var rig_id:String="";var clip_name:String="";var assignment:String="";var component_source:String=""
+        for item in index.groups:
+            for event in item.group.events:
+                if event.kind!="attack" or event.behavior_id!=chosen.behavior or event.phase!="completion" or "canceled" in event.reasons:continue
+                var sequence:int=int(event.sequence)
+                if not packets.has(sequence):
+                    packets[sequence]=journal.decode_record(sequence,FileAccess.get_file_as_bytes(index.directory.path_join("%016d.json"%sequence)))
+                var packet:Dictionary=packets[sequence]
+                check(packet.ok,label+": actual completed Attack bytes pass the existing strict recorded decoder")
+                if not packet.ok:continue
+                var same_identity:bool=packet.value.cursor.sequence==sequence
+                for field in ["game_id","game_epoch","audience_id"]:
+                    same_identity=same_identity and packet.value.cursor[field]==index.identity[field]
+                check(same_identity,label+": Attack operands belong to this exact recorded audience/cursor")
+                if not same_identity:continue
+                var nodes:Array=[]
+                for lineage in packet.value.lineages:
+                    for node in lineage.events:
+                        if str(node.occurrence)==str(event.event_uuid):nodes.append(node)
+                check(nodes.size()==1,label+": compiled Attack occurrence has exactly one original public node")
+                if nodes.size()!=1:continue
+                var node:Dictionary=nodes[0];var fact:Dictionary=node.get("fact",{})
+                var actual:bool=node.phase=="completion" and not node.get("canceled",false) and fact.get("kind")=="attack" \
+                    and fact.get("behavior_id")==chosen.behavior and fact.get("source_entity_uuid")==event.actor_uuid
+                check(actual,label+": native Attack kind/source/behavior remain actual public operands")
+                if not actual:continue
+                var matching:Array=item.group.actor_tracks.filter(func(track):return track.source_event_uuid==event.event_uuid \
+                    and track.actor_uuid==fact.source_entity_uuid and track.activity=="attack" and float(track.duration_ms)>0.0)
+                check(not matching.is_empty(),label+": completed actual Attack has its compiled body track")
+                if matching.is_empty():continue
+                var actor:Dictionary=matching[0].presentation_actor
+                var recipe:Dictionary=Recording.Compiler.Authoring.attack(fact,actor,index.cache)
+                var variants:Array=chosen.entry.variants.filter(func(variant):return variant.id==recipe.get("selected_variant",""))
+                check(variants.size()==1,label+": exact original Attack and captured actor select one typed variant")
+                if variants.size()!=1:continue
+                var variant:Resource=variants[0]
+                var actual_rig:String=Recording.Compiler.Authoring.rig_id(actor,index.cache)
+                check(actor.uuid==fact.source_entity_uuid and variant.body!=null and variant.body.enabled \
+                    and not variant.body.rig.is_empty() and variant.body.rig==actual_rig \
+                    and Recording.Characters.content_id(actor.get("creature_content_ref")) in variant.match.get("creatureIds",[]) \
+                    and fact.attack_source_kind in variant.match.get("sourceKinds",[]) \
+                    and fact.source_item_id in variant.match.get("sourceItemIds",[]) \
+                    and fact.weapon_slot in variant.match.get("weaponSlots",[]) \
+                    and recipe.get("actor",{}).get("enabled",false) and recipe.actor.clip==variant.body.clip,
+                    label+": actual captured creature/rig/item/source-kind/slot owns the selected Attack body")
+                if variant.body==null or variant.body.rig!=actual_rig or not recipe.get("actor",{}).get("enabled",false):continue
+                var source:String=chosen.path+"::variants/"+str(chosen.entry.variants.find(variant))+"/body/clip"
+                var declared_source:String="catalog/rigs.json:"+actual_rig+".clips."+str(recipe.actor.clip)
+                if assignment.is_empty():
+                    assignment=source;component_source=declared_source;rig_id=actual_rig;clip_name=recipe.actor.clip
+                check(assignment==source and component_source==declared_source,label+": one exact typed body assignment owns this original's required Attack")
+                events.append(event.event_uuid)
+                for track in matching:
+                    var body:Array=event.components.filter(func(component):return component.kind=="body" \
+                        and component.trace_track_id==track.trace_track_id and component.source==declared_source)
+                    check(track.rig==actual_rig and track.clip==recipe.actor.clip and not body.is_empty(),
+                        label+": compiled Attack track retains its actual body-component rig/clip source")
+                    if track.rig!=actual_rig or track.clip!=recipe.actor.clip or body.is_empty():continue
+                    tracks[track.trace_track_id]={"source_event_uuid":event.event_uuid,"actor_uuid":event.actor_uuid,
+                        "start_ms":float(item.start_ms)+float(track.start_ms),"duration_ms":track.duration_ms}
+                witness[event.event_uuid]={"sequence":sequence,"fact_kind":fact.kind,"source_entity_uuid":fact.source_entity_uuid,
+                    "target_entity_uuid":fact.target_entity_uuid,"source_item_id":fact.source_item_id,"source_item_uuid":fact.source_item_uuid,
+                    "attack_source_kind":fact.attack_source_kind,"weapon_slot":fact.weapon_slot,"attack_outcome":fact.attack_outcome,
+                    "captured_creature_ref":actor.get("creature_content_ref"),"captured_rig":actual_rig,"selected_variant":recipe.selected_variant}
+        check(not events.is_empty() and not tracks.is_empty(),label+": optional Attack proof has real completed original/body occurrences: "+str(chosen.behavior))
+        result.append({"behavior_id":chosen.behavior,"fact_kind":"attack","rig":rig_id,"clip":clip_name,"source":assignment,
+            "body_component_source":component_source,"original_events":events,"compiled_tracks":tracks,"actual_attack_operands":witness,
+            "scope":"Actual decoded Attack and captured source select the indexed typed body variant. Typed assignment and actual trace rig clip are distinct source carriers; visible postdraw binding is checked separately."})
+    return result
+
+func observed_attack_body(world:Node,requirement:Dictionary,observed:Dictionary)->void:
+    if observed.has(requirement.behavior_id):return
+    for actor_id in world.displayed_samples:
+        var sample:Dictionary=world.displayed_samples[actor_id]
+        var track_id:String=str(sample.get("trace_track_id",""))
+        if not requirement.compiled_tracks.has(track_id) or sample.clip!=requirement.clip:continue
+        var binding:Dictionary=requirement.compiled_tracks[track_id]
+        if str(binding.actor_uuid)!=str(actor_id) or sample.source_event_uuid!=binding.source_event_uuid or not world.playbacks.has(actor_id):continue
+        var submitted:Array=world.timeline.trace.tracks.get(track_id,[]).filter(func(row):return row.row.kind=="attack" \
+            and row.component.kind=="body" and row.component.source==requirement.body_component_source \
+            and row.component.status=="presented" and row.component.sample_count>0)
+        if submitted.is_empty():continue
+        var visual:Dictionary=world.visual_actors.get(actor_id,{})
+        if visual.is_empty() or not visual.valid or visual.row.rig!=requirement.rig or world.playbacks[actor_id].clip!=requirement.clip:continue
+        var clip:Dictionary=world.rigs[requirement.rig].clips[requirement.clip]
+        var frame:int=mini(int(world.playbacks[actor_id].sample_seconds*clip.fps),int(clip.frames)-1)
+        for entry in visual.entries:
+            if entry.role=="shadow" or entry.actor_layer.slot!="body" or not entry.actor_layer.get("effect",{}).is_empty() or not world.component_renderer._entry_visible(world,entry):continue
+            var material:ShaderMaterial=entry.material
+            var path:String=str(entry.get("texture_path",""));var frame_key:Array=entry.get("bound_frame_key",[])
+            if path.is_empty() or entry.actor_layer.paths.get(requirement.clip,"")!=path or not world.textures.has(path) or not world.source_images.has(path) or frame_key.size()<3:continue
+            if int(frame_key[1])!=frame or not is_same(frame_key[0],world.textures[path]) or not is_same(material.get_shader_parameter("sheet"),world.textures[path]):continue
+            if float(material.get_shader_parameter("condition_alpha"))<=0.0 or float(material.get_shader_parameter("layer_alpha"))<=0.0:continue
+            var rig:Dictionary=world.rigs[requirement.rig];var image:Image=world.source_images[path]
+            var uv:Vector4=material.get_shader_parameter("frame_uv")
+            var expected:=Vector4(float(frame)*rig.cell_width/image.get_width(),float(rig.facing_rows[frame_key[2]])*rig.cell_height/image.get_height(),float(rig.cell_width)/image.get_width(),float(rig.cell_height)/image.get_height())
+            if not uv.is_equal_approx(expected):continue
+            var original:Image=image.get_region(Rect2i(frame*int(rig.cell_width),int(rig.facing_rows[frame_key[2]])*int(rig.cell_height),int(rig.cell_width),int(rig.cell_height)))
+            original.convert(Image.FORMAT_RGBA8)
+            var pixels:int=0;var bytes:PackedByteArray=original.get_data()
+            for at in range(3,bytes.size(),4):
+                if bytes[at]>0:pixels+=1
+            if pixels==0:continue
+            observed[requirement.behavior_id]={"behavior_id":requirement.behavior_id,"fact_kind":"attack","actor_uuid":actor_id,
+                "rig":requirement.rig,"clip":requirement.clip,"source":requirement.source,"body_component_source":requirement.body_component_source,
+                "source_event_uuid":sample.source_event_uuid,"trace_track_id":track_id,"display_ms":world.timeline.display_ms,
+                "bound_frame":frame,"bound_facing":frame_key[2],"source_texture":path,"frame_uv":[uv.x,uv.y,uv.z,uv.w],
+                "source_opaque_pixels":pixels,"acknowledged_samples":submitted.map(func(row):return row.component.sample_count).max(),
+                "last_acknowledged_display_ms":submitted.map(func(row):return row.component.last_sample_ms).max(),
+                "scope":"Actual submitted Attack body and current visible original texture/frame binding; distinct typed assignment/trace sources. Not isolated Hit/Dazed pixels, every occurrence/seat output or artwork approval."}
+            break
+
 ## Optional proof of the selected rig-specific body assignments in this
 ## actual original. Compiled tracks and submitted visible bindings stay distinct.
 func authored_action_bodies(index:Dictionary,scenario:Dictionary,label:String)->Array:
@@ -340,11 +476,14 @@ func authored_action_bodies(index:Dictionary,scenario:Dictionary,label:String)->
         check(not events.is_empty(),label+": selected authored action has real completed original occurrences: "+str(behavior))
         result.append({"behavior_id":behavior,"rig":recipe.rigId,"clip":recipe.actor.clip,"source":source,
             "original_events":events,"compiled_tracks":tracks,"scope":"Compiled original action body selection; native binding is checked separately."})
+    result.append_array(authored_attack_bodies(index,scenario,label))
     check(not result.is_empty(),label+": optional action-body proof has actual rig-specific selected assignments")
     return result
 
 func observed_action_bodies(world:Node,required:Array,observed:Dictionary)->void:
     for requirement in required:
+        if requirement.get("fact_kind")=="attack":
+            observed_attack_body(world,requirement,observed);continue
         if observed.has(requirement.behavior_id):continue
         for actor_id in world.displayed_samples:
             var sample:Dictionary=world.displayed_samples[actor_id]

@@ -142,7 +142,9 @@ func set_quad(entry: Dictionary, cell: Vector2, pivot: Vector2, scale: float) ->
 func update_bounds(entry: Dictionary) -> void:
     var row: Dictionary = entry.placement
     var origin = Placement.project(v2(row.position), row.base_height_steps, quarter)
-    entry.screen_rect = Rect2(origin - entry.pivot * entry.scale, entry.cell * entry.scale)
+    var pixel_scale:float=entry.scale
+    if entry.get("source_scale",1.0)!=1.0:pixel_scale*=float(entry.source_scale)
+    entry.screen_rect = Rect2(origin - entry.pivot * pixel_scale, entry.cell * pixel_scale)
     if row.kind!="actor" or entry.get("body_scale",1.0)==1.0:return
     # These rectangles use canonical painter pixels, not viewport/zoom pixels.
     # The actual model owns body scale, mirroring and any passage composition.

@@ -15,6 +15,8 @@ const Context = preload("res://presentation/source/characters/rig_context.gd")
 ## Ground contact and body centre in cell pixels.
 @export var pivot: Vector2 = Vector2.ZERO
 @export var anchor: Vector2 = Vector2.ZERO
+## Explicit feedback placement; the painted anchor is generic authoring, not anatomy.
+@export_enum("legacy", "painted_body_anchor") var feedback_anchor: String = "legacy"
 @export_enum("facing8", "camera4", "single", "repeated") var directions: String = "facing8"
 ## Sheet row of each facing, top to bottom.
 @export var direction_order: PackedStringArray = ["E", "SE", "S", "SW", "W", "NW", "N", "NE"]

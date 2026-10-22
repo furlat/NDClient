@@ -7,6 +7,17 @@ const Protocol = preload("res://sdk/protocol.gd")
 const BodySources = preload("res://presentation/body_sources.gd")
 const Construction = preload("res://presentation/actor_construction.gd")
 const NativeBankShadows = preload("res://presentation/canvas_shadows.gd")
+const FitPlacement = preload("res://presentation/spell_placement.gd")
+const FitImpact = preload("res://presentation/impact_placement.gd")
+const FitInputs = preload("res://presentation/native_inputs.gd")
+
+## Data host for pure source-coordinate placement; no viewport/draw callback.
+class FitWorld extends Node:
+    var visual_actors:Dictionary={}
+    var rigs:Dictionary={}
+    var rig_config:Dictionary={"TILE_W":128}
+    var camera:Node3D
+
 var checks = 0
 var failures: Array = []
 func check(ok: bool, label: String) -> void:
@@ -213,6 +224,84 @@ func technical_native_banks()->Dictionary:
     allowance={"used_usec":0,"limit_usec":1000000}
     check(shadows.prepare_source_cells(due,allowance) and shadows.source_cells_ready(due),"A later actual demanded unit completes the remaining selected grid")
     shadows.close()
+    # Same pixels/geometry as actor-scale2 above, now actor-scale1 + fit2.
+    # This is technical source-registration data, not an adopted Dragon/body.
+    var fitted:Dictionary=rig.duplicate(true)
+    fitted.source_scale=2.0;fitted.body_anchor={"x":5.0,"y":6.0};fitted.feedback_anchor="painted_body_anchor"
+    for shape_row in fitted.clips.Grid.bank_shapes.values():shape_row.source_scale=2.0
+    var fitted_banks:Dictionary={}
+    for source_path in banks:
+        var descriptor:Dictionary=banks[source_path].duplicate(false)
+        descriptor.geometry=descriptor.geometry.duplicate(false);descriptor.geometry.source_scale=2.0
+        descriptor.source_layout=descriptor.source_layout.duplicate(false);descriptor.source_layout.source_scale=2.0
+        fitted_banks[source_path]=descriptor
+    var fitted_index:Resource=index.duplicate(false);fitted_index.rigs={rig_id:fitted}
+    var fitted_clip:Resource=clip.duplicate(false);fitted_clip.descriptors={"body":{"banks":fitted_banks}}
+    var fitted_cache:Dictionary={BodySources.KEY:{"index":fitted_index,"loaded":{layer_path:layer,clip_path:fitted_clip}},
+        "catalog/rig.json":{"TILE_W":128,"FACING_CYCLE":facings}}
+    var fitted_layout:Dictionary=fitted_banks[path].source_layout
+    var fitted_shape:Dictionary=Construction.layer_shape(fitted,1.0,fitted_layout)
+    check(fitted_shape.mesh_size==Vector2(12,8)/Construction.Placement.PIXELS_PER_UNIT
+        and fitted_shape.mesh_center==Vector3(units,units,0) and fitted_shape.scale==1.0,
+        "Source fit2 equals actor-scale2 painted extent but preserves canonical-derived actor scale1")
+    var fitted_node:=MeshInstance3D.new();var fitted_material:=ShaderMaterial.new();fitted_material.shader=Construction.MODULAR_SHADER
+    var fitted_row:Dictionary={"id":"fit-actor","rig":rig_id,"position":[0,0],"base_height_steps":0.0,"scale":1.0,"scale_x":1.0}
+    var fitted_entry:Dictionary={"node":fitted_node,"material":fitted_material,"actor_layer":{"slot":"body"},"role":"body",
+        "placement":fitted_row,"scale":1.0,"source_scale":2.0,"native_shape_rig":fitted,"native_shape_scale":1.0,
+        "native_shapes":Construction.prepare_native_shapes(fitted,1.0)}
+    check(Construction.apply_source_shape(fitted_entry,fitted,path,fitted_layout),"Source fit2 adopts only its actually prepared owner/scale/path shape")
+    var fitted_binding:Dictionary=Construction.prepare_binding(fitted,fitted_entry.actor_layer,path,fitted_cache,true,true,"original",1.0,1.0)
+    var fitted_ready:Dictionary=Construction.realize_private_binding(fitted_binding,textures)
+    Construction.bind_source_values(fitted_entry,fitted,path,3,"E",fitted_ready.sheet,fitted_ready.sheet_size,textures,{},{})
+    Geometry.apply_binding(fitted_entry,fitted_ready.geometry)
+    check(fitted_binding.geometry.key==[path,true,true,1.0,1.0,"original",2.0]
+        and fitted_binding.geometry.key!=binding.geometry.key and fitted_ready.geometry.parameters.component_units==units
+        and fitted_ready.geometry.bounds==realised.geometry.bounds and fitted_entry.source_parameters.frame_uv==Vector4(0,.5,1.0/3.0,.5),
+        "Source fit is a distinct binding operand while optical extents and untouched grid-row UV equal the independent scale2 oracle")
+    var fitted_version:int=fitted_entry.source_version
+    fitted_entry.erase("geometry_binding") # Exercise the real direct binder, not its early return.
+    Geometry.bind(fitted_entry,path,fitted_cache,func(source_path):return textures[source_path],true,true,"original")
+    check(fitted_entry.source_version==fitted_version and fitted_entry.geometry_binding==fitted_binding.geometry.key
+        and fitted_entry.source_parameters.component_units==units and fitted_node.custom_aabb.has_point(expected_point),
+        "Prepared/direct fit keys agree and the same admitted binding retains material coalescing")
+    var wrong_fit:Dictionary=fitted_entry.duplicate();wrong_fit.source_scale=1.0
+    var wrong_layout:Dictionary=fitted_layout.duplicate();wrong_layout.source_scale=1.0
+    check(not Construction.source_shape_ready(wrong_fit,fitted,path,fitted_layout)
+        and not Construction.source_shape_ready(fitted_entry,fitted,path,wrong_layout)
+        and Construction.prepared_reference_shape(wrong_fit,fitted).is_empty(),
+        "Changed fit or unregistered source domain refuses stale painted/reference shape proof")
+    var fit_world:=FitWorld.new();fit_world.camera=Node3D.new();fit_world.rigs={rig_id:fitted}
+    # Painted source points use the actual model global transform. Give this
+    # synchronous geometry fixture its scene owner; no draw/await is added.
+    root.add_child(fit_world);fit_world.add_child(fit_world.camera);fit_world.add_child(fitted_node)
+    fit_world.visual_actors={fitted_row.id:{"row":fitted_row,"entries":[fitted_entry]}}
+    var style:Dictionary={"anchorLiftPx":50.0,"risePx":20.0,"fontSizePx":10.0}
+    var feedback:Dictionary=FitPlacement.painted_feedback_point(fit_world,fitted_row,fitted,style,.25,1.0/Construction.Placement.PIXELS_PER_UNIT)
+    check(feedback.ready and feedback.point.is_equal_approx(Vector3(-2,66,0)/Construction.Placement.PIXELS_PER_UNIT)
+        and fitted_row.scale==1.0 and fitted_entry.scale==1.0,
+        "Explicit generic painted anchor scales once; UI clearance50, rise5 and half-font5 stay independent and canonical scale stays1")
+    check(not FitPlacement.painted_feedback_point(fit_world,fitted_row.duplicate(),fitted,style,.25,1.0).ready,
+        "A copied/stale feedback row cannot borrow the current source model")
+    fitted_entry.source_scale=1.0
+    check(not FitPlacement.painted_feedback_point(fit_world,fitted_row,fitted,style,.25,1.0).ready,
+        "Feedback refuses a source fit not admitted by the current body owner")
+    fitted_entry.source_scale=2.0;fit_world.visual_actors={}
+    check(not FitPlacement.painted_feedback_point(fit_world,fitted_row,fitted,style,.25,1.0).ready,
+        "A departed feedback actor is not replaced with a guessed body or source point")
+    var recipient:Dictionary=actor.duplicate(true);recipient.last_visual_position=[0,0]
+    recipient.appearance={"visual_scale":1.0,"visual_scale_x":1.0}
+    var impact:Dictionary=FitImpact.prepare(recipient,[],0.0,{"from_elevation_feet":0.0},fitted_cache)
+    var replacement:Resource=fitted_index.duplicate(false);replacement.rigs={rig_id:rig}
+    var replacement_cache:Dictionary=fitted_cache.duplicate();replacement_cache[BodySources.KEY]={"index":replacement,"loaded":{layer_path:layer,clip_path:clip}}
+    var received:Dictionary=FitImpact.with_direction(impact,[],replacement_cache)
+    var expected_anchor:Vector3=FitImpact.REFERENCE_BASIS.x*(-units)+Vector3.UP*(3*units)/FitImpact.REFERENCE_BASIS.y.y
+    check(is_same(impact.get("source_registration"),fitted) and received.status=="available" and received.world_anchor.is_equal_approx(expected_anchor),
+        "Detached impact retains actual admitted source fit/anchor after later same-ID rig replacement")
+    var mismatched_history:Dictionary={}
+    FitInputs._departure_metadata({"rig":rig_id,"source_registration":fitted,"departure":{"row":fitted_row}},replacement_cache,{}, {},mismatched_history)
+    check(mismatched_history.get("complete",false) and mismatched_history.get("reason")=="departure_source_registration_not_admitted" and not mismatched_history.has("inputs"),
+        "A retained source rig cannot borrow a later index's same-path history geometry or layout")
+    fit_world.free() # Owns the technical camera and fitted source model.
     node.free()
     check(var_to_bytes([index.rigs,index.source_owners,layer.headers,clip.descriptors])==original,"All native-bank controls preserve their owned admitted metadata")
     return {"scope":"Technical in-memory API/metadata/mesh/material admission only; not Dragon/producer/raster/art evidence",

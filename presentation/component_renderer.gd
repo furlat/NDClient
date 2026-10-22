@@ -713,8 +713,13 @@ func sample(world: Node, samples: Array,frame_seconds: float=1.0/60.0,budget:Dic
             numbers[component.id].visible=true
             var progress=clampf(component.age_ms/maxf(.001,component.duration_ms),0,1)
             var rig: Dictionary=world.rigs[row.rig]
-            var lift=(component.style.anchorLiftPx-rig.origin_y_from_ground)*row.scale+component.style.risePx*progress+component.style.fontSizePx*.5
-            numbers[component.id].position=origin+world.camera.basis.y*lift*numbers[component.id].pixel_size
+            if rig.get("feedback_anchor","legacy")=="painted_body_anchor":
+                var anchor:Dictionary=SpellPlacement.painted_feedback_point(world,row,rig,component.style,progress,numbers[component.id].pixel_size)
+                if not anchor.ready:numbers[component.id].visible=false;ready=false;continue
+                numbers[component.id].position=anchor.point
+            else:
+                var lift=(component.style.anchorLiftPx-rig.origin_y_from_ground)*row.scale+component.style.risePx*progress+component.style.fontSizePx*.5
+                numbers[component.id].position=origin+world.camera.basis.y*lift*numbers[component.id].pixel_size
             numbers[component.id].modulate.a=clampf((1-progress)/maxf(.001,1.0-component.style.fadeStartFraction),0,1)
             _witness(world,component,not world.camera.is_position_behind(numbers[component.id].global_position) and world.get_viewport().get_visible_rect().has_point(world.camera.unproject_position(numbers[component.id].global_position)))
         elif component.kind=="material_flash": _witness(world,component,_actor_visible(world,component.actor_uuid))

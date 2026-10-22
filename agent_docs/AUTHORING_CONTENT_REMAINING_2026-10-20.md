@@ -176,9 +176,9 @@ recipient/publication cuts. No per-spell renderer branch or new clock.
 
 That batch added eight actual native-producer original outcomes: four attack/
 quarry successes, three Myrmidon successes and the exact failed Earth Landing
-identity. After the additional Arcane Sword original, the actual Library now
-contains381cases/377recorded/fourfailed before the next creature captures. The
-failed originals remain preserved. Source publication passes zero errors/two warnings;
+identity. After the additional Arcane Sword original and four creature originals below,
+the actual Library now contains385cases/381recorded/fourfailed. The failed
+originals remain preserved. Source publication passes zero errors/two warnings;
 the initial three external-declaration-order syntax errors are preserved and
 corrected. Four initial headless rows pass19,148assertions. The final two
 current-contact controls pass3,457 and the complete final four-original native
@@ -232,10 +232,15 @@ Authentic Cambion/Deva/Djinni bodies are still missing final-art deliveries.
 Draconic authentic mouth geometry and finite breath output remain partial; the
 current-T-Rex gesture supplies no mouth fallback and does not qualify future
 native grounded/airborne dragon-body choices. Missing final art/input data is
-separate from these now-explicit provisional body assignments. The four actual-
-producer scenarios are source-reviewed but not yet captured here; Library stays
-381/377/fourfailed until actual new receipts are imported.
-[Proposed single four-case original cohort](../.runtime/closing-repairs/provisional-creature-action-choices/provisional-creature-originals.patch),
+separate from these now-explicit provisional body assignments. All four actual-
+producer originals were captured once successfully, including real Cambion
+Charm followed by Draining Kiss, and imported into the ordinary Library:
+385cases/381recorded/fourfailed. Both audience journals and older failed
+originals remain preserved. Native body follow-through is pending; successful
+capture/import does not qualify rendered body or finite VFX output.
+[Exact four-original capture index](../.runtime/closing-repairs/provisional-creature-originals/index.json),
+[confirmed ordinary-Library import](../.runtime/closing-repairs/provisional-creature-originals/library-import.json),
+[source-reviewed single four-case original cohort](../.runtime/closing-repairs/provisional-creature-action-choices/provisional-creature-originals.patch),
 [legal setup/outcome and retirement limits](../.runtime/closing-repairs/provisional-creature-action-choices/scenario-note.md).
 
 **Arcane Sword's independent anchor is separately partial.** Its actual new

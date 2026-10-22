@@ -548,6 +548,7 @@ func _history_capture(cut:Dictionary,owner:Dictionary,at_ms:float)->Dictionary:
     var motion:Dictionary=active.get(actor.uuid,{})
     var capture:Dictionary=Conditions.ConditionPose.capture_sample(rest.value,actor.life_state,rig,pose,motion,at_ms,pose_age,facing)
     capture.merge({"actor_uuid":actor.uuid,"condition_uuid":owner.id,"rig":rig_id,"admitted_at_ms":owner.start_ms,"sample_ms":at_ms})
+    if rig.get("source_scale",1.0)!=1.0:capture.source_registration=rig
     capture.departure=Conditions.ConditionPose.capture_departure(departure,capture,motion)
     capture.make_read_only()
     return {"ready":true,"capture":capture}

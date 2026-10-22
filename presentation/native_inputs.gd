@@ -256,7 +256,9 @@ static func _history_source_key(capture:Dictionary,world:Node)->Array:
     var result:Array=[capture.rig,capture.clip,value.row.equipment_layers,capture.hidden_slots,
         value.row.scale,value.row.get("scale_x",1.0),value.layer_samples.map(func(row):return row.get("clip","")),
         value.material.get("ramp",{}).get("texture"),value.material.get("flash",{}).get("material",{}).get("palette",{}).get("noiseSheet")]
-    if world.rigs.get(capture.rig,{}).get("native_banks",false):
+    var rig:Dictionary=capture.source_registration if capture.has("source_registration") else world.rigs.get(capture.rig,{})
+    if capture.has("source_registration"):result.append(float(capture.source_registration.source_scale))
+    if rig.get("native_banks",false):
         result.append(capture.world_facing)
         result.append(value.layer_samples.map(func(row):return [row.get("clip",""),row.get("source_track",{}).get("from_position"),row.get("source_track",{}).get("target_position",row.get("source_track",{}).get("to_position"))]))
     return result
@@ -414,7 +416,9 @@ static func _departure_layer(layer:Dictionary,capture:Dictionary,rig:Dictionary,
 
 static func _departure_metadata(capture:Dictionary,cache:Dictionary,config:Dictionary,resources:Dictionary,output:Dictionary)->void:
     var departure:Dictionary=capture.departure;var row:Dictionary=departure.row
-    var rig:Dictionary=Characters.rigs(cache)[capture.rig]
+    if capture.has("source_registration") and not is_same(Characters.rigs(cache).get(capture.rig),capture.source_registration):
+        output.merge({"complete":true,"reason":"departure_source_registration_not_admitted"});return
+    var rig:Dictionary=capture.source_registration if capture.has("source_registration") else Characters.rigs(cache)[capture.rig]
     var prepared:Dictionary=Characters.prepare_layers(row,rig,cache)
     if not prepared.ok:output.merge({"complete":true,"reason":prepared.error.message});return
     var layers:Dictionary={};var paths:Dictionary={}
@@ -447,7 +451,8 @@ func prepare_departure(world:Node,handle:Dictionary,component:Dictionary,admit:b
     if capture.is_empty():return {"ready":false,"pending":false,"reason":"condition_original_departure_not_observed"}
     if not str(capture.departure.reason).is_empty():return {"ready":false,"pending":false,"reason":capture.departure.reason}
     var key:Array=[capture,world.source_depth,world.source_normals,world.character_light_profile]
-    if world.rigs.get(capture.rig,{}).get("native_banks",false):key.append(world.quarter)
+    var registration:Dictionary=capture.source_registration if capture.has("source_registration") else world.rigs.get(capture.rig,{})
+    if registration.get("native_banks",false):key.append(world.quarter)
     if handle.get("departure_key",[])==key and handle.has("departure_entries"):
         handle.departure_draw_status=_prepare_draw_sources(world,handle,handle.get("history_draw_captures",[capture]),admit)
         return handle.departure_draw_status
@@ -580,7 +585,8 @@ static func _bind_draw_sources(handle:Dictionary,capture:Dictionary,layers:Array
 func _private_layer_context(world:Node,handle:Dictionary,capture:Dictionary,receiver_depth:Texture2D)->Dictionary:
     if not handle.has("departure_entries"):return {"ready":false,"reason":"departure_layers_not_prepared"}
     if not world.camera is Camera3D or receiver_depth==null:return {"ready":false,"reason":"actor_context_receiver_not_prepared"}
-    var row:Dictionary=capture.departure.row;var rig:Dictionary=Characters.rigs(world.catalog_cache)[capture.rig]
+    var row:Dictionary=capture.departure.row
+    var rig:Dictionary=capture.source_registration if capture.has("source_registration") else Characters.rigs(world.catalog_cache)[capture.rig]
     var layers:Array=[];var revision:Array=[]
     var value:Dictionary=capture.departure.material.duplicate(false)
     var dependencies:Array=[]
@@ -1368,7 +1374,7 @@ static func interrupted_packets(world:Node,component:Dictionary)->Dictionary:
     if capture.get("capture_cut")!="canonical_pre_reaction_commit":return {"ready":false,"reason":"interrupted_preparation_cut_not_bound"}
     if not capture.get("present",false):return {"ready":false,"reason":"interrupted_preparation_not_observed"}
     var row:Dictionary=capture.row.duplicate(false)
-    var rig:Dictionary=world.rigs.get(row.rig,{})
+    var rig:Dictionary=capture.source_registration if capture.has("source_registration") else world.rigs.get(row.rig,{})
     if rig.is_empty():return {"ready":false,"reason":"interrupted_preparation_rig_not_prepared"}
     row.facing=str(capture.world_facing)
     var view:String=Sockets.facing(world,row)
@@ -1377,7 +1383,9 @@ static func interrupted_packets(world:Node,component:Dictionary)->Dictionary:
     if frame<0 or frame>=choices.size() or choices[frame]==null:return {"ready":false,"reason":"interrupted_preparation_socket_not_authored"}
     var pixel:Variant=choices[frame]
     var shape:Dictionary=Construction.layer_shape(rig,128.0/float(world.rig_config.TILE_W)*float(row.scale))
-    var local:Vector3=Vector3(float(pixel.x)-shape.pivot.x,shape.pivot.y-float(pixel.y),0.0)*float(shape.scale)/Sockets.Placement.PIXELS_PER_UNIT
+    var units:float=float(shape.scale)/Sockets.Placement.PIXELS_PER_UNIT
+    if rig.get("source_scale",1.0)!=1.0:units*=float(rig.source_scale)
+    var local:Vector3=Vector3(float(pixel.x)-shape.pivot.x,shape.pivot.y-float(pixel.y),0.0)*units
     var transform:Transform3D=Construction.layer_transform(world.camera.global_basis,row,rig,capture.sample,"body",str(capture.clip),view,frame,float(world.rig_config.TILE_W),float(capture.body_scale))
     var point:Vector3=transform*local
     var observation:Dictionary=component.native_reaction_observation.duplicate(false)

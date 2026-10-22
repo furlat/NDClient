@@ -125,7 +125,9 @@ static func _check_rigs(state: Dictionary) -> void:
             if rig.kind == "layered":
                 for category in rig.slot_categories[slot]:
                     if not state.parts.has(category):Common.warn(report, where, "slot " + slot + " offers a part with no art: " + category)
+        if rig.feedback_anchor not in ["legacy","painted_body_anchor"]:Common.error(report,where,"unknown feedback anchor policy")
         var names := {}
+        var native_scale:float=-1.0
         for clip in rig.clips:
             var at: String = where + "/" + clip.name
             if names.has(clip.name):Common.error(report, at, "duplicate clip")
@@ -134,7 +136,7 @@ static func _check_rigs(state: Dictionary) -> void:
             for marker in clip.markers:
                 if clip.markers[marker] < 0 or clip.markers[marker] >= clip.frames:Common.error(report, at, "marker %s outside the clip's %d frames" % [marker, clip.frames])
             for layer in clip.art:Common.asset(report, at, clip.art[layer])
-            if not clip.body_banks.is_empty():_check_body_banks(state,rig,clip,at)
+            if not clip.body_banks.is_empty():native_scale=_check_body_banks(state,rig,clip,at,native_scale)
             if clip.surface != null and clip.surface.encoding != "none":
                 _check_normal_profile(clip.surface,report,at)
                 _check_camera_origins(clip.surface,report,at,Array(rig.direction_order))
@@ -145,6 +147,12 @@ static func _check_rigs(state: Dictionary) -> void:
                 if key.begins_with("/spritesheets/"):
                     var part: String = key.get_slice("/", 2)
                     if not state.parts.has(part) or not state.parts[part].actions.has(key.get_slice("/", 3).get_basename()):Common.error(report, at, "names a missing part sheet: " + key)
+        if native_scale>0.0 and native_scale!=1.0:
+            if Array(rig.slot_order)!=["body"]:Common.error(report,where,"scaled native body requires its one registered body-pixel domain")
+            for clip in rig.clips:
+                if clip.body_banks.is_empty():Common.error(report,where+"/"+clip.name,"scaled native body requires actual native banks for every declared clip")
+        if rig.feedback_anchor=="painted_body_anchor" and (native_scale<=0.0 or not rig.anchor.is_finite()):
+            Common.error(report,where,"painted feedback requires an admitted native body and finite authored generic anchor")
         for role in rig.fallbacks:
             if not names.has(rig.fallbacks[role]):Common.error(report, where, "fallback " + role + " names a missing clip: " + rig.fallbacks[role])
         for context in rig.contexts:
@@ -152,7 +160,7 @@ static func _check_rigs(state: Dictionary) -> void:
         Common.asset(report, where, rig.measurements)
 
 ## Validate actual native banks before emitting any source Resources.
-static func _check_body_banks(state:Dictionary,rig:Resource,clip:Resource,where:String)->void:
+static func _check_body_banks(state:Dictionary,rig:Resource,clip:Resource,where:String,source_scale:float=-1.0)->float:
     var report:Dictionary=state.report
     if rig.kind=="layered" or not rig.slot_categories.has("body"):
         Common.error(report,where,"native body banks require an own-sheet body slot")
@@ -166,7 +174,10 @@ static func _check_body_banks(state:Dictionary,rig:Resource,clip:Resource,where:
         if art==null:Common.error(report,at,"missing native bank");continue
         if art.container!="atlas" or art.directions!="single" or not art.files.is_empty():Common.error(report,at,"native body bank requires one actual atlas")
         if art.frames!=clip.frames or art.fps!=clip.fps or art.rects.size()!=clip.frames:Common.error(report,at,"native body bank must retain the clip frame clock and exact frame rectangles")
-        if art.cell.x<=0 or art.cell.y<=0 or not art.pivot.is_finite() or art.scale!=1.0:Common.error(report,at,"native bank cell/contact must be finite with unscaled pixels")
+        if art.cell.x<=0 or art.cell.y<=0 or not art.pivot.is_finite():Common.error(report,at,"native bank cell/contact must be finite")
+        if not is_finite(art.scale) or art.scale<=0.0:Common.error(report,at,"native source fit must be finite and positive")
+        elif source_scale<0.0:source_scale=art.scale
+        elif art.scale!=source_scale:Common.error(report,at,"one native rig must retain one uniform source fit")
         var registered:=Rect2(rig.pivot-art.pivot,Vector2(art.cell))
         if not Rect2(Vector2.ZERO,Vector2(rig.cell)).encloses(registered):
             Common.error(report,at,"native bank crop exceeds its declared registered reference canvas")
@@ -189,11 +200,12 @@ static func _check_body_banks(state:Dictionary,rig:Resource,clip:Resource,where:
             if not surface.masks.has(field):Common.error(report,at,"native surface missing actual mask: "+field)
         for path in [surface.depth]+surface.normals.values()+surface.masks.values():
             if Common.asset(report,at,path) and _header(state,_res(path))!=size:Common.error(report,at,"native companion size differs from actual bank: "+path)
-        var definition:Array=[art.cell,art.pivot,art.rects,art.frames,art.fps,art.camera_elevation_degrees,surface.encoding,surface.depth,
+        var definition:Array=[art.cell,art.pivot,art.scale,art.rects,art.frames,art.fps,art.camera_elevation_degrees,surface.encoding,surface.depth,
             surface.normals,surface.normal_profile,surface.masks,surface.depth_range,surface.depth_byte_range,surface.camera_origin,surface.camera_origins,surface.optical_ground_pixels]
         var colour:String=_res(art.path)
         if state.bank_definitions.has(colour) and state.bank_definitions[colour]!=definition:Common.error(report,at,"one physical native colour path has conflicting layout/surface definitions")
         else:state.bank_definitions[colour]=definition
+    return source_scale
 
 ## The rigs the game binds: the player's (root) and each creature's, by content id.
 static func _check_characters(state: Dictionary, characters: Dictionary) -> Dictionary:
@@ -302,6 +314,7 @@ static func _rig_record(state: Dictionary, rig: Resource) -> Dictionary:
     if rig.shadow_alpha >= 0.0:record.shadow_alpha = rig.shadow_alpha
     if rig.lifecycle_scale > 0.0:record.lifecycle_scale = rig.lifecycle_scale
     if rig.native_wings:record.native_wings = true
+    if rig.feedback_anchor!="legacy":record.feedback_anchor=rig.feedback_anchor
     var measured: Dictionary = _measured(state, rig.measurements)
     record.rest_pose_anchors = measured.get("rest_pose_anchors", {}).duplicate()
     for clip in rig.hold_clips:
@@ -315,6 +328,9 @@ static func _rig_record(state: Dictionary, rig: Resource) -> Dictionary:
             for facing in clip.body_banks:
                 var bank:Resource=clip.body_banks[facing]
                 shapes[facing]={"path":_res(bank.path),"cell":[bank.cell.x,bank.cell.y],"pivot":[bank.pivot.x,bank.pivot.y]}
+                if bank.scale!=1.0:
+                    shapes[facing].source_scale=bank.scale
+                    record.source_scale=bank.scale
             value.bank_shapes=shapes
             record.native_banks=true
         if not clip.effect_layers.is_empty():
@@ -490,6 +506,7 @@ static func _bank_descriptor(state:Dictionary,rig:Resource,clip:Resource,facing:
         "cell_size":[art.cell.x,art.cell.y],"frames":clip.frames,"source_coverage":surface.coverage,
         "optical_ground_pixels":surface.optical_ground_pixels}
     if not surface.normal_profile.is_empty():geometry.normal_profile=surface.normal_profile
+    if art.scale!=1.0:geometry.source_scale=art.scale
     # No reference/solid contract is inferred from a normal-admission mask.
     var descriptor:Dictionary=_descriptor(state,_res(art.path),geometry)
     var frames:Array=[]
@@ -497,6 +514,10 @@ static func _bank_descriptor(state:Dictionary,rig:Resource,clip:Resource,facing:
     var header:Dictionary=_header(state,descriptor.path)
     descriptor.source_layout=_plain({"cell":[art.cell.x,art.cell.y],"pivot":[art.pivot.x,art.pivot.y],
         "frame_rects":frames,"sheet_size":[header.width,header.height]})
+    if art.scale!=1.0:
+        var layout:Dictionary=descriptor.source_layout.duplicate()
+        layout.source_scale=art.scale
+        descriptor.source_layout=layout
     return descriptor
 
 static func _bank_slot(state:Dictionary,rig:Resource,clip:Resource,name:String,slot:String,layer:Resource,path:String,selected:Resource,record:Dictionary)->void:

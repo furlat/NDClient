@@ -18,11 +18,14 @@ static func painted_point(world:Node,row:Dictionary,pixel:Vector2)->Vector3:
         if not entry.get("source_layout",{}).is_empty():
             var native_rig:Dictionary=world.rigs[visual.row.rig]
             pivot=Vector2(native_rig.cell_width*.5,native_rig.cell_height-native_rig.origin_y_from_ground)
-        var local:Vector3=Vector3(pixel.x-pivot.x,pivot.y-pixel.y,0.0)*float(entry.scale)/Placement.PIXELS_PER_UNIT
+        var units:float=float(entry.scale)/Placement.PIXELS_PER_UNIT
+        if entry.get("source_scale",1.0)!=1.0:units*=float(entry.source_scale)
+        var local:Vector3=Vector3(pixel.x-pivot.x,pivot.y-pixel.y,0.0)*units
         var lift:float=float(row.get("visual_height",0.0))-float(visual.row.get("visual_height",0.0))
         return entry.node.global_transform*local+Placement.contact(row)-Placement.contact(visual.row)+Vector3.UP*lift*Placement.HEIGHT_UNIT
     var rig:Dictionary=world.rigs[row.rig]
     var units:float=128.0/float(world.rig_config.TILE_W)*row.scale/Placement.PIXELS_PER_UNIT
+    if rig.get("source_scale",1.0)!=1.0:units*=float(rig.source_scale)
     return Placement.contact(row)+world.camera.basis.x*(pixel.x-rig.cell_width*.5)*units*row.get("scale_x",1.0)+world.camera.basis.y*(rig.cell_height-rig.origin_y_from_ground-pixel.y)*units+Vector3.UP*row.get("visual_height",0.0)*Placement.HEIGHT_UNIT
 
 static func resolve(world: Node, actor_id: String, clip: String, frame: int,
@@ -134,6 +137,7 @@ static func resolve(world: Node, actor_id: String, clip: String, frame: int,
         if absf(toward.y) < .00001 or model_axis.is_zero_approx() or model_axis.normalized().dot(toward) < .99999:
             return _missing(result, "source_model_not_on_display_ray")
         var units := float(entry.scale) / Placement.PIXELS_PER_UNIT
+        if entry.get("source_scale",1.0)!=1.0:units*=float(entry.source_scale)
         var elevation := deg_to_rad(float(optical.elevation_degrees))
         var decoded := float(source.depth_range[0]) + (depth.r * 255.0 - 32.0) * (float(source.depth_range[1]) - float(source.depth_range[0])) / 192.0
         var optical_height := ((Geometry.camera_origin(source,facing).y - float(pixel.y) - .5) * cos(elevation) + decoded * sin(elevation)) * units

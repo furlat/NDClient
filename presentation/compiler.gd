@@ -851,6 +851,7 @@ static func _interrupted_draw_cut(group:Dictionary,commit:Dictionary,owners:Dict
         capture.source_seconds=actual.source_seconds;capture.body_scale=material.body_scale.factor
         capture.present=WorldRows.visible_actor(actor,state) and float(material.alpha)>0.0
         capture.capture_cut="canonical_pre_reaction_commit";capture.source_material=material
+        if rig.get("source_scale",1.0)!=1.0:capture.source_registration=rig
 
 static func _native_requirement_cut(group: Dictionary, previous: Dictionary, owners: Dictionary,
         areas: Dictionary, at_ms: float, local_ms: float, cache: Dictionary,item_owners:Dictionary={},item_state:Dictionary={},grants:Dictionary={}) -> void:

@@ -264,9 +264,15 @@ func request(row: Dictionary,sample_ms: float,quarter: int,prepare_views: bool=t
             layout=descriptor.get("source_layout",{})
             if layout.is_empty():errors[key]="No admitted native source layout: "+path;return key
         var selected:Dictionary=layer.duplicate(false)
+        if not layout.is_empty() and layout.get("source_scale",1.0)!=rig.get("source_scale",1.0):
+            errors[key]="Native preview source fit differs from its admitted rig: "+path;return key
         selected.thumbnail_source={"path":path,"layout":layout}
         source_layers.append(selected)
     layers=source_layers
+    if rig.get("source_scale",1.0)!=1.0:
+        if source_layers.any(func(layer):return layer.thumbnail_source.layout.is_empty()):
+            errors[key]="Scaled native preview has an unregistered independent layer domain";return key
+        job.source_scale=rig.source_scale
     job.merge({"rig":rig,"clip":clip_name,"frame":frame,"facing":facing,"layers":layers,
         "hidden":track.get("hidden_slots",[]),"scale_x":actor.get("scale_x",1.0),"material":material})
     _queue(job,prepare_views)
@@ -871,7 +877,9 @@ func _compose(decoded: Dictionary,prepare_hit:bool=true) -> Dictionary:
         var source_parent=Node3D.new();host.add_child(source_parent)
         return {"kind":"body","job":job,"decoded":decoded,"preparing_hit":true,"hit_renderer":renderer,"hit_parent":source_parent,"drawn":false,"started_ms":Time.get_ticks_msec()}
     var view=SubViewport.new();view.disable_3d=true;view.transparent_bg=true
-    view.size=decoded.extent;view.render_target_update_mode=SubViewport.UPDATE_ONCE;host.add_child(view)
+    var fit:float=float(job.get("source_scale",1.0))
+    view.size=decoded.extent if fit==1.0 else Vector2i(ceili(decoded.extent.x*fit),ceili(decoded.extent.y*fit))
+    view.render_target_update_mode=SubViewport.UPDATE_ONCE;host.add_child(view)
     var resources: Dictionary=decoded.resources;var aux={}
     for path in decoded.auxiliary:
         if decoded.auxiliary[path]!=null:aux[path]=ImageTexture.create_from_image(decoded.auxiliary[path])
@@ -886,15 +894,25 @@ func _compose(decoded: Dictionary,prepare_hit:bool=true) -> Dictionary:
         sprite.scale.x=absf(job.scale_x)
         if job.scale_x<0: sprite.flip_h=true
         var offset:Vector2=part.offset
-        if job.scale_x<0:offset.x=view.size.x-offset.x-part.image.get_width()
-        sprite.position=Vector2((view.size.x-view.size.x*absf(job.scale_x))*.5+offset.x*absf(job.scale_x),offset.y)
+        if fit==1.0:
+            if job.scale_x<0:offset.x=view.size.x-offset.x-part.image.get_width()
+            sprite.position=Vector2((view.size.x-view.size.x*absf(job.scale_x))*.5+offset.x*absf(job.scale_x),offset.y)
+        else:
+            sprite.scale*=fit
+            if job.scale_x<0:offset.x=decoded.extent.x-offset.x-part.image.get_width()
+            sprite.position=Vector2((view.size.x-decoded.extent.x*fit*absf(job.scale_x))*.5+offset.x*fit*absf(job.scale_x),offset.y*fit)
         view.add_child(sprite)
     if decoded.mask!=null:
         var overlay=Sprite2D.new();overlay.centered=false;overlay.texture=ImageTexture.create_from_image(decoded.mask)
         var shader=ShaderMaterial.new();shader.shader=OutlineShader
-        shader.set_shader_parameter("assembled",overlay.texture);shader.set_shader_parameter("pulse_mask",outline_source.pulse_mask(view.size))
+        shader.set_shader_parameter("assembled",overlay.texture);shader.set_shader_parameter("pulse_mask",outline_source.pulse_mask(view.size if fit==1.0 else decoded.extent))
         ConditionOutline.bind(shader,state);overlay.material=shader
-        overlay.scale.x=absf(job.scale_x);overlay.flip_h=job.scale_x<0;overlay.position.x=(view.size.x-view.size.x*absf(job.scale_x))*.5;view.add_child(overlay)
+        overlay.scale.x=absf(job.scale_x);overlay.flip_h=job.scale_x<0
+        if fit==1.0:overlay.position.x=(view.size.x-view.size.x*absf(job.scale_x))*.5
+        else:
+            overlay.scale*=fit
+            overlay.position.x=(view.size.x-decoded.extent.x*fit*absf(job.scale_x))*.5
+        view.add_child(overlay)
     return {"kind":"body","job":job,"viewport":view,"drawn":false}
 
 func _composites_drawn()->void:

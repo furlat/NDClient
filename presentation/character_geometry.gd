@@ -105,6 +105,10 @@ static func prepare_binding(path:String,slot:String,cache:Dictionary,depth:bool,
     # this worker result; actual textures are borrowed by the scene owner later.
     var value:Dictionary={"key":[path,depth,normals,scale,scale_x,profile],"parameters":{},"textures":{},"paths":{},"bounds":PackedVector3Array()}
     var source:Dictionary=record(path,slot,cache)
+    var pixel_scale:float=scale
+    if source.get("source_scale",1.0)!=1.0:
+        value.key.append(source.source_scale)
+        pixel_scale*=float(source.source_scale)
     profile=effective_profile(source,profile)
     value.status="unsupported_source" if source.is_empty() else source.status
     if source.is_empty():
@@ -127,11 +131,11 @@ static func prepare_binding(path:String,slot:String,cache:Dictionary,depth:bool,
     var cell:Array=source.get("cell_size",[128,128])
     value.cell=Vector2(cell[0],cell[1]);value.ground=source.get("optical_ground_pixels",19.0)
     value.parameters.merge({"component_depth_range":Vector2(source.depth_range[0],source.depth_range[1]),
-        "component_units":scale/Placement.PIXELS_PER_UNIT,"component_scale_x":scale_x,
+        "component_units":pixel_scale/Placement.PIXELS_PER_UNIT,"component_scale_x":scale_x,
         "component_reconstruction_origin":Vector2(optical.origin[0],optical.origin[1]),"component_elevation":deg_to_rad(optical.elevation_degrees),
         "use_component_depth":depth,"use_component_normals":normals,"has_component_geometry":true})
     var relative:=Basis(Vector3.RIGHT,-(deg_to_rad(optical.elevation_degrees)-PI/6.0))
-    var units:float=scale/Placement.PIXELS_PER_UNIT
+    var units:float=pixel_scale/Placement.PIXELS_PER_UNIT
     for origin in _reconstruction_origins(source):
         for x in [0.0,float(cell[0])]:
             for y in [0.0,float(cell[1])]:
@@ -176,6 +180,7 @@ static func clear(entry: Dictionary) -> void:
 static func bind(entry: Dictionary, path: String, cache: Dictionary, loader: Callable, depth: bool = true, normals: bool = true, profile: String = "original") -> void:
     var scale_x: float = entry.placement.get("scale_x",1.0)
     var key = [path,depth,normals,entry.scale,scale_x,profile]
+    if entry.get("source_scale",1.0)!=1.0:key.append(entry.source_scale)
     if entry.get("geometry_binding",[]) == key: return
     var source = record(path,entry.actor_layer.slot,cache)
     profile=effective_profile(source,profile)
@@ -208,7 +213,9 @@ static func bind(entry: Dictionary, path: String, cache: Dictionary, loader: Cal
     SourceMaterial.set_parameter(entry,"component_depth_range",Vector2(source.depth_range[0],source.depth_range[1]))
     # Provisional optical convention: one reconstruction unit is one source
     # pixel at the existing quad scale. This never changes its geometry/Z/order.
-    SourceMaterial.set_parameter(entry,"component_units",entry.scale/Placement.PIXELS_PER_UNIT)
+    var pixel_scale:float=entry.scale
+    if entry.get("source_scale",1.0)!=1.0:pixel_scale*=float(entry.source_scale)
+    SourceMaterial.set_parameter(entry,"component_units",pixel_scale/Placement.PIXELS_PER_UNIT)
     SourceMaterial.set_parameter(entry,"component_scale_x",scale_x)
     var optical: Dictionary = source.get("optical_camera",{})
     var origins:Dictionary=_camera_origins(source)
@@ -234,7 +241,7 @@ static func bind(entry: Dictionary, path: String, cache: Dictionary, loader: Cal
     # The source and display share azimuth but have 45 and 30 degree elevations.
     var relative := Basis(Vector3.RIGHT,-(deg_to_rad(optical.elevation_degrees)-PI/6.0))
     var bounds: AABB = entry.node.mesh.get_aabb()
-    var units: float = entry.scale/Placement.PIXELS_PER_UNIT
+    var units: float = pixel_scale/Placement.PIXELS_PER_UNIT
     for origin in _reconstruction_origins(source):
         for x in [0.0,float(cell[0])]:
             for y in [0.0,float(cell[1])]:

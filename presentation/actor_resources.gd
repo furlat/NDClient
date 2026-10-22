@@ -29,6 +29,8 @@ static func build_private(inputs:Dictionary,textures:Dictionary,resources:Dictio
             SourceMaterial.set_parameter(entry,"tint",Construction.Modular.rgb(layer.tint))
             var layout:Dictionary=source.binding.get("source_layout",{})
             var shape:Dictionary=Construction.layer_shape(rig,actor.scale,layout)
+            if rig.get("source_scale",1.0)!=1.0 and layout.get("source_scale",1.0)!=rig.source_scale:
+                output.merge({"complete":true,"error":"Private scaled native layer has no matching admitted source domain: "+str(source.binding.path)});return
             if rig.get("native_banks",false) and ((layout.is_empty() and native_shapes.has(source.binding.path)) or native_shapes.get(source.binding.path if not layout.is_empty() else "",{}).get("shape",{})!=shape):
                 output.merge({"complete":true,"error":"Private native source shape/layout is not declared: "+str(source.binding.path)});return
             if rig.get("native_banks",false):
@@ -39,8 +41,11 @@ static func build_private(inputs:Dictionary,textures:Dictionary,resources:Dictio
             if rig.get("native_banks",false):SourceMaterial.set_parameter(entry,"source_quad_size",shape.mesh_size,true)
             else:material.set_shader_parameter("source_quad_size",shape.mesh_size)
             entry.cell=shape.cell;entry.pivot=shape.pivot;entry.scale=shape.scale
+            if rig.get("source_scale",1.0)!=1.0:entry.source_scale=rig.source_scale
             var origin:Vector2=Placement.project(Vector2(row.position[0],row.position[1]),row.base_height_steps,actor.quarter)
-            entry.screen_rect=Rect2(origin-entry.pivot*entry.scale,entry.cell*entry.scale)
+            var pixel_scale:float=entry.scale
+            if entry.get("source_scale",1.0)!=1.0:pixel_scale*=float(entry.source_scale)
+            entry.screen_rect=Rect2(origin-entry.pivot*pixel_scale,entry.cell*pixel_scale)
             SourceMaterial.apply(entry,condition_parameters);entry.bound_condition_parameters=condition_parameters
             var ready:Dictionary=Construction.realize_private_binding(source.binding,textures)
             entry.prepared_source_binding=ready

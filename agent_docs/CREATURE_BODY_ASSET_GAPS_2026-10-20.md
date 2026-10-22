@@ -22,19 +22,42 @@ substitute. Cambion, Deva and Djinni have no own-body delivery identified in
 these handoffs. Thus four original client rows remain incomplete, with only
 three unidentified artwork deliveries. Authentic dragon mouth registration
 remains separate from its delivered depth/normals. Existing portraits remain.
-The source-reviewed independent-normal receiving change awaits its matching
-[existing offline Factory receiver program](FACTORY_DRAGON_RECEIVER_PROGRAM_HANDOFF_2026-10-22.md);
-no new art, mask or API is requested. Client per-facing optical-origin support
+The matching independent-normal Factory receiver program is **DELIVERED;
+CLIENT INTAKE PENDING** in complete
+`runtime-dragon-receiver-20261022-53075ee7ed11481f`.
+[Exact delivery and scope](/mnt/c/Users/tommaso/Documents/assets/VFXFactory/docs/DRAGON_RECEIVER_PROGRAM_DELIVERY_2026-10-22.md).
+It supplies the proposed raw/expanded shader aliases with native-default/private
+owner controls and retains the 81-row Spirit/helper table, 465 static condition
+Scene preload bindings and all 504 defaults. Factory evidence is not client
+installation, Dragon output or human art acceptance. The currently frozen
+client package remains `runtime-spike-readiness-20261022-a12f7da61022225f`;
+archive adoption and the paired client normal-policy source are pending.
+No new art, mask or API is requested. Client per-facing optical-origin support
 and exact per-view native-bank transport are applied through the existing
 source/binder/preparation schema. Their grouped source/default-path controls
 pass; no actual Dragon/native bank is selected yet. The private15clip/120bank
 candidate preserves delivered grids without the earlier padded-atlas overhead.
-Source fit2, unsupported pose/ground-air contexts and the matching receiver
-program still gate activation. Cropped-body Outline reference registration is
+Uniform existing ArtSource.scale fit2 support is now **applied source**, including
+prepared shape/key ownership, optical units, captured history/impact, source-pixel
+placement, picking, thumbnail geometry and the explicit generic painted-anchor
+UI policy. Source peer is clear; the corrected existing geometry922 and
+condition-native-resolution6,293 controls pass at their retained receipt. The current
+native cohort still has the Cambion authoring failure described below.
+Neither the private 18-Resource Dragon proposal nor its separate 16-Resource
+scale2/feedback overlay is applied, no selected Dragon assets were copied, and
+the active Character still uses the T-Rex. The explicitly authorized provisional
+grounded rest/hurt/death, Ground_Attack and Ground_Breathe choices await actual
+data intake; unknown static ground/air state is not a new API requirement or
+reason to withhold those authoring choices. Actual data/asset adoption and
+installation of the delivered matching program still prevent Dragon activation;
+authentic airborne melee, mouth registration and output remain partial.
+Cropped-body Outline reference registration is
 source-closed and its technical native pixel/lifetime gate passes27assertions;
 this does not qualify actual Dragon artwork.
-No GLSL changes while that matching program is unavailable.
+No product GLSL change has landed before the matching package intake.
 [Exact selected data and gates](../.runtime/closing-repairs/dragon-selected-native-data/README.md),
+[applied fit source and separate gated overlay](../.runtime/closing-repairs/dragon-source-fit2/README.md),
+[corrected existing controls](../.runtime/tests/20261022T042313.798617Z/summary.json),
 [current transport/default native receipt](../.runtime/main-queue-20261022/native-bank-action-native/summary.json).
 
 The current Cambion/Deva/Djinni and T-Rex substitutions now have explicit
@@ -45,6 +68,22 @@ the other three use their actual Action body branch. This supplies no dragon
 mouth/contact or selected native ground/air context.
 [Source and affected follow-through](REMAINING_WORK_2026-10-20.md#four-creature-choices-and-native-reference-outline-follow-through).
 
+All four real provisional-body originals now capture successfully once on the
+admitted 9f/schema16 producer: Cambion's genuine Charm/Kiss prerequisite, Deva's
+held-weapon Concussive Smash, Djinni Gales and default Draconic Rend/Breath,
+with movement/injury/ordinary retirement. Their import leaves the Library at
+**385 cases / 381 recorded / four failed**, preserving all earlier failures.
+The later five-original native cohort records **22,960 assertions/two failures**,
+natural exit1 with no script/engine errors or owned leftovers. Deva's equipped
+Attack, Djinni, the current T-Rex Draconic gesture and Arcane command families
+have submitted visible source-binding witnesses. Cambion installation rejects
+an unsupported inherited `weaponGlow/Magic2` layer during its genuine Charm
+prerequisite; that client authoring failure remains open. There is no overall
+native pass. These originals neither select the new Dragon banks nor supply
+authentic mouth geometry or art acceptance.
+[Exact originals and import](../.runtime/closing-repairs/provisional-creature-originals/README.md).
+[Failed native cohort](../.runtime/main-queue-20261022/fit-registration-native/summary.json).
+
 | Creature | Exact owner | Current source / remaining boundary |
 |---|---|---|
 | Air Elemental | [`creature.spell.air_elemental`](../authoring/characters/characters/creature.spell.air_elemental.tres) | `summon.elemental.air` — own9clip body/geometry delivered; native movement/intrinsic/hit/death bindings qualified; art/scale review open |
@@ -52,7 +91,7 @@ mouth/contact or selected native ground/air context.
 | Cambion | [`creature.spell.cambion`](../authoring/characters/characters/creature.spell.cambion.tres) | `smallscale.demonelite01` |
 | Deva | [`creature.spell.deva`](../authoring/characters/characters/creature.spell.deva.tres) | `smallscale.characters.4paladin` |
 | Djinni | [`creature.spell.djinni`](../authoring/characters/characters/creature.spell.djinni.tres) | `smallscale.characters.6mage` |
-| Draconic Spirit | [`creature.spell.draconic_spirit`](../authoring/characters/characters/creature.spell.draconic_spirit.tres) | Selected clean colour/reconstructed depth/Sprite Fusion Default normals delivered; newer shared-material runtime candidate also archived. Client still selects `smallscale.dinosaurs.elite-armored-t-rex`; layout/receiving/caster intake and authentic mouth registration remain |
+| Draconic Spirit | [`creature.spell.draconic_spirit`](../authoring/characters/characters/creature.spell.draconic_spirit.tres) | Selected clean colour/reconstructed depth/Sprite Fusion Default normals delivered; newer shared-material runtime candidate also archived. Per-view layout/origin/caster/Outline and fit2 source support are applied, but Dragon Resources/assets remain private/unselected. Client still selects `smallscale.dinosaurs.elite-armored-t-rex`; client receiver/policy intake, actual data/contexts and authentic mouth registration remain |
 | Earth Elemental | [`creature.spell.earth_elemental`](../authoring/characters/characters/creature.spell.earth_elemental.tres) | `summon.elemental.earth` — own9clip body/geometry delivered; native movement/intrinsic/hit/death bindings qualified; art/scale review open |
 | Earth Myrmidon | [`creature.spell.earth_myrmidon`](../authoring/characters/characters/creature.spell.earth_myrmidon.tres) | `summon.myrmidon.earth` — own equipped9clip body plus compatible derived geometry assigned; source publication/dispatch checked separately from native output, display fit and art review. Bare/weapon-only VFX not selected |
 | Fire Elemental | [`creature.spell.fire_elemental`](../authoring/characters/characters/creature.spell.fire_elemental.tres) | `summon.elemental.fire` — own9clip body/geometry delivered; native movement/intrinsic/hit/death bindings qualified; art/scale review open |
@@ -120,7 +159,7 @@ newer handoffs establish three distinct inputs:
 
 | Supplied source | What exists | Current boundary |
 | --- | --- | --- |
-| [Selected dragon depth/normals handoff](/mnt/c/Users/tommaso/Documents/assets/summon-creature-lab-2026-10-20/production-2026-10-21/dragon-depth-normals/HANDOFF.md), sibling `dragon-depth-normals.zip` | Complete selected clean colour, affine reconstructed depth, Sprite Fusion Default normals, independent normal-admission/depth-support/caster-support masks and optional separate source shadow;1,200appearance banks/20,880appearance poses over120shared action/view banks. Manifest declares `complete selected assets; production adoption separate`. | Preserve each bank's crop/grid/contact/optical origin and measured source-angle adapter. Current rig-wide strip/facing UV assumptions cannot simply receive the new paths. Receiving-normal admission must remain independent of missing depth; caster support remains stricter. The current client normal gate still couples receiving to depth/support (`modular.gdshader`). No import or shader adaptation was performed here. |
+| [Selected dragon depth/normals handoff](/mnt/c/Users/tommaso/Documents/assets/summon-creature-lab-2026-10-20/production-2026-10-21/dragon-depth-normals/HANDOFF.md), sibling `dragon-depth-normals.zip` | Complete selected clean colour, affine reconstructed depth, Sprite Fusion Default normals, independent normal-admission/depth-support/caster-support masks and optional separate source shadow;1,200appearance banks/20,880appearance poses over120shared action/view banks. Manifest declares `complete selected assets; production adoption separate`. | Existing client per-view bank/origin/caster/Outline/fit2 support is applied and preserves crop/grid/contact/clock. The private18-Resource base and16-Resource fit overlay/assets remain unapplied/unselected. Receiving-normal admission must remain independent of missing depth; caster support remains stricter. Its matching Factory program is delivered in53075; client package/policy intake remains pending and current GLSL still uses the old coupled gate. No Dragon import, shader change or activation is claimed. |
 | [Shared dragon runtime handoff](/mnt/c/Users/tommaso/Documents/assets/summon-creature-lab-2026-10-20/dragon-runtime-2026-10-22/HANDOFF.md), frozen archive `/mnt/c/Users/tommaso/Documents/assets/summon-creature-lab-2026-10-20/production-2026-10-22/dragon-shared-body-runtime.zip` | Archive exists and contains the handoff plus `data/manifest.json` with `complete=true`,120shared banks/2,088view poses and481PNGs. The shared material stores Light/Dark palette indices in R/G, membrane guidance in B and depth support in A; selected palette alpha supplies body alpha. | The archive's own handoff still calls this an **isolated candidate for visual review** with production/VFXFactory unchanged. A `production-2026-10-22` parent directory does not override that status. The unarchived authoring project/comparison resources may continue changing; use the archived packet for a later selected intake. This is not a client installation or human acceptance. Its existing support-A/palette-alpha/independent-FX-clock contract needs a real production adapter; the prototype explicitly does not demonstrate the production caster adapter. |
 | [Elemental expansion handoff](/mnt/c/Users/tommaso/Documents/assets/summon-creature-lab-2026-10-20/elemental-expansion-2026-10-22/HANDOFF.md) and its `manifest.json` | Durable isolated source delivery: four equipped/bare Myrmidon families, a new unarmed flowing Water option and optional Water effects.89banks/10,680registered colour–geometry poses;36weapon banks/4,320weapon poses. Actual native3D surfaces, matching part-ID masks and source motion aliases are supplied. | The handoff states existing released elementals, production and game bindings are unchanged. Current equipped Myrmidon Resources now select the converted own-body rigs. Preserve192px cells,96/138contact,12fps and eight rows. Canonical RG16 ray depth/BA octahedral world normal is **not** the current affine-R/optical-RGB character descriptor; preview depth/normal images must not be relabelled as compatible numeric inputs. Source aliases, body/armour/weapon separation and actual weapon ownership need coherent existing-path intake. This delivery alone does not reverse excluded weapon-body replacement policy or require a new renderer. |
 

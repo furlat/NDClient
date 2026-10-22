@@ -1,5 +1,14 @@
 # Factory handoff: prepared receiver for supplied dragon normal policy
 
+**DELIVERED — 22 October.** Complete sealed
+`runtime-dragon-receiver-20261022-53075ee7ed11481f` supplies both exact aliases
+requested below, preserving old programs/defaults. The Factory namespace gate
+passes127 functional checks; its static exit diagnostics and runtime costs remain
+explicit. [Actual delivery](/mnt/c/Users/tommaso/Documents/assets/VFXFactory/docs/DRAGON_RECEIVER_PROGRAM_DELIVERY_2026-10-22.md).
+Client offline extraction is complete; adoption/source integration is next.
+This is no longer an outstanding Factory request. The original request below
+preserves its historical source boundary; client pixels/art remain unqualified.
+
 22 October 2026 — prospective client source compatibility, under the existing
 creature intake and R2/R3 renderer scope.
 

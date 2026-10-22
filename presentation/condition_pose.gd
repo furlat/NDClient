@@ -146,6 +146,7 @@ static func admissions(rows:Array,actors:Dictionary,owners:Dictionary,group:Dict
                     if path.size()==2:facing=Placement.facing(Vector2(path[1][0]-path[0][0],path[1][1]-path[0][1]),cycle)
                     var capture:Dictionary=capture_sample(rest,actor.life_state,rig,pose,active.get(actor_id,{}),start_ms+local_ms,age,facing)
                     capture.merge({"actor_uuid":actor_id,"condition_uuid":after.condition_uuid,"rig":rig_id,"admitted_at_ms":start_ms+local_ms})
+                    if rig.get("source_scale",1.0)!=1.0:capture.source_registration=rig
                     if departure_requested(after,cache) and departures.has(after.condition_uuid):
                         var motion:Dictionary=active.get(actor_id,{})
                         capture.departure=capture_departure(departures[after.condition_uuid],capture,motion)

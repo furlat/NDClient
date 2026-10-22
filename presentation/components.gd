@@ -170,7 +170,9 @@ static func bolt(group: Dictionary,node: Dictionary,recipe: Dictionary,start: fl
     var facing: String=cycle[posmod(roundi((atan2(direction.y,direction.x)+PI/4)/(TAU/8))+cycle.find("E"),8)]
     var socket: Variant=recipe.get("sourceSocketsByRig",{}).get(track.rig,{}).get("release",{}).get(facing)
     var offset=Vector2(recipe.originX,recipe.originY)*appearance.visual_scale
-    if socket!=null:offset=Vector2((socket.x-rig.cell_width*.5)*appearance.visual_scale_x,socket.y-rig.cell_height+rig.origin_y_from_ground)*appearance.visual_scale
+    if socket!=null:
+        offset=Vector2((socket.x-rig.cell_width*.5)*appearance.visual_scale_x,socket.y-rig.cell_height+rig.origin_y_from_ground)*appearance.visual_scale
+        if rig.get("source_scale",1.0)!=1.0:offset*=float(rig.source_scale)
     var source=Placement.project(Vector2(a[0],a[1]),0,0)*config.TILE_W/128.0+offset
     var destination=Placement.project(Vector2(b[0],b[1]),0,0)*config.TILE_W/128.0
     destination.y+=float(recipe.targetY)*target.get("appearance",{}).get("visual_scale",0)

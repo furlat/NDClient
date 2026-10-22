@@ -38,6 +38,17 @@ The stable-zero-HP healing request below is **delivered in 9f81d5267**; its
 original 0c failure is retained alongside the successful 9f original. Historical
 requests below are retained as history only.
 
+The separate Dragon receiving-program dependency is now **DELIVERED / CLIENT
+INTAKE PENDING**, not a backend or missing-Factory request. Complete
+`runtime-dragon-receiver-20261022-53075ee7ed11481f` supplies the exact proposed
+raw/expanded normal-policy aliases and retains 81 typed rows, the Spirit helper,
+465 condition Scene preload bindings and 504 defaults.
+[Factory delivery](/mnt/c/Users/tommaso/Documents/assets/VFXFactory/docs/DRAGON_RECEIVER_PROGRAM_DELIVERY_2026-10-22.md).
+The frozen client still runs package a12f; receiver/policy intake and current
+qualification are separate from the 9f public facts reviewed below. Applied
+fit2 runtime source does not select the private Dragon Resources or copy assets.
+[Current creature intake boundary](CREATURE_BODY_ASSET_GAPS_2026-10-20.md).
+
 
 ## Earth Myrmidon Landing identity — new9f original,22October
 
@@ -97,25 +108,45 @@ proximity. In particular the repeat **is a SpellFact with attack_outcome**, even
 though its declaration ID belongs to the Action catalog. Earlier source-only
 claims that it was an ActionFact without an outcome were wrong and are superseded.
 
+The earlier account also understated a real client consumer error: this was not
+only an unbound optional blade. The automatically selected
+`condition_arcane_sword_persistent` package lifecycle was active for the caster's
+actual `condition.spell.arcane_sword` UUID. Its `recipient_ground` registration
+and `NativePersistent.lifecycle_samples` one-owner target bound that independent
+blade to **caster ground**, not the accepted blade point. This is an exact
+source/ownership finding, not a new framebuffer measurement.
+
+The existing two Resources now explicitly prevent that placement:
+[`condition.spell.arcane_sword`](../authoring/abilities/conditions/condition.spell.arcane_sword.tres)
+sets `play_package_lifecycle=false`, and
+[`spell.arcane_sword`](../authoring/abilities/spells/spell.arcane_sword.tres)
+sets `excluded_cues=PackedInt32Array(0)` for the finite independent-owner cue.
+The ordinary lifecycle suppression/export path enforces the former; no runtime
+framework or substitute point was added. The real Attack5 cast body and separate
+Special1 Move/Strike caster gestures remain selected, with actual canonical
+condition UUIDs, outcomes and clocks intact. They do not qualify independent
+blade placement, movement or contact; its anchor remains unavailable. All
+art/audio remain unreviewed.
+
 Pinned `dnd/spells/evocation.py::ArcaneSwordEffect.position` has no public
 snapshot override; creation/repeat keeps the anchor in private
 `effect_source_position`/retained origin, and Move changes the private condition
 position. Generic BaseAction declaration does not fill the existing
 `ActionEvent.target_position`. No currently observed SpatialEffect/condition
 state or applied-damage component in these originals supplies the independent
-anchor. Read-only inspection of current source agrees at those sites; current
-schema18 was not adopted or reproduced here.
+anchor. This diagnosis is tied to the literal frozen 9f originals and source;
+current schema18 was not adopted or reproduced here.
 
-**Narrow producer review:** expose this actually accepted, observed independent
-anchor at creation, move and repeat, retaining enough actual owner observation
-for resumed playback. Populate the existing ActionFact.target_position for the
-move where applicable; choose the appropriate public declaration/member route
-for initial/repeat/retained position. Keep caster SpellFact.source_position as
-caster and preserve actual SpellFact outcomes. If the current public contract
-has no suitable retained coordinate, identify the smallest required extension
-instead of assigning another field the wrong meaning. No rule solver, new
+**Narrow producer review:** first confirm whether the currently intended
+producer already supplies this actually accepted, observed independent anchor,
+and identify the existing public declaration/member operand for initial, move,
+repeat and retained/resumed position. The existing ActionFact.target_position
+is the move field to review where applicable. Keep caster
+SpellFact.source_position as caster and preserve actual SpellFact outcomes;
+another field must not acquire the wrong meaning. No new API, rule solver,
 VFX family, private client lookup, fixture grant or guessed blade trajectory is
-requested. Client Resource/body routing continues without waiting on this.
+requested by this 9f evidence. Client Resource/body routing continues without
+waiting on this; the independent blade stays explicitly unavailable.
 
 ## Stable zero-HP healing discovery — delivered in 9f81d5267, original 0c failure retained
 

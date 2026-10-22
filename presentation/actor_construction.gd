@@ -66,6 +66,7 @@ static func layer(owner:Node,row:Dictionary,rig:Dictionary,source:Dictionary,ind
         entry.native_shape_rig=rig;entry.native_shape_scale=shape.scale
     entry.node.custom_aabb=entry.node.mesh.get_aabb()
     entry.cell=shape.cell;entry.pivot=shape.pivot;entry.scale=shape.scale
+    if rig.get("source_scale",1.0)!=1.0:entry.source_scale=rig.source_scale
     owner.update_bounds(entry)
     return entry
 
@@ -74,8 +75,12 @@ static func layer_shape(rig:Dictionary,scale:float,layout:Dictionary={})->Dictio
     var pivot:=Vector2(cell.x*.5,cell.y-rig.origin_y_from_ground)
     if not layout.is_empty():
         cell=Vector2(layout.cell[0],layout.cell[1]);pivot=Vector2(layout.pivot[0],layout.pivot[1])
-    return {"cell":cell,"pivot":pivot,"scale":scale,"mesh_size":cell*scale/Placement.PIXELS_PER_UNIT,
-        "mesh_center":Vector3((cell.x*.5-pivot.x)*scale/Placement.PIXELS_PER_UNIT,(pivot.y-cell.y*.5)*scale/Placement.PIXELS_PER_UNIT,0.0)}
+    var pixel_scale:float=scale
+    if rig.get("source_scale",1.0)!=1.0:pixel_scale*=float(rig.source_scale)
+    var result:Dictionary={"cell":cell,"pivot":pivot,"scale":scale,"mesh_size":cell*pixel_scale/Placement.PIXELS_PER_UNIT,
+        "mesh_center":Vector3((cell.x*.5-pivot.x)*pixel_scale/Placement.PIXELS_PER_UNIT,(pivot.y-cell.y*.5)*pixel_scale/Placement.PIXELS_PER_UNIT,0.0)}
+    if rig.get("source_scale",1.0)!=1.0:result.source_scale=rig.source_scale
+    return result
 
 ## Finite private construction prepares the declared shapes at this exact scale.
 ## The existing global QuadShapes map remains the only native mesh cache.
@@ -101,6 +106,7 @@ static func source_uv(rig:Dictionary,layout:Dictionary,frame:int,facing:String,s
 static func source_shape_ready(entry:Dictionary,rig:Dictionary,path:String,layout:Dictionary)->bool:
     if not rig.get("native_banks",false):return layout.is_empty()
     if not is_same(entry.get("native_shape_rig"),rig) or entry.get("native_shape_scale")!=entry.scale:return false
+    if entry.get("source_scale",1.0)!=rig.get("source_scale",1.0) or layout.get("source_scale",1.0)!=rig.get("source_scale",1.0):return false
     if layout.is_empty() and entry.get("native_shapes",{}).has(path):return false
     var key:String=path if not layout.is_empty() else ""
     var prepared:Dictionary=entry.get("native_shapes",{}).get(key,{})
@@ -113,6 +119,7 @@ static func source_shape_ready(entry:Dictionary,rig:Dictionary,path:String,layou
 static func prepared_reference_shape(entry:Dictionary,rig:Dictionary)->Dictionary:
     if not rig.get("native_banks",false):return {}
     if not is_same(entry.get("native_shape_rig"),rig) or entry.get("native_shape_scale")!=entry.scale:return {}
+    if entry.get("source_scale",1.0)!=rig.get("source_scale",1.0):return {}
     var prepared:Dictionary=entry.get("native_shapes",{}).get("",{})
     if prepared.is_empty() or prepared.shape!=layer_shape(rig,entry.scale):return {}
     return prepared
@@ -192,6 +199,7 @@ static func bind_source(owner:Node,entry:Dictionary,rig:Dictionary,path:String,l
     var row:Dictionary=entry.placement
     var prepared:Dictionary=entry.get("prepared_source_binding",{})
     var prepared_key:Array=[path,owner.source_depth,owner.source_normals,entry.scale,row.get("scale_x",1.0),owner.character_light_profile]
+    if entry.get("source_scale",1.0)!=1.0:prepared_key.append(entry.source_scale)
     var source_prepared:bool=not prepared.is_empty() and prepared.geometry.key==prepared_key
     if rig.get("native_banks",false):
         var layout:Dictionary=prepared.get("source_layout",{}) if source_prepared else CharacterGeometry.BodySources.descriptor(path,layer.slot,owner.catalog_cache).get("source_layout",{})
@@ -257,6 +265,7 @@ static func layer_transform(camera_basis:Basis,row:Dictionary,rig:Dictionary,sam
         var points: Array=rig.get("pose_sockets",{}).get(passage.passageSocket,{}).get(clip_name,{}).get(facing,[])
         var socket: Variant=points[mini(frame,points.size()-1)] if not points.is_empty() else null
         var unit=128.0/float(tile_width)*row.scale/Placement.PIXELS_PER_UNIT
+        if rig.get("source_scale",1.0)!=1.0:unit*=float(rig.source_scale)
         position+=camera_basis.y*float(passage.passageBodyHeightPx)*(1-sy)*unit
         if socket!=null:
             position+=camera_basis.x*(rig.cell_width*.5-socket.x)*row.get("scale_x",1.0)*sx*weight*unit

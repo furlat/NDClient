@@ -16,6 +16,53 @@ all 130 alternative dispositions stay implemented; stale worklists do not
 reopen them. All artwork/audio remain unreviewed. Engine/Factory sources stay
 read-only; no mutable backend/schema upgrade is implied by the new handoff.
 
+## Current native source registration and unavailable Arcane placement — 22 October
+
+The existing native source path now consumes uniform `ArtSource.scale` through
+prepared and direct geometry, optical units, bounds/picking, sockets, retained
+history/impact ownership and thumbnails. Canonical actor scale, contact and
+footprint stay independent. Fit1 retains its old field/key shape and arithmetic;
+the explicit painted-anchor feedback policy is opt-in Resource data. The actual
+Dragon resources/assets remain private and unselected at this source boundary.
+[Reviewed existing-owner source family](../.runtime/closing-repairs/dragon-source-fit2/README.md).
+
+The Arcane original exposed a real client placement error: the automatic
+condition lifecycle placed the independent blade at the caster without a blade
+anchor. Two Resource decisions now suppress that lifecycle and exclude its
+finite review-trajectory fallback. Real cast/Move/Strike body gestures and the
+canonical condition UUID/clock/removal remain. Independent blade placement is
+unavailable, rather than substituted with caster/target/command coordinates.
+[Actual producer evidence and narrow handoff](BACKEND_CONTENT_BLOCKERS_2026-10-20.md#arcane-sword-independent-anchor--actual9f-moverepeat-original22october).
+
+All three domains publish zero errors/two warnings. The nine affected headless
+controls pass **26,476 assertions** across the initial seven passing rows and
+the corrected two-row follow-through. The initial geometry fixture's out-of-tree
+transform diagnostic and the old condition-delegation oracle failure are
+preserved; rooting the fixture and checking the exact unavailable Arcane source
+correct them without a product fallback. The older complete200fast batch remains
+199passing/one stale-API parse failure; its source-demand control now passes18
+against the restored first-use API. These are separate source cuts, not a
+relabeled complete current run.
+[Initial affected receipt](../.runtime/main-queue-20261022/fit-registration-and-anchor/summary.json),
+[two corrected controls](../.runtime/tests/20261022T042313.798617Z/summary.json).
+
+The five real-original native cohort completes **22,960 assertions/two failures**,
+natural exit1, no script/engine errors or owned leftovers. Deva's actual equipped
+Attack, Djinni, current T-Rex Draconic gesture and Arcane's real command families
+have submitted visible source-binding witnesses. Cambion installation rejects
+an unsupported inherited `weaponGlow/Magic2` layer during its genuine Charm
+prerequisite; that client authoring failure remains open. No overall native
+pass, isolated effect-pixel acceptance, quiet performance or artwork approval
+is inferred. [Exact failed cohort](../.runtime/main-queue-20261022/fit-registration-native/summary.json).
+
+The already installed sealed a12f source namespace is separately checkpointed
+at **61c4fbdc**, preserving supplied bytes and binary-delivery provenance.
+Factory's newer complete `runtime-dragon-receiver-20261022-53075ee7ed11481f`
+now delivers the exact requested receiver aliases and the static-condition Scene
+preload corrections. Its complete offline intake is next; the program is no
+longer an undelivered Factory blocker. That delivery does not qualify client
+Dragon pixels or authorize invented mouth/contact/airborne-state operands.
+
 ## Shared body-source and Action family — 22 October
 
 The complete reviewed native-bank transport and its existing geometry control

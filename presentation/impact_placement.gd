@@ -22,14 +22,16 @@ static func prepare(actor: Dictionary,tracks: Array,at_ms: float,contact: Dictio
         var seconds:float=sample.source_seconds
         if Graphs.character_loops(rig,clip):seconds=fposmod(seconds,float(rig.clips[clip].frames)/rig.clips[clip].fps)
         frame=clampi(int(seconds*rig.clips[clip].fps),0,int(rig.clips[clip].frames)-1)
-    return {"status":"pending_direction","position":position.duplicate(),"elevation_feet":height*5.0,
+    var receipt:Dictionary={"status":"pending_direction","position":position.duplicate(),"elevation_feet":height*5.0,
         "lift_pixels":sample.get("lift_pixels",0.0),"visual_scale":actor.appearance.visual_scale,
         "visual_scale_x":actor.appearance.visual_scale_x,"source_clip":clip,"source_frame":frame,"source_rig":rig_id}
+    if rig.get("source_scale",1.0)!=1.0:receipt.source_registration=rig
+    return receipt
 
 static func with_direction(receipt: Dictionary,points: Array,cache: Dictionary) -> Dictionary:
     if receipt.status=="missing":return receipt
     var result=receipt.duplicate()
-    var rig:Dictionary=Authoring.rigs(cache)[receipt.source_rig]
+    var rig:Dictionary=receipt.source_registration if receipt.has("source_registration") else Authoring.rigs(cache)[receipt.source_rig]
     var config=Authoring.load_data("catalog/rig.json",cache)
     var facing="SW"
     if points.size()==2:
@@ -44,6 +46,7 @@ static func with_direction(receipt: Dictionary,points: Array,cache: Dictionary) 
     if pixel==null:
         result.status="missing";result.reason="impact_body_socket_explicitly_absent";return result
     var unit=128.0/float(config.TILE_W)*receipt.visual_scale/Placement.PIXELS_PER_UNIT
+    if rig.get("source_scale",1.0)!=1.0:unit*=float(rig.source_scale)
     var offset=Vector2((pixel.x-rig.cell_width*.5)*receipt.visual_scale_x,rig.cell_height-rig.origin_y_from_ground-pixel.y)*unit
     var foot=Vector3(receipt.position[0],receipt.elevation_feet/5.0*Placement.HEIGHT_UNIT,receipt.position[1])
     # Fix registration to the canonical view, then solve the upright attachment

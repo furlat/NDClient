@@ -67,7 +67,9 @@ static func miss_point(world:Node,row:Dictionary,origin:Vector3,policy:Dictionar
         if entry.role=="shadow" or not entry.actor_layer.get("effect",{}).is_empty():continue
         if not is_instance_valid(entry.node) or not entry.node.is_visible_in_tree():continue
         for corner in [Vector2.ZERO,Vector2(entry.cell.x,0.0),Vector2(0.0,entry.cell.y),Vector2(entry.cell)]:
-            var local:Vector3=Vector3(corner.x-entry.pivot.x,entry.pivot.y-corner.y,0.0)*float(entry.scale)/Placement.PIXELS_PER_UNIT
+            var units:float=float(entry.scale)/Placement.PIXELS_PER_UNIT
+            if entry.get("source_scale",1.0)!=1.0:units*=float(entry.source_scale)
+            var local:Vector3=Vector3(corner.x-entry.pivot.x,entry.pivot.y-corner.y,0.0)*units
             edge=maxf(edge,(entry.node.global_transform*local).dot(direction))
     if edge==-INF:return {"ready":false,"reason":"optical_miss_body_not_displayed"}
     var distance:float=maxf(clearance,edge-origin.dot(direction)+clearance)
@@ -357,8 +359,27 @@ static func cast_point(world:Node,component:Dictionary,key:String,frame:int,view
     if not sources.is_empty():
         var forward=Vector3(component.to_position[0]-component.from_position[0],0,component.to_position[1]-component.from_position[1]).normalized()
         var unit=128.0/float(world.rig_config.TILE_W)*row.scale/Placement.PIXELS_PER_UNIT
+        if rig.get("source_scale",1.0)!=1.0:unit*=float(rig.source_scale)
         position+=forward*float(sockets.get("forwardPixels",0.0))*unit
     return {"ready":true,"point":position,"surfaces":qualifications,"clip":clip,"frame":frame,"facing":view}
+
+## Explicit native authoring: a generic painted anchor plus independent UI
+## clearance. No missing/departed owner is replaced with a later live body.
+static func painted_feedback_point(world:Node,row:Dictionary,rig:Dictionary,style:Dictionary,progress:float,pixel_size:float)->Dictionary:
+    var visual:Dictionary=world.visual_actors.get(row.id,{})
+    if visual.is_empty() or not is_same(visual.get("row"),row) or not is_same(world.rigs.get(row.rig),rig):
+        return {"ready":false,"reason":"feedback_source_owner_not_displayed"}
+    var owned:bool=false
+    for entry in visual.get("entries",[]):
+        if entry.role=="shadow" or not entry.actor_layer.get("effect",{}).is_empty():continue
+        if not is_same(entry.get("native_shape_rig"),rig) or entry.get("source_scale",1.0)!=rig.get("source_scale",1.0):
+            return {"ready":false,"reason":"feedback_source_registration_not_admitted"}
+        owned=true;break
+    if not owned or rig.get("body_anchor")==null:return {"ready":false,"reason":"feedback_painted_anchor_not_admitted"}
+    var pixel:Variant=rig.body_anchor
+    var point:Vector3=Surfaces.painted_point(world,row,Vector2(pixel.x,pixel.y))
+    var clearance:float=float(style.anchorLiftPx)+float(style.risePx)*progress+float(style.fontSizePx)*.5
+    return {"ready":true,"point":point+world.camera.basis.y*clearance*pixel_size}
 
 static func pose_point(world:Node,row:Dictionary,name:String,by_clip:Dictionary={})->Dictionary:
     var rig:Dictionary=world.rigs[row.rig]

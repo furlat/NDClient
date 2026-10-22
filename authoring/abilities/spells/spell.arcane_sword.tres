@@ -62,7 +62,7 @@ native_staging = true
 effect_scope = "single"
 effect_roles = PackedStringArray()
 event_cues = PackedInt32Array()
-excluded_cues = PackedInt32Array()
+excluded_cues = PackedInt32Array(0)
 owner_kind = "condition"
 owner_ids = PackedStringArray("condition.spell.arcane_sword")
 owner_cues = PackedInt32Array(0)
@@ -78,5 +78,4 @@ staging_unported = {
 "selection": "arcane_sword_native",
 "source": "assets/vfx/index.json:/selections/arcane_sword_native/staging"
 }
-notes = "Cast body is a stand-in (Attack5, release 7, the most common old gesture) until the spell has its own (coverage fill).
-Plays its imported Factory staging (coverage fill)."
+notes = "The existing Attack5 cast body is provisional and unreviewed. The independent blade's finite owner cue is explicitly excluded while its actual accepted public anchor is absent; the automatic condition package lifecycle is also disabled so it cannot place the blade at caster ground. Real cast outcomes, condition ownership and separate Move/Strike command gestures retain their existing clocks and consumers. No caster/victim position, command trace or review trajectory is a blade-placement fallback. Independent sword placement/contact remains partial pending the actual public operand; all art/audio remain unreviewed."
