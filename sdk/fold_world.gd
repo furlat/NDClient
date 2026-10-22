@@ -52,13 +52,22 @@ static func object_rows(columns:Variant)->Dictionary:
             parts[field]=held.value
         for i in range(indices.size()):
             var placement={"position":at.position[i],"top_height_steps":at.top_height_steps[i]}
-            for field in defaults:placement[field]=parts[field].get(i,defaults[field])
+            placement.merge(defaults)
             placements[indices[i]]=placement
+        # The old row lookups ignored accepted negative sparse field indices.
+        for field in defaults:
+            for i in parts[field]:
+                if i>=0:placements[indices[i]][field]=parts[field][i]
     var result:Array=[]
     for i in range(count):
         var state={"name":columns.name[i],"map_char":columns.map_char[i]}
-        for field in STATE_DEFAULTS:state[field]=fields[field].get(i,STATE_DEFAULTS[field])
+        state.merge(STATE_DEFAULTS)
         result.append({"item_uuid":columns.item_uuids[i],"members":fields.members.get(i),"observed_faces":fields.observed_faces.get(i,[]),"placement":placements.get(i),"state":state})
+    # Defaults keep their original key order; only supplied sparse values
+    # need script assignments after the native dictionary population.
+    for field in STATE_DEFAULTS:
+        for i in fields[field]:
+            if i>=0:result[i].state[field]=fields[field][i]
     return success(result)
 
 static func placement(identity:String,row:Dictionary,statics:Dictionary)->Dictionary:
@@ -80,9 +89,9 @@ static func floor_item(look:Dictionary,state:Dictionary,structures:Dictionary)->
         result.boundary_structure=structures[structure]
     return success(result)
 
-static func tile_columns(columns:Variant,statics:Dictionary,looks:Dictionary)->Dictionary:
+static func tile_columns(columns:Variant,statics:Dictionary,looks:Dictionary,cell_points:Array=[])->Dictionary:
     if columns==null:return success({})
-    var points=Cells.mask_points(columns.cells);var data={};var result={}
+    var points=Cells.mask_points(columns.cells) if cell_points.is_empty() else cell_points;var data={};var result={}
     for field in ["walking_cost","flying_cost","swimming_cost","burrowing_cost","flags","default_light","resolved_light"]:data[field]=Cells.bytes(columns[field])
     for i in range(points.size()):
         var key=Cells.key(points[i]);var row:Dictionary=statics[key];var look:Dictionary=looks[row.look];var flags=int(data.flags[i])
@@ -320,7 +329,8 @@ static func fold(target:Dictionary,update:Dictionary,disclosed:Dictionary={},wor
     for identity in update.get("connectors_removed",[]):
         if not target.connectors.erase(identity):return failure("A connector removal names a connector the client holds")
         if world_context.initialized:_forget_connector(world_context,identity)
-    var entered=Cells.point_set(Cells.mask_points(update.get("entered",{})))
+    var entered_points:Array=Cells.mask_points(update.get("entered",{}))
+    var entered=Cells.point_set(entered_points)
     if not entered.is_empty():
         var unchanged=Cells.point_set(Cells.mask_points(update.get("tiles_unchanged",{})));var kept={}
         for key in unchanged:
@@ -333,7 +343,11 @@ static func fold(target:Dictionary,update:Dictionary,disclosed:Dictionary={},wor
                 if not prior_tiles.has(key):prior_tiles[key]=target.tiles[key]
                 target.tiles.erase(key)
                 order.append({"kind":"tiles","id":key,"remove":true})
-        var tiles=tile_columns(update.get("tile_columns"),target.static.tiles,target.static.tile_looks)
+        var columns:Variant=update.get("tile_columns")
+        # Unchanged cells may make the column mask a strict subset. Borrow
+        # this call's decoded population only for the exact same mask.
+        var column_points:Array=entered_points if columns!=null and columns.cells==update.entered else []
+        var tiles=tile_columns(columns,target.static.tiles,target.static.tile_looks,column_points)
         if not tiles.ok:return tiles
         for key in tiles.value:
             if not entered.has(key) or unchanged.has(key):return failure("Tile columns describe entered cells only, none of them unchanged")

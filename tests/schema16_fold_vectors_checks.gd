@@ -104,6 +104,28 @@ func error_cases()->void:
     for i in [1,2,3]:state=fold(state,apparent.steps[i].input).value
     check(not fold(state.duplicate(true),apparent.steps[3].input).ok,"Removing an effect twice is refused")
     check(not Cells.row_indices({"start":0,"bits":"Ag=="},1).ok,"Out-of-table RowBits refused")
+    # Private API controls retain the original Box and borrow real nondefault
+    # columns. RowBits start -1/bit7 names row -1, never the last Array element.
+    var columns:Dictionary=vector.steps[0].input.update.objects
+    var source_bytes:PackedByteArray=var_to_bytes(columns)
+    var normal:Dictionary=Reducer.World.object_rows(columns)
+    check(normal.ok and normal.value[0].state.is_open==null and normal.value[0].placement.orientation==null,
+        "Original Box has absent/default state and placement fields for negative-row controls")
+    if not normal.ok:return
+    var normal_bytes:PackedByteArray=var_to_bytes(normal.value)
+    var negative_state:Dictionary=columns.duplicate(true)
+    negative_state.is_open=_document("w13_").steps[0].input.update.objects.is_open.duplicate(true)
+    negative_state.is_open.rows={"start":-1,"bits":"gA=="}
+    var state_rows:Dictionary=Reducer.World.object_rows(negative_state)
+    check(state_rows.ok and var_to_bytes(state_rows.value)==normal_bytes,
+        "Negative state-field row remains ignored instead of changing the final object's default")
+    var negative_placement:Dictionary=columns.duplicate(true)
+    negative_placement.placements.orientation=_document("w11_").steps[0].input.update.objects.placements.orientation.duplicate(true)
+    negative_placement.placements.orientation.rows={"start":-1,"bits":"gA=="}
+    var placement_rows:Dictionary=Reducer.World.object_rows(negative_placement)
+    check(placement_rows.ok and var_to_bytes(placement_rows.value)==normal_bytes,
+        "Negative placement-field row remains ignored instead of changing the final placement's default")
+    check(var_to_bytes(columns)==source_bytes,"Negative-row controls leave the original fixture columns unchanged")
 func transition_cases()->void:
     var document=_document("v1_a_first_record");var state:Dictionary=document.initial.duplicate(true)
     state=fold(state,document.steps[0].input).value

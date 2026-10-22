@@ -20,6 +20,49 @@ Authority: [corrected recovery plan](OPUS_RECOVERY_AND_COMPLETION_PLAN_2026-10-2
 The plan-only STOPPED statements describe its earlier preparation, not the current
 human-authorized execution.
 
+## Further recovery — decoded world columns
+
+The resumed recovery removes two repeated operations inside `sdk/fold_world.gd`.
+An entered-cell population is decoded once and lent to tile-column decoding only
+when the two original masks match exactly. Different masks, including unchanged
+tile subsets, keep the existing decoder. Object and placement rows retain their
+complete defaults and original dictionary key order; native dictionary merges
+populate defaults, then script visits only supplied sparse column entries.
+Column validation and first-refusal order are unchanged. Accepted negative
+sparse-field indices retain the previous lookup behavior: they are ignored,
+not interpreted as indices from the end of an Array. This uses call-local data,
+without a retained cache or changed wire/canonical state.
+
+The three original schema18 gameplay journals at `20261022T132135.731366Z`,
+`20261022T132206.675491Z` and `20261022T132237.332472Z` supply all 21 packets.
+The unchanged-pipeline reference matches the candidate's canonical state,
+compiled output, recorded transitions and detached public fold: 85 checks / 0 failures.
+The object decoder's separate original-column comparator passes 450 checks,
+including exact output bytes, input preservation and 11 refusal controls.
+
+Five warm repetitions per recording, followed by an original-code control,
+give these medians across the three recording medians:
+
+| CPU interval (ms) | Before | Candidate | Original-code control | Final candidate |
+| --- | ---: | ---: | ---: | ---: |
+| Door world processing | 13.303 | 12.562 | 13.318 | 12.219 |
+| Move world processing | 8.241 | 7.784 | 8.139 | 7.596 |
+| Door Journal/reduction interval | 21.837 | 21.088 | 21.943 | 20.592 |
+| Move Journal/reduction interval | 19.977 | 19.455 | 19.943 | 18.960 |
+
+These are modest isolated CPU savings. The nested intervals are not additive;
+they do not qualify live command latency, frame maxima, preview speed or the
+remaining performance targets. The final repeats include the negative-index
+compatibility guard; exact 21-packet parity passes again after that correction.
+[Inputs, timings and exact comparison](../.runtime/performance-recovery-20261022/entered-reuse/comparison.json).
+
+The [full fast suite](../.runtime/tests/20261022T191211.723633Z/summary.json)
+passes 208 tests. After the negative-index correction, the
+[affected SDK checks](../.runtime/tests/20261022T191803.551050Z/summary.json)
+pass again: fold vectors 1,257, canonical reuse 87, sensory journal 589.
+The two added negative-row controls use actual nondefault fixture columns and
+compare complete output bytes with the original default rows.
+
 ## Latest affected checkpoint — indexed disclosure, held preparation and composed replay
 
 The human approved the remaining structural plan with the explicit Studio
