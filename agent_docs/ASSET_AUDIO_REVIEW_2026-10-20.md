@@ -44,13 +44,108 @@ shadows and original optical companions. These are assignments of existing
 files, not six new commissions or an artistic approval.
 
 Ashen floor and original static wood/stone wall motifs now use the supplied
-atlases and measured face coordinates. Animated door/destruction banks have
-no matching selected registration and remain a client source-registration gap;
-their pixels are not missing. Blood/Dread/Poison retained pools reuse their
-existing measured region sources. The six summon spell resources explicitly
+atlases and measured face coordinates. Animated door/destruction banks remain
+a source-registration and consumer boundary, detailed below; their colour,
+animation and receiving geometry are already supplied. Blood/Dread/Poison
+retained pools reuse their existing measured region sources. The six summon spell resources explicitly
 reuse the supplied neutral arrival accent for their actual disclosed births;
 this does not replace any missing creature body. All of these choices await
 human review.
+
+The newer explicitly supplied creature packets now include selected dragon
+reconstructed depth/Sprite Fusion Default normals and four actual Myrmidon
+body/geometry/weapon-mask families. They are delivered source inputs awaiting
+client intake, not requests for those assets again. The separate shared indexed-
+material dragon ZIP remains a portable **candidate** by its own archived
+handoff, despite its `production-2026-10-22` directory. Current NDClient still
+uses the T-Rex and four arcane-elemental substitutes; mouth registration and
+layout/receiving/caster adaptation remain separate. See the
+[exact delivered-versus-integrated inventory](CREATURE_BODY_ASSET_GAPS_2026-10-20.md#newer-delivered-files-versus-active-authoring-and-client-intake).
+
+### Animated door/destruction residue registration — current source boundary, 22 October
+
+At client `23e14a2e`, Ashen already selects the original wall atlas through
+[`residue.ashen.tres`](../authoring/environment/surfaces/residue.ashen.tres).
+Its existing `wall_motifs` fields are `art_id`,
+`sampling="wall_motifs_80x192"`, measured `opacity` and `faces`. The selected
+[`residue_wall_faces.json`](../assets/measured/environment/legacy/residue_wall_faces.json)
+contains **24 exact static image IDs**, mapped by `assets` to the three
+`profiles` (`wall`, `door_closed`, `door_open`). Each profile's camera pose
+contains at most two supplied planes, with `origin`, `across`, `down` and the
+optional `reverse` flag. These are registrations of those particular original
+wood/stone images; the old static `wood.door.*` entries are not registrations
+of the newer animated door banks.
+
+The animated artwork is present. For example, the existing shabby-door outward
+bank has **24 frames in each of four views**; its closed/clear destruction bank
+has **37 frames in each view**. Their current measured `surface_frames_by_pose`
+already contain `geometry`, `geometry_region`, `geometry_sampling` and `normal`.
+They retain actual source camera/depth calibration, native source contacts,
+leaf/frame partitioning and the existing sampled hinge angles. This is **not**
+a missing colour sheet, animation, depth/normal asset or backend residue field.
+The source record explicitly distinguishes the fixed frame from the moving
+leaf; one full bank must not be drawn again over its separate components.
+
+What is absent is the matching **original-material face registration for each
+selected frame/view and, during breakage, each surviving source fragment**.
+Ray-depth positions and normals describe current surface geometry; they do not
+by themselves identify the original face coordinates to which a mark must stay
+attached as the leaf swings or fragments move. Copying a static door plane or
+painting the current whole screen quad would slide the motif or apply it to an
+unrelated face/frame.
+
+The exact current transport also stops before those banks:
+
+- [`Environment._images`](../tools/presentation_build/environment.gd:190)
+  assigns `source_image_id` to registered image records. `_bank` preserves the
+  actual frame geometry/clock but has no matching residue-face registration.
+- [`_wall_motif_source`](../tools/presentation_build/environment.gd:682)
+  resolves the selected `faces.assets` IDs only against those registered image
+  resources and validates the supplied planes.
+- [`Catalog.wall_residue_record`](../source_catalog.gd:302) requires an exact
+  `source_image_id` and a wall row. Animated door rows are `kind="door"` and
+  their measured frame surfaces have no such image registration. Destruction
+  bank surfaces likewise lack it.
+- [`EnvironmentSource.describe`](../presentation/environment_source.gd:33)
+  currently applies those motif parameters to body source role1; a door's
+  separate fixed frame and depth-partitioned leaf must retain their own source
+  ownership. The current sampler admits at most four total motif planes.
+
+The bounded deliverable is therefore an authored bank/frame/view-to-original-
+face correspondence, retaining the exact existing bank ID, frame count,
+sample times, camera/view mapping, source rect, source component and original
+alpha/depth/normals. Where a face is representable by the existing planar
+sampler, supply its own measured `origin`/`across`/`down`/optional `reverse` using
+the existing `assets`/`profiles` registration schema. Do not put guessed values
+into a new parallel format. A destruction frame with independently moving
+fragments cannot be claimed supported by one old whole-door plane or by
+exceeding the current plane capacity: its original-face correspondence remains
+an explicit authoring/consumer design boundary until actually supplied.
+
+After authentic registration exists, the existing builder, Catalog frame
+selection and environment material path need one coherent bounded adaptation
+to carry it. Actual `ObjectResidueState.condition_uuid`/`residue_id`/`faces`,
+current observed-face eligibility, original source clock and leaf/frame split
+must remain authoritative. No consumer code or guessed registration was added
+in this source review, and no new Factory/backend API is requested.
+
+### Equipped weapon contacts on object targets — authored placement remains open
+
+[`NativeItems.impact_binding`](../presentation/native_items.gd:206) selects an
+actual equipped Hit/Crit's intrinsic/coating contact from its source item and
+item-effect snapshot. [`Components`](../presentation/components.gd:642) then
+uses [`ImpactPlacement.prepare`](../presentation/impact_placement.gd:11), which
+currently requires a disclosed **actor** rig/body socket. Non-creature targets
+explicitly remain `weapon_impact_object_contact_not_bound`; they do not receive
+an actor proxy. The public AttackFact's `target_kind` and `target_position` do
+not alone author the object's contact point, height or receiving surface.
+
+For any chosen object-contact assignment, identify its actual supported object
+source and intended source-local contact/receiving geometry, then reuse the
+existing finite attack/contact clock and exact item/target identity. An object
+centre, first nearby wall, fake body UUID or guessed elevation is not that
+registration. This is an existing explicit placement boundary, not a request
+for new contact artwork, all object/material combinations or a new renderer.
 
 ## Audio work to delegate
 
@@ -148,6 +243,21 @@ optical geometry does not specify temporal foot contacts. Supply exact
 zero-based planted-frame boundaries and crossing direction after reviewing the
 actual source cycle/facings. No new image or audio file is requested, and no
 frame is copied from the modular body.
+
+**22 October source follow-up:** the actual Run and CrouchWalk cycles were
+inspected in E, S, SW and N; the labelled source-frame sheets are preserved in
+[`goblin-locomotion-contacts/source-inspection`](../.runtime/closing-repairs/goblin-locomotion-contacts/source-inspection).
+The visible supporting phase spans several frames, with the opposite foot
+obscured differently by the body/weapon across views. A low silhouette or
+maximum foot extension does not establish a unique first planted arrival.
+No defensible shared arrival boundary was established by that inspection, so
+`Run/path` remains unassigned rather than receiving a guessed pair of beats.
+The distinct CrouchWalk window source also cannot inherit Run's markers: its
+existing connector clock warps/holds source frames `0→3→7→7→11→14`, and a pose
+inside the actual arc is not automatically a floor contact. Existing source-
+frame and disclosed-endpoint qualifiers already supply the required transport;
+the remaining work is the explicit contact/sound authoring decision. No audio
+data, source clock, body geometry or human-disabled cue was changed.
 
 **The two terminal Blue-view rows remain an intentional source-admission gap.**
 The durable original
@@ -322,8 +432,12 @@ redrawn into that baked body. Its portrait remains borrowed. See
 The absent unused `Head11` helmet offer was removed; no actual gear selection
 was deleted and no missing sprites were fabricated. All 19 later-delivery
 portraits were already assigned; there is no additional exact portrait to
-silently substitute for the remaining borrowed identities. The twelve summon
-body gaps remain unchanged. **All artwork and audio remain UNREVIEWED.**
+silently substitute for the remaining borrowed identities. Of the original
+twelve summon-body rows, four elemental bodies are assigned, four Myrmidon and
+one dragon source families are now delivered but not integrated, and Cambion,
+Deva and Djinni have no own-body delivery identified in the inspected handoffs.
+The eight incomplete client rows are not eight missing-art requests.
+**All artwork and audio remain UNREVIEWED.**
 
 ### Furniture Debris is not an observable missing body assignment
 

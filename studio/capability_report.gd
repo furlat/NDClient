@@ -58,7 +58,9 @@ static func _row(row:Dictionary,cache:Dictionary={})->Dictionary:
         value.preview={"scope":row.preview_scope,"status":row.get("preview_status","not_examined"),
             "reason":row.get("preview_reason",""),"lighting_scope":row.get("preview_lighting_scope","")}
     if row.has("source_fields"):value.source_fields=row.source_fields.duplicate()
-    if row.has("render_method"):value.render_method=row.render_method.duplicate(true)
+    var method:Dictionary=row.get("render_method",{})
+    if method.is_empty():method=EventTrace.render_method(component,cache)
+    if not method.is_empty():value.render_method=method.duplicate(true)
     if component.get("native_spell",false) or component.get("kind")=="native_effect":value.native_method=native_method(component,cache)
     return value
 

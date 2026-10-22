@@ -8,6 +8,10 @@
 [ext_resource type="Script" path="res://presentation/source/sound_ref.gd" id="5_raxc3"]
 [ext_resource type="Script" path="res://presentation/source/abilities/spell_variant.gd" id="6_ehj2j"]
 
+[ext_resource type="Resource" path="res://assets/vfx/extensions/cloud-body-speed-20261021/sources/192b27a6c49748519da7/e022ccf45fa38223.tres" id="SourcePhase_e022ccf45fa38223"]
+
+[ext_resource type="Resource" path="res://assets/vfx/extensions/cloud-body-speed-20261021/sources/071f7f74bedf15d3fcfd/8fcd345672c6929a.tres" id="SourcePhase_8fcd345672c6929a"]
+
 [sub_resource type="Resource" id="Resource_jpexv"]
 script = ExtResource("1_gjp33")
 role = "cast"
@@ -20,8 +24,9 @@ hidden_slots = PackedStringArray("weapon", "offhand")
 [sub_resource type="Resource" id="Resource_7bgk6"]
 script = ExtResource("1_eakmr")
 clip = "bg3-36/hideous-laughter/application"
-approach = "runtime-prepared-input-reduction-20261021"
-immutable_preparation = "res://assets/vfx/extensions/production-review-20261020/sources/7dd1897cdd5ee8a903b9/source_readiness.gd"
+source_phase = ExtResource("SourcePhase_e022ccf45fa38223")
+source_inputs = {"entity_geometry": "set_entity_geometry", "targets": "set_targets"}
+immutable_preparation = "res://assets/vfx/extensions/cloud-body-speed-20261021/sources/2fa692556ac7c0a25f33/readiness.gd"
 role = "attached"
 at = "cast"
 attachment = "recipient_ground"
@@ -33,7 +38,7 @@ hide_at_release = PackedStringArray()
 hide_nodes = PackedStringArray()
 show_nodes = PackedStringArray()
 opacity_keys = PackedVector2Array()
-staging_from = "factory@20261018-c3c616e88a6b725f"
+staging_from = "factory@runtime-spike-readiness-20261022-a12f7da61022225f"
 extra = {
 "dynamic_geometry": true,
 "entity_geometry": {
@@ -55,8 +60,9 @@ extra = {
 [sub_resource type="Resource" id="Resource_lqxv0"]
 script = ExtResource("1_eakmr")
 clip = "bg3-36/hideous-laughter/condition"
-approach = "runtime-prepared-input-reduction-20261021"
-immutable_preparation = "res://assets/vfx/extensions/production-review-20261020/sources/7dd1897cdd5ee8a903b9/source_readiness.gd"
+source_phase = ExtResource("SourcePhase_8fcd345672c6929a")
+source_inputs = {"entity_geometry": "set_entity_geometry", "targets": "set_targets"}
+immutable_preparation = "res://assets/vfx/extensions/cloud-body-speed-20261021/sources/2fa692556ac7c0a25f33/readiness.gd"
 role = "attached"
 at = "contact"
 attachment = "recipient_ground"
@@ -69,7 +75,7 @@ hide_nodes = PackedStringArray()
 show_nodes = PackedStringArray()
 opacity_keys = PackedVector2Array()
 fade_out = 0.3
-staging_from = "factory@20261018-c3c616e88a6b725f"
+staging_from = "factory@runtime-spike-readiness-20261022-a12f7da61022225f"
 extra = {
 "dynamic_geometry": true,
 "entity_geometry": {

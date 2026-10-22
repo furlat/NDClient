@@ -5,6 +5,7 @@ const AudioCues=preload("res://presentation/audio_cues.gd")
 const Recording=preload("res://studio/recording.gd")
 const Fixtures=preload("res://tests/recording_fixtures.gd")
 const Protocol=preload("res://sdk/protocol.gd")
+const CapabilityReport=preload("res://studio/capability_report.gd")
 const CASES=["move","melee","ranged","jump","window-break","death-save","prone","hide","action-surge","door","stairs","interaction-media","dash","hide-light","intrinsic-weapon-arcane-staff"]
 var checks=0
 var failures:Array=[]
@@ -20,6 +21,24 @@ func inspect(directory:String)->void:
     var index=Recording.read(directory)
     check(index.ok,"Actual journal compiles: "+directory)
     if not index.ok:return
+    for row in index.rows:
+        if row.kind!="audio":continue
+        var before:PackedByteArray=var_to_bytes(row)
+        var inspected:Dictionary=CapabilityReport._row(row,index.cache)
+        var method:Dictionary=inspected.get("render_method",{})
+        var source:Dictionary=row.component
+        check(method.get("renderer")=="res://presentation/audio_presenter.gd" \
+            and method.get("source")==source.source and method.get("authoring",{}).get("cue_id")==source.cue_id,
+            "Structured inspection retains the actual recorded audio consumer, cue and editable source")
+        check(method.get("authoring",{}).get("clip")==source.get("clip") \
+            and method.get("authoring",{}).get("contact_ms")==source.get("contact_ms") \
+            and method.get("authoring",{}).get("source_sync_s")==source.get("source_sync_s") \
+            and method.get("authoring",{}).get("voice_limit")==source.get("voice_limit"),
+            "Actual selected stream, contact offset and voice policy survive structured capability inspection")
+        check(method.get("source_availability")==source.status and method.get("source_reason")==source.get("reason","") \
+            and method.get("playback")=="not_witnessed" and method.get("audible_output")=="not_witnessed" \
+            and method.get("listening_review")=="unreviewed","Missing/disabled/assigned sound and human listening remain independent of method presence")
+        check(var_to_bytes(row)==before,"Audio inspection does not mutate the actual compiled row")
     var facts={}
     for name in DirAccess.get_files_at(directory):
         if not name.ends_with(".json") or not name.get_basename().is_valid_int():continue

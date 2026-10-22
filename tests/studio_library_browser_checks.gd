@@ -4,6 +4,7 @@ const Library=preload("res://studio/case_library.gd")
 const WindowScript=preload("res://studio/study_library.gd")
 const Studio=preload("res://studio/studio.gd")
 const Fixtures=preload("res://tests/recording_fixtures.gd")
+const Studies=preload("res://studio/study_catalog.gd")
 var passed=0
 var failures:Array=[]
 func _initialize()->void:call_deferred("run")
@@ -18,6 +19,51 @@ func prepared(window:Window)->bool:
     var ready:bool=window.is_prepared()
     check(ready,"Library filtering and bounded rows finish publication: "+window.error)
     return ready
+
+func described_studies(window:Window,original:Dictionary)->void:
+    # Controlled source descriptors exercise selection; these are not new
+    # recordings or evidence that the expected consequence actually happened.
+    var joined:Dictionary=original.duplicate(true)
+    # Deep-copying each report value separates its lookup from entries. Restore
+    # the shared-entry lookup that the actual Library.build result publishes.
+    joined.by_key={}
+    for entry in joined.entries:joined.by_key[entry.key]=entry
+    var current:Dictionary=joined.by_key["spell:spell.fireball"].cases[0]
+    var unavailable:Dictionary={"id":"described-unlinked","label":"Unlinked expected branch","source":"res://authoring/studio/scenarios.json:/controlled",
+        "purpose":"Expected observation","sequence":["Cast"],"expectations":[{"label":"Expected consequence","phase":"application"}],
+        "recordings":[{"case_id":"absent-exact-original","available":false,"ready":false}]}
+    var linked:Dictionary=unavailable.duplicate(true);linked.id="described-linked";linked.label="Linked expected branch"
+    linked.recordings=[{"case_id":current.id,"available":true,"ready":true,"record":current}]
+    var requirements:Array=[{"id":"exact-audio-use","source":"audio/cues.json:/cues/footstep","label":"Selected contact audio","rendered":false,"gap_kind":"unexercised"}]
+    var resource:String="res://authoring/abilities/spells/spell.fireball.tres"
+    joined.by_key["spell:spell.fireball"].source_path=resource
+    Studies.join_library(joined,{"capabilities":[
+        {"id":"spell.fireball","kind":"Spell","source":"actual-authored-owner","requirements":requirements,"scenarios":[unavailable,linked]},
+        {"id":"source-owner:fireball","kind":"Mechanic","source":resource+"::body","requirements":[{"id":"selected-body","source":resource+"::body","label":"Selected body","rendered":false,"gap_kind":"unexercised"}],"scenarios":[unavailable]},
+        {"id":"unrelated-owner:fireball","kind":"Mechanic","source":"res://elsewhere/spell.fireball.tres","requirements":[{"id":"wrong-source","source":"res://elsewhere/spell.fireball.tres","rendered":false}],"scenarios":[]}],"errors":[],"scope":"Controlled source descriptors only"})
+    check(joined.entries.size()==original.entries.size() and joined.records==original.records,"Method/scenario join adds no capabilities, case aliases or output qualification")
+    check(joined.by_key["spell:spell.fireball"].requirements.map(func(row):return row.id)==["exact-audio-use","selected-body"] \
+        and joined.by_key["spell:spell.fireball"].scenarios.size()==2,"Only the exact selected Resource adds source-owner methods; basename matches and shared-source scenario substitution are refused")
+    check(Library.matches(joined.by_key["spell:spell.fireball"],"audio/cues.json:/cues/footstep") \
+        and Library.matches(joined.by_key["spell:spell.fireball"],"Unlinked expected branch","","unlinked_studies"),"Exact method pointers and unavailable described branches are searchable in the existing browser")
+    window.report=joined
+    var observed:Array=[]
+    window.recording_selected.connect(func(_entry,scenario,record):observed.append({"scenario":scenario,"record":record.id}))
+    window._refresh("spell.fireball",unavailable.id)
+    if not await prepared(window):return
+    check(window.selected_study.id==unavailable.id and window.open_button.disabled and window.recording_options.is_empty(),"An unlinked study cannot fall back to another ready case on the same capability")
+    check(window.detail.tooltip_text.contains("absent-exact-original") and window.detail.tooltip_text.contains(requirements[0].source),"The selected browser entry exposes exact missing reference and authored method pointer")
+    var before:int=observed.size();window._open()
+    check(observed.size()==before,"Unplayable source study selection emits no fabricated recording")
+    window._refresh("spell.fireball",linked.id)
+    if not await prepared(window):return
+    check(window.recording_options.size()==1 and window.recording_options[0].id==current.id,"A described study opens only its exact actual linked original")
+    window._open()
+    check(observed.size()==before+1 and observed[-1].record==current.id \
+        and observed[-1].scenario.id==linked.id and observed[-1].scenario.expectations==linked.expectations \
+        and observed[-1].scenario.moments==current.moments,"Opening the exact link preserves descriptive expectations and independent actual recorded moments")
+    check(joined.by_key["spell:spell.fireball"].approval_status=="needs_review" \
+        and joined.by_key["spell:spell.fireball"].presentation_status==original.by_key["spell:spell.fireball"].presentation_status,"Source study linkage does not approve artwork or promote output evidence")
 func run()->void:
     var identity={"commit":"current","protocol_version":1,"player_schema_version":16,"schema_digest":"current-schema"}
     var snapshot={"header":identity,"ids":{"spell":{"spell.fireball":{"level":3,"school":"evocation"},"spell.false_life":{"level":1,"school":"necromancy"}},"condition":{"condition.hidden":{"family":"core"}},"creature":{"creature.goblin":{}},"damage_type":{"Fire":{}}}}
@@ -148,6 +194,7 @@ func run()->void:
     check(not lines.any(func(line):return "res://test/default.res" in line) and var_to_bytes(component)==immutable,"Inspector cannot describe the default donor or mutate the authored occurrence")
     component.native_cue.approach="absent-authored"
     check(Studio.effect_lines(component).any(func(line):return "no approach absent-authored" in line),"Missing explicit authored approach retains its actual unavailable reason")
+    await described_studies(window,report)
     window.free()
     var actual=Library.catalog();var expected=0
     for kind in actual.counts:expected+=actual.counts[kind]

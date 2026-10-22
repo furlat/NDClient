@@ -1,27 +1,49 @@
-# Creature body deliveries and remaining asset gaps — 21 October 2026
+# Creature body deliveries and remaining asset gaps — 22 October 2026
 
-Source: current `authoring/characters/characters/*.tres`, reconciled 21 October. This is a source-resource inventory, not a rendering test or a request for63 new bodies. The21October elemental delivery is now installed through existing typed rigs; native qualification and human review remain separate. **All artwork and audio remain UNREVIEWED.**
+Source: current `authoring/characters/characters/*.tres` at `23e14a2e`, reconciled with the explicitly supplied22October asset handoffs. This is a source-resource inventory, not a rendering test or a request for63 new bodies. The21October elemental delivery is installed through existing typed rigs; newer delivered data below are not yet client-integrated. Native qualification and human review remain separate. **All artwork and audio remain UNREVIEWED.**
 
-## Original twelve summon-body rows: four delivered, eight remain incomplete
+## Original twelve summon-body rows: four assigned, five delivered for intake, three without an identified own-body delivery
 
-Air/Earth/Fire/Water own bodies and geometry are delivered and now assigned to their four existing creature IDs. Four Myrmidons, Cambion, Deva and Djinni still need own body artwork. Draconic Spirit colour/motion is delivered; its geometry and real per-pose mouth sockets remain pending, and its current game rig remains the substitute. Each incomplete row retains its existing portrait and playable substitute. All artwork remains UNREVIEWED.
+Air/Earth/Fire/Water own bodies and geometry are delivered and assigned to their four existing creature IDs. The newer elemental expansion supplies all four Myrmidon bodies, native geometry and weapon masks; the selected dragon depth/normal packet supplies Draconic Spirit colour and reconstructed geometry. Those five source families still use their existing client substitutes until intake. Cambion, Deva and Djinni have no own-body delivery identified in the inspected handoffs. Thus eight rows remain incomplete in the client, but they are **not eight missing artwork commissions**. Authentic dragon mouth registration remains separate from its now-delivered depth/normals. Each incomplete client row retains its existing portrait and playable substitute. All artwork remains UNREVIEWED.
 
 | Creature | Exact owner | Current source / remaining boundary |
 |---|---|---|
 | Air Elemental | [`creature.spell.air_elemental`](../authoring/characters/characters/creature.spell.air_elemental.tres) | `summon.elemental.air` — own9clip body/geometry delivered; native movement/intrinsic/hit/death bindings qualified; art/scale review open |
-| Air Myrmidon | [`creature.spell.air_myrmidon`](../authoring/characters/characters/creature.spell.air_myrmidon.tres) | `smallscale.enemies.11arcane-elemental` |
+| Air Myrmidon | [`creature.spell.air_myrmidon`](../authoring/characters/characters/creature.spell.air_myrmidon.tres) | Own equipped/bare body, native geometry and weapon masks delivered22October; client still selects `smallscale.enemies.11arcane-elemental` pending intake |
 | Cambion | [`creature.spell.cambion`](../authoring/characters/characters/creature.spell.cambion.tres) | `smallscale.demonelite01` |
 | Deva | [`creature.spell.deva`](../authoring/characters/characters/creature.spell.deva.tres) | `smallscale.characters.4paladin` |
 | Djinni | [`creature.spell.djinni`](../authoring/characters/characters/creature.spell.djinni.tres) | `smallscale.characters.6mage` |
-| Draconic Spirit | [`creature.spell.draconic_spirit`](../authoring/characters/characters/creature.spell.draconic_spirit.tres) | `smallscale.dinosaurs.elite-armored-t-rex` |
+| Draconic Spirit | [`creature.spell.draconic_spirit`](../authoring/characters/characters/creature.spell.draconic_spirit.tres) | Selected clean colour/reconstructed depth/Sprite Fusion Default normals delivered; newer shared-material runtime candidate also archived. Client still selects `smallscale.dinosaurs.elite-armored-t-rex`; layout/receiving/caster intake and authentic mouth registration remain |
 | Earth Elemental | [`creature.spell.earth_elemental`](../authoring/characters/characters/creature.spell.earth_elemental.tres) | `summon.elemental.earth` — own9clip body/geometry delivered; native movement/intrinsic/hit/death bindings qualified; art/scale review open |
-| Earth Myrmidon | [`creature.spell.earth_myrmidon`](../authoring/characters/characters/creature.spell.earth_myrmidon.tres) | `smallscale.enemies.11arcane-elemental` |
+| Earth Myrmidon | [`creature.spell.earth_myrmidon`](../authoring/characters/characters/creature.spell.earth_myrmidon.tres) | Own equipped/bare body, native geometry and weapon masks delivered22October; client still selects `smallscale.enemies.11arcane-elemental` pending intake |
 | Fire Elemental | [`creature.spell.fire_elemental`](../authoring/characters/characters/creature.spell.fire_elemental.tres) | `summon.elemental.fire` — own9clip body/geometry delivered; native movement/intrinsic/hit/death bindings qualified; art/scale review open |
-| Fire Myrmidon | [`creature.spell.fire_myrmidon`](../authoring/characters/characters/creature.spell.fire_myrmidon.tres) | `smallscale.enemies.11arcane-elemental` |
+| Fire Myrmidon | [`creature.spell.fire_myrmidon`](../authoring/characters/characters/creature.spell.fire_myrmidon.tres) | Own equipped/bare body, native geometry and weapon masks delivered22October; client still selects `smallscale.enemies.11arcane-elemental` pending intake |
 | Water Elemental | [`creature.spell.water_elemental`](../authoring/characters/characters/creature.spell.water_elemental.tres) | `summon.elemental.water` — own9clip body/geometry delivered; native movement/intrinsic/hit/death bindings qualified; art/scale review open |
-| Water Myrmidon | [`creature.spell.water_myrmidon`](../authoring/characters/characters/creature.spell.water_myrmidon.tres) | `smallscale.enemies.11arcane-elemental` |
+| Water Myrmidon | [`creature.spell.water_myrmidon`](../authoring/characters/characters/creature.spell.water_myrmidon.tres) | Own equipped/bare body, native geometry and weapon masks delivered22October; client still selects `smallscale.enemies.11arcane-elemental` pending intake |
 
-The five elemental Dragon summon forms share `creature.spell.draconic_spirit`; their delivered colour variants are one family, not five missing base rigs. Current game geometry still uses an armoured T-Rex. Only the four Myrmidons continue using the arcane-elemental substitute.
+The five elemental Dragon summon forms share `creature.spell.draconic_spirit`; their delivered colour variants are one family, not five missing base rigs. Current game geometry still uses an armoured T-Rex. The four Myrmidons still use the arcane-elemental substitute despite their newer own-body delivery; source availability does not change a typed assignment automatically.
+
+### Newer delivered files versus active authoring and client intake
+
+The earlier [21October handoff](ELEMENTALS_DRAGONS_PRODUCTION_HANDOFF_2026-10-21.md)
+is historical where it says dragon geometry is absent. The explicitly supplied
+newer handoffs establish three distinct inputs:
+
+| Supplied source | What exists | Current boundary |
+| --- | --- | --- |
+| [Selected dragon depth/normals handoff](/mnt/c/Users/tommaso/Documents/assets/summon-creature-lab-2026-10-20/production-2026-10-21/dragon-depth-normals/HANDOFF.md), sibling `dragon-depth-normals.zip` | Complete selected clean colour, affine reconstructed depth, Sprite Fusion Default normals, independent normal-admission/depth-support/caster-support masks and optional separate source shadow;1,200appearance banks/20,880appearance poses over120shared action/view banks. Manifest declares `complete selected assets; production adoption separate`. | Preserve each bank's crop/grid/contact/optical origin and measured source-angle adapter. Current rig-wide strip/facing UV assumptions cannot simply receive the new paths. Receiving-normal admission must remain independent of missing depth; caster support remains stricter. The current client normal gate still couples receiving to depth/support (`modular.gdshader`). No import or shader adaptation was performed here. |
+| [Shared dragon runtime handoff](/mnt/c/Users/tommaso/Documents/assets/summon-creature-lab-2026-10-20/dragon-runtime-2026-10-22/HANDOFF.md), frozen archive `/mnt/c/Users/tommaso/Documents/assets/summon-creature-lab-2026-10-20/production-2026-10-22/dragon-shared-body-runtime.zip` | Archive exists and contains the handoff plus `data/manifest.json` with `complete=true`,120shared banks/2,088view poses and481PNGs. The shared material stores Light/Dark palette indices in R/G, membrane guidance in B and depth support in A; selected palette alpha supplies body alpha. | The archive's own handoff still calls this an **isolated candidate for visual review** with production/VFXFactory unchanged. A `production-2026-10-22` parent directory does not override that status. The unarchived authoring project/comparison resources may continue changing; use the archived packet for a later selected intake. This is not a client installation or human acceptance. Its existing support-A/palette-alpha/independent-FX-clock contract needs a real production adapter; the prototype explicitly does not demonstrate the production caster adapter. |
+| [Elemental expansion handoff](/mnt/c/Users/tommaso/Documents/assets/summon-creature-lab-2026-10-20/elemental-expansion-2026-10-22/HANDOFF.md) and its `manifest.json` | Durable isolated source delivery: four equipped/bare Myrmidon families, a new unarmed flowing Water option and optional Water effects.89banks/10,680registered colour–geometry poses;36weapon banks/4,320weapon poses. Actual native3D surfaces, matching part-ID masks and source motion aliases are supplied. | The handoff states existing released elementals, production and game bindings are unchanged. Current Myrmidon Resources still use the substitute. Preserve192px cells,96/138contact,12fps and eight rows. Canonical RG16 ray depth/BA octahedral world normal is **not** the current affine-R/optical-RGB character descriptor; preview depth/normal images must not be relabelled as compatible numeric inputs. Source aliases, body/armour/weapon separation and actual weapon ownership need coherent existing-path intake. This delivery alone does not reverse excluded weapon-body replacement policy or require a new renderer. |
+
+These supplied files remove the corresponding **missing source artwork/geometry**
+requests. They do not qualify production Forward+ output, all pose/receiving/
+shadow/equipment cases, source timing choices or human review. The isolated
+preview's measurements remain its own reported scope, not game performance.
+Neither inspected newer dragon handoff supplies an authenticated per-pose mouth
+socket/optical region; the selected depth packet explicitly says no mouth
+sockets or breath-release times were added. Runtime aura/effect anchors are not
+silently relabelled anatomical mouth contacts. Do not request already-delivered
+dragon normals or Myrmidon bodies again.
 
 The [elemental/dragon handoff](ELEMENTALS_DRAGONS_PRODUCTION_HANDOFF_2026-10-21.md) identifies the durable packet. Elemental intake copies only144 selected colour/affine-depth/optical-original-normal/support PNGs (44.51MiB), preserving all36banks/4,320poses,192px cells,96/138 fixed contact, eight facing rows and12fps. Canonical RG/BA geometry was not misread as the current affine/RGB format. Exact0 ground registration and original-only normal profiles are explicit schema data; absent alternate profiles retain admission limits. The eight native elemental action bodies are assigned through their existing rig-specific resources without invented hit/release/socket frames. All four unchanged original captures now pass the shared native cohort:28,661 checks, zero failures, native exit0 and no engine errors. Each actual intrinsic Cast/AttackHeavy/Jab/Hook assignment has a separately compiled actor/source track and an acknowledged visible original texture/frame binding. This qualifies those selected recorded paths, not isolated framebuffer parity, lighting acceptance or final scale/placement/artwork review. The initial Earth/Shield one-ULP constructor failure is preserved; the shared endpoint repair has passing current evidence. [Exact four-body cohort](../.runtime/tests/20261021T192153.111850Z-content-closure-affected/summary.json).
 
@@ -148,11 +170,12 @@ and does not request a fabricated donor part or change a used selection.
 
 ## Optical mouth authoring for public Draconic Breath readiness
 
-This is **client body/pose authoring**, separate from the twelve missing summon
-bodies listed above. The current `creature.spell.draconic_spirit` resource uses
+This is **client body/pose authoring**, separate from delivery of the original
+twelve summon-body rows listed above. The current `creature.spell.draconic_spirit` resource uses
 `smallscale.dinosaurs.elite-armored-t-rex`. Its real body remains that explicit
-substitute until artwork is assigned; no dinosaur head/face centre is an
-anatomical mouth measurement.
+substitute until the delivered dragon packet is integrated; no dinosaur
+head/face centre is an anatomical mouth measurement. Dragon depth and normals
+are now delivered as described above; that fact does not supply a mouth socket.
 
 Factory `runtime-public-admission-20261020-976f8289ebcefa5c` now supplies the
 public readiness gate and its paired direct source constructors for the five

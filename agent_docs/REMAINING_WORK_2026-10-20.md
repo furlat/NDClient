@@ -1,13 +1,65 @@
 # Everything remaining: client, Factory migration and Studio
 
-**Latest request — 22 October: implement the approved [remaining structural recovery plan](OPUS_REMAINING_STRUCTURAL_RECOVERY_PLAN_2026-10-22.md),
-including the explicit Studio optical-context correction.** These source
-families are implemented; one affected batch passes16cases/8,660assertions with
-natural exits0. Quiet performance comparison is still pending; the external
-dragon preview remains untouched without authorization to close it.
-The plan supersedes recovery sequencing and preserves this R1–R8 inventory.
-This is not whole-current-native/live, performance or art acceptance. The automated heartbeat remains
-paused; older queue/planning-freeze language below is historical.
+**Latest request — 22 October: commit completed recovery and resume the held main queue.**
+The structural recovery source batch is committed at **23e14a2e**; its affected
+cohort passes 16 cases / 8,660 assertions with natural exits 0. Quiet performance
+comparison remains open under R6 and does not gate independent R1–R5/R7–R8
+work. The external creature previews remain untouched. This is not whole-current
+native/live, performance or art acceptance. The automated heartbeat remains
+paused. Older recovery-first/STOPPED sequencing below is historical.
+
+The resumed batch integrates the sealed complete Factory a12f successor and
+its existing Cloud/Patches/Spike resource choices, joins authored scenario and
+method requirements into Studio's existing Library, and reconciles the actual
+remaining source inventory. Existing event/grant/class/variant assignments and
+all 130 alternative dispositions stay implemented; stale worklists do not
+reopen them. All artwork/audio remain unreviewed. Engine/Factory sources stay
+read-only; no mutable backend/schema upgrade is implied by the new handoff.
+
+## Main queue resumed — first coherent source/content batch, 22 October
+
+The complete sealeda12f namespace is installed with82a preserved. Eight mapped
+source choices are assigned through existing resources: four Cloud display
+phases, three Patches native-creation phases and Spike's progressive material
+worker. Poison Gas retains its existing Cloudkill alias. Four historical spell
+Patches cues stay excluded; three actual condition cues own their receiving
+artwork. No clocks, coverage, actual operands, endpoints or package defaults
+were changed. Incendiary keeps its supplied82a worker. Runtime and reporting
+use the same79-row source table.
+
+Studio's existing Library worker now joins exact authored requirements and
+study descriptions into its existing capability entries, including owner
+methods identified by the same Resource carrier. Search/details/copy expose
+exact source pointers and missing original references. Actual selected audio
+file/cue/contact/voice method is visible in structured and human inspection;
+dispatch, audible output and listening review remain separate. No new catalog,
+renderer, scheduler, publication path or clock was introduced.
+
+Current affected evidence: the import exits0 with no errors; environment and
+abilities publish with zero errors/two warnings. Seven baseline originals
+(Cloudkill, Darkness, Fog Cloud, Stinking Cloud, Spike Growth, Hideous Laughter,
+Animal Friendship) pass native Studio replay **2,337checks**, natural exit0,
+zero engine/script errors and no leftover processes. The five unaffected
+functional rows from the initial cohort pass; the two new Studio controls pass
+after correcting their mistaken AT01 attribution and private fixture lookup.
+The failed initial receipt remains preserved. This is bounded technical
+qualification, not whole-current native/live, quiet performance or art review.
+[Native family receipt](../.runtime/vfx-successor-a12f/native-selected-sources/summary.json),
+[initial affected cohort](../.runtime/tests/20261022T004926.909863Z/summary.json),
+[two repaired controls](../.runtime/tests/20261022T005224.397476Z/summary.json).
+
+Source reconciliation keeps already-written event/grant/class/variant and130
+alternative assignments implemented. Actual remaining authoring boundaries
+include authenticated Goblin contact frames, object-target weapon-contact
+placement, and moving/broken door original-face registration; those are not
+new missing backend/Factory APIs. New Myrmidon/dragon deliveries are recorded
+as delivered but not client-integrated, rather than requested again. The
+three bodies without an identified delivery are Cambion, Deva and Djinni;
+actual Draconic mouth/pose sockets remain distinct from delivered depth/normals.
+[Exact asset/registration handoff](ASSET_AUDIO_REVIEW_2026-10-20.md),
+[current body intake inventory](CREATURE_BODY_ASSET_GAPS_2026-10-20.md).
+All artwork/audio remain unreviewed. Quiet performance stays open under R6;
+it does not block independent main-queue work.
 
 ## Recovery execution update — 22 October 2026
 
@@ -55,8 +107,8 @@ speculative cache patch was added. Broader Choice/Startup/history handoffs remai
 open at actual source-index/reload ownership. Exact source and original
 measurements are preserved; no Factory/backend cause is inferred from wall time.
 
-This is not clean whole-suite qualification or completion of R1–R8. No new
-assignments precede recovery. See the [current execution record](OPUS_RECOVERY_IMPLEMENTATION_2026-10-22.md)
+This historical recovery section is not whole-suite qualification or completion
+of R1–R8. The latest human request above resumes independent main-queue work. See the [current execution record](OPUS_RECOVERY_IMPLEMENTATION_2026-10-22.md)
 for exact scope, clocks, original receipts and remaining costs. All art/audio
 remain unreviewed. No new Factory/backend/asset defect has been established by
 this batch, and delivered fixes are not requested again.
@@ -1381,8 +1433,8 @@ to the engine.
 | Factory text-resource labels — delivered§18 | Installed/source-published8dd corrects all15 selected Cadence labels to literal UTF-8 without changing runtime operands; current full publication has four Unicode warnings rather than45. | Independent client/transitive strings remain outside those15 files. [Exact scope](FACTORY_REVIEW_2026-10-20.md#18-serialize-source-resource-labels-as-literal-utf-8). |
 | Optional Cone native bank — delivered§19 | Complete8dd corrects19 packaged interface identity prefixes, retaining source bytes and ordinary recorded default. | Client optional-approach qualification pending; no automatic activation or weakened identity assertion. [Source proof/delivery](FACTORY_REVIEW_2026-10-20.md#19-rebase-packaged-cone-interface-identities-after-source-relocation). |
 | Default heavy-electric bank — delivered§20 | Installed/source-published8dd corrects both retained default GPU banks in place. Actual7ca fatal receipts and subsequent override-qualified Call/Bolt passes remain scoped to their own sources. | Six temporary static bank overrides and their unused transport are removed, preserving actual area/contact inputs and source clock/art. Bare-default current client proof remains pending. [Exact scope](FACTORY_REVIEW_2026-10-20.md#20-re-export-the-default-heavy-electric-bank-metadata). |
-| Wind Wall observed-cell coverage — current§21 | The actual8dd retained Wind source constructs, but12 StandardMaterial debris meshes cannot take the existing current-cell mask; visual state/full wall geometry do not supply the missing subset clipping. | Preserve observed/suppressed-cell privacy and original source materials; no whole-field mask opt-out or backend request. [Exact integration request](FACTORY_REVIEW_2026-10-20.md#21-wind-wall-debris-needs-current-observed-cell-coverage). |
-| Art/audio | Twelve real summon bodies, authentic Draconic mouth/pose geometry, missing sound selections and actual human review. | [Body list](CREATURE_BODY_ASSET_GAPS_2026-10-20.md), [audio/art handoff](ASSET_AUDIO_REVIEW_2026-10-20.md). All artwork/audio remains unreviewed. |
+| Wind Wall observed-cell coverage — delivered§21 | Complete82a supplied the mask-compatible source and it is retained in installeda12f. Current client receiving assignment preserves actual observed/suppressed cells and original source materials. | No outstanding Factory/API request; affected current native/live qualification remains client work. [Original request/delivery](FACTORY_REVIEW_2026-10-20.md#21-wind-wall-debris-needs-current-observed-cell-coverage). |
+| Art/audio | Four elemental bodies are delivered/assigned; four Myrmidons and dragon body/depth/normals are delivered but await client intake. Cambion, Deva and Djinni have no identified own-body delivery. Authentic Draconic mouth/pose sockets remain absent. Sound selections/contact authoring and all human review remain open. | [Body list](CREATURE_BODY_ASSET_GAPS_2026-10-20.md), [audio/art handoff](ASSET_AUDIO_REVIEW_2026-10-20.md). All artwork/audio remains unreviewed. |
 
 Sleep, the GPU Insect Plague owner, general Counterspell inputs, held-item
 rebinding, historical capture, finite Deafness, Magic/Sacred memberships,
@@ -1399,6 +1451,15 @@ choice. Its deployed-pose hold and actual removal are already authored; no new
 client loop is inferred from the review animation.
 
 ### Current complete successor; installation is separate from acceptance
+
+**22 October update:** completea12f is installed with82a preserved separately;
+1,246 clip IDs/504 default selections are unchanged and the typed table has79
+rows. The current Cloud/Patches/Spike resource batch selects only mapped sealed
+sources, preserving existing actual-owner clocks/geometry/coverage. This
+supersedes the historical8dd active-package paragraph below. Installation,
+source publication, affected native evidence and human acceptance remain
+separate. [Complete intake](../.runtime/vfx-successor-a12f/namespace-installation.json).
+
 
 The complete `runtime-call-heavy-defaults-20261021-8dd103fb92174541` is installed,
 retaining7ca, wall-child8b, public-admission976 and production-review repairs.

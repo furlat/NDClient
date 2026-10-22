@@ -10,7 +10,7 @@ extends RefCounted
 const Baked=preload("res://presentation/baked_effect.gd")
 const Admission=preload("res://presentation/native_source_admission.gd")
 const Native=preload("res://presentation/native_effects.gd")
-const SOURCE_TABLE:="res://assets/vfx/format/speed-completion-20261021-source-resources.json"
+const SOURCE_TABLE:="res://assets/vfx/format/spike-readiness-20261022-source-resources.json"
 const INDEX:="res://assets/vfx/index.json"
 ## Conditions whose package lifecycle the client keeps from playing.
 const LIFECYCLES:="condition_lifecycles.json"

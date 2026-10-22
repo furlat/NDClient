@@ -1,5 +1,33 @@
 # Factory source/runtime delegation — reconciled21 October2026
 
+**Current sealed intake — 22 October:** complete
+`runtime-spike-readiness-20261022-a12f7da61022225f` is installed, preserving the
+complete82a namespace separately. It retains all1,246 clip IDs,504 identical
+default selections and155 condition entrypoints and extends the typed table
+to79 rows. The client source batch selects the four Cloud display-group phases
+(including the existing Poison Gas alias), three Patches native-creation phases
+and the Spike progressive material-preparation phase through existing
+EffectUse/source inputs. Actual clocks, owners, geometry, endpoints, coverage
+and source windows are preserved. Four historical spell Patches cues remain
+excluded; their three actual condition cues retain their original lifecycle.
+[Installation receipt](../.runtime/vfx-successor-a12f/namespace-installation.json).
+Environment/abilities publication passes with zero errors/two warnings. The
+seven affected baseline originals pass current native Studio replay2,337checks,
+natural exit0 with no engine/script errors.
+[Exact affected receipt](../.runtime/vfx-successor-a12f/native-selected-sources/summary.json).
+These controls establish neither quiet performance nor art acceptance.
+
+There is **no new Factory API/source request** in this batch. Earlier Wind
+coverage and Freezing resource repairs are delivered, not open dependencies.
+The sealed Spike source's reported nine-cell constructor cost remains over its
+budget; actual client footprints may contain49cells and are not capped to the
+fixture. Later loose Spike compaction/Spirit prepared masks are outside this
+sealed archive and are not installed. Those source experiments do not justify
+another packaging request until a complete successor is delivered. All
+artwork/audio remain unreviewed. Historical receipts and requests below retain
+their original source/package identities.
+
+
 **New complete delivery received21October20:01UTC:**
 `runtime-speed-completion-20261021-82a271b677ff9604` includes the requested
 five Cloud/three Patches alternatives, Wind mask-compatible source and both

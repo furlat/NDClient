@@ -1,5 +1,11 @@
 # Opus recovery implementation — 22 October 2026
 
+**Human continuation,22October:** the completed structural source batch is now
+committed as23e14a2e. The human resumed the held main queue; quiet R6 performance
+comparison remains open and does not gate independent content/Studio work.
+The earlier recovery-first wording below describes that implementation boundary.
+
+
 **Latest request: implement the approved [remaining structural recovery plan](OPUS_REMAINING_STRUCTURAL_RECOVERY_PLAN_2026-10-22.md), with explicit Studio optical-context invalidation.**
 The source families are implemented in the existing SDK, Studio and shared
 preparation/publication owners. The prior eight-file diff remains present.

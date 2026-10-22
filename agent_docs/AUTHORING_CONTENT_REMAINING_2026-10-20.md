@@ -1,5 +1,28 @@
 # Remaining production content — updated 21 October 2026
 
+**22 October resumed-main-queue update:** structural recovery source is committed
+at23e14a2e; its quiet performance comparison remains R6, not an independent
+content blocker. Installed completea12f retains all1,246 clip IDs/504 default
+selections and exposes79 typed rows. Existing resources now select four Cloud
+display-group phases (plus the existing Poison Gas alias), three Patches
+native-creation phases and Spike's progressive material worker. Four legacy
+spell Patches cues remain excluded; the actual condition/spatial owners,
+geometry/endpoints, clocks and source windows remain unchanged. The seven
+corresponding baseline originals pass current native Studio replay2,337checks,
+exit0 with no engine errors. This is affected runtime evidence, not full live,
+performance or human artwork acceptance. R1/R2 source reconciliation found the
+named event/grant/class/variant/alternative assignments already written; it
+does not equate source presence with every lifetime's output qualification.
+
+Studio's existing Library now joins authored methods/scenario requirements
+inside its current worker, including exact Resource-carrier owner methods,
+and exposes actual audio cue/file/contact/voice policy. Missing historical
+study references stay described/unplayable; they are not invented originals
+or125mandatory capture tasks. Current recording, native output and human review
+remain separate. All art/audio are unreviewed. Latest asset notes distinguish
+new delivered Myrmidon/dragon files from their still-unintegrated client data.
+
+
 This is a source/code inventory for the approved migration, after the backend
 `9f81d52676d4cea78be0be951dfc51a756050032` (including all earlier 2948/0c and SDK repairs), and complete Factory
 `runtime-call-heavy-defaults-20261021-8dd103fb92174541` complete successor,

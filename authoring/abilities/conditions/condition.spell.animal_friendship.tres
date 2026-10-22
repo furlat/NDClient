@@ -5,6 +5,8 @@
 
 [ext_resource type="Script" path="res://presentation/source/effect_use.gd" id="2_native_effect"]
 
+[ext_resource type="Resource" path="res://assets/vfx/extensions/cloud-body-speed-20261021/sources/2bf73a9aa3a899bbfe2a/87f3b8e0852cfbcf.tres" id="SourcePhase_87f3b8e0852cfbcf"]
+
 [sub_resource type="Resource" id="Resource_2fq2b"]
 script = ExtResource("1_f0ffe")
 path = "art/ui-delivery-20261018/runtime/smooth48/spell.animal_friendship.png"
@@ -16,8 +18,9 @@ source = "ui-delivery-20261018"
 [sub_resource type="Resource" id="Resource_native_application"]
 script = ExtResource("2_native_effect")
 clip = "bg3-36/animal-friendship/application"
-approach = "runtime-prepared-speed-completion-20261021"
-immutable_preparation = "res://assets/vfx/extensions/speed-completion-20261021/sources/8ab20387ead84601288b/patches_readiness.gd"
+source_phase = ExtResource("SourcePhase_87f3b8e0852cfbcf")
+source_inputs = {"entity_geometry": "set_entity_geometry", "targets": "set_targets"}
+immutable_preparation = "res://assets/vfx/extensions/cloud-body-speed-20261021/sources/2fa692556ac7c0a25f33/readiness.gd"
 role = "attached"
 at = "application"
 attachment = "recipient_ground"
@@ -35,4 +38,4 @@ icon = SubResource("Resource_2fq2b")
 disposition = "authored"
 effects = Array[ExtResource("2_native_effect")]([SubResource("Resource_native_application")])
 status = "partial"
-notes = "Explicitly selects the delivered speed-completion Patches worker and its actual progressive preparer. The actual disclosed condition UUID owns the receiving surface and clock. Finite application requires a witnessed new member; initial owners do not replay onset. Existing Charmed lifecycle/body treatment remains separate; this finite petal onset invents neither caster nor expiry. The covariance implementation is an explicit numerical source alternative with retained raster/cost flags. Assignment is unvalidated; all artwork remains unreviewed."
+notes = "Explicitly selects the delivered Patches native-creation worker and its actual progressive preparer. The actual disclosed condition UUID owns the receiving surface and clock. Finite application requires a witnessed new member; initial owners do not replay onset. Existing Charmed lifecycle/body treatment remains separate; this finite petal onset invents neither caster nor expiry. The covariance implementation is an explicit numerical source alternative with retained raster/cost flags. Assignment is unvalidated; all artwork remains unreviewed."

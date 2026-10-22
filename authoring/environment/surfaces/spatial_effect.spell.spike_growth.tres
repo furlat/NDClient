@@ -5,12 +5,13 @@
 
 [ext_resource type="Script" path="res://presentation/source/effect_use.gd" id="owner_field_use"]
 
-[ext_resource type="Resource" path="res://assets/vfx/extensions/spike-seed-20261021/sources/eea8273c8a8b5dbd6667/phase.tres" id="OwnerFieldPhase0"]
+[ext_resource type="Resource" path="res://assets/vfx/extensions/spike-readiness-20261022/sources/5ccb02815e601fa3218f/phase.tres" id="OwnerFieldPhase0"]
 
 [sub_resource type="Resource" id="OwnerField0"]
 script = ExtResource("owner_field_use")
 clip = "assembled/spike_growth_native"
 source_phase = ExtResource("OwnerFieldPhase0")
+immutable_preparation = "res://assets/vfx/extensions/spike-readiness-20261022/sources/e5b7b1dc748a4bff8968/material_readiness.gd"
 source_inputs = {"targets": "set_targets", "owner_state": "set_owner_state", "zone_geometry": "set_zone_geometry"}
 role = "attached"
 scope = "spatial"
@@ -21,7 +22,7 @@ area_mask = false
 light_multiplier = 0.0
 constructor_input = {"kind": "spatial_owner", "component_path": ["effect"], "input_field": "", "cell_input": "owned_field", "content_id": "spatial_effect.spell.spike_growth", "construct_cells": true}
 extra = {"live_endpoints": [{"cue_point": "source"}]}
-staging_from = "factory@runtime-spike-seed-20261021-7ca62e2877bf5156"
+staging_from = "factory@runtime-spike-readiness-20261022-a12f7da61022225f"
 
 [resource]
 script = ExtResource("2_ylwwo")
@@ -31,4 +32,4 @@ legacy = "measured/environment/surfaces/spatial_effect.spell.spike_growth.json"
 lasting = SubResource("OwnerField0")
 native_staging = true
 status = "partial"
-notes = "Actual owner UUID and each immutable disclosed-cell batch construct the delivered instance-seed Spike source. Later disclosures add separate ordinary source draws with the same real owner/anchor/clock; live source geometry admits only the real current subset of that constructed batch. Source-owned footprint, native draw ordering and original bark/material art remain; no synthetic owner, nine-cell fixture, review retirement, burn event or replayed birth is supplied. All artwork remains unreviewed; source assignment is not rendered/readiness/performance qualification."
+notes = "Actual owner UUID and each immutable disclosed-cell batch construct the delivered instance-seed Spike source with its source-owned progressive material preparer. Later disclosures add separate ordinary source draws with the same real owner/anchor/clock; live source geometry admits only the real current subset of that constructed batch. Source-owned footprint, native draw ordering and original bark/material art remain; no synthetic owner, nine-cell fixture, review retirement, burn event or replayed birth is supplied. The delivered nine-cell source cost remains over its constructor budget; actual disclosed footprints are never capped to that fixture. All artwork remains unreviewed; source assignment is not rendered/readiness/performance qualification."

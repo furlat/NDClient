@@ -1338,6 +1338,11 @@ static func provenance_lines(row:Dictionary)->Array[String]:
             if occurrence.has("contact_ms"):lines.append("Compiled group contact: %.1f ms (authored launch plus actual endpoint travel)."%float(occurrence.contact_ms))
             if occurrence.has("source_rows"):lines.append("Actual projected world rows: "+str(occurrence.source_rows.size())+"; unavailable: "+JSON.stringify(occurrence.get("unavailable",[])))
             lines.append("Inspect this source in the existing scene replay. Prepared resources and rendered output remain separate evidence.")
+        elif data.get("kind")=="audio":
+            var sound:Dictionary=method.get("authoring",{})
+            lines.append("Selected cue: "+str(sound.get("cue_id",""))+" · file "+str(sound.get("clip","not assigned")))
+            lines.append("Voice policy: "+JSON.stringify(sound))
+            lines.append("Stream preparation and native playback diagnostics are separate from audible output, mix and human listening review.")
         elif method.has("residue_id"):
             lines.append("Release source: "+str(method.get("release_id",""))+" → "+str(method.residue_id)+" · "+str(method.get("asset_id",""))+" · primitive "+str(method.get("primitive","")))
             lines.append("Actual receiving regions: "+str(method.get("receiving_region_count",0))+"; changed residue tiles: "+str(method.get("revealed_tile_count",0))+". Authored polygons/palette and the existing landing clock own the appearance.")

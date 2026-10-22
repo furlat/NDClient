@@ -4,7 +4,8 @@ signal recording_selected(capability:Dictionary,scenario:Dictionary,record:Dicti
 signal recording_unavailable
 signal failed_prefix_selected(capability:Dictionary,scenario:Dictionary,record:Dictionary,perspective_id:String)
 const Library=preload("res://studio/case_library.gd")
-const FILTERS={"All statuses":"","Recorded":"recorded","No recording":"missing_recording","Failed / stale":"recording_failure","Evidence linked":"evidence","No output evidence":"unwitnessed","Source gaps":"source_gap","Awaiting art review":"needs_review","Rejected art":"rejected","Current engine/package receipts":"current_evidence","Matching package receipts":"package_evidence","Historical / unknown receipts":"historical_evidence","Reader safety receipts":"reader_evidence","Issued-command receipts":"command_evidence","Audio receipts":"audio_evidence"}
+const Studies=preload("res://studio/study_catalog.gd")
+const FILTERS={"All statuses":"","Recorded":"recorded","No recording":"missing_recording","Failed / stale":"recording_failure","Evidence linked":"evidence","No output evidence":"unwitnessed","Source gaps":"source_gap","Awaiting art review":"needs_review","Rejected art":"rejected","Current engine/package receipts":"current_evidence","Matching package receipts":"package_evidence","Historical / unknown receipts":"historical_evidence","Reader safety receipts":"reader_evidence","Issued-command receipts":"command_evidence","Audio receipts":"audio_evidence","Described studies":"described_studies","Studies without playable originals":"unlinked_studies"}
 var report:Dictionary={}
 var search:LineEdit
 var kind_picker:OptionButton
@@ -19,6 +20,7 @@ var prefix_record:Dictionary={}
 var prefix_perspectives:Array=[]
 var selected_capability:Dictionary={}
 var selected_scenario:Dictionary={}
+var selected_study:Dictionary={}
 var recording_options:Array=[]
 var rebuilding=false
 # Opus worker/generation ownership and bounded Tree publication, adapted only
@@ -69,7 +71,7 @@ func _request_catalog(preferred:String,scenario:String)->void:
     generation+=1;preferred_id=preferred;preferred_scenario=scenario
     request={"generation":generation}
     report={};error="";pending_rows=[];row_cursor=0;published_rows={};preferred_item=null
-    tree.clear();recording_options=[];recording_picker.clear();selected_capability={};selected_scenario={}
+    tree.clear();recording_options=[];recording_picker.clear();selected_capability={};selected_scenario={};selected_study={}
     open_button.disabled=true;prefix_button.disabled=true;prefix_record={};prefix_perspectives=[];detail.text=""
     summary.text="Reading capability definitions, cases and retained evidence…"
     _start()
@@ -80,7 +82,7 @@ func _reload_catalog()->void:
         var selected:Variant=tree.get_selected().get_metadata(0)
         if selected is Dictionary:
             preferred=str(selected.capability.get("key",selected.capability.id))
-            scenario=str(selected.case.get("id",""))
+            scenario=str(selected.case.get("id",selected.get("study",{}).get("id","")))
     _request_catalog(preferred,scenario)
 
 func _start()->void:
@@ -91,7 +93,9 @@ func _start()->void:
         worker=null;error=error_string(started);summary.text=error
 
 static func _build(job:Dictionary)->Dictionary:
-    return {"generation":job.generation,"report":Library.catalog()}
+    var catalog:Dictionary=Library.catalog()
+    Studies.join_library(catalog,Studies.build({},catalog.records))
+    return {"generation":job.generation,"report":catalog}
 
 func _process(_delta:float)->void:
     if worker!=null and not worker.is_alive():
@@ -122,14 +126,14 @@ func _refresh(preferred:String="",scenario:String="")->void:
     if preferred.is_empty() and tree.get_selected()!=null:
         var previous:Variant=tree.get_selected().get_metadata(0)
         if previous is Dictionary:
-            preferred=str(previous.capability.get("key",previous.capability.id));scenario=str(previous.case.get("id",""))
+            preferred=str(previous.capability.get("key",previous.capability.id));scenario=str(previous.case.get("id",previous.get("study",{}).get("id","")))
     preferred_id=preferred;preferred_scenario=scenario;refresh_pending=true
 
 func _filter()->void:
     rebuilding=true;tree.clear();tree.create_item();pending_rows=[];row_cursor=0;published_rows={};preferred_item=null
     var query:String=search.text.strip_edges().to_lower()
     var category:String=kind_picker.get_item_text(kind_picker.selected)
-    selected_capability={};selected_scenario={};recording_options=[];recording_picker.clear()
+    selected_capability={};selected_scenario={};selected_study={};recording_options=[];recording_picker.clear()
     open_button.disabled=true;prefix_button.disabled=true;prefix_record={};prefix_perspectives=[];detail.text=""
     var categories:Dictionary={};var groups:Dictionary={}
     var count:int=0;var recorded:int=0;var evidenced:int=0;var awaiting_review:int=0
@@ -152,6 +156,8 @@ func _filter()->void:
         if not entry.get("output_witnesses",[]).is_empty():evidenced+=1
         if entry.approval_status=="needs_review":awaiting_review+=1
     summary.text="%d / %d capabilities · %d recorded · %d with linked evidence · %d awaiting art review"%[count,report.get("entries",[]).size(),recorded,evidenced,awaiting_review]
+    if not report.get("study_errors",[]).is_empty():summary.tooltip_text="Study input issues: "+"; ".join(report.study_errors)
+    else:summary.tooltip_text=report.get("study_scope","")
     rebuilding=false
 
 func _publish_row(row:Dictionary)->void:
@@ -161,7 +167,15 @@ func _publish_row(row:Dictionary)->void:
         item.set_text(0,row.label);item.set_selectable(0,false);item.collapsed=row.get("collapsed",false);return
     var entry:Dictionary=row.capability
     var record:Dictionary=row.case
-    item.set_metadata(0,{"capability":entry,"case":record})
+    var study:Dictionary=row.get("study",{})
+    item.set_metadata(0,{"capability":entry,"case":record,"study":study})
+    if row.kind=="study":
+        item.set_text(0,"Study · "+str(study.label));item.set_text(1,"Described expectations")
+        var references:Array=study.get("recordings",[])
+        item.set_text(2,"Linked original" if references.any(func(binding):return binding.get("ready",false)) else "Original not playable" if references.any(func(binding):return binding.get("available",false)) else "No linked original")
+        item.set_text(3,"Not assessed");item.set_tooltip_text(0,_study_text(study));item.set_tooltip_text(2,_study_text(study))
+        if preferred_id in [str(entry.key),str(entry.id)] and study.id==preferred_scenario:preferred_item=item;parent.collapsed=false
+        return
     if row.kind=="case":
         item.set_text(0,record.label);item.set_text(2,record.scenario_status.replace("_"," "))
         item.set_text(3,_output_label(record));item.set_tooltip_text(3,_evidence_text(record.witnesses))
@@ -180,6 +194,17 @@ func _publish_row(row:Dictionary)->void:
     for child_record in entry.cases:
         pending_rows.append({"kind":"case","key":str(row.key)+":case:"+str(child_record.id),
             "parent":row.key,"capability":entry,"case":child_record})
+    for described in entry.get("scenarios",[]):
+        pending_rows.append({"kind":"study","key":str(row.key)+":study:"+str(described.id),
+            "parent":row.key,"capability":entry,"case":{},"study":described})
+
+static func _study_text(study:Dictionary)->String:
+    var lines:Array=[str(study.get("label",study.get("id",""))),"Source: "+str(study.get("source","")),
+        "Described expectations; not observed outcomes or output qualification.",str(study.get("purpose","")),
+        "Sequence: "+JSON.stringify(study.get("sequence",[])),"Expectations: "+JSON.stringify(study.get("expectations",[]))]
+    for binding in study.get("recordings",[]):
+        lines.append("Exact original %s: %s"%[str(binding.get("case_id","")),"playable" if binding.get("ready",false) else str(binding.get("scenario_status","not linked in this Library"))])
+    return "\n".join(lines)
 
 static func _output_label(owner:Dictionary)->String:
     if not owner.get("current_output_witnesses",[]).is_empty():return "Engine/package receipts"
@@ -201,9 +226,13 @@ func _selected(open_recording:bool=true)->void:
     if item==null:return
     var selected:Variant=item.get_metadata(0)
     if not selected is Dictionary:return
-    selected_capability=selected.capability;recording_options=[];recording_picker.clear();selected_scenario={}
+    selected_capability=selected.capability;recording_options=[];recording_picker.clear();selected_scenario={};selected_study=selected.get("study",{})
     prefix_record={};prefix_perspectives=[];prefix_button.disabled=true;prefix_button.text="Inspect failed prefix";prefix_button.tooltip_text="Select a failed case with an actual initialized journal prefix."
     var candidates:Array=[selected.case] if not selected.case.is_empty() else selected_capability.cases
+    if not selected_study.is_empty():
+        candidates=[]
+        for binding in selected_study.get("recordings",[]):
+            if binding.get("ready",false) and binding.has("record") and not candidates.any(func(record):return record.id==binding.record.id):candidates.append(binding.record)
     for record in candidates:
         if record.ready:recording_options.append(record);recording_picker.add_item(record.label)
     recording_picker.disabled=recording_options.is_empty();open_button.disabled=recording_options.is_empty()
@@ -212,7 +241,18 @@ func _selected(open_recording:bool=true)->void:
     if not str(selected_capability.get("source_path","")).is_empty():detail.text+="\nSource: "+str(selected_capability.source_path)
     if selected_capability.get("inventory_origin")=="typed_source":detail.text+="\nTyped source is not listed in the server snapshot; runtime availability remains unverified."
     var witnesses:Array=selected.case.get("witnesses",[]) if not selected.case.is_empty() else selected_capability.get("witnesses",[])
+    if not selected_study.is_empty():
+        witnesses=[]
+        for binding in selected_study.get("recordings",[]):
+            if binding.get("available",false) and binding.has("record"):witnesses.append_array(binding.record.get("witnesses",[]))
     detail.tooltip_text=_evidence_text(witnesses)
+    if not selected_capability.get("requirements",[]).is_empty():
+        detail.text+="\n%d authored requirements · %d described studies; source details are in the tooltip and Copy details."%[selected_capability.requirements.size(),selected_capability.get("scenarios",[]).size()]
+        detail.tooltip_text+="\n\nAuthored requirements (not output evidence):\n"+JSON.stringify(selected_capability.requirements,"  ")
+    if not selected_study.is_empty():
+        detail.text+="\nStudy: "+str(selected_study.label)+" · described expectations, not observed outcomes."
+        detail.tooltip_text+="\n\n"+_study_text(selected_study)
+        if not witnesses.is_empty():detail.tooltip_text+="\nLinked case receipts keep their own scopes; they do not establish this study's expected outcome."
     if not witnesses.is_empty():detail.text+="\n%d linked native/audio/safety receipts · hover Output evidence for their scope and paths."%witnesses.size()
     if not selected.case.is_empty():detail.text+="\nCaptured engine: "+str(selected.case.get("capture_engine",{}).get("commit","not recorded"))+" · "+str(selected.case.get("engine_status","unverified"))
     if not selected.case.is_empty() and not str(selected.case.get("reason","")).is_empty():detail.text+="\n"+str(selected.case.reason)
@@ -235,7 +275,14 @@ func _selected(open_recording:bool=true)->void:
         else:recording_unavailable.emit()
 func _open()->void:
     if recording_picker.selected<0 or recording_picker.selected>=recording_options.size():return
-    var record:Dictionary=recording_options[recording_picker.selected];selected_scenario=Library.scenario(record);recording_selected.emit(selected_capability,selected_scenario,record);hide()
+    var record:Dictionary=recording_options[recording_picker.selected]
+    selected_scenario=Library.scenario(record)
+    if not selected_study.is_empty():
+        selected_scenario=selected_study.duplicate(true)
+        selected_scenario.recordings=[{"available":record.ready,"record":record}]
+        selected_scenario.moments=record.get("moments",[]).duplicate(true)
+        selected_scenario.recording_id=record.id
+    recording_selected.emit(selected_capability,selected_scenario,record);hide()
 func _inspect_prefix()->void:
     if prefix_button.disabled or prefix_record.is_empty() or prefix_perspectives.is_empty():return
     var scenario:Dictionary=Library.scenario(prefix_record)
@@ -245,7 +292,7 @@ func _inspect_prefix()->void:
     selected_scenario=scenario
     failed_prefix_selected.emit(selected_capability,scenario,prefix_record,str(prefix_perspectives[0].id));hide()
 func copy_study()->void:
-    if not selected_capability.is_empty():DisplayServer.clipboard_set(JSON.stringify({"capability":selected_capability.id,"kind":selected_capability.kind,"source_path":selected_capability.get("source_path",""),"inventory_origin":selected_capability.get("inventory_origin",""),"runtime_availability":selected_capability.get("runtime_availability","unknown"),"cases":selected_capability.cases,"source":selected_capability.source_status,"scenario":selected_capability.scenario_status,"presentation":selected_capability.presentation_status,"approval":selected_capability.approval_status,"witnesses":selected_capability.get("witnesses",[])},"  "))
+    if not selected_capability.is_empty():DisplayServer.clipboard_set(JSON.stringify({"capability":selected_capability.id,"kind":selected_capability.kind,"source_path":selected_capability.get("source_path",""),"inventory_origin":selected_capability.get("inventory_origin",""),"runtime_availability":selected_capability.get("runtime_availability","unknown"),"cases":selected_capability.cases,"source":selected_capability.source_status,"scenario":selected_capability.scenario_status,"presentation":selected_capability.presentation_status,"approval":selected_capability.approval_status,"witnesses":selected_capability.get("witnesses",[]),"requirements":selected_capability.get("requirements",[]),"described_studies":selected_capability.get("scenarios",[]),"selected_study":selected_study},"  "))
 
 func _exit_tree()->void:
     generation+=1;request={}

@@ -33,6 +33,7 @@ func run()->void:
             for binding in scenario.recordings:
                 check(binding.available==records.any(func(record):return record.id==binding.case_id),"Only actual case IDs become openable evidence")
                 check(binding.has("record")==binding.available,"Unavailable recording is not fabricated")
+                check(binding.ready==records.any(func(record):return record.id==binding.case_id and record.ready),"Referenced but failed/stale originals do not become playable studies")
                 if binding.get("evidence")=="partial":check(not binding.get("gaps",[]).is_empty(),"Partial recording preserves the missing comparison or interaction")
     var snapshot:Dictionary=JSON.parse_string(FileAccess.get_file_as_string(Study.CONTENT))
     for entry in snapshot.entries:
@@ -47,6 +48,19 @@ func run()->void:
     # current journals. Old generated native-spell-* IDs are not a second
     # playback library and cannot authorize a recording fallback.
     var current:Dictionary=Cases.catalog()
+    var original_records:PackedByteArray=var_to_bytes(current.records)
+    Study.join_library(current,built)
+    check(var_to_bytes(current.records)==original_records,"Joining authored methods/studies does not change recording readiness, provenance or output witnesses")
+    check(current.by_key["action:action.attack"].scenarios.any(func(scenario):return scenario.id=="base.AT01" \
+        and scenario.label=="Nonlethal melee hit" and scenario.recordings.any(func(binding):return binding.case_id=="action.class.fighter.action_surge/extra_attacks" and binding.ready)),
+        "The main Library exposes the exact authored nonlethal Attack study and its original first-attack binding")
+    check(not current.by_key["action:action.class.fighter.action_surge"].scenarios.any(func(scenario):return scenario.id=="base.AT01"),
+        "An original containing later Action Surge does not give its ordinary first-attack study extra-attack coverage")
+    check(current.by_key["action:action.move"].scenarios.any(func(scenario):return scenario.id=="base.MV01" and scenario.recordings.any(func(binding):return binding.case_id=="walk_diagonal-seed3-v2" and not binding.available and not binding.ready)),"Absent historical movement originals stay named and unavailable beside current actual cases")
+    check(not current.by_key["spell:spell.fireball"].requirements.is_empty() \
+        and current.by_key["spell:spell.fireball"].requirements.all(func(requirement):return not requirement.rendered),"Current selected spell methods are visible in the main Library without rendered promotion")
+    var goblin:Dictionary=current.by_key["creature:creature.goblin"]
+    check(goblin.requirements.any(func(requirement):return requirement.source==goblin.source_path),"An actual creature's existing owner-prefixed methods join through its exact selected Resource")
     for id in NATIVE_SPELLS:
         var key:String="spell:spell."+id
         check(current.by_key.has(key),"Native recording retains the actual current spell capability: "+id)

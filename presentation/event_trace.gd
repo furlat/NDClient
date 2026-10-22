@@ -202,6 +202,15 @@ static func source_method(source_id:String,cache:Dictionary)->Dictionary:
 
 static func render_method(component:Dictionary,cache:Dictionary)->Dictionary:
     if component.get("render_method") is Dictionary:return component.render_method.duplicate(true)
+    if component.get("kind")=="audio":
+        var authored:Dictionary={}
+        for field in ["cue_id","clip","variation","clip_duration_s","contact_ms","source_sync_s","source_marker","timing_source","assignment_source","assignment_enabled","assignment_reason","gain_db","bus","attachment","attachment_source","loop","loop_start_s","loop_end_s","fade_out_ms","voice_limit","total_voice_limit"]:
+            if component.has(field):authored[field]=component[field].duplicate(true) if component[field] is Array or component[field] is Dictionary else component[field]
+        return {"label":"Authored audio cue","renderer":"res://presentation/audio_presenter.gd",
+            "surface":"recorded listener and disclosed attachment","source":str(component.get("source","")),
+            "authoring":authored,"source_availability":component.get("status","not_examined"),
+            "source_reason":component.get("reason",""),"prepared":"not_examined",
+            "playback":"not_witnessed","audible_output":"not_witnessed","listening_review":"unreviewed"}
     if component.get("kind")=="native_effect" and not component.get("native_spell",false):
         var method:Dictionary=source_method(str(component.get("source_id","")),cache)
         method.assignment_source=str(component.get("assignment_source",component.get("source","")))

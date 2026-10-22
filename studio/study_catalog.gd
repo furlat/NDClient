@@ -142,10 +142,13 @@ static func build(cache:Dictionary={},records:Array=[])->Dictionary:
         for reference in original.get("recordings",[]):
             var row:Dictionary=reference.duplicate(true)
             row.available=recorded.has(row.case_id)
+            row.ready=false
             if row.available:
                 row.record=recorded[row.case_id]
-                available_recorded=available_recorded or row.get("evidence")=="recorded"
-                available_partial=available_partial or row.get("evidence")=="partial"
+                row.ready=bool(row.record.get("ready",false))
+                row.scenario_status=row.record.get("scenario_status","not_assessed")
+                available_recorded=available_recorded or (row.ready and row.get("evidence")=="recorded")
+                available_partial=available_partial or (row.ready and row.get("evidence")=="partial")
             scenario.recordings.append(row)
         counts.scenarios+=1
         counts.recorded_scenarios+=int(available_recorded)
@@ -167,3 +170,32 @@ static func build(cache:Dictionary={},records:Array=[])->Dictionary:
         counts.study_needed+=int(entry.scenarios.is_empty())
     return {"capabilities":capabilities,"counts":counts,"errors":errors,
         "scope":"Current backend capabilities, authored requirements, condition owners and passive VFX inventory. Authored study sequences and available recordings are separate; source presence never proves rendered completion."}
+
+## Join this existing passive inventory into the one Library worker result.
+## No recording alias, extra capability or output qualification is created.
+static func _source_resource(pointer:String)->String:
+    return pointer.get_slice("::",0) if pointer.begins_with("res://") else ""
+
+static func join_library(library:Dictionary,studies:Dictionary)->void:
+    var authored:Dictionary={};var resource_owners:Dictionary={}
+    for entry in studies.get("capabilities",[]):
+        if entry.kind=="VFX":continue
+        authored[entry.id]=entry
+        var resource:String=_source_resource(str(entry.get("source","")))
+        if not resource.is_empty():
+            if not resource_owners.has(resource):resource_owners[resource]=[]
+            resource_owners[resource].append(entry)
+    for entry in library.get("entries",[]):
+        var source:Dictionary=authored.get(entry.id,{})
+        entry.requirements=[]
+        var owners:Array=[source] if not source.is_empty() else []
+        owners.append_array(resource_owners.get(_source_resource(str(entry.get("source_path",""))),[]))
+        var seen:Dictionary={}
+        for owner in owners:
+            for requirement in owner.get("requirements",[]):
+                if seen.has(requirement.id):continue
+                seen[requirement.id]=true;entry.requirements.append(requirement.duplicate(true))
+        # A shared source Resource does not establish shared behavior/outcomes.
+        entry.scenarios=source.get("scenarios",[]).duplicate(true)
+    library.study_errors=studies.get("errors",[]).duplicate()
+    library.study_scope=studies.get("scope","")

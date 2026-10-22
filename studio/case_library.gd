@@ -254,6 +254,8 @@ static func matches(entry:Dictionary,query:String,category_name:String="",status
     if not query.strip_edges().is_empty():
         var text=entry.id+" "+entry.label+" "+entry.group
         for record in entry.cases:text+=" "+record.id+" "+record.label+" "+str(record.get("reason",""))
+        for scenario in entry.get("scenarios",[]):text+=" "+str(scenario.id)+" "+str(scenario.get("label",""))
+        for requirement in entry.get("requirements",[]):text+=" "+str(requirement.get("source",""))+" "+str(requirement.get("label",""))
         if not query.strip_edges().to_lower() in text.to_lower():return false
     match status:
         "recorded":return entry.scenario_status=="recorded"
@@ -267,6 +269,8 @@ static func matches(entry:Dictionary,query:String,category_name:String="",status
         "reader_evidence":return not entry.get("reader_witnesses",[]).is_empty()
         "command_evidence":return not entry.get("command_witnesses",[]).is_empty()
         "audio_evidence":return not entry.get("audio_witnesses",[]).is_empty()
+        "described_studies":return not entry.get("scenarios",[]).is_empty()
+        "unlinked_studies":return entry.get("scenarios",[]).any(func(scenario):return not scenario.get("recordings",[]).any(func(binding):return binding.get("ready",false)))
         "needs_review":return entry.approval_status=="needs_review"
         "rejected":return entry.approval_status=="rejected"
         "source_gap":return not entry.source_status in ["ready","available","internal","explicit_none","state_only"]

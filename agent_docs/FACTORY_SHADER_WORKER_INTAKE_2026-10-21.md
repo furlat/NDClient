@@ -1,5 +1,19 @@
 # Optional Shader worker sources: complete-package intake — delivered
 
+**Current client adoption — 22 October:** sealed complete a12f is installed and
+the current79-row source table is selected by runtime and coverage reporting.
+Four Cloud display-group choices plus the existing Poison Gas alias, three
+Patches native-creation choices and Spike's progressive material worker are
+explicit resource assignments. Incendiary Cloud retains its supplied82a worker;
+it is not silently switched to a nonexistent display-group row. Existing owner
+clocks, real geometry/endpoints and source windows remain unchanged. The old
+packaging request below is historical and must not be resubmitted. Current
+environment/abilities publication has zero errors/two warnings; seven affected
+baselines pass native Studio replay2,337checks with clean exit0 and no engine
+errors. This is bounded current runtime evidence; all artwork is unreviewed.
+[Exact complete intake](../.runtime/vfx-successor-a12f/namespace-installation.json).
+
+
 **Delivered21October20:01UTC:** complete
 `runtime-speed-completion-20261021-82a271b677ff9604` supplies all requested
 five Cloud/three Patches closures, Wind coverage and both Freezing resource
