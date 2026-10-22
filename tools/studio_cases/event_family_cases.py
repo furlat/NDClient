@@ -1,4 +1,6 @@
 """Legal retained payload, granted action and recipient outcome recordings."""
+import json
+from pathlib import Path
 
 
 def event_family_studies(actors, subjects):
@@ -63,4 +65,10 @@ def event_family_studies(actors, subjects):
                        'required_behaviors': ['spell.divine_word'], 'required_conditions': conditions,
                        'required_facts': ['life'] if outcome == 'death' else [],
                        'purpose': 'Legal wounded target setup; renderer must consume actual child membership/life outcomes, never evaluate HP tiers.'})
+    # These literal legal setups retain both the failed first Nimbus route and
+    # its independently captured in-range route; ordinary replay decides output.
+    source = Path(__file__).with_name("scenarios")
+    for name in ("healing_incense_positive_heal.json", "holy_nimbus_contact_out_of_range.json",
+                 "holy_nimbus_positive_contact.json"):
+        result.append(json.loads((source / name).read_text()))
     return result

@@ -1,0 +1,121 @@
+{
+  "id": "spatial_effect.item.devotees_mace.healing_incense/positive_turn_start_heal",
+  "title": "Healing Incense: real equipped mace spatial owner, ordinary wounds and positive turn-start healing",
+  "kind": "interaction",
+  "seed": 2,
+  "battlefield": "battlefield.open_floor_bright",
+  "subjects": {
+    "spell": [
+      "spell.magic_missile"
+    ],
+    "action": [
+      "action.item.devotees_mace.healing_incense",
+      "action.move"
+    ],
+    "condition": [],
+    "class_feature": [],
+    "creature": [],
+    "environment_object": [],
+    "spatial_effect": [
+      "spatial_effect.item.devotees_mace.healing_incense"
+    ],
+    "residue": [],
+    "item": [
+      "weapon.devotees_mace"
+    ]
+  },
+  "actors": [
+    {
+      "role": "caster",
+      "side": "amber",
+      "premade": "cleric",
+      "at": [
+        3,
+        7
+      ],
+      "items": [
+        {
+          "id": "weapon.devotees_mace",
+          "slot": "MELEE_MAIN"
+        }
+      ]
+    },
+    {
+      "role": "attacker",
+      "side": "blue",
+      "premade": "sorcerer",
+      "at": [
+        8,
+        7
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "do": "action.item.devotees_mace.healing_incense",
+      "by": "caster",
+      "target": "self",
+      "capture_choices": true
+    },
+    {
+      "do": "spell.magic_missile",
+      "by": "attacker",
+      "target": "caster",
+      "level": 1,
+      "recipients": [
+        "caster",
+        "caster",
+        "caster"
+      ],
+      "capture_choices": true
+    },
+    {
+      "do": "end_turn",
+      "by": "attacker"
+    },
+    {
+      "do": "action.move",
+      "by": "caster",
+      "target": [
+        3,
+        8
+      ]
+    },
+    {
+      "do": "unequip",
+      "by": "caster",
+      "slot": "MELEE_MAIN"
+    },
+    {
+      "do": "end_turn",
+      "by": "caster"
+    },
+    {
+      "do": "end_turn",
+      "by": "attacker"
+    },
+    {
+      "do": "action.move",
+      "by": "caster",
+      "target": [
+        3,
+        9
+      ]
+    }
+  ],
+  "required_behaviors": [
+    "action.item.devotees_mace.healing_incense",
+    "spell.magic_missile",
+    "action.move"
+  ],
+  "required_facts": [
+    "spatial_effect_state",
+    "damage",
+    "heal",
+    "movement"
+  ],
+  "required_applied_damage_types": [
+    "Force"
+  ],
+  "purpose": "Two genuine roster seats. Published equipped RosterItemGrant builds the real authored DevoteesMace, whose own use_action_templates provide HealingIncense; no action/condition/spatial fixture is granted. Existing Cleric5 has no Shield; existing Sorcerer5 actually learns MagicMissile. One predetermined L1 three-dart cast spends normal resources and wounds the holder by6\u201315Force without HP edits or forced rolls. The next actual Cleric turn starts inside its own active ten-foot zone, allowing ordinary1d4 healing; exact positive unblocked HealFact.source_condition_uuid must join the disclosed spatial owner in unchanged journal after capture. The fixed movement follows the holder-owned field; actual unequip disables contributions before another ordinary turn, without fabricated retirement. No positive result is inferred from capture success or activation alone. Native refusals/missing exact result remain failed originals; artwork/output remain unreviewed."
+}

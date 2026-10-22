@@ -1,0 +1,75 @@
+{
+  "id": "condition.class.paladin.holy_nimbus/positive_turn_start_contact",
+  "title": "Holy Nimbus: real Devotion capstone owner and positive enemy turn-start contact",
+  "kind": "interaction",
+  "seed": 2,
+  "subjects": {
+    "spell": [],
+    "action": [
+      "action.class.paladin.holy_nimbus",
+      "action.move"
+    ],
+    "condition": [
+      "condition.class.paladin.holy_nimbus"
+    ],
+    "class_feature": [],
+    "creature": [
+      "creature.goblin"
+    ],
+    "environment_object": [],
+    "spatial_effect": [],
+    "residue": [],
+    "item": []
+  },
+  "actors": [
+    {
+      "role": "caster",
+      "side": "party"
+    }
+  ],
+  "player_builds_source": "tools/studio_cases/scenarios/paladin_level20_nimbus_builds.json",
+  "steps": [
+    {
+      "do": "action.class.paladin.holy_nimbus",
+      "by": "caster",
+      "target": "self",
+      "capture_choices": true
+    },
+    {
+      "do": "action.move",
+      "by": "caster",
+      "target": [
+        12,
+        10
+      ]
+    },
+    {
+      "do": "end_turn",
+      "by": "caster"
+    },
+    {
+      "do": "action.move",
+      "by": "caster",
+      "target": [
+        11,
+        10
+      ]
+    }
+  ],
+  "required_behaviors": [
+    "action.class.paladin.holy_nimbus",
+    "action.move"
+  ],
+  "required_conditions": [
+    "condition.class.paladin.holy_nimbus"
+  ],
+  "required_facts": [
+    "actor_change",
+    "damage",
+    "movement"
+  ],
+  "required_applied_damage_types": [
+    "Radiant"
+  ],
+  "purpose": "A real level20 Devotion Paladin activates Holy Nimbus and takes this fixed offered route before an enemy turn. The preserved original has no Radiant contact because the surviving enemy is outside10ft at its turn start; that failed outcome remains inspectable. No capstone grant, forced reaction or edited health."
+}
