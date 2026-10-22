@@ -16,9 +16,60 @@ all 130 alternative dispositions stay implemented; stale worklists do not
 reopen them. All artwork/audio remain unreviewed. Engine/Factory sources stay
 read-only; no mutable backend/schema upgrade is implied by the new handoff.
 
+## Main queue actual Action/creature originals — 22 October
+
+Eight new native-producer scenarios are captured once in coherent families.
+The four attack/quarry originals succeed: native Gateplate has two genuine
+Shield Bash Misses and a real Parry on the same held shield; autonomous Spiritual
+Weapon produces real Miss/Hit; Hex/Hunter reapply retain their original sustain
+and end through genuine Drop Concentration. The first unsupported generic Shield
+fixture grant failed before initialization and stays preserved separately;
+the existing native Gateplate registration supplies the real case without a
+backend request or reroll.
+[Exact originals and preserved setup failure](../.runtime/closing-repairs/action-dispatch-originals/README.md).
+
+The four equipped Myrmidon originals complete Air/Fire/Water; Earth retains a
+failed required Landing identity. Both seats publish its real Burrow Landing
+Action with `behavior_id:null` while the parent Burrow and committed transfer
+remain correctly identified. [Narrow9f backend review](BACKEND_CONTENT_BLOCKERS_2026-10-20.md#earth-myrmidon-landing-identity--new9f-original22october).
+Current schema18 was not adopted/reproduced, and no new API or missing artwork
+is inferred. All eight actual originals are in the existing Library, now
+**380cases/376recorded/four failed**. The old three failed cases remain.
+
+The24file shared Action/resource batch resolves ten of the21direct decisions:
+six explicit existing owners, two exact Attack recipes and both retained-quarry
+reapplications. Source-owned attack contact/end timing is typed Resource data;
+real Hit/Crit alone enables contact. Original root/member clocks remain intact
+across later-group reapplication. No spell-name compiler branches or new clocks.
+Abilities publication passes with zero errors/two warnings after correcting
+three Resource external-declaration order errors from its initial failed batch.
+Four affected headless rows pass **19,148assertions**, natural exits0 and no
+unexpected errors. [Publication](../.runtime/main-queue-20261022/active-action-publication-corrected/summary.json),
+[affected cohort](../.runtime/tests/20261022T023947.510661Z/summary.json).
+Native follow-through completes the three admitted Myrmidon own-body originals
+with **23,351assertions**, natural exit0/no engine or script errors/leftovers,
+including visible actual intrinsic bindings and source geometry. The initial four
+attack/quarry replay cases have three passes and a Spiritual Weapon failure:
+its current sensed actor contact exists before body birth, but the new phase
+incorrectly relied on the body's null position cache. The bounded repair captures
+only each Attack's actual pre-row visual contact (or actual controlled canonical
+position) and disclosed support. Uncontrolled remembered/nonvisual positions
+remain refused; existing non-Attack capture is unchanged. This uses public data
+and is not a backend/Factory request. The final two affected source controls pass
+3,457assertions; the same complete four-original native cohort now passes
+**3,358assertions**, natural exit0, zero engine/script errors and no leftovers.
+Actual Spiritual Miss/Hit source witnesses retain false/true contact flags.
+[Preserved initial native failure and three-body pass](../.runtime/main-queue-20261022/active-actions-native/summary.json),
+[final contact controls](../.runtime/tests/20261022T030031.618904Z/summary.json),
+[final four-original native receipt](../.runtime/main-queue-20261022/active-actions-native-current-contacts/summary.json).
+Eleven direct decisions remain:
+four body/mouth boundaries, three Paladin onset choices and four active
+Help/ArcaneSword/BreakEnchantment consumer/choice boundaries. All artwork/audio
+remain unreviewed; no whole-current live/quiet-performance acceptance is claimed.
+
 ## Main queue shared-owner/Studio checkpoint — 22 October
 
-The80resource dispositions, case-first Library method enrichment, optional
+Committed as **312ebe38**. The80resource dispositions, case-first Library method enrichment, optional
 per-facing body optical origins and shared NativeStartup request ownership are
 source-reviewed and applied. The latter fixes an actual `d5d2ff1d` client defect:
 a retained pane's passive/empty request could cancel another pane's unfinished
@@ -38,8 +89,15 @@ carriers, with unchanged ownership/geometry assertions.
 [Initial5row receipt](../.runtime/tests/20261022T015741.088152Z/summary.json),
 [corrected2rows](../.runtime/tests/20261022T015937.602497Z/summary.json),
 [actual208ownership assertions](../.runtime/studio-native-startup-scope-checks.json).
-Native/event/history/current public188 follow-through is separate; no clean
-whole-current native/live, quiet-performance or artwork/audio acceptance is claimed.
+The affected native follow-through is complete on312ebe38/a12f: **four passing
+cohorts /19,547assertions**, every process naturally exits0, no script/engine
+errors or owned leftovers. Event families pass1,848; actual body history/material
+transitions16,432; production Gallery seek/Follow/loop138; the Planar Ally,
+Summon Dragon and Blade Barrier installation context1,129. Summon Dragon passes
+this context in4,408ms. This does not change the predecessor full188run's
+187/188result or prove its timeout's cause. No clean whole-current native/live,
+quiet-performance or artwork/audio acceptance is claimed.
+[Current four-cohort receipt](../.runtime/main-queue-20261022/native-shared-owner/summary.json).
 
 ## Main queue resource decisions — 22 October
 

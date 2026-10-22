@@ -44,6 +44,24 @@ change while that matching program is unavailable.
 
 The five elemental Dragon summon forms share `creature.spell.draconic_spirit`; their delivered colour variants are one family, not five missing base rigs. Current game geometry still uses an armoured T-Rex. All four equipped Myrmidons now use their own assigned rigs; their bare comparisons, weapon-only receivers and native body output remain separate.
 
+### Equipped Myrmidon original/native follow-through,22October
+
+The once-captured own-body cohort records Air/Fire/Water successfully. Their
+current native replay checks actual selected intrinsic body tracks and visible
+original bindings plus source geometry: **23,351assertions, natural exit0, no
+engine/script errors or owned leftovers**. These selected lifecycles include
+real movement, held-item Attack/strike, native techniques, incoming hurt and
+ordinary death. Source fit, final scale/light/shadow/art acceptance remain open.
+[Native receipt](../.runtime/main-queue-20261022/active-actions-native/summary.json).
+
+Earth completes its actual input/Attack/Crit/Burrow/steel/death commands, but
+its public Burrow Landing Action has no behavior ID in both seats. Its original
+remains failed and has no native own-body closure claim; neither another body
+nor guessed display-name selection repairs it.
+[Exact9f producer boundary](BACKEND_CONTENT_BLOCKERS_2026-10-20.md#earth-myrmidon-landing-identity--new9f-original22october).
+The complete four-original Library import preserves this failure, separate from
+source assignment and human review.
+
 ### Dragon layout proof; production intake remains open
 
 Actual source-image inspection plus the existing projection/facing equations

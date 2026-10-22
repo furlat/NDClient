@@ -45,6 +45,24 @@ static func _actor(state: Dictionary, group: Dictionary, identity: Variant, node
     if state.actors.has(identity): return state.actors[identity]
     return group.staged_actors.get(identity, {})
 
+## Event-time receiving points borrow only this captured actor set. Attack
+## source admission needs current sight/control, never a remembered ghost.
+static func _response_inputs(actors:Dictionary,state:Dictionary,kind:String)->Dictionary:
+    var result:Dictionary={}
+    for identity in actors:
+        var actor:Dictionary=actors[identity]
+        var position:Variant=actor.get("last_visual_position")
+        if kind=="attack":
+            position=null
+            if actor.get("present",false):
+                var contact:Dictionary=state.senses.get("entities",{}).get(identity,{}) if state.get("senses")!=null else {}
+                if contact.get("visual",false):position=contact.position
+                elif identity in state.get("audience",{}).get("controlled",[]):position=actor.get("last_visual_position")
+        if position==null:continue
+        var support:Dictionary=state.get("tiles",{}).get(Reducer.Audience.point_key(position),{})
+        if support.has("elevation_steps"):result[identity]={"position":position,"elevation_steps":support.elevation_steps}
+    return result
+
 static func _spell_actor_inputs(node:Dictionary,captured:Dictionary,state:Dictionary,graph:Dictionary)->Dictionary:
     if node.get("fact")==null or node.fact.kind!="spell":return captured
     var source:Variant=Occurrences.spell(node,graph).get("source_entity_uuid")
@@ -385,7 +403,9 @@ static func _schedule(node: Dictionary, start: float, state: Dictionary, group: 
         var actor = _actor(state,group,fact.source_entity_uuid,node,graph)
         var recipe = Authoring.attack(fact,actor,cache)
         graph.recipes[node.id] = recipe
-        var contact = start
+        var source_timing:Dictionary=recipe.get("sourceTiming",{})
+        var contact = start+float(source_timing.get("contact_seconds",0.0))*1000.0
+        if not source_timing.is_empty():finish=maxf(finish,start+float(source_timing.end_seconds)*1000.0)
         if not recipe.is_empty() and recipe.actor.enabled:
             var speed = recipe.actor.playbackSpeed * Authoring.playback_rate(actor,cache)
             var track = _track(group,node,actor,recipe.actor.clip,start,speed,20,cache,graph)
@@ -417,7 +437,7 @@ static func _schedule(node: Dictionary, start: float, state: Dictionary, group: 
                     contact+=Components.bolt(group,node,recipe.projectile,contact,track,target,cache)
                     finish=maxf(finish,contact)
                 track.impact_ms=contact
-        else: group.skipped.append({"occurrence":node.lineage_id,"kind":kind,"reason":"missing_authored_attack_recipe"})
+        elif source_timing.is_empty():group.skipped.append({"occurrence":node.lineage_id,"kind":kind,"reason":"missing_authored_attack_recipe"})
         for child in children: finish = maxf(finish,_schedule(child,contact,state,group,graph,cache))
         effect_commit=contact
     elif kind in ["action","shove"] and not node.canceled:
@@ -1170,15 +1190,8 @@ static func compile_recorded(before: Dictionary, packet: Dictionary, cache: Dict
                     if not graph.has("spatial_contact_inputs"):graph.spatial_contact_inputs={}
                     graph.spatial_contact_inputs[str(node.id)]={"identity":owner,"effect":contact_sources[owner],
                         "origin_cut":"actual_disclosed_spatial_before_retirement","removal_occurrence":contact_retirements[owner]}
-            if observed_fact!=null and observed_fact.get("kind") in ["damage","heal","temporary_hit_points","actor_change"]:
-                var receivers:Dictionary={}
-                for identity in captured.actor_inputs:
-                    var actor:Dictionary=captured.actor_inputs[identity]
-                    var position:Variant=actor.get("last_visual_position")
-                    if position==null:continue
-                    var support:Dictionary=target.tiles.get(Reducer.Audience.point_key(position),{})
-                    if support.has("elevation_steps"):receivers[identity]={"position":position,"elevation_steps":support.elevation_steps}
-                graph.condition_response_inputs[node.id]=receivers
+            if observed_fact!=null and observed_fact.get("kind") in ["damage","heal","temporary_hit_points","actor_change","attack"]:
+                graph.condition_response_inputs[node.id]=_response_inputs(captured.actor_inputs,target,str(observed_fact.kind))
             if observed_fact!=null and observed_fact.get("kind")=="damage" and observed_fact.get("stage")=="applied":
                 var recipient:Dictionary=captured.actor_inputs.get(str(observed_fact.get("target_entity_uuid","")),{})
                 var contact_position:Variant=recipient.get("last_visual_position")

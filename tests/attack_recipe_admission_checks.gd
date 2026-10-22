@@ -6,6 +6,7 @@ const Authoring=preload("res://presentation/authoring.gd")
 const Documents=preload("res://presentation/ability_documents.gd")
 const Records=preload("res://tools/presentation_build/ability_records.gd")
 const Components=preload("res://presentation/components.gd")
+const Compiler=preload("res://presentation/compiler.gd")
 const Characters=preload("res://presentation/characters.gd")
 var checks:int=0
 var failures:Array=[]
@@ -19,7 +20,7 @@ func measured(path:String)->Variant:
 # The pre-split selector, retained independently of the new borrowed-shell
 # implementation. Its input is rebuilt from actual authored Resources and the
 # original measured JSON, not the runtime selector's own result.
-func reference(fact:Dictionary,rig:String,source:Dictionary)->Dictionary:
+func reference(fact:Dictionary,rig:String,source:Dictionary,creature:String="")->Dictionary:
     var recipe:Dictionary=source.duplicate(true)
     var delivery:String="projectile" if fact.weapon_slot in ["RANGED_MAIN","RANGED_OFF"] else "melee"
     var outcomes:Dictionary={"Hit":"hit","Miss":"miss","Crit":"critical","Crit Miss":"critical_miss"}
@@ -28,7 +29,7 @@ func reference(fact:Dictionary,rig:String,source:Dictionary)->Dictionary:
         var matchers:Dictionary=variant.match
         var matches:bool=matchers.get("kind","attack")=="attack"
         for pair in [["delivery",delivery],["weaponSlots",fact.weapon_slot],["outcomes",outcomes[fact.attack_outcome]],
-                ["sourceItemIds",fact.source_item_id],["sourceKinds",fact.attack_source_kind],["rigIds",rig]]:
+                ["sourceItemIds",fact.source_item_id],["sourceKinds",fact.attack_source_kind],["rigIds",rig],["creatureIds",creature]]:
             var constraint:Variant=matchers.get(pair[0])
             if constraint==null:continue
             if constraint is Array:
@@ -48,7 +49,7 @@ func reference(fact:Dictionary,rig:String,source:Dictionary)->Dictionary:
         if types!=null and (fact.damage_types.is_empty() or fact.damage_types[0] not in types):matches=false
         if matches and (selected.is_empty() or variant.precedence>selected.precedence):selected=variant
     if not selected.is_empty():
-        for field in ["actor","anchors","projectile","attackVfx","attackFeedback","weaponTrail"]:
+        for field in ["actor","anchors","projectile","attackVfx","attackFeedback","weaponTrail","sourceTiming"]:
             if selected.has(field):recipe[field]=selected[field]
         recipe.selected_variant=selected.id
     return recipe
@@ -136,7 +137,7 @@ func run()->void:
             witnesses.append(candidate)
         for input in witnesses:
             var selected:Dictionary=Authoring.attack(input,actor,cache)
-            var expected:Dictionary=reference(input,rig,original)
+            var expected:Dictionary=reference(input,rig,original,Characters.content_id(actor.get("creature_content_ref")))
             check(without_pose_storage(selected)==without_pose_storage(expected),"Independent pre-split selector equality: "+entry.id+" control"+str(controls))
             check(Components.weapon_trail(selected,input,actor,cache)==reference_trail(expected,input,actor,cache),"Actual outfit/slot selects the exact original pose, palette and impact source: "+entry.id+" control"+str(controls))
             controls+=1
@@ -146,6 +147,66 @@ func run()->void:
         check(not is_same(one,two) and is_same(one.get("variants"),built.get("variants")),"Occurrences own distinct shells and borrow immutable variants: "+entry.id)
         one.actor={"enabled":false};one.anchors=[];one.selected_variant="private-occurrence"
         check(var_to_bytes(two)==held and var_to_bytes(actual)==prior,"Changing one selected shell leaves other occurrence/source untouched: "+entry.id)
+    var spirit_actor:Dictionary=actor.duplicate(true)
+    spirit_actor.creature_content_ref="creature.spell.spiritual_weapon"
+    var spirit_fact:Dictionary={"kind":"attack","behavior_id":"action.spell.spiritual_weapon.strike","weapon_slot":"MELEE_MAIN",
+        "attack_outcome":"Hit","source_item_id":null,"attack_source_kind":"natural","damage_types":["Force"]}
+    var spirit:Dictionary=Authoring.attack(spirit_fact,spirit_actor,cache)
+    check(not spirit.actor.enabled and spirit.selected_variant=="actual-autonomous-spiritual-weapon" \
+        and spirit.sourceTiming.clip=="bg3-36/spiritual-weapon/strike" \
+        and spirit.sourceTiming.contact_seconds==0.45 and spirit.sourceTiming.end_seconds==1.1,
+        "Exact effect-bodied source uses its declared finite contact/end without a borrowed sprite rig")
+    var wrong:Dictionary=spirit_fact.duplicate();wrong.weapon_slot="MELEE_OFF"
+    check(not Authoring.attack(wrong,spirit_actor,cache).has("sourceTiming") \
+        and not Authoring.attack(spirit_fact,actor,cache).has("sourceTiming"),
+        "Wrong slot or creature cannot inherit the autonomous source timing")
+    var shield:Dictionary=spirit_fact.duplicate();shield.behavior_id="action.monster.shield_bash"
+    shield.attack_source_kind="equipped";shield.weapon_slot="MELEE_OFF";shield.source_item_id="shield.shield"
+    var bash:Dictionary=Authoring.attack(shield,actor,cache)
+    check(bash.actor.enabled and bash.actor.clip=="Attack5" and bash.anchors==[{"name":"action_start","frame":0.0},{"name":"contact","frame":8.0},{"name":"recover","frame":10.0}],
+        "Shield Bash reuses the existing measured modular offhand body/anchors exactly")
+    var gateplate:Dictionary=actor.duplicate(true)
+    gateplate.creature_content_ref="creature.enemy_gateplate"
+    var gate:Dictionary=Authoring.attack(shield,gateplate,cache)
+    check(gate.get("selected_variant")=="actual-gateplate-shield-offhand" and Authoring.rig_id(gateplate,cache)=="smallscale.enemies.3footsoldier" \
+        and gate.actor.clip=="Attack5" and gate.anchors==bash.anchors,
+        "Exact Gateplate rig inherits only the existing0/8/10 Attack5-to-Attack4 stand-in choice")
+    var public_actor:Dictionary=spirit_actor.duplicate(true)
+    public_actor.uuid="selector-source";public_actor.present=true;public_actor.last_visual_position=[1,1]
+    var actual_cut:Dictionary={"actors":{"selector-source":public_actor},"senses":{"entities":{
+        "selector-source":{"position":[5,7],"visual":true}}},"tiles":{"5,7":{"elevation_steps":1},"1,1":{"elevation_steps":0}},
+        "audience":{"controlled":[]}}
+    var receiving:Dictionary=Compiler._response_inputs(actual_cut.actors,actual_cut,"attack")
+    check(receiving["selector-source"]=={"position":[5,7],"elevation_steps":1},
+        "Current public visual contact owns the Attack point even when its Body was admitted later")
+    actual_cut.senses.entities["selector-source"].visual=false
+    check(Compiler._response_inputs(actual_cut.actors,actual_cut,"attack").is_empty(),
+        "Nonvisual uncontrolled actor cannot reuse a remembered position as observed")
+    actual_cut.senses.entities.clear()
+    check(Compiler._response_inputs(actual_cut.actors,actual_cut,"attack").is_empty(),
+        "Absent current sight cannot borrow the stale Body position")
+    actual_cut.audience.controlled=["selector-source"]
+    check(Compiler._response_inputs(actual_cut.actors,actual_cut,"attack")["selector-source"].position==[1,1],
+        "Actual controlled actor retains its current canonical position without requiring a self contact")
+    public_actor.present=false
+    check(Compiler._response_inputs(actual_cut.actors,actual_cut,"attack").is_empty(),
+        "Departed controlled actor does not retain an optical Attack point")
+    for outcome in ["Hit","Crit","Miss","Crit Miss"]:
+        var input:Dictionary=spirit_fact.duplicate();input.attack_outcome=outcome
+        input.source_entity_uuid="selector-source";input.target_entity_uuid="selector-target"
+        var source:Dictionary=spirit_actor.duplicate();source.uuid=input.source_entity_uuid
+        var node:Dictionary={"id":"18","lineage_id":"17","phase":"completion","canceled":false,"fact":input}
+        var descriptor:Dictionary=load("res://authoring/abilities/actions/action.spell.spiritual_weapon.strike.tres").effects[0].constructor_input
+        var input_graph:Dictionary={"actor_inputs":{"18":{"selector-source":source}},"condition_response_inputs":{"18":{
+            "selector-source":{"position":[5,7],"elevation_steps":1},"selector-target":{"position":[6,7],"elevation_steps":2}}}}
+        var projected:Array=Components.ApplicationResults.observed(node,descriptor,input_graph)
+        check(projected.size()==1 and projected[0].origin_position==[5,7] and projected[0].destination_position==[6,7] \
+            and projected[0].origin_elevation_feet==5.0 and projected[0].destination_elevation_feet==10.0 \
+            and projected[0].values.contact_enabled==(outcome in ["Hit","Crit"]),
+            "Actual "+outcome+" controls autonomous contact without an invented hit")
+        input_graph.condition_response_inputs["18"].erase("selector-source")
+        check(Components.ApplicationResults.observed(node,descriptor,input_graph).is_empty(),
+            "Undisclosed current source contact cannot become an origin from an opaque actor record")
     check(owners==actual.size(),"Built table has exactly the actual authored attack owners")
     check(unique.size()==135,"All135 original measured poses are independently qualified")
     check(var_to_bytes(actual)==prior,"Every selector and document admission leaves immutable source table unchanged")

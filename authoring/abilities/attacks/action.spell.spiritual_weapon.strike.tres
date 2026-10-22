@@ -1,0 +1,47 @@
+[gd_resource type="Resource" script_class="PresentationAttack" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/abilities/body_use.gd" id="body"]
+[ext_resource type="Script" path="res://presentation/source/abilities/attack.gd" id="attack"]
+[ext_resource type="Script" path="res://presentation/source/abilities/attack_variant.gd" id="variant"]
+[ext_resource type="Script" path="res://presentation/source/abilities/feedback.gd" id="feedback"]
+
+[sub_resource type="Resource" id="disabled"]
+script = ExtResource("body")
+role = "attack"
+enabled = false
+
+[sub_resource type="Resource" id="selected"]
+script = ExtResource("variant")
+id = "actual-autonomous-spiritual-weapon"
+match = {"kind": "attack", "delivery": "melee", "creatureIds": ["creature.spell.spiritual_weapon"], "weaponSlots": ["MELEE_MAIN"], "sourceKinds": ["natural"]}
+body = SubResource("disabled")
+source_timing = {"clip": "bg3-36/spiritual-weapon/strike", "contact_seconds": 0.45, "end_seconds": 1.1}
+
+[sub_resource type="Resource" id="critical"]
+script = ExtResource("feedback")
+text = "Critical!!"
+colour = Color(1, 0.8, 0, 1)
+
+[sub_resource type="Resource" id="critical_miss"]
+script = ExtResource("feedback")
+text = "Critical miss"
+colour = Color(0.53333336, 0.53333336, 0.53333336, 1)
+
+[sub_resource type="Resource" id="miss"]
+script = ExtResource("feedback")
+text = "Miss"
+colour = Color(0.53333336, 0.53333336, 0.53333336, 1)
+
+[resource]
+script = ExtResource("attack")
+id = "action.spell.spiritual_weapon.strike"
+body = SubResource("disabled")
+outcome_texts = Dictionary[String, ExtResource("feedback")]({
+"critical": SubResource("critical"),
+"critical_miss": SubResource("critical_miss"),
+"miss": SubResource("miss")
+})
+variants = Array[ExtResource("variant")]([SubResource("selected")])
+status = "partial"
+unported = {"anchors": [], "disposition": "authored", "compatibleCueKinds": ["attack"], "previewChildCueKinds": ["damage"], "projectile": null}
+notes = "The real SpiritualWeaponStrike AttackFact is emitted by the effect-bodied spiritual weapon, not its caster. This exact creature/natural/MELEE_MAIN variant schedules child contact at the delivered strike source0.45seconds and end at its unchanged1.1seconds, with no fake sprite body/marker or new clock. The companion Action.effects owns the actual finite autonomous blade and real hit-versus-miss contact flag. Ordinary outcome feedback remains; persistent idle/summon-body artwork and all source pixels still require separate qualification and human review."

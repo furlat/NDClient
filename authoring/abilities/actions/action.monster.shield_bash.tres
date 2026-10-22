@@ -20,9 +20,11 @@ source = "ui-delivery-20261018"
 [resource]
 script = ExtResource("2_alrsg")
 id = "action.monster.shield_bash"
+disposition = "state_only"
 kind = "action"
 family = "monster"
 icon = SubResource("Resource_ee0kn")
 body = SubResource("Resource_4icen")
 effect_sources = PackedStringArray()
-notes = "Body role from the server's body kind (shield_bash); the rig resolves it to a clip once roles are built (coverage fill)."
+notes = "This catalog Action delegates its actual AttackFact to res://authoring/abilities/attacks/action.monster.shield_bash.tres. No duplicate Action body is selected; actual output and all art/audio review remain separate."
+status = "partial"

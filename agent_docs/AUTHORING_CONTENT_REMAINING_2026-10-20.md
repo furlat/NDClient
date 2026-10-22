@@ -6,9 +6,12 @@ equipped Myrmidon bodies plus intrinsic dispatch at a769c40d. All188production
 spell originals completed on that source/a12f:187pass,one Summon Dragon Studio
 installation timeout;69,934checks/two assertions, natural exit1 and no engine/
 script errors. [Exact failed whole batch](../.runtime/main-queue-20261022/public-spell-native/summary.json).
-This is not full-current native/live or performance acceptance. The separate
-shared startup ownership defect is source-confirmed, with its relation to that
-timeout still unproved. The current single R1–R8 inventory remains authoritative.
+The next source/Studio ownership checkpoint is committed as312ebe38. Its four
+affected native cohorts pass19,547assertions with natural exits0 and no engine/
+script errors or owned leftovers, including Summon Dragon in the three-case
+installation context. This does not relabel the earlier full188receipt or prove
+the timeout's cause. This is not full-current native/live or performance acceptance.
+[Current affected receipt](../.runtime/main-queue-20261022/native-shared-owner/summary.json). The current single R1–R8 inventory remains authoritative.
 
 Dragon depth/normals are supplied. Its independent-normal policy needs the
 existing offline equipped receiver prepared for a reviewed new source revision,
@@ -160,6 +163,40 @@ admission/publication and script loading; no per-spell test,
 recording, rendered-output, live or performance pass was started. All artwork
 and audio remain unreviewed.
 
+## Actual active Action owners and originals — 22 October
+
+The next coherent24file resource/shared-compiler batch resolves ten previously
+blank Action decisions: six explicit existing owners (AllyHelp, ElementalWarp,
+HealingIncense, DancingLights.move, Moonbeam.move, learned DivineSmite), exact
+ShieldBash/SpiritualWeaponStrike Attack recipes, and Hex/Hunter retained-root
+reapplication. Deliberate inherited Shield gestures stay stand-ins/unreviewed;
+Spiritual uses its own finite source, typed source timing and actual Miss/Hit
+contact decision. Reapplication preserves original root UUID/age and real later
+recipient/publication cuts. No per-spell renderer branch or new clock.
+
+Eight actual native-producer originals are now in Library380/376recorded:
+four attack/quarry successes, three Myrmidon successes and the exact failed
+Earth Landing identity. Source publication passes zero errors/two warnings;
+the initial three external-declaration-order syntax errors are preserved and
+corrected. Four initial headless rows pass19,148assertions. The final two
+current-contact controls pass3,457 and the complete final four-original native
+cohort passes3,358, all natural0/no engine or script errors/leftovers. The initial
+Spiritual source-position failure was a client assumption: current visual
+contact precedes body birth, leaving body.cached position null. The repaired
+bounded capture reads the actual sensory cut; no backend change or guessed
+birth/remembered location is used. The earlier three-Myrmidon native pass23,351
+retains its actual pre-contact-repair source; whole-current/quiet/live/art
+acceptance does not follow from these separate receipts.
+[Single execution record and exact receipts](REMAINING_WORK_2026-10-20.md#main-queue-actual-actioncreature-originals--22-october).
+
+**Eleven direct decisions remain:** four own-body/mouth-dependent actions;
+DivineSense/HolyNimbus/SacredWeapon independent onsets; HelpAttack presentation;
+ArcaneSword Move/Strike independent blade inputs/presentation; BreakEnchantment
+removal projection/presentation. These are being resolved as the next coherent
+resource/shared-input family. The earlier21-row list below is the source trace
+before this ten-row resolution, not21still-unassigned effects. All art/audio
+remain UNREVIEWED.
+
 ## Explicit wrapper/passive authoring batch — 22 October
 
 The current audit had101Action-catalog rows without a direct assignment.
@@ -175,7 +212,8 @@ controls pass17,059assertions with natural exits0; the original two harness
 parse failures are preserved in the single R1–R8 execution record.
 [Exact source/composer inventory](../.runtime/closing-repairs/action-wrapper-passive-dispositions/source-dispositions.json).
 
-The remaining **21direct Action decisions are still open**; this does not mean
+The earlier **21direct Action decisions** before the ten-row follow-through above
+were not closed by the80wrapper/passive choices; this does not mean
 21missing effects or21backend defects. The source trace must distinguish an
 already-present child owner from an actual missing body/effect:
 

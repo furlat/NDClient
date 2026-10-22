@@ -225,7 +225,7 @@ def first_cohort():
                   {'do':'action.move','by':'caster','target':[11,6]},
                   {'do':'action.environment.directional_door.open','by':'caster','target':{'object':'Burial hall'}},
                   {'do':'action.move','by':'caster','target':[13,6]}],
-         'required_behaviors':['action.environment.directional_door.open'],'required_facts':['movement']}, gallery_sorcerer(), equipped_weapon_study(), poison_weapon_contact_study(), poison_weapon_runtime_study(), water_create_dry_study(), *glyph_warding_trigger_studies(), power_word_heal_poison_study(), goodberry_consumption_study(), shillelagh_equipped_move_study(), flaming_sphere_lifecycle_study()] + interaction_cohort() + traversal_and_utility_cohort() + survival_cohort() + perspective_and_reaction_cohort() + direct_character_cohort() + passive_handler_cohort() + [interaction_media_study(), vampiric_positive_study(), banishment_departure_study()] + native_persistent_studio_studies() + option_identity_studies() + intrinsic_weapon_studies() + [flame_blade_weapon_study(subjects)] + coating_weapon_studies() + event_family_studies(actors, subjects) + projectile_variant_studies(actors, subjects) + production_review_studies(actors, subjects) + legacy_six_studies(subjects) + [skeleton_mark_lifecycle_study()] + coating_slot_lifecycle_studies() + class_held_lifecycle_studies() + elemental_body_lifecycle_studies() + [false_life_grant_study()] + [shield_ranged_lifecycle_study()]
+         'required_behaviors':['action.environment.directional_door.open'],'required_facts':['movement']}, gallery_sorcerer(), equipped_weapon_study(), poison_weapon_contact_study(), poison_weapon_runtime_study(), water_create_dry_study(), *glyph_warding_trigger_studies(), power_word_heal_poison_study(), goodberry_consumption_study(), shillelagh_equipped_move_study(), flaming_sphere_lifecycle_study()] + interaction_cohort() + traversal_and_utility_cohort() + survival_cohort() + perspective_and_reaction_cohort() + direct_character_cohort() + passive_handler_cohort() + [interaction_media_study(), vampiric_positive_study(), banishment_departure_study()] + native_persistent_studio_studies() + option_identity_studies() + intrinsic_weapon_studies() + [flame_blade_weapon_study(subjects)] + coating_weapon_studies() + event_family_studies(actors, subjects) + projectile_variant_studies(actors, subjects) + production_review_studies(actors, subjects) + legacy_six_studies(subjects) + [skeleton_mark_lifecycle_study()] + coating_slot_lifecycle_studies() + class_held_lifecycle_studies() + elemental_body_lifecycle_studies() + [false_life_grant_study()] + [shield_ranged_lifecycle_study()] + action_dispatch_owner_studies() + myrmidon_body_lifecycle_studies()
     cohort += hardware_studies(subjects)
     return [repair_item_owner_requirements(case) for case in cohort]
 
@@ -1975,3 +1975,149 @@ def shield_ranged_lifecycle_study():
                 'there is no repeat-until-outcome, seed search, grant/stat edit or forced roll. If neither '
                 'native attack supplies the required reaction, the complete fixed exchange remains a failed '
                 'original.'}
+
+
+def action_dispatch_owner_studies():
+    """Real Attack dispatch and retained-quarry reapplication, one legal cohort.
+
+    The commands select no dice result and create no presentation-only facts.
+    In particular, the old quarry dies through a different actor's Magic
+    Missile while its original caster retains the same concentration owner.
+    """
+    result = [{
+        'id': 'action.monster.shield_bash/native_held_shield_attempts',
+        'title': 'Shield Bash: native Gateplate shield and two legal attempts',
+        'kind': 'action', 'seed': 2,
+        'subjects': subjects(actions=['action.monster.shield_bash']),
+        'actors': [
+            {'role': 'caster', 'side': 'amber', 'creature': 'creature.enemy_gateplate', 'at': [3, 7]},
+            {'role': 'target', 'side': 'blue', 'creature': 'creature.knight', 'at': [4, 7]}],
+        'steps': [
+            {'do': 'action.monster.shield_bash', 'by': 'caster', 'target': 'target', 'capture_choices': True},
+            {'do': 'end_turn', 'by': 'caster'}, {'do': 'end_turn', 'by': 'target'},
+            {'do': 'action.monster.shield_bash', 'by': 'caster', 'target': 'target', 'capture_choices': True}],
+        'required_behaviors': ['action.monster.shield_bash'], 'required_facts': ['attack'],
+        'purpose': 'Native Gateplate owns the real declared ShieldBash behavior and its actual equipped shield. '
+                   'Both AttackFact outcomes remain the native rolled outcomes; no Hit/Miss or contact is fabricated.'}, {
+        'id': 'spell.spiritual_weapon/autonomous_strike_attempts',
+        'title': 'Spiritual Weapon: summon and actual autonomous initiative attempts',
+        'kind': 'spell', 'seed': 2,
+        'subjects': subjects(['spell.spiritual_weapon'], ['action.spell.spiritual_weapon.strike']),
+        'actors': [
+            {'role': 'caster', 'side': 'amber', 'creature': 'creature.generic_caster',
+             'level': 20, 'caster_level': 20, 'spells': ['spell.spiritual_weapon'], 'at': [3, 7]},
+            {'role': 'target', 'side': 'blue', 'creature': 'creature.knight', 'at': [6, 7]}],
+        'steps': [
+            {'do': 'spell.spiritual_weapon', 'by': 'caster', 'target': [5, 7], 'level': 2, 'capture_choices': True},
+            {'do': 'end_turn', 'by': 'caster'}, {'do': 'end_turn', 'by': 'target'},
+            {'do': 'end_turn', 'by': 'caster'}, {'do': 'end_turn', 'by': 'target'}],
+        'required_behaviors': ['spell.spiritual_weapon', 'action.spell.spiritual_weapon.strike'],
+        'required_facts': ['attack'],
+        'purpose': 'Only real initiative/AI controls the spawned autonomous effect-body creature. '
+                   'No caster-owned sprite swing, synthetic strike, chosen dice result or manual summoned-actor command is inserted.'}]
+    for name in ('hex', 'hunters_mark'):
+        spell = 'spell.' + name
+        action = 'action.spell.' + name + '.reapply'
+        result.append({
+            'id': spell + '/retained_root_quarry_reapply',
+            'title': name.replace('_', ' ').title() + ': original sustain, real defeat and new quarry',
+            'kind': 'spell', 'seed': 2,
+            'subjects': subjects([spell, 'spell.magic_missile'], [action, 'action.drop_concentration'],
+                                 ['condition.concentrating', spell.replace('spell.', 'condition.spell.') + '.quarry']),
+            'actors': [
+                {'role': 'caster', 'side': 'amber', 'creature': 'creature.generic_caster',
+                 'level': 20, 'caster_level': 20, 'spells': [spell], 'at': [3, 7]},
+                {'role': 'ally', 'side': 'amber', 'creature': 'creature.generic_caster',
+                 'level': 20, 'caster_level': 20, 'spells': ['spell.magic_missile'], 'at': [3, 8]},
+                {'role': 'target', 'side': 'blue', 'creature': 'creature.goblin', 'damage': 6, 'at': [4, 7]},
+                {'role': 'second_target', 'side': 'blue', 'creature': 'creature.knight', 'at': [5, 7]}],
+            'steps': [
+                {'do': spell, 'by': 'caster', 'target': 'target', 'level': 1, 'capture_choices': True},
+                {'do': 'spell.magic_missile', 'by': 'ally', 'target': 'target',
+                 'recipients': ['target', 'second_target', 'second_target'], 'level': 1},
+                {'do': action, 'by': 'caster', 'target': 'second_target', 'capture_choices': True},
+                {'do': 'action.move', 'by': 'caster', 'target': [3, 6]},
+                {'do': 'action.drop_concentration', 'by': 'caster', 'target': 'self'}],
+            'required_behaviors': [spell, 'spell.magic_missile', action, 'action.drop_concentration'],
+            'required_conditions': ['condition.concentrating', spell.replace('spell.', 'condition.spell.') + '.quarry'],
+            'required_condition_ends': ['condition.concentrating'],
+            'required_facts': ['damage'],
+            'purpose': 'A real separate allied caster defeats the wounded original quarry without replacing '
+                       'the original marker concentration. The legal reapply action creates only the new '
+                       'recipient member; the original sustain UUID/age must be retained. Source packets, '
+                       'publication cuts, retirement and any failed legal admission remain unchanged.'})
+    return result
+
+
+def myrmidon_body_lifecycle_studies():
+    """Four native equipped families; source setup grants none of their actions."""
+    specs = (
+        ('air', 'electrified_flail', [('raging_vortex', [3, 11])]),
+        ('earth', 'grounded_thunder', [('sludgy_sling', [3, 6]), ('burrow', [2, 6]), ('muck_to_metal', 'self')]),
+        ('fire', 'scorching_strike', [('cinderous_swipe', [4, 5]), ('immolation', 'self')]),
+        ('water', 'hiemal_strike', [('explosive_icicle', [4, 5]), ('healing_vapours', [3, 6])]),
+    )
+    result = []
+    for element, strike, techniques in specs:
+        creature = 'creature.spell.' + element + '_myrmidon'
+        prefix = 'action.' + element + '_myrmidon.'
+        strike = prefix + strike
+        spells = ['spell.magic_missile', 'spell.power_word_kill']
+        actions = ['action.disengage', 'action.move', 'action.attack', strike]
+        actions += [prefix + name for name, _ in techniques]
+        if element == 'earth':
+            actions.append(prefix + 'landing')
+        inventory = subjects(spells, actions)
+        inventory['creature'] = [creature, 'creature.generic_caster']
+        steps = [
+            {'do': 'action.disengage', 'by': 'caster', 'target': 'self', 'capture_choices': True},
+            {'do': 'action.move', 'by': 'caster', 'target': [2, 6]},
+            {'do': 'action.move', 'by': 'caster', 'target': [3, 6]},
+            {'do': 'end_turn', 'by': 'caster'},
+            {'do': 'spell.magic_missile', 'by': 'cleaner', 'target': 'caster', 'level': 1,
+             'recipients': ['caster'] * 3, 'capture_choices': True},
+            {'do': 'end_turn', 'by': 'cleaner'},
+            {'do': 'action.attack', 'by': 'caster', 'target': 'target', 'weapon_slot': 'MELEE_MAIN',
+             'capture_choices': True},
+            {'do': 'end_turn', 'by': 'caster'},
+            {'do': strike, 'by': 'caster', 'target': 'second_target', 'capture_choices': True},
+            {'do': 'end_turn', 'by': 'caster'},
+        ]
+        for name, target in techniques:
+            steps += [{'do': prefix + name, 'by': 'caster', 'target': target, 'capture_choices': True},
+                      {'do': 'end_turn', 'by': 'caster'}]
+        for level in (5, 6):
+            steps += [{'do': 'spell.magic_missile', 'by': 'cleaner', 'target': 'caster', 'level': level,
+                       'recipients': ['caster'] * (level + 2), 'capture_choices': True},
+                      {'do': 'end_turn', 'by': 'cleaner'}]
+        steps += [
+            {'do': 'spell.power_word_kill', 'by': 'cleaner', 'target': 'caster', 'level': 9,
+             'capture_choices': True},
+            {'do': 'action.move', 'by': 'cleaner', 'target': [10, 5]},
+        ]
+        result.append({
+            'id': creature + '/equipped_body_native_intrinsics_death',
+            'title': element.title() + ' Myrmidon: own equipped body, native techniques, hurt and death',
+            'kind': 'creature', 'seed': 2, 'battlefield': 'battlefield.open_floor_bright',
+            'subjects': inventory,
+            'actors': [
+                {'role': 'caster', 'side': 'amber', 'creature': creature, 'at': [3, 6]},
+                {'role': 'target', 'side': 'blue', 'creature': 'creature.generic_caster', 'level': 20, 'at': [4, 5]},
+                {'role': 'second_target', 'side': 'blue', 'creature': 'creature.generic_caster', 'level': 20, 'at': [4, 7]},
+                {'role': 'cleaner', 'side': 'blue', 'creature': 'creature.generic_caster',
+                 'level': 20, 'caster_level': 20, 'spells': spells, 'at': [10, 6]},
+            ],
+            'steps': steps,
+            'required_behaviors': actions + spells,
+            'required_facts': ['movement', 'attack', 'damage', 'life'],
+            'purpose': 'The actual creature factory supplies this own equipped family and every intrinsic. '
+                       'Disengage and two real moves precede a genuine incoming Magic Missile hurt, the actual '
+                       'bound main-hand attack, the exact strike and each native technique. Separate real '
+                       'recipients keep attack roles distinct; both owner and cleanup caster stand outside the chosen '
+                       'Vortex. Water heals only after actual injury. Earth Burrow keeps its native PortalTransfer '
+                       'and Landing child. Actual fixed L5/L6 volleys then L9 Power Word Kill provide an ordinary '
+                       'death path from native max HP117/127/123/127; no HP, hit, save, rider, item or clock '
+                       'is fabricated. Both factions retain original packets and any legal-admission failure. '
+                       'Native body output, gameplay scale, light/shadow acceptance and human art/audio review '
+                       'remain separate from capture.'})
+    return result

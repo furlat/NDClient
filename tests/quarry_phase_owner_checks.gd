@@ -1,6 +1,67 @@
 extends "res://tests/production_condition_handover_checks.gd"
 ## Retained root absence is a real public-data boundary, not a rendering owner.
+const Creation=preload("res://presentation/creation_inputs.gd")
+func retained_reapplication_controls()->void:
+    for name in ["hex","hunters_mark"]:
+        var identity:String="action.spell."+name+".reapply"
+        var source:Resource=load("res://authoring/abilities/actions/"+identity+".tres")
+        var descriptor:Dictionary=source.effects[0].constructor_input
+        var caster:String="retained-caster";var target:String="new-recipient"
+        var root_id:String="retained-root-from-prior-group";var child_id:String="new-real-member"
+        var root_member:Dictionary={"condition_uuid":root_id,"behavior_id":"condition.spell."+name,
+            "state":{"condition_uuid":root_id,"behavior_id":"condition.spell."+name,"applied_source_event_cursor":3}}
+        var child:Dictionary={"condition_uuid":child_id,"behavior_id":"condition.spell."+name+".quarry",
+            "state":{"condition_uuid":child_id,"behavior_id":"condition.spell."+name+".quarry"}}
+        var action:Dictionary={"id":"93","lineage_id":"90","phase":"completion","canceled":false,
+            "fact":{"kind":"action","behavior_id":identity,"source_entity_uuid":caster,"target_entity_uuid":target}}
+        var admission:Dictionary={"id":"91","lineage_id":"91","parent_lineage":"90","phase":"completion","canceled":false,
+            "fact":{"kind":"condition","source_entity_uuid":caster,"target_entity_uuid":target}}
+        var graph:Dictionary={"nodes":{"90":action,"91":admission},"condition_cues":{},
+            "actor_inputs":{"93":{caster:{"uuid":caster,"conditions":[root_member]}}},
+            "observed_results":{"93":[{"kind":"condition_application","node":admission,"target_uuid":target,"condition":child}]}}
+        var pair:Dictionary=Creation.quarry_binding(action,graph,descriptor)
+        check(pair.get("ready",false) and pair.identity.sustain_condition_uuid==root_id \
+            and pair.identity.recipient_condition_uuid==child_id and pair.owner_observation_occurrence=="93" \
+            and not pair.has("owner_occurrence"),name+": actual Action keeps the old root and observes its cut without a fabricated application")
+        var before:PackedByteArray=var_to_bytes(graph)
+        var projected:Array=Results.observed(action,descriptor,graph)
+        check(projected.size()==1 and projected[0].publication_occurrences==["93"] \
+            and projected[0].inputs.owner_input.condition_uuid==root_id \
+            and projected[0].inputs.quarry_input.condition.condition_uuid==child_id \
+            and var_to_bytes(graph)==before,name+": source receives only real retained/new members without mutating their clocks")
+        var publication_cache:Dictionary={"catalog/body_action_bindings.json":{identity:{"effect_cues":[{"constructor_input":descriptor}]}}}
+        var publications:Dictionary=Creation.lifetime_bindings([admission,action],graph,[],publication_cache)
+        check(publications.keys()==["93"] and publications["93"].has(child_id) \
+            and publications["93"][child_id].evidence.publication_occurrence=="93",
+            name+": retained prior-group root publishes at the later real Action/child cut")
+        var actors:Dictionary={caster:{"uuid":caster,"conditions":[root_member]},target:{"uuid":target,"conditions":[]}}
+        var owners:Dictionary={}
+        Conditions.observe(owners,actors,100.0)
+        actors[target].conditions=[child]
+        Conditions.observe(owners,actors,250.0)
+        Conditions.observe(owners,actors,350.0,false,[],{},publications["93"])
+        check(owners[root_id].start_ms==100.0 and owners[child_id].start_ms==250.0 \
+            and owners[child_id].creation_binding.identity.sustain_condition_uuid==root_id \
+            and is_inf(owners[root_id].end_ms),
+            name+": late identity publication retains both original membership clocks")
+        var live:Dictionary=Creation.quarry_state(publications["93"][child_id],{"actors":actors})
+        check(live.ready and live.owner.observed and live.quarry.observed,
+            name+": current real root and recipient still control live source admission")
+        actors[caster].conditions=[]
+        live=Creation.quarry_state(publications["93"][child_id],{"actors":actors})
+        check(live.ready and not live.owner.observed and not live.quarry.observed,
+            name+": removed retained root withdraws source observation without a replacement clock")
+        var actor:Dictionary=graph.actor_inputs["93"][caster]
+        actor.conditions=[]
+        check(not Creation.quarry_binding(action,graph,descriptor).get("ready",false),name+": undisclosed root remains unavailable")
+        actor.conditions=[root_member,root_member.duplicate(true)]
+        check(not Creation.quarry_binding(action,graph,descriptor).get("ready",false),name+": ambiguous roots are refused")
+        actor.conditions=[root_member]
+        graph.observed_results["93"]=[]
+        check(not Creation.quarry_binding(action,graph,descriptor).get("ready",false),name+": no new member means no reapplication source")
+
 func run()->void:
+    retained_reapplication_controls()
     var entries:Dictionary={};var paths:Dictionary={};var conditions:Dictionary={}
     for name in ["hex","hunters_mark"]:
         var id:String="spell."+name;var path:String="res://authoring/abilities/spells/"+id+".tres"

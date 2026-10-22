@@ -20,9 +20,10 @@ source = "ui-delivery-20261018"
 [resource]
 script = ExtResource("2_e6a6f")
 id = "action.spell.dancing_lights.move"
+disposition = "state_only"
 kind = "action"
 family = "spell"
 icon = SubResource("Resource_e7wlj")
 body = SubResource("Resource_tr6iu")
 effect_sources = PackedStringArray()
-notes = "Body role from the server's body kind (area_ability); the rig resolves it to a clip once roles are built (coverage fill)."
+notes = "Pinned schema16 MoveDancingLights moves the exact existing native light UUID and retained owner position. Canonical light_sources and the shared WorldPreparation lighting consumer own the resulting location/illumination; this Action does not cast again or replay finite review motion. No extra actor gesture or source clock is selected. Actual output and human art/audio review remain separate."

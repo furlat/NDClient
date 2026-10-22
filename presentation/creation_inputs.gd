@@ -3,6 +3,7 @@ extends RefCounted
 ## This projects a receiving accent; ordinary world/equipment rendering owns
 ## the real item. No inventory/world diff, fabricated object or birth UUID.
 const Actions=preload("res://presentation/native_action_authoring.gd")
+const Authoring=preload("res://presentation/authoring.gd")
 const Placement=preload("res://placement.gd")
 
 static func release_descriptor(selection:Dictionary)->Dictionary:
@@ -178,7 +179,10 @@ static func lifetime_bindings(events:Array,graph:Dictionary,commits:Array,cache:
         var pair:Dictionary=quarry_binding(node,graph,{},cache)
         if not pair.get("ready",false):continue
         var at:String=str(pair.condition_occurrence)
-        if int(order[str(pair.owner_occurrence)])>int(order[at]):at=str(pair.owner_occurrence)
+        # A reapplication observes its retained root at this Action's cut;
+        # it does not fabricate an owner application in the current group.
+        var owner_at:String=str(pair.get("owner_observation_occurrence",pair.get("owner_occurrence","")))
+        if int(order[owner_at])>int(order[at]):at=owner_at
         pair.evidence.publication_occurrence=at
         if not result.has(at):result[at]={}
         result[at][str(pair.identity.recipient_condition_uuid)]=pair
@@ -189,21 +193,25 @@ static func lifetime_bindings(events:Array,graph:Dictionary,commits:Array,cache:
 ## on another actor, or a surviving unrelated sustain, cannot join this child.
 static func quarry_descriptor(node:Dictionary,cache:Dictionary)->Dictionary:
     var fact:Variant=node.get("fact")
-    if fact==null or fact.get("kind")!="spell" or fact.get("behavior_id")==null:return {}
-    var selection:Dictionary=Actions.Phases.selection_for(fact,cache)
+    if fact==null or fact.get("kind") not in ["spell","action"] or fact.get("behavior_id")==null:return {}
+    var selection:Dictionary={}
+    if fact.kind=="spell":selection=Actions.Phases.selection_for(fact,cache)
+    else:
+        var binding:Dictionary=Authoring.load_data("catalog/body_action_bindings.json",cache).get(str(fact.behavior_id),{})
+        selection={"staging":{"cues":binding.get("effect_cues",[])}}
     var selected:Dictionary={}
     for cue in selection.get("staging",{}).get("cues",[]):
         var descriptor:Dictionary=cue.get("constructor_input",{})
         if descriptor.get("projection")!="quarry_application" or descriptor.get("behavior_id")!=fact.behavior_id:continue
         if selected.is_empty():selected=descriptor
         else:
-            for field in ["behavior_id","quarry_kind","owner_condition_id","recipient_condition_id"]:
+            for field in ["behavior_id","quarry_kind","owner_condition_id","recipient_condition_id","owner_admission"]:
                 if selected.get(field)!=descriptor.get(field):return {}
     return selected
 
 static func quarry_binding(node:Dictionary,graph:Dictionary,descriptor:Dictionary={},cache:Dictionary={})->Dictionary:
     var fact:Variant=node.get("fact")
-    if node.get("canceled",false) or node.get("phase")!="completion" or fact==null or fact.get("kind")!="spell" \
+    if node.get("canceled",false) or node.get("phase")!="completion" or fact==null or fact.get("kind") not in ["spell","action"] \
         or fact.get("source_entity_uuid")==null or fact.get("target_entity_uuid")==null:return {"ready":false}
     if descriptor.is_empty():descriptor=quarry_descriptor(node,cache)
     if descriptor.is_empty() or fact.get("behavior_id")!=descriptor.get("behavior_id"):return {"ready":false}
@@ -212,6 +220,24 @@ static func quarry_binding(node:Dictionary,graph:Dictionary,descriptor:Dictionar
     var rows:Array=graph.get("observed_results",{}).get(str(node.id),[]).filter(func(row):return row.kind=="condition_application" and _direct_creation(row.node,node,graph))
     var owners:Array=rows.filter(func(row):return row.target_uuid==source and row.condition.get("behavior_id")==owner_id)
     var children:Array=rows.filter(func(row):return row.target_uuid==target and row.condition.get("behavior_id")==recipient_id)
+    if fact.kind=="action":
+        if descriptor.get("owner_admission")!="retained" or children.size()!=1 or not owners.is_empty():
+            return {"ready":false,"reason":"quarry_reapplication_actual_child_not_disclosed"}
+        var actor:Dictionary=graph.get("actor_inputs",{}).get(str(node.id),{}).get(source,{})
+        var retained:Array=actor.get("conditions",[]).filter(func(member):return member.get("behavior_id")==owner_id)
+        if actor.get("uuid")!=source or retained.size()!=1:
+            return {"ready":false,"reason":"quarry_reapplication_retained_owner_ambiguous"}
+        var member:Dictionary=retained[0]
+        if member.get("condition_uuid")==null:return {"ready":false,"reason":"quarry_reapplication_retained_owner_not_disclosed"}
+        return {"ready":true,"reason":"","quarry_kind":str(descriptor.quarry_kind),"owner_id":owner_id,"recipient_id":recipient_id,
+            "identity":{"caster_uuid":source,"recipient_uuid":target,"sustain_condition_uuid":str(member.condition_uuid),
+                "recipient_condition_uuid":str(children[0].condition.condition_uuid)},
+            "retained_owner_member":member,"owner_observation_occurrence":str(node.id),"condition_occurrence":str(children[0].node.id),
+            "evidence":{"source_occurrence":str(node.id),"source_lineage":str(node.lineage_id),
+                "owner_observation_occurrence":str(node.id),"owner_cut":"source_actor_before_row",
+                "owner_application_cursor":member.get("state",{}).get("applied_source_event_cursor") if member.get("state") is Dictionary else null,
+                "condition_occurrence":str(children[0].node.id),"admission":"actual_reapplication_retained_owner_and_new_member"}}
+    if descriptor.get("owner_admission","created")!="created":return {"ready":false}
     if owners.size()!=1 or children.size()!=1:return {"ready":false,"reason":"quarry_exact_sustain_and_recipient_pair_not_disclosed"}
     return {"ready":true,"reason":"","quarry_kind":str(descriptor.quarry_kind),"owner_id":owner_id,"recipient_id":recipient_id,
         "identity":{"caster_uuid":source,"recipient_uuid":target,"sustain_condition_uuid":str(owners[0].condition.condition_uuid),

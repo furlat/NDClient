@@ -67,6 +67,7 @@ EVENT_PROJECTIONS = {
     "breath_exhale": {"grant_state"},
     "weapon_component": {"strike_input"},
     "quarry_application": {"owner_input", "quarry_input"},
+    "attack_attempt": {"owner_state"},
     "accepted_area_blast": {"blast_event"},
     "portable_payload_blast": {"observed_explosion"},
 }

@@ -446,13 +446,15 @@ static func native_action(group:Dictionary,node:Dictionary,binding:Dictionary,re
                         if str(commit.get("event_uuid",""))==str(publication):actual.start_ms=maxf(actual.start_ms,float(commit.at_ms))
                 actual.native_constructor_inputs=[{"component_path":descriptor.component_path,"input_field":"","values":projected.values}]
                 actual.native_constructor_evidence=projected.evidence
+                for field in ["native_quarry","creation_binding"]:
+                    if projected.has(field):actual[field]=projected[field]
                 if projected.has("condition"):
                     actual.condition=projected.condition;actual.condition_uuid=str(projected.condition.condition_uuid)
                 if projected.has("weapon_result_item_uuid"):actual.weapon_result_item_uuid=projected.weapon_result_item_uuid
                 var points:Dictionary={}
                 if projected.has("origin_position"):
                     points={"from_position":projected.origin_position,"to_position":projected.get("destination_position",projected.origin_position),
-                        "from_elevation_feet":projected.get("origin_elevation_feet",0.0),"to_elevation_feet":projected.get("origin_elevation_feet",0.0)}
+                        "from_elevation_feet":projected.get("origin_elevation_feet",0.0),"to_elevation_feet":projected.get("destination_elevation_feet",projected.get("origin_elevation_feet",0.0))}
                 _native_action_component(group,node,projected.node,actual,{"values":projected.inputs,"gaps":[],"evidence":projected.evidence},graph,projected.target_uuid,points)
         else:
             _native_action_component(group,node,node,phase,NativeActions.inputs(node,binding,phase,graph,observations),graph)
@@ -620,6 +622,8 @@ static func compile(group: Dictionary,lineage: Dictionary,graph: Dictionary,cach
         var start: float=graph.starts.get(node.id,0)
         var recipe: Dictionary=graph.recipes.get(node.id,{})
         var contact=start
+        if fact.kind=="attack" and not recipe.get("sourceTiming",{}).is_empty():
+            contact=float(graph.get("committed_at",{}).get(node.id,start))
         var release_time=start
         var body_end=start
         var audio_track:Dictionary={}

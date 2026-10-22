@@ -1,0 +1,66 @@
+[gd_resource type="Resource" script_class="PresentationAttack" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/abilities/body_use.gd" id="body"]
+[ext_resource type="Script" path="res://presentation/source/abilities/attack.gd" id="attack"]
+[ext_resource type="Script" path="res://presentation/source/abilities/attack_variant.gd" id="variant"]
+[ext_resource type="Script" path="res://presentation/source/abilities/feedback.gd" id="feedback"]
+
+[sub_resource type="Resource" id="disabled"]
+script = ExtResource("body")
+role = "attack"
+enabled = false
+
+[sub_resource type="Resource" id="shield_body"]
+script = ExtResource("body")
+role = "attack"
+clip = "Attack5"
+rig = "neuroclient.modular"
+markers = Dictionary[String, float]({"action_start": 0.0, "contact": 8.0, "recover": 10.0})
+
+[sub_resource type="Resource" id="selected"]
+script = ExtResource("variant")
+id = "actual-modular-shield-offhand"
+match = {"kind": "attack", "delivery": "melee", "rigIds": ["neuroclient.modular"], "weaponSlots": ["MELEE_OFF"], "sourceKinds": ["equipped"]}
+body = SubResource("shield_body")
+
+[sub_resource type="Resource" id="gateplate_body"]
+script = ExtResource("body")
+role = "attack"
+clip = "Attack5"
+rig = "smallscale.enemies.3footsoldier"
+markers = Dictionary[String, float]({"action_start": 0.0, "contact": 8.0, "recover": 10.0})
+
+[sub_resource type="Resource" id="gateplate_selected"]
+script = ExtResource("variant")
+id = "actual-gateplate-shield-offhand"
+match = {"kind": "attack", "delivery": "melee", "creatureIds": ["creature.enemy_gateplate"], "rigIds": ["smallscale.enemies.3footsoldier"], "weaponSlots": ["MELEE_OFF"], "sourceKinds": ["equipped"]}
+body = SubResource("gateplate_body")
+
+[sub_resource type="Resource" id="critical"]
+script = ExtResource("feedback")
+text = "Critical!!"
+colour = Color(1, 0.8, 0, 1)
+
+[sub_resource type="Resource" id="critical_miss"]
+script = ExtResource("feedback")
+text = "Critical miss"
+colour = Color(0.53333336, 0.53333336, 0.53333336, 1)
+
+[sub_resource type="Resource" id="miss"]
+script = ExtResource("feedback")
+text = "Miss"
+colour = Color(0.53333336, 0.53333336, 0.53333336, 1)
+
+[resource]
+script = ExtResource("attack")
+id = "action.monster.shield_bash"
+body = SubResource("disabled")
+outcome_texts = Dictionary[String, ExtResource("feedback")]({
+"critical": SubResource("critical"),
+"critical_miss": SubResource("critical_miss"),
+"miss": SubResource("miss")
+})
+variants = Array[ExtResource("variant")]([SubResource("selected"), SubResource("gateplate_selected")])
+status = "partial"
+unported = {"anchors": [], "disposition": "authored", "compatibleCueKinds": ["attack"], "previewChildCueKinds": ["damage"], "projectile": null}
+notes = "The actual ShieldBash AttackFact uses the exact equipped shield/MELEE_OFF. Reuse only the existing action.attack melee-offhand Attack5 body and its unchanged authored0/8/10 markers on neuroclient.modular. The exact Gateplate/3Footsoldier variant inherits the same existing Attack5 markers and the rig's already authored Attack5-to-Attack4 stand-in; no new contact measurement, weapon trail, blade slash or shield socket is invented. The disabled default refuses other rigs/sources; the Gateplate reuse is not an authentic shield-pose measurement. Actual attack/damage/save/Prone children keep their original outcomes and consumers. This deliberate gesture reuse and all artwork remain unreviewed."

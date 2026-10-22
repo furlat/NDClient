@@ -13,7 +13,9 @@ source = "ui/resources.json icon:reaction.divine-smite"
 [resource]
 script = ExtResource("1_re53j")
 id = "reaction.spell.divine_smite"
+disposition = "state_only"
 kind = "reaction"
 family = "reaction"
 icon = SubResource("Resource_8ugty")
 effect_sources = PackedStringArray()
+notes = "Pinned schema16 LearnedDivineSmiteHandler is entitlement installation only: its own trigger list is empty and processor is a no-op, while registration supplies the existing shared per-slot class_feature handlers. Actual Radiant damage, exact shared handler and spell.divine_smite source own the impact. No duplicate entitlement body/Smite cue is emitted. Actual source output and all human art/audio acceptance remain separate."

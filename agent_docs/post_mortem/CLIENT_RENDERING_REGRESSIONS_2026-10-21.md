@@ -418,3 +418,12 @@ This source finding/repair does not prove that timeout's cause, attribute old
 shutdown dumps or establish quiet performance. The affected/current native
 follow-through is separately recorded in
 [the single execution inventory](../REMAINING_WORK_2026-10-20.md).
+
+
+The312ebe38follow-through completes four affected native cohorts with19,547
+assertions, natural exits0, zero engine/script errors and no owned leftovers.
+It includes actual event families, positive actor history/material transitions,
+production Gallery transport and a three-case installation context in which
+Summon Dragon passes in4,408ms. The original full188failure remains preserved;
+this bounded pass does not establish its cause or a quiet timing comparison.
+[Exact current receipt](../../.runtime/main-queue-20261022/native-shared-owner/summary.json).

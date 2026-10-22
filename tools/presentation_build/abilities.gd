@@ -536,8 +536,23 @@ static func _validate(entries: Dictionary, report: Dictionary) -> void:
         for sound in e.sounds:_check_binding(report, where, bindings.get("spells", {}).get(id), sound)
     for id in entries.get("attacks",{}):
         var e:Resource=entries.attacks[id]
-        if e.trail_points.is_empty():continue
         var where:String="abilities/attacks/"+id
+        for variant in e.variants:
+            var creatures:Variant=variant.match.get("creatureIds")
+            if creatures!=null and (not creatures is Array or not creatures.all(func(identity):return Common.server_ids().get("ids",{}).get("creature",{}).has(identity))):
+                Common.error(report,where,"attack variant needs exact declared source creatures")
+            if variant.source_timing.is_empty():continue
+            var timing:Dictionary=variant.source_timing
+            var source_id:String=str(timing.get("clip",""))
+            var contact:float=float(timing.get("contact_seconds",-1.0));var end:float=float(timing.get("end_seconds",0.0))
+            var declared:Resource=entries.get("actions",{}).get(id)
+            if variant.body==null or variant.body.enabled or not clips.has(source_id) \
+                or not is_finite(contact) or not is_finite(end) or contact<0.0 or end<contact or end<=0.0 \
+                or end>float(clips.get(source_id,{}).get("seconds",0.0)) or declared==null \
+                or not declared.effects.any(func(use):return use.clip==source_id and use.constructor_input.get("projection")=="attack_attempt" \
+                    and is_equal_approx(float(use.source_end),end) and use.at=="event.start"):
+                Common.error(report,where,"source-owned attack timing needs a finite delivered event source and disabled sprite body")
+        if e.trail_points.is_empty():continue
         if e.trail_source==null or not entries.get("sources",{}).has(e.trail_source.id) \
             or not e.trail_source.record.get("weapon_path",false):
             Common.error(report,where,"measured weapon trail requires an explicitly authored imported path source")
@@ -812,10 +827,10 @@ static func _check_constructor(use:Resource,where:String,clips:Dictionary,report
         if not declared.has(binding.get("owner_condition_id")) or not declared.has(binding.get("recipient_condition_id")):
             Common.error(report,where,"quarry source needs its assigned current sustain and recipient conditions");return
     if binding.get("kind")=="observed_event":
-        if binding.get("outcome") not in ["cast","heal","damage","removal","revival","condition_application"] or use.scope not in ["source","recipient","cast"] or binding.get("geometry_actor") not in ["caster","target"]:
+        if binding.get("outcome") not in ["cast","attack","heal","damage","removal","revival","condition_application"] or use.scope not in ["source","recipient","cast"] or binding.get("geometry_actor") not in ["caster","target"]:
             Common.error(report,where,"observed event needs an outcome, declared event scope and actual geometry role");return
         var projection:String=str(binding.get("projection","event"))
-        if projection not in ["event","owned_outcome","condition_outcome","owner_activity","spatial_contact","applied_contact","cast_completion","healing_return","owned_fire_contact","finite_contact","condition_set_outcome","condition_contact","immediate_blast","retired_payload_blast","breath_grant","breath_exhale","weapon_component","quarry_application","effective_handler","accepted_area_blast","portable_payload_blast","prismatic_outcomes","spatial_fire_contact"] \
+        if projection not in ["event","owned_outcome","condition_outcome","owner_activity","spatial_contact","applied_contact","cast_completion","healing_return","owned_fire_contact","finite_contact","condition_set_outcome","condition_contact","immediate_blast","retired_payload_blast","breath_grant","breath_exhale","weapon_component","quarry_application","attack_attempt","effective_handler","accepted_area_blast","portable_payload_blast","prismatic_outcomes","spatial_fire_contact"] \
             or projection in ["applied_contact","cast_completion"] and use.scope!="cast" \
             or projection=="applied_contact" and (binding.outcome!="damage" or str(binding.get("damage_type","")).is_empty() or use.at!="cast" or use.delay!=0.0) \
             or projection=="cast_completion" and (binding.outcome!="cast" or binding.get("recipient_role")!="target") \
@@ -865,9 +880,24 @@ static func _check_constructor(use:Resource,where:String,clips:Dictionary,report
             or use.delay!=0.0 or use.role!="attached" or binding.get("input_field")!="" \
             or binding.get("damage_source_ids",[]).is_empty() or str(binding.get("damage_type","")).is_empty() and binding.get("damage_type_policy")!="actual_component"):
             Common.error(report,where,"weapon component requires actual attributed positive result, exact source IDs and event clock");return
-        if projection=="quarry_application" and (str(binding.get("quarry_kind","")).is_empty() or binding.outcome!="condition_application" \
-            or use.scope!="cast" or use.at!="cast" or use.delay!=0.0 or use.role!="attached" or binding.get("component_path")!=["owned_quarry"] or binding.get("input_field")!=""):
-            Common.error(report,where,"quarry application requires the actual original sustain/recipient pair and later public admission");return
+        if projection=="quarry_application":
+            var retained:bool=binding.get("owner_admission","created")=="retained"
+            var fact_kind:String="action" if retained else "spell"
+            if str(binding.get("quarry_kind","")).is_empty() or binding.outcome!="condition_application" \
+                or binding.get("owner_admission","created") not in ["created","retained"] \
+                or not Common.server_ids().get("ids",{}).get(fact_kind,{}).has(binding.get("behavior_id")) \
+                or use.scope!="cast" or use.at!=("event.start" if retained else "cast") or use.delay!=0.0 \
+                or use.role!="attached" or binding.get("component_path")!=["owned_quarry"] or binding.get("input_field")!="":
+                Common.error(report,where,"quarry application needs its exact created or retained root and actual recipient admission");return
+        if projection=="attack_attempt" and (binding.outcome!="attack" or use.scope!="cast" or use.at!="event.start" \
+            or use.delay!=0.0 or use.role!="attached" or binding.get("input_field")!="" \
+            or not Common.server_ids().get("ids",{}).get("action",{}).has(binding.get("behavior_id")) \
+            or binding.get("source_creature_ids",[]).is_empty() or binding.get("weapon_slots",[]).is_empty() \
+            or binding.get("source_kinds",[]).is_empty() \
+            or not binding.source_creature_ids.all(func(identity):return Common.server_ids().get("ids",{}).get("creature",{}).has(identity)) \
+            or not binding.weapon_slots.all(func(slot):return slot in ["MELEE_MAIN","MELEE_OFF","RANGED_MAIN","RANGED_OFF"]) \
+            or not binding.source_kinds.all(func(kind):return kind in ["equipped","natural","unarmed"])):
+            Common.error(report,where,"attack attempt requires an exact actual attack/source/slot event contract");return
         if projection=="accepted_area_blast" and (binding.outcome!="cast" or use.scope!="cast" or use.at!="contact" \
             or use.delay!=0.0 or binding.get("component_path")!=["effect"] or binding.get("input_field")!="" \
             or use.extra.get("live_endpoints",[])!=[{"cue_point":"source"}]):
@@ -1117,6 +1147,9 @@ static func _check_constructor(use:Resource,where:String,clips:Dictionary,report
                 var policies:Dictionary=use.extra.get("input_policies",{})
                 if smite and policies!={"condition_input":{"mode":"not_applicable","reason":"selected_smite_impact_does_not_consume_condition"},"tick_input":{"mode":"not_applicable","reason":"selected_smite_impact_does_not_consume_tick"}}:
                     Common.error(report,where,"smite finite impact must expose unused condition/tick methods accurately")
+            elif projection=="attack_attempt":
+                if input.get("phase")!="strike" or not ["owner_state","targets"].all(func(channel):return channel in clips[use.clip].get("inputs",[])):
+                    Common.error(report,where,"attack attempt needs the selected autonomous strike source interface")
             elif projection=="quarry_application":
                 if input.get("phase") not in ["windup","application"] or not input.get("owner") is Dictionary or not input.get("quarry_state") is Dictionary \
                     or not ["owner_input","quarry_input"].all(func(channel):return channel in clips[use.clip].get("inputs",[])):

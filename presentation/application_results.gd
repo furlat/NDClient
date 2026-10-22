@@ -1,6 +1,7 @@
 extends RefCounted
 const Creation=preload("res://presentation/creation_inputs.gd")
 const Catalog=preload("res://source_catalog.gd")
+const Characters=preload("res://presentation/characters.gd")
 ## Group-local observed results, keyed by native cast lineage and application.
 ## No target search, rule evaluation, defaults for hidden results or state edits.
 static func key(node:Dictionary)->Array:
@@ -249,6 +250,7 @@ static func observed(node:Dictionary,descriptor:Dictionary,graph:Dictionary)->Ar
     if projection in ["breath_grant","breath_exhale"]:return _breath(node,descriptor,graph)
     if projection=="weapon_component":return _weapon_component(node,descriptor,graph)
     if projection=="quarry_application":return _quarry_application(node,descriptor,graph)
+    if projection=="attack_attempt":return _attack_attempt(node,descriptor,graph)
     if projection=="accepted_area_blast":return _accepted_area_blast(node,descriptor,graph)
     if projection=="portable_payload_blast":return _portable_blast(node,descriptor,graph)
     if projection=="owned_fire_contact":return _owned_fire_contact(node,descriptor,graph)
@@ -651,18 +653,49 @@ static func _weapon_component(node:Dictionary,descriptor:Dictionary,graph:Dictio
             result.append(observed)
     return result
 
+## An autonomous source executes this actual attack attempt. Its original
+## source owns the stroke clock; only real outcomes admit contact artwork.
+static func _attack_attempt(node:Dictionary,descriptor:Dictionary,graph:Dictionary)->Array:
+    var fact:Variant=node.get("fact")
+    if node.get("canceled",false) or node.get("phase")!="completion" or fact==null or fact.get("kind")!="attack" \
+        or fact.get("behavior_id")!=descriptor.get("behavior_id") or fact.get("source_entity_uuid")==null \
+        or fact.get("target_entity_uuid")==null or fact.get("attack_outcome") not in ["Hit","Crit","Miss","Crit Miss"] \
+        or fact.get("weapon_slot") not in descriptor.get("weapon_slots",[]) \
+        or fact.get("attack_source_kind") not in descriptor.get("source_kinds",[]):return []
+    var source:String=str(fact.source_entity_uuid);var target:String=str(fact.target_entity_uuid)
+    var actor:Dictionary=graph.get("actor_inputs",{}).get(str(node.id),{}).get(source,{})
+    var creature:String=Characters.content_id(actor.get("creature_content_ref"))
+    if actor.get("uuid")!=source or creature not in descriptor.get("source_creature_ids",[]):return []
+    var contacts:Dictionary=graph.get("condition_response_inputs",{}).get(str(node.id),{})
+    if not contacts.has(source) or not contacts.has(target):return []
+    var origin:Dictionary=contacts[source];var destination:Dictionary=contacts[target]
+    var state:Dictionary={"owner_uuid":source,"present":true,"observed":true,"suppressed":false}
+    var contact:bool=fact.attack_outcome in ["Hit","Crit"]
+    return [{"node":node,"target_uuid":target,"origin_position":origin.position,"destination_position":destination.position,
+        "origin_elevation_feet":float(origin.elevation_steps)*5.0,"destination_elevation_feet":float(destination.elevation_steps)*5.0,
+        "values":{"owner_uuid":source,"state":state,"review_owner_states":[],"contact_enabled":contact},
+        "inputs":{"owner_state":state},"evidence":{"attack_occurrence":str(node.id),"attack_lineage":str(node.lineage_id),
+            "source_actor_uuid":source,"recipient_uuid":target,"source_creature_id":creature,
+            "weapon_slot":str(fact.weapon_slot),"attack_source_kind":str(fact.attack_source_kind),
+            "attack_outcome":str(fact.attack_outcome),"contact_enabled":contact,"source_cut":"source_actor_before_row"}}]
+
 static func _quarry_application(node:Dictionary,descriptor:Dictionary,graph:Dictionary)->Array:
     var pair:Dictionary=Creation.quarry_binding(node,graph,descriptor)
     if not pair.get("ready",false) or pair.quarry_kind!=descriptor.get("quarry_kind"):return []
     var rows:Array=graph.get("observed_results",{}).get(str(node.id),[]).filter(func(row):return row.kind=="condition_application" and str(row.condition.condition_uuid) in [str(pair.identity.sustain_condition_uuid),str(pair.identity.recipient_condition_uuid)])
-    if rows.size()!=2:return []
+    var retained:bool=pair.has("retained_owner_member")
+    if rows.size()!=(1 if retained else 2):return []
     var actors:Dictionary={}
+    if retained:actors[str(pair.identity.caster_uuid)]={"conditions":[pair.retained_owner_member]}
     for row in rows:
-        actors[row.target_uuid]={"conditions":[row.condition]}
+        if not actors.has(row.target_uuid):actors[row.target_uuid]={"conditions":[]}
+        actors[row.target_uuid].conditions.append(row.condition)
     var packet:Dictionary=Creation.quarry_state(pair,{"actors":actors})
+    if not packet.owner.observed or not packet.quarry.observed:return []
     var event:Dictionary=rows[-1].node
     var id:Dictionary=pair.identity
     return [{"node":event,"target_uuid":str(id.recipient_uuid),"native_quarry":true,"creation_binding":pair,
+        "publication_occurrences":[str(pair.owner_observation_occurrence)] if retained else [],
         "values":{"source_actor_uuid":str(id.caster_uuid),"recipient_uuid":str(id.recipient_uuid),
             "owner_uuid":str(id.sustain_condition_uuid),"owner_id":str(pair.owner_id),"condition_uuid":str(id.recipient_condition_uuid),
             "condition_id":str(pair.recipient_id),"owner":{},"condition":{},"quarry_state":{},"strike":{},"tick":{},"healing":{},

@@ -38,6 +38,42 @@ The stable-zero-HP healing request below is **delivered in 9f81d5267**; its
 original 0c failure is retained alongside the successful 9f original. Historical
 requests below are retained as history only.
 
+
+## Earth Myrmidon Landing identity — new9f original,22October
+
+One coherent four-family own-body capture completes Air/Fire/Water and retains
+Earth as failed because its real Burrow Landing Action has no public behavior
+identity. All Earth commands, actual held weapon attacks (Hit/Crit), committed
+Burrow, Muck to Metal, incoming damage and ordinary death are recorded. This
+is a narrow producer identity boundary; body/geometry artwork is delivered.
+It does not reopen the eight already-delivered bonus/strike/Tenacity attributions.
+
+Both original seats publish packet41:
+
+| Seat | Committed PortalTransfer | Actual Landing Action | Actual parent Burrow |
+| --- | --- | --- | --- |
+| Amber | occurrence349, [3,6]→[2,6] | occurrence353, `behavior_id:null`, name `Burrow Landing` | occurrence354, `action.earth_myrmidon.burrow` |
+| Blue | occurrence355, [3,6]→[2,6] | occurrence359, `behavior_id:null`, name `Burrow Landing` | occurrence360, `action.earth_myrmidon.burrow` |
+
+[Original case/producer/failure](../.runtime/closing-repairs/myrmidon-body-originals/cases/creature.spell.earth_myrmidon__equipped_body_native_intrinsics_death/20261022T023946.439592Z/recording.json),
+[compact exact public evidence](../.runtime/closing-repairs/myrmidon-body-originals/landing-public-evidence.json).
+The body assignment already uses the declared
+`action.earth_myrmidon.landing`; the client does not select it from display text.
+Pinned9f source `dnd/monsters/spell_summon_actions.py:1417` constructs
+`MyrmidonLanding` and performs it as a real child. The declaration exists at
+the same module's action-identity/dependency tables. The current official
+checkout retains that construction, but its newer schema18 runtime is neither
+adopted nor reproduced here; this original proves the9f boundary only.
+
+**Narrow backend review:** first confirm whether the currently intended producer
+already supplies this real child's identity. If still absent, bind that actual
+registered child to existing `ActionFact.behavior_id` using existing content
+ownership. No new field, client guessed ID, display-name dispatch, artificial
+Action, damage inference or generic fixture-grant API is requested. Keep any
+same-contract producer repair separate from adoption of unrelated schema18
+summon-control work. Independent client assignments/Studio work continue.
+
+
 ## Stable zero-HP healing discovery — delivered in 9f81d5267, original 0c failure retained
 
 The unchanged `survival.stabilize/heal_and_walk` original on `0c2e5a0d7`

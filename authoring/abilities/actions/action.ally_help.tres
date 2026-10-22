@@ -20,9 +20,10 @@ source = "ui-delivery-20261018"
 [resource]
 script = ExtResource("2_j3kqb")
 id = "action.ally_help"
+plays = "action.shake_awake"
 kind = "action"
 family = "core"
 icon = SubResource("Resource_kvsyt")
 body = SubResource("Resource_jlpij")
 effect_sources = PackedStringArray()
-notes = "Body role from the server's body kind (assist); the rig resolves it to a clip once roles are built (coverage fill)."
+notes = "Pinned schema16 AllyHelp inherits the actual ShakeAwake application and only narrows ally/removal-trigger admission. Reuse that existing explicit disabled-body recipe; the actual condition removals and waking pose remain owned by their native children. This adds no helper gesture, source timer or successful removal. It does not qualify output or human art/audio review."

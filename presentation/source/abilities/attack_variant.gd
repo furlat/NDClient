@@ -12,6 +12,10 @@ const BodyUse = preload("res://presentation/source/abilities/body_use.gd")
 ## primaryDamageTypes); null rules match anything.
 @export var match: Dictionary = {}
 @export var body: BodyUse
+## Finite source-owned attacks without a sprite body: clip/contact/end in the
+## selected source's own seconds. This schedules actual child results, not a
+## synthetic body track; an empty map preserves the ordinary body anchors.
+@export var source_timing: Dictionary = {}
 ## Slash sprite layers per outcome (onHit, onMiss, onCrit -> slot -> category, tint).
 @export var slash: Dictionary = {}
 ## Arrow speed in tiles per second, and the measured release sockets per rig

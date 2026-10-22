@@ -5,6 +5,8 @@
 [ext_resource type="Script" path="res://presentation/source/abilities/action.gd" id="2_yd88q"]
 [ext_resource type="Script" path="res://presentation/source/sound_ref.gd" id="3_oqda1"]
 
+[ext_resource type="Script" path="res://presentation/source/effect_use.gd" id="quarry_use"]
+
 [sub_resource type="Resource" id="Resource_oqda1"]
 script = ExtResource("1_yd88q")
 role = "cast"
@@ -17,12 +19,52 @@ path = "art/ui-delivery-20261018/runtime/smooth48/action.spell.hunters_mark.reap
 native_size = Vector2i(48, 48)
 source = "ui-delivery-20261018"
 
+
+[sub_resource type="Resource" id="ActualReapplication"]
+script = ExtResource("quarry_use")
+clip = "bg3-36/hunters-mark/hunters_mark_native/application"
+role = "attached"
+scope = "cast"
+at = "event.start"
+attachment = "caster_ground"
+orientation = "world"
+source_end = 0.55
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+constructor_input = {"kind": "observed_event", "projection": "quarry_application", "outcome": "condition_application", "geometry_actor": "caster", "quarry_kind": "hunters_mark", "component_path": ["owned_quarry"], "input_field": "", "behavior_id": "action.spell.hunters_mark.reapply", "owner_condition_id": "condition.spell.hunters_mark", "recipient_condition_id": "condition.spell.hunters_mark.quarry", "owner_admission": "retained"}
+extra = {
+"input_policies":{"healing_input": {"mode": "not_applicable", "reason": "selected_quarry_finite_phase_consumes_actual_owner_quarry_and_optional_hit"}, "strike_input": {"mode": "not_applicable", "reason": "selected_quarry_finite_phase_consumes_actual_owner_quarry_and_optional_hit"}, "condition_input": {"mode": "not_applicable", "reason": "selected_quarry_finite_phase_consumes_actual_owner_quarry_and_optional_hit"}, "tick_input": {"mode": "not_applicable", "reason": "selected_quarry_finite_phase_consumes_actual_owner_quarry_and_optional_hit"}, "hit_input": {"mode": "not_applicable", "reason": "selected_quarry_finite_phase_consumes_actual_owner_quarry_and_optional_hit"}},
+"delay_seconds": 0.0,
+"dynamic_geometry": true,
+"entity_geometry": {
+"actor": "caster",
+"slots": ["weapon"]
+},
+"live_endpoints": [{
+"actor": "caster",
+"socket": "hand"
+}, {
+"actor": "target",
+"socket": "body_center",
+"surface_slots": ["body", "chest", "cloak", "legs", "shoes", "hands", "head", "helmet"]
+}]
+}
+
 [resource]
 script = ExtResource("2_yd88q")
 id = "action.spell.hunters_mark.reapply"
+disposition = "authored"
 kind = "action"
 family = "spell"
 icon = SubResource("Resource_kaqf3")
 body = SubResource("Resource_oqda1")
 effect_sources = PackedStringArray()
-notes = "Body role from the server's body kind (targeted_ability); the rig resolves it to a clip once roles are built (coverage fill)."
+effects = Array[ExtResource("quarry_use")]([SubResource("ActualReapplication")])
+applies_conditions = PackedStringArray("condition.spell.hunters_mark.quarry")
+notes = "The actual reapplication Action retains the exact pre-row caster sustain and admits one real new recipient member under that Action. Reuse only the existing finite application source at actual event/publication start; the old quarry removal and new member own their real clocks. No replacement sustain/cast, private UUID, future outcome or source-age reset is fabricated. No actor gesture is selected; all artwork/output/human review remain separate."
+status = "partial"

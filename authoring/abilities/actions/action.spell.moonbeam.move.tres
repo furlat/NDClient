@@ -20,9 +20,10 @@ source = "ui-delivery-20261018"
 [resource]
 script = ExtResource("2_xmgsj")
 id = "action.spell.moonbeam.move"
+disposition = "state_only"
 kind = "action"
 family = "spell"
 icon = SubResource("Resource_8ojf6")
 body = SubResource("Resource_ef38o")
 effect_sources = PackedStringArray()
-notes = "Body role from the server's body kind (area_ability); the rig resolves it to a clip once roles are built (coverage fill)."
+notes = "Pinned schema16 MoveMoonbeam moves the exact retained zone and publishes its real changed footprint. The already authored spatial_effect.spell.moonbeam RetainedBeam consumes current public anchor/elevation/cells on that same spatial UUID. This Action adds no duplicate cast, sampled review trajectory, synthetic hit or replacement owner. Existing application/removal/contact limitations and human art/audio review remain open."

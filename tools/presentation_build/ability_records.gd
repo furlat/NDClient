@@ -709,6 +709,9 @@ static func attack_recipe(e: Resource, trail: Variant, sockets: Dictionary) -> D
             F.emit(row, "match", variant, "match", "same", true)
             body_to_actor(row, "actor", variant.body)
             markers_to(row, "anchors", variant.body)
+            if not variant.source_timing.is_empty():
+                row.sourceTiming=variant.source_timing.duplicate(false)
+                row.sourceTiming.source=e.resource_path+"::variants/"+str(e.variants.find(variant))+"/source_timing"
             F.emit(row, "attackVfx", variant, "slash", "same", true)
             if row.get("projectile") is Dictionary:
                 F.emit(row, "projectile/speedPxPerSecond", variant, "flight_tiles_per_second", "tiles", true)

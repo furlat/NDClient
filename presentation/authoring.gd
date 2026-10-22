@@ -94,7 +94,8 @@ static func attack(fact: Dictionary, actor: Dictionary, cache: Dictionary) -> Di
         var matchers: Dictionary = variant.match
         var matches = matchers.get("kind", "attack") == "attack"
         for pair in [["delivery",delivery], ["weaponSlots",fact.weapon_slot], ["outcomes",outcomes.get(fact.attack_outcome)],
-            ["sourceItemIds",fact.source_item_id], ["sourceKinds",fact.attack_source_kind], ["rigIds",rig]]:
+            ["sourceItemIds",fact.source_item_id], ["sourceKinds",fact.attack_source_kind], ["rigIds",rig],
+            ["creatureIds",Characters.content_id(actor.get("creature_content_ref"))]]:
             var constraint: Variant = matchers.get(pair[0])
             if constraint == null: continue
             if constraint is Array:
@@ -114,7 +115,7 @@ static func attack(fact: Dictionary, actor: Dictionary, cache: Dictionary) -> Di
         if types != null and (fact.damage_types.is_empty() or fact.damage_types[0] not in types): matches = false
         if matches and (selected.is_empty() or variant.precedence > selected.precedence): selected = variant
     if not selected.is_empty():
-        for field in ["actor", "anchors", "projectile", "attackVfx", "attackFeedback", "weaponTrail"]:
+        for field in ["actor", "anchors", "projectile", "attackVfx", "attackFeedback", "weaponTrail", "sourceTiming"]:
             if selected.has(field): recipe[field] = selected[field]
         recipe.selected_variant = selected.id
     return recipe

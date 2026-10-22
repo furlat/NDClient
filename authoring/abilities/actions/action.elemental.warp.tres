@@ -20,9 +20,10 @@ source = "ui-delivery-20261018 srd22.creature_action.elemental_warp"
 [resource]
 script = ExtResource("1_54unr")
 id = "action.elemental.warp"
+disposition = "state_only"
 kind = "action"
 family = "summon_form"
 icon = SubResource("Resource_4ucfm")
 body = SubResource("Resource_5qco8")
 effect_sources = PackedStringArray()
-notes = "Body role from the server's body kind (area_ability); the rig resolves it to a clip once roles are built (coverage fill)."
+notes = "Pinned schema16 ElementalWarp performs an actual committed PortalTransferEvent with the real actor and destination. That transfer owns position/body publication through the shared portal-transfer consumer. The Action adds no duplicate cast, guessed release, generic portal artwork or synthetic Step/Spell/Attack. Dedicated warp art is not selected; all actual output and human art/audio review remain separate."
