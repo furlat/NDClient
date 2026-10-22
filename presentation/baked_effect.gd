@@ -366,6 +366,8 @@ static func follow(handle:Dictionary,cue:Dictionary,presentation:float,root_at:C
         _write_column(image,index,current if index==column else root_at.call(float(index)/PATH_RATE))
     if column<=int(handle.history_filled):_write_column(image,column,current)
     handle.history_filled=maxi(int(handle.history_filled),column)
+    # The next texel guards this current observation; it is not completed history.
+    _write_column(image,mini(column+1,image.get_width()-1),current)
     handle.history.update(image)
     for draw in handle.trail_draws:
         if draw.material is ShaderMaterial and draw.scroll!=Vector2.ZERO:

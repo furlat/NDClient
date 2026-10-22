@@ -2341,6 +2341,19 @@
    "reason": "Actual raw recorded vs worker-prepared source native pixels at three ages, private clock/material owner isolation, unchanged immutable scenes and complete teardown; not a timing threshold or visual approval."
   },
   {
+   "name": "native_recorded_path_checks",
+   "script": "res://tests/native_recorded_path_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 210,
+   "options": [
+    "--output"
+   ],
+   "status": "ok",
+   "reason": "Installed Fireball and Scorching Ray recordings through the actual client player and GPU path reader; translated fractional current origin/Basis/clock, held draws, jump/backward seek and separate occurrence ownership. No full-cast, historical-path reconstruction, art or performance claim."
+  },
+  {
    "name": "native_requirement_templates_checks",
    "script": "res://tests/native_requirement_templates_checks.gd",
    "mode": "headless",
