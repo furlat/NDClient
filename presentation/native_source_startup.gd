@@ -129,6 +129,9 @@ static func _next_item(eligible:Array)->Dictionary:
     return {}
 
 static func _complete_request(request:Dictionary,budget:Dictionary={})->Dictionary:
+    if not budget.is_empty() and budget.used_usec>=budget.limit_usec:return status(request)
+    var frame:int=Engine.get_process_frames()
+    if _frame==frame or int(_state.get("completion_profile",{}).get("frame",-1))==frame:return status(request)
     # This process-wide check can outgrow one recording's local request. Keep
     # its exact dynamic approach/key semantics and expose actual short-circuit
     # visits separately from the local readiness result and native draw work.

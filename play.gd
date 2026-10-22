@@ -1446,9 +1446,7 @@ func _dispose_views(budget:Dictionary={},minimum:bool=false) -> void:
 func _deactivate_static_view(retain: bool) -> void:
     if retain and world_quarter >= 0:
         sprite_parent.visible = false
-        var visibility = {}
-        for position in wall_visible_cells: visibility[WorldRows.cell_key(position)] = true
-        sprite_parent.completed_style = [wall_mode,scenery_visibility.duplicate(),visibility] if not static_order_dirty and wall_visibility_revision==timeline.revision else []
+        sprite_parent.completed_style = [wall_mode,scenery_visibility.duplicate(),wall_visible_cells] if not static_order_dirty and wall_visibility_revision==timeline.revision else []
         if wall_mask_viewport != null: wall_mask_viewport.render_target_update_mode = SubViewport.UPDATE_DISABLED
         static_views[world_quarter] = {"root":sprite_parent,"groups":world_groups,"ground":ground_groups,
             "entries":static_entries,"fixtures":fixture_entries,"order":static_order,

@@ -53,6 +53,13 @@ func run() -> void:
         while not target.is_prepared and calls<32:
             target.step(0); calls+=1
         check(target.is_prepared and target.style_is_current() and target.wall_mode=="hidden","Owner-requested style refresh also completes under zero budget")
+        host.timeline.state.senses.visible=Cells.mask([[2,0],[0,0],[1,0]])
+        check(target.style_is_current(),"Equivalent disclosed cells retain prepared style across a new mask")
+        host.timeline.state.senses.visible=Cells.mask([[0,0],[1,0],[3,0]])
+        check(not target.style_is_current(),"Same-sized visibility replacement invalidates prepared style")
+        host.timeline.state.senses.visible=Cells.mask([[0,0],[1,0],[2,0]])
+        host.scenery_visibility.support1=false
+        check(not target.style_is_current(),"Changed scenery disclosure invalidates prepared style with unchanged cells")
     var report={"checks":checks,"failures":failures,"scope":"Headless zero-budget quarter support construction, source elevations, current-view isolation, completed-job no-op and explicit stale-style refresh. No GPU pixel or performance claim."}
     FileAccess.open("res://generated/quarter_progress_checks.json",FileAccess.WRITE).store_string(JSON.stringify(report,"  "))
     print("QUARTER_PROGRESS_CHECKS ",JSON.stringify(report))

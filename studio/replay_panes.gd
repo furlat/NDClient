@@ -48,7 +48,7 @@ static func optical_settings(reference:Node3D)->Array:
         reference.light_strength,reference.fire_light_flicker,reference.light_cap_enabled]
 
 static func prepare(parent:Node,restored:RefCounted,source:Dictionary,reference:Node3D,
-        spare:Dictionary,budget:int,share_sources:bool,retain_view:bool,target_quarter:int=-1)->Dictionary:
+        spare:Dictionary,budget:int,share_sources:bool,retain_view:bool,target_quarter:int=-1,preserve_focus:bool=false)->Dictionary:
     var view_quarter:int=reference.quarter if target_quarter<0 else posmod(target_quarter,4)
     var pane={}
     if not spare.is_empty():
@@ -106,7 +106,8 @@ static func prepare(parent:Node,restored:RefCounted,source:Dictionary,reference:
     owner.light_cap_enabled=reference.light_cap_enabled
     owner.camera.keep_aspect=reference.camera.keep_aspect
     owner.camera.size=reference.camera.size if retain_view else 6.0
-    owner.camera_focus=reference.camera_focus;owner.initial_focus=retain_view
+    if not (reused and preserve_focus):
+        owner.camera_focus=reference.camera_focus;owner.initial_focus=retain_view
     owner.playback_speed=reference.playback_speed
     owner.playback_end_ms=source.get("presentation_end_ms",source.duration_ms)
     owner.position_camera()

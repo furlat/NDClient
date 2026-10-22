@@ -139,9 +139,32 @@ func run()->void:
     var another:Dictionary=variants[0].duplicate(true);another.clip.id="new source after completion";another.key=Startup._key(another.clip)
     var changed=Startup.step(null,{}, {"plan":[another],"required":[another],"optional":false},{"used_usec":2000,"limit_usec":2000})
     check(not changed.ready and changed.pending==1 and not Startup._state.ready,"A new source invalidates completion before the zero-allowance return")
+    # The caller's already-complete source must not scan the accumulated plan
+    # after another preparation owner has spent the frame's allowance.
+    Startup._state={"plan":variants.duplicate(),"known":done.duplicate(),"done":{variants[0].key:true},
+        "failures":{},"resources":{},"active":{},"ready":false,"started":Time.get_ticks_usec()}
+    Startup._frame=-1
+    var local_request={"plan":[variants[0]],"required":[variants[0]],"optional":false}
+    var spent:Dictionary=exhausted()
+    var local_status=Startup.step(null,{},local_request,spent)
+    check(local_status.ready and not Startup._state.has("completion_profile"),
+        "Exhausted preparation returns actual local readiness without scanning unrelated accumulated sources")
+    var allowance={"used_usec":0,"limit_usec":1000000}
+    Startup.step(null,{},local_request,allowance)
+    var scanned:Dictionary=Startup._state.get("completion_profile",{}).duplicate()
+    check(not scanned.is_empty() and scanned.visited==variants.size() and not scanned.all_complete,
+        "Available preparation allowance permits the real accumulated completion check")
+    Startup._state.done[variants[1].key]=true
+    Startup.step(null,{},local_request,{"used_usec":0,"limit_usec":1000000})
+    check(Startup._state.completion_profile==scanned and not Startup._state.ready,
+        "A second caller cannot repeat the accumulated completion scan in the same frame")
+    while Engine.get_process_frames()==int(scanned.frame):await process_frame
+    local_status=Startup.step(null,{},local_request,{"used_usec":0,"limit_usec":1000000})
+    check(local_status.ready and Startup._state.ready and Startup._state.completion_profile.all_complete,
+        "Deferred completion publishes normally on the next admitted frame")
     Startup._state={}
     await ownership_requests()
     var report={"checks":checks,"failures":failures,"recordings":recordings,"scope":"Recorded source/request closure only; no native draw readiness or timing claimed by a headless fixture."}
     FileAccess.open("res://.runtime/studio-native-startup-scope-checks.json",FileAccess.WRITE).store_string(JSON.stringify(report,"  "))
-    print("STUDIO_NATIVE_STARTUP_SCOPE ",checks," failures=",failures," sources=",recordings.map(func(item):return item.sources))
+    print("STUDIO_NATIVE_STARTUP_SCOPE ",JSON.stringify({"checks":checks,"failures":failures,"sources":recordings.map(func(item):return item.sources)}))
     quit(0 if failures.is_empty() else 1)

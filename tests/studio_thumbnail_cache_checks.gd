@@ -135,6 +135,25 @@ func _deferred_composed_foreground()->void:
         and thumb.pending[0].sample_ms==at and thumb.composed_worker==null and thumb.composed_pane.is_empty(),
         "Deferred composed sample retains its actual row, clock and request without an invented host or early restore")
     thumb.close()
+    thumb=Thumbnails.new();thumb.host=root;thumb.cache=index.cache;thumb.recording=index;thumb.prewarm_suspended=true
+    var early:float=lerpf(source.start_ms,source.end_ms,.2)
+    var late:float=lerpf(source.start_ms,source.end_ms,.8)
+    var late_key:String=thumb.request(source,late,0,false)
+    waveform=thumb.request(sound,(sound.start_ms+sound.end_ms)*.5,0,false)
+    var early_three:String=thumb.request(source,early,3,false)
+    var early_zero:String=thumb.request(source,early,0,false)
+    var obsolete:String=thumb.request(source,late,2,false)
+    check(late_key!=early_zero,"Original source has distinct early and late preview bins")
+    thumb.set_demand({late_key:true,waveform:true,early_three:true,early_zero:true})
+    check(thumb.pending.map(func(job):return job.key)==[early_zero,waveform,early_three,late_key,obsolete],
+        "Visible composed samples advance by exact time/view while ordinary priority and obsolete tail remain unchanged")
+    check(thumb.pending[0].sample_ms==early and thumb.pending[3].sample_ms==late \
+        and is_same(thumb.pending[0].row,source) and is_same(thumb.pending[3].recording,index),
+        "Reordering retains each original source row, exact sample clock and recording owner")
+    thumb.poll()
+    check(thumb.textures.has(waveform) and thumb.pending.map(func(job):return job.key)==[early_zero,early_three,late_key,obsolete],
+        "Chronological composed work still yields to an eligible ordinary visible source")
+    thumb.close()
 
 func _native(index:Dictionary,row:Dictionary,at:float)->void:
     var thumb=Thumbnails.new();thumb.cache=index.cache;thumb.host=root

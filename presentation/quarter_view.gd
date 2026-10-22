@@ -103,9 +103,9 @@ func begin_style() -> void:
     wall_mode = host.wall_mode
     current_visibility = host.scenery_visibility.duplicate()
     visible_cells = {}
-    var senses: Variant = host.timeline.state.get("senses")
-    for position in WorldRows.visible_positions(host.timeline.state): visible_cells[WorldRows.cell_key(position)] = true
-    style_key = [wall_mode,current_visibility,visible_cells]
+    var positions:Array=WorldRows.visible_positions(host.timeline.state)
+    for position in positions: visible_cells[WorldRows.cell_key(position)] = true
+    style_key = [wall_mode,current_visibility,positions]
     set_target_camera()
     if completed_style == style_key:
         phase = "mask_position"; cursor = 0
@@ -126,12 +126,10 @@ func refresh_projection() -> void:
 func style_is_current() -> bool:
     if style_key.is_empty(): return true
     if wall_mode != host.wall_mode or current_visibility != host.scenery_visibility: return false
-    var senses: Variant = host.timeline.state.get("senses")
-    var positions: Array = WorldRows.visible_positions(host.timeline.state)
-    if positions.size() != visible_cells.size(): return false
-    for position in positions:
-        if not visible_cells.has(WorldRows.cell_key(position)): return false
-    return true
+    # The shared mask reader already supplies unique points in canonical order.
+    # Compare those native arrays instead of rebuilding every point's string key
+    # on each preparation slice and each publication readiness check.
+    return style_key[2] == WorldRows.visible_positions(host.timeline.state)
 
 func step(budget_usec: int = 3000) -> void:
     if is_prepared: return

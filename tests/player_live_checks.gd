@@ -235,8 +235,10 @@ func finish() -> void:
     print(JSON.stringify({"checks":checks,"failures":failures,"elapsed_ms":report.elapsed_ms,"actions":evidence.actions.size(),
         "jump_offered":evidence.jump_offered,"direct_arc_steps":direct_arc,"reconnect":evidence.reconnect}))
     # Populate the existing empty-root teardown draw after saved evidence.
-    # No pre-join draw or shorter synchronous retirement is implied.
+    # Draw the notice before synchronous native retirement can block this thread.
+    DisplayServer.window_set_title("NDClient · Gameplay check complete · Closing test encounter")
     show_loading_notice("Closing the encounter…")
+    await RenderingServer.frame_post_draw
     scene.queue_free()
     await process_frame
     quit(0 if failures.is_empty() else 1)

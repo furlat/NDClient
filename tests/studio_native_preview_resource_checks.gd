@@ -21,6 +21,66 @@ var tracks:Control
 var finished:bool=false
 var reference:Node3D
 var reference_view:SubViewport
+var profile_composed:bool=false
+
+class ProfiledThumbnails extends "res://studio/thumbnail_cache.gd":
+    # Optional measurement of the real owner. Nested CPU counters are inclusive;
+    # timestamps separate worker/readiness/draw waits without another readback.
+    var timings:Array=[]
+    var measured_job:Dictionary={}
+    func _start_composed(job:Dictionary)->void:
+        measured_job={"key":job.key,"row":job.row.id,"sample_ms":job.sample_ms,"quarter":job.quarter,
+            "start_us":Time.get_ticks_usec(),"start_frame":Engine.get_process_frames(),"cpu_usec":{},"polls":[]}
+        timings.append(measured_job)
+        super._start_composed(job)
+        measured_job.start_return_us=Time.get_ticks_usec()
+        measured_job.cpu_usec.start=measured_job.start_return_us-measured_job.start_us
+    func _prepare_composed(job:Dictionary,restored:RefCounted)->void:
+        var started:int=Time.get_ticks_usec()
+        super._prepare_composed(job,restored)
+        measured_job.prepared_us=Time.get_ticks_usec()
+        measured_job.cpu_usec.prepare=measured_job.prepared_us-started
+        measured_job.reused=composed_pane.reused
+        measured_job.from_ms=restored.display_ms
+    func _advance_composed(owner:Node3D,target_ms:float)->bool:
+        var started:int=Time.get_ticks_usec()
+        var result:bool=super._advance_composed(owner,target_ms)
+        measured_job.cpu_usec.advance=measured_job.cpu_usec.get("advance",0)+Time.get_ticks_usec()-started
+        if result and not measured_job.has("cut_ready_us"):
+            measured_job.cut_ready_us=Time.get_ticks_usec()
+            measured_job.cut_ready_frame=Engine.get_process_frames()
+        return result
+    func _poll_composed()->bool:
+        if measured_job.is_empty() or (composed_active.is_empty() and composed_worker==null):return super._poll_composed()
+        var started:int=Time.get_ticks_usec()
+        var drawn:bool=composed_active.get("drawn",false)
+        var result:bool=super._poll_composed()
+        var ended:int=Time.get_ticks_usec()
+        measured_job.cpu_usec.poll=measured_job.cpu_usec.get("poll",0)+ended-started
+        if composed_active.has("draw_signature") and not measured_job.has("fence_armed_us"):
+            measured_job.fence_armed_us=ended
+            measured_job.fence_armed_frame=Engine.get_process_frames()
+        measured_job.polls.append({"frame":Engine.get_process_frames(),"start_us":started,"end_us":ended,
+            "drawn_before":drawn,"drawn_after":composed_active.get("drawn",false),
+            "fence_after":composed_active.has("draw_signature")})
+        return result
+    func _publish(job:Dictionary,output:Image)->void:
+        if not job.get("composed",false):
+            super._publish(job,output)
+            return
+        var started:int=Time.get_ticks_usec()
+        measured_job.readback_complete_us=started
+        measured_job.readback_size=[output.get_width(),output.get_height()]
+        super._publish(job,output)
+        measured_job.published_us=Time.get_ticks_usec()
+        measured_job.published_frame=Engine.get_process_frames()
+        measured_job.cpu_usec.publish=measured_job.published_us-started
+    func _finish_composed()->void:
+        var started:int=Time.get_ticks_usec()
+        super._finish_composed()
+        if not measured_job.is_empty():
+            measured_job.finished_us=Time.get_ticks_usec()
+            measured_job.cpu_usec.finish=measured_job.finished_us-started
 
 func _initialize()->void:
     DisplayServer.window_set_title("NDClient · Fireball thumbnail control · Timeline only")
@@ -49,9 +109,11 @@ func bind_recording(index:Dictionary)->void:
 
 func measure(label:String)->Dictionary:
     var cache:RefCounted=tracks.thumbnails
+    var first_profile:int=cache.timings.size() if profile_composed else 0
     var before_hits:int=cache.native_store.hits;var before_misses:int=cache.native_store.misses
     var before_loads:int=cache.native_store.disk_loads
     var begin:int=Time.get_ticks_usec()
+    var first_frame:int=Engine.get_process_frames()
     # This measurement owns four-view demand. The automatic one-view process
     # would replace its signature and reorder the same pending queue each frame.
     var was_processing:bool=tracks.is_processing()
@@ -83,6 +145,13 @@ func measure(label:String)->Dictionary:
         "disk_loads":cache.native_store.disk_loads-before_loads,"available":state.ready,"target_ms":200.0,
         "within_target":state.ready and available_ms<=200.0,"errors":state.errors,
         "scope":"Stable explicit four-view demand owner with ordinary Play callbacks and shared remaining preparation budget. Input-bearing rows use exact recorded full context; source-only rows retain normal bounded rendering. This is not an ordinary one-view UI timing. Actual disk identity/dependency proof is separate below."}
+    if profile_composed:
+        record.composed_jobs=cache.timings.slice(first_profile).duplicate(true)
+        # Existing passive rings, copied after the measured window. No extra
+        # detailed diagnostics, callbacks, or work before cache polling.
+        record.frame_range=[first_frame,Engine.get_process_frames()]
+        record.reference_frames=reference.profile.frames.filter(func(sample):return sample.frame>=first_frame).duplicate(true)
+        record.composed_frames=cache.composed_pane.world.profile.frames.filter(func(sample):return sample.frame>=first_frame).duplicate(true) if not cache.composed_pane.is_empty() else []
     measurements.append(record);print("NATIVE_PREVIEW_RESOURCE_TIME ",JSON.stringify(record))
     check(state.samples>0,label+": the measured timeline actually requests source thumbnails")
     return record
@@ -370,7 +439,10 @@ func run()->void:
     check(reference.playback_prepared(),"The actual recorded production reference prepares before source requests")
     if not reference.playback_prepared():reference_view.queue_free();finish();return
     reference.claim_receiving();reference._publish_receiving()
-    tracks=TimelineView.new();root.add_child(tracks);tracks.size=Vector2(1280,800);tracks.filter="native_effect"
+    profile_composed="--profile-composed-stages" in OS.get_cmdline_user_args()
+    tracks=TimelineView.new()
+    if profile_composed:tracks.thumbnails=ProfiledThumbnails.new()
+    root.add_child(tracks);tracks.size=Vector2(1280,800);tracks.filter="native_effect"
     tracks.preparation_admission=reference.preparation_admission
     tracks.set_index(index);bind_recording(index);tracks.rebuild_rows();tracks.fit()
     check(tracks.thumbnails.textures.is_empty(),"Fresh process begins without resident thumbnail images")

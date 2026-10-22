@@ -25,6 +25,83 @@ class CapturingPlayer extends "res://play.gd":
     var choices_observed: Callable
     var profiling_configured:Dictionary
     var submit_markers:Array=[]
+    var capture_frame_boundaries:bool=false
+    var tree_frame_stamp:Dictionary={}
+    var callback_boundaries:Dictionary={}
+    var pre_draw_callbacks:Array=[]
+    var pre_draw_order_revision:int=0
+    var profile_upload_head:Resource
+    func _ready()->void:
+        capture_frame_boundaries="--profile-frame-boundaries" in OS.get_cmdline_user_args()
+        if capture_frame_boundaries:
+            get_tree().process_frame.connect(_profile_tree_frame)
+            RenderingServer.frame_pre_draw.connect(_profile_pre_draw)
+            RenderingServer.frame_post_draw.connect(_profile_post_draw)
+        super._ready()
+    func _profile_tree_frame()->void:
+        tree_frame_stamp={"time_us":Time.get_ticks_usec(),"frame":Engine.get_process_frames()}
+    func _profile_pre_draw()->void:
+        if not callback_boundaries.is_empty() and callback_boundaries.play_frame==Engine.get_process_frames():
+            callback_boundaries.pre_draw_us=Time.get_ticks_usec()
+            callback_boundaries.pre_draw_frame=Engine.get_process_frames()
+            profile_upload_head=BakedEffects._uploads[0] if not BakedEffects._uploads.is_empty() else null
+            callback_boundaries.baked_before=_profile_baked_state()
+            var callbacks:Array=[];var order:Array=[]
+            for connection in RenderingServer.frame_pre_draw.get_connections():
+                callbacks.append(connection.callable)
+            var early:int=callbacks.find(_profile_pre_draw);var tail:int=callbacks.find(_profile_pre_draw_tail);var pump:int=callbacks.find(BakedEffects._pump)
+            callback_boundaries.pre_draw_order={"revision":pre_draw_order_revision,"count":callbacks.size(),
+                "early_index":early,"tail_index":tail,"pump_index":pump,"tail_is_last":tail==callbacks.size()-1,
+                "pump_between_probes":early>=0 and pump>early and tail>pump}
+            # Keep full callback descriptions only when the order changes. The
+            # ordinary per-frame record contains indices and bounded head data.
+            if callbacks!=pre_draw_callbacks or (profile.recording and profile.recorded.size()==1):
+                pre_draw_callbacks=callbacks;pre_draw_order_revision+=1
+                callback_boundaries.pre_draw_order.revision=pre_draw_order_revision
+                for callback in callbacks:order.append({"method":str(callback.get_method()),"object_id":callback.get_object_id()})
+                callback_boundaries.pre_draw_order_change=order
+            callback_boundaries.pre_draw_probe_end_us=Time.get_ticks_usec()
+    func _profile_baked_state()->Dictionary:
+        var state:Dictionary={"pump_frame":BakedEffects._pump_frame,"loading":BakedEffects._loading,
+            "first_queued":BakedEffects._queue_first.size(),"rest_queued":BakedEffects._queue_rest.size(),
+            "uploads_pending":BakedEffects._uploads.size(),"background_allowed":BakedEffects.background_allowed,
+            "clock_dirty":BakedEffects._clock_dirty}
+        var head:Resource=profile_upload_head
+        if head==null and not BakedEffects._uploads.is_empty():head=BakedEffects._uploads[0]
+        if head!=null:
+            var made:int=BakedEffects._textures.get(head,[]).size()
+            state.watched_upload={"id":head.get_instance_id(),"path":head.resource_path,"textures":made,"systems":head.systems.size()}
+            if made<head.systems.size():
+                var image:Image=head.systems[made].vat_image
+                state.watched_upload.next_image={"width":image.get_width(),"height":image.get_height(),"format":image.get_format()}
+        return state
+    func _profile_pre_draw_tail()->void:
+        if not callback_boundaries.is_empty() and callback_boundaries.play_frame==Engine.get_process_frames():
+            callback_boundaries.pre_draw_tail_us=Time.get_ticks_usec()
+            callback_boundaries.pre_draw_tail_frame=Engine.get_process_frames()
+            callback_boundaries.baked_after=_profile_baked_state()
+            callback_boundaries.pre_draw_tail_probe_end_us=Time.get_ticks_usec()
+    func _profile_post_draw()->void:
+        if not callback_boundaries.is_empty() and callback_boundaries.play_frame==Engine.get_process_frames():
+            callback_boundaries.post_draw_us=Time.get_ticks_usec()
+            callback_boundaries.post_draw_frame=Engine.get_process_frames()
+    func _process(delta:float)->void:
+        if not capture_frame_boundaries:
+            super._process(delta)
+            return
+        # One optional passive record on the existing sample. Native draw
+        # callbacks fill it afterward; no readback or serialization in-frame.
+        callback_boundaries={"tree_process":tree_frame_stamp,"play_enter_us":Time.get_ticks_usec(),
+            "play_frame":Engine.get_process_frames()}
+        super._process(delta)
+        callback_boundaries.play_exit_us=Time.get_ticks_usec()
+        # Append only our own one-shot marker. Existing callbacks keep their
+        # connections/order; the early marker records whether this is last.
+        if not RenderingServer.frame_pre_draw.is_connected(_profile_pre_draw_tail):
+            RenderingServer.frame_pre_draw.connect(_profile_pre_draw_tail,CONNECT_ONE_SHOT)
+        if not profile.frames.is_empty():
+            var sampled:Dictionary=profile.frames[posmod(profile.cursor-1,profile.frames.size())]
+            if sampled.frame==callback_boundaries.play_frame:sampled.callback_boundaries=callback_boundaries
     func _submit(intent:Dictionary)->void:
         submit_markers.append({"time_us":Time.get_ticks_usec(),"frame":Engine.get_process_frames(),"number":session.status.next_command_number,"intent":intent.duplicate(true)})
         super._submit(intent)

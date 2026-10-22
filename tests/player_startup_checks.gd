@@ -1,7 +1,7 @@
 extends SceneTree
 # Real launcher/server and native texture publication. Startup must not wait for
 # the optional whole animation family; exact displayed sources still gate input.
-const Player = preload("res://play.tscn")
+const Loading = preload("res://loading.tscn")
 var checks = 0
 var failures: Array = []
 func check(ok: bool, label: String) -> void:
@@ -16,8 +16,16 @@ func run() -> void:
     for arg in OS.get_cmdline_user_args():
         if arg.begins_with("--startup-timeout="):timeout_ms=arg.trim_prefix("--startup-timeout=").to_int()
     var started = Time.get_ticks_msec()
-    var scene = Player.instantiate()
-    root.add_child(scene)
+    var error = change_scene_to_packed(Loading)
+    check(error == OK,"Ordinary loading scene opens")
+    while (current_scene == null or current_scene.scene_file_path != "res://play.tscn") and Time.get_ticks_msec()-started<timeout_ms:
+        await process_frame
+    check(current_scene != null and current_scene.scene_file_path == "res://play.tscn","Ordinary loading scene reaches the player")
+    if not failures.is_empty():
+        print("PLAYER_STARTUP_CHECKS ",JSON.stringify({"checks":checks,"failures":failures,"ready_elapsed_ms":Time.get_ticks_msec()-started}))
+        quit(1)
+        return
+    var scene = current_scene
     while not scene.command_ready() and scene.session.issue.is_empty() and scene.presentation_errors.is_empty() and Time.get_ticks_msec()-started<timeout_ms:
         await process_frame
     var ready_ms = Time.get_ticks_msec()-started
@@ -37,7 +45,7 @@ func run() -> void:
             "sequence":scene.timeline.sequence,"journal_sequence":scene.session.journal.cursor.get("sequence"),"timeline_busy":scene.timeline.busy(),
             "pending_world":{} if scene.pending_world==null else {"phase":scene.pending_world.phase,"prepared":scene.pending_world.prepared,"blocked_actor":scene.pending_world.blocked_actor,"blocked_source":scene.pending_world.blocked_source,"result_errors":scene.pending_world.result.get("errors",[]),"phases":scene.pending_world.phase_usec},
             "action_request":scene.action_request,"action_count":scene.available_actions.size(),"session_status":scene.session.status},
-        "notes":"Real live initialization through first playable choices. Engine launch/import excluded; operating-system file-cache warmth is uncontrolled. This is startup evidence, not an isolated gameplay GPU benchmark."}
+        "notes":"Ordinary loading scene through first playable choices, including its threaded player-scene load. Engine launch excluded; operating-system file-cache warmth is uncontrolled. This is startup evidence, not an isolated gameplay GPU benchmark."}
     scene.set_process(false)
     FileAccess.open(scene.game_config.test_result,FileAccess.WRITE).store_string(JSON.stringify(report,"  "))
     print("PLAYER_STARTUP_CHECKS ",JSON.stringify(report))

@@ -110,6 +110,18 @@ func set_demand(keys:Dictionary)->void:
         else:other.append(job)
     for key in pinned:
         if by_key.has(key):visible.append(by_key[key])
+    # Keep ordinary jobs in their priority slots. Only this visible recording's
+    # composed requests change order, so successive cuts reuse its forward prefix.
+    var slots:Array=[];var composed:Array=[]
+    for index in visible.size():
+        var job:Dictionary=visible[index]
+        if job.get("composed",false) and job.generation==generation and is_same(job.recording,recording):
+            slots.append(index);composed.append({"job":job,"ordinal":index})
+    composed.sort_custom(func(a,b):
+        if a.job.sample_ms!=b.job.sample_ms:return a.job.sample_ms<b.job.sample_ms
+        if a.job.quarter!=b.job.quarter:return a.job.quarter<b.job.quarter
+        return a.ordinal<b.ordinal)
+    for index in slots.size():visible[slots[index]]=composed[index].job
     pending=visible+other
 
 func seed_source_images(sources:Dictionary)->bool:
@@ -326,7 +338,7 @@ func _start_composed(job:Dictionary)->void:
 
 func _prepare_composed(job:Dictionary,restored:RefCounted)->void:
     var budget:int=int(reference_world.media_warmup.budget_bytes)
-    composed_pane=ReplayPanes.prepare(host,restored,job.recording,reference_world,composed_pane,budget,true,true,int(job.quarter))
+    composed_pane=ReplayPanes.prepare(host,restored,job.recording,reference_world,composed_pane,budget,true,true,int(job.quarter),true)
     var owner:Node3D=composed_pane.world
     owner.external_clock=true;owner.timeline.paused=true;owner.publishes_receiving=false
     owner.native_startup_background=false
@@ -500,8 +512,9 @@ func _poll_composed()->bool:
     if not composed_active.framing:
         # Keep the full recorded scene: an actor or cell crop cannot bound all
         # held field/weapon artwork. Only its actual restored focus is changed.
-        owner.camera_focus=focus;owner.position_camera()
-        composed_active.framing=true;composed_active.drawn=false;return false
+        if owner.camera_focus!=focus:
+            owner.camera_focus=focus;owner.position_camera()
+        composed_active.framing=true;composed_active.drawn=false
     if not _claim_composed_receiving(owner):return false
     var signature:Array=[owner.timeline.initialization_revision,owner.world_revision,owner.quarter,owner.timeline.display_ms,
         composed_pane.viewport.size,owner.camera.transform,owner.camera.size,composed_optics,source_stamp]
