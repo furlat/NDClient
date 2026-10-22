@@ -1,5 +1,5 @@
 extends SceneTree
-## Exact scalar contract and actual recording reducer/compiled timeline parity.
+## Exact scalar contract and current producer reducer/compiled timeline parity.
 const Protocol=preload("res://sdk/protocol.gd")
 const Reducer=preload("res://sdk/reducer.gd")
 const Compiler=preload("res://presentation/compiler.gd")
@@ -86,6 +86,6 @@ func run()->void:
                     var started=Time.get_ticks_usec();parser.parse(text);samples.append((Time.get_ticks_usec()-started)/1000.)
                 costs.append(samples)
             timings.append({"file":file,"bytes":raw.size(),"strict_ms":costs[0],"producer_ms":costs[1],"previous_producer_ms":costs[2] if previous!=null else []})
-    var report={"checks":checks,"failures":failures,"recording":recording,"diagnostics":diagnostics,"timings":timings,"scope":"Exact Variant types/decimal bits, unchanged strict fallback, exact actual sparse and normalized packet parity, and byte-exact complete canonical state and compiled timeline groups from independent parser outputs. Native Godot headless CPU timings; no full-game latency claim."}
+    var report={"checks":checks,"failures":failures,"recording":recording,"protocol":protocol.identity,"diagnostics":diagnostics,"timings":timings,"scope":"Current shipped producer contract: exact Variant types/decimal bits, unchanged strict fallback, exact actual sparse and normalized packet parity, and byte-exact complete canonical state and compiled timeline groups from independent parser outputs. Native Godot headless CPU timings; no full-game latency claim."}
     FileAccess.open("res://.runtime/producer-json-checks.json",FileAccess.WRITE).store_string(JSON.stringify(report,"  "))
     print("PRODUCER_JSON_CHECKS ",JSON.stringify(report));quit(0 if failures.is_empty() else 1)

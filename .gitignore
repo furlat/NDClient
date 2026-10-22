@@ -49,7 +49,7 @@
 /generated/receiving_normals/
 /generated/profiles/
 # New diagnostic reports are disposable; curated reference inputs live under
-# tests/fixtures/schema16. Existing versioned files remain tracked.
+# tests/fixtures/schema16 and schema18. Existing versioned files remain tracked.
 /generated/
 # Former live-test reports; the tests now write them beside their run.
 /generated/player_startup_checks.json
@@ -66,6 +66,9 @@ __pycache__/
 /tests/fixtures/*
 !/tests/fixtures/schema16/
 !/tests/fixtures/schema16/spool-oracle/canonical-states.zip
+!/tests/fixtures/schema18/
+!/tests/fixtures/schema18/summon-control/canonical-states.zip
+!/tests/fixtures/schema18/caster-defeat/canonical-states.zip
 
 # Small typed staging source shared by dynamic item-effect ownership tests.
 !/tests/fixtures/dynamic_weapon_overlay.tres

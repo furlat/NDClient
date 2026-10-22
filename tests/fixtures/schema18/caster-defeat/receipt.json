@@ -1,0 +1,25 @@
+{
+ "ok": true,
+ "engine": {
+  "path": "/home/tommaso/.cache/ndclient/dnd_engine-ad5a3220c7",
+  "commit": "ad5a3220c7f05e8ec08778f5487bce6e167db051",
+  "protocol_version": 1,
+  "player_schema_version": 18,
+  "schema_digest": "8eb07a2f102b0549f83fc6556b65359a3f061bcb5d71b1a1aa39973ba5c8867f"
+ },
+ "controller": "codex",
+ "records": {
+  "amber": 28,
+  "blue": 28
+ },
+ "source": "tests.player.test_summon_caster_defeat.test_weapon_moves_resets_and_departs_with_only_its_caster",
+ "scope": "Original native worker publications; existing deterministic dice fixture; no HTTP delivery claim",
+ "journey": [
+  "cast_two_spiritual_weapons",
+  "move_first_weapon",
+  "reset_movement_on_next_turn",
+  "fireball_first_caster",
+  "caster_defeated_departure",
+  "other_caster_weapon_survives"
+ ]
+}

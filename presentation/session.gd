@@ -454,7 +454,7 @@ func request(operation: String, arguments: Dictionary = {}) -> int:
 
 func ready_for_input(displayed_sequence: int) -> bool:
     if not issue.is_empty() or not status_issue.is_empty() or status.is_empty() or not following: return false
-    if status.boundary.lifecycle != "waiting_for_human": return false
+    if not status.boundary.lifecycle in ["waiting_for_human","waiting_for_codex"]: return false
     if status.boundary.input_actor_uuid == null: return false
     var ack: Variant = status.get("acknowledged_cursor")
     var catch_up: Variant = status.get("catch_up_cursor")
@@ -462,7 +462,7 @@ func ready_for_input(displayed_sequence: int) -> bool:
 
 func ready_choice_boundary() -> Dictionary:
     # Discovery can run ahead of playback, but only for an already consumed and
-    # acknowledged human-input boundary. This is private preparation, not input.
+    # acknowledged controlled-input boundary. This is private preparation, not input.
     if not ready_for_input(latest_sequence): return {}
     return {"game_id":status.game_id,"game_epoch":status.game_epoch,"audience_id":status.audience_id,
         "attachment_epoch":status.attachment_epoch,"state_revision":status.boundary.state_revision,

@@ -1,11 +1,11 @@
 extends RefCounted
-## Reference schema-16 fold. Native occurrence order and after-values own state.
+## Reference player fold. Native occurrence order and after-values own state.
 const Audience=preload("res://sdk/audience.gd")
 const Cells=preload("res://sdk/fold_cells.gd")
 const World=preload("res://sdk/fold_world.gd")
 const Bodies=preload("res://sdk/fold_bodies.gd")
 const Transitions=preload("res://sdk/transitions.gd")
-const STATE_PRESENTATION_KINDS=["temporary_hit_points","spatial","turn","sensory","item_charge","faction"]
+const STATE_PRESENTATION_KINDS=["temporary_hit_points","spatial","turn","sensory","audience","item_charge","faction"]
 static func success(value:Variant)->Dictionary:return Audience.success(value)
 static func failure(message:String)->Dictionary:return Audience.failure(message)
 static func content_key(descriptor:Dictionary)->String:
@@ -69,6 +69,14 @@ static func _write_actor(target:Dictionary,identity:Variant,changed_actors:Dicti
 static func apply_player_fact(target:Dictionary,fact:Dictionary,source_cursor:Variant=null,values:Dictionary={},condition_rows:Array=[],item_rows:Array=[],changed_actors:Dictionary={},changed_items:Dictionary={},sensory_cells:Dictionary={})->Dictionary:
     var identity:Variant;var actor:Variant
     match fact.kind:
+        "audience":
+            var membership=Audience.apply_membership(target,fact.audience,changed_actors)
+            if not membership.ok:return membership
+            if fact.get("sensory")!=null:
+                if values.is_empty():return failure("A sensory fact requires its group's rows")
+                return Audience.fold(target,fact.sensory,values,changed_actors,sensory_cells)
+            Audience.clear_unseen_positions(target,changed_actors)
+            return success(target)
         "sensory":
             if values.is_empty():return failure("A sensory fact requires its group's rows")
             return Audience.fold(target,fact,values,changed_actors,sensory_cells)
@@ -206,18 +214,21 @@ static func _reduce_nodes_owned(result:Dictionary,nodes:Array,versions:Dictionar
     for update in updates:world_updates[int(update.occurrence)]=update
     for node in nodes:
         var admitted:Array=[];var item_rows:Array=[];var changed_items={};var changed_actors={}
+        var fact:Variant=node.get("fact")
+        var audience_node:bool=fact!=null and fact.kind=="audience"
+        var membership:bool=audience_node and not node.get("canceled",false)
         # Split the same ordered body cursor at the actual Life/unique immediate
         # parent entry. No fact/world fold is repeated or reordered.
         while recorded!=null and terminal_cursor<terminal_starts.size() and terminal_starts[terminal_cursor].source_index<=node.occurrence:
             var first:Dictionary=terminal_starts[terminal_cursor]
-            while next<pending.size() and pending[next].occurrence<=first.source_index:
+            while next<pending.size() and pending[next].occurrence<=first.source_index and (not audience_node or pending[next].occurrence<node.occurrence):
                 var entered=Bodies.enter_body(result,pending[next],item_rows,changed_actors,changed_items)
                 if not entered.ok:return entered
                 admitted.append(pending[next]);next+=1
             var capture:Dictionary=Transitions.terminal_input(result,first.node,int(first.lineage),int(first.source_index),first.entry)
             if not capture.is_empty():recorded.terminal_inputs[str(first.node.occurrence)]=capture
             terminal_cursor+=1
-        while next<pending.size() and pending[next].occurrence<=node.occurrence:
+        while next<pending.size() and (pending[next].occurrence<node.occurrence or (not audience_node and pending[next].occurrence==node.occurrence)):
             var entered=Bodies.enter_body(result,pending[next],item_rows,changed_actors,changed_items)
             if not entered.ok:return entered
             if recorded!=null:admitted.append(pending[next])
@@ -228,6 +239,13 @@ static func _reduce_nodes_owned(result:Dictionary,nodes:Array,versions:Dictionar
             var source:Variant=casts.get(int(resolutions[node.resolution].lineage))
             if source!=null and result.actors.has(source):inputs[source]=result.actors[source]
         var item_inputs:Dictionary=Transitions.item_inputs(result,inputs) if recorded!=null else {}
+        # A membership after-value owns the interpretation of this occurrence's
+        # world rows and nested sensory rows, then admits its private body rows.
+        if membership:
+            var applied=Audience.apply_membership(result,fact.audience,changed_actors)
+            if not applied.ok:return applied
+            if profile!=null:
+                _profile_elapsed(profile,"facts",started);started=Time.get_ticks_usec()
         var update:Variant=world_updates.get(int(node.occurrence));var disclosed={}
         if update!=null:
             var folded=apply_world_update(result,update,disclosed,world_context)
@@ -235,9 +253,20 @@ static func _reduce_nodes_owned(result:Dictionary,nodes:Array,versions:Dictionar
             if recorded!=null:recorded.world[int(node.occurrence)]=disclosed
         if profile!=null:_profile_elapsed(profile,"world",started)
         var condition_rows:Array=[];started=Time.get_ticks_usec() if profile!=null else 0
-        if not node.get("canceled",false) and node.get("fact")!=null:
-            var folded=apply_committed_player_fact(result,node.fact,int(node.occurrence),versions.get("occurrences",[]),composed.value,condition_rows,item_rows,changed_actors,changed_items,sensory_cells)
+        if membership:
+            if fact.get("sensory")!=null:
+                var folded=Audience.fold(result,fact.sensory,composed.value,changed_actors,sensory_cells)
+                if not folded.ok:return folded
+            else:Audience.clear_unseen_positions(result,changed_actors)
+        elif not node.get("canceled",false) and fact!=null:
+            var folded=apply_committed_player_fact(result,fact,int(node.occurrence),versions.get("occurrences",[]),composed.value,condition_rows,item_rows,changed_actors,changed_items,sensory_cells)
             if not folded.ok:return folded
+        if audience_node:
+            while next<pending.size() and pending[next].occurrence==node.occurrence:
+                var entered=Bodies.enter_body(result,pending[next],item_rows,changed_actors,changed_items)
+                if not entered.ok:return entered
+                if recorded!=null:admitted.append(pending[next])
+                next+=1
         if profile!=null:_profile_elapsed(profile,"facts",started)
         if recorded!=null:
             recorded.events.append({"event_uuid":int(node.occurrence),"occurrence":int(node.occurrence),"source_index":int(node.occurrence),"actor_inputs":inputs,"item_inputs":item_inputs,"condition_rows":condition_rows,"item_rows":item_rows,"delta":Transitions.capture_delta(result,node,admitted,update,{},true,disclosed,changed_actors,changed_items)})

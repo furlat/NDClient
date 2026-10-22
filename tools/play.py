@@ -15,7 +15,8 @@ import socket
 import subprocess
 import sys
 
-from devtools.player_server_acceptance.fixtures import configuration
+from devtools.player_server_acceptance import fixtures as engine_fixtures
+from dnd_player import transport as player_transport
 from delayed_backend import close_delayed_backend, start_delayed_backend
 from live_spell_profile import drive_blue
 from studio_gallery_spell_capture import setup as gallery_sorcerer_setup
@@ -134,6 +135,10 @@ async def stop_host(host: asyncio.subprocess.Process, stop: Path) -> None:
 
 
 async def run(args: argparse.Namespace) -> Path:
+    engine = args.engine.resolve()
+    if (Path(engine_fixtures.__file__).resolve().parents[2] != engine or
+            Path(player_transport.__file__).resolve() != engine / "sdk/python/src/dnd_player/transport.py"):
+        raise RuntimeError("Launcher imports do not match --engine; set PYTHONPATH to the selected engine and its sdk/python/src")
     loop = asyncio.get_running_loop()
     owner = asyncio.current_task()
     for stop_signal in (signal.SIGTERM, signal.SIGHUP):
@@ -146,7 +151,7 @@ async def run(args: argparse.Namespace) -> Path:
     output.mkdir(parents=True, mode=0o700)
     sorcerer = args.scenario == "gallery_sorcerer"
     spell_profile = sorcerer and args.test_script == "res://tests/live_spell_checks.gd" and not args.live_fireball_ui
-    settings, profile_steps = gallery_sorcerer_setup(output, 3) if sorcerer else (configuration(args.scenario, output), [])
+    settings, profile_steps = gallery_sorcerer_setup(output, 3) if sorcerer else (engine_fixtures.configuration(args.scenario, output), [])
     if sorcerer and not spell_profile:
         settings = interactive_sorcerer(settings)
     server_config = output / "server.json"
@@ -270,7 +275,7 @@ async def run(args: argparse.Namespace) -> Path:
 def main() -> None:
     project = Path(__file__).resolve().parents[1]
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--engine", type=Path, default=Path("/home/tommaso/.cache/ndclient/dnd_engine-9f81d5267"))
+    parser.add_argument("--engine", type=Path, default=Path("/home/tommaso/.cache/ndclient/dnd_engine-bedc3d92dc"))
     parser.add_argument("--godot", type=Path, default=project.parent / "Tools/Godot-4.7.2/Godot_v4.7.2-stable_win64_console.exe")
     parser.add_argument("--port", type=int, default=0, help="Backend port; default checks native Windows and WSL availability")
     parser.add_argument("--scenario", choices=("crypt", "crypt_gallery", "gallery_sorcerer"), default="crypt_gallery", help="Backend encounter; crypt retains the original small baseline")

@@ -13,7 +13,7 @@ import sys
 import time
 
 PROJECT=Path(__file__).resolve().parents[2]
-SDK=Path('/home/tommaso/.cache/ndclient/dnd_engine-9f81d5267/sdk/python/src')
+SDK=Path('/home/tommaso/.cache/ndclient/dnd_engine-bedc3d92dc/sdk/python/src')
 sys.path.insert(0,str(SDK))
 sys.path.insert(0,str(PROJECT/'tools'))
 import adapter
@@ -142,7 +142,7 @@ async def run(args):
 
 def main():
     parser=argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('--engine',type=Path,default=Path('/home/tommaso/.cache/ndclient/dnd_engine-9f81d5267'))
+    parser.add_argument('--engine',type=Path,default=Path('/home/tommaso/.cache/ndclient/dnd_engine-bedc3d92dc'))
     parser.add_argument('--godot',type=Path,default=PROJECT.parent/'Tools/Godot-4.7.2/Godot_v4.7.2-stable_win64_console.exe')
     parser.add_argument('--only',default='spell')
     parser.add_argument('--start-after',help='Resume a recorded inventory partition after this exact case ID; earlier evidence is retained in its original run')

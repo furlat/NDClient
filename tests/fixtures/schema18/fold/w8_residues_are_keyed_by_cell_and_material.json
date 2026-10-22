@@ -1,0 +1,1135 @@
+{
+ "name": "w8_residues_are_keyed_by_cell_and_material",
+ "family": "world",
+ "initial": {
+  "generation": "00000000-0000-4000-8000-00000000f000",
+  "observer_uuid": "00000000-0000-4000-8000-00000000000a",
+  "world": {
+   "battlefield_id": "vectors",
+   "battlefield_name": "Vectors",
+   "bounds": [
+    0,
+    0,
+    15,
+    15
+   ],
+   "width": 16,
+   "height": 16
+  },
+  "tiles": {},
+  "objects": {},
+  "object_members": {},
+  "connectors": {},
+  "static": {
+   "tiles": {},
+   "tile_looks": {},
+   "residues": {},
+   "object_looks": {},
+   "boundary_structures": {},
+   "visual_loadouts": {}
+  },
+  "senses": null,
+  "reducer_cursor": 0,
+  "spatial_commit_cursors": {},
+  "actors": {},
+  "spatial_content": {},
+  "items": {},
+  "current_actor_uuid": null,
+  "round_number": 0,
+  "hud_snapshot": null,
+  "audience": {
+   "controlled": [],
+   "observers": [
+    "00000000-0000-4000-8000-00000000000a"
+   ],
+   "revision": 0
+  },
+  "content": [],
+  "combat_log_appends": [],
+  "entity_members": {},
+  "object_contact_members": {},
+  "effect_members": {},
+  "light_sources": {},
+  "remembered_effects": {}
+ },
+ "steps": [
+  {
+   "input": {
+    "update": {
+     "occurrence": 0,
+     "entered": {
+      "x0": 0,
+      "y0": 0,
+      "width": 4,
+      "height": 1,
+      "bits": "Dw=="
+     },
+     "tile_looks": [
+      {
+       "look_id": "652de935c25693e0",
+       "surface": {
+        "base_material": "stone",
+        "layers": [],
+        "description": ""
+       },
+       "name": "Stone floor"
+      }
+     ],
+     "tile_statics": [
+      {
+       "position": [
+        0,
+        0
+       ],
+       "tile_uuid": "00000000-0000-4000-8000-000100000000",
+       "look": "652de935c25693e0"
+      },
+      {
+       "position": [
+        1,
+        0
+       ],
+       "tile_uuid": "00000000-0000-4000-8000-000100001000",
+       "look": "652de935c25693e0"
+      },
+      {
+       "position": [
+        2,
+        0
+       ],
+       "tile_uuid": "00000000-0000-4000-8000-000100002000",
+       "look": "652de935c25693e0"
+      },
+      {
+       "position": [
+        3,
+        0
+       ],
+       "tile_uuid": "00000000-0000-4000-8000-000100003000",
+       "look": "652de935c25693e0"
+      }
+     ],
+     "tile_columns": {
+      "cells": {
+       "x0": 0,
+       "y0": 0,
+       "width": 4,
+       "height": 1,
+       "bits": "Dw=="
+      },
+      "walking_cost": "AQEBAQ==",
+      "flying_cost": "AQEBAQ==",
+      "swimming_cost": "AAAAAA==",
+      "burrowing_cost": "AAAAAA==",
+      "flags": "AAAAAA==",
+      "default_light": "AwMDAw==",
+      "resolved_light": "AwMDAw=="
+     }
+    }
+   },
+   "expected": {
+    "generation": "00000000-0000-4000-8000-00000000f000",
+    "observer_uuid": "00000000-0000-4000-8000-00000000000a",
+    "world": {
+     "battlefield_id": "vectors",
+     "battlefield_name": "Vectors",
+     "bounds": [
+      0,
+      0,
+      15,
+      15
+     ],
+     "width": 16,
+     "height": 16
+    },
+    "tiles": {
+     "0,0": {
+      "tile_uuid": "00000000-0000-4000-8000-000100000000",
+      "position": [
+       0,
+       0
+      ],
+      "surface": {
+       "base_material": "stone",
+       "layers": [],
+       "description": ""
+      },
+      "name": "Stone floor",
+      "blocks_optics": false,
+      "blocks_propagation": false,
+      "walking_cost": 1,
+      "flying_cost": 1,
+      "swimming_cost": 0,
+      "burrowing_cost": 0,
+      "elevation_steps": 0,
+      "surface_kind": "ordinary",
+      "slope_axis": null,
+      "default_light": 3,
+      "resolved_light": 3,
+      "condition_names": [],
+      "residues": []
+     },
+     "1,0": {
+      "tile_uuid": "00000000-0000-4000-8000-000100001000",
+      "position": [
+       1,
+       0
+      ],
+      "surface": {
+       "base_material": "stone",
+       "layers": [],
+       "description": ""
+      },
+      "name": "Stone floor",
+      "blocks_optics": false,
+      "blocks_propagation": false,
+      "walking_cost": 1,
+      "flying_cost": 1,
+      "swimming_cost": 0,
+      "burrowing_cost": 0,
+      "elevation_steps": 0,
+      "surface_kind": "ordinary",
+      "slope_axis": null,
+      "default_light": 3,
+      "resolved_light": 3,
+      "condition_names": [],
+      "residues": []
+     },
+     "2,0": {
+      "tile_uuid": "00000000-0000-4000-8000-000100002000",
+      "position": [
+       2,
+       0
+      ],
+      "surface": {
+       "base_material": "stone",
+       "layers": [],
+       "description": ""
+      },
+      "name": "Stone floor",
+      "blocks_optics": false,
+      "blocks_propagation": false,
+      "walking_cost": 1,
+      "flying_cost": 1,
+      "swimming_cost": 0,
+      "burrowing_cost": 0,
+      "elevation_steps": 0,
+      "surface_kind": "ordinary",
+      "slope_axis": null,
+      "default_light": 3,
+      "resolved_light": 3,
+      "condition_names": [],
+      "residues": []
+     },
+     "3,0": {
+      "tile_uuid": "00000000-0000-4000-8000-000100003000",
+      "position": [
+       3,
+       0
+      ],
+      "surface": {
+       "base_material": "stone",
+       "layers": [],
+       "description": ""
+      },
+      "name": "Stone floor",
+      "blocks_optics": false,
+      "blocks_propagation": false,
+      "walking_cost": 1,
+      "flying_cost": 1,
+      "swimming_cost": 0,
+      "burrowing_cost": 0,
+      "elevation_steps": 0,
+      "surface_kind": "ordinary",
+      "slope_axis": null,
+      "default_light": 3,
+      "resolved_light": 3,
+      "condition_names": [],
+      "residues": []
+     }
+    },
+    "objects": {},
+    "object_members": {},
+    "connectors": {},
+    "static": {
+     "tiles": {
+      "0,0": {
+       "position": [
+        0,
+        0
+       ],
+       "tile_uuid": "00000000-0000-4000-8000-000100000000",
+       "look": "652de935c25693e0"
+      },
+      "1,0": {
+       "position": [
+        1,
+        0
+       ],
+       "tile_uuid": "00000000-0000-4000-8000-000100001000",
+       "look": "652de935c25693e0"
+      },
+      "2,0": {
+       "position": [
+        2,
+        0
+       ],
+       "tile_uuid": "00000000-0000-4000-8000-000100002000",
+       "look": "652de935c25693e0"
+      },
+      "3,0": {
+       "position": [
+        3,
+        0
+       ],
+       "tile_uuid": "00000000-0000-4000-8000-000100003000",
+       "look": "652de935c25693e0"
+      }
+     },
+     "tile_looks": {
+      "652de935c25693e0": {
+       "look_id": "652de935c25693e0",
+       "surface": {
+        "base_material": "stone",
+        "layers": [],
+        "description": ""
+       },
+       "name": "Stone floor"
+      }
+     },
+     "residues": {},
+     "object_looks": {},
+     "boundary_structures": {},
+     "visual_loadouts": {}
+    },
+    "senses": null,
+    "reducer_cursor": 0,
+    "spatial_commit_cursors": {},
+    "actors": {},
+    "spatial_content": {},
+    "items": {},
+    "current_actor_uuid": null,
+    "round_number": 0,
+    "hud_snapshot": null,
+    "audience": {
+     "controlled": [],
+     "observers": [
+      "00000000-0000-4000-8000-00000000000a"
+     ],
+     "revision": 0
+    },
+    "content": [],
+    "combat_log_appends": [],
+    "entity_members": {},
+    "object_contact_members": {},
+    "effect_members": {},
+    "light_sources": {},
+    "remembered_effects": {}
+   }
+  },
+  {
+   "input": {
+    "update": {
+     "occurrence": 1,
+     "residue_materials": [
+      {
+       "residue_id": "residue.blood",
+       "name": "Blood",
+       "description": "A pool of blood.",
+       "max_amount": 3
+      }
+     ],
+     "residues": [
+      {
+       "position": [
+        1,
+        0
+       ],
+       "residue_id": "residue.blood",
+       "condition_uuid": "00000000-0000-4000-8000-000000005101",
+       "amount": 1,
+       "contributions": [
+        {
+         "index": 0,
+         "contribution": {
+          "ellipses": [
+           {
+            "center": [
+             1.5,
+             0.5
+            ],
+            "radius_x": 0.4,
+            "radius_y": 0.3,
+            "angle": 0.0
+           }
+          ],
+          "amount": 1,
+          "deposit_source": null
+         }
+        }
+       ]
+      }
+     ]
+    }
+   },
+   "expected": {
+    "generation": "00000000-0000-4000-8000-00000000f000",
+    "observer_uuid": "00000000-0000-4000-8000-00000000000a",
+    "world": {
+     "battlefield_id": "vectors",
+     "battlefield_name": "Vectors",
+     "bounds": [
+      0,
+      0,
+      15,
+      15
+     ],
+     "width": 16,
+     "height": 16
+    },
+    "tiles": {
+     "0,0": {
+      "tile_uuid": "00000000-0000-4000-8000-000100000000",
+      "position": [
+       0,
+       0
+      ],
+      "surface": {
+       "base_material": "stone",
+       "layers": [],
+       "description": ""
+      },
+      "name": "Stone floor",
+      "blocks_optics": false,
+      "blocks_propagation": false,
+      "walking_cost": 1,
+      "flying_cost": 1,
+      "swimming_cost": 0,
+      "burrowing_cost": 0,
+      "elevation_steps": 0,
+      "surface_kind": "ordinary",
+      "slope_axis": null,
+      "default_light": 3,
+      "resolved_light": 3,
+      "condition_names": [],
+      "residues": []
+     },
+     "1,0": {
+      "tile_uuid": "00000000-0000-4000-8000-000100001000",
+      "position": [
+       1,
+       0
+      ],
+      "surface": {
+       "base_material": "stone",
+       "layers": [],
+       "description": ""
+      },
+      "name": "Stone floor",
+      "blocks_optics": false,
+      "blocks_propagation": false,
+      "walking_cost": 1,
+      "flying_cost": 1,
+      "swimming_cost": 0,
+      "burrowing_cost": 0,
+      "elevation_steps": 0,
+      "surface_kind": "ordinary",
+      "slope_axis": null,
+      "default_light": 3,
+      "resolved_light": 3,
+      "condition_names": [
+       "Blood"
+      ],
+      "residues": [
+       {
+        "condition_uuid": "00000000-0000-4000-8000-000000005101",
+        "residue_id": "residue.blood",
+        "description": "A pool of blood.",
+        "amount": 1,
+        "max_amount": 3,
+        "contributions": [
+         {
+          "ellipses": [
+           {
+            "center": [
+             1.5,
+             0.5
+            ],
+            "radius_x": 0.4,
+            "radius_y": 0.3,
+            "angle": 0.0
+           }
+          ],
+          "amount": 1,
+          "deposit_source": null
+         }
+        ]
+       }
+      ]
+     },
+     "2,0": {
+      "tile_uuid": "00000000-0000-4000-8000-000100002000",
+      "position": [
+       2,
+       0
+      ],
+      "surface": {
+       "base_material": "stone",
+       "layers": [],
+       "description": ""
+      },
+      "name": "Stone floor",
+      "blocks_optics": false,
+      "blocks_propagation": false,
+      "walking_cost": 1,
+      "flying_cost": 1,
+      "swimming_cost": 0,
+      "burrowing_cost": 0,
+      "elevation_steps": 0,
+      "surface_kind": "ordinary",
+      "slope_axis": null,
+      "default_light": 3,
+      "resolved_light": 3,
+      "condition_names": [],
+      "residues": []
+     },
+     "3,0": {
+      "tile_uuid": "00000000-0000-4000-8000-000100003000",
+      "position": [
+       3,
+       0
+      ],
+      "surface": {
+       "base_material": "stone",
+       "layers": [],
+       "description": ""
+      },
+      "name": "Stone floor",
+      "blocks_optics": false,
+      "blocks_propagation": false,
+      "walking_cost": 1,
+      "flying_cost": 1,
+      "swimming_cost": 0,
+      "burrowing_cost": 0,
+      "elevation_steps": 0,
+      "surface_kind": "ordinary",
+      "slope_axis": null,
+      "default_light": 3,
+      "resolved_light": 3,
+      "condition_names": [],
+      "residues": []
+     }
+    },
+    "objects": {},
+    "object_members": {},
+    "connectors": {},
+    "static": {
+     "tiles": {
+      "0,0": {
+       "position": [
+        0,
+        0
+       ],
+       "tile_uuid": "00000000-0000-4000-8000-000100000000",
+       "look": "652de935c25693e0"
+      },
+      "1,0": {
+       "position": [
+        1,
+        0
+       ],
+       "tile_uuid": "00000000-0000-4000-8000-000100001000",
+       "look": "652de935c25693e0"
+      },
+      "2,0": {
+       "position": [
+        2,
+        0
+       ],
+       "tile_uuid": "00000000-0000-4000-8000-000100002000",
+       "look": "652de935c25693e0"
+      },
+      "3,0": {
+       "position": [
+        3,
+        0
+       ],
+       "tile_uuid": "00000000-0000-4000-8000-000100003000",
+       "look": "652de935c25693e0"
+      }
+     },
+     "tile_looks": {
+      "652de935c25693e0": {
+       "look_id": "652de935c25693e0",
+       "surface": {
+        "base_material": "stone",
+        "layers": [],
+        "description": ""
+       },
+       "name": "Stone floor"
+      }
+     },
+     "residues": {
+      "residue.blood": {
+       "residue_id": "residue.blood",
+       "name": "Blood",
+       "description": "A pool of blood.",
+       "max_amount": 3
+      }
+     },
+     "object_looks": {},
+     "boundary_structures": {},
+     "visual_loadouts": {}
+    },
+    "senses": null,
+    "reducer_cursor": 0,
+    "spatial_commit_cursors": {},
+    "actors": {},
+    "spatial_content": {},
+    "items": {},
+    "current_actor_uuid": null,
+    "round_number": 0,
+    "hud_snapshot": null,
+    "audience": {
+     "controlled": [],
+     "observers": [
+      "00000000-0000-4000-8000-00000000000a"
+     ],
+     "revision": 0
+    },
+    "content": [],
+    "combat_log_appends": [],
+    "entity_members": {},
+    "object_contact_members": {},
+    "effect_members": {},
+    "light_sources": {},
+    "remembered_effects": {}
+   }
+  },
+  {
+   "input": {
+    "update": {
+     "occurrence": 2,
+     "residues": [
+      {
+       "position": [
+        1,
+        0
+       ],
+       "residue_id": "residue.blood",
+       "amount": 3,
+       "contributions": [
+        {
+         "index": 0,
+         "contribution": {
+          "ellipses": [
+           {
+            "center": [
+             1.5,
+             0.5
+            ],
+            "radius_x": 0.4,
+            "radius_y": 0.3,
+            "angle": 0.0
+           }
+          ],
+          "amount": 2,
+          "deposit_source": null
+         }
+        },
+        {
+         "index": 1,
+         "contribution": {
+          "ellipses": [
+           {
+            "center": [
+             1.2,
+             0.8
+            ],
+            "radius_x": 0.2,
+            "radius_y": 0.2,
+            "angle": 0.0
+           }
+          ],
+          "amount": 1,
+          "deposit_source": null
+         }
+        }
+       ]
+      }
+     ]
+    }
+   },
+   "expected": {
+    "generation": "00000000-0000-4000-8000-00000000f000",
+    "observer_uuid": "00000000-0000-4000-8000-00000000000a",
+    "world": {
+     "battlefield_id": "vectors",
+     "battlefield_name": "Vectors",
+     "bounds": [
+      0,
+      0,
+      15,
+      15
+     ],
+     "width": 16,
+     "height": 16
+    },
+    "tiles": {
+     "0,0": {
+      "tile_uuid": "00000000-0000-4000-8000-000100000000",
+      "position": [
+       0,
+       0
+      ],
+      "surface": {
+       "base_material": "stone",
+       "layers": [],
+       "description": ""
+      },
+      "name": "Stone floor",
+      "blocks_optics": false,
+      "blocks_propagation": false,
+      "walking_cost": 1,
+      "flying_cost": 1,
+      "swimming_cost": 0,
+      "burrowing_cost": 0,
+      "elevation_steps": 0,
+      "surface_kind": "ordinary",
+      "slope_axis": null,
+      "default_light": 3,
+      "resolved_light": 3,
+      "condition_names": [],
+      "residues": []
+     },
+     "1,0": {
+      "tile_uuid": "00000000-0000-4000-8000-000100001000",
+      "position": [
+       1,
+       0
+      ],
+      "surface": {
+       "base_material": "stone",
+       "layers": [],
+       "description": ""
+      },
+      "name": "Stone floor",
+      "blocks_optics": false,
+      "blocks_propagation": false,
+      "walking_cost": 1,
+      "flying_cost": 1,
+      "swimming_cost": 0,
+      "burrowing_cost": 0,
+      "elevation_steps": 0,
+      "surface_kind": "ordinary",
+      "slope_axis": null,
+      "default_light": 3,
+      "resolved_light": 3,
+      "condition_names": [
+       "Blood"
+      ],
+      "residues": [
+       {
+        "condition_uuid": "00000000-0000-4000-8000-000000005101",
+        "residue_id": "residue.blood",
+        "description": "A pool of blood.",
+        "amount": 3,
+        "max_amount": 3,
+        "contributions": [
+         {
+          "ellipses": [
+           {
+            "center": [
+             1.5,
+             0.5
+            ],
+            "radius_x": 0.4,
+            "radius_y": 0.3,
+            "angle": 0.0
+           }
+          ],
+          "amount": 2,
+          "deposit_source": null
+         },
+         {
+          "ellipses": [
+           {
+            "center": [
+             1.2,
+             0.8
+            ],
+            "radius_x": 0.2,
+            "radius_y": 0.2,
+            "angle": 0.0
+           }
+          ],
+          "amount": 1,
+          "deposit_source": null
+         }
+        ]
+       }
+      ]
+     },
+     "2,0": {
+      "tile_uuid": "00000000-0000-4000-8000-000100002000",
+      "position": [
+       2,
+       0
+      ],
+      "surface": {
+       "base_material": "stone",
+       "layers": [],
+       "description": ""
+      },
+      "name": "Stone floor",
+      "blocks_optics": false,
+      "blocks_propagation": false,
+      "walking_cost": 1,
+      "flying_cost": 1,
+      "swimming_cost": 0,
+      "burrowing_cost": 0,
+      "elevation_steps": 0,
+      "surface_kind": "ordinary",
+      "slope_axis": null,
+      "default_light": 3,
+      "resolved_light": 3,
+      "condition_names": [],
+      "residues": []
+     },
+     "3,0": {
+      "tile_uuid": "00000000-0000-4000-8000-000100003000",
+      "position": [
+       3,
+       0
+      ],
+      "surface": {
+       "base_material": "stone",
+       "layers": [],
+       "description": ""
+      },
+      "name": "Stone floor",
+      "blocks_optics": false,
+      "blocks_propagation": false,
+      "walking_cost": 1,
+      "flying_cost": 1,
+      "swimming_cost": 0,
+      "burrowing_cost": 0,
+      "elevation_steps": 0,
+      "surface_kind": "ordinary",
+      "slope_axis": null,
+      "default_light": 3,
+      "resolved_light": 3,
+      "condition_names": [],
+      "residues": []
+     }
+    },
+    "objects": {},
+    "object_members": {},
+    "connectors": {},
+    "static": {
+     "tiles": {
+      "0,0": {
+       "position": [
+        0,
+        0
+       ],
+       "tile_uuid": "00000000-0000-4000-8000-000100000000",
+       "look": "652de935c25693e0"
+      },
+      "1,0": {
+       "position": [
+        1,
+        0
+       ],
+       "tile_uuid": "00000000-0000-4000-8000-000100001000",
+       "look": "652de935c25693e0"
+      },
+      "2,0": {
+       "position": [
+        2,
+        0
+       ],
+       "tile_uuid": "00000000-0000-4000-8000-000100002000",
+       "look": "652de935c25693e0"
+      },
+      "3,0": {
+       "position": [
+        3,
+        0
+       ],
+       "tile_uuid": "00000000-0000-4000-8000-000100003000",
+       "look": "652de935c25693e0"
+      }
+     },
+     "tile_looks": {
+      "652de935c25693e0": {
+       "look_id": "652de935c25693e0",
+       "surface": {
+        "base_material": "stone",
+        "layers": [],
+        "description": ""
+       },
+       "name": "Stone floor"
+      }
+     },
+     "residues": {
+      "residue.blood": {
+       "residue_id": "residue.blood",
+       "name": "Blood",
+       "description": "A pool of blood.",
+       "max_amount": 3
+      }
+     },
+     "object_looks": {},
+     "boundary_structures": {},
+     "visual_loadouts": {}
+    },
+    "senses": null,
+    "reducer_cursor": 0,
+    "spatial_commit_cursors": {},
+    "actors": {},
+    "spatial_content": {},
+    "items": {},
+    "current_actor_uuid": null,
+    "round_number": 0,
+    "hud_snapshot": null,
+    "audience": {
+     "controlled": [],
+     "observers": [
+      "00000000-0000-4000-8000-00000000000a"
+     ],
+     "revision": 0
+    },
+    "content": [],
+    "combat_log_appends": [],
+    "entity_members": {},
+    "object_contact_members": {},
+    "effect_members": {},
+    "light_sources": {},
+    "remembered_effects": {}
+   }
+  },
+  {
+   "input": {
+    "update": {
+     "occurrence": 3,
+     "residues_removed": [
+      {
+       "position": [
+        1,
+        0
+       ],
+       "residue_id": "residue.blood"
+      }
+     ]
+    }
+   },
+   "expected": {
+    "generation": "00000000-0000-4000-8000-00000000f000",
+    "observer_uuid": "00000000-0000-4000-8000-00000000000a",
+    "world": {
+     "battlefield_id": "vectors",
+     "battlefield_name": "Vectors",
+     "bounds": [
+      0,
+      0,
+      15,
+      15
+     ],
+     "width": 16,
+     "height": 16
+    },
+    "tiles": {
+     "0,0": {
+      "tile_uuid": "00000000-0000-4000-8000-000100000000",
+      "position": [
+       0,
+       0
+      ],
+      "surface": {
+       "base_material": "stone",
+       "layers": [],
+       "description": ""
+      },
+      "name": "Stone floor",
+      "blocks_optics": false,
+      "blocks_propagation": false,
+      "walking_cost": 1,
+      "flying_cost": 1,
+      "swimming_cost": 0,
+      "burrowing_cost": 0,
+      "elevation_steps": 0,
+      "surface_kind": "ordinary",
+      "slope_axis": null,
+      "default_light": 3,
+      "resolved_light": 3,
+      "condition_names": [],
+      "residues": []
+     },
+     "1,0": {
+      "tile_uuid": "00000000-0000-4000-8000-000100001000",
+      "position": [
+       1,
+       0
+      ],
+      "surface": {
+       "base_material": "stone",
+       "layers": [],
+       "description": ""
+      },
+      "name": "Stone floor",
+      "blocks_optics": false,
+      "blocks_propagation": false,
+      "walking_cost": 1,
+      "flying_cost": 1,
+      "swimming_cost": 0,
+      "burrowing_cost": 0,
+      "elevation_steps": 0,
+      "surface_kind": "ordinary",
+      "slope_axis": null,
+      "default_light": 3,
+      "resolved_light": 3,
+      "condition_names": [],
+      "residues": []
+     },
+     "2,0": {
+      "tile_uuid": "00000000-0000-4000-8000-000100002000",
+      "position": [
+       2,
+       0
+      ],
+      "surface": {
+       "base_material": "stone",
+       "layers": [],
+       "description": ""
+      },
+      "name": "Stone floor",
+      "blocks_optics": false,
+      "blocks_propagation": false,
+      "walking_cost": 1,
+      "flying_cost": 1,
+      "swimming_cost": 0,
+      "burrowing_cost": 0,
+      "elevation_steps": 0,
+      "surface_kind": "ordinary",
+      "slope_axis": null,
+      "default_light": 3,
+      "resolved_light": 3,
+      "condition_names": [],
+      "residues": []
+     },
+     "3,0": {
+      "tile_uuid": "00000000-0000-4000-8000-000100003000",
+      "position": [
+       3,
+       0
+      ],
+      "surface": {
+       "base_material": "stone",
+       "layers": [],
+       "description": ""
+      },
+      "name": "Stone floor",
+      "blocks_optics": false,
+      "blocks_propagation": false,
+      "walking_cost": 1,
+      "flying_cost": 1,
+      "swimming_cost": 0,
+      "burrowing_cost": 0,
+      "elevation_steps": 0,
+      "surface_kind": "ordinary",
+      "slope_axis": null,
+      "default_light": 3,
+      "resolved_light": 3,
+      "condition_names": [],
+      "residues": []
+     }
+    },
+    "objects": {},
+    "object_members": {},
+    "connectors": {},
+    "static": {
+     "tiles": {
+      "0,0": {
+       "position": [
+        0,
+        0
+       ],
+       "tile_uuid": "00000000-0000-4000-8000-000100000000",
+       "look": "652de935c25693e0"
+      },
+      "1,0": {
+       "position": [
+        1,
+        0
+       ],
+       "tile_uuid": "00000000-0000-4000-8000-000100001000",
+       "look": "652de935c25693e0"
+      },
+      "2,0": {
+       "position": [
+        2,
+        0
+       ],
+       "tile_uuid": "00000000-0000-4000-8000-000100002000",
+       "look": "652de935c25693e0"
+      },
+      "3,0": {
+       "position": [
+        3,
+        0
+       ],
+       "tile_uuid": "00000000-0000-4000-8000-000100003000",
+       "look": "652de935c25693e0"
+      }
+     },
+     "tile_looks": {
+      "652de935c25693e0": {
+       "look_id": "652de935c25693e0",
+       "surface": {
+        "base_material": "stone",
+        "layers": [],
+        "description": ""
+       },
+       "name": "Stone floor"
+      }
+     },
+     "residues": {
+      "residue.blood": {
+       "residue_id": "residue.blood",
+       "name": "Blood",
+       "description": "A pool of blood.",
+       "max_amount": 3
+      }
+     },
+     "object_looks": {},
+     "boundary_structures": {},
+     "visual_loadouts": {}
+    },
+    "senses": null,
+    "reducer_cursor": 0,
+    "spatial_commit_cursors": {},
+    "actors": {},
+    "spatial_content": {},
+    "items": {},
+    "current_actor_uuid": null,
+    "round_number": 0,
+    "hud_snapshot": null,
+    "audience": {
+     "controlled": [],
+     "observers": [
+      "00000000-0000-4000-8000-00000000000a"
+     ],
+     "revision": 0
+    },
+    "content": [],
+    "combat_log_appends": [],
+    "entity_members": {},
+    "object_contact_members": {},
+    "effect_members": {},
+    "light_sources": {},
+    "remembered_effects": {}
+   }
+  }
+ ]
+}

@@ -1,7 +1,8 @@
 """Full Python-reference states for unchanged, checked-in two-seat recordings.
 
-Run with the frozen engine on PYTHONPATH, never the production checkout:
-  PYTHONPATH=/home/tommaso/.cache/ndclient/dnd_engine-9f81d5267 \
+Run with the catalog's original frozen engine on PYTHONPATH, never the production checkout.
+The default schema16 catalog uses the preserved pre-review producer:
+  PYTHONPATH=/home/tommaso/.cache/ndclient/dnd_engine-211b71134 \
     /home/tommaso/.cache/dnd-engine/venv/bin/python tools/recorded_state_oracle.py
 
 Raw packets remain in their original journals. The ZIP holds complete canonical
@@ -26,8 +27,8 @@ DEFAULT_OUTPUT = PROJECT / "tests/fixtures/schema16/spool-oracle"
 STATE = TypeAdapter(PlayerState)
 
 
-def export(cases: list[str], output: Path) -> None:
-    catalog = json.loads(CATALOG.read_text())
+def export(cases: list[str], output: Path, catalog_path: Path = CATALOG) -> None:
+    catalog = json.loads(catalog_path.read_text())
     reference = Path(reduction.__file__).resolve().parents[2]
     output.mkdir(parents=True, exist_ok=True)
     index = {"reference": {}, "states_archive": "canonical-states.zip", "seats": []}
@@ -58,7 +59,10 @@ def export(cases: list[str], output: Path) -> None:
                     entry.compress_type = ZIP_DEFLATED
                     archive.writestr(entry, STATE.dump_json(state), compresslevel=9)
                     records.append({"bytes": os.path.relpath(path, output), "expected": expected})
-                index["seats"].append({"id": f"{name}/{seat['id']}", "records": records})
+                row = {"id": f"{name}/{seat['id']}", "records": records}
+                if "controller" in case:
+                    row["controller"] = case["controller"]
+                index["seats"].append(row)
     (output / "index.json").write_text(json.dumps(index, indent=1) + "\n")
     print(json.dumps({"seats": len(index["seats"]), "records": sum(len(seat["records"]) for seat in index["seats"]),
         "archive_bytes": (output / index["states_archive"]).stat().st_size, "reference": str(reference)}))
@@ -67,9 +71,10 @@ def export(cases: list[str], output: Path) -> None:
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--cases", nargs="+", default=["door", "oa-jump-late-lethal"])
+    parser.add_argument("--catalog", type=Path, default=CATALOG)
     parser.add_argument("--out", type=Path, default=DEFAULT_OUTPUT)
     args = parser.parse_args()
-    export(args.cases, args.out)
+    export(args.cases, args.out, args.catalog)
 
 
 if __name__ == "__main__":

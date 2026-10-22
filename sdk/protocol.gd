@@ -1,5 +1,5 @@
 extends RefCounted
-## Current schema-16 admission. Trusted server packets stay sparse and borrowed.
+## Current schema-18 admission. Trusted server packets stay sparse and borrowed.
 
 const MAX_BYTES := 64 * 1024 * 1024
 const SAFE_INTEGER := 9007199254740991
@@ -8,6 +8,9 @@ const StrictJSON = preload("res://sdk/strict_json.gd")
 const ProducerJSON = preload("res://sdk/producer_json.gd")
 const PRE_REVIEW_SCHEMA := "res://sdk/recordings/pre-production-review/player-api-v1.schema.json"
 const PRE_REVIEW_IDENTITY := "res://sdk/recordings/pre-production-review/protocol-identity.json"
+const PRE_SUMMON_SCHEMA := "res://sdk/recordings/pre-summon-control/player-api-v1.schema.json"
+const PRE_SUMMON_IDENTITY := "res://sdk/recordings/pre-summon-control/protocol-identity.json"
+const RECORDED_CONTRACTS := [[PRE_SUMMON_SCHEMA,PRE_SUMMON_IDENTITY],[PRE_REVIEW_SCHEMA,PRE_REVIEW_IDENTITY]]
 var schema: Dictionary
 var identity: Dictionary
 var setup_error := ""
@@ -36,7 +39,7 @@ func _init(schema_path: String = "res://sdk/player-api-v1.schema.json", identity
 	schema = parsed.schema
 	identity = parsed.identity
 	_current_server_contract = schema_path == "res://sdk/player-api-v1.schema.json" and identity_path == "res://sdk/protocol-identity.json"
-	_archived_server_contract = schema_path == PRE_REVIEW_SCHEMA and identity_path == PRE_REVIEW_IDENTITY
+	_archived_server_contract = [schema_path,identity_path] in RECORDED_CONTRACTS
 
 func _parse(schema_path: String, identity_path: String) -> Dictionary:
 	var schema_result := StrictJSON.new().parse(FileAccess.get_file_as_string(schema_path))
@@ -189,7 +192,7 @@ func _validate_schema(root_name: String, value: Variant) -> Dictionary:
 func check_identity(value: Dictionary) -> Dictionary:
 	# Identity defaults may be omitted by valid current envelopes. Compare the
 	# three scalar contract fields once, without a schema/default tree walk.
-	if value.get("protocol_version",1)!=identity.protocol_version or value.get("player_schema_version",16)!=identity.player_schema_version or value.get("schema_digest")!=identity.schema_digest:
+	if value.get("protocol_version",identity.protocol_version)!=identity.protocol_version or value.get("player_schema_version",identity.player_schema_version)!=identity.player_schema_version or value.get("schema_digest")!=identity.schema_digest:
 		return failure("Protocol identity mismatch")
 	return {"ok": true, "value": value}
 

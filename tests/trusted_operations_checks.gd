@@ -19,7 +19,7 @@ class Peer extends "res://tests/sdk_transport_peer.gd":
     func operation(sequence: int) -> Dictionary:
         var value: Dictionary = Protocol.new().normalize("PlayerOperation",super.operation(sequence))
         # Named malformed-body control, never a recorded gameplay positive.
-        # Schema16 operations carry generation/observer and an optional HUD;
+        # Operations carry generation/observer and an optional HUD;
         # there is no operation-level audience object anymore.
         if mode == "trusted_body": value.hud = {"fixture_marker":"Producer-owned nested body"}
         if mode == "operation_identity": value.protocol = protocol.duplicate(true); value.protocol.schema_digest = "f".repeat(64)
@@ -217,6 +217,6 @@ func run() -> void:
 func finish() -> void:
     var report := {"checks":checks,"failures":failures,"recording":recording,"operations":operations,
         "command":"Godot --headless --path <NDClientGodot> --script res://tests/trusted_operations_checks.gd -- --recording="+recording,
-        "scope":"Unchanged current Gallery operations equal strict decoded and normalized values, including types/decimal bits. Public/offline negative schema controls remain strict; current-producer checks cover actual identity and positive sequence without recursive body validation. Real HTTP/SSE verifies opt-in, identity, scope, ID/order, duplicate handling, consumer rejection and operation-only trust. Named malformed producer-body controls are not gameplay recordings. No live timing claim."}
+        "scope":"Unchanged current-producer operations equal strict decoded and normalized values, including types/decimal bits. Public/offline negative schema controls remain strict; current-producer checks cover actual identity and positive sequence without recursive body validation. Real HTTP/SSE verifies opt-in, identity, scope, ID/order, duplicate handling, consumer rejection and operation-only trust. Named malformed producer-body controls are not gameplay recordings. No live timing claim."}
     FileAccess.open("res://generated/trusted_operations_checks.json",FileAccess.WRITE).store_string(JSON.stringify(report,"  "))
     print("TRUSTED_OPERATIONS_CHECKS ",JSON.stringify(report)); quit(0 if failures.is_empty() else 1)

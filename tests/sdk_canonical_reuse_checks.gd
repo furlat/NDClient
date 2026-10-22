@@ -26,7 +26,11 @@ func _initialize()->void:
     var recording:String="res://tests/fixtures/schema16/scenarios/gallery/amber"
     for arg in OS.get_cmdline_user_args():
         if arg.begins_with("--recording="):recording=arg.trim_prefix("--recording=")
-    var protocol=Protocol.new()
+    var source=Journal.new()
+    var opened:Dictionary=source.open(recording,true,false)
+    check(opened.ok,"Original Gallery selects its recorded producer contract")
+    if not opened.ok:quit(1);return
+    var protocol=source.protocol
     var state:Dictionary={};var context:Dictionary={}
     var held:Array=[];var frozen:Array=[];var measurements:Array=[]
     for sequence in range(7):

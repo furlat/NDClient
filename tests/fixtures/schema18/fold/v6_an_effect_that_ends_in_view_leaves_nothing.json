@@ -1,0 +1,468 @@
+{
+ "name": "v6_an_effect_that_ends_in_view_leaves_nothing",
+ "family": "sensory",
+ "initial": {
+  "generation": "00000000-0000-4000-8000-00000000f000",
+  "observer_uuid": "00000000-0000-4000-8000-00000000000a",
+  "world": {
+   "battlefield_id": "vectors",
+   "battlefield_name": "Vectors",
+   "bounds": [
+    0,
+    0,
+    15,
+    15
+   ],
+   "width": 16,
+   "height": 16
+  },
+  "tiles": {},
+  "objects": {},
+  "object_members": {},
+  "connectors": {},
+  "static": {
+   "tiles": {},
+   "tile_looks": {},
+   "residues": {},
+   "object_looks": {},
+   "boundary_structures": {},
+   "visual_loadouts": {}
+  },
+  "senses": null,
+  "reducer_cursor": 0,
+  "spatial_commit_cursors": {},
+  "actors": {},
+  "spatial_content": {},
+  "items": {},
+  "current_actor_uuid": null,
+  "round_number": 0,
+  "hud_snapshot": null,
+  "audience": {
+   "controlled": [],
+   "observers": [
+    "00000000-0000-4000-8000-00000000000a",
+    "00000000-0000-4000-8000-00000000000b"
+   ],
+   "revision": 0
+  },
+  "content": [],
+  "combat_log_appends": [],
+  "entity_members": {},
+  "object_contact_members": {},
+  "effect_members": {},
+  "light_sources": {},
+  "remembered_effects": {}
+ },
+ "steps": [
+  {
+   "input": {
+    "sensory_rows": {
+     "uuids": [
+      "00000000-0000-4000-8000-000000003001"
+     ],
+     "sighting_uuid_index": [
+      0
+     ],
+     "sightings": [
+      {
+       "positions": {
+        "x0": 1,
+        "y0": 1,
+        "width": 2,
+        "height": 1,
+        "bits": "Aw=="
+       },
+       "apparent_presence": true
+      }
+     ],
+     "sighting_members": [
+      3
+     ],
+     "cells": {
+      "x0": 1,
+      "y0": 1,
+      "width": 2,
+      "height": 1,
+      "bits": "Aw=="
+     },
+     "light_levels": [
+      {
+       "cells": {
+        "x0": 1,
+        "y0": 1,
+        "width": 2,
+        "height": 1,
+        "bits": "Aw=="
+       },
+       "values": "AwM="
+      }
+     ]
+    },
+    "fact": {
+     "kind": "sensory",
+     "initial": true,
+     "observer_position": [
+      1,
+      0
+     ],
+     "visible_cells_added": {
+      "start": 0,
+      "bits": "Aw=="
+     },
+     "effective_light_levels_changed": {
+      "start": 0,
+      "bits": "Aw=="
+     },
+     "sense_modes_changed": true,
+     "sense_modes": [
+      {
+       "sense_type": "Darkvision",
+       "range_feet": 60
+      }
+     ],
+     "passive_perception_changed": true,
+     "passive_perception": 12,
+     "visual_access_changed": true,
+     "visual_access": 1,
+     "spatial_effects_added": [
+      0
+     ],
+     "spatial_effect_content": {
+      "00000000-0000-4000-8000-000000003001": {
+       "content_ref": {
+        "pack_id": "test.fold_vectors",
+        "definition_kind": "condition",
+        "content_id": "condition.fold_vectors.fog",
+        "content_version": 1,
+        "definition_contract_hash": "0000000000000000000000000000000000000000000000000000000000000000"
+       },
+       "name": "Fog",
+       "description": "A fog."
+      }
+     }
+    }
+   },
+   "expected": {
+    "generation": "00000000-0000-4000-8000-00000000f000",
+    "observer_uuid": "00000000-0000-4000-8000-00000000000a",
+    "world": {
+     "battlefield_id": "vectors",
+     "battlefield_name": "Vectors",
+     "bounds": [
+      0,
+      0,
+      15,
+      15
+     ],
+     "width": 16,
+     "height": 16
+    },
+    "tiles": {},
+    "objects": {},
+    "object_members": {},
+    "connectors": {},
+    "static": {
+     "tiles": {},
+     "tile_looks": {},
+     "residues": {},
+     "object_looks": {},
+     "boundary_structures": {},
+     "visual_loadouts": {}
+    },
+    "senses": {
+     "position": [
+      1,
+      0
+     ],
+     "visible": {
+      "x0": 1,
+      "y0": 1,
+      "width": 2,
+      "height": 1,
+      "bits": "Aw=="
+     },
+     "seen": {
+      "x0": 1,
+      "y0": 1,
+      "width": 2,
+      "height": 1,
+      "bits": "Aw=="
+     },
+     "entities": {},
+     "objects": {},
+     "effective_light_levels": {
+      "cells": {
+       "x0": 1,
+       "y0": 1,
+       "width": 2,
+       "height": 1,
+       "bits": "Aw=="
+      },
+      "values": "AwM="
+     },
+     "paths_dirty": false,
+     "passive_perception": 12,
+     "sense_modes_key": [
+      [
+       "Darkvision",
+       60
+      ]
+     ],
+     "sense_modes": [
+      {
+       "sense_type": "Darkvision",
+       "range_feet": 60
+      }
+     ],
+     "visual_access": 1,
+     "hazardous_cells": {
+      "cells": {
+       "x0": 1,
+       "y0": 1,
+       "width": 2,
+       "height": 1,
+       "bits": "Aw=="
+      },
+      "values": "AAA="
+     },
+     "spatial_effects": {
+      "00000000-0000-4000-8000-000000003001": {
+       "duration": null,
+       "content_ref": {
+        "pack_id": "test.fold_vectors",
+        "definition_kind": "condition",
+        "content_id": "condition.fold_vectors.fog",
+        "content_version": 1,
+        "definition_contract_hash": "0000000000000000000000000000000000000000000000000000000000000000"
+       },
+       "name": "Fog",
+       "description": "A fog.",
+       "positions": [
+        [
+         1,
+         1
+        ],
+        [
+         2,
+         1
+        ]
+       ],
+       "owner_revision": null,
+       "apparent_presence": true,
+       "trap_state": null,
+       "pressed": null,
+       "direction": null,
+       "anchor_item_uuid": null,
+       "anchor_entity_uuid": null,
+       "energy_type": null,
+       "presence_mode": null,
+       "sustainer_item_uuid": null,
+       "concentration_slot_uuid": null,
+       "anchor_position": null,
+       "anchor_elevation_steps": null,
+       "area_geometry": null,
+       "construction_sections": [],
+       "area_propagation": null,
+       "deposit_source": null,
+       "visible_volume_positions": [],
+       "upper_volume_surfaces": [],
+       "suppressions": []
+      }
+     },
+     "light_sources": {},
+     "light_source_removals": {}
+    },
+    "reducer_cursor": 0,
+    "spatial_commit_cursors": {},
+    "actors": {},
+    "spatial_content": {
+     "00000000-0000-4000-8000-000000003001": {
+      "content_ref": {
+       "pack_id": "test.fold_vectors",
+       "definition_kind": "condition",
+       "content_id": "condition.fold_vectors.fog",
+       "content_version": 1,
+       "definition_contract_hash": "0000000000000000000000000000000000000000000000000000000000000000"
+      },
+      "name": "Fog",
+      "description": "A fog."
+     }
+    },
+    "items": {},
+    "current_actor_uuid": null,
+    "round_number": 0,
+    "hud_snapshot": null,
+    "audience": {
+     "controlled": [],
+     "observers": [
+      "00000000-0000-4000-8000-00000000000a",
+      "00000000-0000-4000-8000-00000000000b"
+     ],
+     "revision": 0
+    },
+    "content": [],
+    "combat_log_appends": [],
+    "entity_members": {},
+    "object_contact_members": {},
+    "effect_members": {
+     "00000000-0000-4000-8000-000000003001": 3
+    },
+    "light_sources": {},
+    "remembered_effects": {}
+   }
+  },
+  {
+   "input": {
+    "sensory_rows": {
+     "uuids": [
+      "00000000-0000-4000-8000-000000003001"
+     ],
+     "retired_uuid_index": [
+      0
+     ],
+     "retired_cells": [
+      {
+       "x0": 1,
+       "y0": 1,
+       "width": 2,
+       "height": 1,
+       "bits": "Aw=="
+      }
+     ]
+    },
+    "fact": {
+     "kind": "sensory",
+     "spatial_effects_removed": [
+      0
+     ],
+     "spatial_effect_cells_retired": [
+      0
+     ]
+    }
+   },
+   "expected": {
+    "generation": "00000000-0000-4000-8000-00000000f000",
+    "observer_uuid": "00000000-0000-4000-8000-00000000000a",
+    "world": {
+     "battlefield_id": "vectors",
+     "battlefield_name": "Vectors",
+     "bounds": [
+      0,
+      0,
+      15,
+      15
+     ],
+     "width": 16,
+     "height": 16
+    },
+    "tiles": {},
+    "objects": {},
+    "object_members": {},
+    "connectors": {},
+    "static": {
+     "tiles": {},
+     "tile_looks": {},
+     "residues": {},
+     "object_looks": {},
+     "boundary_structures": {},
+     "visual_loadouts": {}
+    },
+    "senses": {
+     "position": [
+      1,
+      0
+     ],
+     "visible": {
+      "x0": 1,
+      "y0": 1,
+      "width": 2,
+      "height": 1,
+      "bits": "Aw=="
+     },
+     "seen": {
+      "x0": 1,
+      "y0": 1,
+      "width": 2,
+      "height": 1,
+      "bits": "Aw=="
+     },
+     "entities": {},
+     "objects": {},
+     "effective_light_levels": {
+      "cells": {
+       "x0": 1,
+       "y0": 1,
+       "width": 2,
+       "height": 1,
+       "bits": "Aw=="
+      },
+      "values": "AwM="
+     },
+     "paths_dirty": false,
+     "passive_perception": 12,
+     "sense_modes_key": [
+      [
+       "Darkvision",
+       60
+      ]
+     ],
+     "sense_modes": [
+      {
+       "sense_type": "Darkvision",
+       "range_feet": 60
+      }
+     ],
+     "visual_access": 1,
+     "hazardous_cells": {
+      "cells": {
+       "x0": 1,
+       "y0": 1,
+       "width": 2,
+       "height": 1,
+       "bits": "Aw=="
+      },
+      "values": "AAA="
+     },
+     "spatial_effects": {},
+     "light_sources": {},
+     "light_source_removals": {}
+    },
+    "reducer_cursor": 0,
+    "spatial_commit_cursors": {},
+    "actors": {},
+    "spatial_content": {
+     "00000000-0000-4000-8000-000000003001": {
+      "content_ref": {
+       "pack_id": "test.fold_vectors",
+       "definition_kind": "condition",
+       "content_id": "condition.fold_vectors.fog",
+       "content_version": 1,
+       "definition_contract_hash": "0000000000000000000000000000000000000000000000000000000000000000"
+      },
+      "name": "Fog",
+      "description": "A fog."
+     }
+    },
+    "items": {},
+    "current_actor_uuid": null,
+    "round_number": 0,
+    "hud_snapshot": null,
+    "audience": {
+     "controlled": [],
+     "observers": [
+      "00000000-0000-4000-8000-00000000000a",
+      "00000000-0000-4000-8000-00000000000b"
+     ],
+     "revision": 0
+    },
+    "content": [],
+    "combat_log_appends": [],
+    "entity_members": {},
+    "object_contact_members": {},
+    "effect_members": {},
+    "light_sources": {},
+    "remembered_effects": {}
+   }
+  }
+ ]
+}

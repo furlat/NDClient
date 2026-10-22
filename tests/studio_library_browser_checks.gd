@@ -186,6 +186,13 @@ func run()->void:
     check(compatible.cases[0].ready and compatible.cases[0].scenario_status=="recorded" and compatible.cases[0].recording_status=="recorded","A genuine successful same-wire predecessor remains eligible for ordinary playback")
     check(compatible.cases[0].capture_engine==predecessor and compatible.cases[0].engine_status=="historical_or_unverified" and var_to_bytes(compatible_records)==immutable_compatible,"Playback eligibility preserves the actual historical engine and original metadata")
     check(compatible.current_output_witnesses.is_empty() and compatible.historical_output_witnesses.size()==1 and compatible.approval_status=="needs_review","Same-wire historical playback cannot qualify current output or approve artwork")
+    for paths in Library.Journal.Protocol.RECORDED_CONTRACTS:
+        var archived:Dictionary=Library._read(paths[1]).duplicate();archived.commit="archived-control"
+        var archived_records:Dictionary=records.duplicate(true);archived_records.cases[0].engine=archived
+        var archived_receipts={"cases":{"fireball/hit":[{"kind":"native_replay","process_exit":0,"process_status":"passed","engine":archived,"factory_version":"actual-package","report":"res://native/archived-control.json"}]}}
+        var historical:Dictionary=Library.build(snapshot,coverage,archived_records,false,{},archived_receipts,"actual-package").by_key["spell:spell.fireball"]
+        check(historical.cases[0].ready and historical.cases[0].capture_engine==archived,"An explicitly archived wire contract remains playable with its original identity")
+        check(historical.current_output_witnesses.is_empty() and historical.historical_output_witnesses.size()==1 and historical.approval_status=="needs_review","Archived playback cannot qualify current-backend output or artwork")
     for mismatch in [{"protocol_version":2},{"player_schema_version":15},{"schema_digest":"foreign"},{"schema_digest":null}]:
         var incompatible:Dictionary=compatible_records.duplicate(true)
         incompatible.cases[0].engine.merge(mismatch,true)

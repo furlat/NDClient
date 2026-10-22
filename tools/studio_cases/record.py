@@ -19,7 +19,7 @@ import subprocess
 from cases import first_cohort, spell_baselines, spell_baseline_exclusions
 
 PROJECT=Path(__file__).resolve().parents[2]
-ENGINE=Path('/home/tommaso/.cache/ndclient/dnd_engine-9f81d5267')
+ENGINE=Path('/home/tommaso/.cache/ndclient/dnd_engine-bedc3d92dc')
 PYTHON=Path('/home/tommaso/.cache/dnd-engine/venv/bin/python')
 
 

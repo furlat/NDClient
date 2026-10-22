@@ -90,6 +90,14 @@ func run()->void:
                 and actual.inspection=="projected" and actual.status=="unexercised" and not actual.rendered \
                 and actual.event_kinds==[kind] and actual.source.ends_with("/mapping/"+kind),
                 "Current shared world consumer remains projected and unexercised: "+kind)
+        elif kind=="audience":
+            # Schema18 adds roster publication. The frozen extractor predates
+            # it; preserve its exact state-only contract, replacing identity only.
+            var expected:Dictionary=oracle.fact("sensory").duplicate(true)
+            var source:String=Requirements.SCHEMA+":/$defs/PlayerNode/properties/fact/anyOf/0/discriminator/mapping/audience"
+            expected.merge({"id":"operation:"+source+":fact:audience","kind":"fact:audience","mechanism":"fact:audience",
+                "label":"State publication · audience","source":source,"source_pointer":source,"event_kinds":["audience"]},true)
+            check(actual==expected,"Exact schema18 audience state-publication contract without an independent animation claim")
         else:check(actual==oracle.fact(kind),"Exact contract description: "+kind)
         check(is_same(actual,index.fact_requirements[kind]),"Contract description borrows its admitted revision: "+kind)
     var rows:int=0;var conditional:int=0

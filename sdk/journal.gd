@@ -21,23 +21,26 @@ func open(path: String, _historical_recording: bool = false, replay_existing: bo
 	var code := DirAccess.make_dir_recursive_absolute(path)
 	if code != OK: return _failure("Cannot create journal: " + error_string(code))
 	directory = path
-	# An existing native16 recording selects its exact stored producer contract.
+	# An existing recording selects its exact stored producer contract.
 	# Old wire9/unknown identities remain refused; no bytes or facts are rewritten.
 	if FileAccess.file_exists(_file(0)):
 		if not protocol.setup_error.is_empty(): return Protocol.failure(protocol.setup_error)
+		if not protocol._current_server_contract and not protocol._archived_server_contract:
+			return Protocol.failure("Unknown recorded producer contract")
 		var raw := FileAccess.get_file_as_bytes(_file(0))
 		var parsed: Dictionary = Protocol.parse_json(raw)
 		if not parsed.ok: return parsed
 		if not parsed.value is Dictionary or not parsed.value.get("protocol") is Dictionary: return _failure("Recorded initialization has no protocol identity")
 		if not protocol.check_identity(parsed.value.protocol).ok:
-			var archived := Protocol.new(Protocol.PRE_REVIEW_SCHEMA, Protocol.PRE_REVIEW_IDENTITY)
-			if not archived.setup_error.is_empty(): return _failure(archived.setup_error)
-			var checked: Dictionary = archived.check_identity(parsed.value.protocol)
+			for paths in Protocol.RECORDED_CONTRACTS:
+				var archived := Protocol.new(paths[0],paths[1])
+				if not archived.setup_error.is_empty(): return _failure(archived.setup_error)
+				if archived.check_identity(parsed.value.protocol).ok:
+					protocol = archived
+					break
+			var checked: Dictionary = protocol.check_identity(parsed.value.protocol)
 			if not checked.ok: return checked
-			protocol = archived
-		if not protocol._current_server_contract and not protocol._archived_server_contract:
-			return Protocol.failure("Unknown recorded producer contract")
-		# The already strict-parsed value belongs to the exact selected native16
+		# The already strict-parsed value belongs to the exact selected producer
 		# contract. Preserve decode_recorded's initialization cursor check without
 		# reparsing this entire packet (the Opus parse-once handoff).
 		if int(parsed.value.get("cursor",{}).get("sequence",-1))!=0:

@@ -807,11 +807,11 @@ static func _native_requirements(before: Dictionary, groups: Array, cache: Dicti
             var delta: Dictionary = commit.delta
             item_state.tiles.merge(delta.get("tiles",{}),true)
             for cell in delta.get("tiles_removed",[]):item_state.tiles.erase(cell)
-            if delta.get("actors",{}).is_empty() and not delta.get("set",{}).has("senses") and delta.get("items",{}).is_empty() and delta.get("objects",{}).is_empty() and delta.get("objects_removed",[]).is_empty() and not delta.get("set",{}).has("object_members") and commit.get("spatial_rows",[]).is_empty(): continue
+            if delta.get("actors",{}).is_empty() and not delta.get("set",{}).has("senses") and not delta.get("set",{}).has("audience") and delta.get("items",{}).is_empty() and delta.get("objects",{}).is_empty() and delta.get("objects_removed",[]).is_empty() and not delta.get("set",{}).has("object_members") and commit.get("spatial_rows",[]).is_empty(): continue
             var at: float = start+commit.at_ms
             for field in ["actors","items","objects"]:item_state[field].merge(delta.get(field,{}),true)
             for id in delta.get("objects_removed",[]):item_state.objects.erase(id)
-            for field in ["object_members","senses"]:
+            for field in ["object_members","senses","audience"]:
                 if delta.get("set",{}).has(field):item_state[field]=delta.set[field]
             var changed:bool=false
             if NativeItems.interested(item_owners,delta,cache):
@@ -1013,8 +1013,14 @@ static func _actor_structure_requirements(before:Dictionary,groups:Array,cache:D
         for owner in appearance_owners.values():
             if not is_inf(owner.end_ms) and not Appearance.declarations(owner.condition,cache).is_empty():
                 _actor_cut(cuts,float(owner.end_ms)+Appearance.removal_ms(owner.condition,cache)-start,owner.actor_uuid,duration)
+        var controlled:Array=state.audience.controlled
         for commit in group.get("commits",[]):
             for id in commit.delta.get("actors",{}):_actor_cut(cuts,commit.at_ms,id,duration)
+            if commit.delta.get("set",{}).has("audience"):
+                var next_controlled:Array=commit.delta.set.audience.controlled
+                for id in controlled+next_controlled:
+                    if (id in controlled)!=(id in next_controlled):_actor_cut(cuts,commit.at_ms,id,duration)
+                controlled=next_controlled
             for change in commit.get("condition_rows",[]):
                 if change.after==null and change.before!=null and not Appearance.declarations(change.before,cache).is_empty():
                     _actor_cut(cuts,float(commit.at_ms)+Appearance.removal_ms(change.before,cache),change.actor_uuid,duration)
@@ -1048,7 +1054,8 @@ static func _actor_structure_requirements(before:Dictionary,groups:Array,cache:D
                         if terminal_cells.has(key):state.tiles.erase(key)
                     for key in commit.delta.get("tiles",{}):
                         if terminal_cells.has(key):state.tiles[key]=commit.delta.tiles[key]
-                if commit.delta.get("set",{}).has("senses"):state.senses=commit.delta.set.senses
+                for field in ["senses","audience"]:
+                    if commit.delta.get("set",{}).has(field):state[field]=commit.delta.set[field]
                 cursor+=1
             var active_layers:Array=layers.filter(func(item):return item.start_ms<=start+at and start+at<item.start_ms+item.component.duration_ms).map(func(item):return item.component)
             var samples:Dictionary=Tracks.samples(group.get("actor_tracks",[]),at) if at<duration else {}
@@ -1075,7 +1082,8 @@ static func _actor_structure_requirements(before:Dictionary,groups:Array,cache:D
                     if terminal_cells.has(key):state.tiles.erase(key)
                 for key in commit.delta.get("tiles",{}):
                     if terminal_cells.has(key):state.tiles[key]=commit.delta.tiles[key]
-            if commit.delta.get("set",{}).has("senses"):state.senses=commit.delta.set.senses
+            for field in ["senses","audience"]:
+                if commit.delta.get("set",{}).has(field):state[field]=commit.delta.set[field]
             cursor+=1
         group.actor_structure_times=boundaries.keys();group.actor_structure_times.sort()
         group.actor_source_times=source_boundaries.keys();group.actor_source_times.sort()

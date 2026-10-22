@@ -3,7 +3,7 @@ extends SceneTree
 ## value controls below exercise absence/ambiguity; they are not wire replays.
 const Results=preload("res://presentation/application_results.gd")
 const Occurrences=preload("res://presentation/occurrences.gd")
-const Protocol=preload("res://sdk/protocol.gd")
+const Journal=preload("res://sdk/journal.gd")
 const EFFECT="spell.circle_of_death.saving_throw"
 const BASE="res://tests/fixtures/schema16/circle-of-death/"
 const ROOT_BASE="res://tests/fixtures/schema16/root-target-save/ray-of-sickness/"
@@ -26,8 +26,12 @@ func run()->void:
     print(JSON.stringify({"checks":checks,"failures":failures,"scope":"Exact disclosed application/save context; no native or visual qualification"}))
     quit(0 if failures.is_empty() else 1)
 func original(seat:String)->void:
-    var raw_packet:PackedByteArray=FileAccess.get_file_as_bytes(BASE+seat+"/journal/0000000000000008.json")
-    var decoded:Dictionary=Protocol.new().decode_server("PlayerOperation",raw_packet)
+    var directory:String=BASE+seat+"/journal"
+    var journal:RefCounted=Journal.new();var opened:Dictionary=journal.open(directory,true,false)
+    check(opened.ok,seat+" original Circle journal selects its recorded producer contract")
+    if not opened.ok:return
+    var raw_packet:PackedByteArray=FileAccess.get_file_as_bytes(directory+"/0000000000000008.json")
+    var decoded:Dictionary=journal.decode_record(8,raw_packet)
     check(decoded.ok,seat+" original packet is admitted through the actual integer-preserving SDK reader")
     if not decoded.ok:return
     var packet:Dictionary=decoded.value
@@ -105,8 +109,12 @@ func absent(context:Dictionary,reason:String,label:String)->void:
     check(not context.ready and context.reason==reason and context.by_effect.is_empty(),label)
 
 func target_cast(seat:String)->void:
-    var path:String=ROOT_BASE+seat+"/journal/0000000000000008.json"
-    var decoded:Dictionary=Protocol.new().decode_server("PlayerOperation",FileAccess.get_file_as_bytes(path))
+    var directory:String=ROOT_BASE+seat+"/journal"
+    var journal:RefCounted=Journal.new();var opened:Dictionary=journal.open(directory,true,false)
+    check(opened.ok,seat+" original Ray journal selects its recorded producer contract")
+    if not opened.ok:return
+    var path:String=directory+"/0000000000000008.json"
+    var decoded:Dictionary=journal.decode_record(8,FileAccess.get_file_as_bytes(path))
     check(decoded.ok,seat+" original target-bearing Ray cast uses the real SDK reader")
     if not decoded.ok:return
     var packet:Dictionary=decoded.value

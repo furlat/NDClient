@@ -5,7 +5,7 @@ const Media = preload("res://presentation/media_warmup.gd")
 const Encounter = preload("res://presentation/encounter_media.gd")
 const Characters = preload("res://presentation/characters.gd")
 const Catalog = preload("res://source_catalog.gd")
-const Protocol = preload("res://sdk/protocol.gd")
+const Journal = preload("res://sdk/journal.gd")
 const Reducer = preload("res://sdk/reducer.gd")
 const Geometry=preload("res://presentation/character_geometry.gd")
 const PROFILE="reference"
@@ -69,9 +69,12 @@ func run() -> void:
     for arg in OS.get_cmdline_user_args():
         if arg.begins_with("--recording="): recording = arg.trim_prefix("--recording=")
     if recording.is_empty(): check(false,"Usage: --recording=<actual current-schema journal>"); finish(); return
-    var parser = Protocol.new()
+    var journal=Journal.new();var opened:Dictionary=journal.open(recording,true,false)
+    check(opened.ok,"Original journal selects its recorded protocol")
+    if not opened.ok:finish();return
+    var parser = journal.protocol
     var decoded = parser.decode("InitializationResponse",FileAccess.get_file_as_bytes(recording.path_join("0000000000000000.json")))
-    check(decoded.ok,"Actual current-server initialization passes public strict admission")
+    check(decoded.ok,"Actual recorded initialization passes public strict admission")
     if not decoded.ok: finish(); return
     var packet = parser.normalize("InitializationResponse",decoded.value)
     var reduced = Reducer.reduce_initialization(packet.initialization,packet.content_additions)

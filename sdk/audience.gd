@@ -1,5 +1,5 @@
 extends RefCounted
-## Composed schema-16 perception and memory. Never recompute visibility or gameplay light.
+## Composed perception and memory. Never recompute visibility or gameplay light.
 const Cells=preload("res://sdk/fold_cells.gd")
 const EFFECT_DEFAULTS={"duration":null,"owner_revision":null,"apparent_presence":false,"trap_state":null,"pressed":null,"direction":null,"anchor_item_uuid":null,"anchor_entity_uuid":null,"energy_type":null,"presence_mode":null,"sustainer_item_uuid":null,"concentration_slot_uuid":null,"anchor_position":null,"anchor_elevation_steps":null,"area_geometry":null,"construction_sections":[],"area_propagation":null,"deposit_source":null,"visible_volume_positions":[],"upper_volume_surfaces":[],"suppressions":[]}
 static func success(value:Variant)->Dictionary:return {"ok":true,"value":value}
@@ -21,7 +21,38 @@ static func modes_key(modes:Array)->Array:
     result.sort_custom(func(a,b):return compare(a,b)<0);return result
 static func modes_signature(modes:Array)->String:return JSON.stringify(modes_key(modes))
 static func resolve(observer:String,supplied:Variant)->Dictionary:
-    return success({"controlled":[observer],"observers":[observer],"revision":0} if supplied==null else supplied)
+    if supplied==null:return success({"controlled":[observer],"observers":[observer],"revision":0})
+    if supplied.has("revision"):return success(supplied)
+    # Archived schema-16 snapshots predate membership revisions. Keep their
+    # original packets untouched; only the canonical audience receives default 0.
+    var audience:Dictionary=supplied.duplicate();audience.revision=0;return success(audience)
+
+static func apply_membership(target:Dictionary,audience:Dictionary,changed_actors:Dictionary={})->Dictionary:
+    var before:Dictionary=target.audience
+    if int(audience.get("revision",0))!=int(before.get("revision",0))+1 or not target.observer_uuid in audience.observers:
+        return failure("Audience membership must advance one revision and retain the stream observer")
+    if before.observers!=audience.observers:
+        var positions:Dictionary={};var remap:Array=[]
+        for index in range(audience.observers.size()):positions[audience.observers[index]]=1<<index
+        for index in range(before.observers.size()):remap.append([1<<index,positions.get(before.observers[index],0)])
+        for field in ["entity_members","object_contact_members","effect_members","object_members"]:
+            var rows:Dictionary=target[field]
+            for identity in rows:
+                var bits:int=int(rows[identity]);var after:int=0
+                for pair in remap:
+                    if bits&int(pair[0]):after|=int(pair[1])
+                rows[identity]=after
+    for identity in before.controlled:
+        if not identity in audience.controlled and target.actors.has(identity):
+            var actor:Dictionary=target.actors[identity].duplicate();actor.controlled_items=null
+            target.actors[identity]=actor;changed_actors[identity]=true
+    if target.hud_snapshot!=null:
+        var hud:Dictionary=target.hud_snapshot.duplicate();var sheets:Array=[]
+        for sheet in hud.sheets:
+            if sheet.actor_uuid in audience.controlled:sheets.append(sheet)
+        hud.sheets=sheets;target.hud_snapshot=hud
+    target.audience=audience
+    return success(target)
 
 static func composed_values(rows:Dictionary)->Dictionary:
     var positions:Array=rows.get("contact_positions",[]);var visual=Cells.row_indices(rows.get("contact_visual",{}),positions.size())
@@ -97,13 +128,11 @@ static func fold(target:Dictionary,fact:Dictionary,values:Dictionary,changed_act
     var prior_members:Dictionary=cell_context.members if indexed else Cells.point_set(prior_points)
     var topology_changed:bool=not removed.value.is_empty() or not added.value.is_empty()
     var visible:Dictionary=prior_members.duplicate() if topology_changed else prior_members
-    for point in removed.value:visible.erase(Cells.key(point))
-    for point in added.value:visible[Cells.key(point)]=point
-    var points:Array=Cells.sorted_points(visible) if topology_changed else prior_points
+    var points:Array=Cells.updated_points(prior_points,visible,added.value,removed.value) if topology_changed else prior_points
     var result:Dictionary=held.duplicate()
     result.visible=Cells.mask(points) if topology_changed else held.visible
     result.seen=Cells.union_points(held.seen,added.value)
-    var value_indices:=PackedInt64Array();var values_indexed:bool=false
+    var value_indices:=PackedInt64Array();var values_indexed:bool=false;var value_edits:Dictionary={}
     for pair in [["effective_light_levels","light_levels","effective_light_levels_changed"],["hazardous_cells","hazards","hazardous_cells_changed"]]:
         var changed=Cells.selected(values[pair[1]],fact.get(pair[2],{}))
         if not changed.ok:return changed
@@ -112,9 +141,13 @@ static func fold(target:Dictionary,fact:Dictionary,values:Dictionary,changed_act
             # Contact-only changes must not decode/re-encode unchanged columns.
             if indexed and not topology_changed and changed.value.is_empty():
                 result[pair[0]]=held[pair[0]];continue
-            if not values_indexed:
-                value_indices=Cells.value_indices(prior_points,points);values_indexed=true
-            result[pair[0]]=Cells.reindexed_values(held[pair[0]],prior_points.size(),points,changed.value,result.visible,value_indices)
+            if (added.value.size()+removed.value.size()+changed.value.size())*8<prior_points.size():
+                if value_edits.is_empty():value_edits=Cells.value_edits(prior_points,points,added.value,removed.value)
+                result[pair[0]]=Cells.reindexed_values(held[pair[0]],prior_points.size(),points,changed.value,result.visible,PackedInt64Array(),value_edits)
+            else:
+                if not values_indexed:
+                    value_indices=Cells.value_indices(prior_points,points);values_indexed=true
+                result[pair[0]]=Cells.reindexed_values(held[pair[0]],prior_points.size(),points,changed.value,result.visible,value_indices)
         else:
             var prior=Cells.values_map(held[pair[0]])
             for row in changed.value:prior[Cells.key(row.position)]=row.value

@@ -35,7 +35,7 @@ static func packet_causes(packet:Dictionary)->Dictionary:
     for group in packet.get("lineages",[]):
         for node in group.get("events",[]):
             var fact:Variant=node.get("fact")
-            if fact==null or node.get("canceled",false) or fact.kind=="sensory":continue
+            if fact==null or node.get("canceled",false) or fact.kind in ["sensory","audience"]:continue
             var application:Variant=null
             if node.get("resolution")!=null:application=group.get("resolutions",[])[int(node.resolution)].get("application_id")
             var execution:Variant=node.get("turn_execution_id")

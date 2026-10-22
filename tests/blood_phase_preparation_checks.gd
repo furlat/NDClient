@@ -2,7 +2,7 @@ extends SceneTree
 const Fixtures=preload("res://tests/recording_fixtures.gd")
 ## Exact current residue versus real received future/overlapping release inputs.
 ## Filtering changes field invalidation only; the ordered kernel result is fixed.
-const Protocol=preload("res://sdk/protocol.gd")
+const Journal=preload("res://sdk/journal.gd")
 const Reducer=preload("res://sdk/reducer.gd")
 const Compiler=preload("res://presentation/compiler.gd")
 const Blood=preload("res://presentation/blood.gd")
@@ -16,7 +16,10 @@ func check(ok:bool,label:String)->void:
 func _initialize()->void:run.call_deferred()
 func run()->void:
     var directory:String=Fixtures.journal("gallery")+"/"
-    var protocol=Protocol.new();var cache:Dictionary={};var history:Dictionary={}
+    var journal=Journal.new();var opened:Dictionary=journal.open(directory,true,false)
+    check(opened.ok,"Original Gallery journal selects its recorded protocol")
+    if not opened.ok:quit(1);return
+    var protocol=journal.protocol;var cache:Dictionary={};var history:Dictionary={}
     var first:Dictionary=protocol.decode("InitializationResponse",FileAccess.get_file_as_bytes(directory+"0000000000000000.json"))
     check(first.ok,"Actual Gallery initialization admits")
     if not first.ok:quit(1);return

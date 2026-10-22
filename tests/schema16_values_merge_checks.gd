@@ -9,6 +9,8 @@ const StrictJSON=preload("res://sdk/strict_json.gd")
 var checks:int=0
 var failures:Array=[]
 var cuts:Array=[]
+var recordings:Array=[]
+var report_path:String="res://.runtime/schema16-values-merge.json"
 func check(ok:bool,label:String)->void:
     checks+=1
     if not ok:failures.append(label);print("VALUES_MERGE_FAIL ",label)
@@ -17,12 +19,44 @@ func reference(prior:Dictionary,old:Array,points:Array,changed:Array,mask:Dictio
     var held:Dictionary=Cells.values_map(prior,old)
     for row in changed:held[Cells.key(row.position)]=row.value
     return Cells.values(points,held,mask)
+func linear_reference(prior:Dictionary,old:Array,points:Array,changed:Array,mask:Dictionary,indices:PackedInt64Array)->Dictionary:
+    # Frozen pre-delta aligned-column loop; timing includes decode and encode.
+    var source:PackedByteArray=Cells.bytes(prior.get("values",""))
+    if source.size()<old.size():return reference(prior,old,points,changed,mask)
+    var patches:Dictionary={}
+    for row in changed:patches[row.position]=row.value
+    var data:=PackedByteArray();data.resize(points.size());data.fill(0)
+    for i in points.size():
+        if patches.has(points[i]):data[i]=int(patches[points[i]])
+        elif indices[i]>=0:data[i]=source[indices[i]]
+    return {"cells":mask,"values":Cells.encoded(data)}
+func candidate_columns(cut:Dictionary)->Array:
+    var indices:=PackedInt64Array();var indexed:bool=false;var edits:Dictionary={};var result:Array=[]
+    for column in cut.columns:
+        if cut.added.is_empty() and cut.removed.is_empty() and column.changed.is_empty():result.append(column.prior);continue
+        if (cut.added.size()+cut.removed.size()+column.changed.size())*8<cut.old.size():
+            if edits.is_empty():edits=Cells.value_edits(cut.old,cut.points,cut.added,cut.removed)
+            result.append(Cells.reindexed_values(column.prior,cut.old.size(),cut.points,column.changed,cut.mask,PackedInt64Array(),edits))
+        else:
+            if not indexed:indices=Cells.value_indices(cut.old,cut.points);indexed=true
+            result.append(Cells.reindexed_values(column.prior,cut.old.size(),cut.points,column.changed,cut.mask,indices))
+    return result
+func linear_columns(cut:Dictionary)->Array:
+    var indices:=PackedInt64Array();var indexed:bool=false;var result:Array=[]
+    for column in cut.columns:
+        if cut.added.is_empty() and cut.removed.is_empty() and column.changed.is_empty():result.append(column.prior);continue
+        if not indexed:indices=Cells.value_indices(cut.old,cut.points);indexed=true
+        result.append(linear_reference(column.prior,cut.old,cut.points,column.changed,cut.mask,indices))
+    return result
 func capture(prior:Variant,after:Dictionary,fact:Dictionary,rows:Dictionary,label:String)->void:
     if prior==null:prior={"visible":Cells.EMPTY,"effective_light_levels":Cells.values([],{}),"hazardous_cells":Cells.values([],{})}
     var values:Dictionary=Audience.composed_values(rows)
     check(values.ok,label+": actual source sensory table composes")
     if not values.ok:return
-    var cut:Dictionary={"label":label,"old":Cells.mask_points(prior.visible),"points":Cells.mask_points(after.visible),"mask":after.visible,"columns":[]}
+    var added:Dictionary=Cells.selected(values.value.cells,fact.get("visible_cells_added",{}));var removed:Dictionary=Cells.selected(values.value.cells,fact.get("visible_cells_removed",{}))
+    check(added.ok and removed.ok,label+": actual topology operands select")
+    if not added.ok or not removed.ok:return
+    var cut:Dictionary={"label":label,"old":Cells.mask_points(prior.visible),"points":Cells.mask_points(after.visible),"mask":after.visible,"added":added.value,"removed":removed.value,"columns":[]}
     for pair in [["effective_light_levels","light_levels","effective_light_levels_changed"],["hazardous_cells","hazards","hazardous_cells_changed"]]:
         var selected:Dictionary=Cells.selected(values.value[pair[1]],fact.get(pair[2],{}))
         check(selected.ok,label+": actual changed value rows select")
@@ -34,6 +68,10 @@ func originals()->void:
     var directories:Array=["res://tests/fixtures/schema16/scenarios/gallery/amber"]
     for case in ["door","oa-jump-late-lethal"]:
         for seat in ["amber","blue"]:directories.append("res://tests/fixtures/schema16/scenarios/"+case+"/"+seat)
+    for mode in ["human","codex"]:
+        for seat in ["amber","blue"]:directories.append("res://tests/fixtures/schema18/summon-control/"+mode+"/"+seat)
+    for seat in ["amber","blue"]:directories.append("res://tests/fixtures/schema18/caster-defeat/"+seat)
+    directories.append_array(recordings)
     for directory in directories:
         var journal:RefCounted=Journal.new()
         var opened:Dictionary=journal.open(str(directory),true,false)
@@ -61,18 +99,25 @@ func originals()->void:
                     for node in lineage.events:events[int(node.occurrence)]=node
                     for event in folded.transitions.lineages[i].events:
                         var source:Dictionary=events[event.occurrence]
-                        if source.get("fact")!=null and source.fact.kind=="sensory" and not source.get("canceled",false):capture(prior,event.delta.set.senses,source.fact,lineage.get("sensory_rows",{}),str(directory)+":"+str(sequence)+":"+str(event.occurrence))
+                        var fact:Variant=source.get("fact")
+                        if fact!=null and fact.kind=="audience":fact=fact.get("sensory")
+                        if fact!=null and fact.kind=="sensory" and not source.get("canceled",false):capture(prior,event.delta.set.senses,fact,lineage.get("sensory_rows",{}),str(directory)+":"+str(sequence)+":"+str(event.occurrence))
                         if event.delta.set.has("senses"):prior=event.delta.set.senses
             state=folded.value;sequence+=1
 func actual_cases()->void:
     for cut in cuts:
+        var frozen:PackedByteArray=var_to_bytes(cut)
         var indices:PackedInt64Array=Cells.value_indices(cut.old,cut.points)
-        for column in cut.columns:
+        var candidate:Array=candidate_columns(cut)
+        for at in cut.columns.size():
+            var column:Dictionary=cut.columns[at]
             var before:PackedByteArray=var_to_bytes([column.prior,cut.old,cut.points,column.changed,cut.mask])
             var expected:Dictionary=reference(column.prior,cut.old,cut.points,column.changed,cut.mask)
             var actual:Dictionary=Cells.reindexed_values(column.prior,cut.old.size(),cut.points,column.changed,cut.mask,indices)
             check(actual==expected and actual==column.expected,cut.label+": exact original canonical bytes match both old codec and actual produced after-value")
+            check(candidate[at]==expected,cut.label+": small or bulk delta path preserves exact original bytes")
             check(var_to_bytes([column.prior,cut.old,cut.points,column.changed,cut.mask])==before,cut.label+": merge leaves all retained inputs immutable")
+        check(var_to_bytes(cut)==frozen,cut.label+": complete candidate leaves its original cut immutable")
 func differential_cases()->void:
     var rng:=RandomNumberGenerator.new();rng.seed=178601
     var origins:Array=[-9007199254740000,-2147483650,-7,0,2147483650,9007199254740000]
@@ -84,6 +129,10 @@ func differential_cases()->void:
                 if sample%11!=0 and rng.randi_range(0,3)>0:old.append([x0+x,y0+y])
                 if sample%13!=0 and rng.randi_range(0,3)>0:points.append([x0+x-2,y0+y+2])
         var mask:Dictionary=Cells.mask(points);var indices:PackedInt64Array=Cells.value_indices(old,points)
+        var old_members:Dictionary=Cells.point_set(old);var next_members:Dictionary=Cells.point_set(points)
+        var added:Array=points.filter(func(point):return not old_members.has(Cells.key(point)))
+        var removed:Array=old.filter(func(point):return not next_members.has(Cells.key(point)))
+        var edits:Dictionary=Cells.value_edits(old,points,added,removed)
         for column in range(2):
             var bytes:=PackedByteArray()
             for i in old.size():bytes.append(rng.randi_range(0,255))
@@ -101,9 +150,25 @@ func differential_cases()->void:
             var expected:Dictionary=reference(prior,old,points,changed,mask)
             var actual:Dictionary=Cells.reindexed_values(prior,old.size(),points,changed,mask,indices)
             check(actual==expected,"differential "+str(sample)+"/"+str(column)+": exact bytes across full wire coordinates, all byte values, missing/new/removed cells, duplicates and outside patches")
+            var edited:Dictionary=Cells.reindexed_values(prior,old.size(),points,changed,mask,PackedInt64Array(),edits)
+            check(edited==expected,"differential "+str(sample)+"/"+str(column)+": net native byte edits preserve the same value contract")
             check(var_to_bytes([prior,old,points,changed,mask,indices])==before,"differential "+str(sample)+"/"+str(column)+": every retained input stays immutable")
             actual.values=""
             check(var_to_bytes([prior,old,points,changed,mask,indices])==before,"differential "+str(sample)+"/"+str(column)+": returned value dictionary is detached")
+func net_controls()->void:
+    for cut in cuts:
+        if cut.old.size()<32:continue
+        # Codec controls reuse a real held population. Repeated removal/addition
+        # of the same position has no net topology effect and must retain bytes.
+        var point:Array=cut.old[0];var operand:Array=[point,point]
+        var edits:Dictionary=Cells.value_edits(cut.old,cut.old,operand,operand)
+        for column in cut.columns:
+            var before:PackedByteArray=var_to_bytes([column.prior,cut.old,operand,edits])
+            for changed in [[],[{"position":point,"value":17},{"position":point,"value":255}]]:
+                var actual:Dictionary=Cells.reindexed_values(column.prior,cut.old.size(),cut.old,changed,column.prior.cells,PackedInt64Array(),edits)
+                check(actual==reference(column.prior,cut.old,cut.old,changed,column.prior.cells),"Net remove/readd preserves prior bytes and duplicate patches remain last-write-wins")
+            check(var_to_bytes([column.prior,cut.old,operand,edits])==before,"Net edit controls preserve all retained operands")
+        break
 func fallback_cases()->void:
     var parsed:Dictionary=StrictJSON.new().parse(FileAccess.get_file_as_string("res://tests/fixtures/schema16/fold/v7_anchor_scalars_are_sent_when_they_change.json"))
     check(parsed.ok,"Frozen native sensory control parses without integer precision loss")
@@ -129,24 +194,30 @@ func fallback_cases()->void:
         var refused:Dictionary=Audience.fold(owned,invalid,values.value)
         check(not refused.ok and refused.error.message=="A row subset names a row outside its table",field+": malformed changed-row subset retains exact prior refusal")
         check(var_to_bytes(owned)==before,field+": malformed subset publishes no partial canonical values")
-func benchmark()->Dictionary:
+func timed(candidate:bool,selected:Array)->int:
+    var started:int=Time.get_ticks_usec()
+    for cut in selected:
+        if candidate:candidate_columns(cut)
+        else:linear_columns(cut)
+    return Time.get_ticks_usec()-started
+func benchmark(selected:Array)->Dictionary:
     var old_times:Array=[];var new_times:Array=[]
     for repeat in range(7):
-        var started:int=Time.get_ticks_usec()
-        for cut in cuts:
-            for column in cut.columns:reference(column.prior,cut.old,cut.points,column.changed,cut.mask)
-        var old_us:int=Time.get_ticks_usec()-started
-        started=Time.get_ticks_usec()
-        for cut in cuts:
-            var indices:PackedInt64Array=Cells.value_indices(cut.old,cut.points)
-            for column in cut.columns:Cells.reindexed_values(column.prior,cut.old.size(),cut.points,column.changed,cut.mask,indices)
-        var new_us:int=Time.get_ticks_usec()-started
+        var old_us:int;var new_us:int
+        if repeat%2==0:old_us=timed(false,selected);new_us=timed(true,selected)
+        else:new_us=timed(true,selected);old_us=timed(false,selected)
         if repeat>0:old_times.append(old_us);new_times.append(new_us)
     old_times.sort();new_times.sort()
-    return {"actual_sensory_cuts":cuts.size(),"columns_per_cut":2,"old_median_us":old_times[old_times.size()/2],"candidate_median_us":new_times[new_times.size()/2],"old_samples_us":old_times,"candidate_samples_us":new_times,"scope":"Isolated CPU codec only, including shared row mapping and both columns; source rows/points already composed. No live latency or frame claim."}
+    return {"actual_sensory_cuts":selected.size(),"columns_per_cut":2,"linear_median_us":old_times[old_times.size()/2],"candidate_median_us":new_times[new_times.size()/2],"linear_samples_us":old_times,"candidate_samples_us":new_times,"scope":"Isolated CPU codec against the pre-delta linear merge, including local alignment and both columns' decoding/encoding; both sides retain existing unchanged-column borrowing. Source rows/points already composed. No live latency or frame claim; native byte copies/moves still scale with population."}
 func run()->void:
-    originals();actual_cases();differential_cases();fallback_cases()
-    var report:Dictionary={"checks":checks,"failures":failures,"differential_columns":768,"benchmark":benchmark(),
-        "scope":"Exact previous canonical value codec and actual60original sensory cuts, shared linear row mapping, full int64-safe coordinate arrays, detached retained values, nonmatching-mask fallback and unchanged malformed-row refusal. No cache/state/framework, GPU output or live latency claim."}
-    FileAccess.open("res://.runtime/schema16-values-merge.json",FileAccess.WRITE).store_string(JSON.stringify(report,"  "))
+    for arg in OS.get_cmdline_user_args():
+        if arg.begins_with("--recording="):recordings.append(arg.trim_prefix("--recording="))
+        elif arg.begins_with("--report="):report_path=arg.trim_prefix("--report=")
+    originals();actual_cases();differential_cases();net_controls();fallback_cases()
+    var recorded_benchmarks:Dictionary={}
+    for directory in recordings:recorded_benchmarks[directory]=benchmark(cuts.filter(func(cut):return cut.label.begins_with(directory+":")))
+    var report:Dictionary={"checks":checks,"failures":failures,"differential_columns":768,"benchmark":benchmark(cuts),"recordings":recorded_benchmarks,
+        "scope":"Exact previous canonical value codec and schema16/18 original sensory cuts, net population edits, full int64-safe coordinate arrays, detached retained values, nonmatching-mask fallback and unchanged malformed-row refusal. No cache/state/framework, GPU output or live latency claim."}
+    DirAccess.make_dir_recursive_absolute(report_path.get_base_dir())
+    FileAccess.open(report_path,FileAccess.WRITE).store_string(JSON.stringify(report,"  "))
     print("VALUES_MERGE ",JSON.stringify(report));quit(0 if failures.is_empty() else 1)

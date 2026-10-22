@@ -1,0 +1,553 @@
+[
+ {
+  "kind": "start",
+  "game_id": "caster-defeat",
+  "game_epoch": "4b3a9f72-3f42-49a5-93c4-068a70be88a7",
+  "audience_ids": {
+   "amber": "4d4ee7e2-cc05-405c-bda9-ba60c5ad655d",
+   "blue": "6712c278-c69b-4c6b-8728-a528ca7847f4"
+  },
+  "encounter_id": null,
+  "recipe": {
+   "encounter_id": "encounter.caster_defeat",
+   "title": "Caster defeat",
+   "roster_slots": [
+    {
+     "roster_slot_id": "amber",
+     "roster": {
+      "roster_id": "roster.acceptance_amber",
+      "title": "Amber",
+      "members": [
+       {
+        "member_id": "unit_1",
+        "display_name": "Amber scout 1",
+        "deployment_role": "unit_1",
+        "source": {
+         "kind": "premade_character",
+         "premade_id": "hero.cleric_l5_life"
+        },
+        "scenario_setup_effects": []
+       },
+       {
+        "member_id": "unit_2",
+        "display_name": "Amber scout 2",
+        "deployment_role": "unit_2",
+        "source": {
+         "kind": "premade_character",
+         "premade_id": "hero.cleric_l5_life"
+        },
+        "scenario_setup_effects": []
+       }
+      ],
+      "tags": [],
+      "required_battlefield_capabilities": [],
+      "forbidden_battlefield_capabilities": [],
+      "recipe_digest": "e9aeebe403671a05a779af26511d89abd5aa8982c054bddb79d40b093b532695"
+     },
+     "faction_id": "amber",
+     "deployment_zone_id": "amber",
+     "controller_defaults": {
+      "controller": "codex",
+      "participant_name": "amber",
+      "policy_id": null,
+      "member_overrides": []
+     },
+     "member_presentations": []
+    },
+    {
+     "roster_slot_id": "blue",
+     "roster": {
+      "roster_id": "roster.acceptance_blue",
+      "title": "Blue",
+      "members": [
+       {
+        "member_id": "unit_1",
+        "display_name": "Blue scout 1",
+        "deployment_role": "unit_1",
+        "source": {
+         "kind": "premade_character",
+         "premade_id": "hero.wizard_l5_evocation"
+        },
+        "scenario_setup_effects": []
+       }
+      ],
+      "tags": [],
+      "required_battlefield_capabilities": [],
+      "forbidden_battlefield_capabilities": [],
+      "recipe_digest": "a561859aaaccac0edad3408c4d08e94a35b02c49de39736410b5d33ecb198795"
+     },
+     "faction_id": "blue",
+     "deployment_zone_id": "blue",
+     "controller_defaults": {
+      "controller": "codex",
+      "participant_name": "blue",
+      "policy_id": null,
+      "member_overrides": []
+     },
+     "member_presentations": []
+    }
+   ],
+   "battlefield_id": "battlefield.open_floor_bright",
+   "deployment": {
+    "deployment_id": "deployment.caster_defeat",
+    "title": "Caster defeat",
+    "battlefield_id": "battlefield.open_floor_bright",
+    "zones": [
+     {
+      "zone_id": "amber",
+      "ordered_slots": [
+       [
+        3,
+        7
+       ],
+       [
+        10,
+        12
+       ]
+      ],
+      "role_slots": [],
+      "max_members": null
+     },
+     {
+      "zone_id": "blue",
+      "ordered_slots": [
+       [
+        9,
+        7
+       ]
+      ],
+      "role_slots": [],
+      "max_members": null
+     }
+    ],
+    "tags": [],
+    "content_digest": "87158dd872bd47f70b421ac83f49f8f79e5b8caab5eb89e6ea09f468dbfca074"
+   },
+   "opening_policy": {
+    "kind": "fixed_roster",
+    "roster_slot_id": "amber"
+   },
+   "notable_positions": [],
+   "tags": [],
+   "recipe_digest": "78dc4dee4e4ddb22a3e2368804dc20dab3475b5a7c669ba9b5f46084d6b93890"
+  },
+  "assignments": [
+   {
+    "seat_id": "amber",
+    "controlled": [
+     [
+      "amber",
+      "unit_1"
+     ],
+     [
+      "amber",
+      "unit_2"
+     ]
+    ],
+    "observers": null
+   },
+   {
+    "seat_id": "blue",
+    "controlled": [
+     [
+      "blue",
+      "unit_1"
+     ]
+    ],
+    "observers": null
+   }
+  ],
+  "test_seed": 2,
+  "player_builds": null
+ },
+ {
+  "kind": "advance"
+ },
+ {
+  "kind": "command",
+  "seat_id": "amber",
+  "request": {
+   "command_number": 1,
+   "actor_uuid": "75f63f37-3e7c-4129-869c-4ac602e1b990",
+   "state_revision": "3ef41813-6a6e-462f-b475-aa35def5dd71",
+   "intent": {
+    "kind": "end_turn"
+   }
+  }
+ },
+ {
+  "kind": "advance"
+ },
+ {
+  "kind": "command",
+  "seat_id": "blue",
+  "request": {
+   "command_number": 1,
+   "actor_uuid": "495af401-d3f9-47ff-a0c6-2a0ae98c0ba2",
+   "state_revision": "26f17556-a9f1-40da-8336-26f7580e3aca",
+   "intent": {
+    "kind": "end_turn"
+   }
+  }
+ },
+ {
+  "kind": "advance"
+ },
+ {
+  "kind": "choices",
+  "seat_id": "amber",
+  "request": {
+   "actor_uuid": "7ca1c9db-963b-4484-8235-004d2d8ed76d",
+   "state_revision": "e1754505-5b1f-4a06-a5e7-02b00f9d8a83",
+   "force_attack": false,
+   "correlation_id": "7d8befb7-7884-4082-9c66-30f789beac5e"
+  }
+ },
+ {
+  "kind": "preview",
+  "seat_id": "amber",
+  "request": {
+   "actor_uuid": "7ca1c9db-963b-4484-8235-004d2d8ed76d",
+   "state_revision": "e1754505-5b1f-4a06-a5e7-02b00f9d8a83",
+   "discovery_generation": 1,
+   "correlation_id": "6082a5f5-ae37-4ea9-baa5-bd853d4f8a2a",
+   "selection": {
+    "action_index": 21,
+    "target_indices": [],
+    "extra_target_positions": [
+     [
+      3,
+      12
+     ]
+    ],
+    "prefer_safe": true,
+    "cast_at_level": null
+   }
+  }
+ },
+ {
+  "kind": "command",
+  "seat_id": "amber",
+  "request": {
+   "command_number": 1,
+   "actor_uuid": "7ca1c9db-963b-4484-8235-004d2d8ed76d",
+   "state_revision": "e1754505-5b1f-4a06-a5e7-02b00f9d8a83",
+   "intent": {
+    "kind": "execute_selection",
+    "discovery_generation": 1,
+    "selection": {
+     "action_index": 21,
+     "target_indices": [],
+     "extra_target_positions": [
+      [
+       3,
+       12
+      ]
+     ],
+     "prefer_safe": true,
+     "cast_at_level": null
+    }
+   }
+  }
+ },
+ {
+  "kind": "command",
+  "seat_id": "amber",
+  "request": {
+   "command_number": 1,
+   "actor_uuid": "7ca1c9db-963b-4484-8235-004d2d8ed76d",
+   "state_revision": "c727d826-c9a1-4c87-8adf-4b27634cc4ef",
+   "intent": {
+    "kind": "end_turn"
+   }
+  }
+ },
+ {
+  "kind": "advance"
+ },
+ {
+  "kind": "choices",
+  "seat_id": "amber",
+  "request": {
+   "actor_uuid": "6236708c-3e4b-43ad-8586-7fa70f0d0ed4",
+   "state_revision": "2b8dabe0-3ffb-4c21-8cea-96659e91bd31",
+   "force_attack": false,
+   "correlation_id": "e394ae4e-a740-403f-a948-2b48859bb001"
+  }
+ },
+ {
+  "kind": "preview",
+  "seat_id": "amber",
+  "request": {
+   "actor_uuid": "6236708c-3e4b-43ad-8586-7fa70f0d0ed4",
+   "state_revision": "2b8dabe0-3ffb-4c21-8cea-96659e91bd31",
+   "discovery_generation": 2,
+   "correlation_id": "41007df3-3a73-4f86-8257-c63e395484a6",
+   "selection": {
+    "action_index": 1,
+    "target_indices": [
+     1
+    ],
+    "extra_target_positions": [],
+    "prefer_safe": true,
+    "cast_at_level": null
+   }
+  }
+ },
+ {
+  "kind": "command",
+  "seat_id": "amber",
+  "request": {
+   "command_number": 1,
+   "actor_uuid": "6236708c-3e4b-43ad-8586-7fa70f0d0ed4",
+   "state_revision": "2b8dabe0-3ffb-4c21-8cea-96659e91bd31",
+   "intent": {
+    "kind": "execute_selection",
+    "discovery_generation": 2,
+    "selection": {
+     "action_index": 1,
+     "target_indices": [
+      1
+     ],
+     "extra_target_positions": [],
+     "prefer_safe": true,
+     "cast_at_level": null
+    }
+   }
+  }
+ },
+ {
+  "kind": "command",
+  "seat_id": "amber",
+  "request": {
+   "command_number": 1,
+   "actor_uuid": "6236708c-3e4b-43ad-8586-7fa70f0d0ed4",
+   "state_revision": "998051bc-71af-49a5-ab9f-bb5c669976e3",
+   "intent": {
+    "kind": "end_turn"
+   }
+  }
+ },
+ {
+  "kind": "advance"
+ },
+ {
+  "kind": "choices",
+  "seat_id": "amber",
+  "request": {
+   "actor_uuid": "75f63f37-3e7c-4129-869c-4ac602e1b990",
+   "state_revision": "9199a86e-2960-4ebc-a554-5b8516a26db3",
+   "force_attack": false,
+   "correlation_id": "948ea168-5d40-4cb1-862d-b32c7cdc06bb"
+  }
+ },
+ {
+  "kind": "preview",
+  "seat_id": "amber",
+  "request": {
+   "actor_uuid": "75f63f37-3e7c-4129-869c-4ac602e1b990",
+   "state_revision": "9199a86e-2960-4ebc-a554-5b8516a26db3",
+   "discovery_generation": 3,
+   "correlation_id": "3fadbaad-08d6-464c-938b-570a8a453d2f",
+   "selection": {
+    "action_index": 21,
+    "target_indices": [],
+    "extra_target_positions": [
+     [
+      11,
+      12
+     ]
+    ],
+    "prefer_safe": true,
+    "cast_at_level": null
+   }
+  }
+ },
+ {
+  "kind": "command",
+  "seat_id": "amber",
+  "request": {
+   "command_number": 1,
+   "actor_uuid": "75f63f37-3e7c-4129-869c-4ac602e1b990",
+   "state_revision": "9199a86e-2960-4ebc-a554-5b8516a26db3",
+   "intent": {
+    "kind": "execute_selection",
+    "discovery_generation": 3,
+    "selection": {
+     "action_index": 21,
+     "target_indices": [],
+     "extra_target_positions": [
+      [
+       11,
+       12
+      ]
+     ],
+     "prefer_safe": true,
+     "cast_at_level": null
+    }
+   }
+  }
+ },
+ {
+  "kind": "command",
+  "seat_id": "amber",
+  "request": {
+   "command_number": 1,
+   "actor_uuid": "75f63f37-3e7c-4129-869c-4ac602e1b990",
+   "state_revision": "9279ac22-2e19-4883-a993-1e51ba83b070",
+   "intent": {
+    "kind": "end_turn"
+   }
+  }
+ },
+ {
+  "kind": "advance"
+ },
+ {
+  "kind": "command",
+  "seat_id": "amber",
+  "request": {
+   "command_number": 1,
+   "actor_uuid": "199fdb0c-9965-41e9-a318-83e2fc5cbf17",
+   "state_revision": "81705f09-d4eb-4fc7-986a-3f047de36036",
+   "intent": {
+    "kind": "end_turn"
+   }
+  }
+ },
+ {
+  "kind": "advance"
+ },
+ {
+  "kind": "command",
+  "seat_id": "blue",
+  "request": {
+   "command_number": 1,
+   "actor_uuid": "495af401-d3f9-47ff-a0c6-2a0ae98c0ba2",
+   "state_revision": "c682e80d-4f83-4768-9fc5-2dd84ce65962",
+   "intent": {
+    "kind": "end_turn"
+   }
+  }
+ },
+ {
+  "kind": "advance"
+ },
+ {
+  "kind": "command",
+  "seat_id": "amber",
+  "request": {
+   "command_number": 1,
+   "actor_uuid": "7ca1c9db-963b-4484-8235-004d2d8ed76d",
+   "state_revision": "d16e7624-c27a-4acc-8ab2-b238dc133c92",
+   "intent": {
+    "kind": "end_turn"
+   }
+  }
+ },
+ {
+  "kind": "advance"
+ },
+ {
+  "kind": "command",
+  "seat_id": "amber",
+  "request": {
+   "command_number": 1,
+   "actor_uuid": "6236708c-3e4b-43ad-8586-7fa70f0d0ed4",
+   "state_revision": "c81938ab-381f-4d29-af40-8520109939ba",
+   "intent": {
+    "kind": "end_turn"
+   }
+  }
+ },
+ {
+  "kind": "advance"
+ },
+ {
+  "kind": "command",
+  "seat_id": "amber",
+  "request": {
+   "command_number": 1,
+   "actor_uuid": "75f63f37-3e7c-4129-869c-4ac602e1b990",
+   "state_revision": "129aefce-2593-4a20-9f60-3b60b2edfa14",
+   "intent": {
+    "kind": "end_turn"
+   }
+  }
+ },
+ {
+  "kind": "advance"
+ },
+ {
+  "kind": "command",
+  "seat_id": "amber",
+  "request": {
+   "command_number": 1,
+   "actor_uuid": "199fdb0c-9965-41e9-a318-83e2fc5cbf17",
+   "state_revision": "870fd1c8-331e-4202-9ad4-5ad9e7e6bb66",
+   "intent": {
+    "kind": "end_turn"
+   }
+  }
+ },
+ {
+  "kind": "advance"
+ },
+ {
+  "kind": "choices",
+  "seat_id": "blue",
+  "request": {
+   "actor_uuid": "495af401-d3f9-47ff-a0c6-2a0ae98c0ba2",
+   "state_revision": "de86d97e-2eed-4ec6-acc3-064b178d18cc",
+   "force_attack": false,
+   "correlation_id": "80934a02-bcc3-4e8c-926a-7cb44aa43e1b"
+  }
+ },
+ {
+  "kind": "preview",
+  "seat_id": "blue",
+  "request": {
+   "actor_uuid": "495af401-d3f9-47ff-a0c6-2a0ae98c0ba2",
+   "state_revision": "de86d97e-2eed-4ec6-acc3-064b178d18cc",
+   "discovery_generation": 1,
+   "correlation_id": "8b2aa5f4-812c-4c33-8a46-e5cce97e1ef6",
+   "selection": {
+    "action_index": 20,
+    "target_indices": [],
+    "extra_target_positions": [
+     [
+      3,
+      7
+     ]
+    ],
+    "prefer_safe": true,
+    "cast_at_level": null
+   }
+  }
+ },
+ {
+  "kind": "command",
+  "seat_id": "blue",
+  "request": {
+   "command_number": 1,
+   "actor_uuid": "495af401-d3f9-47ff-a0c6-2a0ae98c0ba2",
+   "state_revision": "de86d97e-2eed-4ec6-acc3-064b178d18cc",
+   "intent": {
+    "kind": "execute_selection",
+    "discovery_generation": 1,
+    "selection": {
+     "action_index": 20,
+     "target_indices": [],
+     "extra_target_positions": [
+      [
+       3,
+       7
+      ]
+     ],
+     "prefer_safe": true,
+     "cast_at_level": null
+    }
+   }
+  }
+ }
+]

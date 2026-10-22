@@ -56,9 +56,12 @@ static func capture_delta(target:Dictionary,node:Dictionary,bodies:Array,update:
             if fact.get(field)!=null:identities[fact[field]]=true
         if fact.kind=="actor_change":
             for change in fact.get("actors",[]):identities[change.actor_uuid]=true
-        if fact.kind in ["sensory","spatial"]:
+        if fact.kind in ["sensory","spatial"] or (fact.kind=="audience" and fact.get("sensory")!=null):
             delta.set.senses=target.senses
             for field in ["entity_members","object_contact_members","effect_members","light_sources","remembered_effects","spatial_content"]:delta.set[field]=target[field].duplicate()
+        if fact.kind=="audience":
+            delta.set.audience=target.audience;delta.set.hud_snapshot=target.hud_snapshot
+            for field in ["entity_members","object_contact_members","effect_members","object_members"]:delta.set[field]=target[field].duplicate()
         if fact.kind=="turn":delta.set.current_actor_uuid=target.current_actor_uuid;delta.set.round_number=target.round_number
         if fact.kind=="spatial" and fact.get("entity_uuid")!=null and target.spatial_commit_cursors.has(fact.entity_uuid):delta.spatial_commit_cursors[fact.entity_uuid]=target.spatial_commit_cursors[fact.entity_uuid]
     for identity in identities:

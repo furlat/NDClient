@@ -4,10 +4,13 @@ const Reducer=preload("res://sdk/reducer.gd")
 const Cells=preload("res://sdk/fold_cells.gd")
 const Audience=preload("res://sdk/audience.gd")
 const Compiler=preload("res://presentation/compiler.gd")
-const ROOT="res://tests/fixtures/schema16/fold/"
+var fixture_root="res://tests/fixtures/schema16/fold/"
 var passed=0
 var failures:Array=[]
-func _initialize()->void:call_deferred("run")
+func _initialize()->void:
+    for argument in OS.get_cmdline_user_args():
+        if argument.begins_with("--fixture-root="):fixture_root=argument.trim_prefix("--fixture-root=")
+    call_deferred("run")
 func check(value:bool,message:String)->void:
     if value:passed+=1
     else:failures.append(message);print("FAIL "+message)
@@ -79,9 +82,9 @@ func fold(state:Dictionary,input:Dictionary,world_context:Dictionary={})->Dictio
             var actor:Dictionary=state.actors[identity].duplicate();actor.last_visual_position=contacts[identity].position;state.actors[identity]=actor
     return Reducer.success(state)
 func _document(prefix:String,family:String="")->Dictionary:
-    for name in DirAccess.get_files_at(ROOT):
+    for name in DirAccess.get_files_at(fixture_root):
         if name.begins_with(prefix):
-            var document:Dictionary=JSON.parse_string(FileAccess.get_file_as_string(ROOT+name))
+            var document:Dictionary=JSON.parse_string(FileAccess.get_file_as_string(fixture_root+name))
             if family.is_empty() or document.family==family:return document
     return {}
 func error_cases()->void:
@@ -237,9 +240,9 @@ func attack_source_cases()->void:
         check(result.ok and result.value.actors[actor].visual_loadout.active_weapon_set==sample[2],"Actual AttackFact source selects reference stance without a synthetic weapon_set field: "+sample[0]+" "+sample[1])
 
 func run()->void:
-    var index:Dictionary=JSON.parse_string(FileAccess.get_file_as_string(ROOT+"index.json"));check(index.fixtures.size()==32,"All 32 reference vector files are included")
+    var index:Dictionary=JSON.parse_string(FileAccess.get_file_as_string(fixture_root+"index.json"));check(index.fixtures.size()==32,"All 32 reference vector files are included")
     for name in index.fixtures:
-        var document:Dictionary=JSON.parse_string(FileAccess.get_file_as_string(ROOT+name));var state:Dictionary=document.initial.duplicate(true)
+        var document:Dictionary=JSON.parse_string(FileAccess.get_file_as_string(fixture_root+name));var state:Dictionary=document.initial.duplicate(true)
         if document.family=="world":indexed_world_vectors(document,name)
         for i in range(document.steps.size()):
             var step:Dictionary=document.steps[i];var prior=state.duplicate(true);var result=fold(state,step.input)

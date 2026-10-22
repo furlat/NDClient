@@ -2,8 +2,9 @@ extends SceneTree
 ## Exact current-server bytes, durable publication and independently replayed prefixes.
 const Journal=preload("res://sdk/journal.gd")
 const Protocol=preload("res://sdk/protocol.gd")
-const FIXTURE="res://tests/fixtures/schema16/current-production-0c/fire-bolt/amber"
+const FIXTURE="res://tests/fixtures/schema18/current-production/fire-bolt/amber"
 const ARCHIVED="res://tests/fixtures/schema16/scenarios/door/amber"
+const PREVIOUS="res://tests/fixtures/schema16/current-production-0c/fire-bolt/amber"
 var failures:Array=[]
 var checks=0
 func check(value:bool,label:String)->void:
@@ -33,7 +34,7 @@ func recorded_admission(path:String,initial:Dictionary)->void:
         cached.protocol=supported
         var accepted:Dictionary=cached.decode_record(0,raw(0))
         check(accepted.ok and accepted.value==initial,"Restored current contract admits unchanged initialization: "+control.label)
-    for original in [{"label":"current","path":path},{"label":"archived","path":ARCHIVED}]:
+    for original in [{"label":"current","path":path},{"label":"previous","path":PREVIOUS},{"label":"archived","path":ARCHIVED}]:
         var reader=Journal.new()
         check(reader.open(original.path,true,false).ok,"Open exact "+original.label+" original without replay")
         var bytes:PackedByteArray=FileAccess.get_file_as_bytes(original.path.path_join("0000000000000000.json"))

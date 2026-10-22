@@ -1,0 +1,118 @@
+{
+ "ok": true,
+ "failure": null,
+ "commands": 4,
+ "tracked": null,
+ "gaps": [],
+ "notes": [],
+ "names": {
+  "51f6a2d9-1606-4059-a3b5-58deeb3ae15e": "Amber caster",
+  "99d13161-b94e-4ffb-8122-d6c05e1f921f": "Amber ally",
+  "aa063cba-122f-4ec8-a79f-b2de4a9d6001": "Blue target",
+  "ffdfc193-cd2d-47da-8ad6-68fe135da400": "Blue second target"
+ },
+ "roles": {
+  "caster": "Amber caster",
+  "ally": "Amber ally",
+  "target": "Blue target",
+  "second_target": "Blue second target"
+ },
+ "sequence": [
+  "end_turn \u00b7 Amber ally",
+  "end_turn \u00b7 Blue second target",
+  "end_turn \u00b7 Blue target",
+  "spell.fire_bolt \u00b7 Amber caster"
+ ],
+ "fact_witnesses": [],
+ "summary": {
+  "facts": {
+   "turn": 7,
+   "actor_change": 1,
+   "damage": 2,
+   "spell": 1
+  },
+  "behaviors": {
+   "spell.fire_bolt": 1
+  },
+  "conditions": [],
+  "ended_conditions": [],
+  "positive_applied_damage_types": [
+   "Fire"
+  ],
+  "item_effects": [],
+  "ended_item_effects": [],
+  "item_effect_memberships": [],
+  "item_attacks": []
+ },
+ "moments": [
+  {
+   "sequence": 8,
+   "occurrence": 67,
+   "lineage": 41,
+   "event_offset": 4,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 8,
+   "occurrence": 68,
+   "lineage": 41,
+   "event_offset": 5,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 8,
+   "occurrence": 69,
+   "lineage": 41,
+   "event_offset": 6,
+   "kind": "spell",
+   "label": "spell spell.fire_bolt",
+   "faction": "amber"
+  },
+  {
+   "sequence": 8,
+   "occurrence": 67,
+   "lineage": 41,
+   "event_offset": 4,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 8,
+   "occurrence": 68,
+   "lineage": 41,
+   "event_offset": 5,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 8,
+   "occurrence": 69,
+   "lineage": 41,
+   "event_offset": 6,
+   "kind": "spell",
+   "label": "spell spell.fire_bolt",
+   "faction": "blue"
+  }
+ ],
+ "perspectives": [
+  "amber",
+  "blue"
+ ],
+ "positive_applied_damage_types": [
+  "Fire"
+ ],
+ "engine": {
+  "path": "/home/tommaso/.cache/ndclient/dnd_engine-ad5a3220c7",
+  "commit": "ad5a3220c7f05e8ec08778f5487bce6e167db051",
+  "protocol_version": 1,
+  "player_schema_version": 18,
+  "schema_digest": "8eb07a2f102b0549f83fc6556b65359a3f061bcb5d71b1a1aa39973ba5c8867f"
+ },
+ "sdk": {}
+}

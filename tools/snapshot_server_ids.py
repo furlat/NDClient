@@ -20,8 +20,8 @@ import subprocess
 import sys
 import uuid
 
-DEFAULT_ENGINE = "/home/tommaso/.cache/ndclient/dnd_engine-9f81d5267"
-DEFAULT_PYTHON = "/home/tommaso/.cache/dnd-engine/npc-mechanics-venv/bin/python"
+DEFAULT_ENGINE = "/home/tommaso/.cache/ndclient/dnd_engine-bedc3d92dc"
+DEFAULT_PYTHON = "/home/tommaso/.cache/dnd-engine/venv/bin/python"
 DEFAULT_OUTPUT = "authoring/server_ids.json"
 
 # Item ids the engine creates while a spell or object runs; no builder owns them.
@@ -483,7 +483,7 @@ def extract(engine):
 def main():
     parser = argparse.ArgumentParser(description="Snapshot every content id the dnd_engine server can send.")
     parser.add_argument("--engine", default=DEFAULT_ENGINE)
-    parser.add_argument("--python", help="engine interpreter (default: its npc-mechanics venv, else ENGINE/.venv)")
+    parser.add_argument("--python", help="engine interpreter (default: cached engine venv, else ENGINE/.venv)")
     parser.add_argument("--output", default=DEFAULT_OUTPUT, help="path relative to the client root, or - for stdout")
     parser.add_argument("--extract", action="store_true", help=argparse.SUPPRESS)
     args = parser.parse_args()
@@ -497,7 +497,8 @@ def main():
     python = args.python or next((path for path in (DEFAULT_PYTHON, os.path.join(engine, ".venv", "bin", "python"))
                                   if os.path.exists(path)), sys.executable)
     result = subprocess.run([python, "-B", os.path.abspath(__file__), "--extract", "--engine", engine],
-                            cwd=engine, env=dict(os.environ, PYTHONDONTWRITEBYTECODE="1"),
+                            cwd=engine, env=dict(os.environ, PYTHONDONTWRITEBYTECODE="1",
+                                PYTHONPATH=os.pathsep.join((engine, os.path.join(engine, "sdk/python/src")))),
                             capture_output=True, text=True)
     if result.returncode:
         sys.stderr.write(result.stderr)

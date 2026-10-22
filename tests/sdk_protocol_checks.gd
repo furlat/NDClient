@@ -28,6 +28,13 @@ func _init() -> void:
 	var identity: Dictionary = p.identity.duplicate(true)
 	check(p.check_identity(identity).ok, "exact identity")
 	check(p.check_identity({"schema_digest":identity.schema_digest}).ok,"Current identity permits documented omitted constant defaults")
+	check(identity.player_schema_version==18,"Live admission uses the delivered schema18 producer")
+	for paths in Protocol.RECORDED_CONTRACTS:
+		var archived=Protocol.new(paths[0],paths[1])
+		check(archived.setup_error.is_empty(),"Archived producer schema remains readable")
+		check(not p.check_identity(archived.identity).ok,"Live admission refuses an archived producer identity")
+		check(archived.check_identity({"schema_digest":archived.identity.schema_digest}).ok,"Archived omitted defaults use that recording's own schema version")
+		check(not archived.decode_server("BootstrapResponse",'{}'.to_utf8_buffer()).ok,"Archived protocol cannot become a live transport decoder")
 	var packed={"x0":-1,"y0":2,"width":1,"height":1,"bits":"AQ=="}
 	check(p.validate("CellMask",packed).ok,"Current packed cells admit base64url")
 	packed.bits="!bad"

@@ -24,14 +24,14 @@ static func _same_engine(expected:Dictionary,actual:Dictionary)->bool:
     for field in ["commit","protocol_version","player_schema_version","schema_digest"]:
         if expected.get(field)==null or actual.get(field)==null or expected[field]!=actual[field]:return false
     return true
-## Playback eligibility follows the exact public wire contract. Commit identity
+## Playback eligibility follows current or explicitly archived wire contracts. Commit identity
 ## remains a separate qualification fact; opening an original still uses the
 ## unchanged strict Journal admission and never updates its captured facts.
 static func _same_wire(expected:Dictionary,actual:Dictionary)->bool:
     for field in ["protocol_version","player_schema_version","schema_digest"]:
         if expected.get(field)==null or actual.get(field)==null or expected[field]!=actual[field]:return false
     return true
-static func _record(original:Dictionary,engine:Dictionary,expected:Dictionary,check_files:bool)->Dictionary:
+static func _record(original:Dictionary,engine:Dictionary,expected:Dictionary,check_files:bool,contracts:Array)->Dictionary:
     var result=original.duplicate();var kind:String=result.get("kind","interaction");result.capability=category(kind)
     result.label=result.get("title",result.get("label",result.id));result.interaction=str(result.get("family",kind.capitalize()));result.perspectives=[]
     for faction in result.get("journals",{}):
@@ -43,7 +43,7 @@ static func _record(original:Dictionary,engine:Dictionary,expected:Dictionary,ch
     result.engine_status="current" if _same_engine(expected,result.capture_engine) else "historical_or_unverified"
     result.recording_status=state
     if not result.get("errors",[]).is_empty():state="failed"
-    elif state=="recorded" and not _same_wire(expected,result.capture_engine):state="stale"
+    elif state=="recorded" and not contracts.any(func(identity):return _same_wire(identity,result.capture_engine)):state="stale"
     elif state=="recorded" and result.perspectives.is_empty():state="missing_journal"
     result.scenario_status=state;result.ready=state=="recorded" and not result.perspectives.is_empty()
     result.interval=result.get("interval",{});result.descriptor=result.get("scenario","");result.qualification="studio_checked" if result.get("studio_checked",false) else "not_checked";result.checks=result.get("checks",0)
@@ -96,8 +96,10 @@ static func _evidence_fields(owner:Dictionary,witnesses:Array)->void:
 
 static func records(index:Dictionary,snapshot:Dictionary,check_files:bool=true,evidence:Dictionary={},package:String="")->Array:
     var result:Array=[]
+    var contracts:Array=[snapshot.get("header",{})]
+    for paths in Journal.Protocol.RECORDED_CONTRACTS:contracts.append(_read(paths[1]))
     for row in index.get("cases",[]):
-        var record=_record(row,index.get("engine",{}),snapshot.get("header",{}),check_files)
+        var record=_record(row,index.get("engine",{}),snapshot.get("header",{}),check_files,contracts)
         var witnesses:Array=[]
         for original in evidence.get("cases",{}).get(record.id,[]):witnesses.append(_witness(original,snapshot.get("header",{}),package))
         _evidence_fields(record,witnesses)

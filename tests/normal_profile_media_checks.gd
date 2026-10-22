@@ -4,7 +4,7 @@ const Geometry=preload("res://presentation/character_geometry.gd")
 const Characters=preload("res://presentation/characters.gd")
 const Media=preload("res://presentation/media_warmup.gd")
 const Settings=preload("res://presentation/render_settings.gd")
-const Protocol=preload("res://sdk/protocol.gd")
+const Journal=preload("res://sdk/journal.gd")
 const Reducer=preload("res://sdk/reducer.gd")
 const Fixtures=preload("res://tests/recording_fixtures.gd")
 class ProfilePlayer extends "res://play.gd":
@@ -25,7 +25,10 @@ func run() -> void:
     var recording=Fixtures.journal("gallery")
     for arg in OS.get_cmdline_user_args():
         if arg.begins_with("--recording="):recording=arg.trim_prefix("--recording=")
-    var protocol=Protocol.new()
+    var journal=Journal.new();var opened:Dictionary=journal.open(recording,true,false)
+    check(opened.ok,"Original journal selects its recorded protocol")
+    if not opened.ok:quit(1);return
+    var protocol=journal.protocol
     var decoded=protocol.decode("InitializationResponse",FileAccess.get_file_as_bytes(recording.path_join("0000000000000000.json")))
     check(decoded.ok,"Actual initialization passes strict SDK admission")
     if not decoded.ok:quit(1);return

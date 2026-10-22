@@ -1,5 +1,5 @@
 extends SceneTree
-## Real production resources + unchanged current journals. Option identity is
+## Real production resources + unchanged original journals. Option identity is
 ## routing evidence, not seventeen new effects or visual acceptance.
 const Spells=preload("res://presentation/native_spell_authoring.gd")
 const Sources=preload("res://presentation/native_presentation_sources.gd")
@@ -7,7 +7,6 @@ const Build=preload("res://tools/presentation_build/abilities.gd")
 const Common=preload("res://tools/presentation_build/common.gd")
 const Recording=preload("res://studio/recording.gd")
 const Journal=preload("res://sdk/journal.gd")
-const Protocol=preload("res://sdk/protocol.gd")
 const Occurrences=preload("res://presentation/occurrences.gd")
 const Persistent=preload("res://presentation/native_persistent.gd")
 const Compare=preload("res://tests/schema16_fold_vectors_checks.gd")
@@ -98,11 +97,10 @@ func original(name:String,seat:String,source:Dictionary,cache:Dictionary,overrid
         for event in wrapped.group.events:traces[str(event.event_uuid)]=event
         tracks.append_array(wrapped.group.actor_tracks.filter(func(track):return track.get("activity")=="cast"))
     var actual:int=0;var sparse:int=0;var declarations:Dictionary={}
-    var protocol:RefCounted=Protocol.new()
     var files:PackedStringArray=DirAccess.get_files_at(directory);files.sort()
     for file in files:
         if file.get_basename().length()!=16 or not file.get_basename().is_valid_int() or int(file.get_basename())==0:continue
-        var decoded:Dictionary=protocol.decode_server("PlayerOperation",FileAccess.get_file_as_bytes(directory.path_join(file)))
+        var decoded:Dictionary=expected.decode_record(int(file.get_basename()),FileAccess.get_file_as_bytes(directory.path_join(file)))
         check(decoded.ok,label+" original SDK admits "+file)
         if not decoded.ok:return
         var frozen:PackedByteArray=var_to_bytes(decoded.value)

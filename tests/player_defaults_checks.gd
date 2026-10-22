@@ -5,7 +5,7 @@ const Session = preload("res://presentation/session.gd")
 const Peer = preload("res://tests/sdk_transport_peer.gd")
 const Player = preload("res://play.gd")
 const Timeline = preload("res://presentation/timeline.gd")
-const Fixtures = preload("res://tests/recording_fixtures.gd")
+const CURRENT_JOURNAL = "res://tests/fixtures/schema18/current-production/fire-bolt/amber"
 var failures: Array = []
 var checks = 0
 func check(value: bool, label: String) -> void:
@@ -54,12 +54,13 @@ func run() -> void:
     DirAccess.remove_absolute(directory.path_join("0000000000000000.json"))
     DirAccess.remove_absolute(directory)
     # A retained journal has later canonical state before the fresh follower
-    # replays initialization. Never expose that future state in frame zero.
+    # replays initialization. This is a live-follow duty, so retain genuine
+    # current-protocol originals. Never expose their future state in frame zero.
     var retained = "user://checks/retained-"+Session.uuid()
     DirAccess.make_dir_recursive_absolute(retained)
     for pair in [["initialization","0000000000000000"],["operation","0000000000000001"]]:
         var file = FileAccess.open(retained.path_join(pair[1]+".json"),FileAccess.WRITE)
-        file.store_buffer(FileAccess.get_file_as_bytes(Fixtures.current_journal("door").path_join(pair[1]+".json"))); file.close()
+        file.store_buffer(FileAccess.get_file_as_bytes(CURRENT_JOURNAL.path_join(pair[1]+".json"))); file.close()
     var restored = Session.new()
     check(restored.journal.open(retained,true).ok,"Restore a real two-packet retained journal")
     restored.protocol = restored.journal.protocol

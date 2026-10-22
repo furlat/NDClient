@@ -28,9 +28,9 @@ func run()->void:
     var count:int=0
     for seat in ["amber","blue"]:
         var raw:PackedByteArray=FileAccess.get_file_as_bytes(ROOT.path_join(seat+".json"))
-        var protocol:RefCounted=Protocol.new()
-        var decoded:Dictionary=protocol.decode_server("PlayerOperation",raw)
-        check(decoded.ok,seat+" original complete packet admits through current protocol")
+        var protocol:RefCounted=Protocol.new(Protocol.PRE_REVIEW_SCHEMA,Protocol.PRE_REVIEW_IDENTITY)
+        var decoded:Dictionary=protocol.decode_recorded("PlayerOperation",raw)
+        check(decoded.ok,seat+" original complete packet admits through its exact recorded protocol")
         if not decoded.ok:continue
         var packet:Dictionary=decoded.value
         check(packet.cursor.sequence==8,seat+" original packet cursor remains intact")

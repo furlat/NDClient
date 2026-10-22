@@ -275,11 +275,11 @@ static func _requirements(row: Dictionary, node: Dictionary, actor: Dictionary, 
         row.reasons=["canceled"];return
     if fact.is_empty(): row.reasons = ["fact_not_disclosed"]; return
     match row.kind:
-        "sensory":
-            # Schema16's indexed sensory rows are folded once by the SDK.
+        "sensory","audience":
+            # Indexed perception and control membership are folded once by the SDK.
             # Existing Recording spatial/light histories inspect the exact
             # commit after-values; the envelope creates no duplicate effect.
-            row.reasons=["sensory_publication_visuals_belong_to_disclosed_owners"]
+            row.reasons=["audience_publication_visuals_belong_to_disclosed_owners" if row.kind=="audience" else "sensory_publication_visuals_belong_to_disclosed_owners"]
         "movement": row.reasons = ["movement_container_visuals_belong_to_steps"]
         "step":
             if not fact.get("committed",false): row.components = []; row.reasons = ["uncommitted_step"]; return

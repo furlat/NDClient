@@ -29,6 +29,27 @@ static func point_set(points: Array) -> Dictionary:
 static func sorted_points(values: Dictionary) -> Array:
     var result:Array=values.values();result.sort_custom(func(a,b):return a[1]<b[1] if a[0]==b[0] else a[0]<b[0]);return result
 
+static func _point_lower_bound(points:Array,point:Array)->int:
+    var first:int=0;var last:int=points.size()
+    while first<last:
+        var middle:int=(first+last)>>1;var held:Array=points[middle]
+        if held[0]<point[0] or (held[0]==point[0] and held[1]<point[1]):first=middle+1
+        else:last=middle
+    return first
+
+static func updated_points(prior:Array,members:Dictionary,added:Array,removed:Array)->Array:
+    # The caller owns this membership fork. Published point arrays remain
+    # immutable; small changes use native array moves instead of a full sort.
+    var incremental:bool=(added.size()+removed.size())*8<prior.size()
+    var points:Array=prior.duplicate() if incremental else []
+    for point in removed:
+        if members.erase(key(point)) and incremental:points.remove_at(_point_lower_bound(points,point))
+    for point in added:
+        var identity:String=key(point)
+        if incremental and not members.has(identity):points.insert(_point_lower_bound(points,point),point)
+        members[identity]=point
+    return points if incremental else sorted_points(members)
+
 static func mask(points: Array) -> Dictionary:
     if points.is_empty():return EMPTY.duplicate()
     var low:Array=points[0].duplicate();var high:Array=low.duplicate()
@@ -102,7 +123,21 @@ static func value_indices(prior: Array, points: Array) -> PackedInt64Array:
         else:next+=1
     return result
 
-static func reindexed_values(prior: Dictionary, prior_count: int, points: Array, changed: Array, cell_mask: Dictionary, indices: PackedInt64Array) -> Dictionary:
+static func value_edits(prior:Array,points:Array,added:Array,removed:Array)->Dictionary:
+    # Use the net population change: a removed then re-added cell retains its
+    # old byte unless a value row explicitly replaces it.
+    var erased:Dictionary={};var inserted:Dictionary={}
+    for point in removed:
+        var old:int=_point_lower_bound(prior,point);var next:int=_point_lower_bound(points,point)
+        if old<prior.size() and prior[old]==point and (next==points.size() or points[next]!=point):erased[old]=true
+    for point in added:
+        var old:int=_point_lower_bound(prior,point);var next:int=_point_lower_bound(points,point)
+        if next<points.size() and points[next]==point and (old==prior.size() or prior[old]!=point):inserted[next]=true
+    var removals:Array=erased.keys();removals.sort();removals.reverse()
+    var insertions:Array=inserted.keys();insertions.sort()
+    return {"removed":removals,"added":insertions}
+
+static func reindexed_values(prior: Dictionary, prior_count: int, points: Array, changed: Array, cell_mask: Dictionary, indices: PackedInt64Array, edits:Dictionary={}) -> Dictionary:
     var source:PackedByteArray=bytes(prior.get("values",""))
     # Preserve the old helper boundary for malformed short byte populations;
     # the fast merge must not conceal an invalid old row by dropping its cell.
@@ -110,6 +145,16 @@ static func reindexed_values(prior: Dictionary, prior_count: int, points: Array,
         var held:Dictionary=values_map(prior)
         for row in changed:held[key(row.position)]=row.value
         return values(points,held,cell_mask)
+    if not edits.is_empty():
+        # Decoding owns these bytes. Native moves still copy population-sized
+        # memory, but small changes need no scripted full-column projection.
+        source.resize(prior_count)
+        for index in edits.removed:source.remove_at(index)
+        for index in edits.added:source.insert(index,0)
+        for row in changed:
+            var index:int=_point_lower_bound(points,row.position)
+            if index<points.size() and points[index]==row.position:source[index]=int(row.value)
+        return {"cells":cell_mask,"values":encoded(source)}
     var patches:Dictionary={}
     # Arrays preserve the wire's full integer coordinates. Vector2i would
     # truncate them, while string keys would repeat the old hot-path work.

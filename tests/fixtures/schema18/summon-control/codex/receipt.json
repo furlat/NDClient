@@ -1,0 +1,61 @@
+{
+  "protocol": {
+    "protocol_version": 1,
+    "player_schema_version": 18,
+    "schema_digest": "8eb07a2f102b0549f83fc6556b65359a3f061bcb5d71b1a1aa39973ba5c8867f"
+  },
+  "controller": "codex",
+  "seed": 2,
+  "journey": [
+    "cast_conjure_animals",
+    "end_caster_turn",
+    "summon_choices",
+    "summon_move",
+    "summon_attack",
+    "end_summon_turn",
+    "return_to_caster",
+    "drop_concentration",
+    "retire_summon"
+  ],
+  "seats": {
+    "amber": {
+      "records": 14,
+      "final_cursor": {
+        "game_id": "summon-control-handoff",
+        "game_epoch": "7db1bab0-f52e-4f41-9876-3c276fd16a86",
+        "audience_id": "4dc0f206-2d1a-42ff-b6c4-2f06d2b65962",
+        "sequence": 13
+      },
+      "final_audience": {
+        "controlled": [
+          "e9b3fa11-4e66-4f6b-9d8f-848cdca45f98"
+        ],
+        "observers": [
+          "e9b3fa11-4e66-4f6b-9d8f-848cdca45f98"
+        ],
+        "revision": 2
+      }
+    },
+    "blue": {
+      "records": 14,
+      "final_cursor": {
+        "game_id": "summon-control-handoff",
+        "game_epoch": "7db1bab0-f52e-4f41-9876-3c276fd16a86",
+        "audience_id": "1edbcef3-1b61-46da-8174-d1275ae12f45",
+        "sequence": 13
+      },
+      "final_audience": {
+        "controlled": [
+          "98aab428-04bb-4013-a27d-eab72cf68e41",
+          "9fa48d51-37b6-45e0-ab40-c29647ff64b9"
+        ],
+        "observers": [
+          "98aab428-04bb-4013-a27d-eab72cf68e41",
+          "9fa48d51-37b6-45e0-ab40-c29647ff64b9"
+        ],
+        "revision": 0
+      }
+    }
+  },
+  "reference_reducer": "dnd.player.reduction.reduce_initialization / reduce_operation on serialized records"
+}
