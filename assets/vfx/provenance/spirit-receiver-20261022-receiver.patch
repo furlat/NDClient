@@ -1,0 +1,62 @@
+--- a/presentation/native_area_mask.gd
++++ b/presentation/native_area_mask.gd
+@@ -1,4 +1,7 @@
+ extends RefCounted
++const MaskReadiness=preload("res://assets/vfx/extensions/production-review-20261020/sources/7dd1897cdd5ee8a903b9/source_readiness.gd")
++const MaskProgramBank=preload("res://assets/vfx/extensions/spirit-receiver-20261022/sources/832f814a9a2922d948a8/bank.gd")
++const MASK_BANKS=["res://assets/vfx/extensions/spirit-receiver-20261022/sources/394048fa31fabc8bbabf/radiant-mask-bank.tres","res://assets/vfx/extensions/spirit-receiver-20261022/sources/04436be2e512da351b5b/necrotic-mask-bank.tres"]
+ ## A disclosed spatial-effect footprint clips its isolated native geometry.
+ ## This is coverage admission, not another light, surface or gameplay mask.
+ const DECLARATIONS="\nuniform sampler2D native_area_cells:filter_nearest,repeat_disable;\nuniform vec2 native_area_origin=vec2(0.0);\nuniform vec2 native_area_size=vec2(1.0);\nvarying vec2 native_area_world;\n"
+@@ -17,6 +20,14 @@
+     return -1
+ 
+ static func _shader(original:Shader,shaders:Dictionary)->Shader:
++    if shaders.has(original):return shaders[original]
++    for path in MASK_BANKS:
++        var bank:Resource=MaskReadiness.resources.get(path)
++        if bank==null or bank.get_script()!=MaskProgramBank or not bank.interface_ready:continue
++        var prepared:Shader=bank.replacement(original)
++        if prepared!=null:
++            shaders[original]=prepared
++            return prepared
+     var code:String=original.code
+     if shaders.has(original):return shaders[original]
+     var functions=RegEx.new();functions.compile("void\\s+(vertex|fragment)\\s*\\(\\s*\\)\\s*\\{")
+@@ -37,9 +48,10 @@
+     if not has_vertex:adapted+="\nvoid vertex(){"+VERTEX+"}\n"
+     var shader=Shader.new();shader.code=adapted
+     # Replacing shader source must retain textures authored as shader defaults.
+-    for uniform in original.get_shader_uniform_list():
+-        if int(uniform.type)!=TYPE_OBJECT:continue
+-        var texture:Texture2D=original.get_default_texture_parameter(uniform.name)
++    # Shader.get_shader_uniform_list intentionally omits default-texture
++    # names. The raw native list retains those actual sampler names.
++    for uniform in RenderingServer.get_shader_parameter_list(original.get_rid()):
++        var texture:Texture=original.get_default_texture_parameter(uniform.name)
+         if texture!=null:shader.set_default_texture_parameter(uniform.name,texture)
+     shaders[original]=shader
+     return shader
+@@ -77,6 +89,22 @@
+             material.shader=shader
+             for uniform in values:material.set_shader_parameter(uniform,values[uniform])
+             state.materials.append(material)
++    # EffectPackage retains the actual Source handle here. Its declared
++    # materials include private RID draws that have no GeometryInstance3D.
++    for material in handle.get("inner",{}).get("materials",[]):
++        if not material is ShaderMaterial or material.shader==null:continue
++        if material.shader.get_mode()!=Shader.MODE_SPATIAL or seen.has(material):continue
++        seen[material]=true
++        var shader:Shader=_shader(material.shader,state.shaders)
++        if shader==null:
++            state.errors.append("native_area_declared_shader_unsupported");continue
++        var values:Dictionary={}
++        for uniform in material.shader.get_shader_uniform_list():
++            var value:Variant=material.get_shader_parameter(uniform.name)
++            if value!=null:values[uniform.name]=value
++        material.shader=shader
++        for uniform in values:material.set_shader_parameter(uniform,values[uniform])
++        state.materials.append(material)
+     if state.materials.is_empty():state.errors.append("native_area_no_supported_materials")
+     handle.area_mask=state
+ 

@@ -1,0 +1,190 @@
+{
+  "version": "runtime-bless-scene-admission-20261022-6ec912205315adbc",
+  "plan_sha256": "b13021c8439aeea19feaa26a038b61f2a5f98d69faf425f26766da7a5454784e",
+  "source_qualification": {
+    "schema": "factory.bless_scene_admission.qualification.native.v2",
+    "date": "2026-10-22",
+    "status": "Focused warm-dependency admission capability qualified; cold budget remains open.",
+    "source_capability_qualified": true,
+    "runtime_budget_pass": false,
+    "metadata_correction_applied_to_package": false,
+    "production_installed": false,
+    "engine": "Root-run official Windows Godot4.7.2 ed1daf0bf, Vulkan Forward+, RTX5090, requested144Hz.",
+    "engine_checks": 71,
+    "functional_failures": [],
+    "engine_errors": 0,
+    "engine_warnings": 0,
+    "process_exit_code": 1,
+    "process_exit_scope": "Root reported exit1; the unchanged executed fixture deliberately exits1 for the retained cost flag.",
+    "source_manifest": {
+      "path": "authoring/production-review-repair-20261022/bless_scene_admission/v1/source-manifest-v2.json",
+      "sha256": "a1400e5dc1d9aeb1d8770a98bc475fc051092e108d6b92988a991a9947461939",
+      "bytes": 3458
+    },
+    "request": {
+      "path": "authoring/production-review-repair-20261022/bless_scene_admission/v1/native-request-v2.json",
+      "sha256": "ea8859c04c3ed838f9ff5a98b613b2c5d645083697ab3a167a41af90af26d8f9",
+      "bytes": 476
+    },
+    "receipt": {
+      "path": "authoring/production-review-repair-20261022/bless_scene_admission/v1/native-v2.json",
+      "sha256": "1188387a5441fcd1bb8c767f3198c170b7b98569ccf0a9fda6d6cd115d3e6b0a",
+      "bytes": 26726
+    },
+    "log": {
+      "path": "authoring/production-review-repair-20261022/bless_scene_admission/v1/native-v2.log",
+      "sha256": "4d5dba0e2e6aca170319a8c41f63f718c6bf5e4c0930e00b68cc858dacc572fb",
+      "bytes": 206
+    },
+    "unchanged_local_and_staged_source_records": 10,
+    "unchanged_packaged_operand_records": 13,
+    "unchanged_index_sha256": "70c8124230ac17191c98f6ba472ceb77c12c2ab2c53e722882fdeb478aec81e9",
+    "scope": "Append only the existing prepared Scene to three existing warm lists. Actual receiving Admission snapshot and unchanged prepared constructors; not the complete EffectPackage/startup path.",
+    "scene": {
+      "path": "res://assets/vfx/conditions/condition_bless_retained_native/prepared.scn",
+      "cached_before_admission": false,
+      "loading_calls": 7,
+      "loading_calls_main_inclusive_sum_us": 218,
+      "loading_calls_main_inclusive_max_us": 53,
+      "admission_elapsed_including_draws_us": 48632,
+      "same_admitted_identity_at_all_three_births": true,
+      "timing_limit": "Elapsed includes frame/postdraw waiting; it is not CPU time or a complete scene-to-first-draw latency."
+    },
+    "clock_setup_us": 13358,
+    "cost_flags_retained": [
+      {
+        "limit_us": 2000,
+        "operation": "actual_clock_setup_before_warm_admission",
+        "us": 13358
+      }
+    ],
+    "rows": [
+      {
+        "clip_id": "conditions/retained/bless/application",
+        "constructor_us": 476,
+        "first_owner_input_and_sample_us": 5,
+        "phase": "application",
+        "positive_pixels": 941,
+        "retirement_checks_recorded_in_failures": true,
+        "scene_id": -9223371985600379355,
+        "resource_admission_calls": 42,
+        "resource_admission_main_sum_us": 1370,
+        "resource_admission_main_max_us": 76,
+        "material_admission_calls": 4,
+        "material_admission_main_sum_us": 86,
+        "material_admission_main_max_us": 34,
+        "completed_material_worker_elapsed_ms": 10.179
+      },
+      {
+        "clip_id": "conditions/retained/bless/sustain",
+        "constructor_us": 328,
+        "first_owner_input_and_sample_us": 4,
+        "phase": "sustain",
+        "positive_pixels": 1198,
+        "retirement_checks_recorded_in_failures": true,
+        "scene_id": -9223371985600379355,
+        "resource_admission_calls": 7,
+        "resource_admission_main_sum_us": 179,
+        "resource_admission_main_max_us": 44,
+        "material_admission_calls": 3,
+        "material_admission_main_sum_us": 76,
+        "material_admission_main_max_us": 40,
+        "completed_material_worker_elapsed_ms": 0.011
+      },
+      {
+        "clip_id": "conditions/retained/bless/removal",
+        "constructor_us": 310,
+        "first_owner_input_and_sample_us": 4,
+        "phase": "removal",
+        "positive_pixels": 1196,
+        "retirement_checks_recorded_in_failures": true,
+        "scene_id": -9223371985600379355,
+        "resource_admission_calls": 7,
+        "resource_admission_main_sum_us": 176,
+        "resource_admission_main_max_us": 44,
+        "material_admission_calls": 3,
+        "material_admission_main_sum_us": 63,
+        "material_admission_main_max_us": 33,
+        "completed_material_worker_elapsed_ms": 0.007
+      }
+    ],
+    "timing_scope": "Constructor includes actual make_component+tree admission/_ready. First owner input+sample is timed before positive readback. The three rows reuse the admitted Scene and original six prototype Materials. Worker elapsed is recorded separately and never added to inclusive main calls.",
+    "lifecycle": "All original two-draw owners have positive output, same-owner completed removal blanking, private owner/Material release and Clock-slot return. Actual Admission drains before test Scene/template cache release, two draws and successful Clock teardown.",
+    "limits": [
+      "No original native-phase immutable discovery or actor/startup prototype replay; no complete readiness/frame budget pass.",
+      "No uncached constructor control, paired speedup, old2497/304us ratio or observed production stall claim.",
+      "Positive/removal witness only; no original/candidate pixel-parity or human art approval claim.",
+      "V1 and the first V2 draft remain unexecuted historical source; no engine rerun or frozen-input edit by this qualifier."
+    ]
+  },
+  "source_receipt_sha256": "1188387a5441fcd1bb8c767f3198c170b7b98569ccf0a9fda6d6cd115d3e6b0a",
+  "source_runtime_operands": [
+    {
+      "path": "assets/vfx/conditions/condition_bless_retained_native/application.gd",
+      "sha256": "3c5df88964309cde73198983a417dad2b5869459a37c0ce0ba7c69ce51850c54",
+      "bytes": 610
+    },
+    {
+      "path": "assets/vfx/sources/8679a4c5cc4decb10599/application.tres",
+      "sha256": "cf155bc79dc07ba448f9fe39ac46fde6e36add71774705c5827a1c85c04faa88",
+      "bytes": 1497
+    },
+    {
+      "path": "assets/vfx/shared/resources/27aa63dc157c486b527b159ea0f415fdd58909442f319e9d9232599b1985e1f5.res",
+      "sha256": "5727826975085d9ef84d85be0cb5bdfd9c401e51302f90aebb6751c489bad670",
+      "bytes": 1177
+    },
+    {
+      "path": "assets/vfx/shared/resources/32625ef1b356d3be8ae2aa7810e2f939f65dae20b5729b3d4244bcab38f4f7ca.res",
+      "sha256": "462e448d5cc5e7834c17e46b8efda10128d7785875a6834d6a024913fdfcb28d",
+      "bytes": 435
+    },
+    {
+      "path": "assets/vfx/shared/resources/65472ccd8eb98c1ef25b7b6bdb7bca36a70e26d3d055fb8fad4de7abbf59f14d.res",
+      "sha256": "ec5a8e6cc9a970250cbc0441c4c2674d94cbb3a2bfed599ec31805d06454603f",
+      "bytes": 726
+    },
+    {
+      "path": "assets/vfx/shared/resources/68847e9feed367b94eca34cde7309d324b44ec2a72b508d3d1a45502468c7141.res",
+      "sha256": "71382476ff6482696328f04611acf004d14b74f63ad6f333eb26043898a044af",
+      "bytes": 797
+    },
+    {
+      "path": "assets/vfx/shared/resources/989171f496d6ce1610a12f305ba80becc824cb6f9108240b3f83cb7e7424ed6b.res",
+      "sha256": "50d118f446b7fabc074672745e3707c69a403b6a8222e6674192833d6aa5dea6",
+      "bytes": 792
+    },
+    {
+      "path": "assets/vfx/shared/resources/f553841a45e00470bec10aa7b5b6b05463d564ff7cbb2755711d92506798b28c.res",
+      "sha256": "b2013b31a14daff98b800c2372b6aa10f60d2b2e631c030f407234cb5a4eb093",
+      "bytes": 1177
+    },
+    {
+      "path": "assets/vfx/conditions/condition_bless_retained_native/prepared.scn",
+      "sha256": "29b5557cf97c2911ce89972dba62fb5f3f2cd2762c4fe202968cf2e00f586ddc",
+      "bytes": 1751
+    },
+    {
+      "path": "assets/vfx/conditions/runtime.gd",
+      "sha256": "67b5a757d94874b0ff0dd447fe25322d39f0b90e9c30feed526a5fd91be0e81f",
+      "bytes": 15195
+    },
+    {
+      "path": "assets/vfx/conditions/condition_bless_retained_native/sustain.gd",
+      "sha256": "f038d0f6038ef1105845a409d19a930c2e6c1e28fbba8c4bd9a536afebf34dd5",
+      "bytes": 602
+    },
+    {
+      "path": "assets/vfx/conditions/condition_bless_retained_native/removal.gd",
+      "sha256": "730b0abb94894de31ddc078a03a7f2a6f6f02e26cc51b6521f004b0c4569f97b",
+      "bytes": 602
+    },
+    {
+      "path": "assets/vfx/sources/c0017ad639184b208deb/occurrence_clock.gd",
+      "sha256": "c8cda29d675b7b4d27a9ba908daf9f5878234574e9227bf5d94a3980e9ee4fc6",
+      "bytes": 7379
+    }
+  ],
+  "original_source_qualification_version": "runtime-spike-readiness-20261022-a12f7da61022225f",
+  "source_qualification_is_not_new_version_native_execution": true
+}

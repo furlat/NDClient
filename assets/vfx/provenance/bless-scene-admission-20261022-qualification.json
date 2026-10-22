@@ -1,0 +1,143 @@
+{
+  "version": "runtime-bless-scene-admission-20261022-6ec912205315adbc",
+  "index_sha256": "f15d72d49a54380e671fc4816cf3abd9cb4a404b03936892a7c57b3fbe7a198b",
+  "public_binding_contract": {
+    "schema": "factory.bless_scene_delivery.contracts.v1",
+    "version": "runtime-bless-scene-admission-20261022-6ec912205315adbc",
+    "index_sha256": "f15d72d49a54380e671fc4816cf3abd9cb4a404b03936892a7c57b3fbe7a198b",
+    "failures": [],
+    "index_inverse_exact": true,
+    "changed_warm_lists": 3,
+    "new_art_rows": 0,
+    "typed_rows_exact": 81,
+    "standalone_keys_exact": 4,
+    "engine_execution": false
+  },
+  "actual_new_index_native": {
+    "version": "runtime-bless-scene-admission-20261022-6ec912205315adbc",
+    "index_sha256": "f15d72d49a54380e671fc4816cf3abd9cb4a404b03936892a7c57b3fbe7a198b",
+    "report": "/mnt/c/Users/tommaso/Documents/assets/VFXFactory/.runtime/bless-scene-admission-20261022/fresh-runtime-bless-scene-admission-20261022-6ec912205315adbc/bless-scene-package-native-v1.json",
+    "report_sha256": "89acf340b51c2838b5ec5729e94961bfd54da94ff7eda728c2d0f706bc73f525",
+    "execution": {
+      "command": [
+        "/mnt/c/Users/tommaso/Documents/Dev/Tools/Godot-4.7.2/Godot_v4.7.2-stable_win64_console.exe",
+        "--path",
+        "C:\\Users\\tommaso\\Documents\\assets\\VFXFactory\\.runtime\\bless-scene-admission-20261022\\fresh-runtime-bless-scene-admission-20261022-6ec912205315adbc",
+        "--rendering-method",
+        "forward_plus",
+        "--rendering-driver",
+        "vulkan",
+        "--fixed-fps",
+        "144",
+        "--script",
+        "res://factory/tests/bless_scene_package_native.gd",
+        "--",
+        "--request=res://bless-scene-package-request.json"
+      ],
+      "engine_exit_code": 1,
+      "log": "/mnt/c/Users/tommaso/Documents/assets/VFXFactory/.runtime/vfx-package-20261018/bless-scene-admission-20261022-native-v1.log",
+      "log_sha256": "fa4c6993af8b0648af6efae0df108e2ed0d0a85c5ee9a160d4e0b3fd12f7c27e",
+      "fixture_sha256": "3588737e99c871bf3eda955eb2dd428cc41f99e4cfe7b34b1ec3332094b79421",
+      "request_sha256": "8fdc276bf79bcd3e87f0281318cc6f1b2c740acd43af38946e99e06bbfa8b2fc"
+    },
+    "checks": 103,
+    "failures": [],
+    "rows": [
+      {
+        "clip_id": "conditions/retained/bless/application",
+        "constructor_us": 496,
+        "first_owner_input_and_sample_us": 5,
+        "index_sha256": "f15d72d49a54380e671fc4816cf3abd9cb4a404b03936892a7c57b3fbe7a198b",
+        "package_version": "runtime-bless-scene-admission-20261022-6ec912205315adbc",
+        "phase": "application",
+        "positive_pixels": 941,
+        "retirement_checks_recorded_in_failures": true,
+        "scene_id": -9223371984610523624,
+        "selected_approach": "gpu-prepared-condition",
+        "selected_warm_scene": "res://assets/vfx/conditions/condition_bless_retained_native/prepared.scn"
+      },
+      {
+        "clip_id": "conditions/retained/bless/sustain",
+        "constructor_us": 303,
+        "first_owner_input_and_sample_us": 4,
+        "index_sha256": "f15d72d49a54380e671fc4816cf3abd9cb4a404b03936892a7c57b3fbe7a198b",
+        "package_version": "runtime-bless-scene-admission-20261022-6ec912205315adbc",
+        "phase": "sustain",
+        "positive_pixels": 1198,
+        "retirement_checks_recorded_in_failures": true,
+        "scene_id": -9223371984610523624,
+        "selected_approach": "gpu-prepared-condition",
+        "selected_warm_scene": "res://assets/vfx/conditions/condition_bless_retained_native/prepared.scn"
+      },
+      {
+        "clip_id": "conditions/retained/bless/removal",
+        "constructor_us": 297,
+        "first_owner_input_and_sample_us": 4,
+        "index_sha256": "f15d72d49a54380e671fc4816cf3abd9cb4a404b03936892a7c57b3fbe7a198b",
+        "package_version": "runtime-bless-scene-admission-20261022-6ec912205315adbc",
+        "phase": "removal",
+        "positive_pixels": 1196,
+        "retirement_checks_recorded_in_failures": true,
+        "scene_id": -9223371984610523624,
+        "selected_approach": "gpu-prepared-condition",
+        "selected_warm_scene": "res://assets/vfx/conditions/condition_bless_retained_native/prepared.scn"
+      }
+    ],
+    "cost_flags": [
+      {
+        "limit_us": 2000,
+        "operation": "actual_clock_setup_before_warm_admission",
+        "us": 12923
+      }
+    ],
+    "scene_admission_elapsed_including_draws_us": 48727,
+    "scene_loading_calls_main_inclusive_us": 159,
+    "clock_prepare_us": 12923,
+    "runtime_budget_pass": false,
+    "scope": "Actual selected three warm lists from this new index, unchanged constructors/private Clock/removal; not full EffectPackage/startup/frame timing."
+  },
+  "metadata_graph_equivalence": {
+    "qualified_by": "Exact unchanged predecessor bytes and runtime loader edges; not a new engine walk.",
+    "prior_graph": {
+      "path": "/mnt/c/Users/tommaso/Documents/assets/VFXFactory/.runtime/runtime-spirit-receiver-20261022/fresh-runtime-spirit-receiver-20261022-851b88bdf3cdf065/dependencies.json",
+      "sha256": "1109b5aa1c9e727928f93f6029fe70fcb29995e75a7b7236022eb1879c10a23a",
+      "version": "runtime-spirit-receiver-20261022-851b88bdf3cdf065",
+      "files": 23027
+    },
+    "prior_exit_retention": {
+      "path": "/mnt/c/Users/tommaso/Documents/assets/VFXFactory/.runtime/runtime-spirit-receiver-20261022/namespace-retention.json",
+      "sha256": "2b9da5634b5549af7dfbbd0ef6c3e99ba5fc5f53e631c88aede779e61fb2c6f3"
+    },
+    "new_namespace_engine_walk": false,
+    "new_exit_retention_measured": false,
+    "validator_amendment": {
+      "path": "/mnt/c/Users/tommaso/Documents/assets/VFXFactory/authoring/production-review-repair-20261022/bless_scene_delivery/metadata-equivalence-v2.json",
+      "sha256": "ff27838e7bb45978a0b528b37bb56b892b7bf2e83bc97ef299d78f34afba5591",
+      "companion": {
+        "path": "tools/vfx_package/bless_scene_seal_v2.py",
+        "sha256": "1a8cabda2afa7bd14dc789381acdc2a7c89a419e01685e4a753d1063aa643789"
+      },
+      "frozen_original_module_sha256": "01483cc2f2e6b64ed0af162583dc24c859c55e0f42209c642600ee6b443b43d9",
+      "frozen_original_plan_sha256": "b13021c8439aeea19feaa26a038b61f2a5f98d69faf425f26766da7a5454784e",
+      "only_excluded_resource_graph_address": "res://assets/vfx/index.json",
+      "index_still_qualified_separately_by_exact_sha_inverse_and_native_binding": true,
+      "failed_v1_preserved": {
+        "path": "authoring/production-review-repair-20261022/bless_scene_delivery/history/metadata-equivalence-v1/failed-seal.json",
+        "sha256": "0629b04423be3b34fd9824a1d804b02d58930f5cb6058a2e8ec99dae32c35233"
+      }
+    },
+    "all_prior_graph_paths_retained": true,
+    "runtime_loader_paths_checked": 171,
+    "prior_resources_except_index_size_crc_exact": {
+      "entries": 23256,
+      "exceptions": [
+        "assets/vfx/index.json"
+      ],
+      "all_other_predecessor_size_crc_exact": true
+    },
+    "new_source_files": 0
+  },
+  "source_clock_setup_flag_retained_us": 13358,
+  "whole_library_runtime_complete": false,
+  "human_approval_inferred": false
+}

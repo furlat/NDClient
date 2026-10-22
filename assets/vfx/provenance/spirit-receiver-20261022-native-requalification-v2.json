@@ -1,0 +1,339 @@
+{
+  "version": "runtime-spirit-receiver-20261022-851b88bdf3cdf065",
+  "actual_completed_native_test": {
+    "schema": "factory.spirit_receiver.native_requalification.v2",
+    "execution_qualified": true,
+    "version": "runtime-spirit-receiver-20261022-851b88bdf3cdf065",
+    "index_sha256": "2cf992b7f16619fca4a826ea3a37ea3070896c1cb18cca2b2b9dee78c646bfad",
+    "source_table_sha256": "e626e118d162188f9b8352f206bf6f50a5ab49ec32c6ddfac62ecaa4f0ab617a",
+    "checks": 153,
+    "failures": [],
+    "engine_errors": 0,
+    "engine_warnings": 1,
+    "process_exit": 0,
+    "unclassified_exit_warning": "1 ObjectDB instance was leaked at exit; retained, not a clean shutdown claim.",
+    "test_amendment": {
+      "path": "authoring/production-review-repair-20261022/spirit_receiver_delivery/native-requalification-v2.json",
+      "sha256": "859249b210159bd988f2bec63da5599ffb7ab3b3576abeff0feb7600aeeb1ed8",
+      "bytes": 3995
+    },
+    "runner": {
+      "path": "tools/vfx_package/spirit_receiver_native_v2.py",
+      "sha256": "122dfd34d517855d897e1ebedeeb0e7ddbf27e9269b91851b67715373aab97ed",
+      "bytes": 2883
+    },
+    "receipt": {
+      "path": ".runtime/runtime-spirit-receiver-20261022/native-smoke-complete-v1.json",
+      "sha256": "af97f773f28d8b2564ce983121055b1ced22ff53bff1e0c01e60102089defb59",
+      "bytes": 217535
+    },
+    "raw_receipt": {
+      "path": ".runtime/runtime-spirit-receiver-20261022/fresh-runtime-spirit-receiver-20261022-851b88bdf3cdf065/native-spirit-receiver-v2.json",
+      "sha256": "53285a29d17f7d448a9d804c4aa259eed44a00b3a100f764764721708c50889d",
+      "bytes": 188165
+    },
+    "log": {
+      "path": "authoring/production-review-repair-20261022/spirit_receiver_delivery/native-history/v2/native.log",
+      "sha256": "5735fe08e34c014363825650cf3532ec90eac34aff97ad7b8d1bbc7d115c52c6",
+      "bytes": 339
+    },
+    "configuration_v2": {
+      "path": "authoring/production-review-repair-20261022/spirit_receiver_delivery/native-request-v2.json",
+      "sha256": "a329632726d6480c19515410f64a22626dfcfd9959bdbc592a3907fe17d8005e",
+      "bytes": 30944
+    },
+    "frozen_cohort": {
+      "path": "authoring/production-review-repair-20261022/spirit_receiver_delivery/cohort.json",
+      "sha256": "8407cdba7746287af75fd33f99e2ac1f625258f4669f6887b4545c8996a953cb",
+      "bytes": 75108
+    },
+    "verified_original_inputs": 174,
+    "old_v1_checks": 112,
+    "old_v1_failures": 9,
+    "rows": [
+      {
+        "absent_difference_pixels": 0,
+        "actual_sample_hz": 144.0,
+        "capture": "res://native-spirit-receiver-v2/spirit_mask_prepared_radiant.png",
+        "chronological_ticks": 181,
+        "clip_id": "assembled/spirit_guardians_radiant_native",
+        "clock_script_checks": 1,
+        "constructor_over2000us": true,
+        "group": "spirit_mask_prepared",
+        "key": "spirit_mask_prepared_radiant",
+        "native_complete_constructor_us": 2398,
+        "native_original_art_parity_repeated": false,
+        "positive_pixels": 23136,
+        "public_inputs": {
+          "actual_backend_journal": false,
+          "fixture_owners_are_not_source_defaults": true,
+          "public_callbacks": [
+            "set_targets",
+            "set_owner_state"
+          ],
+          "schema_fixture": true
+        },
+        "sample_rate_scope": "Declared phase rate",
+        "source_lookup": "index",
+        "source_simulation_hz": 144.0,
+        "visible_draws": 1
+      },
+      {
+        "absent_difference_pixels": 0,
+        "actual_sample_hz": 144.0,
+        "capture": "res://native-spirit-receiver-v2/spirit_mask_prepared_necrotic.png",
+        "chronological_ticks": 181,
+        "clip_id": "assembled/spirit_guardians_necrotic_native",
+        "clock_script_checks": 1,
+        "constructor_over2000us": true,
+        "group": "spirit_mask_prepared",
+        "key": "spirit_mask_prepared_necrotic",
+        "native_complete_constructor_us": 2751,
+        "native_original_art_parity_repeated": false,
+        "positive_pixels": 19993,
+        "public_inputs": {
+          "actual_backend_journal": false,
+          "fixture_owners_are_not_source_defaults": true,
+          "public_callbacks": [
+            "set_targets",
+            "set_owner_state"
+          ],
+          "schema_fixture": true
+        },
+        "sample_rate_scope": "Declared phase rate",
+        "source_lookup": "index",
+        "source_simulation_hz": 144.0,
+        "visible_draws": 1
+      }
+    ],
+    "program_identity_observations": [
+      {
+        "key": "spirit_mask_prepared_radiant",
+        "materials_checked": 9,
+        "original_program_groups": [
+          {
+            "compatible_ready_banks": [
+              "res://assets/vfx/extensions/spirit-receiver-20261022/sources/394048fa31fabc8bbabf/radiant-mask-bank.tres"
+            ],
+            "declared_bank": "res://assets/vfx/extensions/spirit-receiver-20261022/sources/394048fa31fabc8bbabf/radiant-mask-bank.tres",
+            "displayed_id_string": "-9223371956458355113",
+            "displayed_path": "res://assets/vfx/extensions/spirit-receiver-20261022/sources/3864b730feda9343f8a7/radiant-ground.tres",
+            "original_id_string": "-9223371958891051478",
+            "original_path": "res://assets/vfx/extensions/continuation42-20261020/sources/42606d401263105992b1/program-5af2677571e8d9ec6a85ba6abaec5242eeb1def324d6360afb3d4b7e9099e6d7.gdshader"
+          },
+          {
+            "compatible_ready_banks": [
+              "res://assets/vfx/extensions/spirit-receiver-20261022/sources/394048fa31fabc8bbabf/radiant-mask-bank.tres"
+            ],
+            "declared_bank": "res://assets/vfx/extensions/spirit-receiver-20261022/sources/394048fa31fabc8bbabf/radiant-mask-bank.tres",
+            "displayed_id_string": "-9223371956575795736",
+            "displayed_path": "res://assets/vfx/extensions/spirit-receiver-20261022/sources/6d7ad6dab8bc30da8d25/radiant-leaf.tres",
+            "original_id_string": "-9223371963706112503",
+            "original_path": "res://assets/vfx/extensions/continuation42-20261020/sources/17f526191ec1ab01f444/program-2c6b1458220467b1d33b7685e1b717a1b9a79d7abfe955588bef9a14a07c3740.gdshader"
+          }
+        ],
+        "prepare_us": 363,
+        "publish_us": 27
+      },
+      {
+        "key": "spirit_mask_prepared_necrotic",
+        "materials_checked": 9,
+        "original_program_groups": [
+          {
+            "compatible_ready_banks": [
+              "res://assets/vfx/extensions/spirit-receiver-20261022/sources/394048fa31fabc8bbabf/radiant-mask-bank.tres"
+            ],
+            "declared_bank": "res://assets/vfx/extensions/spirit-receiver-20261022/sources/04436be2e512da351b5b/necrotic-mask-bank.tres",
+            "displayed_id_string": "-9223371956458355113",
+            "displayed_path": "res://assets/vfx/extensions/spirit-receiver-20261022/sources/3864b730feda9343f8a7/radiant-ground.tres",
+            "original_id_string": "-9223371958891051478",
+            "original_path": "res://assets/vfx/extensions/continuation42-20261020/sources/42606d401263105992b1/program-5af2677571e8d9ec6a85ba6abaec5242eeb1def324d6360afb3d4b7e9099e6d7.gdshader"
+          },
+          {
+            "compatible_ready_banks": [
+              "res://assets/vfx/extensions/spirit-receiver-20261022/sources/394048fa31fabc8bbabf/radiant-mask-bank.tres"
+            ],
+            "declared_bank": "res://assets/vfx/extensions/spirit-receiver-20261022/sources/04436be2e512da351b5b/necrotic-mask-bank.tres",
+            "displayed_id_string": "-9223371956575795736",
+            "displayed_path": "res://assets/vfx/extensions/spirit-receiver-20261022/sources/6d7ad6dab8bc30da8d25/radiant-leaf.tres",
+            "original_id_string": "-9223371963706112503",
+            "original_path": "res://assets/vfx/extensions/continuation42-20261020/sources/17f526191ec1ab01f444/program-2c6b1458220467b1d33b7685e1b717a1b9a79d7abfe955588bef9a14a07c3740.gdshader"
+          }
+        ],
+        "prepare_us": 403,
+        "publish_us": 28
+      }
+    ],
+    "source_loading_max_us": 60,
+    "inclusive_source_admission_max_us": 925,
+    "preparation_cost_flags": [],
+    "constructor_flags": [
+      {
+        "key": "spirit_mask_prepared_radiant",
+        "actual_us": 2398,
+        "threshold_us": 2000
+      },
+      {
+        "key": "spirit_mask_prepared_necrotic",
+        "actual_us": 2751,
+        "threshold_us": 2000
+      }
+    ],
+    "source_qualification": {
+      "path": "authoring/production-review-repair-20261022/spirit_mask_prepared/v1/qualification-native-v1.json",
+      "sha256": "995993b2eccb895966229887c0dd90c75fc8434a8d27f4afcd350bf34bff7122",
+      "bytes": 26160
+    },
+    "source_raw_cost_flag_count": 37,
+    "whole_frame_budget_pass": false,
+    "client_adoption": false,
+    "human_approval_inferred": false,
+    "scope": "Stronger exact-original Shader identity oracle on the unchanged851b package/index/table. Both owners actually share the same original leaf/ground Shader Resources and select the same already-ready radiant masked programs; all18displayed private material checks pass, fallback is rejected. Two181-tick positive/absence witnesses; no old-art rerender, complete first-input timer or driver-cold ratio. Source37flags and prior112/9fixture failure remain separate. V2 retains one unclassified ObjectDB exit warning."
+  },
+  "frozen_preexecution_amendment": {
+    "schema": "factory.spirit_receiver.native_test_amendment.v2",
+    "execution_qualified": false,
+    "source_or_package_payload_changed": false,
+    "frozen_cohort": {
+      "path": "authoring/production-review-repair-20261022/spirit_receiver_delivery/cohort.json",
+      "sha256": "8407cdba7746287af75fd33f99e2ac1f625258f4669f6887b4545c8996a953cb",
+      "bytes": 75108
+    },
+    "frozen_module": {
+      "path": "tools/vfx_package/spirit_receiver_package.py",
+      "sha256": "bd522f24ff2055e5b5d412970c8b45a92021a4f6602116d3bb3682c466e7b9dd",
+      "bytes": 22742
+    },
+    "original_fixture": {
+      "path": "factory/tests/spirit_receiver_package_actual.gd",
+      "sha256": "b8c804bc3bffa9880e9e0119df1cae851e0be885dc7dd1feb928b3b428b067e2",
+      "bytes": 3927
+    },
+    "corrected_fixture": {
+      "path": "factory/tests/spirit_receiver_package_actual_v2.gd",
+      "sha256": "4860654698a3d743357ad96a14d79b981583c0618ad19df0227ed89f64c88c6e",
+      "bytes": 5478
+    },
+    "historical_failed_v1": {
+      "checks": 112,
+      "failures": 9,
+      "engine_errors": 9,
+      "objectdb_exit_warning": true,
+      "receipt": {
+        "path": "authoring/production-review-repair-20261022/spirit_receiver_delivery/native-history/v1/checks.json",
+        "sha256": "f00150d2b1320d5922f0becd212a3eefcc6af51b8acf3f6664f5e87f3a41e763",
+        "bytes": 170004
+      },
+      "log": {
+        "path": "authoring/production-review-repair-20261022/spirit_receiver_delivery/native-history/v1/native.log",
+        "sha256": "71050cc84a3ccbaf263919044b8f93180f2f76e4c2f3deecaead6a34420f3da9",
+        "bytes": 4389
+      },
+      "request": {
+        "path": "authoring/production-review-repair-20261022/spirit_receiver_delivery/native-history/v1/request.json",
+        "sha256": "42fc562aca7a7ff8da95680d02c983281d9b1031ee68d821b62bff194dfda65c",
+        "bytes": 30944
+      }
+    },
+    "exact_replacements": 2,
+    "original_native_source_qualification": "995993b2eccb895966229887c0dd90c75fc8434a8d27f4afcd350bf34bff7122",
+    "scope": "Test-only correction: recover the actual incoming Shader identity from the existing per-owner helper cache, require it in this row bank.originals, then require the displayed Shader to be the exact replacement from an explicitly declared ready MASK_BANK. All diagnostics follow existing timers. Unknown/fallback Shader and unrelated source identities remain rejected. Helper lookup intentionally permits compatible first-bank reuse; actual v1 did not record material identities, so shared identity is not inferred from its failed booleans. Root will use a separate V2 scratch request/output; no frozen174 input, source, index, table or namespace payload change.",
+    "fixture": {
+      "path": "factory/tests/spirit_receiver_package_actual_v2.gd",
+      "sha256": "4860654698a3d743357ad96a14d79b981583c0618ad19df0227ed89f64c88c6e",
+      "bytes": 5478
+    },
+    "predecessor_cohort": {
+      "path": "authoring/production-review-repair-20261022/spirit_receiver_delivery/cohort.json",
+      "sha256": "8407cdba7746287af75fd33f99e2ac1f625258f4669f6887b4545c8996a953cb",
+      "bytes": 75108
+    },
+    "v1_report": {
+      "path": "authoring/production-review-repair-20261022/spirit_receiver_delivery/native-history/v1/checks.json",
+      "sha256": "f00150d2b1320d5922f0becd212a3eefcc6af51b8acf3f6664f5e87f3a41e763",
+      "bytes": 170004
+    },
+    "v1_log": {
+      "path": "authoring/production-review-repair-20261022/spirit_receiver_delivery/native-history/v1/native.log",
+      "sha256": "71050cc84a3ccbaf263919044b8f93180f2f76e4c2f3deecaead6a34420f3da9",
+      "bytes": 4389
+    },
+    "configuration_v1": {
+      "path": "authoring/production-review-repair-20261022/spirit_receiver_delivery/native-history/v1/request.json",
+      "sha256": "42fc562aca7a7ff8da95680d02c983281d9b1031ee68d821b62bff194dfda65c",
+      "bytes": 30944
+    },
+    "fixture_failure": {
+      "checks": 112,
+      "failures": 9
+    },
+    "output": {
+      "report_path": "res://native-spirit-receiver-v2.json",
+      "capture_directory": "res://native-spirit-receiver-v2"
+    },
+    "unambiguous_shader_cache_key_required": true
+  },
+  "headless_verbose_failure": {
+    "version": "runtime-spirit-receiver-20261022-851b88bdf3cdf065",
+    "index_sha256": "2cf992b7f16619fca4a826ea3a37ea3070896c1cb18cca2b2b9dee78c646bfad",
+    "engine_exit_code": 5,
+    "log": "/mnt/c/Users/tommaso/Documents/assets/VFXFactory/.runtime/vfx-package-20261018/spirit-receiver-20261022-retention-verbose-v1.log",
+    "log_sha256": "88b6eee5ef42f3af265a79e2e6378e9403b40d7dbe4eeddaf72e91fc7d878cda",
+    "engine_errors_filtered": false,
+    "diagnostic_only": true
+  },
+  "correlated_windows_event": {
+    "scope": "Official Godot access-violation event correlated by trace log/start/end times. Original wrapper child PID was not recorded; event correlation is not an independent process-tree witness. No engine/source cause, clean shutdown or package qualification is inferred.",
+    "trace_log_creation_utc": "2026-10-22T01:01:29.9431125Z",
+    "report_id": "b009cdcf-4d39-44c1-b249-7d490a3e45c8",
+    "schema": "factory.spirit_receiver.metadata_exit_event.v1",
+    "trace_log_last_write_utc": "2026-10-22T01:03:42.6379039Z",
+    "events": [
+      {
+        "time_utc": "2026-10-22T01:03:45.3627023Z",
+        "message": "Fault bucket 1161908200763835012, type 4\r\nEvent Name: APPCRASH\r\nResponse: Not available\r\nCab Id: 0\r\n\r\nProblem signature:\r\nP1: Godot_v4.7.2-stable_win64.exe\r\nP2: 4.7.2.0\r\nP3: 6a826550\r\nP4: Godot_v4.7.2-stable_win64.exe\r\nP5: 4.7.2.0\r\nP6: 6a826550\r\nP7: c0000005\r\nP8: 0000000000547f2c\r\nP9: \r\nP10: \r\n\r\nAttached files:\r\n\\\\?\\C:\\ProgramData\\Microsoft\\Windows\\WER\\Temp\\WER.50c1bccd-5c88-4bdb-9239-fa66785f1e88.tmp.dmp\r\n\\\\?\\C:\\ProgramData\\Microsoft\\Windows\\WER\\Temp\\WER.b1705131-88a6-4dd2-8330-b9d9d7e6dd37.tmp.WERInternalMetadata.xml\r\n\\\\?\\C:\\ProgramData\\Microsoft\\Windows\\WER\\Temp\\WER.b85a609b-2206-44f7-822f-1d8a15d3ea31.tmp.csv\r\n\\\\?\\C:\\ProgramData\\Microsoft\\Windows\\WER\\Temp\\WER.a1194207-c8dd-4509-bc9a-c091a7742fc2.tmp.txt\r\n\\\\?\\C:\\ProgramData\\Microsoft\\Windows\\WER\\Temp\\WER.4298b811-f8a0-4aab-97c1-5b465cdb84c3.tmp.xml\r\n\r\nThese files may be available here:\r\n\\\\?\\C:\\ProgramData\\Microsoft\\Windows\\WER\\ReportArchive\\AppCrash_Godot_v4.7.2-sta_9fe12410f9e88e9171a4aeca87b9eb3ef28d_c38cbb91_962ab21c-43ca-439b-b231-7e8b9f69d881\r\n\r\nAnalysis symbol: \r\nRechecking for solution: 0\r\nReport Id: b009cdcf-4d39-44c1-b249-7d490a3e45c8\r\nReport Status: 268435456\r\nHashed bucket: a7d0b855a319db24801fed5a40244284\r\nCab Guid: 0",
+        "id": 1001,
+        "xml": "<Event xmlns='http://schemas.microsoft.com/win/2004/08/events/event'><System><Provider Name='Windows Error Reporting' Guid='{0ead09bd-2157-539a-8d6d-c87f95b64d70}'/><EventID>1001</EventID><Version>0</Version><Level>4</Level><Task>0</Task><Opcode>0</Opcode><Keywords>0x8000000000000000</Keywords><TimeCreated SystemTime='2026-10-22T01:03:45.3627023Z'/><EventRecordID>75613</EventRecordID><Correlation/><Execution ProcessID='18484' ThreadID='14544'/><Channel>Application</Channel><Computer>DESKTOP-J9JF48Q</Computer><Security UserID='S-1-5-21-527246163-1906028455-2002703439-1001'/></System><EventData><Data Name='Bucket'>1161908200763835012</Data><Data Name='BucketType'>4</Data><Data Name='EventName'>APPCRASH</Data><Data Name='Response'>Not available</Data><Data Name='CabId'>0</Data><Data Name='P1'>Godot_v4.7.2-stable_win64.exe</Data><Data Name='P2'>4.7.2.0</Data><Data Name='P3'>6a826550</Data><Data Name='P4'>Godot_v4.7.2-stable_win64.exe</Data><Data Name='P5'>4.7.2.0</Data><Data Name='P6'>6a826550</Data><Data Name='P7'>c0000005</Data><Data Name='P8'>0000000000547f2c</Data><Data Name='P9'></Data><Data Name='P10'></Data><Data Name='AttachedFiles'>\r\n\\\\?\\C:\\ProgramData\\Microsoft\\Windows\\WER\\Temp\\WER.50c1bccd-5c88-4bdb-9239-fa66785f1e88.tmp.dmp\r\n\\\\?\\C:\\ProgramData\\Microsoft\\Windows\\WER\\Temp\\WER.b1705131-88a6-4dd2-8330-b9d9d7e6dd37.tmp.WERInternalMetadata.xml\r\n\\\\?\\C:\\ProgramData\\Microsoft\\Windows\\WER\\Temp\\WER.b85a609b-2206-44f7-822f-1d8a15d3ea31.tmp.csv\r\n\\\\?\\C:\\ProgramData\\Microsoft\\Windows\\WER\\Temp\\WER.a1194207-c8dd-4509-bc9a-c091a7742fc2.tmp.txt\r\n\\\\?\\C:\\ProgramData\\Microsoft\\Windows\\WER\\Temp\\WER.4298b811-f8a0-4aab-97c1-5b465cdb84c3.tmp.xml</Data><Data Name='StorePath'>\\\\?\\C:\\ProgramData\\Microsoft\\Windows\\WER\\ReportArchive\\AppCrash_Godot_v4.7.2-sta_9fe12410f9e88e9171a4aeca87b9eb3ef28d_c38cbb91_962ab21c-43ca-439b-b231-7e8b9f69d881</Data><Data Name='AnalysisSymbol'></Data><Data Name='Rechecking'>0</Data><Data Name='ReportId'>b009cdcf-4d39-44c1-b249-7d490a3e45c8</Data><Data Name='ReportStatus'>268435456</Data><Data Name='HashedBucket'>a7d0b855a319db24801fed5a40244284</Data><Data Name='CabGuid'>0</Data></EventData></Event>"
+      },
+      {
+        "time_utc": "2026-10-22T01:03:42.8635978Z",
+        "message": "Faulting application name: Godot_v4.7.2-stable_win64.exe, version: 4.7.2.0, time stamp: 0x6a826550\r\nFaulting module name: Godot_v4.7.2-stable_win64.exe, version: 4.7.2.0, time stamp: 0x6a826550\r\nException code: 0xc0000005\r\nFault offset: 0x0000000000547f2c\r\nFaulting process id: 0xEEC8\r\nFaulting application start time: 0x1DD61C0DF5AE87C\r\nFaulting application path: C:\\Users\\tommaso\\Documents\\Dev\\Tools\\Godot-4.7.2\\Godot_v4.7.2-stable_win64.exe\r\nFaulting module path: C:\\Users\\tommaso\\Documents\\Dev\\Tools\\Godot-4.7.2\\Godot_v4.7.2-stable_win64.exe\r\nReport Id: b009cdcf-4d39-44c1-b249-7d490a3e45c8\r\nFaulting package full name: \r\nFaulting package-relative application ID: ",
+        "id": 1000,
+        "xml": "<Event xmlns='http://schemas.microsoft.com/win/2004/08/events/event'><System><Provider Name='Application Error' Guid='{a0e9b465-b939-57d7-b27d-95d8e925ff57}'/><EventID>1000</EventID><Version>0</Version><Level>2</Level><Task>100</Task><Opcode>0</Opcode><Keywords>0x8000000000000000</Keywords><TimeCreated SystemTime='2026-10-22T01:03:42.8635978Z'/><EventRecordID>75612</EventRecordID><Correlation/><Execution ProcessID='18484' ThreadID='14544'/><Channel>Application</Channel><Computer>DESKTOP-J9JF48Q</Computer><Security UserID='S-1-5-21-527246163-1906028455-2002703439-1001'/></System><EventData><Data Name='AppName'>Godot_v4.7.2-stable_win64.exe</Data><Data Name='AppVersion'>4.7.2.0</Data><Data Name='AppTimeStamp'>6a826550</Data><Data Name='ModuleName'>Godot_v4.7.2-stable_win64.exe</Data><Data Name='ModuleVersion'>4.7.2.0</Data><Data Name='ModuleTimeStamp'>6a826550</Data><Data Name='ExceptionCode'>c0000005</Data><Data Name='FaultingOffset'>0000000000547f2c</Data><Data Name='ProcessId'>0xeec8</Data><Data Name='ProcessCreationTime'>0x1dd61c0df5ae87c</Data><Data Name='AppPath'>C:\\Users\\tommaso\\Documents\\Dev\\Tools\\Godot-4.7.2\\Godot_v4.7.2-stable_win64.exe</Data><Data Name='ModulePath'>C:\\Users\\tommaso\\Documents\\Dev\\Tools\\Godot-4.7.2\\Godot_v4.7.2-stable_win64.exe</Data><Data Name='IntegratorReportId'>b009cdcf-4d39-44c1-b249-7d490a3e45c8</Data><Data Name='PackageFullName'></Data><Data Name='PackageRelativeAppId'></Data></EventData></Event>"
+      }
+    ],
+    "trace_log_sha256": "88b6eee5ef42f3af265a79e2e6378e9403b40d7dbe4eeddaf72e91fc7d878cda"
+  },
+  "forward_metadata_execution": {
+    "project": "/mnt/c/Users/tommaso/Documents/assets/VFXFactory/.runtime/runtime-spirit-receiver-20261022/fresh-runtime-spirit-receiver-20261022-851b88bdf3cdf065",
+    "version": "runtime-spirit-receiver-20261022-851b88bdf3cdf065",
+    "index_sha256": "2cf992b7f16619fca4a826ea3a37ea3070896c1cb18cca2b2b9dee78c646bfad",
+    "canonical_source_tree_present": false,
+    "engine_exit_code": 0,
+    "started_unix_seconds": 1792631472.0975435,
+    "finished_unix_seconds": 1792631801.0284655,
+    "command": [
+      "/mnt/c/Users/tommaso/Documents/Dev/Tools/Godot-4.7.2/Godot_v4.7.2-stable_win64_console.exe",
+      "--verbose",
+      "--rendering-method",
+      "forward_plus",
+      "--rendering-driver",
+      "vulkan",
+      "--fixed-fps",
+      "144",
+      "--path",
+      "C:\\Users\\tommaso\\Documents\\assets\\VFXFactory\\.runtime\\runtime-spirit-receiver-20261022\\fresh-runtime-spirit-receiver-20261022-851b88bdf3cdf065",
+      "--script",
+      "res://audit_dependencies.gd",
+      "--",
+      "res://dependencies-forward-v1.json"
+    ],
+    "log": "/mnt/c/Users/tommaso/Documents/assets/VFXFactory/.runtime/vfx-package-20261018/spirit-receiver-20261022-retention-forward-v1.log",
+    "log_sha256": "8fc20b939db3cd76ad525f2cc794b042c02a21d5540c1d4cfab3c5613da9c7d8",
+    "engine_errors_filtered": false,
+    "diagnostic_only": true,
+    "purpose": "Same immutable metadata graph on actual Forward+/Vulkan instead of the failed RendererDummy diagnostic; no source/art change or qualification inferred."
+  },
+  "source_or_threshold_changed": false,
+  "scope": "Preserves the actual failed own-bank oracle and exact-original-identity requalification, plus all metadata shutdown evidence. The preexecution amendment remains historical; the completed result is authoritative. Forward ownership qualification remains a separate gate."
+}

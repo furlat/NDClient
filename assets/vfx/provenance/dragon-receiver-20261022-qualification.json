@@ -1,0 +1,389 @@
+{
+  "version": "runtime-dragon-receiver-20261022-53075ee7ed11481f",
+  "source_native": {
+    "schema": "factory.dragon_receiver_program.native_qualification.v2",
+    "status": "source_compatibility_qualified_with_exact_static_exit_diagnostic",
+    "checks": 64,
+    "failures": [],
+    "image_pairs": 9,
+    "actual_engine": "Windows Godot 4.7.2.stable.official.ed1daf0bf Forward+ / RTX5090,144Hz",
+    "engine_exit_code": 0,
+    "engine_shutdown_clean": false,
+    "engine_errors_filtered": false,
+    "source_native_functional_qualified": true,
+    "qualified_static_script_exit": true,
+    "native_source_snapshot": {
+      "path": "authoring/dragon-receiver-program-20261022/native-source-snapshot-v2.json",
+      "sha256": "d3d68ee28778f215871e5692d9dc74e439ad7c6c606aa82b95ccf4961a1bfaac",
+      "bytes": 49906
+    },
+    "all252executed_pins_preserved": true,
+    "receipt": {
+      "path": "authoring/dragon-receiver-program-20261022/native-v2/receipt.json",
+      "sha256": "061e13c33f56a5a25dcc7b566e5a892fb179f314e13741e457564f15be136439",
+      "bytes": 13159
+    },
+    "log": {
+      "path": "authoring/dragon-receiver-program-20261022/native-v2/dragon-receiver-program-native-v2.log",
+      "sha256": "a8285f79751a89969063e7cc754465e1389b88cafd1c05fa254697d7dd48128b",
+      "bytes": 176999
+    },
+    "current_exit": {
+      "objects": [
+        {
+          "class": "GDScriptNativeClass",
+          "id": "9223372054806397547",
+          "reference_count": 1
+        },
+        {
+          "class": "GDScriptNativeClass",
+          "id": "9223372059957003166",
+          "reference_count": 3
+        },
+        {
+          "class": "GDScriptNativeClass",
+          "id": "9223372060007334817",
+          "reference_count": 3
+        },
+        {
+          "class": "GDScriptNativeClass",
+          "id": "9223372061148185573",
+          "reference_count": 2
+        },
+        {
+          "class": "GDScriptNativeClass",
+          "id": "9223372062591026235",
+          "reference_count": 2
+        },
+        {
+          "class": "GDScript",
+          "id": "9223372070962857419",
+          "reference_count": 8
+        },
+        {
+          "class": "GDScript",
+          "id": "9223372071248070093",
+          "reference_count": 1
+        },
+        {
+          "class": "GDScript",
+          "id": "9223372071533282767",
+          "reference_count": 7
+        }
+      ],
+      "resources": [
+        {
+          "path": "res://factory/core/source_materials.gd",
+          "class": "GDScript",
+          "source": {
+            "path": "factory/core/source_materials.gd",
+            "sha256": "f40a55151ac28e2891eb3e606e1c257a4ac21ec10b63778e4baa3a08aa4b31b2",
+            "bytes": 6414
+          }
+        },
+        {
+          "path": "res://factory/components/weapon_appearance/program.gd",
+          "class": "GDScript",
+          "source": {
+            "path": "factory/components/weapon_appearance/program.gd",
+            "sha256": "ab22ef671a09bd6769a5710d8249389d269e334626bddf6707f8be963001feae",
+            "bytes": 1823
+          }
+        },
+        {
+          "path": "res://factory/packaging/occurrence_clock.gd",
+          "class": "GDScript",
+          "source": {
+            "path": "factory/packaging/occurrence_clock.gd",
+            "sha256": "59a42844d8168bc0bdb3fb893261197f7559d5fc94a7342d1861421c02691f6a",
+            "bytes": 7352
+          }
+        }
+      ],
+      "classes": {
+        "GDScript": 3,
+        "GDScriptNativeClass": 5
+      },
+      "exact_error": "3 resources still in use at exit.",
+      "warnings": {
+        "GENERAL - Message Id Number: 0 | Message Id Name: Loader Message": 1,
+        "Image format RGBFloat not supported by hardware, converting to RGBAFloat.": 56,
+        "8 ObjectDB instances were leaked at exit (run with `--verbose` for details).": 1
+      },
+      "live_node_material_shader_image_texture_retained": false,
+      "ids_and_paths_are_separately_reported_by_native_log_not_guessed_pairings": true
+    },
+    "terminal_contracts": {
+      "clock_shutdown_idle_pool_assertion_passed": true,
+      "orphan_node_set_empty_assertion_passed": true,
+      "frozen_run_explicitly_clears_program_and_source_material_caches": true,
+      "mutable_cache_snapshot_added": false
+    },
+    "interface": {
+      "native_defaults_main_us": 45454,
+      "program_code_sha256": "74dc1738afa00e504dff056b394417803de1894a34bee03a259262fc6dce3292",
+      "raw_and_expanded_program_identity": true,
+      "runtime_source_lookup_exercised": "exact literal expanded source; raw alias Resource identity is checked, not an installed client root load",
+      "source_code_sha256": "8d1e8295804c17220d7ef263603ecae93b6acd2e9dc23198c3c4ec199fe37490",
+      "source_defaults": {
+        "component_normal_alpha_threshold": 0.5,
+        "component_normal_requires_depth": true
+      }
+    },
+    "contexts": [
+      {
+        "actual_adapter_construct_bind_hook_us": 210420,
+        "actual_first_source_sample_us": 256,
+        "age_seconds": 0.6,
+        "clip": "Idle",
+        "equipment_slot": "MELEE_MAIN",
+        "frame_uv": "(0.066667, 0.125, 0.066667, 0.125)",
+        "policy": "unchanged_coupled_defaults",
+        "source": "/media/smallscale/modular/Melee2/Idle.png",
+        "view": 0,
+        "weapon": "Longsword"
+      },
+      {
+        "actual_adapter_construct_bind_hook_us": 172760,
+        "actual_first_source_sample_us": 268,
+        "age_seconds": 0.6,
+        "clip": "Idle",
+        "equipment_slot": "MELEE_MAIN",
+        "frame_uv": "(0.066667, 0.125, 0.066667, 0.125)",
+        "policy": "independent_false_7over255",
+        "source": "/media/smallscale/modular/Melee2/Idle.png",
+        "view": 0,
+        "weapon": "Longsword"
+      }
+    ],
+    "first_native_v1_costs_retained": {
+      "interface": {
+        "native_defaults_main_us": 17512,
+        "program_code_sha256": "74dc1738afa00e504dff056b394417803de1894a34bee03a259262fc6dce3292",
+        "raw_and_expanded_program_identity": true,
+        "runtime_source_lookup_exercised": "exact literal expanded source; raw alias Resource identity is checked, not an installed client root load",
+        "source_code_sha256": "8d1e8295804c17220d7ef263603ecae93b6acd2e9dc23198c3c4ec199fe37490",
+        "source_defaults": {
+          "component_normal_alpha_threshold": 0.5,
+          "component_normal_requires_depth": true
+        }
+      },
+      "contexts": [
+        {
+          "actual_adapter_construct_bind_hook_us": 227918,
+          "actual_first_source_sample_us": 284,
+          "age_seconds": 0.6,
+          "clip": "Idle",
+          "equipment_slot": "MELEE_MAIN",
+          "frame_uv": "(0.066667, 0.125, 0.066667, 0.125)",
+          "policy": "unchanged_coupled_defaults",
+          "source": "/media/smallscale/modular/Melee2/Idle.png",
+          "view": 0,
+          "weapon": "Longsword"
+        },
+        {
+          "actual_adapter_construct_bind_hook_us": 166689,
+          "actual_first_source_sample_us": 255,
+          "age_seconds": 0.6,
+          "clip": "Idle",
+          "equipment_slot": "MELEE_MAIN",
+          "frame_uv": "(0.066667, 0.125, 0.066667, 0.125)",
+          "policy": "independent_false_7over255",
+          "source": "/media/smallscale/modular/Melee2/Idle.png",
+          "view": 0,
+          "weapon": "Longsword"
+        }
+      ]
+    },
+    "optical": {
+      "exact_rgba_pairs": 7,
+      "active_colour_same_alpha_pairs": 2,
+      "source_covered_pixels_each": 665,
+      "all_active_rgb_changes": 665,
+      "root_visual_note": "Root inspected independent disabled/active prepared frames: same isolated actual sword silhouette/placement; Ember changes sword colouring. This dark isolated-mask fixture is not full-character aesthetics, dragon creature art or human acceptance.",
+      "images": [
+        {
+          "path": "evidence/weapon-appearance-20261022/dragon-receiver-program-native-v2/longsword-default-old-source-source.png",
+          "sha256": "666442306374f3a43ccdbefeb4be4d20a2f51871c8ee594d35dd213ee26ba5af",
+          "bytes": 990
+        },
+        {
+          "path": "evidence/weapon-appearance-20261022/dragon-receiver-program-native-v2/longsword-default-old-source-prepared.png",
+          "sha256": "666442306374f3a43ccdbefeb4be4d20a2f51871c8ee594d35dd213ee26ba5af",
+          "bytes": 990
+        },
+        {
+          "path": "evidence/weapon-appearance-20261022/dragon-receiver-program-native-v2/longsword-default-disabled-source.png",
+          "sha256": "666442306374f3a43ccdbefeb4be4d20a2f51871c8ee594d35dd213ee26ba5af",
+          "bytes": 990
+        },
+        {
+          "path": "evidence/weapon-appearance-20261022/dragon-receiver-program-native-v2/longsword-default-disabled-prepared.png",
+          "sha256": "666442306374f3a43ccdbefeb4be4d20a2f51871c8ee594d35dd213ee26ba5af",
+          "bytes": 990
+        },
+        {
+          "path": "evidence/weapon-appearance-20261022/dragon-receiver-program-native-v2/longsword-default-active-source.png",
+          "sha256": "666442306374f3a43ccdbefeb4be4d20a2f51871c8ee594d35dd213ee26ba5af",
+          "bytes": 990
+        },
+        {
+          "path": "evidence/weapon-appearance-20261022/dragon-receiver-program-native-v2/longsword-default-active-prepared.png",
+          "sha256": "df503b028bff9b7e9e71100475bce01178991e99f46cb07d03bbdb12565120ac",
+          "bytes": 981
+        },
+        {
+          "path": "evidence/weapon-appearance-20261022/dragon-receiver-program-native-v2/longsword-default-suppressed-source.png",
+          "sha256": "666442306374f3a43ccdbefeb4be4d20a2f51871c8ee594d35dd213ee26ba5af",
+          "bytes": 990
+        },
+        {
+          "path": "evidence/weapon-appearance-20261022/dragon-receiver-program-native-v2/longsword-default-suppressed-prepared.png",
+          "sha256": "666442306374f3a43ccdbefeb4be4d20a2f51871c8ee594d35dd213ee26ba5af",
+          "bytes": 990
+        },
+        {
+          "path": "evidence/weapon-appearance-20261022/dragon-receiver-program-native-v2/longsword-default-retired-source.png",
+          "sha256": "666442306374f3a43ccdbefeb4be4d20a2f51871c8ee594d35dd213ee26ba5af",
+          "bytes": 990
+        },
+        {
+          "path": "evidence/weapon-appearance-20261022/dragon-receiver-program-native-v2/longsword-default-retired-prepared.png",
+          "sha256": "666442306374f3a43ccdbefeb4be4d20a2f51871c8ee594d35dd213ee26ba5af",
+          "bytes": 990
+        },
+        {
+          "path": "evidence/weapon-appearance-20261022/dragon-receiver-program-native-v2/longsword-independent-disabled-source.png",
+          "sha256": "666442306374f3a43ccdbefeb4be4d20a2f51871c8ee594d35dd213ee26ba5af",
+          "bytes": 990
+        },
+        {
+          "path": "evidence/weapon-appearance-20261022/dragon-receiver-program-native-v2/longsword-independent-disabled-prepared.png",
+          "sha256": "666442306374f3a43ccdbefeb4be4d20a2f51871c8ee594d35dd213ee26ba5af",
+          "bytes": 990
+        },
+        {
+          "path": "evidence/weapon-appearance-20261022/dragon-receiver-program-native-v2/longsword-independent-active-source.png",
+          "sha256": "666442306374f3a43ccdbefeb4be4d20a2f51871c8ee594d35dd213ee26ba5af",
+          "bytes": 990
+        },
+        {
+          "path": "evidence/weapon-appearance-20261022/dragon-receiver-program-native-v2/longsword-independent-active-prepared.png",
+          "sha256": "df503b028bff9b7e9e71100475bce01178991e99f46cb07d03bbdb12565120ac",
+          "bytes": 981
+        },
+        {
+          "path": "evidence/weapon-appearance-20261022/dragon-receiver-program-native-v2/longsword-independent-suppressed-source.png",
+          "sha256": "666442306374f3a43ccdbefeb4be4d20a2f51871c8ee594d35dd213ee26ba5af",
+          "bytes": 990
+        },
+        {
+          "path": "evidence/weapon-appearance-20261022/dragon-receiver-program-native-v2/longsword-independent-suppressed-prepared.png",
+          "sha256": "666442306374f3a43ccdbefeb4be4d20a2f51871c8ee594d35dd213ee26ba5af",
+          "bytes": 990
+        },
+        {
+          "path": "evidence/weapon-appearance-20261022/dragon-receiver-program-native-v2/longsword-independent-retired-source.png",
+          "sha256": "666442306374f3a43ccdbefeb4be4d20a2f51871c8ee594d35dd213ee26ba5af",
+          "bytes": 990
+        },
+        {
+          "path": "evidence/weapon-appearance-20261022/dragon-receiver-program-native-v2/longsword-independent-retired-prepared.png",
+          "sha256": "666442306374f3a43ccdbefeb4be4d20a2f51871c8ee594d35dd213ee26ba5af",
+          "bytes": 990
+        }
+      ]
+    },
+    "prior_failed_wrapper_evidence": {
+      "path": "authoring/dragon-receiver-program-20261022/native-result-v1.json",
+      "sha256": "941185294485baec754ce65e5cf1f4d552101b954af35799688f2943d89c12ea",
+      "bytes": 10970
+    },
+    "cost_budget_qualified": false,
+    "whole_frame_qualified": false,
+    "installed_raw_root_qualified": false,
+    "dragon_creature_rendering_qualified": false,
+    "client_installed": false,
+    "packaged": false,
+    "scope": "Actual equipped Longsword sheet/Ember source: one delivered-b61 versus new-default exact RGBA pair, then existing _hook under old-default and supplied independent-normal policy; disabled/suppressed/retired exact RGBA and active original-alpha preservation. Uses actual source masks unchanged. Not a dragon mask/creature-rendering, installed raw-root, complete pipeline/cold-budget or client-adoption qualification."
+  },
+  "namespace_native": {
+    "version": "runtime-dragon-receiver-20261022-53075ee7ed11481f",
+    "checks": 127,
+    "failures": [],
+    "receipt": "/mnt/c/Users/tommaso/Documents/assets/VFXFactory/.runtime/dragon-receiver-20261022/actual-context-project/dragon-namespace-output-v2/receipt.json",
+    "receipt_sha256": "367f8380ba0cb7439a9c0b723df940513ea7607691458978b0263c648d94603e",
+    "log": "/mnt/c/Users/tommaso/Documents/assets/VFXFactory/.runtime/vfx-package-20261018/dragon-receiver-20261022-namespace-native-v2.log",
+    "log_sha256": "b8020ea0a35c36d155efd42474e6f2dc3fe1d43b13e7a3f5ec1a295144782e4c",
+    "engine_shutdown_clean": false,
+    "engine_errors_filtered": false,
+    "exact_static_exit_qualified": true,
+    "resources": [
+      [
+        "res://factory/core/source_materials.gd",
+        "GDScript"
+      ],
+      [
+        "res://factory/components/weapon_appearance/program.gd",
+        "GDScript"
+      ],
+      [
+        "res://factory/packaging/occurrence_clock.gd",
+        "GDScript"
+      ]
+    ],
+    "classes": {
+      "GDScriptNativeClass": 5,
+      "GDScript": 3
+    },
+    "new_image_comparisons_performed": false,
+    "runtime_budget_pass": false,
+    "native_amendment": {
+      "path": "/mnt/c/Users/tommaso/Documents/assets/VFXFactory/authoring/dragon-receiver-program-20261022/namespace-native-amendment-v2.json",
+      "sha256": "68465ebd38d74c1cb7521e25f55083b7dfce591332df864237152b12749083f6",
+      "checks_preserved": true,
+      "effective_default_rows": [
+        "default-disabled",
+        "independent-disabled"
+      ],
+      "source_module_sha256": "2d81b1c091104e9deac3bff6f61e494da016ae28e9402c12bc1c9099aa2c8215",
+      "frozen_plan_sha256": "ce580f2fe355470a1c2d9a277470aec433054c00df4d781d9daaa9c925d33bfa",
+      "failed_v1_preserved": "authoring/dragon-receiver-program-20261022/history/namespace-native-v1"
+    }
+  },
+  "contracts": {
+    "version": "runtime-dragon-receiver-20261022-53075ee7ed11481f",
+    "index_sha256": "ad15b49efa90d230ade4b7f31cf5d1db0d8be5c3265beec7794bfaf8ae6f2d52",
+    "failures": [],
+    "index_except_version_exact": true,
+    "bank_inverse_exact": true,
+    "typed_rows": 81,
+    "standalone_keys": 4,
+    "scene_warm_rows_retained": 465,
+    "prior_graph": {
+      "path": "/mnt/c/Users/tommaso/Documents/assets/VFXFactory/.runtime/runtime-spirit-receiver-20261022/fresh-runtime-spirit-receiver-20261022-851b88bdf3cdf065/dependencies.json",
+      "sha256": "1109b5aa1c9e727928f93f6029fe70fcb29995e75a7b7236022eb1879c10a23a",
+      "version": "runtime-spirit-receiver-20261022-851b88bdf3cdf065",
+      "resource_files": 23027
+    },
+    "new_resource_paths": [
+      "res://assets/vfx/corrections/dragon-receiver-20261022/53075ee7ed11481f/74dc1738afa00e504dff056b394417803de1894a34bee03a259262fc6dce3292.gdshader",
+      "res://assets/vfx/corrections/dragon-receiver-20261022/53075ee7ed11481f/8d43f1f89024a203e989.gdshader"
+    ],
+    "all_actual_bank_edges_known": true,
+    "new_namespace_engine_walk": false,
+    "new_exit_retention_measured": false
+  },
+  "native_amendment": {
+    "path": "/mnt/c/Users/tommaso/Documents/assets/VFXFactory/authoring/dragon-receiver-program-20261022/namespace-native-amendment-v2.json",
+    "sha256": "68465ebd38d74c1cb7521e25f55083b7dfce591332df864237152b12749083f6",
+    "companion": {
+      "path": "tools/vfx_package/dragon_receiver_native_v2.py",
+      "sha256": "348c4334bfcb7b9bce793deff63a7a1d9c7aa71224be42f33e374bc1f509e05e"
+    },
+    "frozen_module_sha256": "2d81b1c091104e9deac3bff6f61e494da016ae28e9402c12bc1c9099aa2c8215",
+    "frozen_plan_sha256": "ce580f2fe355470a1c2d9a277470aec433054c00df4d781d9daaa9c925d33bfa",
+    "runtime_or_schema_or_index_changed": false
+  },
+  "scope": "Inherited complete graph plus exact new Resource delta. No new whole-namespace engine walk/exit-retention measurement; no clean-engine or runtime-budget claim."
+}

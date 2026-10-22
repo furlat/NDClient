@@ -1,0 +1,32 @@
+{
+  "version": "runtime-condition-scenes-20261022-fc9aa0cb8b94d9a9",
+  "source_table": "res://assets/vfx/format/condition-scenes-20261022-source-resources.json",
+  "typed_resources": 81,
+  "standalone_resources": 4,
+  "runtime": {
+    "clock": "res://assets/vfx/sources/c0017ad639184b208deb/occurrence_clock.gd",
+    "initialize": "ensure_pool",
+    "capacity": 2048,
+    "production_construction": {
+      "entrypoint": "res://assets/vfx/sources/59e01d16319a5dcc3e14/constructed_occurrence.gd",
+      "circle_template": "res://assets/vfx/sources/f96e18e08395bac8fbf5/circle_recipient_template.gd",
+      "rage_body_film": "res://assets/vfx/sources/acc2f171e4a7d636f818/accepted_film_actor_material_v176.gd",
+      "immutable_preparation": "res://assets/vfx/sources/7dd1897cdd5ee8a903b9/source_readiness.gd",
+      "readiness_contract": "res://assets/vfx/format/construction-readiness.json",
+      "contracts": "res://assets/vfx/format/production-construction.json",
+      "scope": "Explicit preparation-time source operands; consumer projects actual facts; not a runtime discovery pass"
+    },
+    "actor_history_preparation": {
+      "helper": "res://assets/vfx/conditions/actor_history.gd",
+      "public_method": "prepare_actor_context",
+      "scope": "Existing actual actor packet; one private allocation/binding unit per call; no invented history"
+    },
+    "measured_alternatives": {
+      "approach_id": "runtime-prepared-20261020",
+      "provenance": "res://assets/vfx/provenance/runtime-alternatives.json",
+      "selection": "Unselected; no automatic substitution for recorded/default approaches"
+    }
+  },
+  "optional_receiver_helper": "res://assets/vfx/extensions/spirit-receiver-20261022/sources/0d4f34de6187f16c3e2c/spirit_area_mask_prepared.gd",
+  "new_art_or_source_rows": 0
+}

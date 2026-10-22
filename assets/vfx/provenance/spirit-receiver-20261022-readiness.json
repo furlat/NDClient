@@ -1,0 +1,80 @@
+{
+  "schema": "factory.additive_successor.actual_readiness.v1",
+  "version": "runtime-spirit-receiver-20261022-851b88bdf3cdf065",
+  "index_sha256": "2cf992b7f16619fca4a826ea3a37ea3070896c1cb18cca2b2b9dee78c646bfad",
+  "native_receipt": "/mnt/c/Users/tommaso/Documents/assets/VFXFactory/.runtime/runtime-spirit-receiver-20261022/native-smoke-complete-v1.json",
+  "native_receipt_sha256": "af97f773f28d8b2564ce983121055b1ced22ff53bff1e0c01e60102089defb59",
+  "cases": 2,
+  "constructor_flag_count": 2,
+  "unique_reported_immutable_resources": 4,
+  "resources": [
+    {
+      "path": "res://assets/vfx/extensions/spirit-receiver-20261022/sources/4dfedede8b34909eac2c/radiant.res",
+      "complete": true,
+      "original_node_bank_ready": false,
+      "resources": 13
+    },
+    {
+      "path": "res://assets/vfx/extensions/spirit-receiver-20261022/sources/394048fa31fabc8bbabf/radiant-mask-bank.tres",
+      "complete": true,
+      "error": "",
+      "operation": "metadata",
+      "unit": {
+        "operation": "metadata",
+        "ordinal": 1,
+        "parameter_index": 10,
+        "progress": {},
+        "us": 108
+      }
+    },
+    {
+      "path": "res://assets/vfx/extensions/spirit-receiver-20261022/sources/190dc65ddaabfcd68f93/necrotic.res",
+      "complete": true,
+      "original_node_bank_ready": false,
+      "resources": 51
+    },
+    {
+      "path": "res://assets/vfx/extensions/spirit-receiver-20261022/sources/04436be2e512da351b5b/necrotic-mask-bank.tres",
+      "complete": true,
+      "error": "",
+      "operation": "metadata",
+      "unit": {
+        "operation": "metadata",
+        "ordinal": 1,
+        "parameter_index": 10,
+        "progress": {},
+        "us": 60
+      }
+    }
+  ],
+  "rows": [
+    {
+      "clip_id": "assembled/spirit_guardians_radiant_native",
+      "group": "spirit_mask_prepared",
+      "native_complete_constructor_us": 2398,
+      "constructor_over2000us": true,
+      "measured_readiness_step_cpu_us": 4625,
+      "maximum_resource_step_cpu_us": 912,
+      "measured_inclusive_admission_wall_us": null,
+      "maximum_inclusive_admission_wall_us": null,
+      "maximum_readiness_step_cpu_us": 912,
+      "readiness_steps": 63
+    },
+    {
+      "clip_id": "assembled/spirit_guardians_necrotic_native",
+      "group": "spirit_mask_prepared",
+      "native_complete_constructor_us": 2751,
+      "constructor_over2000us": true,
+      "measured_readiness_step_cpu_us": 5258,
+      "maximum_resource_step_cpu_us": 336,
+      "measured_inclusive_admission_wall_us": null,
+      "maximum_inclusive_admission_wall_us": null,
+      "maximum_readiness_step_cpu_us": 336,
+      "readiness_steps": 95
+    }
+  ],
+  "maximum_actual_readiness_step_cpu_us": 912,
+  "scope": "Actual prepublication resource spans and, when supplied by the fixture, complete inclusive main-call wall spans. The maximum includes synchronous render callbacks inside admission; nested spans are never added twice. Cumulative Resource reports are deduplicated by exact address. Async elapsed waiting, full-game input work and wall-clock loading are not characterized as negligible.",
+  "human_approval_inferred": false,
+  "production_integration_performed": false
+}

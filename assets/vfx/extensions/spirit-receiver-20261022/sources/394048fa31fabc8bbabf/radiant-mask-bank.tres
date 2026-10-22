@@ -1,0 +1,39 @@
+[gd_resource type="Resource" format=3]
+
+[ext_resource type="Resource" path="res://assets/vfx/extensions/spirit-receiver-20261022/sources/4dfedede8b34909eac2c/radiant.res" id="1_ske2k"]
+[ext_resource type="Resource" path="res://assets/vfx/extensions/spirit-receiver-20261022/sources/c63b7344323c678ccd54/spirit_radiant-ground.res" id="2_lwh7t"]
+[ext_resource type="Shader" path="res://assets/vfx/extensions/spirit-receiver-20261022/sources/6d7ad6dab8bc30da8d25/radiant-leaf.tres" id="3_gaw73"]
+[ext_resource type="Shader" path="res://assets/vfx/extensions/spirit-receiver-20261022/sources/3864b730feda9343f8a7/radiant-ground.tres" id="4_sjb57"]
+[ext_resource type="Script" path="res://assets/vfx/extensions/spirit-receiver-20261022/sources/832f814a9a2922d948a8/bank.gd" id="5_k8i2f"]
+
+[resource]
+script = ExtResource("5_k8i2f")
+original_banks = Array[Resource]([ExtResource("1_ske2k"), ExtResource("2_lwh7t")])
+descriptors = Array[Dictionary]([{
+"bank": 0,
+"masked_code_sha256": "5728259bd7e0ad14da2957eeb1fc391966920331bfc6aabd979bdffdc0a20027",
+"material_value": false,
+"reference": {
+&"index": 0,
+"kind": "scene",
+"member": "shader",
+"node": 1,
+"property": 1
+},
+"rid_bank": true,
+"source_code_sha256": "2c6b1458220467b1d33b7685e1b717a1b9a79d7abfe955588bef9a14a07c3740"
+}, {
+"bank": 1,
+"masked_code_sha256": "237c548a2239ceb72cb5481b4aa7701881a81655eefd89aafa05c4e3c1af20a4",
+"material_value": false,
+"reference": {
+&"index": 0,
+"kind": "scene",
+"member": "shader",
+"node": 1,
+"property": 1
+},
+"rid_bank": false,
+"source_code_sha256": "5af2677571e8d9ec6a85ba6abaec5242eeb1def324d6360afb3d4b7e9099e6d7"
+}])
+programs = Array[Shader]([ExtResource("3_gaw73"), ExtResource("4_sjb57")])

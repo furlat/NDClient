@@ -1,0 +1,2993 @@
+{
+  "schema": "factory.production_review.source_resources.v1",
+  "resources": [
+    {
+      "key": "deafness",
+      "clip_id": "production-review/deafness/finite_application",
+      "phase": "res://assets/vfx/extensions/source-preparation-20261020/sources/6dc5a39bea3357fd04ad/finite_deafness.tres",
+      "source_phase": "res://authoring/runtime-cost-repair-20261020/r6_sensory/phases-v2/finite_deafness.tres",
+      "source_sha256": "e6b499800e0dc24982bb263fc95f923ceb6b49335b68093c88c4d6dfc0d945f4"
+    },
+    {
+      "key": "delayed_fire",
+      "clip_id": "production-review/retained-payload/delayed_fire",
+      "phase": "res://assets/vfx/extensions/source-preparation-20261020/sources/90f9a5a22d9213d09bc2/retained_fire.tres",
+      "source_phase": "res://authoring/runtime-cost-repair-20261020/review_contacts/retained_fire.tres",
+      "source_sha256": "3a87b0dae23d806be46f496857f89f42a1e7c3105ede613b4ebf322a398b4f65"
+    },
+    {
+      "key": "freezing",
+      "clip_id": "production-review/retained-payload/freezing",
+      "phase": "res://assets/vfx/extensions/source-preparation-20261020/sources/1602e5ab2c9262f9e0c5/retained.tres",
+      "source_phase": "res://authoring/runtime-cost-repair-20261020/r6_freezing/phases/retained.tres",
+      "source_sha256": "41c7ba5e9091d425a0ca0f754fa6c1027f5efe1b3d3bd7db8d77ec0670f21ed2"
+    },
+    {
+      "key": "counterspell",
+      "clip_id": "production-review/counterspell/actual_presentation_contact",
+      "phase": "res://assets/vfx/extensions/source-preparation-20261020/sources/24692e80be5c661fdc84/counterspell_contact.tres",
+      "source_phase": "res://authoring/runtime-cost-repair-20261020/review_contacts/counterspell_contact.tres",
+      "source_sha256": "a9a3c3a0cba3ed9692973ad31ca4105d69eadb72114d46c3d2dabbe4fd9ddea5"
+    },
+    {
+      "key": "continual_flame_bounded_hold",
+      "clip_id": "production-review/continual-flame/source-hold-loop",
+      "phase": "res://assets/vfx/extensions/production-review-20261020/sources/99344fc19f3a0e8d0096/source-hold-loop.tres",
+      "source_phase": "res://authoring/production-review-repair-20261020/continual_flame/source-hold-loop.tres",
+      "source_sha256": "29d3ceb9c16f3b6b2b23b1f35499dd76d1668f98248b014f85fa4a834709f0f4"
+    },
+    {
+      "key": "aura_of_life_main_owner",
+      "clip_id": "production-review/aura-of-life/main_owner",
+      "phase": "res://assets/vfx/extensions/production-review-20261020/sources/2b93d2f154712e5f200b/owner.tres",
+      "source_phase": "res://authoring/production-review-repair-20261020/aura_of_life/owner.tres",
+      "source_sha256": "98ad8a7e16edf66201b408dad1ec18a9f35730e1fac5708260bcd5930a396bf9"
+    },
+    {
+      "key": "portable_freezing_explosion",
+      "clip_id": "high-level-22/freezing-sphere/launch_blast",
+      "phase": "res://assets/vfx/extensions/public-admission-20261020/sources/6033ff6a0d8ffe5824a1/phase.tres",
+      "source_phase": "res://authoring/production-review-repair-20261020/portable_freezing/phase.tres",
+      "source_sha256": "368e75c5de28c997d02568987a4aa77c33dad40bf8351c74fe3e7cc93e2b8c35",
+      "constructor": "res://assets/vfx/extensions/public-admission-20261020/sources/d34f187453abd42ddb8a/public_explosion_occurrence.gd",
+      "construction_input_contract": {
+        "kind": "portable_observed_freezing",
+        "operands": "Existing component_path/input_field/values; actual occurrence owner and original caster before Source.make",
+        "fixture_observation_defaults_used": false
+      },
+      "public_callbacks": {
+        "observed_explosion": "set_observed_explosion",
+        "targets": "set_targets"
+      }
+    },
+    {
+      "key": "frigid_air_child",
+      "clip_id": "native/frigid_air/lifecycle",
+      "phase": "res://assets/vfx/extensions/wall-child-v3-20261021/sources/2503267e57482def9940/phase.tres",
+      "source_phase": "res://authoring/production-review-repair-20261021/frigid_air_child_v3/phase.tres",
+      "source_sha256": "32a7ba9eb18c2869eea464cc3fb8e4aa5c4111688c3f9913537533c5954e69e1",
+      "constructor": "res://assets/vfx/extensions/wall-child-v3-20261021/sources/77685eed96e701f52da0/frigid_air_child_v3_occurrence.gd",
+      "construction_input_contract": {
+        "operands": "One effect operand containing actual owner_uuid only"
+      },
+      "public_callbacks": {
+        "zone_geometry": "set_zone_geometry",
+        "owner_state": "set_owner_state",
+        "targets": "set_targets"
+      }
+    },
+    {
+      "key": "cloud_cloudkill",
+      "clip_id": "review/cloudkill/volume/lifecycle",
+      "phase": "res://assets/vfx/extensions/owner-fields-v2-20261021/sources/ed0cae71b5191d0c812e/cloudkill-phase.tres",
+      "source_phase": "res://authoring/production-review-repair-20261021/clouds/cloudkill-phase.tres",
+      "source_sha256": "707242c1e17d5cf3e53ba785901d3910f79acbfc7b7aad8ff08cc5cad27f6ca9",
+      "constructor": "res://assets/vfx/extensions/owner-fields-v2-20261021/sources/91d871df4fd48ba30113/cloudkill.gd",
+      "construction_input_contract": {
+        "operands": "One exact source-component operand with current owner/construction facts. No saved fixture defaults or bank override.",
+        "lifetime": "Explicit current owner state, disclosed geometry/cells and supplied world anchor; no review lease/recast."
+      },
+      "public_callbacks": {
+        "owner_state": "set_owner_state",
+        "targets": "set_targets"
+      },
+      "forwarded_source_inputs": [],
+      "forward_usage": "constructor result.forward(source_method, actual_value); not direct wrapper setters",
+      "indexed_alternative": true
+    },
+    {
+      "key": "cloud_darkness",
+      "clip_id": "review/darkness/volume/lifecycle",
+      "phase": "res://assets/vfx/extensions/owner-fields-v2-20261021/sources/a48155fd4471e4d25ce2/darkness-phase.tres",
+      "source_phase": "res://authoring/production-review-repair-20261021/clouds/darkness-phase.tres",
+      "source_sha256": "fdf7f3156f2827d255d9bacbabfeedddc27453bef859e07b284b1a18eda7cf7e",
+      "constructor": "res://assets/vfx/extensions/owner-fields-v2-20261021/sources/899d831709bf69cbd149/darkness.gd",
+      "construction_input_contract": {
+        "operands": "One exact source-component operand with current owner/construction facts. No saved fixture defaults or bank override.",
+        "lifetime": "Explicit current owner state, disclosed geometry/cells and supplied world anchor; no review lease/recast."
+      },
+      "public_callbacks": {
+        "owner_state": "set_owner_state",
+        "targets": "set_targets"
+      },
+      "forwarded_source_inputs": [],
+      "forward_usage": "constructor result.forward(source_method, actual_value); not direct wrapper setters",
+      "indexed_alternative": true
+    },
+    {
+      "key": "cloud_fog_cloud",
+      "clip_id": "review/fog_cloud/volume/lifecycle",
+      "phase": "res://assets/vfx/extensions/owner-fields-v2-20261021/sources/5d9fdb6ea9dfe4e9958e/fog_cloud-phase.tres",
+      "source_phase": "res://authoring/production-review-repair-20261021/clouds/fog_cloud-phase.tres",
+      "source_sha256": "d2e5ecc1caacbdc22e08a333b612e99d47ad1932bc27ff45dbeba9367562ee2e",
+      "constructor": "res://assets/vfx/extensions/owner-fields-v2-20261021/sources/91648362bb673cc03880/fog_cloud.gd",
+      "construction_input_contract": {
+        "operands": "One exact source-component operand with current owner/construction facts. No saved fixture defaults or bank override.",
+        "lifetime": "Explicit current owner state, disclosed geometry/cells and supplied world anchor; no review lease/recast."
+      },
+      "public_callbacks": {
+        "owner_state": "set_owner_state",
+        "targets": "set_targets"
+      },
+      "forwarded_source_inputs": [],
+      "forward_usage": "constructor result.forward(source_method, actual_value); not direct wrapper setters",
+      "indexed_alternative": true
+    },
+    {
+      "key": "cloud_stinking_cloud",
+      "clip_id": "review/stinking_cloud/volume/lifecycle",
+      "phase": "res://assets/vfx/extensions/owner-fields-v2-20261021/sources/f5fc7634962a11007e65/stinking_cloud-phase.tres",
+      "source_phase": "res://authoring/production-review-repair-20261021/clouds/stinking_cloud-phase.tres",
+      "source_sha256": "dd6ac9aa0d99e8b89ca6a194a0c3bcca6458b965f69c6fe1566cb1efc8672e29",
+      "constructor": "res://assets/vfx/extensions/owner-fields-v2-20261021/sources/8613c1d49e5ec59d4742/stinking_cloud.gd",
+      "construction_input_contract": {
+        "operands": "One exact source-component operand with current owner/construction facts. No saved fixture defaults or bank override.",
+        "lifetime": "Explicit current owner state, disclosed geometry/cells and supplied world anchor; no review lease/recast."
+      },
+      "public_callbacks": {
+        "owner_state": "set_owner_state",
+        "targets": "set_targets"
+      },
+      "forwarded_source_inputs": [],
+      "forward_usage": "constructor result.forward(source_method, actual_value); not direct wrapper setters",
+      "indexed_alternative": true
+    },
+    {
+      "key": "cloud_incendiary_cloud",
+      "clip_id": "review/incendiary_cloud/volume/lifecycle",
+      "phase": "res://assets/vfx/extensions/owner-fields-v2-20261021/sources/84f1a38fb39b341e94a1/incendiary_cloud-phase.tres",
+      "source_phase": "res://authoring/production-review-repair-20261021/clouds/incendiary_cloud-phase.tres",
+      "source_sha256": "4b0cbf2e579f9e694ea3fc9b6be2f3ac47f54384e3abd7aa3267689fc94a369d",
+      "constructor": "res://assets/vfx/extensions/owner-fields-v2-20261021/sources/98114d7858bc58906646/incendiary_cloud.gd",
+      "construction_input_contract": {
+        "operands": "One exact source-component operand with current owner/construction facts. No saved fixture defaults or bank override.",
+        "lifetime": "Explicit current owner state, disclosed geometry/cells and supplied world anchor; no review lease/recast."
+      },
+      "public_callbacks": {
+        "owner_state": "set_owner_state",
+        "targets": "set_targets"
+      },
+      "forwarded_source_inputs": [],
+      "forward_usage": "constructor result.forward(source_method, actual_value); not direct wrapper setters",
+      "indexed_alternative": true
+    },
+    {
+      "key": "spike",
+      "clip_id": "assembled/spike_growth_native",
+      "phase": "res://assets/vfx/extensions/owner-fields-v2-20261021/sources/22a15c478bca6b5904bb/spike.tres",
+      "source_phase": "res://authoring/production-review-repair-20261021/owner_release/spike.tres",
+      "source_sha256": "99a9e9b0af95bb582b994ba8441d6f427564e62c5dc6503faa67950e02a580f9",
+      "constructor": "res://assets/vfx/extensions/owner-fields-v2-20261021/sources/071cb5dfbf5ba3bf7019/owner_release_spike.gd",
+      "construction_input_contract": {
+        "operands": "One exact source-component operand with current owner/construction facts. No saved fixture defaults or bank override.",
+        "lifetime": "Explicit current owner state, disclosed geometry/cells and supplied world anchor; no review lease/recast."
+      },
+      "public_callbacks": {
+        "targets": "set_targets",
+        "owner_state": "set_owner_state",
+        "zone_geometry": "set_zone_geometry"
+      },
+      "forwarded_source_inputs": [],
+      "forward_usage": "constructor result.forward(source_method, actual_value); not direct wrapper setters",
+      "indexed_alternative": true
+    },
+    {
+      "key": "sleet",
+      "clip_id": "assembled/sleet_storm_native",
+      "phase": "res://assets/vfx/extensions/owner-fields-v2-20261021/sources/1b7f19780b26c6798b82/sleet.tres",
+      "source_phase": "res://authoring/production-review-repair-20261021/owner_release/sleet.tres",
+      "source_sha256": "021d4c4d1a253199b0a7699fadbef4a33c6a5c8a2edbe8f20435bc31ab9fd7af",
+      "constructor": "res://assets/vfx/extensions/owner-fields-v2-20261021/sources/466f2cf191ebaf6b135d/owner_release_sleet.gd",
+      "construction_input_contract": {
+        "operands": "One exact source-component operand with current owner/construction facts. No saved fixture defaults or bank override.",
+        "lifetime": "Explicit current owner state, disclosed geometry/cells and supplied world anchor; no review lease/recast."
+      },
+      "public_callbacks": {
+        "targets": "set_targets",
+        "owner_state": "set_owner_state",
+        "zone_geometry": "set_zone_geometry"
+      },
+      "forwarded_source_inputs": [],
+      "forward_usage": "constructor result.forward(source_method, actual_value); not direct wrapper setters",
+      "indexed_alternative": true
+    },
+    {
+      "key": "spirit_radiant",
+      "clip_id": "assembled/spirit_guardians_radiant_native",
+      "phase": "res://assets/vfx/extensions/owner-fields-v2-20261021/sources/2e93044a5c373736be1b/spirit_radiant.tres",
+      "source_phase": "res://authoring/production-review-repair-20261021/owner_release/spirit_radiant.tres",
+      "source_sha256": "239047443bed568acaab7a7f65127408e46d4f0e9cd3782165ba78a578503663",
+      "constructor": "res://assets/vfx/extensions/owner-fields-v2-20261021/sources/4358fe542e97279c061c/owner_release_spirit_radiant.gd",
+      "construction_input_contract": {
+        "operands": "One exact source-component operand with current owner/construction facts. No saved fixture defaults or bank override.",
+        "lifetime": "Explicit current owner state, disclosed geometry/cells and supplied world anchor; no review lease/recast."
+      },
+      "public_callbacks": {
+        "targets": "set_targets",
+        "owner_state": "set_owner_state"
+      },
+      "forwarded_source_inputs": [],
+      "forward_usage": "constructor result.forward(source_method, actual_value); not direct wrapper setters",
+      "indexed_alternative": true
+    },
+    {
+      "key": "spirit_necrotic",
+      "clip_id": "assembled/spirit_guardians_necrotic_native",
+      "phase": "res://assets/vfx/extensions/owner-fields-v2-20261021/sources/e9c552183a421cae7c90/spirit_necrotic.tres",
+      "source_phase": "res://authoring/production-review-repair-20261021/owner_release/spirit_necrotic.tres",
+      "source_sha256": "a4aebcb3ca666d2200d9cd95160aeab761a9c0a66c7e67fa6e93901362cd648c",
+      "constructor": "res://assets/vfx/extensions/owner-fields-v2-20261021/sources/89af03b3b463a89cdcf8/owner_release_spirit_necrotic.gd",
+      "construction_input_contract": {
+        "operands": "One exact source-component operand with current owner/construction facts. No saved fixture defaults or bank override.",
+        "lifetime": "Explicit current owner state, disclosed geometry/cells and supplied world anchor; no review lease/recast."
+      },
+      "public_callbacks": {
+        "targets": "set_targets",
+        "owner_state": "set_owner_state"
+      },
+      "forwarded_source_inputs": [],
+      "forward_usage": "constructor result.forward(source_method, actual_value); not direct wrapper setters",
+      "indexed_alternative": true
+    },
+    {
+      "key": "wind",
+      "clip_id": "review/gust_of_wind/whole/lifecycle",
+      "phase": "res://assets/vfx/extensions/owner-fields-v2-20261021/sources/f2699aff8bd985672766/wind.tres",
+      "source_phase": "res://authoring/production-review-repair-20261021/owner_release/wind.tres",
+      "source_sha256": "7ab2b24e13b6f5f004c359b77aaf9dd370b337bf71b6a39e777d80786bcd4d07",
+      "constructor": "res://assets/vfx/extensions/owner-fields-v2-20261021/sources/8bc056cc059b0e916424/owner_release_wind.gd",
+      "construction_input_contract": {
+        "operands": "One exact source-component operand with current owner/construction facts. No saved fixture defaults or bank override.",
+        "lifetime": "Explicit current owner state, disclosed geometry/cells and supplied world anchor; no review lease/recast."
+      },
+      "public_callbacks": {
+        "targets": "set_targets",
+        "owner_state": "set_owner_state",
+        "zone_geometry": "set_zone_geometry"
+      },
+      "forwarded_source_inputs": [],
+      "forward_usage": "constructor result.forward(source_method, actual_value); not direct wrapper setters",
+      "indexed_alternative": true
+    },
+    {
+      "key": "force_panels",
+      "clip_id": "wall-native/wall_of_force_panels_back_native/lifecycle",
+      "phase": "res://assets/vfx/extensions/owner-fields-v2-20261021/sources/9aa7b3266c8d9dd2a5cc/force_panels.tres",
+      "source_phase": "res://authoring/production-review-repair-20261021/owner_release/force_panels.tres",
+      "source_sha256": "87d9a9788c9195a08fcaa4c4eb575cecf26ec2a529bdb6112ea78c26d0ee3fe8",
+      "constructor": "res://assets/vfx/extensions/owner-fields-v2-20261021/sources/ff1fd545d18e174740a0/owner_release_force_panels.gd",
+      "construction_input_contract": {
+        "operands": "One exact source-component operand with current owner/construction facts. No saved fixture defaults or bank override.",
+        "lifetime": "Explicit current owner state, disclosed geometry/cells and supplied world anchor; no review lease/recast."
+      },
+      "public_callbacks": {
+        "targets": "set_targets",
+        "owner_state": "set_owner_state",
+        "zone_geometry": "set_zone_geometry"
+      },
+      "forwarded_source_inputs": [],
+      "forward_usage": "constructor result.forward(source_method, actual_value); not direct wrapper setters",
+      "indexed_alternative": true
+    },
+    {
+      "key": "force_dome",
+      "clip_id": "wall-native/wall_of_force_dome_back_native/lifecycle",
+      "phase": "res://assets/vfx/extensions/owner-fields-v2-20261021/sources/f0f6f2d4f36bce8317e4/force_dome.tres",
+      "source_phase": "res://authoring/production-review-repair-20261021/owner_release/force_dome.tres",
+      "source_sha256": "61f4dd60c6fc5a69a766338cdede63266beeae979585f4778bf9ed2f0866e027",
+      "constructor": "res://assets/vfx/extensions/owner-fields-v2-20261021/sources/90f4808175f158a9753d/owner_release_force_dome.gd",
+      "construction_input_contract": {
+        "operands": "One exact source-component operand with current owner/construction facts. No saved fixture defaults or bank override.",
+        "lifetime": "Explicit current owner state, disclosed geometry/cells and supplied world anchor; no review lease/recast."
+      },
+      "public_callbacks": {
+        "targets": "set_targets",
+        "owner_state": "set_owner_state",
+        "zone_geometry": "set_zone_geometry"
+      },
+      "forwarded_source_inputs": [],
+      "forward_usage": "constructor result.forward(source_method, actual_value); not direct wrapper setters",
+      "indexed_alternative": true
+    },
+    {
+      "key": "stone_straight",
+      "clip_id": "wall-native/wall_of_stone_straight_back_native/lifecycle",
+      "phase": "res://assets/vfx/extensions/owner-fields-v2-20261021/sources/64338dc77f9df28ee171/stone_straight.tres",
+      "source_phase": "res://authoring/production-review-repair-20261021/solid_owner_release/stone_straight.tres",
+      "source_sha256": "423bbe5d0b60a3b2dd12f7b482740afbdb4d1a6312abdfd71d0d0c6d711a54e2",
+      "constructor": "res://assets/vfx/extensions/owner-fields-v2-20261021/sources/6ba45e68758fa55ffd1a/stone_straight.gd",
+      "construction_input_contract": {
+        "operands": "One exact source-component operand with current owner/construction facts. No saved fixture defaults or bank override.",
+        "lifetime": "Explicit current owner state, disclosed geometry/cells and supplied world anchor; no review lease/recast."
+      },
+      "public_callbacks": {
+        "zone_geometry": "set_zone_geometry",
+        "owner_state": "set_owner_state",
+        "targets": "set_targets"
+      },
+      "forwarded_source_inputs": [],
+      "forward_usage": "constructor result.forward(source_method, actual_value); not direct wrapper setters",
+      "indexed_alternative": true
+    },
+    {
+      "key": "stone_corner",
+      "clip_id": "wall-native/stone_wall_assembly_breakup_native/lifecycle",
+      "phase": "res://assets/vfx/extensions/owner-fields-v2-20261021/sources/25d570c7aba326c3e0ab/stone_corner.tres",
+      "source_phase": "res://authoring/production-review-repair-20261021/solid_owner_release/stone_corner.tres",
+      "source_sha256": "293b5056b22967760d54de8c2aba60067e6b44f705dfc822593e0a1e55a01419",
+      "constructor": "res://assets/vfx/extensions/owner-fields-v2-20261021/sources/90d3c21331fc5ffe2c3d/stone_corner.gd",
+      "construction_input_contract": {
+        "operands": "One exact source-component operand with current owner/construction facts. No saved fixture defaults or bank override.",
+        "lifetime": "Explicit current owner state, disclosed geometry/cells and supplied world anchor; no review lease/recast."
+      },
+      "public_callbacks": {
+        "zone_geometry": "set_zone_geometry",
+        "owner_state": "set_owner_state",
+        "targets": "set_targets"
+      },
+      "forwarded_source_inputs": [],
+      "forward_usage": "constructor result.forward(source_method, actual_value); not direct wrapper setters",
+      "indexed_alternative": true
+    },
+    {
+      "key": "ice_straight",
+      "clip_id": "wall-native/ice_wall_assembly_breakup_native/lifecycle",
+      "phase": "res://assets/vfx/extensions/owner-fields-v2-20261021/sources/d3b02cdefe76a9e1ab14/ice_straight.tres",
+      "source_phase": "res://authoring/production-review-repair-20261021/solid_owner_release/ice_straight.tres",
+      "source_sha256": "8b18534c116eebd5584dcbcc9edd8eea82045ffbad3b46c5812ffff1a490d8e8",
+      "constructor": "res://assets/vfx/extensions/owner-fields-v2-20261021/sources/546881997d9f51554541/ice_straight.gd",
+      "construction_input_contract": {
+        "operands": "One exact source-component operand with current owner/construction facts. No saved fixture defaults or bank override.",
+        "lifetime": "Explicit current owner state, disclosed geometry/cells and supplied world anchor; no review lease/recast."
+      },
+      "public_callbacks": {
+        "zone_geometry": "set_zone_geometry",
+        "owner_state": "set_owner_state",
+        "targets": "set_targets"
+      },
+      "forwarded_source_inputs": [],
+      "forward_usage": "constructor result.forward(source_method, actual_value); not direct wrapper setters",
+      "indexed_alternative": true
+    },
+    {
+      "key": "ice_corner",
+      "clip_id": "wall-native/wall_of_ice_corner_back_native/lifecycle",
+      "phase": "res://assets/vfx/extensions/owner-fields-v2-20261021/sources/9f8de59fdae5b3eacbb0/ice_corner.tres",
+      "source_phase": "res://authoring/production-review-repair-20261021/solid_owner_release/ice_corner.tres",
+      "source_sha256": "dceffb7dc5be5ea14c64fccb405e8114c7993478c20730cbf7ece53c8f88e522",
+      "constructor": "res://assets/vfx/extensions/owner-fields-v2-20261021/sources/bfcb7c2d821081972edc/ice_corner.gd",
+      "construction_input_contract": {
+        "operands": "One exact source-component operand with current owner/construction facts. No saved fixture defaults or bank override.",
+        "lifetime": "Explicit current owner state, disclosed geometry/cells and supplied world anchor; no review lease/recast."
+      },
+      "public_callbacks": {
+        "zone_geometry": "set_zone_geometry",
+        "owner_state": "set_owner_state",
+        "targets": "set_targets"
+      },
+      "forwarded_source_inputs": [],
+      "forward_usage": "constructor result.forward(source_method, actual_value); not direct wrapper setters",
+      "indexed_alternative": true
+    },
+    {
+      "key": "ice_dome",
+      "clip_id": "wall-native/ice_dome_surface_breakup_native/lifecycle",
+      "phase": "res://assets/vfx/extensions/owner-fields-v2-20261021/sources/fff2b41147e30064ec0a/ice_dome.tres",
+      "source_phase": "res://authoring/production-review-repair-20261021/solid_owner_release/ice_dome.tres",
+      "source_sha256": "589a60c93b2b94cdb8ff2d46fd5428938ae2fd9069a611b35f56b1edb0bf407c",
+      "constructor": "res://assets/vfx/extensions/owner-fields-v2-20261021/sources/88866e09bd2d02713cd8/ice_dome.gd",
+      "construction_input_contract": {
+        "operands": "One exact source-component operand with current owner/construction facts. No saved fixture defaults or bank override.",
+        "lifetime": "Explicit current owner state, disclosed geometry/cells and supplied world anchor; no review lease/recast."
+      },
+      "public_callbacks": {
+        "zone_geometry": "set_zone_geometry",
+        "owner_state": "set_owner_state",
+        "targets": "set_targets"
+      },
+      "forwarded_source_inputs": [],
+      "forward_usage": "constructor result.forward(source_method, actual_value); not direct wrapper setters",
+      "indexed_alternative": true
+    },
+    {
+      "key": "forcecage_cage",
+      "clip_id": "high-level-22/forcecage/cage",
+      "phase": "res://assets/vfx/extensions/owner-fields-v2-20261021/sources/c2436b5e61eb0d3f988a/cage.tres",
+      "source_phase": "res://authoring/production-review-repair-20261021/forcecage/cage.tres",
+      "source_sha256": "ded6e0b15eb66031c51016a4d24da164feb9950854cc7dfbd0d4b195d707e1e2",
+      "constructor": "res://assets/vfx/extensions/owner-fields-v2-20261021/sources/b6e13f250bd01b630220/forcecage_cage.gd",
+      "construction_input_contract": {
+        "operands": "One exact source-component operand with current owner/construction facts. No saved fixture defaults or bank override.",
+        "lifetime": "Explicit current owner state, disclosed geometry/cells and supplied world anchor; no review lease/recast."
+      },
+      "public_callbacks": {
+        "zone_geometry": "set_zone_geometry",
+        "owner_state": "set_owner_state",
+        "targets": "set_targets"
+      },
+      "forwarded_source_inputs": [],
+      "forward_usage": "constructor result.forward(source_method, actual_value); not direct wrapper setters",
+      "indexed_alternative": true
+    },
+    {
+      "key": "partitioned_surface_ice",
+      "clip_id": "high-level-22/freezing-sphere/launch_observed_ice",
+      "phase": "res://assets/vfx/extensions/owner-fields-v2-20261021/sources/fe651910a22696b57f92/ice-phase.tres",
+      "source_phase": "res://authoring/production-review-repair-20261021/partitioned_surfaces_v2/ice-phase.tres",
+      "source_sha256": "cace8e5c556d0ae3eee276197e3f32f41e9a637c19eea37d716a9b34c46baee9",
+      "constructor": "res://assets/vfx/extensions/owner-fields-v2-20261021/sources/827440216c3d3edcc4f6/partitioned_surface_ice.gd",
+      "construction_input_contract": {
+        "operands": "One effect operand containing only the actual surface_uuid. Source bank/art is immutable.",
+        "surface_partition": "Explicit original-neighbor packet and disjoint draw subset; derive from actual admitted local cells once per footprint change.",
+        "placement": "Existing supplied finite world anchor point applied once; horizontal cell size one."
+      },
+      "public_callbacks": {
+        "surface_partition": "set_surface_partition",
+        "owner_state": "set_owner_state",
+        "targets": "set_targets"
+      },
+      "forwarded_source_inputs": [],
+      "forward_usage": "constructor result.forward(source_method, actual_value); not direct wrapper setters",
+      "indexed_alternative": true
+    },
+    {
+      "key": "partitioned_surface_acid",
+      "clip_id": "bg3-36/chromatic-orb/acid/observed-surface",
+      "phase": "res://assets/vfx/extensions/owner-fields-v2-20261021/sources/c4f61f828bfb0cf8a518/acid-phase.tres",
+      "source_phase": "res://authoring/production-review-repair-20261021/partitioned_surfaces_v2/acid-phase.tres",
+      "source_sha256": "ffcf24b3a8d8f1a7f7b898e86581fa5efe483ac90fefa508b35748ffe360df88",
+      "constructor": "res://assets/vfx/extensions/owner-fields-v2-20261021/sources/4cc60c54beea74752cf2/partitioned_surface_acid.gd",
+      "construction_input_contract": {
+        "operands": "One effect operand containing only the actual surface_uuid. Source bank/art is immutable.",
+        "surface_partition": "Explicit original-neighbor packet and disjoint draw subset; derive from actual admitted local cells once per footprint change.",
+        "placement": "Existing supplied finite world anchor point applied once; horizontal cell size one."
+      },
+      "public_callbacks": {
+        "surface_partition": "set_surface_partition",
+        "owner_state": "set_owner_state",
+        "targets": "set_targets"
+      },
+      "forwarded_source_inputs": [],
+      "forward_usage": "constructor result.forward(source_method, actual_value); not direct wrapper setters",
+      "indexed_alternative": true
+    },
+    {
+      "key": "partitioned_surface_cold",
+      "clip_id": "bg3-36/chromatic-orb/cold/observed-surface",
+      "phase": "res://assets/vfx/extensions/owner-fields-v2-20261021/sources/9bb4724fc5eb9042ea57/cold-phase.tres",
+      "source_phase": "res://authoring/production-review-repair-20261021/partitioned_surfaces_v2/cold-phase.tres",
+      "source_sha256": "647519a2b2f2d54e3386648c3a8bc705e6d80fbd168840e506789250a6fcd538",
+      "constructor": "res://assets/vfx/extensions/owner-fields-v2-20261021/sources/5a90258ef34d107d6948/partitioned_surface_cold.gd",
+      "construction_input_contract": {
+        "operands": "One effect operand containing only the actual surface_uuid. Source bank/art is immutable.",
+        "surface_partition": "Explicit original-neighbor packet and disjoint draw subset; derive from actual admitted local cells once per footprint change.",
+        "placement": "Existing supplied finite world anchor point applied once; horizontal cell size one."
+      },
+      "public_callbacks": {
+        "surface_partition": "set_surface_partition",
+        "owner_state": "set_owner_state",
+        "targets": "set_targets"
+      },
+      "forwarded_source_inputs": [],
+      "forward_usage": "constructor result.forward(source_method, actual_value); not direct wrapper setters",
+      "indexed_alternative": true
+    },
+    {
+      "key": "partitioned_surface_fire",
+      "clip_id": "bg3-36/chromatic-orb/fire/observed-surface",
+      "phase": "res://assets/vfx/extensions/owner-fields-v2-20261021/sources/545c3e0e639aebfb1c09/fire-phase.tres",
+      "source_phase": "res://authoring/production-review-repair-20261021/partitioned_surfaces_v2/fire-phase.tres",
+      "source_sha256": "231edced0c84c97f7842f9609f110fcf2b410fcb4d5d8d184678cedd1f352bc0",
+      "constructor": "res://assets/vfx/extensions/owner-fields-v2-20261021/sources/ef94717312a8f0f83dfa/partitioned_surface_fire.gd",
+      "construction_input_contract": {
+        "operands": "One effect operand containing only the actual surface_uuid. Source bank/art is immutable.",
+        "surface_partition": "Explicit original-neighbor packet and disjoint draw subset; derive from actual admitted local cells once per footprint change.",
+        "placement": "Existing supplied finite world anchor point applied once; horizontal cell size one."
+      },
+      "public_callbacks": {
+        "surface_partition": "set_surface_partition",
+        "owner_state": "set_owner_state",
+        "targets": "set_targets"
+      },
+      "forwarded_source_inputs": [],
+      "forward_usage": "constructor result.forward(source_method, actual_value); not direct wrapper setters",
+      "indexed_alternative": true
+    },
+    {
+      "key": "partitioned_surface_lightning",
+      "clip_id": "bg3-36/chromatic-orb/lightning/observed-surface",
+      "phase": "res://assets/vfx/extensions/owner-fields-v2-20261021/sources/151498e87f3dc6a1779e/lightning-phase.tres",
+      "source_phase": "res://authoring/production-review-repair-20261021/partitioned_surfaces_v2/lightning-phase.tres",
+      "source_sha256": "17f8d9ced5f1a22cc77cc804678a1c4b9a7e055d1765a379280631fd6a7e9f05",
+      "constructor": "res://assets/vfx/extensions/owner-fields-v2-20261021/sources/3b73c9d48b53cbc55c63/partitioned_surface_lightning.gd",
+      "construction_input_contract": {
+        "operands": "One effect operand containing only the actual surface_uuid. Source bank/art is immutable.",
+        "surface_partition": "Explicit original-neighbor packet and disjoint draw subset; derive from actual admitted local cells once per footprint change.",
+        "placement": "Existing supplied finite world anchor point applied once; horizontal cell size one."
+      },
+      "public_callbacks": {
+        "surface_partition": "set_surface_partition",
+        "owner_state": "set_owner_state",
+        "targets": "set_targets"
+      },
+      "forwarded_source_inputs": [],
+      "forward_usage": "constructor result.forward(source_method, actual_value); not direct wrapper setters",
+      "indexed_alternative": true
+    },
+    {
+      "key": "partitioned_surface_poison",
+      "clip_id": "bg3-36/chromatic-orb/poison/observed-surface",
+      "phase": "res://assets/vfx/extensions/owner-fields-v2-20261021/sources/fa99b9d3dd611519f073/poison-phase.tres",
+      "source_phase": "res://authoring/production-review-repair-20261021/partitioned_surfaces_v2/poison-phase.tres",
+      "source_sha256": "fb73b986cdde8eaebc9bdba5695d16d007a15537462eea92fbd2d748ccbc0569",
+      "constructor": "res://assets/vfx/extensions/owner-fields-v2-20261021/sources/73a1ccc511040b925f08/partitioned_surface_poison.gd",
+      "construction_input_contract": {
+        "operands": "One effect operand containing only the actual surface_uuid. Source bank/art is immutable.",
+        "surface_partition": "Explicit original-neighbor packet and disjoint draw subset; derive from actual admitted local cells once per footprint change.",
+        "placement": "Existing supplied finite world anchor point applied once; horizontal cell size one."
+      },
+      "public_callbacks": {
+        "surface_partition": "set_surface_partition",
+        "owner_state": "set_owner_state",
+        "targets": "set_targets"
+      },
+      "forwarded_source_inputs": [],
+      "forward_usage": "constructor result.forward(source_method, actual_value); not direct wrapper setters",
+      "indexed_alternative": true
+    },
+    {
+      "key": "fire_wall_segment",
+      "clip_id": "assembled/wall_of_fire_straight_native",
+      "phase": "res://assets/vfx/extensions/owner-fields-v2-20261021/sources/d8ecd83764d1b85daf91/segment-phase.tres",
+      "source_phase": "res://authoring/production-review-repair-20261021/fire_wall/segment-phase.tres",
+      "source_sha256": "d058ea1b1dfb9d033788e130f1a25e97286f4b1523d0ec1f74200a4a40119444",
+      "constructor": "res://assets/vfx/extensions/owner-fields-v2-20261021/sources/ccdcfe2f055783af988c/segment.gd",
+      "construction_input_contract": {
+        "operands": "One exact source-component operand with current owner/construction facts. No saved fixture defaults or bank override.",
+        "lifetime": "Explicit current owner state, disclosed geometry/cells and supplied world anchor; no review lease/recast."
+      },
+      "public_callbacks": {
+        "owner_state": "set_owner_state",
+        "targets": "set_targets"
+      },
+      "forwarded_source_inputs": [
+        "set_admitted_cells"
+      ],
+      "forward_usage": "constructor result.forward(source_method, actual_value); not direct wrapper setters",
+      "indexed_alternative": true
+    },
+    {
+      "key": "fire_wall_ring",
+      "clip_id": "assembled/wall_of_fire_ring_native",
+      "phase": "res://assets/vfx/extensions/owner-fields-v2-20261021/sources/b2942c7f80e34ccec79b/ring-phase.tres",
+      "source_phase": "res://authoring/production-review-repair-20261021/fire_wall/ring-phase.tres",
+      "source_sha256": "5f72a8291f2275ddfe56e05d389d6dc8338dde93b824f7b9306f13f43046867f",
+      "constructor": "res://assets/vfx/extensions/owner-fields-v2-20261021/sources/45429202d0da83f4f1ac/ring.gd",
+      "construction_input_contract": {
+        "operands": "One exact source-component operand with current owner/construction facts. No saved fixture defaults or bank override.",
+        "lifetime": "Explicit current owner state, disclosed geometry/cells and supplied world anchor; no review lease/recast."
+      },
+      "public_callbacks": {
+        "owner_state": "set_owner_state",
+        "targets": "set_targets"
+      },
+      "forwarded_source_inputs": [
+        "set_admitted_cells"
+      ],
+      "forward_usage": "constructor result.forward(source_method, actual_value); not direct wrapper setters",
+      "indexed_alternative": true
+    },
+    {
+      "key": "forcecage_box",
+      "clip_id": "high-level-22/forcecage/box",
+      "phase": "res://assets/vfx/extensions/owner-fields-v2-20261021/sources/6a55e15534f0bfc573bf/box.tres",
+      "source_phase": "res://authoring/production-review-repair-20261021/forcecage/box.tres",
+      "source_sha256": "08f1f8722aa517bbe037f4e8a60d20a016f77469281071d423ddbc0d571906ed",
+      "constructor": "res://assets/vfx/extensions/owner-fields-v2-20261021/sources/e91096bd617ec9606200/forcecage_box.gd",
+      "construction_input_contract": {
+        "operands": "One exact source-component operand with current owner/construction facts. No saved fixture defaults or bank override.",
+        "lifetime": "Explicit current owner state, disclosed geometry/cells and supplied world anchor; no review lease/recast."
+      },
+      "public_callbacks": {
+        "zone_geometry": "set_zone_geometry",
+        "owner_state": "set_owner_state",
+        "targets": "set_targets"
+      },
+      "forwarded_source_inputs": [],
+      "forward_usage": "constructor result.forward(source_method, actual_value); not direct wrapper setters",
+      "indexed_alternative": false
+    },
+    {
+      "key": "material_runtime_fire_wall_segment",
+      "clip_id": "assembled/wall_of_fire_straight_native",
+      "phase": "res://assets/vfx/extensions/material-runtime-20261021/sources/f094d2311ca09245c364/segment-phase.tres",
+      "source_phase": "res://authoring/production-review-repair-20261021/fire_colour/input-fast-v1/segment-phase.tres",
+      "source_sha256": "7b91a72dc44c5d13da459fc1e11ccc2d6869ea7fa1d3a8d3802fdd357afc8af2",
+      "constructor": "res://assets/vfx/extensions/material-runtime-20261021/sources/bf22f7e2aab6184aad39/segment.gd",
+      "construction_input_contract": {
+        "operands": "One exact source-component operand with current owner/construction facts. No saved fixture defaults or bank override.",
+        "lifetime": "Explicit current owner state, disclosed geometry/cells and supplied world anchor; no review lease/recast."
+      },
+      "public_callbacks": {
+        "owner_state": "set_owner_state",
+        "targets": "set_targets"
+      },
+      "public_usage": "Call public_callbacks methods directly on the returned occurrence; aliases such as set_targets perform their own binding.",
+      "forwarded_source_inputs": [
+        "set_admitted_cells"
+      ],
+      "forward_usage": "Only forwarded_source_inputs name source-level methods for occurrence.forward(source_method, actual_value); do not forward public aliases.",
+      "indexed_alternative": true
+    },
+    {
+      "key": "material_runtime_fire_wall_ring",
+      "clip_id": "assembled/wall_of_fire_ring_native",
+      "phase": "res://assets/vfx/extensions/material-runtime-20261021/sources/5e0a32e28e7fc4debd88/ring-phase.tres",
+      "source_phase": "res://authoring/production-review-repair-20261021/fire_colour/input-fast-v1/ring-phase.tres",
+      "source_sha256": "ffefcacb0ad8df9f8d53923917639c3310037f914970dd493a87afcc8761bb91",
+      "constructor": "res://assets/vfx/extensions/material-runtime-20261021/sources/3b8cdf2a215c95ef9bba/ring.gd",
+      "construction_input_contract": {
+        "operands": "One exact source-component operand with current owner/construction facts. No saved fixture defaults or bank override.",
+        "lifetime": "Explicit current owner state, disclosed geometry/cells and supplied world anchor; no review lease/recast."
+      },
+      "public_callbacks": {
+        "owner_state": "set_owner_state",
+        "targets": "set_targets"
+      },
+      "public_usage": "Call public_callbacks methods directly on the returned occurrence; aliases such as set_targets perform their own binding.",
+      "forwarded_source_inputs": [
+        "set_admitted_cells"
+      ],
+      "forward_usage": "Only forwarded_source_inputs name source-level methods for occurrence.forward(source_method, actual_value); do not forward public aliases.",
+      "indexed_alternative": true
+    },
+    {
+      "key": "material_runtime_native_liquid_surface_acid",
+      "clip_id": "bg3-36/chromatic-orb/acid/observed-surface",
+      "phase": "res://assets/vfx/extensions/material-runtime-20261021/sources/66d0f866197b5da47066/acid-phase.tres",
+      "source_phase": "res://authoring/production-review-repair-20261021/surface_readability/liquid_layers/acid-phase.tres",
+      "source_sha256": "4e1c631fc09e1cdd052587825ed83f52754d5541f8cbe7a551174f01a7e1f9cb",
+      "constructor": "res://assets/vfx/extensions/material-runtime-20261021/sources/a10094fa967e3ba2ca8d/acid.gd",
+      "construction_input_contract": "One actual surface UUID, actual current owner age/presence/observation/suppression, actual world anchor and existing full-owner/disjoint draw packet.",
+      "public_callbacks": {
+        "targets": "set_targets",
+        "owner_state": "set_owner_state",
+        "surface_partition": "set_surface_partition"
+      },
+      "public_usage": "Call public_callbacks methods directly on the returned occurrence; aliases such as set_targets perform their own binding.",
+      "forwarded_source_inputs": [
+        "set_surface_partition"
+      ],
+      "forward_usage": "Only forwarded_source_inputs name source-level methods for occurrence.forward(source_method, actual_value); do not forward public aliases.",
+      "indexed_alternative": true
+    },
+    {
+      "key": "material_runtime_native_liquid_surface_poison",
+      "clip_id": "bg3-36/chromatic-orb/poison/observed-surface",
+      "phase": "res://assets/vfx/extensions/material-runtime-20261021/sources/b3d7c9c8a0da8c7ffc0d/poison-phase.tres",
+      "source_phase": "res://authoring/production-review-repair-20261021/surface_readability/liquid_layers/poison-phase.tres",
+      "source_sha256": "031f10d18adb5ed810fb3d06a585b1bdc80cc0f3a96c931f1f109e41211c2f26",
+      "constructor": "res://assets/vfx/extensions/material-runtime-20261021/sources/b2137e984b3ce57bb44d/poison.gd",
+      "construction_input_contract": "One actual surface UUID, actual current owner age/presence/observation/suppression, actual world anchor and existing full-owner/disjoint draw packet.",
+      "public_callbacks": {
+        "targets": "set_targets",
+        "owner_state": "set_owner_state",
+        "surface_partition": "set_surface_partition"
+      },
+      "public_usage": "Call public_callbacks methods directly on the returned occurrence; aliases such as set_targets perform their own binding.",
+      "forwarded_source_inputs": [
+        "set_surface_partition"
+      ],
+      "forward_usage": "Only forwarded_source_inputs name source-level methods for occurrence.forward(source_method, actual_value); do not forward public aliases.",
+      "indexed_alternative": true
+    },
+    {
+      "key": "material_runtime_cloud_cloudkill",
+      "clip_id": "review/cloudkill/volume/lifecycle",
+      "phase": "res://assets/vfx/extensions/material-runtime-20261021/sources/ed0cae71b5191d0c812e/cloudkill-phase.tres",
+      "source_phase": "res://authoring/production-review-repair-20261021/clouds/cloudkill-phase.tres",
+      "source_sha256": "707242c1e17d5cf3e53ba785901d3910f79acbfc7b7aad8ff08cc5cad27f6ca9",
+      "constructor": "res://assets/vfx/extensions/material-runtime-20261021/sources/91d871df4fd48ba30113/cloudkill.gd",
+      "construction_input_contract": {
+        "operands": "One actual source-component operand, current owner UUID only; no saved review state or caller bank override.",
+        "lifetime": "Explicit current owner age/presence/observation/suppression and live endpoint."
+      },
+      "public_callbacks": {
+        "owner_state": "set_owner_state",
+        "targets": "set_targets"
+      },
+      "public_usage": "Call public_callbacks methods directly on the returned occurrence; aliases such as set_targets perform their own binding.",
+      "forwarded_source_inputs": [],
+      "forward_usage": "Only forwarded_source_inputs name source-level methods for occurrence.forward(source_method, actual_value); do not forward public aliases.",
+      "indexed_alternative": true
+    },
+    {
+      "key": "material_runtime_cloud_darkness",
+      "clip_id": "review/darkness/volume/lifecycle",
+      "phase": "res://assets/vfx/extensions/material-runtime-20261021/sources/a48155fd4471e4d25ce2/darkness-phase.tres",
+      "source_phase": "res://authoring/production-review-repair-20261021/clouds/darkness-phase.tres",
+      "source_sha256": "fdf7f3156f2827d255d9bacbabfeedddc27453bef859e07b284b1a18eda7cf7e",
+      "constructor": "res://assets/vfx/extensions/material-runtime-20261021/sources/899d831709bf69cbd149/darkness.gd",
+      "construction_input_contract": {
+        "operands": "One actual source-component operand, current owner UUID only; no saved review state or caller bank override.",
+        "lifetime": "Explicit current owner age/presence/observation/suppression and live endpoint."
+      },
+      "public_callbacks": {
+        "owner_state": "set_owner_state",
+        "targets": "set_targets"
+      },
+      "public_usage": "Call public_callbacks methods directly on the returned occurrence; aliases such as set_targets perform their own binding.",
+      "forwarded_source_inputs": [],
+      "forward_usage": "Only forwarded_source_inputs name source-level methods for occurrence.forward(source_method, actual_value); do not forward public aliases.",
+      "indexed_alternative": true
+    },
+    {
+      "key": "material_runtime_cloud_fog_cloud",
+      "clip_id": "review/fog_cloud/volume/lifecycle",
+      "phase": "res://assets/vfx/extensions/material-runtime-20261021/sources/5d9fdb6ea9dfe4e9958e/fog_cloud-phase.tres",
+      "source_phase": "res://authoring/production-review-repair-20261021/clouds/fog_cloud-phase.tres",
+      "source_sha256": "d2e5ecc1caacbdc22e08a333b612e99d47ad1932bc27ff45dbeba9367562ee2e",
+      "constructor": "res://assets/vfx/extensions/material-runtime-20261021/sources/91648362bb673cc03880/fog_cloud.gd",
+      "construction_input_contract": {
+        "operands": "One actual source-component operand, current owner UUID only; no saved review state or caller bank override.",
+        "lifetime": "Explicit current owner age/presence/observation/suppression and live endpoint."
+      },
+      "public_callbacks": {
+        "owner_state": "set_owner_state",
+        "targets": "set_targets"
+      },
+      "public_usage": "Call public_callbacks methods directly on the returned occurrence; aliases such as set_targets perform their own binding.",
+      "forwarded_source_inputs": [],
+      "forward_usage": "Only forwarded_source_inputs name source-level methods for occurrence.forward(source_method, actual_value); do not forward public aliases.",
+      "indexed_alternative": true
+    },
+    {
+      "key": "material_runtime_cloud_stinking_cloud",
+      "clip_id": "review/stinking_cloud/volume/lifecycle",
+      "phase": "res://assets/vfx/extensions/material-runtime-20261021/sources/f5fc7634962a11007e65/stinking_cloud-phase.tres",
+      "source_phase": "res://authoring/production-review-repair-20261021/clouds/stinking_cloud-phase.tres",
+      "source_sha256": "dd6ac9aa0d99e8b89ca6a194a0c3bcca6458b965f69c6fe1566cb1efc8672e29",
+      "constructor": "res://assets/vfx/extensions/material-runtime-20261021/sources/8613c1d49e5ec59d4742/stinking_cloud.gd",
+      "construction_input_contract": {
+        "operands": "One actual source-component operand, current owner UUID only; no saved review state or caller bank override.",
+        "lifetime": "Explicit current owner age/presence/observation/suppression and live endpoint."
+      },
+      "public_callbacks": {
+        "owner_state": "set_owner_state",
+        "targets": "set_targets"
+      },
+      "public_usage": "Call public_callbacks methods directly on the returned occurrence; aliases such as set_targets perform their own binding.",
+      "forwarded_source_inputs": [],
+      "forward_usage": "Only forwarded_source_inputs name source-level methods for occurrence.forward(source_method, actual_value); do not forward public aliases.",
+      "indexed_alternative": true
+    },
+    {
+      "key": "material_runtime_cloud_incendiary_cloud",
+      "clip_id": "review/incendiary_cloud/volume/lifecycle",
+      "phase": "res://assets/vfx/extensions/material-runtime-20261021/sources/84f1a38fb39b341e94a1/incendiary_cloud-phase.tres",
+      "source_phase": "res://authoring/production-review-repair-20261021/clouds/incendiary_cloud-phase.tres",
+      "source_sha256": "4b0cbf2e579f9e694ea3fc9b6be2f3ac47f54384e3abd7aa3267689fc94a369d",
+      "constructor": "res://assets/vfx/extensions/material-runtime-20261021/sources/98114d7858bc58906646/incendiary_cloud.gd",
+      "construction_input_contract": {
+        "operands": "One actual source-component operand, current owner UUID only; no saved review state or caller bank override.",
+        "lifetime": "Explicit current owner age/presence/observation/suppression and live endpoint."
+      },
+      "public_callbacks": {
+        "owner_state": "set_owner_state",
+        "targets": "set_targets"
+      },
+      "public_usage": "Call public_callbacks methods directly on the returned occurrence; aliases such as set_targets perform their own binding.",
+      "forwarded_source_inputs": [],
+      "forward_usage": "Only forwarded_source_inputs name source-level methods for occurrence.forward(source_method, actual_value); do not forward public aliases.",
+      "indexed_alternative": true
+    },
+    {
+      "key": "material_runtime_curse_ability_burden",
+      "clip_id": "assembled/bestow_curse_ability_burden_native",
+      "phase": "res://assets/vfx/extensions/material-runtime-20261021/sources/dabbb5b33eff1fb6cd00/ability_burden.tres",
+      "source_phase": "res://authoring/production-review-repair-20261021/runtime_tail/curse_display_direct/phases/ability_burden.tres",
+      "source_sha256": "22297e052aa6698d8758aba09ab139963ef3fe30f40d90ff872979f130645e32",
+      "constructor": "res://assets/vfx/clips/01d77b5dfdf9846acf79b94c/construct.gd",
+      "construction_input_contract": "Bind candidate_phase.to_clip() to existing constructed_occurrence.make_component({clip:...}). No owner/lease/event defaults or bank override. Fixed phase-binding wrapper not authored by this draft.",
+      "public_callbacks": {
+        "targets": "set_targets",
+        "root_path": "set_root_path"
+      },
+      "public_usage": "Call public_callbacks methods directly on the returned occurrence; aliases such as set_targets perform their own binding.",
+      "forwarded_source_inputs": [],
+      "forward_usage": "Only forwarded_source_inputs name source-level methods for occurrence.forward(source_method, actual_value); do not forward public aliases.",
+      "indexed_alternative": true
+    },
+    {
+      "key": "material_runtime_curse_action_denial",
+      "clip_id": "assembled/bestow_curse_action_denial_native",
+      "phase": "res://assets/vfx/extensions/material-runtime-20261021/sources/4d30344c404e8a9c16c4/action_denial.tres",
+      "source_phase": "res://authoring/production-review-repair-20261021/runtime_tail/curse_display_direct/phases/action_denial.tres",
+      "source_sha256": "51b586baf18dfd7621260d58a8f451a08e2b6d8185d02f776e5a3ee822bfcb45",
+      "constructor": "res://assets/vfx/clips/2081319a0c53c892a4e60cd9/construct.gd",
+      "construction_input_contract": "Bind candidate_phase.to_clip() to existing constructed_occurrence.make_component({clip:...}). No owner/lease/event defaults or bank override. Fixed phase-binding wrapper not authored by this draft.",
+      "public_callbacks": {
+        "targets": "set_targets",
+        "root_path": "set_root_path"
+      },
+      "public_usage": "Call public_callbacks methods directly on the returned occurrence; aliases such as set_targets perform their own binding.",
+      "forwarded_source_inputs": [],
+      "forward_usage": "Only forwarded_source_inputs name source-level methods for occurrence.forward(source_method, actual_value); do not forward public aliases.",
+      "indexed_alternative": true
+    },
+    {
+      "key": "material_runtime_curse_bent_strike",
+      "clip_id": "assembled/bestow_curse_bent_strike_native",
+      "phase": "res://assets/vfx/extensions/material-runtime-20261021/sources/74c3c820027ac282cd40/bent_strike.tres",
+      "source_phase": "res://authoring/production-review-repair-20261021/runtime_tail/curse_display_direct/phases/bent_strike.tres",
+      "source_sha256": "e321f4e6b7af274ca642a4ac5f5bed4ba71b46e590afe16c5c9ac1dbd034a00c",
+      "constructor": "res://assets/vfx/clips/213eda1ff311d799e0e3eef7/construct.gd",
+      "construction_input_contract": "Bind candidate_phase.to_clip() to existing constructed_occurrence.make_component({clip:...}). No owner/lease/event defaults or bank override. Fixed phase-binding wrapper not authored by this draft.",
+      "public_callbacks": {
+        "targets": "set_targets",
+        "root_path": "set_root_path"
+      },
+      "public_usage": "Call public_callbacks methods directly on the returned occurrence; aliases such as set_targets perform their own binding.",
+      "forwarded_source_inputs": [],
+      "forward_usage": "Only forwarded_source_inputs name source-level methods for occurrence.forward(source_method, actual_value); do not forward public aliases.",
+      "indexed_alternative": true
+    },
+    {
+      "key": "material_runtime_curse_necrotic_wound",
+      "clip_id": "assembled/bestow_curse_necrotic_wound_native",
+      "phase": "res://assets/vfx/extensions/material-runtime-20261021/sources/907ebdb1975e9b2d65a9/necrotic_wound.tres",
+      "source_phase": "res://authoring/production-review-repair-20261021/runtime_tail/curse_display_direct/phases/necrotic_wound.tres",
+      "source_sha256": "f69db8ffd10d6cc9207eb7e8e61ef5925fe7a7f6ee00f9729205b0abdd4bcb17",
+      "constructor": "res://assets/vfx/clips/3d5b0afcf75336469b495637/construct.gd",
+      "construction_input_contract": "Bind candidate_phase.to_clip() to existing constructed_occurrence.make_component({clip:...}). No owner/lease/event defaults or bank override. Fixed phase-binding wrapper not authored by this draft.",
+      "public_callbacks": {
+        "targets": "set_targets",
+        "root_path": "set_root_path"
+      },
+      "public_usage": "Call public_callbacks methods directly on the returned occurrence; aliases such as set_targets perform their own binding.",
+      "forwarded_source_inputs": [],
+      "forward_usage": "Only forwarded_source_inputs name source-level methods for occurrence.forward(source_method, actual_value); do not forward public aliases.",
+      "indexed_alternative": true
+    },
+    {
+      "key": "material_runtime_forcecage_cage",
+      "clip_id": "high-level-22/forcecage/cage",
+      "phase": "res://assets/vfx/extensions/material-runtime-20261021/sources/935a8199cd9007d69ba6/cage.tres",
+      "source_phase": "res://authoring/production-review-repair-20261021/forcecage_inputs/cage.tres",
+      "source_sha256": "f8cc704fc92d3855b4ce33e73de1f24a2d67f6e94cacaba077bfa3e4bbd27537",
+      "constructor": "res://assets/vfx/extensions/material-runtime-20261021/sources/dd5fa40c87055ef1e240/cage.gd",
+      "construction_input_contract": "Existing observed_forcecage_occurrence: fixed phase plus one actual field operand (wall_uuid, anchor_position, wall_geometry); live set_zone_geometry, set_owner_state and set_targets. No synthesized sections, roof or floor.",
+      "public_callbacks": {
+        "zone_geometry": "set_zone_geometry",
+        "owner_state": "set_owner_state",
+        "targets": "set_targets"
+      },
+      "public_usage": "Call public_callbacks methods directly on the returned occurrence; aliases such as set_targets perform their own binding.",
+      "forwarded_source_inputs": [
+        "set_zone_geometry"
+      ],
+      "forward_usage": "Only forwarded_source_inputs name source-level methods for occurrence.forward(source_method, actual_value); do not forward public aliases.",
+      "indexed_alternative": true
+    },
+    {
+      "key": "material_runtime_forcecage_box",
+      "clip_id": "high-level-22/forcecage/box",
+      "phase": "res://assets/vfx/extensions/material-runtime-20261021/sources/3dcb6288ad2b0a017239/box.tres",
+      "source_phase": "res://authoring/production-review-repair-20261021/forcecage_inputs/box.tres",
+      "source_sha256": "0fcaa299ce490add193352e92fe6f060cad0ead4e511990234f1deb8e4d6b336",
+      "constructor": "res://assets/vfx/extensions/material-runtime-20261021/sources/64d33ed9bbb478dcdf9d/box.gd",
+      "construction_input_contract": "Existing observed_forcecage_occurrence: fixed phase plus one actual field operand (wall_uuid, anchor_position, wall_geometry); live set_zone_geometry, set_owner_state and set_targets. No synthesized sections, roof or floor.",
+      "public_callbacks": {
+        "zone_geometry": "set_zone_geometry",
+        "owner_state": "set_owner_state",
+        "targets": "set_targets"
+      },
+      "public_usage": "Call public_callbacks methods directly on the returned occurrence; aliases such as set_targets perform their own binding.",
+      "forwarded_source_inputs": [
+        "set_zone_geometry"
+      ],
+      "forward_usage": "Only forwarded_source_inputs name source-level methods for occurrence.forward(source_method, actual_value); do not forward public aliases.",
+      "indexed_alternative": false
+    },
+    {
+      "key": "material_runtime_summon_terminal_air_elemental",
+      "clip_id": "high-level-22/summon-manifestation/air_elemental/terminal",
+      "phase": "res://assets/vfx/extensions/material-runtime-20261021/sources/577712791e3d1a072ce8/air_elemental.tres",
+      "source_phase": "res://authoring/production-review-repair-20261021/summon_terminal/phases/air_elemental.tres",
+      "source_sha256": "d3081961d1d1def56433391b611762045d244c38e178f1346b9ba5a3c7a2e4ec",
+      "constructor": "res://assets/vfx/extensions/material-runtime-20261021/constructors/material_runtime_summon_terminal_air_elemental.gd",
+      "construction_input_contract": "Package full sampler path binds fixed candidate_phase.to_clip() through constructed_occurrence. Source fixed_constructor independently returns direct Terminal node. Feed actual terminal fact/commit occurrence/cause/clock and one witnessed world ground endpoint; no birth/body/arrival or invented owner defaults. Witnessed departure survives actor absence and retires by its original source duration.",
+      "public_callbacks": {
+        "terminal_departure": "set_terminal_departure",
+        "live_endpoints": "set_live_endpoints"
+      },
+      "public_usage": "Call public_callbacks methods directly on the returned occurrence; aliases such as set_targets perform their own binding.",
+      "forwarded_source_inputs": [
+        "set_terminal_departure"
+      ],
+      "forward_usage": "Only forwarded_source_inputs name source-level methods for occurrence.forward(source_method, actual_value); do not forward public aliases.",
+      "indexed_alternative": false
+    },
+    {
+      "key": "material_runtime_summon_terminal_draconic_spirit",
+      "clip_id": "high-level-22/summon-manifestation/draconic_spirit/terminal",
+      "phase": "res://assets/vfx/extensions/material-runtime-20261021/sources/02aad722b95dce013dde/draconic_spirit.tres",
+      "source_phase": "res://authoring/production-review-repair-20261021/summon_terminal/phases/draconic_spirit.tres",
+      "source_sha256": "5d6f1d7eb94f2ddc9c83cf93263154ac032c076a360d5f2163d316400cbb994c",
+      "constructor": "res://assets/vfx/extensions/material-runtime-20261021/constructors/material_runtime_summon_terminal_draconic_spirit.gd",
+      "construction_input_contract": "Package full sampler path binds fixed candidate_phase.to_clip() through constructed_occurrence. Source fixed_constructor independently returns direct Terminal node. Feed actual terminal fact/commit occurrence/cause/clock and one witnessed world ground endpoint; no birth/body/arrival or invented owner defaults. Witnessed departure survives actor absence and retires by its original source duration.",
+      "public_callbacks": {
+        "terminal_departure": "set_terminal_departure",
+        "live_endpoints": "set_live_endpoints"
+      },
+      "public_usage": "Call public_callbacks methods directly on the returned occurrence; aliases such as set_targets perform their own binding.",
+      "forwarded_source_inputs": [
+        "set_terminal_departure"
+      ],
+      "forward_usage": "Only forwarded_source_inputs name source-level methods for occurrence.forward(source_method, actual_value); do not forward public aliases.",
+      "indexed_alternative": false
+    },
+    {
+      "key": "material_runtime_summon_terminal_deva",
+      "clip_id": "high-level-22/summon-manifestation/deva/terminal",
+      "phase": "res://assets/vfx/extensions/material-runtime-20261021/sources/ee2f010c497771da80c7/deva.tres",
+      "source_phase": "res://authoring/production-review-repair-20261021/summon_terminal/phases/deva.tres",
+      "source_sha256": "8fb4d8032e73e6b140fd61cf626df0fd3421717365fac633dba7dc7dfdf978f1",
+      "constructor": "res://assets/vfx/extensions/material-runtime-20261021/constructors/material_runtime_summon_terminal_deva.gd",
+      "construction_input_contract": "Package full sampler path binds fixed candidate_phase.to_clip() through constructed_occurrence. Source fixed_constructor independently returns direct Terminal node. Feed actual terminal fact/commit occurrence/cause/clock and one witnessed world ground endpoint; no birth/body/arrival or invented owner defaults. Witnessed departure survives actor absence and retires by its original source duration.",
+      "public_callbacks": {
+        "terminal_departure": "set_terminal_departure",
+        "live_endpoints": "set_live_endpoints"
+      },
+      "public_usage": "Call public_callbacks methods directly on the returned occurrence; aliases such as set_targets perform their own binding.",
+      "forwarded_source_inputs": [
+        "set_terminal_departure"
+      ],
+      "forward_usage": "Only forwarded_source_inputs name source-level methods for occurrence.forward(source_method, actual_value); do not forward public aliases.",
+      "indexed_alternative": false
+    },
+    {
+      "key": "cell_validation_sleet",
+      "clip_id": "assembled/sleet_storm_native",
+      "phase": "res://assets/vfx/extensions/cell-validation-20261021/sources/1b7f19780b26c6798b82/sleet.tres",
+      "source_phase": "res://authoring/production-review-repair-20261021/owner_release/sleet.tres",
+      "source_sha256": "021d4c4d1a253199b0a7699fadbef4a33c6a5c8a2edbe8f20435bc31ab9fd7af",
+      "constructor": "res://assets/vfx/extensions/cell-validation-20261021/sources/466f2cf191ebaf6b135d/owner_release_sleet.gd",
+      "indexed_alternative": true,
+      "construction_input_contract": {
+        "operands": "One exact source-component operand with current owner/construction facts. No saved fixture defaults or bank override.",
+        "lifetime": "Explicit current owner state, disclosed geometry/cells and supplied world anchor; no review lease/recast."
+      },
+      "public_callbacks": {
+        "targets": "set_targets",
+        "owner_state": "set_owner_state",
+        "zone_geometry": "set_zone_geometry"
+      },
+      "source_qualification": "authoring/production-review-repair-20261021/cell_validation/qualification.json",
+      "source_runtime_flags_retained": {
+        "flags": [
+          {
+            "actual_us": 258,
+            "measurement": "first_positive_age_inputs_plus_sample",
+            "repeat": 0,
+            "representation": "native_int197",
+            "threshold_us": 250
+          },
+          {
+            "actual_us": 2184,
+            "measurement": "complete_public_constructor",
+            "repeat": 1,
+            "representation": "",
+            "threshold_us": 2000
+          }
+        ],
+        "readiness": {
+          "elapsed_us": 276994,
+          "maximum_step_us": 13916,
+          "resources_only_before_first_owner": true,
+          "all_steps_below2000us": false
+        },
+        "raw_single_input_max_us": 347,
+        "full_budget_pass_claimed": false,
+        "previous_source_flags_preserved": true
+      }
+    },
+    {
+      "key": "finger_materials_normal",
+      "clip_id": "review/finger_of_death/normal_back/lifecycle",
+      "phase": "res://assets/vfx/extensions/input-reduction-20261021/sources/15e773dfaa9a8ce240e5/normal.tres",
+      "source_phase": "res://authoring/production-review-repair-20261021/runtime_tail/finger_owner_materials/v1/phases/normal.tres",
+      "source_sha256": "db54a485083d859a1361855f2c1e4e0a05c5104ec2096be1697472fb29d01347",
+      "constructor": "res://assets/vfx/clips/3d4fb28e3e50d7ec47dae03a/construct.gd",
+      "indexed_alternative": true,
+      "public_callbacks": {
+        "root_path": "set_root_path",
+        "targets": "set_targets",
+        "delivery_timing": "set_delivery_timing"
+      },
+      "forwarded_source_inputs": [],
+      "construction_input_contract": "clip = exact selected PhaseResource.to_clip(); original native component input, no overrides.",
+      "source_qualification": "authoring/production-review-repair-20261021/runtime_tail/finger_owner_materials/v1/qualification.json",
+      "source_runtime_flags_retained": {
+        "qualification": "authoring/production-review-repair-20261021/runtime_tail/finger_owner_materials/v1/qualification.json",
+        "qualification_sha256": "9e5dd185ed526691cae8253a4e32901dbb8748a0b47e99367ee9b79337af966f",
+        "strict_rgba_equivalence_pass": false,
+        "runtime_budget_pass": false,
+        "raw_flags_retained": true,
+        "source_scope": "Original source/private-owner/native operand proof; bounded local early overlap difference retained. No strict fullRGBA, all-budget, arbitrary counterspell handover, art/default or gameplay-assignment claim."
+      },
+      "native_art_scope": "Same-owner material aliasing preserves logical slots/native operands; two source early-overlap frames retain one pixel above3bytes each, max5. Not strict RGBA art identity."
+    },
+    {
+      "key": "finger_materials_counterspell",
+      "clip_id": "private/finger-counterspell-v193/full_sequence",
+      "phase": "res://assets/vfx/extensions/input-reduction-20261021/sources/8e1bc02b83b153a2f55e/counterspell.tres",
+      "source_phase": "res://authoring/production-review-repair-20261021/runtime_tail/finger_owner_materials/v1/phases/counterspell.tres",
+      "source_sha256": "e2a2f1ce2eb295926b9893d275c82b4c040bbfeb8288e5c619a7b453d234b085",
+      "constructor": "res://assets/vfx/clips/7c4c0f8015d3ccb567850789/construct.gd",
+      "indexed_alternative": true,
+      "public_callbacks": {
+        "root_path": "set_root_path",
+        "targets": "set_targets",
+        "delivery_timing": "set_delivery_timing"
+      },
+      "forwarded_source_inputs": [],
+      "construction_input_contract": "clip = exact selected PhaseResource.to_clip(); original native component input, no overrides.",
+      "source_qualification": "authoring/production-review-repair-20261021/runtime_tail/finger_owner_materials/v1/qualification.json",
+      "source_runtime_flags_retained": {
+        "qualification": "authoring/production-review-repair-20261021/runtime_tail/finger_owner_materials/v1/qualification.json",
+        "qualification_sha256": "9e5dd185ed526691cae8253a4e32901dbb8748a0b47e99367ee9b79337af966f",
+        "strict_rgba_equivalence_pass": false,
+        "runtime_budget_pass": true,
+        "raw_flags_retained": true,
+        "source_scope": "Original source/private-owner/native operand proof; bounded local early overlap difference retained. No strict fullRGBA, all-budget, arbitrary counterspell handover, art/default or gameplay-assignment claim."
+      },
+      "native_art_scope": "Same-owner material aliasing preserves logical slots/native operands; two source early-overlap frames retain one pixel above3bytes each, max5. Not strict RGBA art identity."
+    },
+    {
+      "key": "patches_covariance_animal_friendship",
+      "clip_id": "bg3-36/animal-friendship/application",
+      "phase": "res://assets/vfx/extensions/input-reduction-20261021/sources/f2387bb46b015930811c/87f3b8e0852cfbcf.tres",
+      "source_phase": "res://authoring/production-review-repair-20261021/patches_covariance/v1/phases/87f3b8e0852cfbcf.tres",
+      "source_sha256": "c8520a9e4f8c7599a34cb0c083e25cc92fbf9b839925eb25757083533edbdd92",
+      "constructor": "res://assets/vfx/clips/2f837e3a846975da8b1a6b1c/construct.gd",
+      "indexed_alternative": true,
+      "public_callbacks": {
+        "entity_geometry": "set_entity_geometry",
+        "targets": "set_targets",
+        "root_path": "set_root_path"
+      },
+      "forwarded_source_inputs": [
+        "set_owner_visibility"
+      ],
+      "construction_input_contract": "clip = exact selected PhaseResource.to_clip(); same existing component input and native bank, no input overrides.",
+      "source_qualification": "authoring/production-review-repair-20261021/patches_covariance/v1/qualification.json",
+      "source_runtime_flags_retained": {
+        "qualification": "authoring/production-review-repair-20261021/patches_covariance/v1/qualification.json",
+        "qualification_sha256": "ff07459a9d558b98186a5393ead1c650cacbb9550519cc2749f6a0e8246a49e1",
+        "strict_rgba_equivalence_pass": true,
+        "runtime_budget_pass": false,
+        "raw_flags_retained": true,
+        "source_scope": "Bounded explicit numerical source alternative: mandatory public material/mesh/point/owner/clock/admission/retirement checks passed, numerical and strict raster differences explicitly retained. This is not original bit-exact equivalence, arbitrary-body qualification, an all-cold budget pass, default selection or human approval."
+      },
+      "native_art_scope": "Covariance reassociation is an explicit bounded numerical alternative, not original floating-point reduction order. Four raw one-byte RGB flags across the source cohort remain; alpha is exact."
+    },
+    {
+      "key": "patches_covariance_laughter_application",
+      "clip_id": "bg3-36/hideous-laughter/application",
+      "phase": "res://assets/vfx/extensions/input-reduction-20261021/sources/cd402eb2f0dbcf7aed26/e022ccf45fa38223.tres",
+      "source_phase": "res://authoring/production-review-repair-20261021/patches_covariance/v1/phases/e022ccf45fa38223.tres",
+      "source_sha256": "ad19167ba81b5d0c239d724451a13598830ad1dee67b0ff0238bb0555c48ad64",
+      "constructor": "res://assets/vfx/clips/f7706b17e4a2fcadbf94a078/construct.gd",
+      "indexed_alternative": true,
+      "public_callbacks": {
+        "entity_geometry": "set_entity_geometry",
+        "targets": "set_targets",
+        "root_path": "set_root_path"
+      },
+      "forwarded_source_inputs": [
+        "set_owner_visibility"
+      ],
+      "construction_input_contract": "clip = exact selected PhaseResource.to_clip(); same existing component input and native bank, no input overrides.",
+      "source_qualification": "authoring/production-review-repair-20261021/patches_covariance/v1/qualification.json",
+      "source_runtime_flags_retained": {
+        "qualification": "authoring/production-review-repair-20261021/patches_covariance/v1/qualification.json",
+        "qualification_sha256": "ff07459a9d558b98186a5393ead1c650cacbb9550519cc2749f6a0e8246a49e1",
+        "strict_rgba_equivalence_pass": false,
+        "runtime_budget_pass": false,
+        "raw_flags_retained": true,
+        "source_scope": "Bounded explicit numerical source alternative: mandatory public material/mesh/point/owner/clock/admission/retirement checks passed, numerical and strict raster differences explicitly retained. This is not original bit-exact equivalence, arbitrary-body qualification, an all-cold budget pass, default selection or human approval."
+      },
+      "native_art_scope": "Covariance reassociation is an explicit bounded numerical alternative, not original floating-point reduction order. Four raw one-byte RGB flags across the source cohort remain; alpha is exact."
+    },
+    {
+      "key": "patches_covariance_laughter_condition",
+      "clip_id": "bg3-36/hideous-laughter/condition",
+      "phase": "res://assets/vfx/extensions/input-reduction-20261021/sources/7af1dfa5616330f068ef/8fcd345672c6929a.tres",
+      "source_phase": "res://authoring/production-review-repair-20261021/patches_covariance/v1/phases/8fcd345672c6929a.tres",
+      "source_sha256": "b18215a81263b41c441efb07ed22b9f4fe55edc0022c003784edeac8ff076b7f",
+      "constructor": "res://assets/vfx/clips/1c9832fa32215839142162fc/construct.gd",
+      "indexed_alternative": true,
+      "public_callbacks": {
+        "entity_geometry": "set_entity_geometry",
+        "targets": "set_targets",
+        "root_path": "set_root_path"
+      },
+      "forwarded_source_inputs": [
+        "set_owner_visibility"
+      ],
+      "construction_input_contract": "clip = exact selected PhaseResource.to_clip(); same existing component input and native bank, no input overrides.",
+      "source_qualification": "authoring/production-review-repair-20261021/patches_covariance/v1/qualification.json",
+      "source_runtime_flags_retained": {
+        "qualification": "authoring/production-review-repair-20261021/patches_covariance/v1/qualification.json",
+        "qualification_sha256": "ff07459a9d558b98186a5393ead1c650cacbb9550519cc2749f6a0e8246a49e1",
+        "strict_rgba_equivalence_pass": false,
+        "runtime_budget_pass": false,
+        "raw_flags_retained": true,
+        "source_scope": "Bounded explicit numerical source alternative: mandatory public material/mesh/point/owner/clock/admission/retirement checks passed, numerical and strict raster differences explicitly retained. This is not original bit-exact equivalence, arbitrary-body qualification, an all-cold budget pass, default selection or human approval."
+      },
+      "native_art_scope": "Covariance reassociation is an explicit bounded numerical alternative, not original floating-point reduction order. Four raw one-byte RGB flags across the source cohort remain; alpha is exact."
+    },
+    {
+      "key": "spike_instance_seed",
+      "clip_id": "assembled/spike_growth_native",
+      "phase": "res://assets/vfx/extensions/spike-seed-20261021/sources/eea8273c8a8b5dbd6667/phase.tres",
+      "source_phase": "res://authoring/production-review-repair-20261021/runtime_tail/spike_instance_seed/v1/phase.tres",
+      "source_sha256": "2a64c78415f32aa87b8f0e67df9d33586f0bae9aeb95179c9b7cb2425ca3313d",
+      "constructor": "res://assets/vfx/clips/ff9054553df3f010759f155a/construct.gd",
+      "indexed_alternative": true,
+      "public_callbacks": {
+        "targets": "set_targets",
+        "owner_state": "set_owner_state",
+        "zone_geometry": "set_zone_geometry"
+      },
+      "construction_input_contract": "make_component({phase:load(candidate_phase),layer_mask:2,operands:[{component_path:[\"effect\"],input_field:\"\",values:{owner_uuid:actual_owner_uuid,cells:actual_constructed_cells}}]}); add returned occurrence to its real parent before live setters/sample. A later package must privately bind this phase; existing fixed owner_release_spike wrapper still names the older phase.",
+      "source_qualification": "authoring/production-review-repair-20261021/runtime_tail/spike_instance_seed/v1/qualification.json",
+      "source_runtime_flags_retained": {
+        "qualification": "authoring/production-review-repair-20261021/runtime_tail/spike_instance_seed/v1/qualification.json",
+        "qualification_sha256": "e35b88d2cf951f568a1b330e5d10df4fbec6dbe867a0932ff1e9ed06b184fc9d",
+        "cost_flags": [
+          {
+            "actual_us": 2118.0,
+            "measurement": "complete_constructor",
+            "source": "spike",
+            "threshold_us": 2000.0
+          },
+          {
+            "actual_us": 2437.0,
+            "measurement": "complete_constructor",
+            "source": "spike",
+            "threshold_us": 2000.0
+          },
+          {
+            "actual_us": 2071.0,
+            "measurement": "complete_constructor",
+            "source": "spike",
+            "threshold_us": 2000.0
+          }
+        ],
+        "readiness": [
+          {
+            "phase": "res://authoring/production-review-repair-20261021/runtime_tail/spike_instance_seed/v1/phase.tres",
+            "total_including_frame_yields_us": 383345,
+            "sum_actual_step_us": 159235,
+            "maximum_actual_step_us": 24454,
+            "steps_over2000us": 9,
+            "scope": "Readiness.begin and actual resource steps; caller phase load is separate. No owner construction or sample."
+          },
+          {
+            "phase": "res://authoring/production-review-repair-20261021/runtime_tail/spike_owner_direct/v1/phases/spike.tres",
+            "total_including_frame_yields_us": 246799,
+            "sum_actual_step_us": 148981,
+            "maximum_actual_step_us": 18093,
+            "steps_over2000us": 9,
+            "scope": "Readiness.begin and actual resource steps; caller phase load is separate. No owner construction or sample."
+          }
+        ],
+        "runtime_budget_pass": false,
+        "raw_flags_retained": true
+      },
+      "native_art_scope": "Only the native seed moves from material to draw-instance storage; three selected actual-owner native source/candidate pairs exact. Not whole chronology/arbitrary actor or human art approval."
+    },
+    {
+      "key": "spirit_rid_queued_radiant",
+      "clip_id": "assembled/spirit_guardians_radiant_native",
+      "phase": "res://assets/vfx/extensions/spirit-runtime-20261021/sources/53af195b70b841a65a63/radiant.tres",
+      "source_phase": "res://authoring/production-review-repair-20261021/runtime_tail/spirit_rid/queued_v1/radiant.tres",
+      "source_sha256": "f9679500f8bc7b435ef58796a55677c3c54a24d5ec37ad7e6f4ba501d6aeb845",
+      "constructor": "res://assets/vfx/clips/98c1ade973e1e7f784cd1b07/construct.gd",
+      "indexed_alternative": true,
+      "public_callbacks": {
+        "targets": "set_targets",
+        "owner_state": "set_owner_state"
+      },
+      "construction_input_contract": "make_component({phase:load(candidate_phase),layer_mask:actual_layer_mask,operands:[{component_path:[\"effect\"],input_field:\"\",values:{owner_uuid:actual_owner_uuid}}]}); add returned occurrence to the real parent before setters/sample. A packaged fixed wrapper must bind this new phase privately.",
+      "source_qualification": "authoring/production-review-repair-20261021/runtime_tail/spirit_rid/queued_v1/qualification.json",
+      "source_runtime_flags_retained": {
+        "cost_flags": [],
+        "readiness": {
+          "total_including_frame_yields_us": 332441,
+          "maximum_main_thread_step_us": 1074,
+          "atomic_cost_flags": [],
+          "cache_before": {
+            "bank": false,
+            "ground": false,
+            "piece": false
+          },
+          "node_counts": [
+            1,
+            1
+          ],
+          "actual_native_resources": 10,
+          "actual_explicit_dependency_paths": [
+            "res://factory/components/spirit_rid/piece_v3.gd",
+            "res://authoring/production-review-repair-20261021/runtime_tail/spirit_rid/ready_v1/assets/radiant.res",
+            "res://factory/components/owned_fields/flow_hold.gd",
+            "res://authoring/production-review-repair-20261021/terrain_owner/assets-v1/spirit_radiant-ground.res"
+          ]
+        },
+        "runtime_budget_pass": true,
+        "raw_flags_retained": true,
+        "runtime_budget_pass_definition": "Source gates: complete constructor<=2000us, first input<=250us, and held/advancing/moved input p95<=250us. This does not mean every individual input call fits250us.",
+        "raw_input_maxima_us": [
+          {
+            "repeat": 0,
+            "held_unchanged": 111,
+            "advancing_orbit": 280,
+            "changed_owner_anchor": 254
+          },
+          {
+            "repeat": 1,
+            "held_unchanged": 82,
+            "advancing_orbit": 256,
+            "changed_owner_anchor": 180
+          },
+          {
+            "repeat": 2,
+            "held_unchanged": 64,
+            "advancing_orbit": 289,
+            "changed_owner_anchor": 155
+          }
+        ],
+        "individual_over250us_input_maxima_remain_in_qualification": true
+      },
+      "native_art_scope": "Individual sorted native RIDs retain original v3 draws/private material/owner Clock; retained4exactpairs. No current full-game/actor/physics/art-approval claim."
+    },
+    {
+      "key": "spirit_rid_queued_necrotic",
+      "clip_id": "assembled/spirit_guardians_necrotic_native",
+      "phase": "res://assets/vfx/extensions/spirit-runtime-20261021/sources/d08891dcb9d9d4e5e692/necrotic.tres",
+      "source_phase": "res://authoring/production-review-repair-20261021/runtime_tail/spirit_rid/queued_v1/necrotic.tres",
+      "source_sha256": "cb4b3aec8292f12b6c22d51db2573d86a78358dc8af02698e5b9b0e1a5459c40",
+      "constructor": "res://assets/vfx/clips/d5b707613ab209b59b3d65a5/construct.gd",
+      "indexed_alternative": true,
+      "public_callbacks": {
+        "targets": "set_targets",
+        "owner_state": "set_owner_state"
+      },
+      "construction_input_contract": "make_component({phase:load(candidate_phase),layer_mask:actual_layer_mask,operands:[{component_path:[\"effect\"],input_field:\"\",values:{owner_uuid:actual_owner_uuid}}]}); add returned occurrence to the real parent before setters/sample. A packaged fixed wrapper must bind this new phase privately.",
+      "source_qualification": "authoring/production-review-repair-20261021/runtime_tail/spirit_rid/queued_v1/qualification.json",
+      "source_runtime_flags_retained": {
+        "cost_flags": [
+          {
+            "actual_us": 2194,
+            "measurement": "complete_constructor",
+            "repeat": 0,
+            "source": "necrotic-candidate",
+            "threshold_us": 2000
+          },
+          {
+            "actual_us": 2133,
+            "measurement": "complete_constructor",
+            "repeat": 1,
+            "source": "necrotic-candidate",
+            "threshold_us": 2000
+          },
+          {
+            "actual_us": 2061,
+            "measurement": "complete_constructor",
+            "repeat": 2,
+            "source": "necrotic-candidate",
+            "threshold_us": 2000
+          }
+        ],
+        "readiness": {
+          "total_including_frame_yields_us": 422506,
+          "maximum_main_thread_step_us": 328,
+          "atomic_cost_flags": [],
+          "cache_before": {
+            "bank": false,
+            "ground": true,
+            "piece": true
+          },
+          "node_counts": [
+            1,
+            1
+          ],
+          "actual_native_resources": 48,
+          "actual_explicit_dependency_paths": [
+            "res://factory/components/spirit_rid/piece_v3.gd",
+            "res://authoring/production-review-repair-20261021/runtime_tail/spirit_rid/ready_v1/assets/necrotic.res",
+            "res://factory/components/owned_fields/flow_hold.gd",
+            "res://authoring/production-review-repair-20261021/terrain_owner/assets-v1/spirit_necrotic-ground.res"
+          ]
+        },
+        "runtime_budget_pass": false,
+        "raw_flags_retained": true,
+        "runtime_budget_pass_definition": "Source gates: complete constructor<=2000us, first input<=250us, and held/advancing/moved input p95<=250us. This does not mean every individual input call fits250us.",
+        "raw_input_maxima_us": [
+          {
+            "repeat": 0,
+            "held_unchanged": 129,
+            "advancing_orbit": 236,
+            "changed_owner_anchor": 190
+          },
+          {
+            "repeat": 1,
+            "held_unchanged": 80,
+            "advancing_orbit": 243,
+            "changed_owner_anchor": 278
+          },
+          {
+            "repeat": 2,
+            "held_unchanged": 86,
+            "advancing_orbit": 246,
+            "changed_owner_anchor": 204
+          }
+        ],
+        "individual_over250us_input_maxima_remain_in_qualification": true
+      },
+      "native_art_scope": "Individual sorted native RIDs retain original v3 draws/private material/owner Clock; retained4exactpairs. No current full-game/actor/physics/art-approval claim."
+    },
+    {
+      "key": "cloud_shader_worker_cloudkill",
+      "clip_id": "review/cloudkill/volume/lifecycle",
+      "phase": "res://assets/vfx/extensions/speed-completion-20261021/sources/f77d3bcc7ad87bd54956/cloudkill-phase.tres",
+      "source_phase": "res://authoring/production-review-repair-20261021/shader_interface_single_poll/phases/clouds/cloudkill-phase.tres",
+      "source_sha256": "5fee6cd9828da30287ddd41a583252a3f4206f4fb277e31295d0e3fb181cee43",
+      "constructor": "res://assets/vfx/clips/8a6b6c4c755054316b0b45c1/construct.gd",
+      "indexed_alternative": true,
+      "public_callbacks": {
+        "owner_state": "set_owner_state",
+        "targets": "set_targets"
+      },
+      "source_runtime_flags_retained": {
+        "legacy_rd_raw_cost_flags": [
+          {
+            "context": "actual_default_legacy_load_RD_unit",
+            "progress": {
+              "immutable_progress": {
+                "complete": false,
+                "current_rendered_frame": 5,
+                "error": "",
+                "first_ready_rendered_frame": 5,
+                "pipeline": {
+                  "closed": false,
+                  "complete": true,
+                  "device": "NVIDIA GeForce RTX 5090",
+                  "error": "",
+                  "prepare_us": 68155,
+                  "ready": true
+                },
+                "scope": "Immutable native pipeline plus actual rendered-frame admission; no actor or source sample"
+              },
+              "operation": "prepare_immutable_resource_unit",
+              "path": "res://authoring/production-review-repair-20261021/shader_interface_worker/receiver_bridge_v1/legacy-kernel.tres",
+              "state": "preparing",
+              "stepped": true,
+              "us": 82373
+            },
+            "settling": true,
+            "source_owned": false,
+            "us": 82424
+          }
+        ],
+        "historical_source_cost_flags": [
+          {
+            "kind": "complete_constructor",
+            "owner_index": 0,
+            "us": 2645,
+            "budget_us": 2000
+          }
+        ],
+        "runtime_budget_pass": false,
+        "raw_flags_retained": true
+      },
+      "forwarded_source_inputs": [],
+      "forward_usage": "Only forwarded_source_inputs use occurrence.forward(source_method, actual_value); public_callbacks are direct methods.",
+      "construction_input_contract": "Fixed mapped phase delegates to existing owner_clouds.public.make_for_phase(phase,input); exactly one operands row component_path=[assembly], input_field empty, values={owner_uuid}; no saved owner/clock defaults.",
+      "qualification": "authoring/production-review-repair-20261021/shader_interface_worker/receiver_bridge_v1/qualification-native-v2.json"
+    },
+    {
+      "key": "cloud_shader_worker_darkness",
+      "clip_id": "review/darkness/volume/lifecycle",
+      "phase": "res://assets/vfx/extensions/speed-completion-20261021/sources/070c0c08f7b21b1e25fd/darkness-phase.tres",
+      "source_phase": "res://authoring/production-review-repair-20261021/shader_interface_single_poll/phases/clouds/darkness-phase.tres",
+      "source_sha256": "6507c647211105d9b6f5d5fa257b2993e87fb864b32c2b3bc0f597b8c2163bf5",
+      "constructor": "res://assets/vfx/clips/b0a87214c84c4bdfd549599e/construct.gd",
+      "indexed_alternative": true,
+      "public_callbacks": {
+        "owner_state": "set_owner_state",
+        "targets": "set_targets"
+      },
+      "source_runtime_flags_retained": {
+        "legacy_rd_raw_cost_flags": [
+          {
+            "context": "actual_default_legacy_load_RD_unit",
+            "progress": {
+              "immutable_progress": {
+                "complete": false,
+                "current_rendered_frame": 5,
+                "error": "",
+                "first_ready_rendered_frame": 5,
+                "pipeline": {
+                  "closed": false,
+                  "complete": true,
+                  "device": "NVIDIA GeForce RTX 5090",
+                  "error": "",
+                  "prepare_us": 68155,
+                  "ready": true
+                },
+                "scope": "Immutable native pipeline plus actual rendered-frame admission; no actor or source sample"
+              },
+              "operation": "prepare_immutable_resource_unit",
+              "path": "res://authoring/production-review-repair-20261021/shader_interface_worker/receiver_bridge_v1/legacy-kernel.tres",
+              "state": "preparing",
+              "stepped": true,
+              "us": 82373
+            },
+            "settling": true,
+            "source_owned": false,
+            "us": 82424
+          }
+        ],
+        "historical_source_cost_flags": [],
+        "runtime_budget_pass": false,
+        "raw_flags_retained": true
+      },
+      "forwarded_source_inputs": [],
+      "forward_usage": "Only forwarded_source_inputs use occurrence.forward(source_method, actual_value); public_callbacks are direct methods.",
+      "construction_input_contract": "Fixed mapped phase delegates to existing owner_clouds.public.make_for_phase(phase,input); exactly one operands row component_path=[assembly], input_field empty, values={owner_uuid}; no saved owner/clock defaults.",
+      "qualification": "authoring/production-review-repair-20261021/shader_interface_worker/receiver_bridge_v1/qualification-native-v2.json"
+    },
+    {
+      "key": "cloud_shader_worker_fog_cloud",
+      "clip_id": "review/fog_cloud/volume/lifecycle",
+      "phase": "res://assets/vfx/extensions/speed-completion-20261021/sources/6765e463989ae754409b/fog_cloud-phase.tres",
+      "source_phase": "res://authoring/production-review-repair-20261021/shader_interface_single_poll/phases/clouds/fog_cloud-phase.tres",
+      "source_sha256": "a65ef4a5b8d3adaa0aa3a262a93cd1891d7458093e0b7b6b671227f5a541d295",
+      "constructor": "res://assets/vfx/clips/823a6dac481dfd24648b829c/construct.gd",
+      "indexed_alternative": true,
+      "public_callbacks": {
+        "owner_state": "set_owner_state",
+        "targets": "set_targets"
+      },
+      "source_runtime_flags_retained": {
+        "legacy_rd_raw_cost_flags": [
+          {
+            "context": "actual_default_legacy_load_RD_unit",
+            "progress": {
+              "immutable_progress": {
+                "complete": false,
+                "current_rendered_frame": 5,
+                "error": "",
+                "first_ready_rendered_frame": 5,
+                "pipeline": {
+                  "closed": false,
+                  "complete": true,
+                  "device": "NVIDIA GeForce RTX 5090",
+                  "error": "",
+                  "prepare_us": 68155,
+                  "ready": true
+                },
+                "scope": "Immutable native pipeline plus actual rendered-frame admission; no actor or source sample"
+              },
+              "operation": "prepare_immutable_resource_unit",
+              "path": "res://authoring/production-review-repair-20261021/shader_interface_worker/receiver_bridge_v1/legacy-kernel.tres",
+              "state": "preparing",
+              "stepped": true,
+              "us": 82373
+            },
+            "settling": true,
+            "source_owned": false,
+            "us": 82424
+          }
+        ],
+        "historical_source_cost_flags": [],
+        "runtime_budget_pass": false,
+        "raw_flags_retained": true
+      },
+      "forwarded_source_inputs": [],
+      "forward_usage": "Only forwarded_source_inputs use occurrence.forward(source_method, actual_value); public_callbacks are direct methods.",
+      "construction_input_contract": "Fixed mapped phase delegates to existing owner_clouds.public.make_for_phase(phase,input); exactly one operands row component_path=[assembly], input_field empty, values={owner_uuid}; no saved owner/clock defaults.",
+      "qualification": "authoring/production-review-repair-20261021/shader_interface_worker/receiver_bridge_v1/qualification-native-v2.json"
+    },
+    {
+      "key": "cloud_shader_worker_stinking_cloud",
+      "clip_id": "review/stinking_cloud/volume/lifecycle",
+      "phase": "res://assets/vfx/extensions/speed-completion-20261021/sources/ea53eeb4f1fcc5394d23/stinking_cloud-phase.tres",
+      "source_phase": "res://authoring/production-review-repair-20261021/shader_interface_single_poll/phases/clouds/stinking_cloud-phase.tres",
+      "source_sha256": "27401def9f94737d7cc9a13d7b18d36d45f6aad57cdcc6ef3fb7062e829001f2",
+      "constructor": "res://assets/vfx/clips/4c575b42aeee19f45185d1ec/construct.gd",
+      "indexed_alternative": true,
+      "public_callbacks": {
+        "owner_state": "set_owner_state",
+        "targets": "set_targets"
+      },
+      "source_runtime_flags_retained": {
+        "legacy_rd_raw_cost_flags": [
+          {
+            "context": "actual_default_legacy_load_RD_unit",
+            "progress": {
+              "immutable_progress": {
+                "complete": false,
+                "current_rendered_frame": 5,
+                "error": "",
+                "first_ready_rendered_frame": 5,
+                "pipeline": {
+                  "closed": false,
+                  "complete": true,
+                  "device": "NVIDIA GeForce RTX 5090",
+                  "error": "",
+                  "prepare_us": 68155,
+                  "ready": true
+                },
+                "scope": "Immutable native pipeline plus actual rendered-frame admission; no actor or source sample"
+              },
+              "operation": "prepare_immutable_resource_unit",
+              "path": "res://authoring/production-review-repair-20261021/shader_interface_worker/receiver_bridge_v1/legacy-kernel.tres",
+              "state": "preparing",
+              "stepped": true,
+              "us": 82373
+            },
+            "settling": true,
+            "source_owned": false,
+            "us": 82424
+          }
+        ],
+        "historical_source_cost_flags": [],
+        "runtime_budget_pass": false,
+        "raw_flags_retained": true
+      },
+      "forwarded_source_inputs": [],
+      "forward_usage": "Only forwarded_source_inputs use occurrence.forward(source_method, actual_value); public_callbacks are direct methods.",
+      "construction_input_contract": "Fixed mapped phase delegates to existing owner_clouds.public.make_for_phase(phase,input); exactly one operands row component_path=[assembly], input_field empty, values={owner_uuid}; no saved owner/clock defaults.",
+      "qualification": "authoring/production-review-repair-20261021/shader_interface_worker/receiver_bridge_v1/qualification-native-v2.json"
+    },
+    {
+      "key": "cloud_shader_worker_incendiary_cloud",
+      "clip_id": "review/incendiary_cloud/volume/lifecycle",
+      "phase": "res://assets/vfx/extensions/speed-completion-20261021/sources/a4c11cd05f7aa0330789/incendiary_cloud-phase.tres",
+      "source_phase": "res://authoring/production-review-repair-20261021/shader_interface_single_poll/phases/clouds/incendiary_cloud-phase.tres",
+      "source_sha256": "ae22846e1273f532080b1f2dc902669556b3603bcdb923e4479c1cea1635e709",
+      "constructor": "res://assets/vfx/clips/a72d80a4c2f534fb83028f8f/construct.gd",
+      "indexed_alternative": true,
+      "public_callbacks": {
+        "owner_state": "set_owner_state",
+        "targets": "set_targets"
+      },
+      "source_runtime_flags_retained": {
+        "legacy_rd_raw_cost_flags": [
+          {
+            "context": "actual_default_legacy_load_RD_unit",
+            "progress": {
+              "immutable_progress": {
+                "complete": false,
+                "current_rendered_frame": 5,
+                "error": "",
+                "first_ready_rendered_frame": 5,
+                "pipeline": {
+                  "closed": false,
+                  "complete": true,
+                  "device": "NVIDIA GeForce RTX 5090",
+                  "error": "",
+                  "prepare_us": 68155,
+                  "ready": true
+                },
+                "scope": "Immutable native pipeline plus actual rendered-frame admission; no actor or source sample"
+              },
+              "operation": "prepare_immutable_resource_unit",
+              "path": "res://authoring/production-review-repair-20261021/shader_interface_worker/receiver_bridge_v1/legacy-kernel.tres",
+              "state": "preparing",
+              "stepped": true,
+              "us": 82373
+            },
+            "settling": true,
+            "source_owned": false,
+            "us": 82424
+          }
+        ],
+        "historical_source_cost_flags": [],
+        "runtime_budget_pass": false,
+        "raw_flags_retained": true
+      },
+      "forwarded_source_inputs": [],
+      "forward_usage": "Only forwarded_source_inputs use occurrence.forward(source_method, actual_value); public_callbacks are direct methods.",
+      "construction_input_contract": "Fixed mapped phase delegates to existing owner_clouds.public.make_for_phase(phase,input); exactly one operands row component_path=[assembly], input_field empty, values={owner_uuid}; no saved owner/clock defaults.",
+      "qualification": "authoring/production-review-repair-20261021/shader_interface_worker/receiver_bridge_v1/qualification-native-v2.json"
+    },
+    {
+      "key": "patches_shader_worker_87f3b8e0852cfbcf",
+      "clip_id": "bg3-36/animal-friendship/application",
+      "phase": "res://assets/vfx/extensions/speed-completion-20261021/sources/675814cf146b7889343b/87f3b8e0852cfbcf.tres",
+      "source_phase": "res://authoring/production-review-repair-20261021/shader_interface_single_poll/phases/patches/87f3b8e0852cfbcf.tres",
+      "source_sha256": "4687f5ffbd4ee5c29fe6b87fb401cf671e7a626a8e503cfa51cbca318c73912f",
+      "constructor": "res://assets/vfx/clips/50846437bddaac7c4bd0dbe7/construct.gd",
+      "indexed_alternative": true,
+      "public_callbacks": {
+        "entity_geometry": "set_entity_geometry",
+        "targets": "set_targets"
+      },
+      "source_runtime_flags_retained": {
+        "raw_cost_flags": [
+          {
+            "context": "bg3-36/animal-friendship/application",
+            "limit_us": 250,
+            "measurement": "first_actual_input_and_positive_sample",
+            "us": 514
+          }
+        ],
+        "complete_runtime_budget_pass": false,
+        "scope": "Raw worker_us is elapsed around native calls and can include server waiting; not measured CPU cycles. Separate from inclusive main Admission.step_source wall, never added to it as serial main cost.",
+        "source_elapsed_with_draws_us": 90021
+      },
+      "forwarded_source_inputs": [
+        "set_packed_entity_geometry",
+        "set_owner_visibility",
+        "set_live_endpoints"
+      ],
+      "forward_usage": "Only forwarded_source_inputs use occurrence.forward(source_method, actual_value); public_callbacks are direct methods.",
+      "construction_input_contract": "Existing fixed phase.to_clip Occurrence; original actual entity_geometry and endpoints remain supplied through public forwarding. No actor/provider facts or saved geometry become defaults.",
+      "qualification": "authoring/production-review-repair-20261021/main_rd_source_worker/v1/qualification-native-v1.json"
+    },
+    {
+      "key": "patches_shader_worker_e022ccf45fa38223",
+      "clip_id": "bg3-36/hideous-laughter/application",
+      "phase": "res://assets/vfx/extensions/speed-completion-20261021/sources/ee60d32954653c691f23/e022ccf45fa38223.tres",
+      "source_phase": "res://authoring/production-review-repair-20261021/shader_interface_single_poll/phases/patches/e022ccf45fa38223.tres",
+      "source_sha256": "8b65666c5494fe0dffeda0c1ad143c24ca69d65256b06182a06de9043bcb4d5d",
+      "constructor": "res://assets/vfx/clips/dc084c8a592f68037c08d3cf/construct.gd",
+      "indexed_alternative": true,
+      "public_callbacks": {
+        "entity_geometry": "set_entity_geometry",
+        "targets": "set_targets"
+      },
+      "source_runtime_flags_retained": {
+        "raw_cost_flags": [
+          {
+            "context": "bg3-36/animal-friendship/application",
+            "limit_us": 250,
+            "measurement": "first_actual_input_and_positive_sample",
+            "us": 514
+          }
+        ],
+        "complete_runtime_budget_pass": false,
+        "scope": "Raw worker_us is elapsed around native calls and can include server waiting; not measured CPU cycles. Separate from inclusive main Admission.step_source wall, never added to it as serial main cost.",
+        "source_elapsed_with_draws_us": 201412
+      },
+      "forwarded_source_inputs": [
+        "set_packed_entity_geometry",
+        "set_owner_visibility",
+        "set_live_endpoints"
+      ],
+      "forward_usage": "Only forwarded_source_inputs use occurrence.forward(source_method, actual_value); public_callbacks are direct methods.",
+      "construction_input_contract": "Existing fixed phase.to_clip Occurrence; original actual entity_geometry and endpoints remain supplied through public forwarding. No actor/provider facts or saved geometry become defaults.",
+      "qualification": "authoring/production-review-repair-20261021/main_rd_source_worker/v1/qualification-native-v1.json"
+    },
+    {
+      "key": "patches_shader_worker_8fcd345672c6929a",
+      "clip_id": "bg3-36/hideous-laughter/condition",
+      "phase": "res://assets/vfx/extensions/speed-completion-20261021/sources/50c6431ae75e5470855d/8fcd345672c6929a.tres",
+      "source_phase": "res://authoring/production-review-repair-20261021/shader_interface_single_poll/phases/patches/8fcd345672c6929a.tres",
+      "source_sha256": "993c0325ec307060394f92dc55229acaf59078e0a2ef21731f3d8fdf6f013361",
+      "constructor": "res://assets/vfx/clips/430930f413a01cdb4e3edc31/construct.gd",
+      "indexed_alternative": true,
+      "public_callbacks": {
+        "entity_geometry": "set_entity_geometry",
+        "targets": "set_targets"
+      },
+      "source_runtime_flags_retained": {
+        "raw_cost_flags": [
+          {
+            "context": "bg3-36/animal-friendship/application",
+            "limit_us": 250,
+            "measurement": "first_actual_input_and_positive_sample",
+            "us": 514
+          }
+        ],
+        "complete_runtime_budget_pass": false,
+        "scope": "Raw worker_us is elapsed around native calls and can include server waiting; not measured CPU cycles. Separate from inclusive main Admission.step_source wall, never added to it as serial main cost.",
+        "source_elapsed_with_draws_us": 173978
+      },
+      "forwarded_source_inputs": [
+        "set_packed_entity_geometry",
+        "set_owner_visibility",
+        "set_live_endpoints"
+      ],
+      "forward_usage": "Only forwarded_source_inputs use occurrence.forward(source_method, actual_value); public_callbacks are direct methods.",
+      "construction_input_contract": "Existing fixed phase.to_clip Occurrence; original actual entity_geometry and endpoints remain supplied through public forwarding. No actor/provider facts or saved geometry become defaults.",
+      "qualification": "authoring/production-review-repair-20261021/main_rd_source_worker/v1/qualification-native-v1.json"
+    },
+    {
+      "key": "wind_current_cell_material_coverage_stable",
+      "clip_id": "wall-native/wind_wall_corner_native/lifecycle",
+      "phase": "res://assets/vfx/extensions/speed-completion-20261021/sources/894bddaf1657d9ef4191/phase.tres",
+      "source_phase": "res://authoring/production-review-repair-20261021/wind_material_coverage_stable/phase.tres",
+      "source_sha256": "1165b1623e687da3da17dc2b34918efdf5535f8d3942eb84cfb0a57c980dbba0",
+      "constructor": "res://assets/vfx/extensions/speed-completion-20261021/sources/bb27e6b210d10323a8a8/occurrence.gd",
+      "indexed_alternative": true,
+      "public_callbacks": {
+        "visual_state": "set_visual_state"
+      },
+      "source_runtime_flags_retained": {
+        "closed_mask_historical_measured": {
+          "complete_public_constructors_us": [
+            7309,
+            1492,
+            1095
+          ],
+          "first_public_input_and_sample_us": 177,
+          "readiness_elapsed_us": 142309,
+          "maximum_readiness_step_us": 7010,
+          "cost_flags": [
+            {
+              "boundary": "complete_public_constructor",
+              "limit_us": 2000,
+              "us": 7309
+            },
+            {
+              "boundary": "immutable_readiness_main_step",
+              "us": 7010,
+              "limit_us": 2000
+            }
+          ],
+          "constructor_order": "Candidate constructors before original/control owners; not alternating paired cold measurements.",
+          "steady_and_changed_coverage_budget_qualified": false
+        },
+        "direct_historical_measured": {
+          "unprofiled_complete_public_constructors_us": [
+            8882,
+            1756,
+            1317
+          ],
+          "first_public_input_and_sample_us": 233,
+          "inclusive_admission_max_us": 4904,
+          "bank_unit_max_us": 349,
+          "native_shader_jobs": [
+            {
+              "main_thread": false,
+              "ordinal": 0,
+              "rid_valid": true,
+              "shader_id": -9223371977731865058,
+              "uniform_count": 30,
+              "worker_us": 6763
+            },
+            {
+              "main_thread": false,
+              "ordinal": 3,
+              "rid_valid": true,
+              "shader_id": -9223371977580870111,
+              "uniform_count": 15,
+              "worker_us": 6943
+            },
+            {
+              "main_thread": false,
+              "ordinal": 5,
+              "rid_valid": true,
+              "shader_id": -9223371976574237157,
+              "uniform_count": 14,
+              "worker_us": 6902
+            }
+          ],
+          "diagnostic_constructor": {
+            "profile": {
+              "clock_preparation": {
+                "calls": 1,
+                "exclusive_us": 38,
+                "inclusive_us": 38
+              },
+              "component_construction": {
+                "calls": 1,
+                "exclusive_us": 641,
+                "inclusive_us": 641
+              },
+              "component_tree_registration": {
+                "calls": 1,
+                "exclusive_us": 43,
+                "inclusive_us": 43
+              },
+              "declared_binding_collection": {
+                "calls": 1,
+                "exclusive_us": 36,
+                "inclusive_us": 36
+              },
+              "declared_geometry_registration": {
+                "calls": 1,
+                "exclusive_us": 118,
+                "inclusive_us": 118
+              },
+              "initial_source_sample": {
+                "calls": 1,
+                "exclusive_us": 8,
+                "inclusive_us": 8
+              },
+              "input_receiver_binding": {
+                "calls": 1,
+                "exclusive_us": 29,
+                "inclusive_us": 29
+              },
+              "occurrence_material_discovery": {
+                "calls": 1,
+                "exclusive_us": 2,
+                "inclusive_us": 2
+              },
+              "occurrence_ready": {
+                "calls": 1,
+                "exclusive_us": 58,
+                "inclusive_us": 1173
+              },
+              "phase_resolution": {
+                "calls": 1,
+                "exclusive_us": 6,
+                "inclusive_us": 6
+              },
+              "sampler_material_discovery": {
+                "calls": 6,
+                "exclusive_us": 23,
+                "inclusive_us": 23
+              },
+              "sampler_registration": {
+                "calls": 1,
+                "exclusive_us": 17,
+                "inclusive_us": 196
+              },
+              "source_adaptation": {
+                "calls": 1,
+                "exclusive_us": 31,
+                "inclusive_us": 31
+              },
+              "source_construction": {
+                "calls": 1,
+                "exclusive_us": 30,
+                "inclusive_us": 918
+              },
+              "source_opacity_interface_registration": {
+                "calls": 1,
+                "exclusive_us": 2,
+                "inclusive_us": 2
+              },
+              "source_path_normalization": {
+                "calls": 1,
+                "exclusive_us": 91,
+                "inclusive_us": 91
+              }
+            },
+            "us": 1244
+          },
+          "cost_flags": [
+            {
+              "boundary": "inclusive_source_admission_step",
+              "limit_us": 2000,
+              "us": 4904
+            },
+            {
+              "boundary": "complete_public_constructor",
+              "limit_us": 2000,
+              "us": 8882
+            }
+          ],
+          "scope": "Candidate-only publication then three unprofiled complete public constructors before labelled warm diagnostic and original control. Worker elapsed includes native/server waiting; inclusive Admission is measured once, with no extra nested callback addition. No alternating-paired cold constructor claim, complete-frame time, recurring coverage measurement or universal driver-cold guarantee."
+        },
+        "prepared_raw_cost_flags": [
+          {
+            "boundary": "complete_public_constructor",
+            "limit_us": 2000,
+            "us": 2119
+          }
+        ],
+        "current_measured": {
+          "unprofiled_complete_public_constructors_us": [
+            1684,
+            1325,
+            1028
+          ],
+          "first_public_input_and_sample_us": 199,
+          "inclusive_admission_max_us": 441,
+          "bank_unit_max_us": 387,
+          "native_shader_jobs": [
+            {
+              "main_thread": false,
+              "ordinal": 0,
+              "rid_valid": true,
+              "shader_id": -9223371976943335906,
+              "uniform_count": 30,
+              "worker_us": 7171
+            },
+            {
+              "main_thread": false,
+              "ordinal": 3,
+              "rid_valid": true,
+              "shader_id": -9223371976758786526,
+              "uniform_count": 15,
+              "worker_us": 6970
+            },
+            {
+              "main_thread": false,
+              "ordinal": 5,
+              "rid_valid": true,
+              "shader_id": -9223371975752153573,
+              "uniform_count": 14,
+              "worker_us": 6893
+            }
+          ],
+          "cost_flags": [],
+          "warm_diagnostic_constructor": {
+            "profile": {
+              "clock_preparation": {
+                "calls": 1,
+                "exclusive_us": 17,
+                "inclusive_us": 17
+              },
+              "component_construction": {
+                "calls": 1,
+                "exclusive_us": 588,
+                "inclusive_us": 588
+              },
+              "component_tree_registration": {
+                "calls": 1,
+                "exclusive_us": 41,
+                "inclusive_us": 41
+              },
+              "declared_binding_collection": {
+                "calls": 1,
+                "exclusive_us": 35,
+                "inclusive_us": 35
+              },
+              "declared_geometry_registration": {
+                "calls": 1,
+                "exclusive_us": 119,
+                "inclusive_us": 119
+              },
+              "initial_source_sample": {
+                "calls": 1,
+                "exclusive_us": 8,
+                "inclusive_us": 8
+              },
+              "input_receiver_binding": {
+                "calls": 1,
+                "exclusive_us": 28,
+                "inclusive_us": 28
+              },
+              "occurrence_material_discovery": {
+                "calls": 1,
+                "exclusive_us": 1,
+                "inclusive_us": 1
+              },
+              "occurrence_ready": {
+                "calls": 1,
+                "exclusive_us": 58,
+                "inclusive_us": 972
+              },
+              "phase_resolution": {
+                "calls": 1,
+                "exclusive_us": 7,
+                "inclusive_us": 7
+              },
+              "sampler_material_discovery": {
+                "calls": 6,
+                "exclusive_us": 9,
+                "inclusive_us": 9
+              },
+              "sampler_registration": {
+                "calls": 1,
+                "exclusive_us": 20,
+                "inclusive_us": 185
+              },
+              "source_adaptation": {
+                "calls": 1,
+                "exclusive_us": 7,
+                "inclusive_us": 7
+              },
+              "source_construction": {
+                "calls": 1,
+                "exclusive_us": 29,
+                "inclusive_us": 851
+              },
+              "source_opacity_interface_registration": {
+                "calls": 1,
+                "exclusive_us": 2,
+                "inclusive_us": 2
+              },
+              "source_path_normalization": {
+                "calls": 1,
+                "exclusive_us": 3,
+                "inclusive_us": 3
+              }
+            },
+            "us": 1037
+          },
+          "scope": "Candidate-only readiness then3unprofiled complete public owners before a labelled warm diagnostic/original control. No alternating-paired cold construction or universal driver-cold claim. Worker elapsed may include server waiting; inclusive main Admission wall is charged once. No recurring changed-coverage/update or complete-frame measurement."
+        },
+        "runtime_budget_pass": false,
+        "recurring_changed_coverage_timing_measured": false
+      },
+      "forwarded_source_inputs": [],
+      "forward_usage": "Only forwarded_source_inputs use occurrence.forward(source_method, actual_value); public_callbacks are direct methods.",
+      "construction_input_contract": "Same selected public Wind constructor's wall Dictionary. Privately copy wall_uuid/anchor_position/wall_geometry into the new phase before ConstructedOccurrence. No clip/phase input demanded from production.",
+      "qualification": "authoring/production-review-repair-20261021/wind_material_coverage_stable/qualification.json"
+    },
+    {
+      "key": "cloud_display_groups_cloudkill",
+      "clip_id": "review/cloudkill/volume/lifecycle",
+      "phase": "res://assets/vfx/extensions/cloud-body-speed-20261021/sources/92882958bc5101892ef0/cloudkill.tres",
+      "source_phase": "res://authoring/production-review-repair-20261021/cloud_runtime_tail/display_groups/phases/cloudkill.tres",
+      "source_sha256": "8f0abea884815e195de59e4cd1e2a6d1ba9f4ce1da50f42047c292b0a517754c",
+      "constructor": "res://assets/vfx/clips/c781c09f9d0982328a141a50/construct.gd",
+      "indexed_alternative": true,
+      "public_callbacks": {
+        "owner_state": "set_owner_state",
+        "targets": "set_targets"
+      },
+      "source_runtime_flags_retained": {
+        "historical_synchronous_fixture_flags": [
+          {
+            "key": "cloudkill",
+            "limit_us": 2000,
+            "operation": "phase_resource_publication",
+            "us": 4869
+          },
+          {
+            "key": "cloudkill",
+            "limit_us": 2000,
+            "operation": "immutable_helper_script_publication",
+            "us": 18284
+          }
+        ],
+        "source_owner_constructor_and_update_budget_pass": true,
+        "existing_async_preparation_scope_pass": true,
+        "async_loading_exit_warning": "One unclassified ObjectDB exit warning retained; no clean-shutdown claim. Primary native log is clean.",
+        "whole_runtime_budget_pass": false
+      },
+      "forwarded_source_inputs": [],
+      "forward_usage": "Only forwarded_source_inputs use occurrence.forward(source_method, actual_value).",
+      "construction_input_contract": "Fixed mapped phase delegates to existing owner_clouds.public.make_for_phase(phase,input); exactly one operands row component_path=[assembly], input_field empty, values={owner_uuid}; no saved owner/clock defaults.",
+      "qualification": "authoring/production-review-repair-20261021/cloud_runtime_tail/display_groups/qualification.json",
+      "native_art_scope": "Two actual original/control/candidate full-RGBA exact positive triplets at ticks115/812; matching144Hz histories/movement/suppression. Effects-only viewport, no actor/floor occlusion or human approval."
+    },
+    {
+      "key": "cloud_display_groups_darkness",
+      "clip_id": "review/darkness/volume/lifecycle",
+      "phase": "res://assets/vfx/extensions/cloud-body-speed-20261021/sources/c4edc2d2a11c96a03494/darkness.tres",
+      "source_phase": "res://authoring/production-review-repair-20261021/cloud_runtime_tail/display_groups/phases/darkness.tres",
+      "source_sha256": "50872b6ac506140c24f8990f9310c957e6e659d0950cefdda9ffed4c9f266c43",
+      "constructor": "res://assets/vfx/clips/72f1eef02b84c7985cac55f2/construct.gd",
+      "indexed_alternative": true,
+      "public_callbacks": {
+        "owner_state": "set_owner_state",
+        "targets": "set_targets"
+      },
+      "source_runtime_flags_retained": {
+        "historical_synchronous_fixture_flags": [
+          {
+            "key": "cloudkill",
+            "limit_us": 2000,
+            "operation": "phase_resource_publication",
+            "us": 4869
+          },
+          {
+            "key": "cloudkill",
+            "limit_us": 2000,
+            "operation": "immutable_helper_script_publication",
+            "us": 18284
+          }
+        ],
+        "source_owner_constructor_and_update_budget_pass": true,
+        "existing_async_preparation_scope_pass": true,
+        "async_loading_exit_warning": "One unclassified ObjectDB exit warning retained; no clean-shutdown claim. Primary native log is clean.",
+        "whole_runtime_budget_pass": false
+      },
+      "forwarded_source_inputs": [],
+      "forward_usage": "Only forwarded_source_inputs use occurrence.forward(source_method, actual_value).",
+      "construction_input_contract": "Fixed mapped phase delegates to existing owner_clouds.public.make_for_phase(phase,input); exactly one operands row component_path=[assembly], input_field empty, values={owner_uuid}; no saved owner/clock defaults.",
+      "qualification": "authoring/production-review-repair-20261021/cloud_runtime_tail/display_groups/qualification.json",
+      "native_art_scope": "Two actual original/control/candidate full-RGBA exact positive triplets at ticks115/812; matching144Hz histories/movement/suppression. Effects-only viewport, no actor/floor occlusion or human approval."
+    },
+    {
+      "key": "cloud_display_groups_fog_cloud",
+      "clip_id": "review/fog_cloud/volume/lifecycle",
+      "phase": "res://assets/vfx/extensions/cloud-body-speed-20261021/sources/88b4d9ec3ee520867664/fog_cloud.tres",
+      "source_phase": "res://authoring/production-review-repair-20261021/cloud_runtime_tail/display_groups/phases/fog_cloud.tres",
+      "source_sha256": "520dce503cc7bec979a142f829794750761b5b353f17d6ea1204844bf30019e9",
+      "constructor": "res://assets/vfx/clips/66a04ae2976b9dae5a61bf99/construct.gd",
+      "indexed_alternative": true,
+      "public_callbacks": {
+        "owner_state": "set_owner_state",
+        "targets": "set_targets"
+      },
+      "source_runtime_flags_retained": {
+        "historical_synchronous_fixture_flags": [
+          {
+            "key": "cloudkill",
+            "limit_us": 2000,
+            "operation": "phase_resource_publication",
+            "us": 4869
+          },
+          {
+            "key": "cloudkill",
+            "limit_us": 2000,
+            "operation": "immutable_helper_script_publication",
+            "us": 18284
+          }
+        ],
+        "source_owner_constructor_and_update_budget_pass": true,
+        "existing_async_preparation_scope_pass": true,
+        "async_loading_exit_warning": "One unclassified ObjectDB exit warning retained; no clean-shutdown claim. Primary native log is clean.",
+        "whole_runtime_budget_pass": false
+      },
+      "forwarded_source_inputs": [],
+      "forward_usage": "Only forwarded_source_inputs use occurrence.forward(source_method, actual_value).",
+      "construction_input_contract": "Fixed mapped phase delegates to existing owner_clouds.public.make_for_phase(phase,input); exactly one operands row component_path=[assembly], input_field empty, values={owner_uuid}; no saved owner/clock defaults.",
+      "qualification": "authoring/production-review-repair-20261021/cloud_runtime_tail/display_groups/qualification.json",
+      "native_art_scope": "Two actual original/control/candidate full-RGBA exact positive triplets at ticks115/812; matching144Hz histories/movement/suppression. Effects-only viewport, no actor/floor occlusion or human approval."
+    },
+    {
+      "key": "cloud_display_groups_stinking_cloud",
+      "clip_id": "review/stinking_cloud/volume/lifecycle",
+      "phase": "res://assets/vfx/extensions/cloud-body-speed-20261021/sources/a7b7afe1e4247bcce3fc/stinking_cloud.tres",
+      "source_phase": "res://authoring/production-review-repair-20261021/cloud_runtime_tail/display_groups/phases/stinking_cloud.tres",
+      "source_sha256": "68662b9d99fbcef3c65d837ff27fd94332617a822bca31dc8aaf7bb61b45da57",
+      "constructor": "res://assets/vfx/clips/4edce5d2a0ee8a827924a0a0/construct.gd",
+      "indexed_alternative": true,
+      "public_callbacks": {
+        "owner_state": "set_owner_state",
+        "targets": "set_targets"
+      },
+      "source_runtime_flags_retained": {
+        "historical_synchronous_fixture_flags": [
+          {
+            "key": "cloudkill",
+            "limit_us": 2000,
+            "operation": "phase_resource_publication",
+            "us": 4869
+          },
+          {
+            "key": "cloudkill",
+            "limit_us": 2000,
+            "operation": "immutable_helper_script_publication",
+            "us": 18284
+          }
+        ],
+        "source_owner_constructor_and_update_budget_pass": true,
+        "existing_async_preparation_scope_pass": true,
+        "async_loading_exit_warning": "One unclassified ObjectDB exit warning retained; no clean-shutdown claim. Primary native log is clean.",
+        "whole_runtime_budget_pass": false
+      },
+      "forwarded_source_inputs": [],
+      "forward_usage": "Only forwarded_source_inputs use occurrence.forward(source_method, actual_value).",
+      "construction_input_contract": "Fixed mapped phase delegates to existing owner_clouds.public.make_for_phase(phase,input); exactly one operands row component_path=[assembly], input_field empty, values={owner_uuid}; no saved owner/clock defaults.",
+      "qualification": "authoring/production-review-repair-20261021/cloud_runtime_tail/display_groups/qualification.json",
+      "native_art_scope": "Two actual original/control/candidate full-RGBA exact positive triplets at ticks115/812; matching144Hz histories/movement/suppression. Effects-only viewport, no actor/floor occlusion or human approval."
+    },
+    {
+      "key": "patches_native_creation_worker_87f3b8e0852cfbcf",
+      "clip_id": "bg3-36/animal-friendship/application",
+      "phase": "res://assets/vfx/extensions/cloud-body-speed-20261021/sources/2bf73a9aa3a899bbfe2a/87f3b8e0852cfbcf.tres",
+      "source_phase": "res://authoring/production-review-repair-20261021/main_rd_pipeline_worker/v1/phases/87f3b8e0852cfbcf.tres",
+      "source_sha256": "e5d5b40567069b85e5f758544a39f59953f6b239b7a165e3a0ae26ae9b2bfefe",
+      "constructor": "res://assets/vfx/clips/2e841cd3fe433b14771705fc/construct.gd",
+      "indexed_alternative": true,
+      "public_callbacks": {
+        "entity_geometry": "set_entity_geometry",
+        "targets": "set_targets"
+      },
+      "source_runtime_flags_retained": {
+        "raw_cost_flags": [
+          {
+            "context": "bg3-36/animal-friendship/application",
+            "limit_us": 250,
+            "measurement": "first_actual_input_and_positive_sample",
+            "us": 646
+          },
+          {
+            "context": "validate_target_and_create_shader",
+            "limit_us": 2000,
+            "measurement": "whole_main_frame_work_overlapping_native_worker",
+            "us": 6262
+          },
+          {
+            "context": "validate_target_and_create_shader",
+            "limit_us": 2000,
+            "measurement": "actual_draw_wall_overlapping_native_worker",
+            "us": 6237
+          },
+          {
+            "context": "create_compute_pipeline",
+            "limit_us": 2000,
+            "measurement": "whole_main_frame_work_overlapping_native_worker",
+            "us": 6602
+          },
+          {
+            "context": "create_compute_pipeline",
+            "limit_us": 2000,
+            "measurement": "actual_draw_wall_overlapping_native_worker",
+            "us": 6574
+          }
+        ],
+        "complete_runtime_budget_pass": false,
+        "scope": "Different processes/cache state;2232us worker pipeline is not a paired speedup against49357us earlier main API elapsed. Current source-only route is not in sealed82a271b677ff9604.",
+        "worker_elapsed_is_not_serial_main_cpu_cost": true
+      },
+      "forwarded_source_inputs": [
+        "set_packed_entity_geometry",
+        "set_owner_visibility",
+        "set_live_endpoints"
+      ],
+      "forward_usage": "Only forwarded_source_inputs use occurrence.forward(source_method, actual_value).",
+      "construction_input_contract": "Existing fixed phase.to_clip Occurrence; original actual entity_geometry and endpoints remain supplied through public forwarding. No actor/provider facts or saved geometry become defaults.",
+      "qualification": "authoring/production-review-repair-20261021/main_rd_pipeline_worker/v1/qualification-native-v1.json",
+      "native_art_scope": "Original runtime component, Shader/output equations/native resources and actual saved-packet source unchanged. This immutable-creation worker proof has no new art images; no client/provider adoption or new raster approval."
+    },
+    {
+      "key": "patches_native_creation_worker_e022ccf45fa38223",
+      "clip_id": "bg3-36/hideous-laughter/application",
+      "phase": "res://assets/vfx/extensions/cloud-body-speed-20261021/sources/192b27a6c49748519da7/e022ccf45fa38223.tres",
+      "source_phase": "res://authoring/production-review-repair-20261021/main_rd_pipeline_worker/v1/phases/e022ccf45fa38223.tres",
+      "source_sha256": "54f8ca4c60a07f0989f0cd1b98adcca6d91d079b4c6bdf4f78d34325e0f916c2",
+      "constructor": "res://assets/vfx/clips/402d2732622e6fb983a885c7/construct.gd",
+      "indexed_alternative": true,
+      "public_callbacks": {
+        "entity_geometry": "set_entity_geometry",
+        "targets": "set_targets"
+      },
+      "source_runtime_flags_retained": {
+        "raw_cost_flags": [
+          {
+            "context": "bg3-36/animal-friendship/application",
+            "limit_us": 250,
+            "measurement": "first_actual_input_and_positive_sample",
+            "us": 646
+          },
+          {
+            "context": "validate_target_and_create_shader",
+            "limit_us": 2000,
+            "measurement": "whole_main_frame_work_overlapping_native_worker",
+            "us": 6262
+          },
+          {
+            "context": "validate_target_and_create_shader",
+            "limit_us": 2000,
+            "measurement": "actual_draw_wall_overlapping_native_worker",
+            "us": 6237
+          },
+          {
+            "context": "create_compute_pipeline",
+            "limit_us": 2000,
+            "measurement": "whole_main_frame_work_overlapping_native_worker",
+            "us": 6602
+          },
+          {
+            "context": "create_compute_pipeline",
+            "limit_us": 2000,
+            "measurement": "actual_draw_wall_overlapping_native_worker",
+            "us": 6574
+          }
+        ],
+        "complete_runtime_budget_pass": false,
+        "scope": "Different processes/cache state;2232us worker pipeline is not a paired speedup against49357us earlier main API elapsed. Current source-only route is not in sealed82a271b677ff9604.",
+        "worker_elapsed_is_not_serial_main_cpu_cost": true
+      },
+      "forwarded_source_inputs": [
+        "set_packed_entity_geometry",
+        "set_owner_visibility",
+        "set_live_endpoints"
+      ],
+      "forward_usage": "Only forwarded_source_inputs use occurrence.forward(source_method, actual_value).",
+      "construction_input_contract": "Existing fixed phase.to_clip Occurrence; original actual entity_geometry and endpoints remain supplied through public forwarding. No actor/provider facts or saved geometry become defaults.",
+      "qualification": "authoring/production-review-repair-20261021/main_rd_pipeline_worker/v1/qualification-native-v1.json",
+      "native_art_scope": "Original runtime component, Shader/output equations/native resources and actual saved-packet source unchanged. This immutable-creation worker proof has no new art images; no client/provider adoption or new raster approval."
+    },
+    {
+      "key": "patches_native_creation_worker_8fcd345672c6929a",
+      "clip_id": "bg3-36/hideous-laughter/condition",
+      "phase": "res://assets/vfx/extensions/cloud-body-speed-20261021/sources/071f7f74bedf15d3fcfd/8fcd345672c6929a.tres",
+      "source_phase": "res://authoring/production-review-repair-20261021/main_rd_pipeline_worker/v1/phases/8fcd345672c6929a.tres",
+      "source_sha256": "b45de2c1fd5f8ec192cdb344141e9d6bdfdca48594412196f7990c0b45fc4b4d",
+      "constructor": "res://assets/vfx/clips/150a4d53d96303cc0f9e265f/construct.gd",
+      "indexed_alternative": true,
+      "public_callbacks": {
+        "entity_geometry": "set_entity_geometry",
+        "targets": "set_targets"
+      },
+      "source_runtime_flags_retained": {
+        "raw_cost_flags": [
+          {
+            "context": "bg3-36/animal-friendship/application",
+            "limit_us": 250,
+            "measurement": "first_actual_input_and_positive_sample",
+            "us": 646
+          },
+          {
+            "context": "validate_target_and_create_shader",
+            "limit_us": 2000,
+            "measurement": "whole_main_frame_work_overlapping_native_worker",
+            "us": 6262
+          },
+          {
+            "context": "validate_target_and_create_shader",
+            "limit_us": 2000,
+            "measurement": "actual_draw_wall_overlapping_native_worker",
+            "us": 6237
+          },
+          {
+            "context": "create_compute_pipeline",
+            "limit_us": 2000,
+            "measurement": "whole_main_frame_work_overlapping_native_worker",
+            "us": 6602
+          },
+          {
+            "context": "create_compute_pipeline",
+            "limit_us": 2000,
+            "measurement": "actual_draw_wall_overlapping_native_worker",
+            "us": 6574
+          }
+        ],
+        "complete_runtime_budget_pass": false,
+        "scope": "Different processes/cache state;2232us worker pipeline is not a paired speedup against49357us earlier main API elapsed. Current source-only route is not in sealed82a271b677ff9604.",
+        "worker_elapsed_is_not_serial_main_cpu_cost": true
+      },
+      "forwarded_source_inputs": [
+        "set_packed_entity_geometry",
+        "set_owner_visibility",
+        "set_live_endpoints"
+      ],
+      "forward_usage": "Only forwarded_source_inputs use occurrence.forward(source_method, actual_value).",
+      "construction_input_contract": "Existing fixed phase.to_clip Occurrence; original actual entity_geometry and endpoints remain supplied through public forwarding. No actor/provider facts or saved geometry become defaults.",
+      "qualification": "authoring/production-review-repair-20261021/main_rd_pipeline_worker/v1/qualification-native-v1.json",
+      "native_art_scope": "Original runtime component, Shader/output equations/native resources and actual saved-packet source unchanged. This immutable-creation worker proof has no new art images; no client/provider adoption or new raster approval."
+    },
+    {
+      "key": "spike_preparation_material_worker",
+      "clip_id": "assembled/spike_growth_native",
+      "phase": "res://assets/vfx/extensions/spike-readiness-20261022/sources/5ccb02815e601fa3218f/phase.tres",
+      "source_phase": "res://authoring/production-review-repair-20261021/runtime_tail/spike_preparation_worker/v3/phase.tres",
+      "source_sha256": "f65ce24723d102d891b66d139c2120599cb42fe3ed26678afd1008e94709c873",
+      "constructor": "res://assets/vfx/clips/72124779d29da59fea0ba8eb/construct.gd",
+      "indexed_alternative": true,
+      "public_callbacks": {
+        "targets": "set_targets",
+        "owner_state": "set_owner_state",
+        "zone_geometry": "set_zone_geometry"
+      },
+      "immutable_preparation": "res://assets/vfx/extensions/spike-readiness-20261022/sources/e5b7b1dc748a4bff8968/material_readiness.gd",
+      "qualification": "authoring/production-review-repair-20261021/runtime_tail/spike_preparation_worker/v3/qualification-native-v3b.json",
+      "source_runtime_flags_retained": {
+        "qualification": "authoring/production-review-repair-20261021/runtime_tail/spike_preparation_worker/v3/qualification-native-v3b.json",
+        "qualification_sha256": "dfcb7f16d42d6a987db201f30d10d89767afd96f2e30026e09da5093abc5c092",
+        "whole_frame_budget_pass": false,
+        "cost_flags": [
+          {
+            "limit_us": 2000,
+            "operation": "observed_worker_overlap_process_to_post_draw",
+            "us": 6279
+          },
+          {
+            "limit_us": 2000,
+            "operation": "observed_worker_overlap_pre_to_post_draw",
+            "us": 6242
+          },
+          {
+            "limit_us": 2000,
+            "operation": "observed_worker_overlap_process_to_post_draw",
+            "us": 6284
+          },
+          {
+            "limit_us": 2000,
+            "operation": "observed_worker_overlap_pre_to_post_draw",
+            "us": 6252
+          },
+          {
+            "limit_us": 2000,
+            "operation": "observed_worker_overlap_process_to_post_draw",
+            "us": 6433
+          },
+          {
+            "limit_us": 2000,
+            "operation": "observed_worker_overlap_pre_to_post_draw",
+            "us": 6400
+          },
+          {
+            "limit_us": 2000,
+            "operation": "observed_worker_overlap_process_to_post_draw",
+            "us": 5356
+          },
+          {
+            "limit_us": 2000,
+            "operation": "observed_worker_overlap_pre_to_post_draw",
+            "us": 5334
+          },
+          {
+            "limit_us": 2000,
+            "operation": "observed_worker_overlap_process_to_post_draw",
+            "us": 6373
+          },
+          {
+            "limit_us": 2000,
+            "operation": "observed_worker_overlap_pre_to_post_draw",
+            "us": 6293
+          },
+          {
+            "limit_us": 2000,
+            "operation": "observed_worker_overlap_process_to_post_draw",
+            "us": 6802
+          },
+          {
+            "limit_us": 2000,
+            "operation": "observed_worker_overlap_pre_to_post_draw",
+            "us": 6784
+          },
+          {
+            "limit_us": 2000,
+            "operation": "observed_worker_overlap_process_to_post_draw",
+            "us": 6603
+          },
+          {
+            "limit_us": 2000,
+            "operation": "observed_worker_overlap_pre_to_post_draw",
+            "us": 6528
+          },
+          {
+            "limit_us": 2000,
+            "operation": "observed_worker_overlap_process_to_post_draw",
+            "us": 6031
+          },
+          {
+            "limit_us": 2000,
+            "operation": "observed_worker_overlap_pre_to_post_draw",
+            "us": 5991
+          },
+          {
+            "limit_us": 2000,
+            "operation": "observed_worker_overlap_process_to_post_draw",
+            "us": 6869
+          },
+          {
+            "limit_us": 2000,
+            "operation": "observed_worker_overlap_pre_to_post_draw",
+            "us": 6826
+          },
+          {
+            "limit_us": 2000,
+            "operation": "observed_worker_overlap_process_to_post_draw",
+            "us": 6612
+          },
+          {
+            "limit_us": 2000,
+            "operation": "observed_worker_overlap_pre_to_post_draw",
+            "us": 6571
+          },
+          {
+            "limit_us": 2000,
+            "operation": "observed_worker_overlap_process_to_post_draw",
+            "us": 6787
+          },
+          {
+            "limit_us": 2000,
+            "operation": "observed_worker_overlap_pre_to_post_draw",
+            "us": 6742
+          },
+          {
+            "limit_us": 2000,
+            "operation": "observed_worker_overlap_process_to_post_draw",
+            "us": 6454
+          },
+          {
+            "limit_us": 2000,
+            "operation": "observed_worker_overlap_pre_to_post_draw",
+            "us": 6433
+          },
+          {
+            "limit_us": 2000,
+            "operation": "observed_worker_overlap_process_to_post_draw",
+            "us": 6851
+          },
+          {
+            "limit_us": 2000,
+            "operation": "observed_worker_overlap_pre_to_post_draw",
+            "us": 6819
+          },
+          {
+            "limit_us": 2000,
+            "operation": "observed_worker_overlap_process_to_post_draw",
+            "us": 6273
+          },
+          {
+            "limit_us": 2000,
+            "operation": "observed_worker_overlap_pre_to_post_draw",
+            "us": 6250
+          },
+          {
+            "limit_us": 2000,
+            "operation": "observed_worker_overlap_process_to_post_draw",
+            "us": 6883
+          },
+          {
+            "limit_us": 2000,
+            "operation": "observed_worker_overlap_pre_to_post_draw",
+            "us": 6854
+          },
+          {
+            "limit_us": 2000,
+            "operation": "observed_worker_overlap_process_to_post_draw",
+            "us": 6135
+          },
+          {
+            "limit_us": 2000,
+            "operation": "observed_worker_overlap_pre_to_post_draw",
+            "us": 6105
+          },
+          {
+            "limit_us": 2000,
+            "operation": "observed_worker_overlap_process_to_post_draw",
+            "us": 6716
+          },
+          {
+            "limit_us": 2000,
+            "operation": "observed_worker_overlap_pre_to_post_draw",
+            "us": 6679
+          },
+          {
+            "limit_us": 2000,
+            "operation": "observed_worker_overlap_process_to_post_draw",
+            "us": 6706
+          },
+          {
+            "limit_us": 2000,
+            "operation": "observed_worker_overlap_pre_to_post_draw",
+            "us": 6684
+          },
+          {
+            "limit_us": 2000,
+            "operation": "observed_worker_overlap_process_to_post_draw",
+            "us": 6825
+          },
+          {
+            "limit_us": 2000,
+            "operation": "observed_worker_overlap_pre_to_post_draw",
+            "us": 6794
+          },
+          {
+            "limit_us": 2000,
+            "operation": "observed_worker_overlap_process_to_post_draw",
+            "us": 5854
+          },
+          {
+            "limit_us": 2000,
+            "operation": "observed_worker_overlap_pre_to_post_draw",
+            "us": 5823
+          },
+          {
+            "limit_us": 2000,
+            "operation": "observed_worker_overlap_process_to_post_draw",
+            "us": 6402
+          },
+          {
+            "limit_us": 2000,
+            "operation": "observed_worker_overlap_pre_to_post_draw",
+            "us": 6379
+          },
+          {
+            "limit_us": 2000,
+            "operation": "observed_worker_overlap_process_to_post_draw",
+            "us": 5732
+          },
+          {
+            "limit_us": 2000,
+            "operation": "observed_worker_overlap_pre_to_post_draw",
+            "us": 5656
+          },
+          {
+            "limit_us": 2000,
+            "operation": "observed_worker_overlap_process_to_post_draw",
+            "us": 6290
+          },
+          {
+            "limit_us": 2000,
+            "operation": "observed_worker_overlap_pre_to_post_draw",
+            "us": 6267
+          },
+          {
+            "limit_us": 2000,
+            "operation": "observed_worker_overlap_process_to_post_draw",
+            "us": 6871
+          },
+          {
+            "limit_us": 2000,
+            "operation": "observed_worker_overlap_pre_to_post_draw",
+            "us": 6837
+          },
+          {
+            "limit_us": 2000,
+            "operation": "observed_worker_overlap_process_to_post_draw",
+            "us": 6677
+          },
+          {
+            "limit_us": 2000,
+            "operation": "observed_worker_overlap_pre_to_post_draw",
+            "us": 6623
+          },
+          {
+            "limit_us": 2000,
+            "operation": "observed_worker_overlap_process_to_post_draw",
+            "us": 6918
+          },
+          {
+            "limit_us": 2000,
+            "operation": "observed_worker_overlap_pre_to_post_draw",
+            "us": 6891
+          },
+          {
+            "limit_us": 2000,
+            "operation": "observed_worker_overlap_process_to_post_draw",
+            "us": 6320
+          },
+          {
+            "limit_us": 2000,
+            "operation": "observed_worker_overlap_pre_to_post_draw",
+            "us": 6297
+          },
+          {
+            "limit_us": 2000,
+            "operation": "observed_worker_overlap_process_to_post_draw",
+            "us": 6807
+          },
+          {
+            "limit_us": 2000,
+            "operation": "observed_worker_overlap_pre_to_post_draw",
+            "us": 6774
+          },
+          {
+            "limit_us": 2000,
+            "operation": "observed_worker_overlap_process_to_post_draw",
+            "us": 6853
+          },
+          {
+            "limit_us": 2000,
+            "operation": "observed_worker_overlap_pre_to_post_draw",
+            "us": 6670
+          },
+          {
+            "limit_us": 2000,
+            "operation": "observed_worker_overlap_process_to_post_draw",
+            "us": 6847
+          },
+          {
+            "limit_us": 2000,
+            "operation": "observed_worker_overlap_pre_to_post_draw",
+            "us": 6813
+          },
+          {
+            "limit_us": 2000,
+            "operation": "observed_worker_overlap_process_to_post_draw",
+            "us": 6358
+          },
+          {
+            "limit_us": 2000,
+            "operation": "observed_worker_overlap_pre_to_post_draw",
+            "us": 6340
+          },
+          {
+            "limit_us": 2000,
+            "operation": "observed_worker_overlap_process_to_post_draw",
+            "us": 6909
+          },
+          {
+            "limit_us": 2000,
+            "operation": "observed_worker_overlap_pre_to_post_draw",
+            "us": 6884
+          },
+          {
+            "limit_us": 2000,
+            "operation": "observed_worker_overlap_process_to_post_draw",
+            "us": 6887
+          },
+          {
+            "limit_us": 2000,
+            "operation": "observed_worker_overlap_pre_to_post_draw",
+            "us": 6867
+          },
+          {
+            "limit_us": 2000,
+            "operation": "observed_worker_overlap_process_to_post_draw",
+            "us": 6831
+          },
+          {
+            "limit_us": 2000,
+            "operation": "observed_worker_overlap_pre_to_post_draw",
+            "us": 6798
+          },
+          {
+            "limit_us": 2000,
+            "operation": "observed_worker_overlap_process_to_post_draw",
+            "us": 5832
+          },
+          {
+            "limit_us": 2000,
+            "operation": "observed_worker_overlap_pre_to_post_draw",
+            "us": 5805
+          },
+          {
+            "limit_us": 2000,
+            "operation": "observed_worker_overlap_process_to_post_draw",
+            "us": 6827
+          },
+          {
+            "limit_us": 2000,
+            "operation": "observed_worker_overlap_pre_to_post_draw",
+            "us": 6804
+          },
+          {
+            "limit_us": 2000,
+            "operation": "observed_worker_overlap_process_to_post_draw",
+            "us": 6112
+          },
+          {
+            "limit_us": 2000,
+            "operation": "observed_worker_overlap_pre_to_post_draw",
+            "us": 6093
+          },
+          {
+            "limit_us": 2000,
+            "operation": "observed_worker_overlap_process_to_post_draw",
+            "us": 6315
+          },
+          {
+            "limit_us": 2000,
+            "operation": "observed_worker_overlap_pre_to_post_draw",
+            "us": 6219
+          },
+          {
+            "limit_us": 2000,
+            "operation": "observed_worker_overlap_process_to_post_draw",
+            "us": 6917
+          },
+          {
+            "limit_us": 2000,
+            "operation": "observed_worker_overlap_pre_to_post_draw",
+            "us": 6854
+          },
+          {
+            "limit_us": 2000,
+            "operation": "observed_worker_overlap_process_to_post_draw",
+            "us": 6840
+          },
+          {
+            "limit_us": 2000,
+            "operation": "observed_worker_overlap_pre_to_post_draw",
+            "us": 6822
+          },
+          {
+            "limit_us": 2000,
+            "operation": "observed_worker_overlap_process_to_post_draw",
+            "us": 6900
+          },
+          {
+            "limit_us": 2000,
+            "operation": "observed_worker_overlap_pre_to_post_draw",
+            "us": 6871
+          },
+          {
+            "limit_us": 2000,
+            "operation": "observed_worker_overlap_process_to_post_draw",
+            "us": 6444
+          },
+          {
+            "limit_us": 2000,
+            "operation": "observed_worker_overlap_pre_to_post_draw",
+            "us": 6316
+          },
+          {
+            "limit_us": 2000,
+            "operation": "observed_worker_overlap_process_to_post_draw",
+            "us": 6837
+          },
+          {
+            "limit_us": 2000,
+            "operation": "observed_worker_overlap_pre_to_post_draw",
+            "us": 6802
+          },
+          {
+            "limit_us": 2000,
+            "operation": "observed_worker_overlap_process_to_post_draw",
+            "us": 6651
+          },
+          {
+            "limit_us": 2000,
+            "operation": "observed_worker_overlap_pre_to_post_draw",
+            "us": 6614
+          },
+          {
+            "limit_us": 2000,
+            "operation": "observed_worker_overlap_process_to_post_draw",
+            "us": 6873
+          },
+          {
+            "limit_us": 2000,
+            "operation": "observed_worker_overlap_pre_to_post_draw",
+            "us": 6822
+          }
+        ],
+        "historical_limits": {
+          "original_readiness_max_us": 24454,
+          "original_constructor_flags_us": [
+            2118,
+            2437,
+            2071
+          ],
+          "scope": "Historical whole-bank/constructor flags retained, not rewritten. v1 153 flags, v2 77 flags and failed-v3 fixture remain separate observations. No paired all-cold/full-frame/provider/client/default-selection closure."
+        }
+      },
+      "native_art_scope": "Preparation-only derivative. Actual original nine maps/Resources,88sorted draws and395effective seed comparisons pass; zero new source images. Earlier seed-lowering3exact source pairs remain historical art proof, not repeated here. No actor/body/perceptual/human approval."
+    },
+    {
+      "key": "spirit_mask_prepared_radiant",
+      "clip_id": "assembled/spirit_guardians_radiant_native",
+      "phase": "res://assets/vfx/extensions/spirit-receiver-20261022/sources/a0dd22db8e406a786d29/radiant.tres",
+      "source_phase": "res://authoring/production-review-repair-20261022/spirit_mask_prepared/v1/radiant.tres",
+      "source_sha256": "1c9d43637a821da14950d964aadc6a02a745519a19356d5139431af352a86d5c",
+      "constructor": "res://assets/vfx/clips/c336e271ce1b4e079788d4c3/construct.gd",
+      "indexed_alternative": true,
+      "public_callbacks": {
+        "targets": "set_targets",
+        "owner_state": "set_owner_state"
+      },
+      "immutable_preparation": "res://assets/vfx/extensions/spirit-receiver-20261022/sources/94ebf85d9ec035241295/readiness.gd",
+      "required_receiver_helper": "res://assets/vfx/extensions/spirit-receiver-20261022/sources/0d4f34de6187f16c3e2c/spirit_area_mask_prepared.gd",
+      "qualification": "authoring/production-review-repair-20261022/spirit_mask_prepared/v1/qualification-native-v1.json",
+      "native_art_scope": "Sixteen exact native RGBA states, four saved positive pairs. Same old geometry/clock/material operands with exact immutable mask Shader lowering. No actor or client art approval.",
+      "source_runtime_flags_retained": [
+        {
+          "actual_us": 2398.0,
+          "measurement": "complete_constructor",
+          "repeat": 0.0,
+          "source": "radiant-candidate",
+          "threshold_us": 2000.0
+        },
+        {
+          "actual_us": 536.0,
+          "measurement": "first_positive_inputs_mask_and_sample",
+          "repeat": 0.0,
+          "source": "radiant-candidate",
+          "threshold_us": 250.0
+        },
+        {
+          "actual_us": 324.0,
+          "measurement": "advancing_p95",
+          "repeat": 0.0,
+          "source": "radiant-candidate",
+          "threshold_us": 250.0
+        },
+        {
+          "actual_us": 278.0,
+          "measurement": "moved_p95",
+          "repeat": 0.0,
+          "source": "radiant-candidate",
+          "threshold_us": 250.0
+        },
+        {
+          "actual_us": 456.0,
+          "measurement": "same_age_changed_mask_p95",
+          "repeat": 0.0,
+          "source": "radiant-candidate",
+          "threshold_us": 250.0
+        },
+        {
+          "actual_us": 549.0,
+          "measurement": "split_publish_inputs_and_sample",
+          "repeat": 1.0,
+          "source": "radiant-candidate",
+          "threshold_us": 250.0
+        }
+      ]
+    },
+    {
+      "key": "spirit_mask_prepared_necrotic",
+      "clip_id": "assembled/spirit_guardians_necrotic_native",
+      "phase": "res://assets/vfx/extensions/spirit-receiver-20261022/sources/07bdd89007c0d0e191d6/necrotic.tres",
+      "source_phase": "res://authoring/production-review-repair-20261022/spirit_mask_prepared/v1/necrotic.tres",
+      "source_sha256": "cf8d30a4b8a47bd81641d251105dd8bc99d9810a564d4d8ff46e9b38aed7ac62",
+      "constructor": "res://assets/vfx/clips/d34859dc0238f9ddf05a25c4/construct.gd",
+      "indexed_alternative": true,
+      "public_callbacks": {
+        "targets": "set_targets",
+        "owner_state": "set_owner_state"
+      },
+      "immutable_preparation": "res://assets/vfx/extensions/spirit-receiver-20261022/sources/94ebf85d9ec035241295/readiness.gd",
+      "required_receiver_helper": "res://assets/vfx/extensions/spirit-receiver-20261022/sources/0d4f34de6187f16c3e2c/spirit_area_mask_prepared.gd",
+      "qualification": "authoring/production-review-repair-20261022/spirit_mask_prepared/v1/qualification-native-v1.json",
+      "native_art_scope": "Sixteen exact native RGBA states, four saved positive pairs. Same old geometry/clock/material operands with exact immutable mask Shader lowering. No actor or client art approval.",
+      "source_runtime_flags_retained": [
+        {
+          "actual_us": 2279.0,
+          "measurement": "complete_constructor",
+          "repeat": 0.0,
+          "source": "necrotic-candidate",
+          "threshold_us": 2000.0
+        },
+        {
+          "actual_us": 806.0,
+          "measurement": "first_positive_inputs_mask_and_sample",
+          "repeat": 0.0,
+          "source": "necrotic-candidate",
+          "threshold_us": 250.0
+        },
+        {
+          "actual_us": 424.0,
+          "measurement": "advancing_p95",
+          "repeat": 0.0,
+          "source": "necrotic-candidate",
+          "threshold_us": 250.0
+        },
+        {
+          "actual_us": 387.0,
+          "measurement": "moved_p95",
+          "repeat": 0.0,
+          "source": "necrotic-candidate",
+          "threshold_us": 250.0
+        },
+        {
+          "actual_us": 664.0,
+          "measurement": "same_age_changed_mask_p95",
+          "repeat": 0.0,
+          "source": "necrotic-candidate",
+          "threshold_us": 250.0
+        },
+        {
+          "actual_us": 2322.0,
+          "measurement": "split_complete_constructor",
+          "repeat": 0.0,
+          "source": "necrotic-candidate",
+          "threshold_us": 2000.0
+        },
+        {
+          "actual_us": 466.0,
+          "measurement": "split_publish_inputs_and_sample",
+          "repeat": 1.0,
+          "source": "necrotic-candidate",
+          "threshold_us": 250.0
+        }
+      ]
+    }
+  ],
+  "default_selection_changed": false,
+  "new_index_clip_ids_added": false,
+  "usage": "Explicit typed SourceResource entries, not aliases for existing clip IDs or gameplay assignments",
+  "version": "runtime-dragon-receiver-20261022-53075ee7ed11481f",
+  "previous_table": "res://assets/vfx/format/condition-scenes-20261022-source-resources.json",
+  "previous_table_sha256": "af5bacf26951e753a9ade6ef051f1b03eb80ee5947d595354f8a710c761f85a6",
+  "standalone_source_keys": [
+    "material_runtime_forcecage_box",
+    "material_runtime_summon_terminal_air_elemental",
+    "material_runtime_summon_terminal_draconic_spirit",
+    "material_runtime_summon_terminal_deva"
+  ]
+}
