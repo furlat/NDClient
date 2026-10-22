@@ -1,6 +1,41 @@
 # Remaining production content — updated 22 October 2026
 
-**Latest source follow-through:** Studio framing/source inspection and owned
+**Current source and content boundary:** shared finite-Life/provider source is
+committed at **4511b697**, and accepted Timeline endpoint/evidence follow-through
+at **e083cef1**. Recovery23e14a2e remains intact. Twenty-one additional original cases
+are captured/imported in six data batches: thirteen recorded and eight failed;
+the Library is409cases/396recorded/thirteenfailed. Eyebite/Sunbeam accepted repeats,
+active attributed Divine Favor contact, Cloudkill/Spirit continuation and a
+recipient-side Stinking save now have actual originals. Obstruction/fall,
+ordinary successful-save stabilization and the failed Protection tail retain
+their exact limitations. The same-seed eligible-enemy Shoves both naturally
+resist; the separately identified two-move Protection prefix records its actual
+effective handler. Original capture closes recorded-branch gaps; its bounded
+native follow-through is stated separately below. Performance and art/audio
+acceptance remain open.
+[Current original ledger](../.runtime/main-queue-20261022/content-originals/original-ledger.json).
+
+**Current shared area/source closure:** action-dispatched area SpellFacts now
+preserve their actual occurrence support/geometry, while explicit actor/result
+paths retain priority. Initial and repeated Sunbeam select the existing strict
+line endpoint through Resource data. Publication has0errors/2warnings; the
+affected source control passes295. The grouped13new-original+initial-Sunbeam
+native cohort passes14cases/32,102assertions/natural exit0/no unexpected errors
+or owned leftovers. This ordinary replay/seek/two-seat/loop proof does not
+qualify every positive persistent cut or all188native/live/artwork.
+[Current grouped receipt](../.runtime/main-queue-20261022/content-postfix-native/summary.json).
+
+The real Stone partial remainder is still withheld by the selected source's
+current-null-anchor contract even though general replay passes; its exact
+existing-interface Factory request is§24. Full Ice section destruction also
+loses an existing public fact at the backend pre-removal capture seam. Honest
+client originals use the actual available removal/FrigidAir facts and do not
+fabricate that event. These are narrow source-contract/projection defects,
+separate from unassigned artwork or a renderer replacement.
+[Factory§24](FACTORY_REVIEW_2026-10-20.md#24-partial-stone-remainder--current-anchor-is-not-the-immutable-construction-frame),
+[exact backend handoff](BACKEND_CONTENT_BLOCKERS_2026-10-20.md#observed-ice-section-destruction-loses-its-public-fact--22-october).
+
+**Shared source follow-through:** Studio framing/source inspection and owned
 surface readiness are committed at **0f522660**. Both Thorns forms now require
 only the selected source's actual `visual_state`, with unused legacy review
 setters explicitly omitted. Ensnaring's actual condition lifecycle owns

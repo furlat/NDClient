@@ -479,14 +479,29 @@ static func _native_action_component(group:Dictionary,owner:Dictionary,event:Dic
         parameters.status="missing";parameters.reason=observed.gaps[0]
     var recipient:bool=str(phase.native_cue.get("attachment","")).begins_with("recipient")
     var target_endpoint:bool=phase.native_cue.get("live_endpoints",[]).any(func(endpoint):return endpoint.get("actor")=="target")
-    var self_owned:bool=not recipient and not target_endpoint and to==null
+    # A real area SpellFact may be dispatched by an Action resource. Preserve
+    # its disclosed ground declaration without inventing a recipient actor.
+    # Result/operation projections already supply their own exact points.
+    var area:bool=fact.get("kind")=="spell" and fact.get("aoe_position")!=null \
+        and not Occurrences.application(owner) and not recipient and not target_endpoint and target.is_empty() and points.is_empty()
+    var area_contact:Dictionary={}
+    if area:
+        if fact.get("source_position")!=null:from=fact.source_position
+        area_contact=graph.get("area_contacts",{}).get(str(owner.id),{})
+        to=area_contact.get("position")
+        parameters.area_geometry=fact.area_geometry if fact.get("area_geometry")!=null else {}
+        parameters.aim_position=SpellDelivery.aim_position(fact,graph)
+        parameters.resolved_area_positions=fact.get("resolved_area_positions")
+        parameters.ground_target=true
+    var self_owned:bool=not area and not recipient and not target_endpoint and to==null
     parameters.merge({"native_spell":true,"actor_uuid":source,"target_uuid":target,
         "from_position":from,"to_position":from if self_owned else to,
         "from_elevation_feet":points.get("from_elevation_feet",graph.contacts.get(source,{}).get("from_elevation_feet",0)),
         "to_elevation_feet":points.get("to_elevation_feet",graph.contacts.get(source if self_owned else target,{}).get("from_elevation_feet",0)),
         "recipe":{},"cast_recipe":{"enabled":false}},true)
+    if area and area_contact.has("elevation_steps"):parameters.to_elevation_feet=float(area_contact.elevation_steps)*5.0
     if self_owned:parameters.target_uuid=source
-    if from==null or ((recipient or target_endpoint) and to==null):
+    if from==null or ((area or recipient or target_endpoint) and to==null) or area and not area_contact.has("elevation_steps"):
         parameters.status="missing";parameters.reason="native_action_position_unavailable"
     return add(group,event,"native_effect",phase.start_ms,phase.duration_ms,phase.source,parameters)
 

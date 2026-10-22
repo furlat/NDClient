@@ -9,6 +9,8 @@ from flame_blade_case import flame_blade_weapon_study
 from production_review_cases import production_review_studies, repair_item_owner_requirements
 from trap_cases import hardware_studies
 from legacy_six_cases import legacy_six_studies
+from retained_field_cases import retained_field_studies
+from wall_continuation_cases import wall_continuation_studies, wall_public_witness_studies
 
 
 def subjects(spells=(), actions=(), conditions=()):
@@ -225,7 +227,7 @@ def first_cohort():
                   {'do':'action.move','by':'caster','target':[11,6]},
                   {'do':'action.environment.directional_door.open','by':'caster','target':{'object':'Burial hall'}},
                   {'do':'action.move','by':'caster','target':[13,6]}],
-         'required_behaviors':['action.environment.directional_door.open'],'required_facts':['movement']}, gallery_sorcerer(), equipped_weapon_study(), poison_weapon_contact_study(), poison_weapon_runtime_study(), water_create_dry_study(), *glyph_warding_trigger_studies(), power_word_heal_poison_study(), goodberry_consumption_study(), shillelagh_equipped_move_study(), flaming_sphere_lifecycle_study()] + interaction_cohort() + traversal_and_utility_cohort() + survival_cohort() + perspective_and_reaction_cohort() + direct_character_cohort() + passive_handler_cohort() + [interaction_media_study(), vampiric_positive_study(), banishment_departure_study()] + native_persistent_studio_studies() + option_identity_studies() + intrinsic_weapon_studies() + [flame_blade_weapon_study(subjects)] + coating_weapon_studies() + event_family_studies(actors, subjects) + projectile_variant_studies(actors, subjects) + production_review_studies(actors, subjects) + legacy_six_studies(subjects) + [skeleton_mark_lifecycle_study()] + coating_slot_lifecycle_studies() + class_held_lifecycle_studies() + elemental_body_lifecycle_studies() + [false_life_grant_study()] + [shield_ranged_lifecycle_study()] + action_dispatch_owner_studies() + myrmidon_body_lifecycle_studies() + [arcane_sword_granted_lifecycle_study()] + provisional_creature_body_studies()
+         'required_behaviors':['action.environment.directional_door.open'],'required_facts':['movement']}, gallery_sorcerer(), equipped_weapon_study(), poison_weapon_contact_study(), poison_weapon_runtime_study(), water_create_dry_study(), *glyph_warding_trigger_studies(), power_word_heal_poison_study(), goodberry_consumption_study(), shillelagh_equipped_move_study(), flaming_sphere_lifecycle_study()] + interaction_cohort() + traversal_and_utility_cohort() + survival_cohort() + perspective_and_reaction_cohort() + direct_character_cohort() + passive_handler_cohort() + [interaction_media_study(), vampiric_positive_study(), banishment_departure_study()] + native_persistent_studio_studies() + option_identity_studies() + intrinsic_weapon_studies() + [flame_blade_weapon_study(subjects)] + coating_weapon_studies() + event_family_studies(actors, subjects) + projectile_variant_studies(actors, subjects) + production_review_studies(actors, subjects) + legacy_six_studies(subjects) + [skeleton_mark_lifecycle_study()] + coating_slot_lifecycle_studies() + class_held_lifecycle_studies() + elemental_body_lifecycle_studies() + [false_life_grant_study()] + [shield_ranged_lifecycle_study()] + action_dispatch_owner_studies() + myrmidon_body_lifecycle_studies() + [arcane_sword_granted_lifecycle_study()] + provisional_creature_body_studies() + granted_repeat_contact_studies() + r4_movement_survival_studies() + [protection_party_study(), protection_party_prefix_study(), shove_enemy_obstruction_study()] + retained_field_studies(subjects) + wall_continuation_studies(subjects) + wall_public_witness_studies(subjects)
     cohort += hardware_studies(subjects)
     return [repair_item_owner_requirements(case) for case in cohort]
 
@@ -2248,3 +2250,501 @@ def provisional_creature_body_studies():
             scenario['required_condition_ends'] = ['condition.charmed']
         result.append(scenario)
     return result
+
+
+def granted_repeat_contact_studies():
+    """Fixed legal retained repeats and an actual active weapon rider; no outcome retries."""
+    return [{'id': 'spell.eyebite/repeat_end',
+      'title': 'Eyebite: actual retained repeat, movement and concentration end',
+      'kind': 'spell',
+      'seed': 2,
+      'battlefield': 'battlefield.open_floor_bright',
+      'actors': [{'role': 'caster',
+                  'side': 'amber',
+                  'creature': 'creature.generic_caster',
+                  'level': 20,
+                  'caster_level': 20,
+                  'spells': ['spell.eyebite'],
+                  'at': [3, 7]},
+                 {'role': 'ally',
+                  'side': 'amber',
+                  'creature': 'creature.generic_caster',
+                  'level': 20,
+                  'at': [3, 10]},
+                 {'role': 'target',
+                  'side': 'blue',
+                  'creature': 'creature.generic_caster',
+                  'level': 20,
+                  'at': [8, 7]},
+                 {'role': 'second_target',
+                  'side': 'blue',
+                  'creature': 'creature.generic_caster',
+                  'level': 20,
+                  'at': [8, 8]}],
+      'subjects': {'spell': ['spell.eyebite'],
+                   'action': ['action.spell.eyebite.strike', 'action.move', 'action.drop_concentration'],
+                   'condition': ['condition.spell.eyebite.casting', 'condition.spell.eyebite.sickened'],
+                   'creature': [],
+                   'environment_object': [],
+                   'spatial_effect': [],
+                   'residue': [],
+                   'item': []},
+      'steps': [{'do': 'spell.eyebite',
+                 'by': 'caster',
+                 'target': 'target',
+                 'level': 6,
+                 'track': True,
+                 'track_condition': 'condition.spell.eyebite.casting',
+                 'capture_choices': True},
+                {'do': 'action.move', 'by': 'caster', 'target': [3, 6]},
+                {'do': 'end_turn', 'by': 'caster'},
+                {'do': 'action.spell.eyebite.strike',
+                 'by': 'caster',
+                 'target': 'second_target',
+                 'capture_choices': True},
+                {'do': 'action.move', 'by': 'caster', 'target': [3, 7]},
+                {'do': 'end_tracked', 'strategy': 'concentration'},
+                {'do': 'end_turn', 'by': 'caster'},
+                {'do': 'action.spell.eyebite.strike',
+                 'by': 'caster',
+                 'target': 'second_target',
+                 'expect_unavailable': True,
+                 'capture_choices': True},
+                {'do': 'action.move', 'by': 'caster', 'target': [3, 8]}],
+      'required_behaviors': ['spell.eyebite',
+                             'action.spell.eyebite.strike',
+                             'action.move',
+                             'action.drop_concentration'],
+      'required_conditions': ['condition.spell.eyebite.casting'],
+      'required_condition_ends': ['condition.spell.eyebite.casting', 'condition.concentrating'],
+      'required_facts': ['spell', 'movement', 'saving_throw'],
+      'purpose': 'A fixed ordinary native20 two-seat roster and seed2; no AI attacks, altered '
+                 'HP/stats/conditions, forced rolls or retries. The actual cast creates the exact '
+                 'concentration-owned marker and repeat action. One paid repeat follows a real new caster '
+                 'turn, then real concentration removal and a later-turn unavailable discovery. Initial and '
+                 'repeated recipients are distinct, keeping Eyebite successful-save exclusion factual. Current '
+                 'owner UUID, repeated occurrence/lineage and actual result must be joined from the saved '
+                 'packets; generic spell counts are not that proof. No native output or artwork acceptance is '
+                 'claimed. Pinned9f exposes the default Sickened form only: Eyebite and its granted strike '
+                 'have no facet_domain/_selection_overrides override. Internal Asleep/Panicked literals are '
+                 'not requested through invented public facets. Each real Wisdom save/result is retained; a '
+                 'successful repeat save is a saved-outcome branch, not a claimed failed-save application.'},
+     {'id': 'spell.sunbeam/repeat_end',
+      'title': 'Sunbeam: actual retained repeat, movement and concentration end',
+      'kind': 'spell',
+      'seed': 2,
+      'battlefield': 'battlefield.open_floor_bright',
+      'actors': [{'role': 'caster',
+                  'side': 'amber',
+                  'creature': 'creature.generic_caster',
+                  'level': 20,
+                  'caster_level': 20,
+                  'spells': ['spell.sunbeam'],
+                  'at': [3, 7]},
+                 {'role': 'ally',
+                  'side': 'amber',
+                  'creature': 'creature.generic_caster',
+                  'level': 20,
+                  'at': [3, 10]},
+                 {'role': 'target',
+                  'side': 'blue',
+                  'creature': 'creature.generic_caster',
+                  'level': 20,
+                  'at': [8, 7]},
+                 {'role': 'second_target',
+                  'side': 'blue',
+                  'creature': 'creature.generic_caster',
+                  'level': 20,
+                  'at': [8, 8]}],
+      'subjects': {'spell': ['spell.sunbeam'],
+                   'action': ['action.spell.sunbeam.strike', 'action.move', 'action.drop_concentration'],
+                   'condition': ['condition.spell.sunbeam'],
+                   'creature': [],
+                   'environment_object': [],
+                   'spatial_effect': [],
+                   'residue': [],
+                   'item': []},
+      'steps': [{'do': 'spell.sunbeam',
+                 'by': 'caster',
+                 'target': [8, 7],
+                 'level': 6,
+                 'track': True,
+                 'track_condition': 'condition.spell.sunbeam',
+                 'capture_choices': True},
+                {'do': 'action.move', 'by': 'caster', 'target': [3, 6]},
+                {'do': 'end_turn', 'by': 'caster'},
+                {'do': 'action.spell.sunbeam.strike',
+                 'by': 'caster',
+                 'target': [8, 8],
+                 'capture_choices': True},
+                {'do': 'action.move', 'by': 'caster', 'target': [3, 7]},
+                {'do': 'end_tracked', 'strategy': 'concentration'},
+                {'do': 'end_turn', 'by': 'caster'},
+                {'do': 'action.spell.sunbeam.strike',
+                 'by': 'caster',
+                 'target': [8, 8],
+                 'expect_unavailable': True,
+                 'capture_choices': True},
+                {'do': 'action.move', 'by': 'caster', 'target': [3, 8]}],
+      'required_behaviors': ['spell.sunbeam',
+                             'action.spell.sunbeam.strike',
+                             'action.move',
+                             'action.drop_concentration'],
+      'required_conditions': ['condition.spell.sunbeam'],
+      'required_condition_ends': ['condition.spell.sunbeam', 'condition.concentrating'],
+      'required_facts': ['spell', 'movement', 'saving_throw', 'damage'],
+      'purpose': 'A fixed ordinary native20 two-seat roster and seed2; no AI attacks, altered '
+                 'HP/stats/conditions, forced rolls or retries. The actual cast creates the exact '
+                 'concentration-owned marker and repeat action. One paid repeat follows a real new caster '
+                 'turn, then real concentration removal and a later-turn unavailable discovery. Initial and '
+                 'repeated beams use distinct accepted commands and actual line directions. Current owner '
+                 'UUID, repeated occurrence/lineage and actual result must be joined from the saved packets; '
+                 'generic spell counts are not that proof. No native output or artwork acceptance is claimed. '
+                 'Both fixed aims are on actual recipient cells within60ft. Native generic20 health, '
+                 'spell-damage bonuses and saves are unchanged. Each beam has6d8 base dice; any actual '
+                 'recipient death, lost target or action refusal stays the natural failed outcome rather than '
+                 'a survival guarantee. The repeat is an actual granted SpellAction, not a second initial cast '
+                 'or a child recipient fact.',
+      'required_applied_damage_types': ['Radiant'],
+      'required_fact_witnesses': [{'kind': 'spell',
+                                   'behavior_id': 'action.spell.sunbeam.strike',
+                                   'actor_role': 'caster',
+                                   'actor_field': 'source_entity_uuid',
+                                   'field': 'area_geometry',
+                                   'when': {'shape': 'line'}}]},
+     {'id': 'spell.divine_favor/radiant_hit_end',
+      'title': 'Divine Favor: native Spellblade paid weapon exchange, actual rider and end',
+      'kind': 'spell',
+      'seed': 2,
+      'battlefield': 'battlefield.open_floor_bright',
+      'actors': [{'role': 'caster',
+                  'side': 'amber',
+                  'premade': 'spellblade',
+                  'caster_level': 1,
+                  'spells': ['spell.divine_favor'],
+                  'at': [3, 7]},
+                 {'role': 'target', 'side': 'blue', 'premade': 'sorcerer', 'at': [4, 7]}],
+      'subjects': {'spell': ['spell.divine_favor'],
+                   'action': ['action.attack',
+                              'action.class.fighter.action_surge',
+                              'action.move',
+                              'action.drop_concentration'],
+                   'condition': ['condition.spell.divine_favor'],
+                   'creature': [],
+                   'environment_object': [],
+                   'spatial_effect': [],
+                   'residue': [],
+                   'item': []},
+      'steps': [{'do': 'spell.divine_favor',
+                 'by': 'caster',
+                 'target': 'self',
+                 'level': 1,
+                 'track': True,
+                 'track_condition': 'condition.spell.divine_favor',
+                 'capture_choices': True},
+                {'do': 'action.attack',
+                 'by': 'caster',
+                 'target': 'target',
+                 'weapon_slot': 'MELEE_MAIN',
+                 'capture_choices': True},
+                {'do': 'action.class.fighter.action_surge',
+                 'by': 'caster',
+                 'target': 'self',
+                 'capture_choices': True},
+                {'do': 'action.attack',
+                 'by': 'caster',
+                 'target': 'target',
+                 'weapon_slot': 'MELEE_MAIN',
+                 'capture_choices': True},
+                {'do': 'action.move', 'by': 'caster', 'target': [3, 6]},
+                {'do': 'end_tracked', 'strategy': 'concentration'},
+                {'do': 'tail_walk', 'by': 'caster', 'offset': [0, -1]}],
+      'required_behaviors': ['spell.divine_favor',
+                             'action.attack',
+                             'action.class.fighter.action_surge',
+                             'action.move',
+                             'action.drop_concentration'],
+      'required_conditions': ['condition.spell.divine_favor'],
+      'required_condition_ends': ['condition.spell.divine_favor', 'condition.concentrating'],
+      'required_facts': ['spell', 'attack', 'damage', 'movement'],
+      'required_fact_witnesses': [{'kind': 'damage',
+                                   'stage': 'applied',
+                                   'actor_role': 'caster',
+                                   'actor_field': 'source_entity_uuid',
+                                   'field': 'body_release',
+                                   'when': {'secondary_damage_type': 'Radiant'}}],
+      'purpose': 'The unchanged native Spellblade is Fighter2/Sorcerer3: its real Sorcerer slots pay the '
+                 'level1 cast and native Fighter ActionSurge pays one fixed second Attack. RosterSpellGrant '
+                 'registers DivineFavor only; it does not create slots or fake a Paladin class. The real '
+                 'MELEE_MAIN Longsword and all stats/HP/resources remain native. The ordinary Sorcerer5 '
+                 'recipient has no learned Shield; no reaction is disabled. Bonus-action cast, paid Attack, '
+                 'native Surge and second paid Attack are unconditional and independent of outcomes; there is '
+                 'no ExtraAttack on Fighter2 or repeat-until-hit. Existing dictionary witness requires the '
+                 'source actor actual applied body_release secondaryRadiant, but exact positive '
+                 'components[].source_id=spell.divine_favor, actual Hit/Crit and active same-source member '
+                 'before its true removal must additionally be independently joined from the unchanged '
+                 'journals. Primary damage summary alone is insufficient attribution. Both natural misses, '
+                 'absent rider, death, refusal or blocked removal stay failed; no retries/stat/HP edits/forced '
+                 'outcomes/native-output claim.'}]
+
+
+def r4_movement_survival_studies():
+    """Fixed legal obstruction/fall and ordinary death-save originals, no outcome retries."""
+    return [{'id': 'action.shove/obstructed_then_surviving_fall',
+      'title': 'Shove: actual occupied endpoint, blocker departure, ten-foot fall and surviving walk',
+      'kind': 'interaction',
+      'seed': 2,
+      'battlefield': 'battlefield.elevation_proving_ground',
+      'subjects': {'spell': [],
+                   'action': ['action.shove', 'action.move'],
+                   'condition': ['condition.prone'],
+                   'creature': [],
+                   'environment_object': [],
+                   'spatial_effect': [],
+                   'residue': [],
+                   'item': []},
+      'actors': [{'role': 'caster', 'side': 'amber', 'premade': 'fighter', 'at': [7, 4]},
+                 {'role': 'patient', 'side': 'amber', 'premade': 'fighter', 'at': [8, 4]},
+                 {'role': 'blocker', 'side': 'amber', 'premade': 'fighter', 'at': [9, 4]},
+                 {'role': 'observer', 'side': 'blue', 'premade': 'fighter', 'at': [14, 7]}],
+      'steps': [{'do': 'action.shove', 'by': 'caster', 'target': 'patient', 'capture_choices': True},
+                {'do': 'action.move', 'by': 'blocker', 'target': [10, 4]},
+                {'do': 'end_turn', 'by': 'caster'},
+                {'do': 'action.shove', 'by': 'caster', 'target': 'patient', 'capture_choices': True},
+                {'do': 'action.move', 'by': 'patient', 'target': [9, 5]}],
+      'required_behaviors': ['action.shove', 'action.move'],
+      'required_facts': ['shove', 'forced_movement', 'damage', 'movement'],
+      'required_conditions': ['condition.prone'],
+      'required_condition_ends': ['condition.prone'],
+      'required_applied_damage_types': ['Bludgeoning'],
+      'required_fact_witnesses': [{'kind': 'shove',
+                                   'actor_role': 'patient',
+                                   'actor_field': 'target_entity_uuid',
+                                   'field': 'contest_success',
+                                   'equals': True,
+                                   'behavior_id': 'action.shove'},
+                                  {'kind': 'shove',
+                                   'actor_role': 'patient',
+                                   'actor_field': 'target_entity_uuid',
+                                   'field': 'push_distance',
+                                   'equals': 0,
+                                   'behavior_id': 'action.shove'},
+                                  {'kind': 'forced_movement',
+                                   'actor_role': 'patient',
+                                   'actor_field': 'target_entity_uuid',
+                                   'field': 'landing_kind',
+                                   'equals': 'fall'},
+                                  {'kind': 'forced_movement',
+                                   'actor_role': 'patient',
+                                   'actor_field': 'target_entity_uuid',
+                                   'field': 'drop_feet',
+                                   'equals': 10},
+                                  {'kind': 'forced_movement',
+                                   'actor_role': 'patient',
+                                   'actor_field': 'target_entity_uuid',
+                                   'field': 'start_elevation_feet',
+                                   'equals': 10},
+                                  {'kind': 'forced_movement',
+                                   'actor_role': 'patient',
+                                   'actor_field': 'target_entity_uuid',
+                                   'field': 'end_elevation_feet',
+                                   'equals': 0},
+                                  {'kind': 'step',
+                                   'actor_role': 'patient',
+                                   'actor_field': 'source_entity_uuid',
+                                   'field': 'committed',
+                                   'equals': True}],
+      'purpose': 'The unchanged registered elevation proving ground places (7,4) and (8,4) on height2 (10ft) and '
+                 '(9,4) on ordinary height0 support. The actual living ally at (9,4) first prevents the patient '
+                 'ending there; the first Shove is still the real successful ally rule, not a resisted contest. '
+                 'The blocker then makes a legal move to (10,4). The caster ends its own real next turn and '
+                 'repeats the same offered Shove on the following turn with a fresh bonus action. Existing Shove '
+                 'includes allies and auto-succeeds for allies; source admission stops the displacement on its '
+                 'first lower support, actual (9,4), with landing_kind fall/drop10. Ordinary one-d6 Bludgeoning '
+                 'is at most6, below the unchanged level5 Fighter native44HP; actual positive damage applies '
+                 'Prone and the patient later stands through its normal turn-start owner before moving to (9,5). '
+                 'No map/stat/HP override, reaction grant, forced roll, chosen outcome or post-admission '
+                 'coordinate edit is used. Both real faction journals remain immutable. If discovery, '
+                 'obstruction, actual fall, condition retirement or surviving committed Step is absent, preserve '
+                 'the fixed attempt as failed. The first blocked Shove combat-log blocked_by value is also '
+                 'retained for source inspection.'},
+     {'id': 'survival.death_save/ordinary_stabilization_attempt',
+      'title': 'Death saves: living patient, one real missile and fixed ordinary turn progression toward Stable',
+      'kind': 'interaction',
+      'seed': 3,
+      'battlefield': 'battlefield.open_floor_bright',
+      'subjects': {'spell': ['spell.magic_missile'],
+                   'action': [],
+                   'condition': [],
+                   'creature': [],
+                   'environment_object': [],
+                   'spatial_effect': [],
+                   'residue': [],
+                   'item': []},
+      'actors': [{'role': 'caster',
+                  'side': 'amber',
+                  'creature': 'creature.generic_caster',
+                  'level': 20,
+                  'caster_level': 20,
+                  'at': [3, 6]},
+                 {'role': 'patient', 'side': 'amber', 'premade': 'fighter', 'at': [4, 6], 'damage': 43},
+                 {'role': 'target',
+                  'side': 'blue',
+                  'creature': 'creature.generic_caster',
+                  'level': 20,
+                  'caster_level': 20,
+                  'spells': ['spell.magic_missile'],
+                  'at': [9, 6]}],
+      'steps': [{'do': 'spell.magic_missile',
+                 'by': 'target',
+                 'target': 'patient',
+                 'level': 1,
+                 'recipients': ['patient', 'caster', 'caster'],
+                 'capture_choices': True},
+                {'do': 'end_turn'},
+                {'do': 'end_turn'},
+                {'do': 'end_turn'},
+                {'do': 'end_turn'},
+                {'do': 'end_turn'},
+                {'do': 'end_turn'},
+                {'do': 'end_turn'},
+                {'do': 'end_turn'},
+                {'do': 'end_turn'},
+                {'do': 'end_turn'},
+                {'do': 'end_turn'},
+                {'do': 'end_turn'},
+                {'do': 'end_turn'},
+                {'do': 'end_turn'},
+                {'do': 'end_turn'},
+                {'do': 'end_turn'},
+                {'do': 'end_turn'},
+                {'do': 'end_turn'},
+                {'do': 'end_turn'},
+                {'do': 'end_turn'},
+                {'do': 'end_turn'},
+                {'do': 'end_turn'},
+                {'do': 'end_turn'},
+                {'do': 'end_turn'}],
+      'required_behaviors': ['spell.magic_missile'],
+      'required_facts': ['damage', 'life', 'death_save'],
+      'required_fact_witnesses': [{'kind': 'life',
+                                   'actor_role': 'patient',
+                                   'actor_field': 'entity_uuid',
+                                   'field': 'previous_state',
+                                   'equals': 'alive'},
+                                  {'kind': 'life',
+                                   'actor_role': 'patient',
+                                   'actor_field': 'entity_uuid',
+                                   'field': 'new_state',
+                                   'equals': 'dying'},
+                                  {'kind': 'life',
+                                   'actor_role': 'patient',
+                                   'actor_field': 'entity_uuid',
+                                   'field': 'new_state',
+                                   'equals': 'stable'}],
+      'purpose': 'Reuse the existing genuine death-save fixture route: supported starting damage43 leaves the '
+                 'unchanged native level5 Fighter alive at1HP; the only missile assigned to that patient '
+                 'deals2-5 actual Force, entering Dying without instant-death-sized overflow. The two remaining '
+                 'level1 darts go to the healthy native caster20. No later attack, healing, stabilization spell '
+                 'or condition is submitted. The next24 fixed steps end only actual published human turns, '
+                 'matching the existing death-save fixture choreography; ordinary patient turn starts resolve '
+                 'the real saves. The default cohort seed3 is fixed before any capture and is not searched. '
+                 'Three ordinary successful saves are required to produce the actual Dying-to-Stable Life fact. '
+                 'Natural20-to-Alive, terminal failed saves, an early end or no Stable transition remain the '
+                 'fixed original with required outcome failure, not permission to alter seed, reroll, replay '
+                 'until success, inject Stable, change HP or substitute Spare the Dying. Both actual seat '
+                 'journals and every issued command/receipt remain preserved. No later walking command is '
+                 'required from an unconscious Stable patient.'}]
+
+
+def protection_party_study():
+    """One fixed legal Protection build/party route; actual missing trigger remains failed."""
+    return {'id': 'reaction.protection/party_native_attempt',
+     'title': 'Protection: actual owned Fighter style, nearby ally and fixed native Goblin turns',
+     'kind': 'interaction',
+     'seed': 2,
+     'subjects': {'spell': [],
+                  'action': ['action.move'],
+                  'condition': ['class_feature.fighter.fighting_style.protection'],
+                  'creature': ['creature.goblin'],
+                  'environment_object': [],
+                  'spatial_effect': [],
+                  'residue': [],
+                  'item': ['shield.shield']},
+     'actors': [{'role': 'protector', 'side': 'party'}, {'role': 'ally', 'side': 'party'}],
+     'player_builds_source': 'tools/studio_cases/scenarios/fighter_protection_party_builds.json',
+     'steps': [{'do': 'action.move', 'by': 'protector', 'target': [10, 11], 'capture_choices': True},
+               {'do': 'action.move', 'by': 'ally', 'target': [11, 11], 'capture_choices': True},
+               {'do': 'end_turn'},
+               {'do': 'end_turn'},
+               {'do': 'end_turn'},
+               {'do': 'end_turn'},
+               {'do': 'end_turn'},
+               {'do': 'end_turn'}],
+     'required_behaviors': ['action.move', 'reaction.class_feature.fighter.protection'],
+     'required_facts': ['movement', 'attack'],
+     'purpose': 'One fixed ordinary two-character build uses the existing direct-character Goblin skirmish and '
+                'its single real party journal. Both Fighter5 builds preserve the current native Shield Fighter '
+                'base scores, Human origin, class levels1-5, Champion choices, Strength ASI, appearance and '
+                'literal equipment/loadout. Only the protector selects the legal level1 Protection style instead '
+                'of Dueling; that owned feature toggle is explicitly enabled. No premade is added and no '
+                'reaction or condition grant/stat/HP/resource override is used. Native create_session deploys '
+                'the actual party at(10,10)/(10,12), two ordinary Goblins at(14,10)/(14,12). The protector makes '
+                'its offered move to(10,11); the ally makes its offered move to(11,11), keeping the real '
+                'actors5ft apart. Then exactly six ordinary published human turn ends allow the unchanged '
+                'NativeAIController to choose all attacks/recipients/results. No target, hit, miss, reaction or '
+                'disadvantage packet is prescribed. Required behavior credit comes from actual completed '
+                'facts/effective-handler attributions, not initial feature membership. If Goblins attack the '
+                'protector, an actor is unavailable, or no effective Protection attribution occurs, retain the '
+                'complete fixed attempt as failed; never retry seed/outcome, reposition privately or treat a '
+                'registered handler as triggered. A positive actual handler and normal native attack '
+                'continuation is factual original scope only, not two-seat or native pixels/audio/art '
+                'qualification.'}
+
+
+def protection_party_prefix_study():
+    """Actual effective-handler route with its legal fixed command prefix."""
+    original = protection_party_study()
+    return {**original,
+        'id': 'reaction.protection/party_move_continuation',
+        'title': 'Protection: owned Shield reaction during actual ally movement and continuation',
+        'subjects': {**original['subjects'], 'condition': [],
+            'reaction': ['reaction.class_feature.fighter.protection']},
+        'steps': original['steps'][:2],
+        'purpose': 'Same native Fighter5 party builds, seed2, public initial deployment and two offered '
+            'moves as the preserved party_native_attempt original. Its unchanged original already contains '
+            'the actual Protection effective_handler on a Goblin opportunity Attack during the ally move '
+            '(party packet13/occurrence312). This new case stops after those two declared moves; ordinary '
+            'turn-alignment ends remain owned by the existing driver. It omits the later excessive turn-end '
+            'tail that requested input after native combat ended. No build/stat/HP/seed, target, roll, '
+            'reaction or outcome is changed or injected. The source subject is the actual reaction ID, '
+            'not a condition invented from the legal build-choice ID. Actual missing handler or movement '
+            'still fails. The old failed case, original bytes, reason and source identity remain history. '
+            'This is a legal original route; current rendering and art/audio review remain separate.'}
+
+
+def shove_enemy_obstruction_study():
+    """Enemy-target discovery, exact same-fact obstruction, ordinary opposed rolls."""
+    original = r4_movement_survival_studies()[0]
+    witnesses = [dict(row) for row in original['required_fact_witnesses']]
+    for row in witnesses:
+        if row['kind'] == 'shove' and row['field'] == 'push_distance':
+            row['where'] = {'contest_success': True}
+    return {**original,
+        'id': 'action.shove/enemy_obstruction_then_fall',
+        'title': 'Shove: eligible enemy, occupied lower support and surviving fall attempt',
+        'actors': [{**actor, 'side': 'blue'} if actor['role'] == 'patient' else dict(actor)
+            for actor in original['actors']],
+        'required_fact_witnesses': witnesses,
+        'purpose': 'Same unchanged elevation proving ground, seed2, native Fighter actors, support cells '
+            'and fixed command sequence as the preserved failed allied-target attempt. Public discovery '
+            'uses the inherited enemies target filter; the former allied patient was excluded before any '
+            'Shove, despite the action execution include_allies flag. This separately identified route '
+            'places only that actual patient on Blue so the target is eligible. Both Shoves use real '
+            'opposed native checks and may naturally fail; no automatic ally success, favorable seed or '
+            'roll is assumed. The first lower support (9,4) is occupied; actual blocker departure then '
+            'permits the later real ten-foot fall. Obstruction requires push_distance0 AND contest_success '
+            'true on the SAME completed Shove fact, through the optional sibling-field witness guard. '
+            'A resisted first attempt and successful second must not satisfy it. The retained fall, positive '
+            'Bludgeoning, Prone end and surviving committed Step requirements are unchanged. Any missing '
+            'branch remains failed; no retry, private movement/stat edit or backend fix is implied.'}

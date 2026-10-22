@@ -17,6 +17,7 @@ const Results=preload("res://presentation/application_results.gd")
 const Constructed=preload("res://presentation/native_constructed_occurrence.gd")
 const Effects=preload("res://presentation/effect_package.gd")
 const Timeline=preload("res://presentation/timeline.gd")
+const NativeInputs=preload("res://presentation/native_inputs.gd")
 class World extends Node:
     var timeline=Timeline.new()
 const BODY_KEY="__body_source_admission"
@@ -423,6 +424,83 @@ func legacy_six()->void:
     check(built.docs==before,"Legacy-six compile controls never mutate shared authored source records")
 
 
+func disclosed_area_action()->void:
+    var id:String="action.spell.sunbeam.strike"
+    var path:String="res://authoring/abilities/actions/"+id+".tres"
+    var entry:Resource=load(path)
+    var initial:Resource=load("res://authoring/abilities/spells/spell.sunbeam.tres")
+    check(entry.effects[0].extra.live_endpoints[2]=={"area_point":"line_end"} \
+        and initial.effects[0].extra.live_endpoints[2]=={"area_point":"line_end"},
+        "Initial and granted beam select the actual declared line heading, not a fabricated recipient")
+    var built:Dictionary=Build.documents({"actions":{id:entry}},{"actions":{id:path}})
+    var cache:Dictionary=built.docs.duplicate(true)
+    var binding:Dictionary=cache["catalog/body_action_bindings.json"][id]
+    # Exact public repeat geometry from the saved op18/root187 original. The
+    # controlled supports below independently exercise source/area elevations.
+    var fact:Dictionary={"kind":"spell","behavior_id":id,"source_entity_uuid":"caster","target_entity_uuid":null,
+        "source_position":[3,6],"aoe_position":[3,6],
+        "area_geometry":{"shape":"line","origin":[3,6],"direction":[5,2],"length_feet":60,"width_feet":5},
+        "resolved_area_positions":[[3,6],[4,6],[5,7],[6,7],[7,7],[8,8],[9,8],[10,9],[11,9],[12,9],[13,10],[14,10]]}
+    var node:Dictionary={"id":"187","lineage_id":"150","parent_lineage":null,"phase":"completion","canceled":false,"fact":fact}
+    var graph:Dictionary={"starts":{"187":0.0},"positions":{"caster":[99,99]},"contacts":{"caster":{"from_elevation_feet":10.0}},
+        "area_contacts":{"187":{"position":[3,6],"elevation_steps":3}},"observed_results":{}}
+    var before:PackedByteArray=var_to_bytes({"fact":fact,"graph":graph,"binding":binding})
+    var group:Dictionary={"operation_sequence":18,"components":[],"commits":[]}
+    Components.native_action(group,node,binding,{}, {},{"event.start":0.0},graph,cache)
+    check(group.components.size()==1,"A real area declaration emits its carrier once without inventing a damage contact")
+    if group.components.size()!=1:return
+    var row:Dictionary=group.components[0]
+    check(row.status=="available" and row.actor_uuid=="caster" and row.target_uuid.is_empty() and row.ground_target \
+        and row.from_position==[3,6] and row.to_position==[3,6] \
+        and row.from_elevation_feet==10.0 and row.to_elevation_feet==15.0,
+        "Action-dispatched SpellFact keeps its public source and exact area support without treating the heading as an actor")
+    check(row.area_geometry==fact.area_geometry and row.resolved_area_positions==fact.resolved_area_positions \
+        and row.aim_position==[8,8] and row.source_event_uuid=="187" and row.source_lineage=="150" \
+        and row.ability_kind=="spell" and row.ability_id==id and row.duration_ms==1500.0,
+        "Shared action route retains real geometry, ancestry, wire kind and authored source duration")
+    # Exercise the actual endpoint adapter's declaration-only tuple; the
+    # ordinary caster ground/hand tuples retain their displayed socket gates.
+    var endpoint:Dictionary=row.duplicate();endpoint.native_cue=row.native_cue.duplicate()
+    endpoint.native_cue.live_endpoints=[row.native_cue.live_endpoints[2]]
+    var points:Dictionary={"hand":Vector3(3,2,6)}
+    var packet:Dictionary=NativeInputs.new().endpoint_packet(null,{},endpoint,points,{})
+    var expected:Vector3=Vector3(3,2,6)+Vector3(5,0,2).normalized()*12.0
+    check(packet.reason.is_empty() and packet.rows.size()==1 and packet.rows[0].point.is_equal_approx(expected) \
+        and not packet.rows[0].has("actor_uuid"),"Declared 60ft line produces only its factual heading point at the real hand elevation")
+    endpoint.area_geometry=row.area_geometry.duplicate();endpoint.area_geometry.direction=[0,0]
+    check(not NativeInputs.new().endpoint_packet(null,{},endpoint,points,{}).reason.is_empty(),"Zero direction cannot become an invented beam heading")
+    endpoint.area_geometry={}
+    check(not NativeInputs.new().endpoint_packet(null,{},endpoint,points,{}).reason.is_empty(),"Absent line geometry remains unavailable")
+    check(var_to_bytes({"fact":fact,"graph":graph,"binding":binding})==before,"Area preparation and endpoint projection leave authoritative/source operands unchanged")
+    graph.area_contacts={};group.components=[]
+    Components.native_action(group,node,binding,{}, {},{"event.start":0.0},graph,cache)
+    check(group.components.size()==1 and group.components[0].status=="missing" \
+        and group.components[0].reason=="native_action_position_unavailable",
+        "Missing actual area support is refused instead of using a default end-tile height")
+    var observed:Dictionary={"values":{},"gaps":[],"evidence":{}}
+    var phase:Dictionary=Actions.phases(binding,fact,{}, {},{"event.start":0.0},cache)[0]
+    var exact:Dictionary={"from_position":[7,8],"to_position":[9,10],"from_elevation_feet":20.0,"to_elevation_feet":35.0}
+    group.components=[]
+    var result:Dictionary=Components._native_action_component(group,node,node,phase,observed,graph,"actual-recipient",exact)
+    check(result.from_position==[7,8] and result.to_position==[9,10] and result.to_elevation_feet==35.0 \
+        and not result.get("ground_target",false),"Exact observed-result points retain priority over the carrier's area geometry")
+    phase.native_cue=phase.native_cue.duplicate();phase.native_cue.live_endpoints=[{"actor":"target","socket":"ground"}]
+    group.components=[]
+    result=Components._native_action_component(group,node,node,phase,observed,graph,"undisclosed-recipient")
+    check(result.status=="missing" and result.reason=="native_action_position_unavailable",
+        "A genuine recipient endpoint still refuses undisclosed actor placement")
+    group.components=[]
+    result=Components._native_action_component(group,node,node,phase,observed,graph)
+    check(result.status=="missing" and not result.get("ground_target",false),
+        "An explicit actor-target tuple cannot borrow disclosed area support when the fact names no actor")
+    var targeted:Dictionary=node.duplicate();targeted.fact=fact.duplicate();targeted.fact.target_entity_uuid="real-recipient"
+    graph.positions["real-recipient"]=[12,7];graph.contacts["real-recipient"]={"from_elevation_feet":25.0}
+    group.components=[]
+    result=Components._native_action_component(group,targeted,targeted,phase,observed,graph)
+    check(result.status=="available" and result.target_uuid=="real-recipient" and result.to_position==[12,7] \
+        and result.to_elevation_feet==25.0 and not result.get("ground_target",false),
+        "A real actor target retains its own placement despite the fact also carrying area geometry")
+
 func run()->void:
     var use=Use.new();use.clip=CLIP;use.selection="fighter_action_surge_native"
     use.role="attached";use.at="body.effect";use.attachment="caster_ground";use.follow=true
@@ -492,6 +570,6 @@ func run()->void:
     Components.compile(group,{"events":[node]},graph,cache)
     check(group.components.size()==1 and group.components[0].status=="missing" and group.components[0].reason=="native_action_position_unavailable","Missing public placement never creates an effect at a fixture origin")
     check(fact==original,"Cue preparation and component dispatch do not mutate authoritative facts")
-    authored();observations();held_conditions();factual_events();retained_occurrences();legacy_six();remaining_action_choices()
+    authored();observations();held_conditions();factual_events();retained_occurrences();legacy_six();remaining_action_choices();disclosed_area_action()
     print(JSON.stringify({"checks":checks,"failures":failures,"legacy_six_scope":"Actual authored six-resource import/export and production compiler outputs from explicit synthetic witness/membership controls; shared source-time values only, no recorded/native/art evidence."}))
     quit(0 if failures.is_empty() else 1)

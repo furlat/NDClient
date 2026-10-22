@@ -88,8 +88,8 @@ receipts qualified this newly selected Dragon body.
 
 All four actual provisional-creature originals were captured once successfully
 on9f/schema16, including Cambion's real Charm/Kiss prerequisite, Deva's held
-weapon, Djinni Gales and Draconic Rend/Breath with ordinary retirement. The
-Library now contains **388cases/383recorded/fivefailed**, including the later
+weapon, Djinni Gales and Draconic Rend/Breath with ordinary retirement. At that
+earlier body checkpoint the Library contained **388cases/383recorded/fivefailed**, including the later
 Incense/Nimbus originals and preserved failed Nimbus route.
 The subsequent **historical** five-original native cohort recorded22,960checks/
 two failures,natural exit1/no engine or script errors/leftovers. Deva, Djinni,

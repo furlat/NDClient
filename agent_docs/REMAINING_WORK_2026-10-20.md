@@ -74,7 +74,7 @@ changing gameplay camera or canonical occupancy. The body/source witnesses above
 qualify framing, final artwork, whole-current native/live or quiet performance.
 [Preserved initial pre-framing capture](../.runtime/main-queue-20261022/dragon-native-receiver-registered/captures/creature.spell.draconic_spirit-current_stand_in_intrinsic_retirement-55-primary.png).
 
-The current Library is **388cases/383recorded/fivefailed**. Three new exact9f
+At this earlier body checkpoint the Library was **388cases/383recorded/fivefailed**. Three new exact9f
 originals are imported: positive Incense spatial healing, the failed out-of-range
 Nimbus route and its separately identified offered5ft approach with real10Radiant
 contact. Both positive results name their actual disclosed spatial/condition UUID.
@@ -291,16 +291,111 @@ No repeated full188rerun precedes independent scenario/content work.
 [exact intentional stop](../.runtime/main-queue-20261022/finite-native-exact-point/interruption.json),
 [current bounded follow-through](../.runtime/main-queue-20261022/published-clock-and-affected-preparation/summary.json).
 
-Current source inspection also found actual original-coverage holes: Eyebite/
-Sunbeam have initial cast originals but no accepted granted-repeat original;
-Divine Favor's lifecycle has an active Miss while later Hits follow concentration
-removal, so it does not prove an active attributed Radiant contact. Current cloud/
-wall baselines do not close all positive turn/traversal/retirement branches.
+### Resumed R4 content originals — current 22 October
+
+The recovery follow-through and existing Timeline endpoint correction are
+committed at **e083cef1**. Twenty-one new original cases were captured in six
+coherent data batches against frozen9f/schema16 and imported unchanged. The
+current Library is **409 cases / 396 recorded / thirteen failed**. Thirteen new
+cases are recorded; eight new failed originals retain their exact status and bytes.
+Capture and source/original inspection do not qualify current native output.
+
+The first grouped current native replay completes all seven successful new
+originals: **six pass / one fails**,14,582assertions/two failures, natural exit1
+with no engine/script errors or owned leftovers. Sunbeam's repeat is rejected
+at installation with `18:187:native_effect:5: native_action_position_unavailable`;
+its real accepted command/result does not remove that current client consumer
+failure. The existing ordinary controls exercise seeks, independent audiences,
+playback and loops. Their result is not a positive-specific constructor witness
+for every retained/varied source, whole-current qualification or art acceptance.
+The bounded placement trace proceeds alongside further scenario-data work.
+[Preserved seven-case native receipt](../.runtime/main-queue-20261022/content-originals-native/summary.json).
+
+That placement source defect is now corrected at the existing shared action
+carrier: actual non-recipient SpellFacts retain their public area/support/aim,
+without replacing actual actor endpoints or exact result projections. Both
+initial and granted Sunbeam Resources select the existing strict `line_end`
+geometry endpoint. All three domains publish zero errors/two warnings and the
+existing affected compiler/input control passes295assertions/natural exit0.
+The current fourteen-case native batch passes **14/14**,32,102assertions,
+natural exit0/no engine/script errors or owned leftovers: all thirteen new
+recorded cases plus initial Sunbeam. Ordinary seek, independent-seat playback
+and loop controls pass, including initial+repeat Sunbeam after its source fix.
+No positive-specific partial-wall/result constructor oracle was supplied;
+this does not qualify every retained cut, whole188native/live or artwork.
+No scheduler,
+renderer, source clock, lighting or canonical-state replacement is introduced.
+[Current source publication/control receipt](../.runtime/main-queue-20261022/sunbeam-ground-carrier/summary.json),
+[actual fourteen-case replay receipt](../.runtime/main-queue-20261022/content-postfix-native/summary.json).
+
+- **Eyebite and Sunbeam:** actual accepted granted repeats on a second
+  recipient, retained casting-member UUID, real resulting conditions/damage,
+  concentration removal and fresh-turn unavailable discovery are recorded.
+  Eyebite proves its actual Sickened result only. Sunbeam's positive repeat
+  retains the original `spell.sunbeam` source identity.
+- **Divine Favor:** the actual paid equipped Hit while its real member is
+  active includes a positive3Radiant component attributed to
+  `spell.divine_favor`; actual later concentration removal is preserved. The
+  primary Slashing summary alone is not this rider proof.
+- **Cloudkill and both Spirit Guardians energies:** actual turn/entry
+  continuation, owner movement, changing coverage and retirement are recorded.
+  Both Spirit results name their exact real spatial-owner UUID. Cloudkill's
+  positive Poison damage has no per-damage owner pointer, and none is invented;
+  its selected retained volume uses actual owner/geometry independently.
+- **Stinking Cloud:** the first attempt remains failed because its primary
+  seat does not disclose the recipient save. A separately identified case
+  requires the exact real Blue recipient CON save and passes. The existing
+  witness reader now permits an explicitly published audience and literal
+  scalar comparison; no fact is moved between seats or completion guard relaxed.
+- **Survival/support/reaction:** the ordinary death-save attempt naturally
+  reaches Alive on a20, so ordinary successful-save stabilization stays open.
+  The first obstruction/fall Shove attempt is refused by public discovery before
+  any Shove. A separately identified eligible-enemy route naturally resists
+  both opposed checks; it has no successful obstruction/fall/Prone/damage.
+  Its lower-support movement is then refused because the patient never fell.
+  The exact same-fact successful-and-zero-distance guard correctly matches
+  none; no further outcome retry is made. Protection's first original stays
+  failed after its excessive end-turn tail requests input after combat ends.
+  The new same-build/seed two-move prefix records four real commands and one
+  actual effective handler with native attack/movement continuation. No roll,
+  private state or reaction is injected, and no backend/Factory defect inferred.
+- **Wall continuation/destruction:** actual Fire contact plus hot-side turn end,
+  Thorns Dash/costly passage, Ice section removal/new FrigidAir child/contact,
+  Stone partial aperture with the same retained section and Force whole-owner
+  retirement after actual SeeInvisibility are recorded. All five original
+  routes committed. The first Fire/Thorns/Ice receipts remain failed for their
+  incorrect field/audience requirements. Three new same-command/actor/seed
+  cases use actual public witnesses and all record successfully. Raw owner,
+  partial-volume and child UUID joins remain explicit; neither a title nor an
+  accepted object spell substitutes for those joins or native output.
+
+One exact backend defect is newly documented: the actually seen full Ice section
+loses its public destruction fact because contact capture occurs after its
+recorded removal. Both audiences and current-source anchors are preserved; no
+new API or fresh schema18 runtime claim is made. Independent Ice/FrigidAir work
+continues through its actual public spell/removal/child/contact facts.
+[Delegable backend request](BACKEND_CONTENT_BLOCKERS_2026-10-20.md#observed-ice-section-destruction-loses-its-public-fact--22-october),
+[five-wall owner/result/partial-geometry proof](../.runtime/closing-repairs/wall-continuation-originals/wall-branch-proof.md).
+
+One exact existing Factory contract remains open: Stone's same-owner partial
+remainder has real current sections/cells but explicitly null current anchor.
+Both selected530 WallInput.observation and the client current-anchor gate
+reject that cut despite the admitted immutable construction frame. The general
+Stone replay's1668passingchecks do not prove the remainder rendered. §24 asks
+the existing source to distinguish current observation from its factual retained
+frame without filling the packet or introducing an API. Client gate adjustment
+is contingent on a qualified complete source delivery; §§17–23 stay delivered.
+[Delegable Factory request](FACTORY_REVIEW_2026-10-20.md#24-partial-stone-remainder--current-anchor-is-not-the-immutable-construction-frame).
+
 Existing payload releases, five Exhale elements, Vampiric repeat, sphere Ram and
-hardware originals remain reusable. This is R4corpus/output work, not another
-unimplemented provider claim. Coherent scenario-data batches are being prepared
-through the existing recorder while runtime diagnosis proceeds. All original
-failures, producer identities and unreviewed art/audio remain separate.
+hardware originals remain reusable. Ordinary wall replay passes in the current
+cohort; the specific Stone partial remainder remains Factory-blocked. The stated
+survival/support outcomes, whole-current native/live, quiet R6 and all
+artwork/audio review remain open. This is R4 corpus work through existing public
+commands, not another unimplemented-provider claim or presentation framework.
+[Exact current original ledger](../.runtime/main-queue-20261022/content-originals/original-ledger.json),
+[field owners/results and attribution limits](../.runtime/closing-repairs/retained-field-originals/field-branch-proof.md),
+[granted repeat and active rider proof](../.runtime/closing-repairs/granted-repeat-contact-originals/grant-branch-proof.md).
 
 ## Earlier source-registration checkpoint ae4fb4a6 — 22 October
 

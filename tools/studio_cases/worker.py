@@ -65,6 +65,9 @@ def fact_witness_evidence(out, perspective, scenario):
                 continue
             if len(actors) != 1 or str(fact.get(requirement['actor_field'])) != actors[0]:
                 continue
+            if not all(key in fact and fact[key] == value
+                       for key, value in requirement.get('where', {}).items()):
+                continue
             witness = fact.get(requirement['field'])
             if witness is None:
                 continue
@@ -72,9 +75,13 @@ def fact_witness_evidence(out, perspective, scenario):
                 'event_offset': offset, 'actor_uuid': actors[0], 'actor_field': requirement['actor_field'], 'kind': fact['kind'],
                 'stage': fact.get('stage'), 'field': requirement['field'], 'value': witness}
             observed.append(row)
-            if all(witness.get(key) == value for key, value in requirement['when'].items()):
+            if 'equals' in requirement:
+                matches = witness == requirement['equals']
+            else:
+                matches = all(witness.get(key) == value for key, value in requirement['when'].items())
+            if matches:
                 matched.append(row)
-        evidence.append({'requirement': requirement, 'actor_uuids': actors, 'observed': observed, 'matched': matched})
+        evidence.append({'requirement': requirement, 'perspective': perspective, 'actor_uuids': actors, 'observed': observed, 'matched': matched})
         if not matched:
             missing.append(requirement['kind']+'.'+requirement['field']+' for '+role+' has no exact required completed witness')
     return evidence, missing
@@ -109,7 +116,22 @@ async def record(args):
     missing=set(scenario.get('required_applied_damage_types',()))-set(positive_damage_types)
     if missing and result['ok']:
         result.update(ok=False,failure='Required positive applied damage types absent: '+', '.join(sorted(missing)))
-    witnesses, missing_witnesses = fact_witness_evidence(args.out, perspectives[0], scenario)
+    witnesses, missing_witnesses = [], []
+    witness_groups = {}
+    for requirement in scenario.get('required_fact_witnesses', ()):
+        perspective = requirement.get('perspective', perspectives[0])
+        if perspective not in perspectives:
+            error = 'Required fact witness perspective '+repr(perspective)+' was not published: '+', '.join(perspectives)
+            witnesses.append({'requirement': requirement, 'perspective': perspective,
+                'actor_uuids': [], 'observed': [], 'matched': [], 'error': error})
+            missing_witnesses.append(error)
+            continue
+        witness_groups.setdefault(perspective, []).append(requirement)
+    for perspective, requirements in witness_groups.items():
+        observed, missing = fact_witness_evidence(args.out, perspective,
+            {**scenario, 'required_fact_witnesses': requirements})
+        witnesses.extend(observed)
+        missing_witnesses.extend(missing)
     result['fact_witnesses'] = witnesses
     if missing_witnesses and result['ok']:
         result.update(ok=False, failure='; '.join(missing_witnesses))

@@ -14,6 +14,13 @@ scenario or artwork/audio. All art/audio remain UNREVIEWED.
 [Complete installation](../.runtime/vfx-successor-dragon-receiver/namespace-installation.json),
 [affected source/group, preserving initial failed controls](../.runtime/main-queue-20261022/dragon-native-receiver-registered/summary.json).
 
+**New bounded request: §24, partial solid-wall observation.** A real retained
+Stone remainder has disclosed sections/cells while its current anchor is null;
+the selected530 source refuses it. Existing constructor/current-zone inputs
+already carry the factual frame and remainder. No new API or guessed anchor is
+requested. The ordinary native replay pass does not qualify that omitted
+remainder. [Exact current request](#24-partial-stone-remainder--current-anchor-is-not-the-immutable-construction-frame).
+
 **No outstanding re-export request for §§17–23.** The normal-policy programs,
 Wind mask and Freezing immutable-resource fixes are delivered and installed.
 The new Spirit alternatives are available, not automatically selected. Existing
@@ -1152,3 +1159,51 @@ The [dedicated handoff](FACTORY_DRAGON_RECEIVER_PROGRAM_HANDOFF_2026-10-22.md)
 preserves the exact original request as history and its actual delivery/client
 qualification boundary. Whole-current output, quiet performance, Studio framing
 and all artwork/audio review remain separate.
+
+
+## 24. Partial Stone remainder — current anchor is not the immutable construction frame
+
+**OPEN, source-confirmed on selected530; independent work continues.**
+The actual9f `spell.wall_of_stone/aperture_end` original creates spatial UUID
+266619c0-f8d0-4f34-a43a-c1763c884970 at disclosed6,7. Actual operation7
+Disintegrate removes a10ft volume; section99215530-b95d-4041-81ba-3acaad3977ac
+retains its UUID/90HP/intact state with exact removed bands. The same owner and
+unchanged overall area retain currently disclosed cells8,7/9,7/10,7 in Blue,
+and8,7 in Amber; both actual packets set current `anchor_position=null`.
+Only operation8 concentration drop removes that remaining section/owner.
+
+Both selected Stone phases use installed WallInput.construction to validate
+and retain the original factual construction frame. WallInput.observation then
+requires a current non-null matching anchor before consuming the actual current
+sections/cells/cuts; wall.gd clears/hides before its existing partial-cut path.
+The client Resource's `requires_spatial_anchor` gate also refuses earlier.
+Disabling just that client gate cannot fix the independent source refusal.
+The ordinary native replay's passing1668checks do **not** establish visible
+partial remainder; no positive-specific remainder oracle was supplied.
+
+**Requested existing-interface correction:** retain the admitted immutable
+construction UUID/area/frame for the actual current sections when the same
+owner's current observed anchor is explicitly null. Keep that packet null;
+validate current identity, unchanged area, sections, removed volumes, cells,
+suppression and owner_state through the existing setters. A present non-null
+anchor must still pass current finite/integral/equal-frame validation. Preserve
+wrong-identity/content/geometry, malformed cuts, contradictory anchor, absent
+initial construction, hidden/empty/suppressed current coverage and real owner
+withdrawal refusals. Never redraw the removed6,7/7,7 bands, revive at operation8,
+fill the current anchor from object placement/another observer, reset age or
+invent debris. This requests existing source validation behavior, not new
+coordinates, a caller/API, renderer, scene or producer field.
+
+Deliver and qualify a **complete successor** retaining installed530 content.
+The shared helper also serves Ice: preserve its admitted shapes; the positive
+supplied original here is Stone, not a claimed Ice-partial qualification.
+After that complete delivery is integrated, the client can remove only the
+selected immutable Stone source's extra current-anchor gate while keeping its
+actual initial constructor anchor/support and unchanged current observation.
+No client bypass or source/package mutation is applied in this checkpoint.
+
+[Exact selected source paths, both-seat proof and existing-interface request](../.runtime/closing-repairs/stone-partial-observation-contract/factory-intake-request.md),
+[original source/owner/partial-cut proof](../.runtime/closing-repairs/wall-continuation-originals/wall-branch-proof.md),
+[bounded consumer ownership check](../.runtime/closing-repairs/wall-continuation-originals/stone-partial-consumer-source-check.md).
+All art/audio remain UNREVIEWED. §§17–23 remain delivered; this does not reopen
+them or request already supplied normal/receiver/field packages.

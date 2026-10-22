@@ -1,5 +1,64 @@
 # Backend content blockers after the production handoff
 
+## Observed Ice section destruction loses its public fact — 22 October
+
+**New exact existing-contract defect; independent client work continues.**
+Pinned9f's ordinary full10ft Ice-section Disintegrate removes an actually seen
+section and creates its real FrigidAir child, but neither audience receives
+the native `ObjectDestroyedFact`. Both audiences had current visual contact
+with exact section `bb6b2be6-1d80-4aa6-ab3d-1030d750d1ab` through operation6.
+Operation7 accepts object-target Disintegrate (Amber77/Blue76), removes that
+object and creates child `9a2fca02-541a-4064-ad8d-416ae2570a26`; later real
+20Cold names that child. This is not an unseen-object or absent-native-event
+claim. Stone partial-aperture and Force whole-owner originals retain actual
+destruction facts and are separate controls.
+
+Source trace: full-section `WallSection.disintegrate` prepares removal before
+publishing typed `ItemDestructionEvent`. Projection delays its pre-destruction
+contact capture to a retained completion, but folds the earlier observed
+object-removal source first. The object is gone when `destroyed_contacts` is
+captured; its missing snapshot suppresses `ObjectDestroyedFact`, and explicit
+destruction also suppresses the location fallback. Current backend source
+HEAD `9ead58f825cc0475d885a3785f9c81a499e93cb1` still has that seam. That is a
+read-only source comparison, **not a fresh schema18 runtime reproduction** or
+authorization to upgrade the frozen producer.
+
+**Requested repair:** retain the exact already-observed pre-removal contact and
+previous state/placement before folding that removal, then use the existing
+typed destruction projection. Preserve actual event/observer ownership,
+unseen-object privacy, section lifetime, Stone partial resulting placement and
+Force sight/whole-owner semantics. No new wire field/API, hidden-object grant,
+recreated canonical object or client-inferred destruction is requested.
+
+[Complete source anchors, original paths and bounded regression request](../.runtime/closing-repairs/wall-continuation-originals/ice-destruction-projection-analysis.md),
+[both-seat original/child/retirement proof](../.runtime/closing-repairs/wall-continuation-originals/wall-branch-proof.md).
+The three corrected public-witness wall originals are separately recorded;
+Ice's accepted spell/removal/FrigidAir path is usable without inventing the
+missing destruction fact. All original failed statuses remain preserved.
+
+## Earlier resumed original batch boundaries
+
+**Earlier 22 October thirteen-case batch: no new backend request.** Thirteen fixed
+public-command originals add eight recorded cases and five retained failures.
+Stinking Cloud's first failure was a client scenario witness on the wrong
+audience; the separately identified recipient-side case passes its real CON
+save. Shove's first setup selected an ally, but public discovery consumes the
+inherited `valid_target_filter='enemies'`; the unused execution-side
+`include_allies` flag does not make that ally an offered target. No Shove was
+issued, and no blocked-displacement backend defect is inferred. The corrected
+data route uses a real enemy: both actual opposed checks resist, so it still
+does not cover obstruction/fall and is not retried. Protection actually has
+an effective handler; its first failure is a later client command after combat
+ended. The separately identified same-build/seed two-move prefix is recorded
+with that actual handler. Ordinary death saves naturally recovered on20 instead of Stable.
+Cloudkill's absent per-damage owner pointer is not a required selected-source
+input: its authored retained volume uses the actual spatial owner/coverage.
+Existing narrow Landing/Arcane questions and asset registrations remain their
+separate handoffs. Do not resubmit delivered requests from historical tables.
+[Exact original statuses and paths](../.runtime/main-queue-20261022/content-originals/original-ledger.json),
+[source legality correction](../.runtime/closing-repairs/r4-movement-survival-originals/survival1-source-corrections.md),
+[field source/attribution boundary](../.runtime/closing-repairs/retained-field-originals/field-branch-proof.md).
+
 **Current delivery, 21 October:** adopted committed export
 `9f81d52676d4cea78be0be951dfc51a756050032`, including the prior 2948/0c repairs.
 The [backend follow-up](/mnt/c/Users/tommaso/Documents/Dev/dnd_engine/agent_docs/BACKEND_TRAP_GLYPH_HANDOFF_2026-10-21.md)
