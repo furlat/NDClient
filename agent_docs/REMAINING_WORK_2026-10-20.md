@@ -1,5 +1,66 @@
 # Everything remaining: client, Factory migration and Studio
 
+**Bounded follow-through authorized after cancellation — 22 October:** integrate
+only the two reviewed pending proposals (six outcome scenarios and accumulated
+Studio/first-ready diagnostics), commit, repeat the same gameplay/preview timings
+and update the post-mortem. This latest human request supersedes the stop only
+for that batch. The broader implementation/qualification queue and automation
+remain stopped/paused. These additions are scenarios and instrumentation, not a
+new performance fix or a completed accumulated-process repair.
+
+Both proposals are now applied. The single200fast batch and affected Transport/
+eight-case native Studio cohort pass; this is bounded functional evidence.
+Seven preserved originals add both-seat successful obstructed/falling Shove and
+ordinary third-success stabilization (seed7). Three other stabilization seeds
+ended in death. The initial Shield scenario had an incorrect ActionSurge ID;
+its corrected public-ID version completed legally but did not trigger Shield.
+Both Shield originals remain failed and ranged Shield remains open. No further
+seed search or broad qualification queue is resumed. Source checkpoint/retiming
+and the post-mortem update are the remaining bounded follow-through.
+
+**STOPPED — 22 October, explicit human cancellation.** Implementation and
+qualification have ended. Running same-task reviewers were interrupted; the
+event proposal was already finished. The last12-row native group had already
+exited normally, and no owned runtime remained at cleanup. The heartbeat is
+confirmed `PAUSED`; the external preview was not targeted. Pending positive
+outcome and accumulated-cost patches remain private and unapplied. No new
+recording, source commit, rollback or resumed implementation follows this stop.
+The priority/continuation wording below is historical and does not authorize
+resumption. [Cancellation post-mortem](post_mortem/NDCLIENT_REFACTOR_EXECUTION_FAILURE_2026-10-22.md).
+
+**Current human priority — 22 October:** actively finish the client-owned
+positive Shove/ordinary Stable/ranged-Shield outcomes, current rendering/Studio
+native/live and history/seek/loop acceptance, and measured gameplay/preview
+performance including accumulated-process stalls. The delegated Stone/Ice
+defects do not gate that work. The earlier self-imposed no-further-attempt
+dispositions preserve those original receipts; they do not prohibit the new
+human-authorized bounded legal outcome family. Keep every prior failure and
+use real public commands, actors and native mechanics without injected facts
+or forced rolls. Source/outcome/performance lanes proceed in parallel, with
+serialized GPU/live runs and grouped qualification. The separate dragon
+preview remains untouched. Measure and label actual contention; do not wait
+for external delivery or claim quiet performance from an unqualified run.
+
+**Current measured client continuation:** three serialized fresh native GUI
+Gallery routes at `d6fffec8`, pinned producer `9f81d5267` and installed complete
+Factory `53075ee7ed11481f` each pass 83 checks with natural exit0, no script/engine
+errors or owned leftovers. Exact submit-to-animation Door values are
+150.598/106.874/133.893ms; Move148.650/134.785/139.151ms. Full after-initial-ready
+frame p50 values are7.694/7.643/7.537ms, p95 values11.981/12.028/11.591ms,
+and maximum77.596/37.810/37.702ms. Startup-ready observations1256/1158/1256ms.
+No other native Godot processes appear in the preserved before/after snapshots;
+no external process was closed and no cache was flushed. This is a current
+route measurement, not a controlled single-change A/B against historical82a,
+continuous whole-host contention proof, full-suite pass or performance closure.
+The missed latency/frame targets remain R6 work. Exact full phase/frame receipts:
+[current measurements](../.runtime/client-owned-closure-20261022/performance-baseline/measurements.json).
+
+The historical Protection loop `publish_ms=14039.559` includes waiting until
+the actual Out boundary. First readiness after request was66.246ms, followed
+by13973.313ms until publication. That is not14seconds of preparation. The older
+90s accumulated-process installation timeouts remain preserved and require
+separate actual allowance/owner attribution; this arithmetic does not fix them.
+
 **Latest request — 22 October: commit completed recovery and resume the held main queue.**
 The structural recovery source batch is committed at **23e14a2e**; its affected
 cohort passes 16 cases / 8,660 assertions with natural exits 0. Quiet performance

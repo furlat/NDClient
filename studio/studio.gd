@@ -901,6 +901,10 @@ func _publish_candidate()->void:
     var first_publication=index.is_empty()
     _freeze_loop_candidate(false)
     preparation_measurement.publish_ms=(Time.get_ticks_usec()-int(preparation_measurement.get("requested_usec",Time.get_ticks_usec())))/1000.0
+    if preparation_measurement.has("ready_from_request_ms"):
+        # This includes deliberate loop residence until Out and any subsequent
+        # view invalidation/handoff; it is not a source-preparation duration.
+        preparation_measurement.after_first_ready_ms=maxf(0.0,preparation_measurement.publish_ms-preparation_measurement.ready_from_request_ms)
     transport_measurements.append(preparation_measurement.duplicate());preparation_measurement={}
     if transport_measurements.size()>32:transport_measurements.pop_front()
     var previous=viewport
@@ -1137,7 +1141,19 @@ func _process(_delta: float) -> void:
             if preparing_loop:_cancel_loop_preparation();world.timeline.paused=true
             _discard_candidate();pending_index={};pending_bundle={};pending_perspective="";_set_perspectives(active_perspective)
         elif _candidate_frame_ready(view_changed):
-            if not preparation_measurement.has("ready_ms"):preparation_measurement.ready_ms=(Time.get_ticks_usec()-int(preparation_measurement.get("created_usec",Time.get_ticks_usec())))/1000.0
+            if not preparation_measurement.has("ready_ms"):
+                var now:int=Time.get_ticks_usec()
+                preparation_measurement.ready_ms=(now-int(preparation_measurement.get("created_usec",now)))/1000.0
+                preparation_measurement.ready_from_request_ms=(now-int(preparation_measurement.get("requested_usec",now)))/1000.0
+                preparation_measurement.ready_display_clock_ms=world.timeline.display_ms
+                if preparing_loop:preparation_measurement.loop_out_ms=loop_end
+                # Passive shared-allowance snapshot at first readiness. Do not
+                # call a budget reset, source status, admission or preparation.
+                var allowance:Dictionary=candidate_world.preparation_admission
+                preparation_measurement.shared_allowance_at_first_ready={"frame":allowance.get("frame",-1),
+                    "used_usec":allowance.get("used_usec",0),"limit_usec":allowance.get("limit_usec",0),
+                    "phase_usec":allowance.get("phase_usec",{}).duplicate()}
+                preparation_measurement.native_startup_global_at_first_ready=Play.NativeStartup.profile_state()
             if not preparing_loop or world.timeline.display_ms>=loop_end:_publish_candidate()
             else:_freeze_loop_candidate(true)
     if not index.is_empty():
@@ -1227,6 +1243,7 @@ func _report_publication(first:bool)->void:
         "optional_sources":optional_count,"optional_ready":optional_ready,
         "thumbnail_pending":candidate_preview_pending,
         "native_warmup_ms":world.native_startup.get("elapsed_ms",0.0),
+        "native_warmup_scope":"Process-global elapsed since first requested plan, including intervening playback; not this candidate's preparation duration.",
         "native_warmup_completed":world.native_startup.get("completed",0),
         "native_warmup_total":world.native_startup.get("total",0),
         "native_required_total":world.native_startup.get("required_total",0),

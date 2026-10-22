@@ -128,8 +128,26 @@ static func _next_item(eligible:Array)->Dictionary:
         if not _state.done.has(_key(candidate.clip)) and not _state.failures.has(_key(candidate.clip)):return candidate
     return {}
 
-static func _complete_request(request:Dictionary)->Dictionary:
-    if _state.plan.all(func(entry):return _state.done.has(_key(entry.clip))):
+static func _complete_request(request:Dictionary,budget:Dictionary={})->Dictionary:
+    # This process-wide check can outgrow one recording's local request. Keep
+    # its exact dynamic approach/key semantics and expose actual short-circuit
+    # visits separately from the local readiness result and native draw work.
+    var began:int=Time.get_ticks_usec();var visited:int=0;var complete:bool=true
+    for entry in _state.plan:
+        visited+=1
+        if not _state.done.has(_key(entry.clip)):
+            complete=false;break
+    var elapsed:int=Time.get_ticks_usec()-began
+    var measured:Dictionary=_state.get("completion_profile",{})
+    measured.merge({"frame":Engine.get_process_frames(),"visited":visited,"plan":_state.plan.size(),
+        "known":_state.get("known",{}).size(),"done":_state.done.size(),"scan_usec":elapsed,
+        "all_complete":complete,"effect_revision":Effects.revision,"requested_kind":Effects.requested},true)
+    _state.completion_profile=measured
+    if not budget.is_empty():
+        var phases:Dictionary=budget.get("phase_usec",{})
+        phases.native_startup_completion_scan=phases.get("native_startup_completion_scan",0)+elapsed
+        budget.phase_usec=phases
+    if complete:
         if is_instance_valid(_state.get("viewport")):_state.viewport.free()
         _state.owner=null;_state.ready=true
         _state.elapsed_ms=(Time.get_ticks_usec()-_state.started)/1000.0
@@ -184,7 +202,10 @@ static func profile_state()->Dictionary:
         "drawn":bool(active.get("drawn",false)),"ages_remaining":active.get("ages",[]).size(),
         "private_viewport_valid":viewport_valid,"private_viewport_update_mode":int(viewport.render_target_update_mode) if viewport_valid else -1,
         "admission_loading_path":Effects.Admission.loading_path,"admission_material_job_active":not Effects.Admission._material_job.is_empty(),
-        "admission_settling":Effects.Admission.settling}
+        "admission_settling":Effects.Admission.settling,
+        "plan":_state.get("plan",[]).size(),"known":_state.get("known",{}).size(),"done":_state.get("done",{}).size(),
+        "retained_material_variants":_state.get("material_owners",[]).size(),
+        "global_completion_scan":_state.get("completion_profile",{}).duplicate()}
 
 static func _materials(material:Material,result:Dictionary)->void:
     if material==null or result.has(material):return
@@ -233,7 +254,12 @@ static func _owner(world:Node3D)->Node3D:
 static func step(world:Node3D,cache:Dictionary,request:Dictionary={},budget:Dictionary={})->Dictionary:
     var started:int=Time.get_ticks_usec()
     var result:Dictionary=_step(world,cache,request,budget)
-    if not budget.is_empty():budget.used_usec+=Time.get_ticks_usec()-started
+    if not budget.is_empty():
+        var elapsed:int=Time.get_ticks_usec()-started
+        budget.used_usec+=elapsed
+        var phases:Dictionary=budget.get("phase_usec",{})
+        phases.native_startup=phases.get("native_startup",0)+elapsed
+        budget.phase_usec=phases
     return result
 
 static func _step(world:Node3D,cache:Dictionary,request:Dictionary,budget:Dictionary)->Dictionary:
@@ -270,7 +296,7 @@ static func _step(world:Node3D,cache:Dictionary,request:Dictionary,budget:Dictio
     var item:Dictionary=_resource_request(world,candidate,required.any(func(entry):return not candidate.is_empty() and _key(entry.clip)==_key(candidate.clip)))
     if item.is_empty():
         if not candidate.is_empty():return status(request)
-        if _state.active.is_empty():return _complete_request(request)
+        if _state.active.is_empty():return _complete_request(request,budget)
     if not budget.is_empty() and budget.used_usec>=budget.limit_usec:return status(request)
     if _frame==Engine.get_process_frames():return status(request)
     # The private viewport exists as soon as there is work, in its own frame,
@@ -313,7 +339,7 @@ static func _step(world:Node3D,cache:Dictionary,request:Dictionary,budget:Dictio
         _state.active={};_state.completed+=1
     item=_next_item(eligible)
     item=_resource_request(world,item,required.any(func(entry):return not item.is_empty() and _key(entry.clip)==_key(item.clip)))
-    if item.is_empty():return _complete_request(request)
+    if item.is_empty():return _complete_request(request,budget)
     _frame=Engine.get_process_frames()
     # A recording is one file loaded on a worker; a live approach loads its
     # files and compiles its warm materials on workers. Its private warm draw
