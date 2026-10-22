@@ -39,14 +39,18 @@ original 0c failure is retained alongside the successful 9f original. Historical
 requests below are retained as history only.
 
 The separate Dragon receiving-program dependency is now **DELIVERED AND
-INSTALLED / CLIENT POLICY QUALIFICATION PENDING**, not a backend or missing-Factory request. Complete
+INSTALLED / SELECTED CLIENT NATIVE WITNESSES PASS**, not a backend or missing-Factory request. Complete
 `runtime-dragon-receiver-20261022-53075ee7ed11481f` supplies the exact proposed
 raw/expanded normal-policy aliases and retains 81 typed rows, the Spirit helper,
 465 condition Scene preload bindings and 504 defaults.
 [Factory delivery](/mnt/c/Users/tommaso/Documents/assets/VFXFactory/docs/DRAGON_RECEIVER_PROGRAM_DELIVERY_2026-10-22.md).
 The complete53075 namespace is installed with the a12f predecessor preserved;
 the paired client normal-policy source and selected native Dragon resources are
-applied; grouped native qualification remains pending.
+applied. The five actual-original body/Arcane cohort passes30,795native
+assertions, Outline27 and the corrected weapon withdrawal/re-entry control119,
+all natural exits0/no unexpected errors or owned leftovers. This is affected
+consumer evidence, not whole-current native/live, Studio framing, quiet
+performance or artwork acceptance.
 [Installation receipt](../.runtime/vfx-successor-dragon-receiver/namespace-installation.json).
 This renderer work is separate from the 9f public facts reviewed below. Applied
 fit2 runtime support is now consumed by the selected native Dragon resources;
@@ -54,6 +58,20 @@ fit2 runtime support is now consumed by the selected native Dragon resources;
 separate producer questions below are unchanged.
 [Current creature intake boundary](CREATURE_BODY_ASSET_GAPS_2026-10-20.md).
 
+
+## Nimbus terminal recipient — client presentation closure, no backend request
+
+The exact new9f original has real10Radiant result367 and actual Nimbus owner
+1941e7ff-6cf4-4de1-b22b-55e7e779dc6f. Current native replay refuses receiving
+output with `native_spell_recipient_not_displayed`. The public journal removes
+that Goblin's visual contact at370 before publishing its actual death at371;
+pinned Python/Godot canonical folding intentionally clears the unseen living
+position. This is not a reducer mismatch, missing producer result or permission
+to restore canonical visibility. Its actual finite Death BodyTrack retains the
+disclosed contact/source clock; a bounded client terminal-presentation cut is
+being reviewed. Do not forward this as another backend/Factory API request.
+[Exact current refusal](../.runtime/main-queue-20261022/terminal-response-diagnostics/native-receipt.json),
+[source/canonical analysis](../.runtime/closing-repairs/nimbus-contact-visibility/canonical-visibility-analysis.md).
 
 ## Earth Myrmidon Landing identity — new9f original,22October
 

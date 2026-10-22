@@ -53,6 +53,7 @@ EVENT_PROJECTIONS = {
     "cast_completion": {"observation"},
     "healing_return": {"healing_input"},
     "owned_fire_contact": {"contact_event"},
+    "spatial_fire_contact": {"contact_event"},
     "finite_contact": {"damage_event"},
     "divine_outcome": {"observation"},
     "condition_set_outcome": {"observation"},
@@ -295,8 +296,32 @@ def report() -> dict:
                 if constructor == "observed_event":
                     projection = cue["constructor_input"].get("projection", "event")
                     event_channels = EVENT_PROJECTIONS.get(projection, EVENT_PROVIDERS)
-                if constructor == "payload_release":
+                # Mirror the existing conditional packet shapes; none of
+                # these static matches proves a recording supplied operands.
+                descriptor = cue["constructor_input"]
+                if constructor == "observed_event" and projection == "weapon_component":
+                    if descriptor.get("packet") == "event":
+                        event_channels = EVENT_PROVIDERS
+                    elif descriptor.get("quarry_kind"):
+                        event_channels = {"owner_input", "quarry_input", "hit_input"}
+                    elif descriptor.get("owner_condition_id"):
+                        event_channels = {"hit_input", "weapon_binding"}
+                elif constructor == "observed_event" and projection == "condition_contact" and descriptor.get("packet_kind") == "condition_tick":
+                    event_channels = {"condition_input", "tick_input"}
+                elif constructor == "observed_event" and projection == "spatial_contact" and descriptor.get("packet") == "element_contact":
+                    event_channels = {"damage_event"}
+                elif constructor == "retained_payload":
+                    event_channels = {"payload_anchor", "payload_state"}
+                elif constructor == "quarry_owner":
+                    event_channels = {"owner_input", "quarry_input"}
+                elif constructor == "payload_release":
                     event_channels = {"accepted_release"}
+                if collection == "responses":
+                    response_kind = cue["condition_response"].get("kind")
+                    if response_kind == "attributed_component":
+                        event_channels = event_channels | {"weapon_impact"}
+                    elif response_kind == "miss_damage":
+                        event_channels = event_channels | {"event_binding", "event_state"}
                 if cue["input_arguments"]:
                     event_channels = event_channels | set(cue["input_arguments"])
                 supplied = PROVIDERS | event_channels
@@ -306,6 +331,8 @@ def report() -> dict:
                         supplied = supplied | {"owner_state"}
                     if cell_input == "wall_geometry":
                         supplied = supplied | {"zone_geometry"}
+                    elif cell_input == "wall_assembly":
+                        supplied = supplied | {"visual_state"}
                     elif cell_input == "partitioned_surface":
                         supplied = supplied | {"surface_partition"}
                     elif cell_input == "owned_cells":

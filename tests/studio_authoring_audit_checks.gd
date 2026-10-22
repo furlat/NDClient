@@ -23,6 +23,31 @@ func _initialize()->void:
             ids[row.id]=true
             check(not row.rendered and not row.source.is_empty() and not row.next_step.is_empty(),"Assignment is actionable without a false rendering witness: "+entry.id+" / "+str(row))
     check(report.totals.backend_definitions==347,"Current backend definition denominator is independent of replay cases")
+    var character_sources:Resource=load("res://authoring/characters.tres")
+    var admitted_bodies:Resource=Audit.BodySources.index(cache)
+    var creature_id:String="creature.spell.draconic_spirit"
+    var creature_row:Dictionary=by_id["creature_rig:"+creature_id].requirements[0]
+    var selected_rig:String=str(admitted_bodies.creature_rigs.get(creature_id,""))
+    check(not selected_rig.is_empty() and creature_row.inspection=="projected" and creature_row.gap_kind=="unexercised" \
+        and creature_row.source==character_sources.sections.characters[creature_id] \
+        and creature_row.authored_program.rig==selected_rig \
+        and creature_row.authored_program.rig_source==character_sources.sections.rigs[selected_rig] \
+        and creature_row.render_method.selector=="res://presentation/characters.gd::rig_id" \
+        and creature_row.render_method.renderer=="res://presentation/characters.gd::structure",
+        "Exact admitted creature binding exposes its current selector/rig source rather than a missing inspection track")
+    check(creature_row.render_method.runtime_binding=="not_examined" and creature_row.render_method.prepared=="not_examined" \
+        and creature_row.render_method.rendered=="not_witnessed" and creature_row.render_method.artwork=="unreviewed" \
+        and not creature_row.rendered and not creature_row.timing.resolved,
+        "Static body source inspection does not certify an occurrence, native admission, pixels, timing or artwork")
+    var missing_binding:Dictionary=Audit._creature_rig_requirement("unassigned-creature-control","exact-resource-control",admitted_bodies,character_sources.sections.rigs)
+    var missing_rig:Dictionary=Audit._creature_rig_requirement(creature_id,creature_row.source,admitted_bodies,{})
+    var effect_owned:Dictionary=by_id["creature_rig:creature.spell.spiritual_weapon"].requirements[0]
+    check(missing_binding.inspection=="missing" and missing_rig.inspection=="missing" \
+        and effect_owned.inspection=="missing" and not effect_owned.has("render_method"),
+        "Absent mappings, unavailable rig carriers and effect-owned bodies cannot borrow the sprite inspection method")
+    check(Audit.Requirements.owner("environment_bank","control","exact-bank-source",{}).inspection=="missing" \
+        and Audit.Requirements.owner("environment_door","control","exact-door-source",{}).gap_kind=="inspection",
+        "A source pointer alone cannot close bank or finite environment transition inspection")
     var raw_pointer:String="raw/source.json:/original/field"
     check(Authoring.recipe_source({"_source_fields":{"actual":raw_pointer}},"actual",cache)==raw_pointer,
         "An exact raw field pointer stays unchanged rather than becoming a Resource property")

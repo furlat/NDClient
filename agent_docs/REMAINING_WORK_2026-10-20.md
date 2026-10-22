@@ -18,6 +18,10 @@ read-only; no mutable backend/schema upgrade is implied by the new handoff.
 
 ## Current Dragon/body receiver batch — 22 October
 
+Client body/source checkpoint **f5fbc77b** and sealed Factory namespace
+checkpoint **ee542eaf** are committed. Canonical Incense/Nimbus legal scenario
+data, including the preserved failed first route, are committed at **e9a284dc**.
+
 Complete Factory `runtime-dragon-receiver-20261022-53075ee7ed11481f` is installed
 with a12f preserved. It retains1,246clip IDs/504defaults, supplies81typed rows,
 465corrected static-condition Scene warm bindings and the exact prepared receiver
@@ -63,10 +67,10 @@ Factory defect was inferred from that stale control.
 [corrected handover control](../.runtime/tests/20261022T045446.793799Z/summary.json),
 [corrected weapon control](../.runtime/tests/20261022T050423.282733Z/summary.json).
 
-A fresh actual Dragon frame exposes a remaining R4 issue: the default Studio
-camera can clip newly admitted large body artwork. Delivered scale2 is retained;
-automatic preview framing is a separate client follow-through, without changing
-gameplay camera or canonical occupancy. The body/source witnesses above do not
+The initial actual Dragon frame exposed an R4 issue: the default Studio
+camera clipped newly admitted large body artwork. Delivered scale2 is retained;
+the bounded automatic preview framing follow-through is recorded below, without
+changing gameplay camera or canonical occupancy. The body/source witnesses above do not
 qualify framing, final artwork, whole-current native/live or quiet performance.
 [Current captured frame](../.runtime/main-queue-20261022/dragon-native-receiver-registered/captures/creature.spell.draconic_spirit-current_stand_in_intrinsic_retirement-55-primary.png).
 
@@ -76,10 +80,84 @@ Nimbus route and its separately identified offered5ft approach with real10Radian
 contact. Both positive results name their actual disclosed spatial/condition UUID.
 Existing positive Blessed Healer/Destroy Undead originals retain their0c producer
 identities and are reused; no recapture, forced outcome or new fixture framework.
-Their four-family current native consumer proof is next; successful original
-capture/import alone does not qualify output. All artwork/audio remain unreviewed.
+Current exact native consumer proof passes Blessed Healer, Destroy Undead and
+Incense. Nimbus still lacks its body-bound contact output; the exact later
+refusal is `native_spell_recipient_not_displayed`, not a missing producer
+result. Capture/import alone does not qualify output. All artwork/audio remain unreviewed.
 [Four-family literal result ledger](../.runtime/closing-repairs/class-passive-result-originals/four-family-original-ledger.json),
 [exact import](../.runtime/closing-repairs/class-passive-result-originals/library-import.json).
+
+## Current shared Studio inspection/framing follow-through — 22 October
+
+The bounded Studio framing family is applied through existing view/publication
+owners. The automatic view grows/minimally shifts to prepared current body
+bounds; wheel/pan/explicit CLI framing wins, Follow keeps priority and same-index
+seek retains manual intent. Existing published actor/source keys prevent routine
+per-frame body scans. No source pixels, delivered scale2, canonical occupancy,
+gameplay camera, scheduler, lighting or owner clock changes.
+
+The existing viewport projection control passes139assertions. One actual current
+Dragon original passes4,553native assertions/natural exit0/no unexpected errors
+or leftovers; freshly captured15/55/90percent cuts fit the actual1600x439preview,
+including the formerly clipped wings. This is framing/source evidence, not art
+acceptance. The existing whole StudioUI control now passes72assertions, including actual
+wheel/pan/pending seek, metadata, native Mute/Solo, listener and silent/nonzero
+PCM duties. Its earlier obsolete-control and real composed-preview failures
+remain preserved. This one-original control does not qualify the whole
+UI/navigation/seek scenario matrix from the Dragon alone.
+[Actual Dragon native/visual receipt](../.runtime/main-queue-20261022/studio-framing-native-dragon/summary.json),
+[fresh-image inspection](../.runtime/main-queue-20261022/studio-framing-native-dragon/visual-inspection.json),
+[initial UI/projection cohort](../.runtime/tests/20261022T052647.219564Z/summary.json),
+[current shared surface/input/UI batch](../.runtime/tests/20261022T055525.756023Z/summary.json).
+
+The existing offline provider report now mirrors24already implemented conditional
+packet mappings: static unmatched rows fall27→3, with five deliberate default
+refusal gaps unchanged. The three remaining rows are Thorns' review_contacts/
+visual_occupants and Ensnaring's old application declaration, not automatically
+new Factory/backend requirements. Actual operands, native output and human
+review remain separate. No new runtime provider or registry is introduced.
+[Corrected current source join](../.runtime/main-queue-20261022/current-authoring-source-coverage-corrected.json).
+
+The first exact four-result cohort remains failed:3,882assertions/eight failures,
+natural exit1. Two passive complete-attribution comparisons used inconsistent
+JSON numeric carriers despite real acknowledged draws/operands; the corrected
+gate uses the existing exact recursive Protocol comparator. Nimbus' overly deep
+private capture directory is replaced in the Library by a29file byte-equal short
+mirror, preserving its real9f original and all14packets. In that first receipt,
+Incense's actual response compiled with exact owner/result116/lineage113 and
+positive3HP, but lacked a native witness; that earlier miss remains unattributed.
+The later four-family cohort completes9,804assertions/two Nimbus failures,
+natural exit1/no engine or script errors/leftovers. The other three selected
+positive results pass their exact owner/lineage/operand/postdraw requirements.
+Nimbus' actual later refusal is `native_spell_recipient_not_displayed`: its real
+visual contact is removed before the same native death transition, and canonical
+folding intentionally clears the position. A finite actual Death BodyTrack still
+exists; a bounded terminal-presentation cut is being investigated. Canonical
+state/observation and receiving-geometry rules remain unchanged; no backend or
+Factory repair is inferred. The first missing Incense witness remains
+unattributed rather than falsely assigned a cause.
+[Preserved failed result cohort](../.runtime/main-queue-20261022/four-family-native-results/summary.json),
+[actual Incense compiled selection](../.runtime/main-queue-20261022/incense-compiled-selection/compiled-incense-inspection.json).
+
+The complete existing source audit now exposes only exact admitted creature→rig→
+registered Resource bindings as source inspection, explicitly unexercised/not
+prepared/not witnessed/unreviewed. Missing/effect-owned bindings and finite
+world-transition gaps stay explicit; this is not a blanket893-row promotion.
+Its affected audit control passes15,644assertions.
+[Exact audit receipt](../.runtime/tests/20261022T054530.956663Z/summary.json).
+
+The stronger UI control exposed a real shared failure: an exact owned body-
+surface measurement job returned not-ready without pending provenance, causing
+NativeInputs to report unavailable and Studio to cache a terminal preview error.
+The five-file existing-owner repair carries pending only for actual owned
+source-pose jobs through geometry/source/endpoint/event inputs; NativeSpellRenderer
+uses its existing hide/retry path. Missing registrations/actors/empty geometry
+remain unavailable. No fake points, thumbnail error weakening, new queue/cache/
+provider/Timeline hold/private clock or lighting change is added. The coherent
+batch passes real-worker43, input-binding429 and whole-UI72, all natural exits0/
+no engine/script errors or owned leftovers. Earlier72/1preview failure remains.
+[Preserved actual preview failure](../.runtime/tests/20261022T054747.921756Z/summary.json),
+[current affected batch](../.runtime/tests/20261022T055525.756023Z/summary.json).
 
 ## Earlier source-registration checkpoint ae4fb4a6 — 22 October
 
@@ -1192,14 +1270,18 @@ in2948. Neutral Glyph presence is now assigned; richer armed/payload studies
 are optional unselected art choices. The stable-zero-HP healing defect is
 repaired in9f81, with a successful unchanged client journey and the original
 failed recording preserved. Authentic mouth authoring,
-twelve summon body substitutions and the eight named sound categories are
-separate asset work. All artwork remains unreviewed.
+the three remaining unidentified summon own-body deliveries and the eight
+named sound categories are separate asset work. Nine own-body assignments,
+including the selected Dragon, are described in the current body inventory;
+assignment and affected native witnesses do not establish art acceptance.
+All artwork remains unreviewed.
 
 Current external issues: [backend content capture blockers](BACKEND_CONTENT_BLOCKERS_2026-10-20.md),
 [Factory source review](FACTORY_REVIEW_2026-10-20.md), and the
 [exact creature-body artwork list](CREATURE_BODY_ASSET_GAPS_2026-10-20.md).
-The twelve summon body substitutions are distinct from 63 raw `stand_in`
-resource flags; ordinary modular human bodies and duplicate aliases do not
+The original twelve summon substitution rows now have nine own-body
+assignments. The three remaining body deliveries are distinct from63raw
+`stand_in` flags; ordinary modular human bodies and duplicate aliases do not
 require sixty-three new creatures.
 
 ### R1: historical declaration snapshot and consumer-family boundaries
@@ -1838,11 +1920,12 @@ No extra recurring runtime checksum gate is required.
 
 ## 5. R4: Studio, scenarios and full rendering-method visibility
 
-The current ordinary Studio Library is usable:369 recorded cases out of372,
-with voluntary Drop Prone, developer TestBless setup and Extend Intimidating
-Presence's actual `no_valid_targets` retained as failures. The complete369-original
-reader/compiler cohort passes49,862 checks across both seats. Current case
-counts do not turn historical output evidence into current package evidence.
+The current ordinary Studio Library is usable: **383recorded cases out of388**,
+with five exact failures preserved. The later creature/action and positive
+Incense/Nimbus imports are recorded in the current main-queue sections above.
+The historical complete369-original reader/compiler cohort passed49,862checks
+across both seats; it does not qualify all388current rows or current output.
+Case counts do not turn historical output evidence into current package evidence.
 Historical originals retain their actual engine labels; same-wire playback and
 strict current engine/package output qualification are separate. The old
 299/285/14,331/312/19 and354/352/2 populations are preserved receipts, not today's Library

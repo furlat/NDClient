@@ -35,10 +35,14 @@ class SurfaceProvider extends RefCounted:
     var selected:Array=[]
     var selected_region:Dictionary={}
     var prepared:Array=[]
+    var preparing:bool=false
+    var refusal:String=""
     func sample(_world:Node,actor:String,slots:Array=[],region:Dictionary={})->Dictionary:
         calls+=1
         selected=[actor,slots];selected_region=region
-        return {"actor":actor,"actor_uuid":actor,"entity_uuid":actor,"ready":true,"reason":"","points":[],"origin":origin,"gpu_geometry_key":["same-source-pose"]}
+        return {"actor":actor,"actor_uuid":actor,"entity_uuid":actor,"ready":not preparing and refusal.is_empty(),
+            "pending":preparing and refusal.is_empty(),"reason":refusal if not refusal.is_empty() else "surface_source_preparing" if preparing else "",
+            "points":[],"origin":origin,"gpu_geometry_key":["same-source-pose"]}
     func prepare(_world:Node,actors:Array,slots:Array,priority:bool)->void:prepared.append([actors,slots,priority])
     func clear()->void:pass
 class EndpointProbe extends Node3D:
@@ -291,6 +295,23 @@ func run()->void:
     world.basis=Basis(Vector3.UP,.25)
     bridge.sync(world,prepared_handle,aimed,exact)
     check(receiving.surface.gpu_geometry_key!=prior_key,"Changed receiving rotation/scale cannot reuse world points in an old local basis")
+    var optical_handle:Dictionary=prepared_handle.duplicate(false)
+    optical_handle.clip={"inputs":["recipient_geometry","source_geometry"],"input_setters":{"recipient_geometry":"set_entity_geometry","source_geometry":"set_entity_geometry"}}
+    optical.preparing=true
+    result=bridge.sync(world,optical_handle,aimed,exact)
+    check(result.unavailable.is_empty() and result.pending.get("recipient_geometry")=="surface_source_preparing" \
+        and result.pending.get("source_geometry")=="surface_source_preparing" and not receiving.surface.ready,
+        "Owned optical measurements remain pending across recipient/source geometry instead of becoming terminal input failures")
+    optical.preparing=false
+    result=bridge.sync(world,optical_handle,aimed,exact)
+    check(result.pending.is_empty() and result.unavailable.is_empty() and receiving.surface.ready,
+        "The same exact source binding becomes usable only after its optical owner publishes ready")
+    optical.refusal="source_geometry_not_registered"
+    result=bridge.sync(world,optical_handle,aimed,exact)
+    check(result.pending.is_empty() and result.unavailable.get("recipient_geometry")==optical.refusal \
+        and result.unavailable.get("source_geometry")==optical.refusal,
+        "Missing geometry remains unavailable and cannot borrow the measurement pending classification")
+    optical.refusal=""
     aimed.native_cue.entity_geometry={"actor":"caster","slots":["weapon"]}
     bridge.sync(world,prepared_handle,aimed,exact)
     check(optical.selected==["a",["weapon"]],"Actual authored actor and weapon-only slot operands reach the optical provider unchanged")
@@ -322,6 +343,14 @@ func run()->void:
     result=bridge.sync(world,legacy_handle,authored,exact)
     check(result.unavailable.is_empty() and endpoint_probe.endpoints.size()==4 and endpoint_probe.endpoints[0].point==exact.hand and endpoint_probe.endpoints[2].point==exact.from and endpoint_probe.endpoints[3].point==Vector3(10,0,0),"Authored four-row delivery preserves current hand, recipient, accepted source and ground roles/order")
     check(optical.selected==["b",["body","chest"]] and endpoint_probe.endpoints[1].surface.actor=="b","Endpoint surface_slots requests the exact actor and slots without a body-wide substitute")
+    optical.preparing=true
+    result=bridge.sync(world,legacy_handle,authored,exact)
+    check(result.unavailable.is_empty() and result.pending.get("targets")=="surface_source_preparing" and endpoint_probe.endpoints.is_empty(),
+        "Authored endpoint surface_slots preserves exact optical pending provenance and clears the prior endpoint packet")
+    optical.preparing=false
+    result=bridge.sync(world,legacy_handle,authored,exact)
+    check(result.pending.is_empty() and result.unavailable.is_empty() and endpoint_probe.endpoints.size()==4,
+        "The same authored endpoint tuple resumes with its actual surface after preparation")
     bridge.prepare(world,[authored],false)
     check(optical.prepared.back()==[["b"],["body","chest"],false],"Early endpoint surface preparation shares the exact slot request and optional priority")
     authored.native_cue.live_endpoints=[{"actor":"target2","socket":"ground"}]

@@ -69,8 +69,12 @@ authentic mouth or art acceptance follows.
 
 A fresh Dragon frame reveals a separate Studio camera-framing gap: newly
 admitted large-body artwork can exceed the preview extent. The delivered
-scale2 is retained; a bounded Studio view repair is in progress. Source-binding
-and positive pixels do not qualify this framing.
+scale2 is retained. The bounded Studio view repair is now applied: the actual
+Dragon follow-through passes4,553native assertions and its three fresh sampled
+cuts fit; the viewport projection control passes139. The whole existing UI gate now passes72after its obsolete controls and actual
+owned-surface pending-classification repair, with real-worker43/input-binding429.
+Earlier failures remain preserved. This is selected framing/interaction evidence,
+not the entire UI matrix or art acceptance.
 [Actual current capture](../.runtime/main-queue-20261022/dragon-native-receiver-registered/captures/creature.spell.draconic_spirit-current_stand_in_intrinsic_retirement-55-primary.png).
 
 **Earlier receipts retain their earlier source.** Equipped Myrmidon source/

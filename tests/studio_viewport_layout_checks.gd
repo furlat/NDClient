@@ -4,6 +4,9 @@ const Layout=preload("res://studio/viewport_layout.gd")
 var checks=0
 var failures:Array=[]
 var samples:Array=[]
+class BodyFrameWorld extends Node3D:
+    var camera:Camera3D
+    var visual_actors:Dictionary={}
 
 func check(value:bool,label:String)->void:
     checks+=1
@@ -16,7 +19,47 @@ func projected(camera:Camera3D,focus:Vector3)->Array:
     return [center,camera.unproject_position(focus+camera.basis.x)-center,
         camera.unproject_position(focus+camera.basis.y*.7)-center]
 
+func prepared_body_framing()->void:
+    var viewport=SubViewport.new();viewport.size=Vector2i(1600,439)
+    viewport.own_world_3d=true;viewport.render_target_update_mode=SubViewport.UPDATE_DISABLED;root.add_child(viewport)
+    var world=BodyFrameWorld.new();viewport.add_child(world)
+    var camera=Camera3D.new();camera.projection=Camera3D.PROJECTION_ORTHOGONAL;world.add_child(camera);world.camera=camera;camera.make_current()
+    var mesh=QuadMesh.new();mesh.size=Vector2(14,10);mesh.center_offset=Vector3(2,3,0)
+    var body=MeshInstance3D.new();body.mesh=mesh;body.custom_aabb=mesh.get_aabb().expand(Vector3(11,9,1));world.add_child(body)
+    var hidden=MeshInstance3D.new();hidden.mesh=QuadMesh.new();hidden.mesh.size=Vector2(200,200);hidden.hide();world.add_child(hidden)
+    var reference=QuadMesh.new();reference.size=Vector2(20,18)
+    var entry={"node":body,"role":"body","actor_layer":{},"native_shapes":{"":{"mesh":reference}}}
+    world.visual_actors={"actual visible owner":{"entries":[entry],"row":{"position":[3,4],"base_height_steps":0}},"undisclosed owner":{"entries":[{"node":hidden,"role":"body","actor_layer":{}}]}}
+    var focus:=Vector3(3,.75,4)
+    for aspect in [Camera3D.KEEP_HEIGHT,Camera3D.KEEP_WIDTH]:
+        camera.keep_aspect=aspect
+        for quarter in 4:
+            camera.size=6;camera.position=focus+Basis(Vector3.UP,quarter*PI*.5)*Vector3(12,8,12);camera.look_at(focus)
+            body.transform=Transform3D(camera.basis.scaled_local(Vector3(-1.2,1.1,1)),focus)
+            var before:Transform3D=body.transform;var original_size:Vector2=mesh.size
+            var bounds:Rect2=Layout.body_bounds(world)
+            check(bounds.size.x<100 and bounds.size.y<100,"Hidden body does not enter automatic current-source bounds")
+            var frame:Dictionary=Layout.body_frame(camera,viewport.size,bounds,focus,camera.size)
+            var delta:Vector3=frame.focus-focus;camera.position+=delta;camera.size=frame.size
+            var contained:bool=true
+            for local in [body.custom_aabb,reference.get_aabb()]:
+                for corner in 8:
+                    var point:Vector2=camera.unproject_position(body.global_transform*local.get_endpoint(corner))
+                    contained=contained and point.x>=-.01 and point.y>=-.01 and point.x<=viewport.size.x+.01 and point.y<=viewport.size.y+.01
+            check(contained and frame.size>=6,"Prepared transformed body fits the actual short viewport q%d aspect%d"%[quarter,aspect])
+            var again:Dictionary=Layout.body_frame(camera,viewport.size,bounds,frame.focus,camera.size)
+            check(is_equal_approx(again.size,camera.size) and again.focus.is_equal_approx(frame.focus),"Already contained body does not shrink or recenter")
+            check(body.transform==before and mesh.size==original_size,"Studio fit preserves actual body transform and source mesh scale")
+    # An initially reduced body must also fit its already declared return to
+    # ordinary size; a removal fade cannot require frame-by-frame projection.
+    world.visual_actors["actual visible owner"].sampled_pose={"body_scale":{"factor":.5,"owners":[{"authored_factor":.5}]}}
+    body.transform=Transform3D(camera.basis.scaled_local(Vector3.ONE*.5),Vector3(3,0,4))
+    var returned:Rect2=Layout.body_bounds(world)
+    check(returned.size.x>=reference.size.x-.01 and returned.size.y>=reference.size.y-.01,"Admitted reduced-body envelope contains its real ordinary-size restoration")
+    viewport.free()
+
 func run()->void:
+    prepared_body_framing()
     var viewport=SubViewport.new();viewport.size=Vector2i(1280,320)
     viewport.own_world_3d=true;viewport.render_target_update_mode=SubViewport.UPDATE_DISABLED
     root.add_child(viewport)

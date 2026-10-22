@@ -41,15 +41,21 @@ Grounded rest/hurt/death/Rend/Breath are explicit provisional presentation
 choices. Real walking/flying MovementFacts choose their corresponding clips.
 Authentic mouth/finite breath VFX, further aerial context and human art review
 remain partial. A fresh current Studio frame also exposes large-body clipping;
-its bounded view-framing repair is being prepared without shrinking delivered
-scale2 or changing gameplay camera. All artwork/audio remain UNREVIEWED.
+the bounded view-framing repair is now applied without shrinking delivered
+scale2 or changing gameplay camera. The actual Dragon follow-through passes
+4,553native assertions and its three fresh sampled cuts fit; the viewport
+projection control passes139. The whole existing UI gate now passes72after correcting its obsolete owner
+controls and the actual shared surface-pending classification bug; real-worker43
+and input-binding429also pass. These are affected controls, not the full matrix. All artwork/audio remain UNREVIEWED.
 [Exact body/asset inventory](CREATURE_BODY_ASSET_GAPS_2026-10-20.md).
 
 Current Library: **388cases/383recorded/fivefailed**. New real9f Incense positive
 healing and Nimbus positive contact originals are imported, with the separate
 failed out-of-range Nimbus route preserved. Existing positive Blessed Healer/
-Destroy Undead originals retain0c provenance. Four-family native consumer
-qualification is pending; capture/import success alone is not output acceptance.
+Destroy Undead originals retain0c provenance. Exact native consumer proof passes Blessed Healer, Destroy Undead and Incense.
+Nimbus' positive result is real, but receiving output refuses its absent current
+body; the finite terminal presentation cut remains open. The later four-family
+receipt stays9,804/two failures/natural1; no backend/Factory defect is inferred.
 
 **Four-family body follow-through,22October:** all equipped Myrmidons now use
 own supplied9clip rigs; source conversion and13Action/4Attack assignments are

@@ -56,13 +56,19 @@ The newer explicitly supplied creature packets now include selected dragon
 reconstructed depth/Sprite Fusion Default normals and four actual Myrmidon
 body/geometry/weapon-mask families. The four equipped Myrmidon bodies and
 compatible numeric companions are now assigned with their intrinsic body
-recipes; the dragon packet and weapon-only receivers remain separate intake.
+recipes. The selected Dragon native packet is also assigned at **f5fbc77b**;
+weapon-only receivers remain separate optional intake.
 No duplicate asset delivery is requested. The separate shared indexed-
 material dragon ZIP remains a portable **candidate** by its own archived
-handoff, despite its `production-2026-10-22` directory. Current NDClient still
-uses the T-Rex for the dragon; Myrmidons now use their own equipped rigs.
-Authentic dragon mouth registration and layout/receiving/caster adaptation
-remain separate. See the
+handoff, despite its `production-2026-10-22` directory. Current Draconic Spirit
+uses `summon.draconic_spirit.violet-astral`:600verbatim supplied PNGs,15clips/
+120facing banks/2,088poses with existing fit2 and the delivered matching
+independent-normal receiver. The five actual-original body/Arcane native cohort
+passes30,795assertions; this is selected output evidence, not art acceptance.
+Authentic Dragon mouth/finite breath/further aerial-context authoring remain
+partial. The bounded Studio framing repair has fresh three-cut containment
+witnesses; its shared input/UI batch passes43/429/72. These technical controls
+do not establish human artwork/audio acceptance. See the
 [exact delivered-versus-integrated inventory](CREATURE_BODY_ASSET_GAPS_2026-10-20.md#newer-delivered-files-versus-active-authoring-and-client-intake).
 
 ### Animated door/destruction residue registration — current source boundary, 22 October
@@ -436,10 +442,11 @@ The absent unused `Head11` helmet offer was removed; no actual gear selection
 was deleted and no missing sprites were fabricated. All 19 later-delivery
 portraits were already assigned; there is no additional exact portrait to
 silently substitute for the remaining borrowed identities. Of the original
-twelve summon-body rows, four elemental bodies are assigned, four Myrmidon and
-one dragon source families are now delivered but not integrated, and Cambion,
-Deva and Djinni have no own-body delivery identified in the inspected handoffs.
-The eight incomplete client rows are not eight missing-art requests.
+twelve summon-body rows, nine own bodies are assigned: four Elementals, four
+equipped Myrmidons and the selected native Dragon. Cambion, Deva and Djinni
+have no own-body delivery identified in the inspected handoffs. Assignment and
+selected native witnesses do not establish the remaining gestures, optical
+regions, further equipment support or human artwork acceptance.
 **All artwork and audio remain UNREVIEWED.**
 
 ### Furniture Debris is not an observable missing body assignment

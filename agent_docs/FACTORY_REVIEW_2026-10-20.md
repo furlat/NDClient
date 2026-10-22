@@ -1,6 +1,27 @@
-# Factory source/runtime delegation — reconciled21 October2026
+# Factory source/runtime delegation — reconciled22 October2026
 
-**Current sealed intake — 22 October:** complete
+**Current complete installation:** `runtime-dragon-receiver-20261022-53075ee7ed11481f`,
+sealed text checkpoint **ee542eaf**, client body/source checkpoint **f5fbc77b**.
+It retains1,246clip IDs/504defaults, supplies81typed rows, Spirit prepared-mask
+helpers/alternatives,465static-condition Scene preload corrections and the exact
+Dragon normal-policy receiver aliases. The complete a12f predecessor is preserved.
+The selected client source policy is applied; three-domain publication has zero
+errors/two warnings. Five real-original body/Arcane cases pass30,795native
+assertions, Outline27 and the corrected weapon withdrawal/re-entry control119,
+all natural exits0/no engine or script errors or owned leftovers. These selected
+witnesses do not qualify the entire package, quiet performance, every Studio
+scenario or artwork/audio. All art/audio remain UNREVIEWED.
+[Complete installation](../.runtime/vfx-successor-dragon-receiver/namespace-installation.json),
+[affected source/group, preserving initial failed controls](../.runtime/main-queue-20261022/dragon-native-receiver-registered/summary.json).
+
+**No outstanding re-export request for §§17–23.** The normal-policy programs,
+Wind mask and Freezing immutable-resource fixes are delivered and installed.
+The new Spirit alternatives are available, not automatically selected. Existing
+source cost flags remain evidence for R6 rather than missing source APIs; final
+current consumer qualification remains separate. Earlier intake/pending language
+below is historical at its stated package, not another request to Factory.
+
+**Earlier a12f sealed intake — 22 October:** complete
 `runtime-spike-readiness-20261022-a12f7da61022225f` is installed, preserving the
 complete82a namespace separately. It retains all1,246 clip IDs,504 identical
 default selections and155 condition entrypoints and extends the typed table
@@ -76,10 +97,12 @@ or every equipment combination. The latest whole installed8dd package gate passe
 the earlier alias failure remains preserved. This is functional source-contract
 qualification, not artwork acceptance or a complete live checkpoint.
 
-**§§21–22 and the worker complete-package intake are DELIVERED in82a.**
-The latest complete handoff above supersedes the earlier source-only delivery.
-Client receiving/publication/qualification are underway; no new Factory source
-or packaging request is needed for these supplied repairs. Keep the original8dd
+**§§21–22 and the worker complete-package intake are DELIVERED and installed.**
+The complete successors retain these repairs; client assignments/source
+publication are applied. The a12f187/188full-original result includes the Wind
+baseline and retains Summon Dragon as its sole failed case; it is predecessor
+evidence, not a whole-current530pass. No new Factory source or packaging
+request is needed for these supplied repairs. Keep the original8dd
 Wind UI and Freezing10s gate failures at their actual package/source cutoffs.
 Factory's scoped source proof does not replace the affected client rerun.
 
@@ -994,8 +1017,9 @@ removal are complete; affected current-output qualification remains separate.
 
 ## 21. Wind Wall debris needs current observed-cell coverage
 
-**Latest disposition: source repair supplied, complete-package/client adoption
-pending.** [Factory qualification](/mnt/c/Users/tommaso/Documents/assets/VFXFactory/authoring/production-review-repair-20261021/wind_material_coverage/qualification.json)
+**Current disposition: DELIVERED, installed and source-assigned in complete
+successors.** The following source/8dd failure evidence is historical; current
+installation and qualification boundaries are above. [Factory qualification](/mnt/c/Users/tommaso/Documents/assets/VFXFactory/authoring/production-review-repair-20261021/wind_material_coverage/qualification.json)
 retains480 CPU,2,391 primary native and801 diagnostic checks. All twelve debris
 materials support the existing coverage mask with the original wall/owner API.
 The primary receipt retains21 one-byte retirement differences and five fixture
@@ -1064,8 +1088,9 @@ API, backend or artwork request.
 
 ## 22. Freezing payload cold-resource initialization exceeds the current gate
 
-**Latest disposition: source repair supplied, complete-package/client adoption
-pending.** [Factory immutable-noise delivery](/mnt/c/Users/tommaso/Documents/assets/VFXFactory/authoring/production-review-repair-20261021/freezing_noise_offline/README.md)
+**Current disposition: DELIVERED and installed in complete successors.** The
+following source/8dd cold-load evidence remains historical, not a repeated
+packaging request or whole-current performance pass. [Factory immutable-noise delivery](/mnt/c/Users/tommaso/Documents/assets/VFXFactory/authoring/production-review-repair-20261021/freezing_noise_offline/README.md)
 replaces the32 procedural resources with one immutable exact ImageTexture at
 the original bank/scene addresses. All32 native mip witnesses match;105 capture,
 2,317 storage and384 native checks pass. Actual uncached threaded completion is
@@ -1116,15 +1141,14 @@ not raised the gate timeout or bypassed loading. Runtime/output qualification,
 performance scope and human review remain separate; all artwork is UNREVIEWED.
 
 
-## 23. Prospective dragon normal-policy receiver program
+## 23. Dragon normal-policy receiver program — delivered and consumed
 
-**22 October — new source-reviewed compatibility request, candidate not applied.**
-The supplied selected dragon already has normal/depth/caster masks. Its
-independent receiving normal needs two explicit source operands in the existing
-modular shader. The reviewed candidate and exact complete source closure are in
-[the dedicated Factory handoff](FACTORY_DRAGON_RECEIVER_PROGRAM_HANDOFF_2026-10-22.md).
-Please re-export the existing offline equipped receiver program for that exact
-revision, preserving the old bank entries and current owner/clock/material
-contracts. No new API, artwork, mask or backend fact is requested. The client
-will adopt both matching source and program together; it keeps the installed
-working shader unchanged meanwhile. This does not reopen delivered §17.
+**22 October — DELIVERED AND INSTALLED; paired client source applied.** Complete
+`runtime-dragon-receiver-20261022-53075ee7ed11481f` supplies both exact raw and
+expanded aliases, preserving old programs/defaults. Current three-domain source
+publication and the selected body/weapon/Outline native witnesses are recorded
+above. No re-export or additional API/art/mask/backend field is requested.
+The [dedicated handoff](FACTORY_DRAGON_RECEIVER_PROGRAM_HANDOFF_2026-10-22.md)
+preserves the exact original request as history and its actual delivery/client
+qualification boundary. Whole-current output, quiet performance, Studio framing
+and all artwork/audio review remain separate.

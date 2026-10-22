@@ -775,7 +775,7 @@ func endpoint_packet(world:Node,handle:Dictionary,component:Dictionary,points:Di
         if authored.has("surface_slots"):
             var slots:Array=Array(authored.surface_slots)
             var supplied:Dictionary=surface if surface.get("actor")==actor and surface.get("geometry_slots",[])==slots else receiver_surface(surfaces.sample(world,actor,slots),handle.root.global_transform)
-            if not supplied.ready:return {"rows":[],"reason":supplied.reason}
+            if not supplied.ready:return {"rows":[],"reason":supplied.reason,"pending":supplied.get("pending",false)}
             endpoint.surface=supplied
         elif not surface.is_empty() and surface.get("actor")==actor:endpoint.surface=surface
         result.append(endpoint)
@@ -1148,11 +1148,15 @@ func sync(world:Node,handle:Dictionary,component:Dictionary,points:Dictionary,re
         for name in ["entity_geometry","recipient_geometry"]:
             if name in geometry_requested:
                 geometry_input(handle,name,surface);supplied.append(name)
-                if not surface.ready:unavailable[name]=surface.reason
+                if not surface.ready:
+                    if surface.get("pending",false):pending[name]=surface.reason
+                    else:unavailable[name]=surface.reason
     if "source_geometry" in geometry_requested:
         var source:Dictionary=receiver_surface(geometry_sample(world,component,"source_geometry"),handle.root.global_transform)
         geometry_input(handle,"source_geometry",source);supplied.append("source_geometry")
-        if not source.ready:unavailable.source_geometry=source.reason
+        if not source.ready:
+            if source.get("pending",false):pending.source_geometry=source.reason
+            else:unavailable.source_geometry=source.reason
     if "targets" in geometry_requested or "live_endpoints" in geometry_requested:
         # Both delivered adapters forward live_endpoints through targets. One
         # changed endpoint packet supplies both declared aliases, avoiding a
@@ -1166,6 +1170,7 @@ func sync(world:Node,handle:Dictionary,component:Dictionary,points:Dictionary,re
         for channel in ["targets","live_endpoints"]:
             if channel not in geometry_requested:continue
             if packet.reason.is_empty():supplied.append(channel)
+            elif packet.get("pending",false):pending[channel]=packet.reason
             else:unavailable[channel]=packet.reason
         if component.has("native_propagation") and packet.reason.is_empty():
             source_contact_seconds=PropagationInputs.optical_contact(component,packet.rows,handle.root.global_transform)
@@ -1319,7 +1324,10 @@ func sync(world:Node,handle:Dictionary,component:Dictionary,points:Dictionary,re
         for channel in ["event_binding","event_state","owner_state"]:
             if channel not in requested:continue
             var packet:Dictionary=binding if channel=="event_binding" else event if channel=="event_state" else {"phase":"sustain","phase_age_seconds":age,"owner_age_seconds":age}
-            if channel=="event_state" and not surface.get("ready",false):unavailable[channel]=surface.get("reason","actual_event_contact_surface_unavailable");continue
+            if channel=="event_state" and not surface.get("ready",false):
+                if surface.get("pending",false):pending[channel]=surface.reason
+                else:unavailable[channel]=surface.get("reason","actual_event_contact_surface_unavailable")
+                continue
             if packet!=handle.get(channel+"_input",{}):
                 Effects.set_input(handle,channel,packet);handle[channel+"_input"]=packet
             supplied.append(channel)

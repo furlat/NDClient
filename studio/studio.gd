@@ -86,6 +86,12 @@ var loop_enabled = true
 var follow_tracks=true
 var follow_actor_id=""
 var initial_view_size=0.0
+# View intent belongs to Studio/index; source and gameplay scale never change.
+var automatic_view=true
+var automatic_frame_key:Dictionary={}
+var candidate_automatic_view=false
+var candidate_frame_key:Dictionary={}
+var camera_input_seen=false
 var loop_button:CheckButton
 var follow_button:CheckButton
 var preparing_loop=false
@@ -269,7 +275,9 @@ func _ready() -> void:
         elif args[i].begins_with("--follow-actor="):follow_actor_id=args[i].trim_prefix("--follow-actor=")
         elif args[i].begins_with("--view-size="):
             var value=args[i].trim_prefix("--view-size=")
-            if value.is_valid_float():initial_view_size=clampf(value.to_float(),3,100)
+            if value.is_valid_float():
+                initial_view_size=clampf(value.to_float(),3,100)
+                automatic_view=false
     if directory.is_empty() and not case_paths.is_empty(): directory=case_paths[0]
     if not directory.is_empty():
         _select_browser_path(directory)
@@ -790,7 +798,7 @@ func _discard_candidate()->void:
     candidate_preview_errors=[]
     frozen_candidate_viewports=[]
     if candidate_viewport!=null:_retire(candidate_viewport,[candidate_index])
-    candidate_viewport=null;candidate_world=null;candidate_index={};installing=false;tracks.thumbnails.suspended=false
+    candidate_viewport=null;candidate_world=null;candidate_index={};candidate_frame_key={};installing=false;tracks.thumbnails.suspended=false
 
 func _reload_authoring()->void:
     _load(active_directory,{},false,true)
@@ -856,6 +864,8 @@ func _prepare_candidate(restored: Dictionary, source: Dictionary)->void:
     var started=Time.get_ticks_usec()
     preparation_measurement.restore_wait_ms=(started-int(preparation_measurement.get("requested_usec",started)))/1000.0
     candidate_index=source;_stage_tracks(source)
+    candidate_automatic_view=automatic_view if is_same(source,index) else initial_view_size<=0.0
+    candidate_frame_key={}
     candidate_budget=replay_budget_bytes
     var spare={"viewport":spare_viewport,"world":spare_world,"index":spare_index,"frozen":frozen_spare_viewports} if spare_world!=null else {}
     spare_viewport=null;spare_world=null;spare_index={};frozen_spare_viewports=[]
@@ -899,6 +909,7 @@ func _publish_candidate()->void:
     _cancel_replay_advance()
     var changed=not is_same(index,candidate_index)
     viewport=candidate_viewport;world=candidate_world
+    automatic_view=candidate_automatic_view;automatic_frame_key=candidate_frame_key
     tracks.thumbnails.set_displayed_world(world)
     if candidate_tracks!=null:candidate_tracks.thumbnails.set_displayed_world(world)
     if is_instance_valid(previous_world) and previous_world!=world:previous_world.publishes_receiving=false
@@ -987,11 +998,59 @@ func _sync_candidate_view()->bool:
     var extent=1 if world.camera.keep_aspect==Camera3D.KEEP_HEIGHT else 0
     var candidate_zoom=world.camera.size*float(candidate_viewport.size[extent])/maxi(1,viewport.size[extent])
     var desired_focus=_follow_position(candidate_world,world.camera_focus)
-    var zoom_changed=not index.is_empty() and not is_equal_approx(candidate_world.camera.size,candidate_zoom)
-    if (not index.is_empty() or not follow_actor_id.is_empty()) and (zoom_changed or candidate_world.camera_focus!=desired_focus):
-        if not index.is_empty():candidate_world.camera.size=candidate_zoom
+    if not follow_actor_id.is_empty():candidate_frame_key={}
+    if candidate_automatic_view and not candidate_frame_key.is_empty() and follow_actor_id.is_empty():
+        # This admitted candidate already fitted its own bodies. Resize has
+        # preserved its pixel zoom; only real manual input or Follow supersedes it.
+        return changed
+    if index.is_empty() and not camera_input_seen:
+        candidate_zoom=candidate_world.camera.size
+        if follow_actor_id.is_empty():desired_focus=candidate_world.camera_focus
+    var zoom_changed=not is_equal_approx(candidate_world.camera.size,candidate_zoom)
+    if zoom_changed or not candidate_world.camera_focus.is_equal_approx(desired_focus):
+        candidate_world.camera.size=candidate_zoom
         candidate_world.camera_focus=desired_focus;candidate_world.initial_focus=true;candidate_world.position_camera();changed=true
     return changed
+
+func _body_frame_key(owner:Node3D)->Dictionary:
+    # These are the existing published actor/source owners, never UV/pose ticks.
+    return {"stamp":[owner.get_instance_id(),owner.actor_revision,owner.actor_group,owner.quarter,
+        owner.timeline.resource_revision,owner.world_generation,
+        Play.MediaWarmup.physical(owner.media_warmup).source_revision,owner.source_depth,owner.source_normals,owner.character_light_profile],
+        "loadouts":owner.sampled_loadouts,"staged":owner.sampled_staged_ids}
+
+static func _same_body_frame(first:Dictionary,second:Dictionary)->bool:
+    return not first.is_empty() and first.stamp==second.stamp \
+        and is_same(first.loadouts,second.loadouts) and is_same(first.staged,second.staged)
+
+func _prepared_body_frame(owner:Node3D,key:Dictionary)->Dictionary:
+    # Cached owner facts only. Wait for actual membership/admission; framing
+    # cannot request media, advance preparation or inspect unpublished nodes.
+    if owner.world_revision<0 or owner.world_revision!=owner.timeline.world_revision \
+        or owner.actor_revision!=owner.timeline.revision or owner.rotation_pending() \
+        or not owner.component_renderer.ready or owner.timeline.waiting_for_world \
+        or owner.timeline.waiting_for_media:return {}
+    var bounds:Variant=ViewportLayout.body_bounds(owner)
+    var frame:Dictionary={"key":key,"size":owner.camera.size,"focus":owner.camera_focus}
+    if bounds!=null:frame.merge(ViewportLayout.body_frame(owner.camera,owner.get_viewport().size,bounds,frame.focus,frame.size),true)
+    return frame
+
+func _manual_camera_view()->void:
+    # A wheel/pan during asynchronous installation owns the pending view too.
+    automatic_view=false;candidate_automatic_view=false;camera_input_seen=true
+
+func _frame_displayed_bodies()->void:
+    if not automatic_view:return
+    if not follow_actor_id.is_empty():
+        if not automatic_frame_key.is_empty():automatic_frame_key={}
+        return
+    var key:Dictionary=_body_frame_key(world)
+    if _same_body_frame(automatic_frame_key,key):return
+    var frame:Dictionary=_prepared_body_frame(world,key)
+    if frame.is_empty():return
+    automatic_frame_key=key
+    if is_equal_approx(world.camera.size,frame.size) and world.camera_focus.is_equal_approx(frame.focus):return
+    world.camera.size=frame.size;world.camera_focus=frame.focus;world.initial_focus=true;world.position_camera()
 
 func _process(_delta: float) -> void:
     if Time.get_ticks_msec()>=fps_update_ms:
@@ -1006,6 +1065,7 @@ func _process(_delta: float) -> void:
         world.camera_focus=desired_focus;world.position_camera()
     if preparing_loop and (not loop_enabled or world.timeline.paused or prepared_loop_range!=Vector2(loop_start,loop_end)):_cancel_loop_preparation()
     ViewportLayout.resize(viewport,world.camera,preview.size)
+    _frame_displayed_bodies()
     _sync_listener(world)
     if loader!=null and not loader.is_alive():
         var result=loader.wait_to_finish();loader=null
@@ -1128,6 +1188,18 @@ func _candidate_frame_ready(view_changed:bool)->bool:
         return false
     var ready:bool=candidate_world.playback_prepared()
     preparation_measurement.candidate_gate="ready" if ready else "playback_not_prepared"
+    if ready and candidate_automatic_view and follow_actor_id.is_empty():
+        var key:Dictionary=_body_frame_key(candidate_world)
+        if not _same_body_frame(candidate_frame_key,key):
+            var frame:Dictionary=_prepared_body_frame(candidate_world,key)
+            if frame.is_empty():return ready # Framing never adds a source-admission hold.
+            candidate_frame_key=key
+            if not is_equal_approx(candidate_world.camera.size,frame.size) or not candidate_world.camera_focus.is_equal_approx(frame.focus):
+                candidate_world.camera.size=frame.size;candidate_world.camera_focus=frame.focus
+                candidate_world.initial_focus=true;candidate_world.position_camera()
+                preparation_measurement.candidate_gate="automatic_body_frame"
+                # The existing publication gate observes the next ordinary draw.
+                return false
     return ready
 
 func _report_publication(first:bool)->void:
@@ -1226,9 +1298,11 @@ func _preview_input(event: InputEvent) -> void:
     if event is InputEventMouseButton:
         preview.grab_focus()
         if event.pressed and event.button_index in [MOUSE_BUTTON_WHEEL_UP,MOUSE_BUTTON_WHEEL_DOWN]:
+            _manual_camera_view()
             world.camera.size=clampf(world.camera.size*(.9 if event.button_index==MOUSE_BUTTON_WHEEL_UP else 1.1),3,100)
             world.position_camera(); accept_event()
     elif event is InputEventMouseMotion and event.button_mask & MOUSE_BUTTON_MASK_MIDDLE:
+        _manual_camera_view()
         follow_actor_id=""
         var factor=world.camera.size/maxf(1,preview.size.y)
         world.camera_focus -= (world.camera.basis.x*event.relative.x-world.camera.basis.y*event.relative.y)*factor

@@ -14,6 +14,7 @@ var require_authored_action_bodies:bool=false
 var required_action_bodies:Array=[]
 ## Optional requirements from this exact original scenario; ordinary callers stay unchanged.
 var required_grant_sources:Array=[]
+var required_native_results:Array=[]
 var body_geometry_rows:Dictionary={}
 func _initialize()->void:run.call_deferred()
 func register_case(studio:Control,record:Dictionary)->void:
@@ -665,6 +666,80 @@ func grant_source_witness(world:Node,index:Dictionary,handle:Dictionary,witness:
         "effect_clip":component.lifecycle_phases[phase].id,
         "scope":"Actual acknowledged bounded native draw with exact canonical grant/recipient and lifecycle phase; not a final-scene pixel difference or artwork approval."}
 
+## Optional exact originals for this invocation; no source/owner is synthesized.
+func _native_result_fields(actual:Dictionary,expected:Dictionary)->bool:
+    for field in expected:
+        if not actual.has(field) or actual[field]!=expected[field]:return false
+    return true
+
+## The literal oracle was independently saved from the unchanged public
+## result/owner nodes; do not derive it from the components being observed.
+func recorded_native_results(index:Dictionary,record:Dictionary,requirements:Array)->Array:
+    var result:Array=[]
+    for requirement in requirements:
+        var same:bool=ProjectSettings.globalize_path(requirement.journal).replace("\\","/")==ProjectSettings.globalize_path(index.directory).replace("\\","/")
+        for field in ["commit","protocol_version","player_schema_version","schema_digest"]:
+            same=same and record.capture_engine.get(field)==requirement.capture_engine.get(field)
+        check(same,record.id+": result requirement preserves exact original journal and captured producer")
+        if same:result.append(requirement.duplicate(true))
+    return result
+
+func native_result_witness(world:Node,handle:Dictionary,witness:Dictionary)->Dictionary:
+    var component:Dictionary=handle.component
+    var diagnostic:Dictionary=world.component_renderer.native_spells.diagnostics.get(component.id,{})
+    var bindings:Dictionary=diagnostic.get("input_bindings",{})
+    if witness.get("id")!=component.id or witness.get("status")!="rendered" or int(witness.get("frame",-1))<0 \
+        or float(witness.get("age_ms",-1.0))<0.0 or not handle.get("rendered_once",false) \
+        or float(handle.get("drawn_time",-1.0))!=float(handle.get("sample_time",-2.0)) \
+        or float(handle.get("sample_time",-1.0))!=float(handle.get("requested_time",-2.0)) \
+        or int(handle.get("drawn_frame",-1))<0 \
+        or not handle.root.is_visible_in_tree() or diagnostic.get("status")!="rendered" \
+        or not diagnostic.get("submitted_bounds",false) or not bindings.get("unavailable",{}).is_empty():return {}
+    var operands:Array=[]
+    if not component.get("native_constructor_inputs",[]).is_empty():
+        # Actual current Constructed occurrence parameters, already passed to
+        # its constructor; no getter/sample/setter/provider is invoked here.
+        operands=handle.occurrence.parameters.get("operands",[]).duplicate(true)
+    return {"clip":component.native_clip.id,"evidence":component.get("native_constructor_evidence",component.get("native_input_evidence",{})).duplicate(true),
+        "component_id":component.id,"source_id":component.get("source_id",""),"source_event_uuid":component.get("source_event_uuid",""),
+        "source_lineage":component.get("source_lineage",""),"actor_uuid":component.get("actor_uuid",""),"target_uuid":component.get("target_uuid",""),
+        "condition_uuid":component.get("condition_uuid"),"spatial_effect_uuid":component.get("spatial_effect_uuid"),
+        "condition_response":component.get("condition_response",{}).duplicate(true),"witness_trigger":witness.duplicate(true),
+        "acknowledged_age_ms":float(handle.drawn_time)*1000.0,"acknowledged_frame":int(handle.drawn_frame),
+        "declared_inputs":Array(handle.clip.get("inputs",[])),"input_bindings":bindings.duplicate(true),
+        "input_packets":handle.get("native_input_packets",{}).duplicate(true),"constructor_operands":operands,
+        "component_constructor_inputs":component.get("native_constructor_inputs",[]).duplicate(true),
+        "submitted_bounds":true,"result_witness":true,
+        "scope":"Actual existing postdraw acknowledgement/declared operands; no isolated framebuffer pixels or human artwork approval."}
+
+func verify_native_results(label:String,observed:Dictionary)->void:
+    for requirement in required_native_results:
+        var matches:Array=observed.values().filter(func(row):return row.get("result_witness",false) and row.clip==requirement.clip \
+            and _native_result_fields(row.evidence,requirement.evidence))
+        check(matches.size()==1,label+": exact positive original result has one submitted native source witness: "+str(requirement.result_occurrence))
+        if matches.size()!=1:continue
+        var row:Dictionary=matches[0]
+        check(row.source_id==requirement.source_id and str(row.source_event_uuid)==str(requirement.result_occurrence) \
+            and str(row.source_lineage)==str(requirement.result_lineage) and row.actor_uuid==requirement.actor_uuid \
+            and row.target_uuid==requirement.target_uuid,label+": native source keeps the exact result/lineage/receiving actor")
+        check(row.declared_inputs==requirement.declared_inputs,label+": witness uses the selected source's actual declared input contract")
+        if requirement.owner_kind=="effective_handler":
+            check(Recording.Journal.Protocol._equal(row.evidence.get("attribution",{}),requirement.attribution),label+": drawn passive keeps its exact real effective-handler/emitted-result attribution")
+        else:
+            var key:String="condition_uuid" if requirement.owner_kind=="condition" else "spatial_effect_uuid"
+            check(row.get(key)==requirement.owner_uuid and _native_result_fields(row.condition_response,requirement.response_evidence),
+                label+": drawn response retains the exact captured public owner and positive result")
+        if requirement.has("constructor_values"):
+            var operands:Array=row.constructor_operands.filter(func(operand):return operand.component_path==requirement.constructor_component_path and operand.get("input_field","").is_empty())
+            check(row.constructor_operands==row.component_constructor_inputs and operands.size()==1 \
+                and _native_result_fields(operands[0].values,requirement.constructor_values),label+": actual constructed source operands preserve original identities")
+            check(_native_result_fields(row.input_packets.get("event_input",{}),requirement.event_input) \
+                and ["lease_input","event_input","recipient_geometry","targets","owner_visibility"].all(func(channel):return channel in row.input_bindings.get("supplied",[])),
+                label+": actual declared setters received the exact positive event and required receiving inputs")
+        else:
+            check(row.constructor_operands.is_empty() and row.component_constructor_inputs.is_empty() and row.input_packets.is_empty(),
+                label+": inputless Incense receiving source has no invented constructor/event/lease input")
+
 func play_once(studio:Control,label:String,source_uses:Array=[],item_effects:Array=[])->void:
     var failures_before:int=failures.size()
     studio.loop_enabled=false;studio._play_study()
@@ -675,6 +750,7 @@ func play_once(studio:Control,label:String,source_uses:Array=[],item_effects:Arr
     var deadline=Time.get_ticks_msec()+expected_play_ms+45000
     var next_sample=0.0;var frames=0;var longest=0.0;var last=Time.get_ticks_usec()
     var observed_native:Dictionary={};var observed_sources:Dictionary={}
+    var native_result_diagnostics:Dictionary={}
     var observed_items:Dictionary={}
     var observed_grants:Dictionary={}
     var observed_action_draws:Dictionary={}
@@ -692,12 +768,38 @@ func play_once(studio:Control,label:String,source_uses:Array=[],item_effects:Arr
         var timeline=studio.world.timeline
         var native=studio.world.component_renderer.native_spells
         if not required_action_bodies.is_empty():observed_action_bodies(studio.world,required_action_bodies,observed_action_draws)
+        if not required_native_results.is_empty():
+            for handle in native.handles.values():
+                var component:Dictionary=handle.component
+                if not required_native_results.any(func(requirement):return requirement.clip==component.native_clip.id):continue
+                var id:String=str(component.id)
+                var visible:bool=is_instance_valid(handle.get("root")) and handle.root.is_visible_in_tree()
+                # Keep actual later hidden refusals as well as visible cuts;
+                # unchanged inactive diagnostics must not overwrite that cut.
+                var diagnostic:Dictionary=native.diagnostics.get(id,{})
+                if native_result_diagnostics.has(id) and not visible and (diagnostic.is_empty() or diagnostic==native_result_diagnostics[id].diagnostic):continue
+                if native_result_diagnostics.size()>=4 and not native_result_diagnostics.has(id):continue
+                native_result_diagnostics[id]={"component_id":id,"clip":component.native_clip.id,
+                    "source_event_uuid":component.get("source_event_uuid",""),"source_lineage":component.get("source_lineage",""),
+                    "evidence":component.get("native_constructor_evidence",component.get("native_input_evidence",{})).duplicate(true),
+                    "display_ms":timeline.display_ms,"root_visible":visible,"baked":handle.get("baked",false),
+                    "effect_kind":handle.get("effect_kind",""),"effect_approach_id":handle.get("effect_approach_id",""),
+                    "sample_time":handle.get("sample_time",-1.0),"requested_time":handle.get("requested_time",-1.0),
+                    "drawn_time":handle.get("drawn_time",-1.0),"drawn_frame":handle.get("drawn_frame",-1),
+                    "rendered_once":handle.get("rendered_once",false),"error":handle.get("error",""),
+                    "has_rendered_witness":native.witnesses.any(func(witness):return witness.id==id and witness.status=="rendered"),
+                    "diagnostic":diagnostic.duplicate(true),
+                    "snapshot_policy":"Latest visible or changed nonempty diagnostic cut, otherwise first sighting; at most four exact required-source candidates."}
         for witness in native.witnesses:
             if witness.status!="rendered" or observed_native.has(witness.id) or not native.handles.has(witness.id):continue
             var component:Dictionary=native.handles[witness.id].component
             var actual:Dictionary=component.get("native_constructor_evidence",component.get("native_input_evidence",{}))
             if actual.is_empty():continue
-            observed_native[witness.id]={"clip":component.native_clip.id,"evidence":actual}
+            if required_native_results.any(func(requirement):return requirement.clip==component.native_clip.id):
+                var captured:Dictionary=native_result_witness(studio.world,native.handles[witness.id],witness)
+                if captured.is_empty():continue
+                observed_native[witness.id]=captured
+            else:observed_native[witness.id]={"clip":component.native_clip.id,"evidence":actual}
         if not required_grant_sources.is_empty():
             for witness in native.witnesses:
                 if not native.handles.has(witness.id):continue
@@ -794,8 +896,9 @@ func play_once(studio:Control,label:String,source_uses:Array=[],item_effects:Arr
                 label+": depleted grant has no canonical pool owner, retained lifecycle or native handle after its actual source return")
     for requirement in required_action_bodies:
         check(observed_action_draws.has(requirement.behavior_id),label+": actual selected intrinsic body reaches a submitted visible original binding: "+str(requirement.behavior_id)+" "+str(requirement.clip))
+    verify_native_results(label,observed_native)
     if require_body_geometry:check(not body_geometry_rows.is_empty(),label+": at least one actual visible source-declared body has geometry preservation proof")
-    evidence.append({"case":label,"frames":frames,"functional_max_frame_ms_including_oracle":longest,"diagnostics":studio.replay_diagnostics(),"audio_primary":studio.world.component_renderer.audio.diagnostics(),"observed_native":observed_native,
+    evidence.append({"case":label,"frames":frames,"functional_max_frame_ms_including_oracle":longest,"diagnostics":studio.replay_diagnostics(),"audio_primary":studio.world.component_renderer.audio.diagnostics(),"observed_native":observed_native,"required_native_results":required_native_results,"native_result_diagnostics":native_result_diagnostics,
         "required_body_geometry":require_body_geometry,"observed_body_geometry":body_geometry_rows.values() if require_body_geometry else [],
         "required_action_bodies":required_action_bodies,"observed_action_bodies":observed_action_draws,
         "required_native_sources":source_uses,"observed_native_sources":observed_sources,"required_item_effects":item_effects,"observed_item_surfaces":observed_items,"required_grant_sources":required_grant_sources,"observed_grant_sources":observed_grants,"expected_playback_ms":expected_play_ms,"preparation_allowance_ms":45000})

@@ -500,12 +500,13 @@ func sample(world:Node,components:Array,frame_seconds:float)->void:
                 _unavailable(component,"native_input_unavailable:"+",".join(reasons),input_bindings)
                 continue
             if not input_bindings.get("pending",{}).is_empty():
-                # Withdrawing actor_context suspends its pending GPU captures.
-                # Hide only the output while this exact admitted draw completes.
+                # Keep the exact occurrence while its owned optical measurement
+                # or history draw completes. No missing operand becomes ready.
                 handle.root.hide();handle.rendered_once=false;ready=false
-                _pending(component,"history_capture_draw_pending")
+                var history_pending:bool=input_bindings.pending.has("actor_context")
+                _pending(component,"history_capture_draw_pending" if history_pending else "native_input_preparing")
                 diagnostics[id].input_bindings=input_bindings
-                diagnostics[id].history_capture=Inputs.capture_status(handle)
+                if history_pending:diagnostics[id].history_capture=Inputs.capture_status(handle)
                 continue
         if handle.get("baked",false) and not handle.has("emission_stop_set"):
             Baked.stop_emission(handle,_emission_stop(cue));handle.emission_stop_set=true

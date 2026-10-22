@@ -3,6 +3,7 @@ extends "res://tests/studio_replay_native_checks.gd"
 ## remains independent of the current engine and rendered-output qualification.
 const CaseLibrary=preload("res://studio/case_library.gd")
 const Authoring=preload("res://presentation/authoring.gd")
+var native_result_cases:Dictionary={}
 const COHORT=["action.move/ordinary","spell.haste/lifecycle","spell.fire_bolt/hit","spell.fireball/area",
     "action.hide/lifecycle","action.attack/death","interaction.door/entry","spell.shield/reaction"]
 
@@ -28,6 +29,11 @@ func run()->void:
     for argument in OS.get_cmdline_user_args():
         if argument.begins_with("--only-case="):
             wanted=Array(argument.trim_prefix("--only-case=").split(",",false));subset_requested=true
+    for argument in OS.get_cmdline_user_args():
+        if argument.begins_with("--native-result-requirements="):
+            var data:Variant=JSON.parse_string(FileAccess.get_file_as_string(argument.trim_prefix("--native-result-requirements=")))
+            check(data is Dictionary and not data.get("cases",{}).is_empty(),"Explicit native result requirements contain actual original cases")
+            if data is Dictionary:native_result_cases=data.get("cases",{})
     var selected:Array=[];var case_results:Array=[]
     for id in wanted:
         var first_failure:int=failures.size()
@@ -107,6 +113,10 @@ func replay_case(studio:Control,record:Dictionary,all_spells:bool)->bool:
     var item_effects:Array=scenario.get("required_item_effects",[])
     required_grant_sources=scenario.get("required_grant_sources",[])
     required_action_bodies=authored_action_bodies(studio.index,scenario,record.id) if require_authored_action_bodies else []
+    required_native_results=[]
+    if not native_result_cases.is_empty():
+        check(native_result_cases.has(record.id) and not native_result_cases[record.id].is_empty(),record.id+": explicit native-result cohort has a nonempty independent original requirement")
+        required_native_results=recorded_native_results(studio.index,record,native_result_cases.get(record.id,[]))
     await play_once(studio,record.id,source_uses,item_effects)
     if record.id=="action.class.cleric.preserve_life/recipients":
         var observed:Dictionary=evidence.back().get("observed_native",{})

@@ -223,7 +223,7 @@ static func admitted_images(world:Node,path:String,slot:String)->Dictionary:
 
 func _capture(world:Node,actor:String,slots:Array,priority:bool=true)->Dictionary:
     poll()
-    var result:Dictionary={"selected":[],"revision":[],"pose_key":[],"origin":Vector3.ZERO,"reason":"actor_not_displayed"}
+    var result:Dictionary={"selected":[],"revision":[],"pose_key":[],"origin":Vector3.ZERO,"pending":false,"reason":"actor_not_displayed"}
     var visual:Dictionary=world.visual_actors.get(actor,{})
     if visual.is_empty() or not visual.get("valid",false):return result
     var row:Dictionary=visual.get("row",{})
@@ -269,13 +269,17 @@ func _capture(world:Node,actor:String,slots:Array,priority:bool=true)->Dictionar
                 lead.append({"key":_source_key(entry.texture_path,world.character_light_profile,images,next_pose),"images":images,"pose":next_pose})
     for candidate in lead:_request(candidate.key,candidate.images,candidate.pose,false)
     _start()
-    result.reason="" if result.selected.all(func(row):return sources.has(row.key)) else "surface_source_preparing"
+    var prepared:bool=result.selected.all(func(row):return sources.has(row.key))
+    # Only an exact source pose already owned by this measurement queue is
+    # pending. Missing actor/source/registration remains a real unavailable.
+    result.pending=not prepared and result.selected.all(func(row):return sources.has(row.key) or jobs.has(row.key) or pending.has(row.key))
+    result.reason="" if prepared else "surface_source_preparing"
     return result
 
 func sample(world:Node,actor:String,slots:Array=BODY_SLOTS,region:Dictionary={})->Dictionary:
     var captured:Dictionary=_capture(world,actor,slots)
-    var result:Dictionary={"actor":actor,"actor_uuid":actor,"entity_uuid":actor,"points":[],"origin":Vector3.ZERO,"pose_key":[],"gpu_geometry_key":[],"ready":false,"reason":"actor_not_displayed"}
-    result.reason=captured.reason;result.origin=captured.origin;result.pose_key=captured.pose_key
+    var result:Dictionary={"actor":actor,"actor_uuid":actor,"entity_uuid":actor,"points":[],"origin":Vector3.ZERO,"pose_key":[],"gpu_geometry_key":[],"ready":false,"pending":false,"reason":"actor_not_displayed"}
+    result.reason=captured.reason;result.pending=captured.pending;result.origin=captured.origin;result.pose_key=captured.pose_key
     if not captured.reason.is_empty():return result
     var selected:Array=captured.selected;var revision:Array=captured.revision;var origin:Vector3=captured.origin
     var owner_key:Array=[actor,slots,region.get("socket",""),region.get("radius",0.0)]

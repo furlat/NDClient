@@ -288,10 +288,11 @@ static func build(cache:Dictionary={})->Dictionary:
             _native_uses(entry,binding.get("effect_cues",[]),str(binding.get("source",entry.source)),str(id))
         entries.append(entry)
     var characters:SourceRoot=load("res://authoring/characters.tres")
+    var body_index:Resource=BodySources.index(cache)
     for section in [["rigs","rig"],["characters","creature_rig"]]:
         for id in characters.sections.get(section[0],{}):
             var source:String=characters.sections[section[0]][id]
-            var owner:Dictionary=Requirements.owner(section[1],id,source,{})
+            var owner:Dictionary=_creature_rig_requirement(id,source,body_index,characters.sections.get("rigs",{})) if section[1]=="creature_rig" else Requirements.owner(section[1],id,source,{})
             entries.append({"id":section[1]+":"+id,"label":owner.label,"group":"Presentation owners · "+section[1].replace("_"," "),"source":source,"requirements":[owner]})
     _gear_owners(entries,characters,cache)
     # Existing context/world owners expose source slots even when no recording
@@ -384,6 +385,25 @@ static func build(cache:Dictionary={})->Dictionary:
     for entry in entries:
         for requirement in entry.requirements:totals[requirement.gap_kind]=totals.get(requirement.gap_kind,0)+1
     return {"entries":entries,"totals":totals,"scope":"Current schema facts, backend IDs, selected presentation owners, active authored operations and source slots. Inspection gaps, unassessed owners, renderer gaps and source availability are separate. Empty optional phases are not automatically missing. No rendering qualification, new VFX or imports."}
+
+## Inspect the admitted body binding, not merely the editable Resource path.
+## Effect-owned and absent mappings keep their separate unresolved owner rows.
+static func _creature_rig_requirement(id:String,source:String,selected:Resource,rig_sources:Dictionary)->Dictionary:
+    var result:Dictionary=Requirements.owner("creature_rig",id,source,{})
+    if selected==null or selected.effect_owned_creatures.has(id):return result
+    var rig:String=selected.root_rig if id=="creature.player.humanoid_body" else str(selected.creature_rigs.get(id,""))
+    var rig_source:String=str(rig_sources.get(rig,""))
+    if rig.is_empty() or not selected.rigs.has(rig) or rig_source.is_empty():return result
+    result.inspection="projected";result.gap_kind="unexercised";result.status="unexercised"
+    result.reason="The admitted character binding selects this exact existing rig through the shared body selector. This is source inspection only; per-occurrence pose/loadout, readiness, rendered output and artwork remain unqualified."
+    result.next_step="Qualify this exact rig binding and its selected body sources on an actual recorded occurrence."
+    result.availability="assigned"
+    result.authored_program={"creature_id":id,"rig":rig,"rig_source":rig_source}
+    result.render_method={"selector":"res://presentation/characters.gd::rig_id",
+        "renderer":"res://presentation/characters.gd::structure","surface":"actual disclosed actor and visual loadout",
+        "source_index":str(ProjectSettings.get_setting("source_data/body_source_index",BodySources.INDEX)),
+        "runtime_binding":"not_examined","prepared":"not_examined","rendered":"not_witnessed","artwork":"unreviewed"}
+    return result
 
 ## Shared source-browser rows for the existing item index. These describe
 ## source methods, not an invented item occurrence or rendered thumbnail.
