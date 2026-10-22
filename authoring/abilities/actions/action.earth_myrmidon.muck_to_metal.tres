@@ -8,7 +8,8 @@
 [sub_resource type="Resource" id="Resource_gal17"]
 script = ExtResource("1_uqn35")
 role = "cast_alt"
-enabled = false
+clip = "Cast"
+rig = "summon.myrmidon.earth"
 hidden_slots = PackedStringArray()
 
 [sub_resource type="Resource" id="Resource_mpnff"]
@@ -22,7 +23,9 @@ script = ExtResource("1_quasq")
 id = "action.earth_myrmidon.muck_to_metal"
 kind = "action"
 family = "summon_form"
+disposition = "authored"
 icon = SubResource("Resource_mpnff")
 body = SubResource("Resource_gal17")
 effect_sources = PackedStringArray()
-notes = "Body role from the server's body kind (self_ability); the rig resolves it to a clip once roles are built (coverage fill)."
+notes = "Select the delivered Earth Cast body for this actual self-directed Muck to Metal ActionFact. The real Transmuted to Steel member retains its independent material/lifetime owner. Keep the supplied fifteen poses at twelve fps with no invented contact, release or socket marker. This is a provisional gesture choice; timing, placement and all artwork remain unreviewed."
+status = "partial"

@@ -8,7 +8,8 @@
 [sub_resource type="Resource" id="Resource_2lu04"]
 script = ExtResource("1_yxb4m")
 role = "attack"
-enabled = false
+clip = "AttackHeavy"
+rig = "summon.myrmidon.earth"
 hidden_slots = PackedStringArray()
 
 [sub_resource type="Resource" id="Resource_vvo3r"]
@@ -24,7 +25,9 @@ script = ExtResource("1_dfxm6")
 id = "action.earth_myrmidon.landing"
 kind = "action"
 family = "summon_form"
+disposition = "authored"
 icon = SubResource("Resource_vvo3r")
 body = SubResource("Resource_2lu04")
 effect_sources = PackedStringArray()
-notes = "Body role from the server's body kind (area_attack); the rig resolves it to a clip once roles are built (coverage fill)."
+notes = "Select the delivered Earth AttackHeavy two-handed chop for the actual Landing child after Burrow's position transfer. This finite ActionFact body does not invent a travel gesture or replace its real recipient results. Keep the supplied fifteen poses at twelve fps with no invented contact, release or socket marker. This is a provisional gesture choice; timing, placement and all artwork remain unreviewed."
+status = "partial"

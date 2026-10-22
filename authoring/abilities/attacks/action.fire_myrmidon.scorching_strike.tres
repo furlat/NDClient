@@ -1,0 +1,64 @@
+[gd_resource type="Resource" script_class="PresentationAttack" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/abilities/body_use.gd" id="body"]
+[ext_resource type="Script" path="res://presentation/source/abilities/attack.gd" id="attack"]
+[ext_resource type="Script" path="res://presentation/source/abilities/attack_variant.gd" id="variant"]
+[ext_resource type="Script" path="res://presentation/source/abilities/feedback.gd" id="feedback"]
+
+[sub_resource type="Resource" id="disabled_body"]
+script = ExtResource("body")
+role = "attack"
+enabled = false
+
+[sub_resource type="Resource" id="selected_body"]
+script = ExtResource("body")
+role = "attack"
+clip = "Attack"
+rig = "summon.myrmidon.fire"
+
+[sub_resource type="Resource" id="selected_variant"]
+script = ExtResource("variant")
+id = "equipped-fire-myrmidon"
+match = {
+"delivery": "melee",
+"kind": "attack",
+"rigIds": ["summon.myrmidon.fire"],
+"weaponSlots": ["MELEE_MAIN"]
+}
+body = SubResource("selected_body")
+
+[sub_resource type="Resource" id="critical_feedback"]
+script = ExtResource("feedback")
+text = "Critical!!"
+colour = Color(1, 0.8, 0, 1)
+
+[sub_resource type="Resource" id="critical_miss_feedback"]
+script = ExtResource("feedback")
+text = "Critical miss"
+colour = Color(0.53333336, 0.53333336, 0.53333336, 1)
+
+[sub_resource type="Resource" id="miss_feedback"]
+script = ExtResource("feedback")
+text = "Miss"
+colour = Color(0.53333336, 0.53333336, 0.53333336, 1)
+
+[resource]
+script = ExtResource("attack")
+id = "action.fire_myrmidon.scorching_strike"
+body = SubResource("disabled_body")
+outcome_texts = Dictionary[String, ExtResource("feedback")]({
+"critical": SubResource("critical_feedback"),
+"critical_miss": SubResource("critical_miss_feedback"),
+"miss": SubResource("miss_feedback")
+})
+variants = Array[ExtResource("variant")]([SubResource("selected_variant")])
+status = "partial"
+unported = {
+"anchors": [],
+"compatibleCueKinds": ["attack"],
+"disposition": "authored",
+"mediaFailurePolicy": "fail_transaction",
+"previewChildCueKinds": ["damage"],
+"projectile": null
+}
+notes = "Select the delivered Fire Attack diagonal cut for the actual Scorching Strike AttackFact, restricted to its own equipped Myrmidon rig. The disabled default supplies no body on another rig. Actual strike results and attributed Fire contacts retain their existing owners. Keep all fifteen supplied poses at twelve fps; no contact, release, weapon-trail or socket measurement is supplied or invented. Contact keeps the existing unmarked-recipe scheduling. The pose choice, placement, timing and all artwork remain unreviewed."

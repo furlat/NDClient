@@ -1,5 +1,16 @@
 # Remaining production content — updated 21 October 2026
 
+**Four-family body follow-through,22October:** all equipped Myrmidons now use
+own supplied9clip rigs; source conversion and13Action/4Attack assignments are
+complete through existing data schemas. Earth Burrow retains real movement/
+Landing ownership; four actual strikes use the exact attack table, with own-
+rig guards and empty authored anchors. No renderer/lighting/scheduler changes.
+Characters/abilities publication has zero errors/two warnings; the affected
+source/dispatch batch passes3suites/20,434assertions. Native body/scale/art
+qualification remains open. See the latest [single backlog](REMAINING_WORK_2026-10-20.md)
+and [actual body inventory](CREATURE_BODY_ASSET_GAPS_2026-10-20.md).
+
+
 **22 October resumed-main-queue update:** structural recovery source is committed
 at23e14a2e; its quiet performance comparison remains R6, not an independent
 content blocker. Installed completea12f retains all1,246 clip IDs/504 default
@@ -20,7 +31,8 @@ and exposes actual audio cue/file/contact/voice policy. Missing historical
 study references stay described/unplayable; they are not invented originals
 or125mandatory capture tasks. Current recording, native output and human review
 remain separate. All art/audio are unreviewed. Latest asset notes distinguish
-new delivered Myrmidon/dragon files from their still-unintegrated client data.
+assigned equipped Myrmidons from the delivered but still-unintegrated dragon
+packet and its absent anatomical mouth data.
 
 
 This is a source/code inventory for the approved migration, after the backend

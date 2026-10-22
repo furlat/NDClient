@@ -16,7 +16,41 @@ all 130 alternative dispositions stay implemented; stale worklists do not
 reopen them. All artwork/audio remain unreviewed. Engine/Factory sources stay
 read-only; no mutable backend/schema upgrade is implied by the new handoff.
 
+## Main queue content batch — four equipped Myrmidon bodies and intrinsic body dispatch
+
+All four existing Myrmidon IDs now select own supplied equipped rigs through
+existing resources.36banks/4,320poses/144PNG preserve sourcecolour,192px cells,
+96/138contact,8facing rows and15frames/12fps. The same prior elemental offline
+conversion produces compatible depth/normals/support with range[-49,92],
+explicit ground0/original profile. No renderer/shader/scheduler/lighting or
+mechanical-size/occupancy change was introduced. Native weapon-only reception,
+bare body variants and optional Water FX were not selected.
+
+Thirteen old Action definitions are now resolved: eight real BaseAction bodies
+select their supplied bank, four actual strike AttackFacts have exact guarded
+PresentationAttack resources, and Earth Burrow stays state-only with real
+PortalTransfer plus Landing child. A wrong rig cannot acquire these strike
+bodies. No new contact/release/socket timestamp or projectile/trail is invented.
+
+Native editor import exits0 with zero errors; combined characters/abilities
+publication has zero errors/two warnings. One affected source/dispatch batch
+passes **3suites /20,434assertions**, natural exits0 and zero unexpected errors.
+The source selector control checks all four exact attack IDs and wrong-rig
+refusal. These are authoring/admission/dispatch controls, not four recorded
+native body gestures, game scale/placement proof or human artwork approval.
+[Grouped receipt](../.runtime/tests/20261022T010912.329680Z/summary.json),
+[exact offline source/coverage](../.runtime/closing-repairs/myrmidon-body-intake/README.md).
+All art/audio remain unreviewed.
+
+The eight Elemental/Myrmidon bodies are source-assigned. Dragon body/depth/
+normals are delivered; its fixed-atlas/view optical origins and independent
+normal/depth reception require bounded client intake, with real mouth sockets
+still absent. Cambion/Deva/Djinni remain the three unidentified own-body
+source deliveries. Those are not new backend/Factory API requests.
+
 ## Main queue resumed — first coherent source/content batch, 22 October
+
+Committed as **56b8d64c** after the affected cohort below.
 
 The complete sealeda12f namespace is installed with82a preserved. Eight mapped
 source choices are assigned through existing resources: four Cloud display
@@ -52,8 +86,9 @@ Source reconciliation keeps already-written event/grant/class/variant and130
 alternative assignments implemented. Actual remaining authoring boundaries
 include authenticated Goblin contact frames, object-target weapon-contact
 placement, and moving/broken door original-face registration; those are not
-new missing backend/Factory APIs. New Myrmidon/dragon deliveries are recorded
-as delivered but not client-integrated, rather than requested again. The
+new missing backend/Factory APIs. At this first checkpoint, Myrmidon/dragon deliveries were recorded
+as delivered but not yet client-integrated; the later Myrmidon batch above
+supersedes that source boundary without requesting the same assets again. The
 three bodies without an identified delivery are Cambion, Deva and Djinni;
 actual Draconic mouth/pose sockets remain distinct from delivered depth/normals.
 [Exact asset/registration handoff](ASSET_AUDIO_REVIEW_2026-10-20.md),
@@ -1434,7 +1469,7 @@ to the engine.
 | Optional Cone native bank — delivered§19 | Complete8dd corrects19 packaged interface identity prefixes, retaining source bytes and ordinary recorded default. | Client optional-approach qualification pending; no automatic activation or weakened identity assertion. [Source proof/delivery](FACTORY_REVIEW_2026-10-20.md#19-rebase-packaged-cone-interface-identities-after-source-relocation). |
 | Default heavy-electric bank — delivered§20 | Installed/source-published8dd corrects both retained default GPU banks in place. Actual7ca fatal receipts and subsequent override-qualified Call/Bolt passes remain scoped to their own sources. | Six temporary static bank overrides and their unused transport are removed, preserving actual area/contact inputs and source clock/art. Bare-default current client proof remains pending. [Exact scope](FACTORY_REVIEW_2026-10-20.md#20-re-export-the-default-heavy-electric-bank-metadata). |
 | Wind Wall observed-cell coverage — delivered§21 | Complete82a supplied the mask-compatible source and it is retained in installeda12f. Current client receiving assignment preserves actual observed/suppressed cells and original source materials. | No outstanding Factory/API request; affected current native/live qualification remains client work. [Original request/delivery](FACTORY_REVIEW_2026-10-20.md#21-wind-wall-debris-needs-current-observed-cell-coverage). |
-| Art/audio | Four elemental bodies are delivered/assigned; four Myrmidons and dragon body/depth/normals are delivered but await client intake. Cambion, Deva and Djinni have no identified own-body delivery. Authentic Draconic mouth/pose sockets remain absent. Sound selections/contact authoring and all human review remain open. | [Body list](CREATURE_BODY_ASSET_GAPS_2026-10-20.md), [audio/art handoff](ASSET_AUDIO_REVIEW_2026-10-20.md). All artwork/audio remains unreviewed. |
+| Art/audio | Four elemental and four equipped Myrmidon bodies are delivered/assigned; dragon body/depth/normals are delivered but await client intake. Cambion, Deva and Djinni have no identified own-body delivery. Authentic Draconic mouth/pose sockets remain absent. Sound selections/contact authoring and all human review remain open. | [Body list](CREATURE_BODY_ASSET_GAPS_2026-10-20.md), [audio/art handoff](ASSET_AUDIO_REVIEW_2026-10-20.md). All artwork/audio remains unreviewed. |
 
 Sleep, the GPU Insect Plague owner, general Counterspell inputs, held-item
 rebinding, historical capture, finite Deafness, Magic/Sacred memberships,

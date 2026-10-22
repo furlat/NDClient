@@ -54,12 +54,15 @@ human review.
 
 The newer explicitly supplied creature packets now include selected dragon
 reconstructed depth/Sprite Fusion Default normals and four actual Myrmidon
-body/geometry/weapon-mask families. They are delivered source inputs awaiting
-client intake, not requests for those assets again. The separate shared indexed-
+body/geometry/weapon-mask families. The four equipped Myrmidon bodies and
+compatible numeric companions are now assigned with their intrinsic body
+recipes; the dragon packet and weapon-only receivers remain separate intake.
+No duplicate asset delivery is requested. The separate shared indexed-
 material dragon ZIP remains a portable **candidate** by its own archived
 handoff, despite its `production-2026-10-22` directory. Current NDClient still
-uses the T-Rex and four arcane-elemental substitutes; mouth registration and
-layout/receiving/caster adaptation remain separate. See the
+uses the T-Rex for the dragon; Myrmidons now use their own equipped rigs.
+Authentic dragon mouth registration and layout/receiving/caster adaptation
+remain separate. See the
 [exact delivered-versus-integrated inventory](CREATURE_BODY_ASSET_GAPS_2026-10-20.md#newer-delivered-files-versus-active-authoring-and-client-intake).
 
 ### Animated door/destruction residue registration — current source boundary, 22 October

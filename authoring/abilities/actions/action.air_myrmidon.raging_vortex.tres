@@ -8,7 +8,8 @@
 [sub_resource type="Resource" id="Resource_kl0k7"]
 script = ExtResource("1_ct1u1")
 role = "cast"
-enabled = false
+clip = "Cast"
+rig = "summon.myrmidon.air"
 hidden_slots = PackedStringArray()
 
 [sub_resource type="Resource" id="Resource_wclue"]
@@ -22,7 +23,9 @@ script = ExtResource("1_eol6t")
 id = "action.air_myrmidon.raging_vortex"
 kind = "action"
 family = "summon_form"
+disposition = "authored"
 icon = SubResource("Resource_wclue")
 body = SubResource("Resource_kl0k7")
 effect_sources = PackedStringArray()
-notes = "Body role from the server's body kind (area_ability); the rig resolves it to a clip once roles are built (coverage fill)."
+notes = "Select the delivered Air Cast body for this actual field-invoking ActionFact. Raging Vortex creates its real spatial owner without moving the actor; the finite body does not replace or duplicate that field. Keep the supplied fifteen poses at twelve fps with no invented contact, release or socket marker. This is a provisional gesture choice; timing, placement and all artwork remain unreviewed."
+status = "partial"

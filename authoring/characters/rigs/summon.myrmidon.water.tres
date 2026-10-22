@@ -1,0 +1,285 @@
+[gd_resource type="Resource" script_class="PresentationRig" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/characters/rig.gd" id="rig"]
+[ext_resource type="Script" path="res://presentation/source/characters/rig_clip.gd" id="clip"]
+[ext_resource type="Script" path="res://presentation/source/characters/body_surface.gd" id="surface"]
+[ext_resource type="Script" path="res://presentation/source/characters/rig_context.gd" id="context"]
+
+[sub_resource type="Resource" id="surface_Idle"]
+script = ExtResource("surface")
+status = "validated_complete"
+encoding = "normal_rgb_depth_byte"
+depth = "art/media/myrmidons/WaterMyrmidon/Idle/depth-affine.png"
+normals = Dictionary[String, String]({"original": "art/media/myrmidons/WaterMyrmidon/Idle/normal-optical.png"})
+normal_profile = "original"
+masks = Dictionary[String, String]({"normal_valid": "art/media/myrmidons/WaterMyrmidon/Idle/support.png", "support": "art/media/myrmidons/WaterMyrmidon/Idle/support.png"})
+depth_range = Vector2(-49, 92)
+depth_limits = PackedFloat64Array(-49.0, 92.0)
+camera_origin = Vector2(96, 138)
+optical_ground_pixels = 0.0
+source = "elemental-expansion-2026-10-22-v1"
+
+[sub_resource type="Resource" id="clip_Idle"]
+script = ExtResource("clip")
+name = "Idle"
+role = "idle"
+source_clip = "Idle"
+frames = 15
+fps = 12.0
+loop = "loop"
+sheets = Dictionary[String, String]({"WaterMyrmidon": "/rigs/summon.myrmidon.water/body/Idle.png"})
+art = Dictionary[String, String]({"body": "art/media/myrmidons/WaterMyrmidon/Idle/color.png", "combined": "art/media/myrmidons/WaterMyrmidon/Idle/color.png"})
+surface = SubResource("surface_Idle")
+
+[sub_resource type="Resource" id="surface_Walk"]
+script = ExtResource("surface")
+status = "validated_complete"
+encoding = "normal_rgb_depth_byte"
+depth = "art/media/myrmidons/WaterMyrmidon/Walk/depth-affine.png"
+normals = Dictionary[String, String]({"original": "art/media/myrmidons/WaterMyrmidon/Walk/normal-optical.png"})
+normal_profile = "original"
+masks = Dictionary[String, String]({"normal_valid": "art/media/myrmidons/WaterMyrmidon/Walk/support.png", "support": "art/media/myrmidons/WaterMyrmidon/Walk/support.png"})
+depth_range = Vector2(-49, 92)
+depth_limits = PackedFloat64Array(-49.0, 92.0)
+camera_origin = Vector2(96, 138)
+optical_ground_pixels = 0.0
+source = "elemental-expansion-2026-10-22-v1"
+
+[sub_resource type="Resource" id="clip_Walk"]
+script = ExtResource("clip")
+name = "Walk"
+role = "walk"
+source_clip = "Walk"
+frames = 15
+fps = 12.0
+loop = "loop"
+sheets = Dictionary[String, String]({"WaterMyrmidon": "/rigs/summon.myrmidon.water/body/Walk.png"})
+art = Dictionary[String, String]({"body": "art/media/myrmidons/WaterMyrmidon/Walk/color.png", "combined": "art/media/myrmidons/WaterMyrmidon/Walk/color.png"})
+surface = SubResource("surface_Walk")
+
+[sub_resource type="Resource" id="surface_AttackHeavy"]
+script = ExtResource("surface")
+status = "validated_complete"
+encoding = "normal_rgb_depth_byte"
+depth = "art/media/myrmidons/WaterMyrmidon/AttackHeavy/depth-affine.png"
+normals = Dictionary[String, String]({"original": "art/media/myrmidons/WaterMyrmidon/AttackHeavy/normal-optical.png"})
+normal_profile = "original"
+masks = Dictionary[String, String]({"normal_valid": "art/media/myrmidons/WaterMyrmidon/AttackHeavy/support.png", "support": "art/media/myrmidons/WaterMyrmidon/AttackHeavy/support.png"})
+depth_range = Vector2(-49, 92)
+depth_limits = PackedFloat64Array(-49.0, 92.0)
+camera_origin = Vector2(96, 138)
+optical_ground_pixels = 0.0
+source = "elemental-expansion-2026-10-22-v1"
+
+[sub_resource type="Resource" id="clip_AttackHeavy"]
+script = ExtResource("clip")
+name = "AttackHeavy"
+role = "attack_heavy"
+source_clip = "AttackHeavy"
+frames = 15
+fps = 12.0
+loop = "once"
+sheets = Dictionary[String, String]({"WaterMyrmidon": "/rigs/summon.myrmidon.water/body/AttackHeavy.png"})
+art = Dictionary[String, String]({"body": "art/media/myrmidons/WaterMyrmidon/AttackHeavy/color.png", "combined": "art/media/myrmidons/WaterMyrmidon/AttackHeavy/color.png"})
+surface = SubResource("surface_AttackHeavy")
+
+[sub_resource type="Resource" id="surface_Hit"]
+script = ExtResource("surface")
+status = "validated_complete"
+encoding = "normal_rgb_depth_byte"
+depth = "art/media/myrmidons/WaterMyrmidon/Hit/depth-affine.png"
+normals = Dictionary[String, String]({"original": "art/media/myrmidons/WaterMyrmidon/Hit/normal-optical.png"})
+normal_profile = "original"
+masks = Dictionary[String, String]({"normal_valid": "art/media/myrmidons/WaterMyrmidon/Hit/support.png", "support": "art/media/myrmidons/WaterMyrmidon/Hit/support.png"})
+depth_range = Vector2(-49, 92)
+depth_limits = PackedFloat64Array(-49.0, 92.0)
+camera_origin = Vector2(96, 138)
+optical_ground_pixels = 0.0
+source = "elemental-expansion-2026-10-22-v1"
+
+[sub_resource type="Resource" id="clip_Hit"]
+script = ExtResource("clip")
+name = "Hit"
+role = "hurt"
+source_clip = "Hit"
+frames = 15
+fps = 12.0
+loop = "once"
+sheets = Dictionary[String, String]({"WaterMyrmidon": "/rigs/summon.myrmidon.water/body/Hit.png"})
+art = Dictionary[String, String]({"body": "art/media/myrmidons/WaterMyrmidon/Hit/color.png", "combined": "art/media/myrmidons/WaterMyrmidon/Hit/color.png"})
+surface = SubResource("surface_Hit")
+
+[sub_resource type="Resource" id="surface_Death"]
+script = ExtResource("surface")
+status = "validated_complete"
+encoding = "normal_rgb_depth_byte"
+depth = "art/media/myrmidons/WaterMyrmidon/Death/depth-affine.png"
+normals = Dictionary[String, String]({"original": "art/media/myrmidons/WaterMyrmidon/Death/normal-optical.png"})
+normal_profile = "original"
+masks = Dictionary[String, String]({"normal_valid": "art/media/myrmidons/WaterMyrmidon/Death/support.png", "support": "art/media/myrmidons/WaterMyrmidon/Death/support.png"})
+depth_range = Vector2(-49, 92)
+depth_limits = PackedFloat64Array(-49.0, 92.0)
+camera_origin = Vector2(96, 138)
+optical_ground_pixels = 0.0
+source = "elemental-expansion-2026-10-22-v1"
+
+[sub_resource type="Resource" id="clip_Death"]
+script = ExtResource("clip")
+name = "Death"
+role = "die"
+source_clip = "Death"
+frames = 15
+fps = 12.0
+loop = "once"
+sheets = Dictionary[String, String]({"WaterMyrmidon": "/rigs/summon.myrmidon.water/body/Death.png"})
+art = Dictionary[String, String]({"body": "art/media/myrmidons/WaterMyrmidon/Death/color.png", "combined": "art/media/myrmidons/WaterMyrmidon/Death/color.png"})
+surface = SubResource("surface_Death")
+
+[sub_resource type="Resource" id="surface_Attack"]
+script = ExtResource("surface")
+status = "validated_complete"
+encoding = "normal_rgb_depth_byte"
+depth = "art/media/myrmidons/WaterMyrmidon/Attack/depth-affine.png"
+normals = Dictionary[String, String]({"original": "art/media/myrmidons/WaterMyrmidon/Attack/normal-optical.png"})
+normal_profile = "original"
+masks = Dictionary[String, String]({"normal_valid": "art/media/myrmidons/WaterMyrmidon/Attack/support.png", "support": "art/media/myrmidons/WaterMyrmidon/Attack/support.png"})
+depth_range = Vector2(-49, 92)
+depth_limits = PackedFloat64Array(-49.0, 92.0)
+camera_origin = Vector2(96, 138)
+optical_ground_pixels = 0.0
+source = "elemental-expansion-2026-10-22-v1"
+
+[sub_resource type="Resource" id="clip_Attack"]
+script = ExtResource("clip")
+name = "Attack"
+role = "attack_1"
+source_clip = "Attack"
+frames = 15
+fps = 12.0
+loop = "once"
+sheets = Dictionary[String, String]({"WaterMyrmidon": "/rigs/summon.myrmidon.water/body/Attack.png"})
+art = Dictionary[String, String]({"body": "art/media/myrmidons/WaterMyrmidon/Attack/color.png", "combined": "art/media/myrmidons/WaterMyrmidon/Attack/color.png"})
+surface = SubResource("surface_Attack")
+
+[sub_resource type="Resource" id="surface_Jab"]
+script = ExtResource("surface")
+status = "validated_complete"
+encoding = "normal_rgb_depth_byte"
+depth = "art/media/myrmidons/WaterMyrmidon/Jab/depth-affine.png"
+normals = Dictionary[String, String]({"original": "art/media/myrmidons/WaterMyrmidon/Jab/normal-optical.png"})
+normal_profile = "original"
+masks = Dictionary[String, String]({"normal_valid": "art/media/myrmidons/WaterMyrmidon/Jab/support.png", "support": "art/media/myrmidons/WaterMyrmidon/Jab/support.png"})
+depth_range = Vector2(-49, 92)
+depth_limits = PackedFloat64Array(-49.0, 92.0)
+camera_origin = Vector2(96, 138)
+optical_ground_pixels = 0.0
+source = "elemental-expansion-2026-10-22-v1"
+
+[sub_resource type="Resource" id="clip_Jab"]
+script = ExtResource("clip")
+name = "Jab"
+role = "attack_2"
+source_clip = "Jab"
+frames = 15
+fps = 12.0
+loop = "once"
+sheets = Dictionary[String, String]({"WaterMyrmidon": "/rigs/summon.myrmidon.water/body/Jab.png"})
+art = Dictionary[String, String]({"body": "art/media/myrmidons/WaterMyrmidon/Jab/color.png", "combined": "art/media/myrmidons/WaterMyrmidon/Jab/color.png"})
+surface = SubResource("surface_Jab")
+
+[sub_resource type="Resource" id="surface_Hook"]
+script = ExtResource("surface")
+status = "validated_complete"
+encoding = "normal_rgb_depth_byte"
+depth = "art/media/myrmidons/WaterMyrmidon/Hook/depth-affine.png"
+normals = Dictionary[String, String]({"original": "art/media/myrmidons/WaterMyrmidon/Hook/normal-optical.png"})
+normal_profile = "original"
+masks = Dictionary[String, String]({"normal_valid": "art/media/myrmidons/WaterMyrmidon/Hook/support.png", "support": "art/media/myrmidons/WaterMyrmidon/Hook/support.png"})
+depth_range = Vector2(-49, 92)
+depth_limits = PackedFloat64Array(-49.0, 92.0)
+camera_origin = Vector2(96, 138)
+optical_ground_pixels = 0.0
+source = "elemental-expansion-2026-10-22-v1"
+
+[sub_resource type="Resource" id="clip_Hook"]
+script = ExtResource("clip")
+name = "Hook"
+role = "attack_3"
+source_clip = "Hook"
+frames = 15
+fps = 12.0
+loop = "once"
+sheets = Dictionary[String, String]({"WaterMyrmidon": "/rigs/summon.myrmidon.water/body/Hook.png"})
+art = Dictionary[String, String]({"body": "art/media/myrmidons/WaterMyrmidon/Hook/color.png", "combined": "art/media/myrmidons/WaterMyrmidon/Hook/color.png"})
+surface = SubResource("surface_Hook")
+
+[sub_resource type="Resource" id="surface_Cast"]
+script = ExtResource("surface")
+status = "validated_complete"
+encoding = "normal_rgb_depth_byte"
+depth = "art/media/myrmidons/WaterMyrmidon/Cast/depth-affine.png"
+normals = Dictionary[String, String]({"original": "art/media/myrmidons/WaterMyrmidon/Cast/normal-optical.png"})
+normal_profile = "original"
+masks = Dictionary[String, String]({"normal_valid": "art/media/myrmidons/WaterMyrmidon/Cast/support.png", "support": "art/media/myrmidons/WaterMyrmidon/Cast/support.png"})
+depth_range = Vector2(-49, 92)
+depth_limits = PackedFloat64Array(-49.0, 92.0)
+camera_origin = Vector2(96, 138)
+optical_ground_pixels = 0.0
+source = "elemental-expansion-2026-10-22-v1"
+
+[sub_resource type="Resource" id="clip_Cast"]
+script = ExtResource("clip")
+name = "Cast"
+role = "cast"
+source_clip = "Cast"
+frames = 15
+fps = 12.0
+loop = "once"
+sheets = Dictionary[String, String]({"WaterMyrmidon": "/rigs/summon.myrmidon.water/body/Cast.png"})
+art = Dictionary[String, String]({"body": "art/media/myrmidons/WaterMyrmidon/Cast/color.png", "combined": "art/media/myrmidons/WaterMyrmidon/Cast/color.png"})
+surface = SubResource("surface_Cast")
+
+[sub_resource type="Resource" id="context_0"]
+script = ExtResource("context")
+role = "movement"
+qualifier = {"kind": "movement", "movement_mode": "walking", "trajectory": "path"}
+clip = "Walk"
+
+[sub_resource type="Resource" id="context_1"]
+script = ExtResource("context")
+role = "movement"
+qualifier = {"kind": "movement", "movement_mode": "flying", "trajectory": "path"}
+clip = "Idle"
+
+[sub_resource type="Resource" id="context_2"]
+script = ExtResource("context")
+role = "forced_movement"
+qualifier = {"kind": "default"}
+clip = "Hit"
+
+[sub_resource type="Resource" id="context_3"]
+script = ExtResource("context")
+role = "death"
+qualifier = {"kind": "default"}
+clip = "Death"
+
+[resource]
+script = ExtResource("rig")
+id = "summon.myrmidon.water"
+pack = "myrmidons"
+variant = "WaterMyrmidon"
+source = "elemental-expansion-2026-10-22-v1"
+cell = Vector2i(192, 192)
+pivot = Vector2(96, 138)
+anchor = Vector2(95.5, 113.0)
+camera_elevation_degrees = 30.0
+direction_order = PackedStringArray("E", "SE", "S", "SW", "W", "NW", "N", "NE")
+slot_order = PackedStringArray("body")
+slot_categories = Dictionary[String, PackedStringArray]({"body": PackedStringArray("WaterMyrmidon")})
+clips = Array[ExtResource("clip")]([SubResource("clip_Idle"), SubResource("clip_Walk"), SubResource("clip_AttackHeavy"), SubResource("clip_Hit"), SubResource("clip_Death"), SubResource("clip_Attack"), SubResource("clip_Jab"), SubResource("clip_Hook"), SubResource("clip_Cast")])
+fallbacks = Dictionary[String, String]({"Attack1": "Attack", "Attack2": "AttackHeavy", "Attack3": "Jab", "Attack4": "Hook", "Die": "Death", "TakeDamage": "Hit", "Run": "Walk", "Rolling": "Walk", "CrouchWalk": "Walk", "Idle2": "Idle", "Special1": "Cast"})
+contexts = Array[ExtResource("context")]([SubResource("context_0"), SubResource("context_1"), SubResource("context_2"), SubResource("context_3")])
+shadow = "generated"
+hold_clips = PackedStringArray("Death", "Die")
+status = "partial"
+notes = "Own equipped Myrmidon body: all9 actual source bank names,8directions,15frames12fps and fixed192cell/contact96,138/elevation30. Raw source colour is unchanged; compatibility affine-depth/optical-normal/support derives only from actual canonical geometry. Original-only profile and ground0 are explicit. The generic body-effect anchor is the median centre of120 Idle alpha bounds, not sprite registration, a hand/head/mouth socket or an event marker. Native source motion aliases remain the delivered per-action source records; no bank is collapsed from summary prose. Existing role fallbacks are explicit; no flying attack, jump, swimming or contact/release timestamp is invented. Death holds actual supplied final pixels, including equipment/debris where present. The equipped weapon is baked body artwork; its part masks are not a selected weapon-only VFX receiver. Mechanical size/occupancy and actor visual scale remain authoritative. Native output, placement and all art/audio remain unreviewed."

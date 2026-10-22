@@ -9,6 +9,7 @@ const Builder = preload("res://tools/presentation_build/abilities.gd")
 const Common = preload("res://tools/presentation_build/common.gd")
 const Characters = preload("res://presentation/characters.gd")
 const BodySources = preload("res://presentation/body_sources.gd")
+const Authoring = preload("res://presentation/authoring.gd")
 var checks = 0
 var failures: Array = []
 
@@ -192,6 +193,24 @@ func _initialize() -> void:
     for path in ["catalog/condition_recipes.json", "catalog/body_action_recipes.json"]:
         DirAccess.remove_absolute(build_root.path_join("docs").path_join(path.get_basename() + ".res"))
     DirAccess.remove_absolute(build_root.path_join("native_spells/current"))
+    # A strike's AttackFact selects the attack table, not the ActionFact
+    # body table. Exercise the public selector with the new exact native IDs.
+    for row in [["air", "electrified_flail", "Attack"], ["earth", "grounded_thunder", "AttackHeavy"],
+        ["fire", "scorching_strike", "Attack"], ["water", "hiemal_strike", "Jab"]]:
+        var behavior:String="action."+row[0]+"_myrmidon."+row[1]
+        var fact:Dictionary={"behavior_id":behavior,"weapon_slot":"MELEE_MAIN","attack_outcome":"Hit",
+            "source_item_id":null,"attack_source_kind":"unarmed","damage_types":[]}
+        var actor:Dictionary={"creature_content_ref":"content.neurodragon:creature:creature.spell."+row[0]+"_myrmidon@1"}
+        var input_before:PackedByteArray=var_to_bytes([fact,actor])
+        var selected:Dictionary=Authoring.attack(fact,actor,{})
+        check(selected.get("actor",{}).get("enabled",false) and selected.actor.clip==row[2]
+            and selected.get("selected_variant","")=="equipped-"+row[0]+"-myrmidon",
+            behavior+": exact AttackFact selects its own supplied body instead of an absent ActionFact recipe")
+        check(selected.get("anchors",[])==[] and var_to_bytes([fact,actor])==input_before,
+            behavior+": body selection adds no contact markers and preserves the supplied input")
+        var other:Dictionary=Authoring.attack(fact,{"creature_content_ref":"content.neurodragon:creature:creature.generic_caster@1"},{})
+        check(not other.get("actor",{}).get("enabled",true) and not other.has("selected_variant"),
+            behavior+": another rig cannot acquire the equipped Myrmidon gesture")
     var report = {"checks":checks, "failures":failures, "scope":"Native source selection, installed crouch sheets, exact provenance and candidate reload isolation; no pixel-rendering claim."}
     FileAccess.open("res://generated/native_authoring_checks.json", FileAccess.WRITE).store_string(JSON.stringify(report, "  "))
     print("NATIVE_AUTHORING ", JSON.stringify(report))

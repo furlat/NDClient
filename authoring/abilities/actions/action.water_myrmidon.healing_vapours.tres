@@ -8,7 +8,8 @@
 [sub_resource type="Resource" id="Resource_vcbpy"]
 script = ExtResource("1_td0c1")
 role = "cast"
-enabled = false
+clip = "Cast"
+rig = "summon.myrmidon.water"
 hidden_slots = PackedStringArray()
 
 [sub_resource type="Resource" id="Resource_5qlyw"]
@@ -22,7 +23,9 @@ script = ExtResource("1_revgq")
 id = "action.water_myrmidon.healing_vapours"
 kind = "action"
 family = "summon_form"
+disposition = "authored"
 icon = SubResource("Resource_5qlyw")
 body = SubResource("Resource_vcbpy")
 effect_sources = PackedStringArray()
-notes = "Body role from the server's body kind (area_ability); the rig resolves it to a clip once roles are built (coverage fill)."
+notes = "Select the delivered Water Cast body for this actual Healing Vapours ActionFact. Real healing or Poison results and WetSurface ownership remain separate; no successful healing is inferred from the gesture. Keep the supplied fifteen poses at twelve fps with no invented contact, release or socket marker. This is a provisional gesture choice; timing, placement and all artwork remain unreviewed."
+status = "partial"

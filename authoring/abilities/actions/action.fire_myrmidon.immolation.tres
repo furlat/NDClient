@@ -8,7 +8,8 @@
 [sub_resource type="Resource" id="Resource_igg1f"]
 script = ExtResource("1_dvhrm")
 role = "cast_alt"
-enabled = false
+clip = "Cast"
+rig = "summon.myrmidon.fire"
 hidden_slots = PackedStringArray()
 
 [sub_resource type="Resource" id="Resource_p3ll1"]
@@ -22,7 +23,9 @@ script = ExtResource("1_qfqqt")
 id = "action.fire_myrmidon.immolation"
 kind = "action"
 family = "summon_form"
+disposition = "authored"
 icon = SubResource("Resource_p3ll1")
 body = SubResource("Resource_igg1f")
 effect_sources = PackedStringArray()
-notes = "Body role from the server's body kind (self_ability); the rig resolves it to a clip once roles are built (coverage fill)."
+notes = "Select the delivered Fire Cast body for this actual self-directed Immolation ActionFact. Its real concentration and HasteEffect memberships retain their independent ownership. Keep the supplied fifteen poses at twelve fps with no invented contact, release or socket marker. This is a provisional gesture choice; timing, placement and all artwork remain unreviewed."
+status = "partial"

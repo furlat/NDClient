@@ -8,7 +8,8 @@
 [sub_resource type="Resource" id="Resource_doohe"]
 script = ExtResource("1_gbowg")
 role = "attack"
-enabled = false
+clip = "Cast"
+rig = "summon.myrmidon.water"
 hidden_slots = PackedStringArray()
 
 [sub_resource type="Resource" id="Resource_2dtvx"]
@@ -22,7 +23,9 @@ script = ExtResource("1_jpq6h")
 id = "action.water_myrmidon.explosive_icicle"
 kind = "action"
 family = "summon_form"
+disposition = "authored"
 icon = SubResource("Resource_2dtvx")
 body = SubResource("Resource_doohe")
 effect_sources = PackedStringArray()
-notes = "Body role from the server's body kind (area_attack); the rig resolves it to a clip once roles are built (coverage fill)."
+notes = "Select the delivered Water Cast body for this actual ranged Explosive Icicle ActionFact. Its real allocated attack children and Cold/contact/field results retain their independent ownership; this body does not fabricate a projectile or release socket. Keep the supplied fifteen poses at twelve fps with no invented contact, release or socket marker. This is a provisional gesture choice; timing, placement and all artwork remain unreviewed."
+status = "partial"
