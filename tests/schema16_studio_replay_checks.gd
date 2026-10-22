@@ -13,7 +13,20 @@ func run()->void:
     require_body_geometry="--require-body-geometry" in OS.get_cmdline_user_args()
     require_authored_action_bodies="--require-authored-action-bodies" in OS.get_cmdline_user_args()
     DirAccess.make_dir_recursive_absolute("res://.captures/studio/replay-comparison")
-    var records:Array=CaseLibrary.read();var wanted:Array=COHORT.duplicate()
+    var case_index:String="";var primary_perspective:String=""
+    for argument in OS.get_cmdline_user_args():
+        if argument.begins_with("--case-index="):case_index=argument.trim_prefix("--case-index=")
+        elif argument.begins_with("--primary-perspective="):primary_perspective=argument.trim_prefix("--primary-perspective=")
+    var records:Array=[]
+    if case_index.is_empty():records=CaseLibrary.read()
+    else:
+        var supplied:Variant=JSON.parse_string(FileAccess.get_file_as_string(case_index))
+        check(supplied is Dictionary and supplied.get("cases") is Array and not supplied.cases.is_empty(),
+            "Explicit case index contains preserved original recordings: "+case_index)
+        if supplied is Dictionary and supplied.get("cases") is Array:
+            var snapshot:Dictionary=JSON.parse_string(FileAccess.get_file_as_string(CaseLibrary.SERVER_IDS))
+            records=CaseLibrary.records(supplied,snapshot)
+    var wanted:Array=COHORT.duplicate()
     var all_spells:bool="--all-spells" in OS.get_cmdline_user_args()
     var production_inventory:Array=[];var excluded:Array=[];var subset_requested:bool=false
     if all_spells:
@@ -43,7 +56,12 @@ func run()->void:
             case_results.append({"case":id,"passed":false,"stage":"selection","failures":failures.slice(first_failure)})
             continue
         check(matching[0].ready,id+": real recording ready: "+str(matching[0].get("reason","")))
-        if matching[0].ready:selected.append(matching[0])
+        if matching[0].ready:
+            var record:Dictionary=matching[0]
+            for position in record.perspectives.size():
+                if str(record.perspectives[position].id)==primary_perspective:
+                    record.perspectives.push_front(record.perspectives.pop_at(position));break
+            selected.append(record)
         else:case_results.append({"case":id,"passed":false,"stage":"recording_admission", "reason":matching[0].get("reason",""),"failures":failures.slice(first_failure)})
     if all_spells:
         evidence.append({"selection":"production_spell_baselines","production_inventory":production_inventory,"excluded":excluded,
@@ -55,6 +73,8 @@ func run()->void:
         print(JSON.stringify({"checks":checks,"failures":failures}));quit(1);return
     var all_failures:Array=failures.duplicate();failures=[]
     var studio=Studio.new();root.add_child(studio);studio.loop_enabled=false
+    if not case_index.is_empty():
+        for record in selected:register_case(studio,record)
     for record in selected:
         failures=[]
         var checks_before:int=checks;var started:int=Time.get_ticks_msec()
@@ -62,7 +82,8 @@ func run()->void:
         check(completed,record.id+": complete bounded case controls")
         var result:Dictionary={"case":record.id,"passed":failures.is_empty(),"stage":"native_replay",
             "checks":checks-checks_before,"failures":failures.duplicate(),"elapsed_ms":Time.get_ticks_msec()-started,
-            "perspectives":record.perspectives.map(func(perspective):return perspective.id)}
+            "perspectives":record.perspectives.map(func(perspective):return perspective.id),
+            "played_perspective":record.perspectives[0].id}
         case_results.append(result);all_failures.append_array(failures)
         print("SCHEMA16_STUDIO_CASE ",JSON.stringify(result))
     failures=all_failures

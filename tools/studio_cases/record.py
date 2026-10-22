@@ -65,7 +65,12 @@ def import_recordings(roots,out):
     index=json.loads(path.read_text()) if path.exists() else {'version':1,'engine':{'path':str(ENGINE),**identity},'cases':[]}
     index['spell_baseline_exclusions']=spell_baseline_exclusions(inventory)
     if any(index['engine'].get(key)!=value for key,value in identity.items()):
-        index['cases']=compatible_cases(index,identity)
+        # Imports preserve historical originals alongside new current captures.
+        # Pin each retained row to its original producer before changing the
+        # index default; the ordinary Library/Journal still owns admission.
+        previous_engine=index['engine']
+        index['cases']=[dict(row,engine=(row.get('engine') or {}) if 'engine' in row else previous_engine.copy())
+                        for row in index['cases']]
         index['engine']={'path':str(ENGINE),**identity}
     files=sorted({record.resolve() for root in roots for record in root.rglob('recording.json')})
     if not files:raise ValueError('No preserved recording.json was found')

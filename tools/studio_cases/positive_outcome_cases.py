@@ -2,12 +2,13 @@
 
 
 def positive_outcome_studies(subjects):
-    return [_shove(subjects), *[_stable(subjects, seed) for seed in (4, 5, 6, 7)], _shield(subjects)]
+    return [_shove(subjects), _stable(subjects, 7), _shield(subjects)]
 
 
 def _shove(subjects):
     return {
         'id': 'action.shove/enhanced_goblin_obstruction_fall',
+        'required_survival_lifecycle': 'shove',
         'title': 'Shove: Strength advantage, real obstruction and surviving Goblin fall',
         'kind': 'interaction', 'seed': 2,
         'battlefield': 'battlefield.elevation_proving_ground',
@@ -63,6 +64,7 @@ def _shove(subjects):
 def _stable(subjects, seed):
     return {
         'id': 'survival.death_save/ordinary_stable_s' + str(seed),
+        'required_survival_lifecycle': 'stabilization',
         'title': 'Ordinary death-save stabilization: fixed seed ' + str(seed),
         'kind': 'interaction', 'seed': seed, 'battlefield': 'battlefield.open_floor_bright',
         'subjects': subjects(['spell.magic_missile']),
@@ -87,8 +89,8 @@ def _stable(subjects, seed):
             {'kind': 'life', 'actor_role': 'patient', 'actor_field': 'entity_uuid',
              'field': 'new_state', 'equals': 'stable',
              'where': {'previous_state': 'dying', 'reason': 'stabilization'}}],
-        'purpose': 'One of the finite seed4/5/6/7 originals declared together before recording; all four '
-            'are retained regardless of results. Existing public RosterStartingDamage43 calls real '
+        'purpose': 'The established seed7 ordinary stabilization route is the active positive capture. '
+            'Earlier seed3/4/5/6 revival/death originals remain unchanged. Existing public RosterStartingDamage43 calls real '
             'receive_damage and leaves native Fighter5 alive at1/44HP; no private HP/counter mutation '
             'or initial Dying/Stable condition is used. Only one actual L1 Magic Missile dart targets '
             'the patient; the other two target the healthy caster20. Real2-5 Force drops the patient '
@@ -106,26 +108,27 @@ def _shield(subjects):
          'track': True, 'track_condition': 'condition.spell.shield', 'capture_choices': True}
         for behavior in ('action.attack', 'action.feature.extra_attack')]
     return {
-        'id': 'spell.shield/native_archer_ranged_lifecycle_public_v2',
-        'title': 'Shield: native Archery Fighter exchange, actual interception, end and walk',
+        'id': 'spell.shield/mage_armor_ranged_lifecycle',
+        'title': 'Shield: paid Mage Armor, ranged interception, exact retirement and walk',
         'kind': 'spell', 'seed': 2, 'battlefield': 'battlefield.open_floor_bright',
-        'subjects': subjects(['spell.shield'],
-            ['action.attack', 'action.feature.extra_attack', 'action.class.fighter.action_surge', 'action.move'],
+        'subjects': subjects(['spell.shield', 'spell.mage_armor'],
+            ['action.attack', 'action.feature.extra_attack', 'action.move'],
             ['condition.spell.shield']),
         'actors': [
             {'role': 'caster', 'side': 'amber', 'creature': 'creature.generic_caster',
-             'level': 20, 'at': [4, 6]},
+             'level': 20, 'spells':['spell.mage_armor'], 'at': [4, 6]},
             {'role': 'archer', 'side': 'blue', 'premade': 'scenario.fighter_l5_archer', 'at': [9, 6]}],
-        'steps': [dict(attacks[0]), dict(attacks[1]),
-                  {'do': 'action.class.fighter.action_surge', 'by': 'archer', 'target': 'self'},
-                  dict(attacks[0]), dict(attacks[1]),
+        'steps': [{'do':'spell.mage_armor','by':'caster','target':'self','level':1}]+[
+                  step for _ in range(4) for step in
+                  (dict(attacks[0]), dict(attacks[1]), {'do':'end_turn','by':'archer'})]+[
                   {'do': 'end_tracked', 'prefer_turns': True, 'max_turns': 4},
                   {'do': 'tail_walk', 'by': 'caster', 'offset': [-1, 0]}],
-        'required_behaviors': ['action.attack', 'action.feature.extra_attack',
-            'action.class.fighter.action_surge', 'reaction.spell.shield', 'action.move'],
+        'required_behaviors': ['spell.mage_armor', 'action.attack', 'action.feature.extra_attack',
+            'reaction.spell.shield', 'action.move'],
         'required_facts': ['attack', 'actor_change', 'movement'],
         'required_conditions': ['condition.spell.shield'],
         'required_condition_ends': ['condition.spell.shield'],
+        'require_shield_lifecycle': {'recipient':'caster','attacker':'archer'},
         'required_fact_witnesses': [
             {'kind': 'attack', 'actor_role': 'archer', 'actor_field': 'source_entity_uuid',
              'field': 'weapon_slot', 'equals': 'RANGED_MAIN',
@@ -133,15 +136,19 @@ def _shield(subjects):
                        'attack_outcome': 'Miss'}, 'perspective': perspective}
             for perspective in ('amber', 'blue')],
         'purpose': 'Use the actual shipped scenario.fighter_l5_archer: DEX16, native Archery+2, '
-            'proficiency3 and equipped longbow, versus actual generic20 caster DEX14/unarmoredAC12, '
-            'native full slots/reaction Shield and160HP. No item/spell/stat grant or reaction override '
-            'is added. At25ft the fixed paid Attack/earned Extra/paid Surge/new Attack/new earned Extra '
-            'sequence is unconditional. Only an ordinary Hit in [AC,AC+5) can spend real Shield and '
+            'proficiency3 and equipped longbow, versus actual generic20 caster DEX14 and160HP. '
+            'The public recipe grants Mage Armor; the caster actually pays a level1 slot and casts '
+            'it on itself, changing nativeAC12 to15 before the first attack. Shield uses its native '
+            'handler, reaction and remaining slots; no private AC/stat/resource override is added. '
+            'At25ft four fixed rounds each use a paid Attack and earned Extra Attack, '
+            'then end the archer turn. These eight shots are unconditional; even eight maximum '
+            'longbow critical hits total152 damage against native160HP. Only an ordinary Hit in '
+            '[AC,AC+5) can spend real Shield and '
             'change it to Miss; high hits, Crits and ordinary misses do not qualify. This sensible native '
             'setup creates an opportunity, not an outcome guarantee. Track the real own condition UUID, '
             'advance actual turns to retirement, then walk. Required summary behavior/condition and '
-            'both-seat equipped ranged Miss witnesses are preliminary guards; independent raw/native '
-            'proof must additionally join Attack.intercepted_by_condition_uuid to this recipient own '
-            'Shield UUID, effective_handler reaction attribution, exact removal and post-removal Step. '
+            'both-seat equipped ranged Miss witnesses are supplemented by executable exact joins: '
+            'Attack.intercepted_by_condition_uuid to this recipient own Shield UUID, effective_handler '
+            'reaction attribution, exact removal and post-removal Step in both original journals. '
             'No Magic Missile/melee attack can supply an unrelated Shield here. All earlier miss-only '
             'originals remain failed and unchanged.'}

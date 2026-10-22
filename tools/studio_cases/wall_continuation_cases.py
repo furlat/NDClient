@@ -32,17 +32,13 @@ def wall_continuation_studies(subjects):
                            'before accepting each branch. Recording success alone is not native output or '
                            'human art/audio acceptance.'}
 
-    def contact(effect, damage_type, *, exposure=None):
-        result = {'perspective': 'blue', 'kind': 'damage', 'stage': 'applied',
-                  'actor_role': 'target', 'actor_field': 'target_entity_uuid',
-                  'where': {'damage_type': damage_type}, 'field': 'effect_id', 'equals': effect}
-        if exposure is not None:
-            result.update(field='spatial_source', when={'exposure': exposure})
-            result.pop('equals')
-            result['where']['effect_id'] = effect
-        return result
+    def contact(damage_type, exposure='contact'):
+        return {'perspective': 'blue', 'kind': 'damage', 'stage': 'applied',
+                'actor_role': 'target', 'actor_field': 'target_entity_uuid',
+                'where': {'damage_type': damage_type}, 'field': 'spatial_source',
+                'when': {'exposure': exposure}}
 
-    fire = field('spell.wall_of_fire', 'contact_heat_end',
+    fire = field('spell.wall_of_fire', 'contact_heat_end_public_v2',
                  'Wall of Fire: actual crossing, hot-side turn end and retirement', 4,
                  [command('action.move', 'target', [8, 8]),
                   command('action.move', 'target', [8, 7]),
@@ -54,13 +50,15 @@ def wall_continuation_studies(subjects):
                   command('action.move', target=[3, 6]),
                   command('action.move', 'target', [8, 6])],
                  ['action.move', 'action.drop_concentration'],
-                 witnesses=[contact('wall_of_fire.exposure', 'Fire', exposure='contact'),
-                            contact('wall_of_fire.exposure', 'Fire', exposure='radiated_heat')])
+                 witnesses=[contact('Fire'), contact('Fire', 'radiated_heat')])
+    fire['required_field_lifecycle'] = {'perspective': 'blue', 'spell': 'spell.wall_of_fire',
+        'content_id': 'spatial_effect.spell.wall_of_fire', 'damage_type': 'Fire',
+        'exposures': ['contact', 'radiated_heat']}
     fire['purpose'] += ' The ordered eastward segment heats its positive-y side. Five adjacent steps '
     fire['purpose'] += 'spend 25ft, cross the one-cell flame row and return to8,8 before the real turn end. '
     fire['purpose'] += 'Only the first native entry per turn may burn; the return does not demand another proc.'
 
-    thorns = field('spell.wall_of_thorns', 'crossing_end',
+    thorns = field('spell.wall_of_thorns', 'crossing_end_public_v2',
                    'Wall of Thorns: actual costly passage, turn end and retirement', 6,
                    [command('action.dash', 'target', 'self'),
                     command('action.move', 'target', [8, 8]),
@@ -72,7 +70,14 @@ def wall_continuation_studies(subjects):
                     command('action.move', target=[3, 6]),
                     command('action.move', 'target', [8, 7])],
                    ['action.dash', 'action.move', 'action.drop_concentration'],
-                   witnesses=[contact('wall_of_thorns.exposure', 'Slashing')])
+                   witnesses=[contact('Slashing'),
+                       {'perspective': 'blue', 'kind': 'action', 'behavior_id': 'action.dash',
+                        'actor_role': 'target', 'actor_field': 'source_entity_uuid',
+                        'field': 'behavior_id', 'equals': 'action.dash'}])
+    thorns['required_behaviors'].remove('action.dash')
+    thorns['required_field_lifecycle'] = {'perspective': 'blue', 'spell': 'spell.wall_of_thorns',
+        'content_id': 'spatial_effect.spell.wall_of_thorns', 'damage_type': 'Slashing',
+        'exposures': ['contact']}
     thorns['purpose'] += ' The actual5ft physical width touches rows6,7,8. Dash supplies60ft; '
     thorns['purpose'] += 'the three distinct destination cells each cost20ft. After the real turn end, '
     thorns['purpose'] += 'the next turn exits to8,5 at ordinary floor cost. Slashing exposure cannot '
@@ -98,7 +103,7 @@ def wall_continuation_studies(subjects):
         steps += [command('action.drop_concentration', target='self'),
                   command('action.move', target=[3, 6]),
                   command('action.move', 'target', [7, 7]), command('action.move', 'target', [7, 8])]
-        row = {'id': spell + ('/frigid_contact_end' if material == 'ice' else '/aperture_end'),
+        row = {'id': spell + ('/frigid_contact_end_public_v2' if material == 'ice' else '/aperture_end'),
                'title': 'Wall of ' + material.title() + ': actual section disintegration and retirement',
                'kind': 'spell', 'seed': 2, 'battlefield': 'battlefield.open_floor_bright',
                'subjects': inventory,
@@ -117,7 +122,13 @@ def wall_continuation_studies(subjects):
                           'adjacent post-removal steps remain normal commands. Native output/art/audio '
                           'review are separate; an unavailable object, refusal or natural loss is retained.'}
         if material == 'ice':
-            row['required_fact_witnesses'] = [contact('wall_of_ice.frigid_air', 'Cold')]
+            row['required_fact_witnesses'] = [contact('Cold'),
+                {'perspective': 'amber', 'kind': 'spell', 'behavior_id': 'spell.disintegrate',
+                 'actor_role': 'caster', 'actor_field': 'source_entity_uuid',
+                 'where': {'target_position': [6, 7]}, 'field': 'target_kind', 'equals': 'object'}]
+            row['required_field_lifecycle'] = {'perspective': 'blue', 'spell': spell,
+                'content_id': 'spatial_effect.spell.frigid_air', 'damage_type': 'Cold',
+                'exposures': ['contact'], 'ice_section': True}
             row['purpose'] += ' The unique10ft Ice panel is wholly retired; its real FrigidAir child '
             row['purpose'] += 'owns only that destroyed section. Two adjacent steps cross its actual '
             row['purpose'] += 'former sheet before dropping concentration retires the linked child. '
@@ -159,65 +170,3 @@ def wall_continuation_studies(subjects):
                             'whole-owner/section retirement and actual post-removal path from both original '
                             'journals. This is neither an unseen-force eligibility bypass nor native/art/audio acceptance.'})
     return rows
-
-
-def wall_public_witness_studies(subjects):
-    """New originals retain the exact V1 route; only public witness scope changes."""
-    selected = {'spell.wall_of_fire/contact_heat_end', 'spell.wall_of_thorns/crossing_end',
-                'spell.wall_of_ice/frigid_contact_end'}
-    result = []
-    for row in wall_continuation_studies(subjects):
-        if row['id'] not in selected:
-            continue
-        # Each call constructs fresh literal scenario data. The original
-        # function, case IDs and recorded failures remain untouched.
-        source_id = row['id']
-        row['id'] += '_public_v2'
-        row['title'] += ' · actual public witnesses v2'
-
-        def contact(damage_type, exposure='contact'):
-            return {'perspective': 'blue', 'kind': 'damage', 'stage': 'applied',
-                    'actor_role': 'target', 'actor_field': 'target_entity_uuid',
-                    'where': {'damage_type': damage_type}, 'field': 'spatial_source',
-                    'when': {'exposure': exposure}}
-
-        if source_id.startswith('spell.wall_of_fire/'):
-            row['required_fact_witnesses'] = [contact('Fire'), contact('Fire', 'radiated_heat')]
-            row['purpose'] += ' V2 changes witness scope only: the actual recipient DamageFacts '
-            row['purpose'] += 'carry spatial_source.exposure=contact or radiated_heat, with exact '
-            row['purpose'] += 'current owner UUID/source position in that public packet; they have no '
-            row['purpose'] += 'flat effect_id. Keep positive component attribution, owner identity, '
-            row['purpose'] += 'recipient, native turn ancestry and retirement correlated from actual '
-            row['purpose'] += 'bytes. Do not invent a per-damage condition UUID or another audience result.'
-        elif source_id.startswith('spell.wall_of_thorns/'):
-            row['required_behaviors'] = [identity for identity in row['required_behaviors']
-                                         if identity != 'action.dash']
-            row['required_fact_witnesses'] = [contact('Slashing'),
-                {'perspective': 'blue', 'kind': 'action', 'behavior_id': 'action.dash',
-                 'actor_role': 'target', 'actor_field': 'source_entity_uuid',
-                 'field': 'behavior_id', 'equals': 'action.dash'}]
-            row['purpose'] += ' V2 retains Dash as an exact completed Blue actor fact, rather '
-            row['purpose'] += 'than requiring that hidden recipient action in Amber summary. Actual '
-            row['purpose'] += 'Slashing has spatial_source.exposure=contact and the real owner UUID; '
-            row['purpose'] += 'flat effect_id and caster/component source IDs may be absent under '
-            row['purpose'] += 'current visibility. Preserve public owner, positions, costly movement '
-            row['purpose'] += 'and retirement proof without filling hidden caster attribution.'
-        else:
-            row['required_facts'] = [kind for kind in row['required_facts'] if kind != 'object_destroyed']
-            row['required_fact_witnesses'] = [contact('Cold'),
-                {'perspective': 'amber', 'kind': 'spell', 'behavior_id': 'spell.disintegrate',
-                 'actor_role': 'caster', 'actor_field': 'source_entity_uuid',
-                 'where': {'target_position': [6, 7]}, 'field': 'target_kind', 'equals': 'object'}]
-            row['purpose'] = ('V2 keeps the identical actual Ice panel/ordinary object Disintegrate/'
-                              'crossing/drop route, actors, stats, map and seed. The public accepted '
-                              'Disintegrate names the actual section object at6,7 and target_kind=object; '
-                              'neither journal emits ObjectDestroyed for this actual branch. The exact '
-                              'public object removal, linked new three-cell FrigidAir owner, later Blue '
-                              'positive Cold contact spatial_source UUID and subsequent owner retirement '
-                              'must be correlated in the raw original. The scalar accepted-object witness '
-                              'and contact witness do not independently establish that cross-packet UUID '
-                              'join. No invented destruction fact, previous item, caller, command-derived '
-                              'renderer point, private UUID, effect_id or hidden result. V1 remains a '
-                              'failed original. No outcome retry or native/art/audio acceptance is implied.')
-        result.append(row)
-    return result

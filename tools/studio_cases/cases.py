@@ -10,7 +10,7 @@ from production_review_cases import production_review_studies, repair_item_owner
 from trap_cases import hardware_studies
 from legacy_six_cases import legacy_six_studies
 from retained_field_cases import retained_field_studies
-from wall_continuation_cases import wall_continuation_studies, wall_public_witness_studies
+from wall_continuation_cases import wall_continuation_studies
 from positive_outcome_cases import positive_outcome_studies
 
 
@@ -228,7 +228,7 @@ def first_cohort():
                   {'do':'action.move','by':'caster','target':[11,6]},
                   {'do':'action.environment.directional_door.open','by':'caster','target':{'object':'Burial hall'}},
                   {'do':'action.move','by':'caster','target':[13,6]}],
-         'required_behaviors':['action.environment.directional_door.open'],'required_facts':['movement']}, gallery_sorcerer(), equipped_weapon_study(), poison_weapon_contact_study(), poison_weapon_runtime_study(), water_create_dry_study(), *glyph_warding_trigger_studies(), power_word_heal_poison_study(), goodberry_consumption_study(), shillelagh_equipped_move_study(), flaming_sphere_lifecycle_study()] + interaction_cohort() + traversal_and_utility_cohort() + survival_cohort() + perspective_and_reaction_cohort() + direct_character_cohort() + passive_handler_cohort() + [interaction_media_study(), vampiric_positive_study(), banishment_departure_study()] + native_persistent_studio_studies() + option_identity_studies() + intrinsic_weapon_studies() + [flame_blade_weapon_study(subjects)] + coating_weapon_studies() + event_family_studies(actors, subjects) + projectile_variant_studies(actors, subjects) + production_review_studies(actors, subjects) + legacy_six_studies(subjects) + [skeleton_mark_lifecycle_study()] + coating_slot_lifecycle_studies() + class_held_lifecycle_studies() + elemental_body_lifecycle_studies() + [false_life_grant_study()] + [shield_ranged_lifecycle_study()] + action_dispatch_owner_studies() + myrmidon_body_lifecycle_studies() + [arcane_sword_granted_lifecycle_study()] + provisional_creature_body_studies() + granted_repeat_contact_studies() + r4_movement_survival_studies() + [protection_party_study(), protection_party_prefix_study(), shove_enemy_obstruction_study()] + retained_field_studies(subjects) + wall_continuation_studies(subjects) + wall_public_witness_studies(subjects) + positive_outcome_studies(subjects)
+         'required_behaviors':['action.environment.directional_door.open'],'required_facts':['movement']}, gallery_sorcerer(), equipped_weapon_study(), poison_weapon_contact_study(), poison_weapon_runtime_study(), water_create_dry_study(), *glyph_warding_trigger_studies(), power_word_heal_poison_study(), goodberry_consumption_study(), shillelagh_equipped_move_study(), flaming_sphere_lifecycle_study()] + interaction_cohort() + traversal_and_utility_cohort() + survival_cohort() + perspective_and_reaction_cohort() + direct_character_cohort() + passive_handler_cohort() + [interaction_media_study(), vampiric_positive_study(), banishment_departure_study()] + native_persistent_studio_studies() + option_identity_studies() + intrinsic_weapon_studies() + [flame_blade_weapon_study(subjects)] + coating_weapon_studies() + event_family_studies(actors, subjects) + projectile_variant_studies(actors, subjects) + production_review_studies(actors, subjects) + legacy_six_studies(subjects) + [skeleton_mark_lifecycle_study()] + coating_slot_lifecycle_studies() + class_held_lifecycle_studies() + elemental_body_lifecycle_studies() + [false_life_grant_study()] + action_dispatch_owner_studies() + myrmidon_body_lifecycle_studies() + [arcane_sword_granted_lifecycle_study()] + provisional_creature_body_studies() + granted_repeat_contact_studies() + [protection_party_prefix_study()] + retained_field_studies(subjects) + wall_continuation_studies(subjects) + positive_outcome_studies(subjects)
     cohort += hardware_studies(subjects)
     return [repair_item_owner_requirements(case) for case in cohort]
 
@@ -771,10 +771,6 @@ def interaction_cohort():
         study('action.jump/land_and_walk','Jump: actual launch, landing and subsequent walking',
               distant,[command('action.jump',target=[5,7]),command('action.move',target=[6,7])],
               actions=['action.jump','action.move'],facts=['movement']),
-        study('condition.prone/drop_stand_walk','Prone: voluntarily lie down, stand at real cost, resume walking',
-              distant,[command('action.core.drop_prone',target='self'),command('action.core.stand_up',target='self'),
-                       command('action.move',target=[4,7])],
-              actions=['action.core.drop_prone','action.core.stand_up','action.move'],conditions=['condition.prone'],ends=['condition.prone']),
         study('action.shove/forced_departure','Shove: real contest, forced displacement and recipient movement',
               adjacent,[command('action.shove',target='target'),command('action.move','target',[6,7])],
               actions=['action.shove','action.move'],facts=['shove','forced_movement']),
@@ -992,8 +988,20 @@ def perspective_and_reaction_cohort():
               conditions=['condition.spell.greater_invisibility'],ends=['condition.spell.greater_invisibility']),
         study('condition.prone/grease_auto_stand','Grease: actual failed save, prone owner, turn-start standing and movement',
               [mage('caster','amber',[3,7],['spell.grease']),mage('target','blue',[9,7],[],level=1)],
-              [command('spell.grease',target=[9,7]),command('action.move','target',[11,7])],
-              spells=['spell.grease'],actions=['action.move'],conditions=['condition.prone'],ends=['condition.prone'],seed=2),
+              [command('spell.grease',target=[9,7],capture_choices=True),
+               command('action.move','target',[11,7],capture_choices=True)],
+              spells=['spell.grease'],actions=['action.move'],conditions=['condition.prone'],ends=['condition.prone'],seed=2,
+              require_prone_standing=True,
+              required_fact_witnesses=[
+                  {'kind':'saving_throw','actor_role':'target','actor_field':'target_entity_uuid',
+                   'field':'succeeded','equals':False,'where':{'ability_name':'dexterity'}},
+                  {'kind':'step','actor_role':'target','actor_field':'source_entity_uuid',
+                   'field':'committed','equals':True,'perspective':'blue'}],
+              purpose='Paid Grease produces the actual failed Dexterity save and Prone membership. '
+                  'The native turn-start handler removes that same owner before the recipient walks. '
+                  'This replaces the unsupported voluntary Drop Prone/Stand Up choreography; no '
+                  'starting condition or private state is supplied. Retain exact application/removal/'
+                  'post-removal Step evidence from both original journals.'),
         study('conditions.hold/independent_owners','Paralysis: two actual spell owners, first removal retains second, final restoration',
               [mage('caster','amber',[3,7],['spell.hold_person']),mage('ally','amber',[3,8],['spell.hold_monster']),
                mage('target','blue',[9,7],[],level=1)],
@@ -1930,56 +1938,6 @@ def false_life_grant_study():
                 'defect or reason to disable reactions.'}
 
 
-def shield_ranged_lifecycle_study():
-    """One fixed Fighter attack exchange; an absent Shield witness stays failed."""
-    return {'id': 'spell.shield/ranged_attack_lifecycle',
-     'title': 'Shield: real Fighter ranged Attack and Extra Attack, next-turn end and walk',
-     'kind': 'spell',
-     'seed': 2,
-     'subjects': {'spell': ['spell.shield'],
-                  'action': ['action.attack', 'action.feature.extra_attack', 'action.move'],
-                  'condition': ['condition.spell.shield'],
-                  'creature': [],
-                  'environment_object': [],
-                  'spatial_effect': [],
-                  'residue': [],
-                  'item': []},
-     'actors': [{'role': 'caster', 'side': 'amber', 'premade': 'spellblade', 'at': [4, 6]},
-                {'role': 'archer', 'side': 'blue', 'premade': 'fighter', 'at': [9, 6]}],
-     'steps': [{'do': 'action.attack',
-                'by': 'archer',
-                'target': 'caster',
-                'weapon_slot': 'RANGED_MAIN',
-                'track': True,
-                'track_condition': 'condition.spell.shield',
-                'capture_choices': True},
-               {'do': 'action.feature.extra_attack',
-                'by': 'archer',
-                'target': 'caster',
-                'weapon_slot': 'RANGED_MAIN',
-                'track': True,
-                'track_condition': 'condition.spell.shield',
-                'capture_choices': True},
-               {'do': 'end_tracked', 'prefer_turns': True, 'max_turns': 4},
-               {'do': 'tail_walk', 'by': 'caster', 'offset': [-1, 0]}],
-     'required_behaviors': ['action.attack',
-                            'action.feature.extra_attack',
-                            'reaction.spell.shield',
-                            'action.move'],
-     'required_facts': ['attack', 'actor_change', 'movement'],
-     'required_conditions': ['condition.spell.shield'],
-     'required_condition_ends': ['condition.spell.shield'],
-     'purpose': 'One fixed, ordinary level5 Fighter Attack exchange against the original native Spellblade: '
-                'offered longbow Attack followed by its earned RANGED_MAIN Extra Attack in the same actual '
-                'turn, regardless of either result. The first preserved single-attack original naturally '
-                'missed AC18 and remains failed. Original seed2, both actors, native equipment/stats/Shield '
-                'source and spell slots are unchanged. A genuine own-UUID ranged Shield interception, '
-                'next-turn expiration and restored walk remain required; neither attack is conditional and '
-                'there is no repeat-until-outcome, seed search, grant/stat edit or forced roll. If neither '
-                'native attack supplies the required reaction, the complete fixed exchange remains a failed '
-                'original.'}
-
-
 def action_dispatch_owner_studies():
     """Real Attack dispatch and retained-quarry reapplication, one legal cohort.
 
@@ -2489,175 +2447,6 @@ def granted_repeat_contact_studies():
                  'outcomes/native-output claim.'}]
 
 
-def r4_movement_survival_studies():
-    """Fixed legal obstruction/fall and ordinary death-save originals, no outcome retries."""
-    return [{'id': 'action.shove/obstructed_then_surviving_fall',
-      'title': 'Shove: actual occupied endpoint, blocker departure, ten-foot fall and surviving walk',
-      'kind': 'interaction',
-      'seed': 2,
-      'battlefield': 'battlefield.elevation_proving_ground',
-      'subjects': {'spell': [],
-                   'action': ['action.shove', 'action.move'],
-                   'condition': ['condition.prone'],
-                   'creature': [],
-                   'environment_object': [],
-                   'spatial_effect': [],
-                   'residue': [],
-                   'item': []},
-      'actors': [{'role': 'caster', 'side': 'amber', 'premade': 'fighter', 'at': [7, 4]},
-                 {'role': 'patient', 'side': 'amber', 'premade': 'fighter', 'at': [8, 4]},
-                 {'role': 'blocker', 'side': 'amber', 'premade': 'fighter', 'at': [9, 4]},
-                 {'role': 'observer', 'side': 'blue', 'premade': 'fighter', 'at': [14, 7]}],
-      'steps': [{'do': 'action.shove', 'by': 'caster', 'target': 'patient', 'capture_choices': True},
-                {'do': 'action.move', 'by': 'blocker', 'target': [10, 4]},
-                {'do': 'end_turn', 'by': 'caster'},
-                {'do': 'action.shove', 'by': 'caster', 'target': 'patient', 'capture_choices': True},
-                {'do': 'action.move', 'by': 'patient', 'target': [9, 5]}],
-      'required_behaviors': ['action.shove', 'action.move'],
-      'required_facts': ['shove', 'forced_movement', 'damage', 'movement'],
-      'required_conditions': ['condition.prone'],
-      'required_condition_ends': ['condition.prone'],
-      'required_applied_damage_types': ['Bludgeoning'],
-      'required_fact_witnesses': [{'kind': 'shove',
-                                   'actor_role': 'patient',
-                                   'actor_field': 'target_entity_uuid',
-                                   'field': 'contest_success',
-                                   'equals': True,
-                                   'behavior_id': 'action.shove'},
-                                  {'kind': 'shove',
-                                   'actor_role': 'patient',
-                                   'actor_field': 'target_entity_uuid',
-                                   'field': 'push_distance',
-                                   'equals': 0,
-                                   'behavior_id': 'action.shove'},
-                                  {'kind': 'forced_movement',
-                                   'actor_role': 'patient',
-                                   'actor_field': 'target_entity_uuid',
-                                   'field': 'landing_kind',
-                                   'equals': 'fall'},
-                                  {'kind': 'forced_movement',
-                                   'actor_role': 'patient',
-                                   'actor_field': 'target_entity_uuid',
-                                   'field': 'drop_feet',
-                                   'equals': 10},
-                                  {'kind': 'forced_movement',
-                                   'actor_role': 'patient',
-                                   'actor_field': 'target_entity_uuid',
-                                   'field': 'start_elevation_feet',
-                                   'equals': 10},
-                                  {'kind': 'forced_movement',
-                                   'actor_role': 'patient',
-                                   'actor_field': 'target_entity_uuid',
-                                   'field': 'end_elevation_feet',
-                                   'equals': 0},
-                                  {'kind': 'step',
-                                   'actor_role': 'patient',
-                                   'actor_field': 'source_entity_uuid',
-                                   'field': 'committed',
-                                   'equals': True}],
-      'purpose': 'The unchanged registered elevation proving ground places (7,4) and (8,4) on height2 (10ft) and '
-                 '(9,4) on ordinary height0 support. The actual living ally at (9,4) first prevents the patient '
-                 'ending there; the first Shove is still the real successful ally rule, not a resisted contest. '
-                 'The blocker then makes a legal move to (10,4). The caster ends its own real next turn and '
-                 'repeats the same offered Shove on the following turn with a fresh bonus action. Existing Shove '
-                 'includes allies and auto-succeeds for allies; source admission stops the displacement on its '
-                 'first lower support, actual (9,4), with landing_kind fall/drop10. Ordinary one-d6 Bludgeoning '
-                 'is at most6, below the unchanged level5 Fighter native44HP; actual positive damage applies '
-                 'Prone and the patient later stands through its normal turn-start owner before moving to (9,5). '
-                 'No map/stat/HP override, reaction grant, forced roll, chosen outcome or post-admission '
-                 'coordinate edit is used. Both real faction journals remain immutable. If discovery, '
-                 'obstruction, actual fall, condition retirement or surviving committed Step is absent, preserve '
-                 'the fixed attempt as failed. The first blocked Shove combat-log blocked_by value is also '
-                 'retained for source inspection.'},
-     {'id': 'survival.death_save/ordinary_stabilization_attempt',
-      'title': 'Death saves: living patient, one real missile and fixed ordinary turn progression toward Stable',
-      'kind': 'interaction',
-      'seed': 3,
-      'battlefield': 'battlefield.open_floor_bright',
-      'subjects': {'spell': ['spell.magic_missile'],
-                   'action': [],
-                   'condition': [],
-                   'creature': [],
-                   'environment_object': [],
-                   'spatial_effect': [],
-                   'residue': [],
-                   'item': []},
-      'actors': [{'role': 'caster',
-                  'side': 'amber',
-                  'creature': 'creature.generic_caster',
-                  'level': 20,
-                  'caster_level': 20,
-                  'at': [3, 6]},
-                 {'role': 'patient', 'side': 'amber', 'premade': 'fighter', 'at': [4, 6], 'damage': 43},
-                 {'role': 'target',
-                  'side': 'blue',
-                  'creature': 'creature.generic_caster',
-                  'level': 20,
-                  'caster_level': 20,
-                  'spells': ['spell.magic_missile'],
-                  'at': [9, 6]}],
-      'steps': [{'do': 'spell.magic_missile',
-                 'by': 'target',
-                 'target': 'patient',
-                 'level': 1,
-                 'recipients': ['patient', 'caster', 'caster'],
-                 'capture_choices': True},
-                {'do': 'end_turn'},
-                {'do': 'end_turn'},
-                {'do': 'end_turn'},
-                {'do': 'end_turn'},
-                {'do': 'end_turn'},
-                {'do': 'end_turn'},
-                {'do': 'end_turn'},
-                {'do': 'end_turn'},
-                {'do': 'end_turn'},
-                {'do': 'end_turn'},
-                {'do': 'end_turn'},
-                {'do': 'end_turn'},
-                {'do': 'end_turn'},
-                {'do': 'end_turn'},
-                {'do': 'end_turn'},
-                {'do': 'end_turn'},
-                {'do': 'end_turn'},
-                {'do': 'end_turn'},
-                {'do': 'end_turn'},
-                {'do': 'end_turn'},
-                {'do': 'end_turn'},
-                {'do': 'end_turn'},
-                {'do': 'end_turn'},
-                {'do': 'end_turn'}],
-      'required_behaviors': ['spell.magic_missile'],
-      'required_facts': ['damage', 'life', 'death_save'],
-      'required_fact_witnesses': [{'kind': 'life',
-                                   'actor_role': 'patient',
-                                   'actor_field': 'entity_uuid',
-                                   'field': 'previous_state',
-                                   'equals': 'alive'},
-                                  {'kind': 'life',
-                                   'actor_role': 'patient',
-                                   'actor_field': 'entity_uuid',
-                                   'field': 'new_state',
-                                   'equals': 'dying'},
-                                  {'kind': 'life',
-                                   'actor_role': 'patient',
-                                   'actor_field': 'entity_uuid',
-                                   'field': 'new_state',
-                                   'equals': 'stable'}],
-      'purpose': 'Reuse the existing genuine death-save fixture route: supported starting damage43 leaves the '
-                 'unchanged native level5 Fighter alive at1HP; the only missile assigned to that patient '
-                 'deals2-5 actual Force, entering Dying without instant-death-sized overflow. The two remaining '
-                 'level1 darts go to the healthy native caster20. No later attack, healing, stabilization spell '
-                 'or condition is submitted. The next24 fixed steps end only actual published human turns, '
-                 'matching the existing death-save fixture choreography; ordinary patient turn starts resolve '
-                 'the real saves. The default cohort seed3 is fixed before any capture and is not searched. '
-                 'Three ordinary successful saves are required to produce the actual Dying-to-Stable Life fact. '
-                 'Natural20-to-Alive, terminal failed saves, an early end or no Stable transition remain the '
-                 'fixed original with required outcome failure, not permission to alter seed, reroll, replay '
-                 'until success, inject Stable, change HP or substitute Spare the Dying. Both actual seat '
-                 'journals and every issued command/receipt remain preserved. No later walking command is '
-                 'required from an unconscious Stable patient.'}]
-
-
 def protection_party_study():
     """One fixed legal Protection build/party route; actual missing trigger remains failed."""
     return {'id': 'reaction.protection/party_native_attempt',
@@ -2722,30 +2511,3 @@ def protection_party_prefix_study():
             'not a condition invented from the legal build-choice ID. Actual missing handler or movement '
             'still fails. The old failed case, original bytes, reason and source identity remain history. '
             'This is a legal original route; current rendering and art/audio review remain separate.'}
-
-
-def shove_enemy_obstruction_study():
-    """Enemy-target discovery, exact same-fact obstruction, ordinary opposed rolls."""
-    original = r4_movement_survival_studies()[0]
-    witnesses = [dict(row) for row in original['required_fact_witnesses']]
-    for row in witnesses:
-        if row['kind'] == 'shove' and row['field'] == 'push_distance':
-            row['where'] = {'contest_success': True}
-    return {**original,
-        'id': 'action.shove/enemy_obstruction_then_fall',
-        'title': 'Shove: eligible enemy, occupied lower support and surviving fall attempt',
-        'actors': [{**actor, 'side': 'blue'} if actor['role'] == 'patient' else dict(actor)
-            for actor in original['actors']],
-        'required_fact_witnesses': witnesses,
-        'purpose': 'Same unchanged elevation proving ground, seed2, native Fighter actors, support cells '
-            'and fixed command sequence as the preserved failed allied-target attempt. Public discovery '
-            'uses the inherited enemies target filter; the former allied patient was excluded before any '
-            'Shove, despite the action execution include_allies flag. This separately identified route '
-            'places only that actual patient on Blue so the target is eligible. Both Shoves use real '
-            'opposed native checks and may naturally fail; no automatic ally success, favorable seed or '
-            'roll is assumed. The first lower support (9,4) is occupied; actual blocker departure then '
-            'permits the later real ten-foot fall. Obstruction requires push_distance0 AND contest_success '
-            'true on the SAME completed Shove fact, through the optional sibling-field witness guard. '
-            'A resisted first attempt and successful second must not satisfy it. The retained fall, positive '
-            'Bludgeoning, Prone end and surviving committed Step requirements are unchanged. Any missing '
-            'branch remains failed; no retry, private movement/stat edit or backend fix is implied.'}

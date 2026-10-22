@@ -41,14 +41,22 @@ def legacy_six_studies(subjects):
                 step('end_turn'), step(wings, capture_choices=True)], [wings, 'action.move'],
             required_conditions=['class_feature.sorcerer.dragon_wings.active'],
             required_condition_ends=['class_feature.sorcerer.dragon_wings.active']),
-        study('action.class.barbarian.extend_intimidating_presence/actual_extension',
-            'Intimidating Presence: actual fear, legal Action Surge and same-turn extension',
-            'legacy_berserker10_fighter2_party', [step('action.class.barbarian.intimidating_presence', target='Goblin 2', capture_choices=True),
+        study('action.class.barbarian.extend_intimidating_presence/nonlethal_same_turn_extension',
+            'Intimidating Presence: nonlethal opener, actual fear and same-turn extension',
+            'intimidation_nonlethal_berserker_party', [step('action.class.barbarian.intimidating_presence', target='first_legal', capture_choices=True),
                 step('action.class.fighter.action_surge'),
-                step('action.class.barbarian.extend_intimidating_presence', target='Goblin 2', capture_choices=True)],
+                step('action.class.barbarian.extend_intimidating_presence', target='first_legal', capture_choices=True)],
             ['action.class.barbarian.intimidating_presence', 'action.class.fighter.action_surge', 'action.class.barbarian.extend_intimidating_presence'],
+            actors=[{'role':'caster','side':'party'}],
             required_conditions=['condition.frightened'],
-            purpose='The preserved failed 9f original offered Goblin 2 for Intimidating Presence, not Goblin 1. Select that exact public recipient for the initial fear and same-turn extension; a natural save still leaves the required fear/extension genuinely unavailable.'),
+            require_fear_extension=True,
+            purpose='The same legal Berserker10/Fighter2 build enters alone with its greataxe carried '
+                'unequipped, avoiding the old high-level ally lethal opening opportunity attack. '
+                'Abilities, progression, native Goblins and seed stay unchanged. Select the actual '
+                'first eligible visible recipient, pay Action Surge, then select an actually offered '
+                'extension in the same turn, before the one-round fear expires. Require the original '
+                'failed save, exact Frightened owner and completed extension on that recipient. No '
+                'forced save, alternate seed, granted feature or repeat-until-success command.'),
         study('class_feature.fighter.indomitable/actual_successful_reroll',
             'Indomitable: actual failed save, native reroll and disclosed successful witness',
             'legacy_sorcerer14_fighter17', [step('spell.fireball', target=[6, 12], level=3, capture_choices=True),

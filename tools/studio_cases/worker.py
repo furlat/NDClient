@@ -6,6 +6,11 @@ import os
 from pathlib import Path
 
 import adapter
+from fear_witness import fear_extension_evidence
+from field_witnesses import field_lifecycle_evidence, nimbus_contact_evidence
+from prone_witness import prone_standing_evidence
+from shield_witness import shield_lifecycle_evidence
+from survival_witnesses import shove_lifecycle_evidence, stabilization_evidence
 
 
 def initial_mechanism_evidence(out, perspectives, fixtures):
@@ -96,6 +101,18 @@ async def record(args):
     result=await adapter.hosted(args.engine,config,args.out,drive,timeout=args.timeout,
                                initial_mechanisms=scenario.get('initial_mechanisms',()))
     perspectives=[credential.seat_id for credential in config.credentials]
+    missing_initializations=[perspective for perspective in perspectives
+        if not (args.out/perspective/'journal'/('0'*16+'.json')).is_file()]
+    if missing_initializations and not result['ok']:
+        # A failed setup/connection may never publish initialization. Keep its
+        # actual failure and partial originals instead of masking it in a reader.
+        if not result.get('failure'):
+            result['failure']='; '.join(str(row['reason']) for row in result.get('gaps',[]))
+        result.update(missing_initializations=missing_initializations, perspectives=perspectives,
+            engine=adapter.engine_identity(args.engine),
+            sdk=json.loads(os.environ.get('NDCLIENT_STUDIO_SDK_PROVENANCE','{}')))
+        (args.out/'recording.json').write_text(json.dumps(result,indent=1,default=str)+'\n')
+        return result
     if scenario.get('initial_mechanisms'):
         anchors, missing_anchors = initial_mechanism_evidence(args.out, perspectives, scenario['initial_mechanisms'])
         result['initial_mechanisms'] = anchors
@@ -135,6 +152,31 @@ async def record(args):
     result['fact_witnesses'] = witnesses
     if missing_witnesses and result['ok']:
         result.update(ok=False, failure='; '.join(missing_witnesses))
+    if scenario.get('require_nimbus_contact'):
+        result['nimbus_contact'], missing = nimbus_contact_evidence(args.out, scenario)
+        if missing and result['ok']:
+            result.update(ok=False, failure='; '.join(missing))
+    if scenario.get('required_field_lifecycle'):
+        result['field_lifecycle'], missing = field_lifecycle_evidence(args.out, scenario)
+        if missing and result['ok']:
+            result.update(ok=False, failure='; '.join(missing))
+    if scenario.get('required_survival_lifecycle'):
+        check = shove_lifecycle_evidence if scenario['required_survival_lifecycle'] == 'shove' else stabilization_evidence
+        result['survival_lifecycle'], missing = check(args.out, perspectives, scenario)
+        if missing and result['ok']:
+            result.update(ok=False, failure='; '.join(missing))
+    if scenario.get('require_shield_lifecycle'):
+        result['shield_lifecycle'], missing = shield_lifecycle_evidence(args.out, perspectives, scenario)
+        if missing and result['ok']:
+            result.update(ok=False, failure='; '.join(missing))
+    if scenario.get('require_prone_standing'):
+        result['prone_standing'], missing = prone_standing_evidence(args.out, perspectives, scenario)
+        if missing and result['ok']:
+            result.update(ok=False, failure='; '.join(missing))
+    if scenario.get('require_fear_extension'):
+        result['fear_extension'], missing = fear_extension_evidence(args.out, perspectives, scenario)
+        if missing and result['ok']:
+            result.update(ok=False, failure='; '.join(missing))
     moments=[]
     for faction in perspectives:
         moments.extend(dict(row,faction=faction) for row in adapter.moments(args.out/faction/'journal'))
