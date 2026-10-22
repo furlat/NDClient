@@ -176,6 +176,7 @@ var target_selection: Dictionary = {}
 var selection_preview: Dictionary = {}
 var selection_serial = 0
 var force_attack = false
+var auto_confirm_targets:bool=true
 var choices_force_attack = false
 var attack_preference = "MELEE_MAIN"
 var attack_preferences: Dictionary = {}
@@ -215,6 +216,13 @@ const WALL_MODES = ["solid","translucent","hidden"]
 var wall_mode = "solid"
 var announced_ready = false
 var reported_session_issue = ""
+var restart_in_progress:bool=false
+var restart_error:String=""
+var restart_request:HTTPRequest
+var restart_was_paused:bool=false
+var restart_expected_epoch:String=""
+var restart_requested_epoch:String=""
+var restart_journal_root:String=""
 var wall_mask_viewport: SubViewport
 var wall_mask_nodes: Array[ColorRect] = []
 var wall_mask_sources: Array = []
@@ -325,6 +333,93 @@ func try_reset_hidden_playback(value:RefCounted)->bool:
     wall_geometry_views={}
     return true
 
+func restart_game()->void:
+    if external_playback or restart_in_progress or session==null:return
+    var url:String=game_config.get("restart_url","")
+    # The host already accepted this reset. A failed bootstrap retries only
+    # the connection; it must not start another encounter.
+    if not url.is_empty() and not restart_expected_epoch.is_empty():
+        restart_in_progress=true;restart_error=""
+        _connect_restarted_game(restart_expected_epoch)
+        return
+    if not session.status.is_empty():restart_requested_epoch=str(session.status.game_epoch)
+    if url.is_empty() or restart_requested_epoch.is_empty():
+        restart_error="This encounter does not provide a restart connection."
+        notice_text=restart_error
+        return
+    restart_in_progress=true;restart_error=""
+    restart_was_paused=timeline.paused;timeline.paused=true
+    cancel_selection();close_storage()
+    notice_text="Restarting the encounter…"
+    restart_request=HTTPRequest.new()
+    restart_request.timeout=30.0
+    add_child(restart_request)
+    restart_request.request_completed.connect(_restart_completed)
+    var headers:=PackedStringArray(["Authorization: Bearer "+str(game_config.token),
+        "X-Game-Epoch: "+restart_requested_epoch])
+    var error:Error=restart_request.request(url,headers,HTTPClient.METHOD_POST)
+    if error!=OK:
+        restart_request.queue_free();restart_request=null
+        _restart_failed("Could not request encounter restart: "+error_string(error),true)
+
+func _restart_failed(message:String,restore_pause:bool=false)->void:
+    restart_in_progress=false
+    restart_error=message;notice_text=message
+    timeline.paused=restart_was_paused if restore_pause else true
+    if hud!=null:hud.settings_panel.refresh()
+
+func _restart_completed(result:int,response_code:int,_headers:PackedStringArray,body:PackedByteArray)->void:
+    restart_request.queue_free();restart_request=null
+    if result!=HTTPRequest.RESULT_SUCCESS:
+        _restart_failed("The restart connection failed. Retry to reconnect if the encounter already restarted.")
+        return
+    # A lost successful reply can leave this client on the old epoch. The host
+    # rejects its retry with 409; bootstrap the replacement without resetting it again.
+    if response_code==409:
+        _connect_restarted_game("")
+        return
+    if response_code!=200:
+        _restart_failed("Encounter restart failed (HTTP %d)."%response_code,response_code in [400,401])
+        return
+    var reply:Variant=JSON.parse_string(body.get_string_from_utf8())
+    if typeof(reply)!=TYPE_DICTIONARY or typeof(reply.get("game_epoch"))!=TYPE_STRING or str(reply.game_epoch).is_empty():
+        _restart_failed("The restart reply was incomplete. Retry to reconnect to the encounter.")
+        return
+    _connect_restarted_game(reply.game_epoch)
+
+func _connect_restarted_game(expected_epoch:String)->void:
+    var profiling:bool=session.transport.profiling_enabled()
+    session.close()
+    session=Session.new()
+    if profiling:session.transport.set_profiling(true)
+    session.deliver_compiled_operations=true
+    session.authoring_cache=Catalog.source_snapshot(catalog_cache)
+    action_request=-1;pending_request={};available_actions={};choices_boundary={};pending_choices={}
+    action_revision="";command_busy=false;receipt_due=0;await_command_cursor=-1
+    hover_request=-1;hover_requests={};hover_context={};hover_hit={};hover_due=0
+    context_options=[];preview_selection={};force_attack=false;choices_force_attack=false
+    attack_preferences={};attack_preference="MELEE_MAIN"
+    choice_resources.request({},catalog_cache)
+    reported_session_issue="";media_issue="";presentation_errors.clear()
+    initial_focus=false;native_startup_requested_ms=0.0
+    native_live_owners=[];native_live_plan=[]
+    install_playback(Timeline.new())
+    timeline.retire_group=session.retire_group
+    world_prepare_epoch=-1;world_revision=-1
+    scenery_revision=-1;scenery_world_revision=-1;scenery_generation=-1
+    pick_heights_revision=-1
+    _clear_static_view_cache()
+    requested_quarter=quarter;wall_geometry_views={}
+    if hud!=null:hud.reset_encounter()
+    var config:Dictionary=game_config.duplicate()
+    if restart_journal_root.is_empty():restart_journal_root=str(game_config.get("journal","user://sessions/live")).get_base_dir()
+    config.journal=restart_journal_root.path_join("restart-"+Session.uuid()).path_join("journal")
+    game_config=config
+    restart_expected_epoch=expected_epoch
+    notice_text="Connecting the restarted encounter…"
+    var opened:Dictionary=session.start(config)
+    if not opened.ok:_restart_failed("Could not connect the restarted encounter: "+str(opened.error.message))
+
 func _reset_playback_presentation()->void:
     prepared_scenery={};prepared_static_order={}
     # Fresh transient owners/clocks must never inherit a previous seek's audio,
@@ -372,6 +467,7 @@ func _ready() -> void:
     character_light_profile = settings.profile
     media_warmup.light_profile = character_light_profile
     native_spell_hit_material = settings.native_spell_hit_material
+    auto_confirm_targets = settings.auto_confirm_targets
     fire_light_flicker = settings.fire_light_flicker
     source_lighting.fire_light_flicker = fire_light_flicker
     light_strength = settings.light_strength
@@ -495,6 +591,11 @@ func _poll_character_light_profile() -> void:
 func set_native_spell_hit_material(enabled:bool)->void:
     native_spell_hit_material=enabled
     var error=RenderSettings.write_spell_hit_material(enabled)
+    if error!=OK:notice_text="Setting applied; cannot save it: "+error_string(error)
+
+func set_auto_confirm_targets(enabled:bool)->void:
+    auto_confirm_targets=enabled
+    var error=RenderSettings.write_auto_confirm_targets(enabled)
     if error!=OK:notice_text="Setting applied; cannot save it: "+error_string(error)
 
 func set_fire_light_flicker(enabled: bool) -> void:
@@ -695,6 +796,7 @@ func _advance_prepared(delta_ms:float)->void:
         timeline.advance(maxf(0.0,target-timeline.display_ms))
 
 func _process(delta: float) -> void:
+    if restart_request!=null:return
     if publication_failed:return
     var budget:Dictionary=_preparation_budget()
     var advance_ms=delta*1000*playback_speed
@@ -708,6 +810,11 @@ func _process(delta: float) -> void:
     FrameProfile.end_phase(profile,"native_startup",subphase)
     subphase = Time.get_ticks_usec()
     if not external_playback: session.poll()
+    if restart_in_progress:
+        if restart_expected_epoch.is_empty() and not session.status.is_empty():restart_expected_epoch=str(session.status.game_epoch)
+        if not session.issue.is_empty():_restart_failed("Could not connect the restarted encounter: "+str(session.issue.message))
+        elif not restart_expected_epoch.is_empty() and not session.status.is_empty() and session.status.game_epoch!=restart_expected_epoch:
+            _restart_failed("The restarted encounter changed before this player connected.")
     FrameProfile.end_phase(profile,"session_poll",subphase)
     subphase = Time.get_ticks_usec()
     _receive_prepared_operations()
@@ -829,6 +936,8 @@ func _process(delta: float) -> void:
         _capture_frame_evidence()
         FrameProfile.end_phase(profile,"interaction",phase)
         if not external_playback and not announced_ready and command_ready():
+            restart_in_progress=false;restart_expected_epoch=""
+            if hud!=null:hud.settings_panel.refresh()
             announced_ready = true
             print("PLAYER_READY: initialized, acknowledged, and current choices available")
     phase = Time.get_ticks_usec()
@@ -855,7 +964,8 @@ func _process(delta: float) -> void:
     if session != null and not session.issue.is_empty(): notice_text = session.issue.message
     elif not media_issue.is_empty(): notice_text = media_issue
     elif session != null and not session.status_issue.is_empty(): notice_text = "Reconnecting to encounter status…"
-    if session != null and not session.issue.is_empty() and str(session.issue) != reported_session_issue:
+    if not restart_error.is_empty():notice_text=restart_error
+    if session != null and not session.issue.is_empty() and restart_error.is_empty() and str(session.issue) != reported_session_issue:
         reported_session_issue = str(session.issue)
         push_error("PLAYER_CONNECTION_FAILED: " + session.issue.message)
     FrameProfile.end_phase(profile,"player_process",started)
@@ -3624,7 +3734,7 @@ func _discover() -> void:
     action_request = session.request("choices",{"actor_uuid":boundary.actor_uuid,"state_revision":boundary.state_revision,"force_attack":force_attack,"correlation_id":Session.uuid()})
 
 func command_ready() -> bool:
-    return not external_playback and session != null and native_startup.ready and media_initial_ready and media_issue.is_empty() and not command_busy and action_request < 0 and not available_actions.is_empty() and not timeline.busy() \
+    return restart_request==null and not external_playback and session != null and native_startup.ready and media_initial_ready and media_issue.is_empty() and not command_busy and action_request < 0 and not available_actions.is_empty() and not timeline.busy() \
         and not timeline.paused and timeline.sequence >= await_command_cursor and session.ready_for_input(timeline.sequence) \
         and action_revision == session.status.boundary.state_revision and choices_force_attack == force_attack \
         and session.matches_choice_boundary(choices_boundary) \
@@ -3830,9 +3940,11 @@ func choose_target(position: Array, actor_id: String = "",subject_kind:String=""
         var extra = appended.selection.extra_target_positions.size()>target_selection.extra_target_positions.size()
         target_selection = appended.selection
         var position_spec: Variant = selected_action.get("position_selection")
-        var explicit = extra or selected_action.target_type == "multi_entity" or (position_spec != null and position_spec.kind in ["path","entity_destination"])
+        var explicit = extra or selected_action.get("position_region")!=null or selected_action.target_type == "multi_entity" or (position_spec != null and position_spec.kind in ["path","entity_destination"])
         if not explicit and _submit_ready_move(): return true
         _request_selection(not explicit)
+        if auto_confirm_targets and explicit and pending_request.get("kind")=="preview":
+            pending_request.complete_targets=true
         return true
     var selected: Dictionary = {}
     var target: Dictionary = {}
@@ -3898,7 +4010,7 @@ func _poll_actions() -> void:
             preview_positions = Choices.preview_positions(preview,true)
             command_busy = false
             _refresh_selection_media()
-            if pending_request.auto_confirm and preview.can_confirm: confirm_selection()
+            if (pending_request.auto_confirm and preview.can_confirm) or (auto_confirm_targets and pending_request.get("complete_targets",false) and Interaction.selection_complete(preview)): confirm_selection()
             else:
                 notice_text = preview.reason if preview.get("reason") != null else ""
                 if hud!=null:hud.show_item_targets()
@@ -4032,6 +4144,21 @@ func _world_click(hit: Dictionary, alternative: bool = false) -> void:
     if not alternative and defaults.size() == 1: _choose_world_option(defaults[0]); return
     context_options = options
     _show_context(options.map(func(option):return option.label))
+
+func pick_target(screen:Vector2,ground_only:bool=false)->Dictionary:
+    var hit:Dictionary={} if ground_only else pick_world(screen)
+    if not ground_only:
+        if selected_action.is_empty() or hit.get("kind")=="ground":return hit
+        var aim:Dictionary=Interaction.extend_selection(available_actions,selected_action,target_selection,selection_preview,
+            hit.get("position",[]),hit.get("id",""),true,timeline.state,Interaction.hit_subject_kind(hit))
+        var binding:Dictionary=aim.get("target",{})
+        var domains:Dictionary=available_actions if selection_preview.is_empty() else selection_preview
+        # An admitted body remains clickable at its visible artwork. Decorative
+        # scenery must not snap a floor aim to that prop's contact position.
+        if not binding.is_empty() and Choices.binding_subject(domains,binding)!=null:return hit
+        if hit.get("kind")=="actor" and not aim.is_empty():return hit
+    var cell:Dictionary=pick_cell(screen)
+    return {"id":"","kind":"ground","label":"","position":cell.position} if not cell.is_empty() else {}
 
 func pick_world(screen: Vector2) -> Dictionary:
     # Ctrl deliberately targets the original native members, including hidden
@@ -4284,7 +4411,7 @@ func _update_hover() -> void:
     var key: Array = []
     var intent: Dictionary = {}
     if ready and not over_ui:
-        hover_hit = pick_world(get_viewport().get_mouse_position())
+        hover_hit = pick_target(get_viewport().get_mouse_position(),Input.is_physical_key_pressed(KEY_V))
         var safe = not Input.is_physical_key_pressed(KEY_SHIFT)
         key = [hover_hit.get("id"),hover_hit.get("position"),safe,action_revision,
             available_actions.entity_uuid,available_actions.discovery_generation,force_attack,
@@ -4326,7 +4453,7 @@ func _update_hover() -> void:
     hover_requests[hover_request] = hover_context
 
 func _unhandled_input(event: InputEvent) -> void:
-    if external_playback: return
+    if external_playback or restart_in_progress: return
     var focus = get_viewport().gui_get_focus_owner()
     if focus is LineEdit or focus is TextEdit: return
     if event is InputEventKey and hud.owns_keyboard_focus(): return
@@ -4376,8 +4503,10 @@ func _unhandled_input(event: InputEvent) -> void:
         if event.button_index == MOUSE_BUTTON_WHEEL_UP: camera.size = maxf(4,camera.size*0.9)
         if event.button_index == MOUSE_BUTTON_WHEEL_DOWN: camera.size = minf(80,camera.size/0.9)
         if event.button_index == MOUSE_BUTTON_LEFT:
-            _world_click(pick_world(event.position))
+            get_viewport().set_input_as_handled()
+            _world_click(pick_target(event.position,Input.is_physical_key_pressed(KEY_V)))
         if event.button_index == MOUSE_BUTTON_RIGHT:
+            get_viewport().set_input_as_handled()
             if not selected_action.is_empty() or not pending_approach.is_empty(): cancel_selection()
             else: _world_click(pick_world(event.position),true)
 

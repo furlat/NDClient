@@ -20,6 +20,7 @@ class HUD extends "res://play_hud.gd":
     func pointer_over_controls(_point:Vector2=Vector2.INF) -> bool: return false
 class Player extends "res://play.gd":
     var clicks=[]
+    var selections=[]
     func _ready() -> void:
         set_process(false)
         camera=Camera3D.new();camera.projection=Camera3D.PROJECTION_ORTHOGONAL;camera.size=10
@@ -27,8 +28,10 @@ class Player extends "res://play.gd":
         add_child(context_menu);context_menu.hide()
     func command_ready() -> bool: return true
     func pick_cell(_point:Vector2) -> Dictionary: return {"position":[9,9]}
-    func choose_target(position:Array,identity:String="",_scope:String="") -> bool:
-        clicks.append({"position":position,"id":identity});return true
+    func choose_target(position:Array,identity:String="",scope:String="") -> bool:
+        clicks.append({"position":position,"id":identity});return super.choose_target(position,identity,scope)
+    func _request_selection(_auto_confirm:bool)->void:
+        selections.append(target_selection.duplicate(true))
 var checks=0
 var failures=[]
 var scene:Player
@@ -45,8 +48,8 @@ func mouse_click(point:Vector2) -> void:
     for pressed in [true,false]:
         var event=InputEventMouseButton.new();event.position=point;event.global_position=point;event.button_index=MOUSE_BUTTON_LEFT;event.pressed=pressed
         viewport.push_input(event,true)
-func alt(pressed:bool) -> void:
-    var event=InputEventKey.new();event.keycode=KEY_ALT;event.physical_keycode=KEY_ALT;event.pressed=pressed
+func key_state(code:Key,pressed:bool) -> void:
+    var event=InputEventKey.new();event.keycode=code;event.physical_keycode=code;event.pressed=pressed
     Input.parse_input_event(event)
     Input.flush_buffered_events()
 func refresh() -> void:
@@ -91,24 +94,63 @@ func run() -> void:
     for repeat in range(2):
         mouse_click(point)
         check(hud.hover_outline.owners.is_empty() and scene.clicks.size()==repeat+1,"Actual target click clears temporary outline once")
+        check(scene.selections.size()==repeat+1 and scene.selections[-1].target_indices.size()==repeat+1 and scene.selections[-1].extra_target_positions.is_empty(),"Each native press/release appends one body target and no floor continuation")
         refresh();check(hud.hover_outline.owners.is_empty(),"Stationary pointer cannot immediately restore clicked outline")
         motion(point);refresh()
+    # The same real pointer gesture has both a body and a position continuation.
+    # V deliberately resolves the floor ray; it must not also append the body.
+    scene.target_selection={"action_index":0,"target_indices":[],"extra_target_positions":[],"prefer_safe":true}
+    scene.selection_preview={"can_confirm":true,"subjects":scene.available_actions.subjects,"positions":[[0,0],[3,0],[9,9]],"target_sets":[scene.available_actions.target_sets[0]],"next_target_set":0,"next_positions":[0,2]}
+    motion(point);refresh();mouse_click(point)
+    check(scene.selections[-1].target_indices==[0] and scene.selections[-1].extra_target_positions.is_empty(),"Physical body click wins over a same-cell floor continuation")
+    scene.target_selection={"action_index":0,"target_indices":[],"extra_target_positions":[],"prefer_safe":true}
+    var before_floor:int=scene.selections.size()
+    key_state(KEY_V,true);motion(point);refresh()
+    check(scene.hover_hit.kind=="ground" and scene.hover_hit.position==[9,9] and hud._hover_target_subject().is_empty(),"Held V uses the floor ray under the same body artwork")
+    mouse_click(point);key_state(KEY_V,false)
+    check(scene.selections.size()==before_floor+1 and scene.selections[-1].target_indices.is_empty() and scene.selections[-1].extra_target_positions==[[9,9]],"V press/release click appends the offered floor once without a body target")
+    scene.target_selection={"action_index":0,"target_indices":[],"extra_target_positions":[],"prefer_safe":true};scene.selection_preview={}
     motion(Vector2(20,220));refresh();check(hud.hover_outline.owners.is_empty(),"Mouse leaving character clears outline")
     scene.selected_action=ground;motion(point);refresh()
     check(scene.hover_hit.id=="actor" and hud._hover_target_subject().is_empty(),"Position spell stays ground-targeted over the same actual body")
     check(scene.ground_overlay.marks.has("0,0") and not scene.ground_overlay.marks.has("9,9") and hud.hover_outline.owners.is_empty(),"Ground-target click keeps the admitted cell over a body, not the floor ray below it")
+    check(scene.ground_overlay.marks["0,0"].width==3.0 and scene.ground_overlay.marks["0,0"].fill_colour.a>0,"Admitted ground aim has a full cell outline and visible fill")
+    scene.hover_preview={"area_preview":"computed","positions":[[0,0]],"affected_positions":[0]};hud._update_ground_preview()
+    check(scene.ground_overlay.marks["0,0"].fill_colour==Color(0.92,0.59,0.23,0.2),"Ground aim preserves the actual area preview fill")
+    scene.hover_preview={}
+    hud._refresh_world_labels()
+    check("Hold V to aim at ground" in hud.hover_info.text,"Selected nonself action explains the ground override")
+    scene.selected_action=row.duplicate();scene.selected_action.cast_at_level=5;scene.selected_action.num_projectiles=3
+    hud._refresh_world_labels()
+    check("0 selected" in hud.hover_info.text and not "/ 3 selected" in hud.hover_info.text,"Selected cast level does not promise the discovery row's base projectile count")
     scene.selected_action=row
     var object_point=scene.camera.unproject_position(object.node.position)
     motion(object_point);refresh();check(object.material.get_shader_parameter("highlighted"),"Actual disclosed object hover highlights source")
     mouse_click(object_point);check(not object.material.get_shader_parameter("highlighted"),"Object click restores exact previous highlight parameter")
+    # Named GUI-source control uses the real EnvironmentSource roles: door
+    # leaf partitions1/3 share the placement with noninteractive arch role2.
+    var leaf=source("door","door",5,texture);var back_leaf=source("door","door",5,texture);back_leaf.source_role=3
+    var arch=source("door","door",5,texture);arch.source_role=2
+    scene.static_entries.append_array([leaf,back_leaf,arch]);scene.draw_order.append_array([leaf,back_leaf,arch]);scene.placements.append(leaf.placement)
+    scene.scenery_visibility.door=true
+    scene.timeline.state.objects.door={"item":{"name":"Door","item_id":"fixture"}}
+    scene.available_actions=scene.available_actions.duplicate(true)
+    scene.selected_action=scene.available_actions.entity_actions[0]
+    scene.available_actions.subjects.append({"uuid":"door","kind":"object"});scene.available_actions.positions.append([5,0])
+    scene.available_actions.target_sets[0].append({"kind":"subject","subject":2,"position":2,"index":2})
+    var door_point:Vector2=scene.camera.unproject_position(leaf.node.position)
+    motion(door_point);refresh()
+    check(leaf.material.get_shader_parameter("highlighted") and back_leaf.material.get_shader_parameter("highlighted") and not arch.material.get_shader_parameter("highlighted"),"Door hover highlights both native leaf passes without its shared-identity arch")
+    mouse_click(door_point)
+    check(not leaf.material.get_shader_parameter("highlighted") and not back_leaf.material.get_shader_parameter("highlighted") and not arch.material.get_shader_parameter("highlighted"),"Door click restores leaf and frame materials")
     motion(Vector2(20,220));refresh()
-    alt(true);refresh()
+    key_state(KEY_ALT,true);refresh()
     check(object.material.get_shader_parameter("highlighted"),"Actual Alt press highlights active disclosed object")
     check(not hidden.material.get_shader_parameter("highlighted"),"Alt cannot reveal remembered undisclosed object")
-    alt(false);refresh()
+    key_state(KEY_ALT,false);refresh()
     check(not object.material.get_shader_parameter("highlighted"),"Actual Alt release restores original object material")
     if DisplayServer.get_name()!="headless":
-        scene.selected_action=row;motion(point);refresh()
+        scene.selected_action=scene.available_actions.entity_actions[0];motion(point);refresh()
         # The real HUD samples each frame, including after its private alpha
         # viewport has submitted. A process-frame wait alone is not that fence.
         var deadline:int=Time.get_ticks_msec()+2000

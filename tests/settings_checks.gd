@@ -38,6 +38,9 @@ class SettingsWorld extends FixtureWorld:
     func set_native_spell_hit_material(enabled:bool)->void:
         native_spell_hit_material=enabled
         Settings.write_spell_hit_material(enabled,settings_path)
+    func set_auto_confirm_targets(enabled:bool)->void:
+        auto_confirm_targets=enabled
+        Settings.write_auto_confirm_targets(enabled,settings_path)
     func close_storage()->void:
         loot_object_uuid=""
         if owner_hud!=null:owner_hud.loot_panel.hide()
@@ -75,7 +78,7 @@ func run()->void:
     root.size=Vector2i(1280,720)
     root.gui_embed_subwindows=true
     check(Settings.PROFILES.keys()==["original","gentle","reference"],"Only three delivered normal profiles are offered")
-    check(Settings.read(config_path)=={"profile":"reference","fire_light_flicker":false,"light_strength":1.0,"light_cap_enabled":true,"native_spell_hit_material":true,"error":OK} and not FileAccess.file_exists(config_path),"Missing settings use Reference, static fire, full strength, overlap cap and native spell hits without writing a file")
+    check(Settings.read(config_path)=={"profile":"reference","fire_light_flicker":false,"light_strength":1.0,"light_cap_enabled":true,"native_spell_hit_material":true,"auto_confirm_targets":true,"error":OK} and not FileAccess.file_exists(config_path),"Missing settings use declared display defaults and automatic target confirmation without writing a file")
     check(Settings.write("gentle",config_path)==OK and Settings.read(config_path).profile=="gentle","ConfigFile round trip preserves a selected profile")
     check(Settings.write("unregistered-profile",config_path)==ERR_INVALID_PARAMETER and Settings.read(config_path).profile=="gentle","Unknown profile cannot overwrite saved selection")
     var saved=ConfigFile.new();saved.load(config_path);saved.set_value("unrelated","keep",73);saved.save(config_path)
@@ -111,6 +114,12 @@ func run()->void:
     check(hud.settings_panel.profiles.get_item_metadata(hud.settings_panel.profiles.selected)=="reference","Menu reflects renderer's accepted profile")
     check(not hud.settings_panel.fire_flicker.button_pressed,"Fire light flicker defaults off")
     check(hud.settings_panel.spell_hits.selected==1,"Native material choice reflects the renderer")
+    check(hud.settings_panel.auto_confirm_targets.button_pressed,"Target confirmation defaults on")
+    hud.settings_panel.auto_confirm_targets.grab_focus();key(KEY_SPACE);await process_frame
+    check(not world.auto_confirm_targets and not Settings.read(config_path).auto_confirm_targets,"Native checkbox disables and persists automatic target confirmation")
+    key(KEY_SPACE);await process_frame
+    check(world.auto_confirm_targets and Settings.read(config_path).auto_confirm_targets,"Native checkbox restores automatic target confirmation")
+    check(Settings.read(config_path).profile=="reference" and Settings.read(config_path).native_spell_hit_material,"Target preference preserves display settings")
     hud.settings_panel.spell_hits.grab_focus();key(KEY_SPACE);await process_frame
     key(KEY_UP);key(KEY_ENTER);await process_frame
     check(not world.native_spell_hit_material and not Settings.read(config_path).native_spell_hit_material,"Actual hit selector switches and persists Colour treatment")

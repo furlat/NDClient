@@ -145,6 +145,15 @@ static func target(domains: Dictionary, pool: Array, position: Array, identity: 
             if subject != null and subject.uuid == identity and (subject_kind.is_empty() or subject.kind==subject_kind): return candidate
     for candidate in pool:
         if Choices.binding_subject(domains,candidate) == null and same_position(Choices.binding_position(domains,candidate),position): return candidate
+    # Clicking a disclosed subject's ground contact is the same selection only
+    # when this exact response offers one unambiguous binding there.
+    if identity.is_empty():
+        var at_cell:Dictionary={}
+        for candidate in pool:
+            if Choices.binding_subject(domains,candidate)==null or not same_position(Choices.binding_position(domains,candidate),position):continue
+            if not at_cell.is_empty() and at_cell!=candidate:return {}
+            at_cell=candidate
+        return at_cell
     return {}
 
 static func main_attack(choices: Dictionary, identity: String, preference: String) -> Dictionary:
@@ -161,12 +170,14 @@ static func extend_selection(choices: Dictionary, action: Dictionary, prefix: Di
     # A computed empty continuation must never fall back to initial eligibility.
     var selected = prefix.duplicate(true)
     selected.prefer_safe = safe
-    if Choices.preview_positions(preview).any(func(point):return same_position(point,position)):
-        selected.extra_target_positions.append(position.duplicate())
-        return {"selection":selected,"position":position}
     var domains = choices if preview.is_empty() else preview
     var options = Choices.action_options(choices,action) if preview.is_empty() else Choices.next_options(preview)
     var candidate = target(domains,options,position,identity,subject_kind)
+    var subject:Variant=Choices.binding_subject(domains,candidate) if not candidate.is_empty() else null
+    var body_selected:bool=not identity.is_empty() and subject!=null and subject.uuid==identity
+    if not body_selected and Choices.preview_positions(preview).any(func(point):return same_position(point,position)):
+        selected.extra_target_positions.append(position.duplicate())
+        return {"selection":selected,"position":position}
     if candidate.is_empty():
         # Only the first aim uses discovery's region. A subsequent vertex must
         # be admitted by this exact prefix's Preview continuation, even empty.
@@ -176,6 +187,11 @@ static func extend_selection(choices: Dictionary, action: Dictionary, prefix: Di
         return {}
     selected.target_indices.append(candidate.index)
     return {"selection":selected,"target":candidate,"position":Choices.binding_position(domains,candidate)}
+
+static func selection_complete(preview:Dictionary)->bool:
+    # Upcast rows can retain their base projectile count. Only the current
+    # server continuation proves that every selectable target has been chosen.
+    return preview.get("can_confirm",false) and Choices.next_options(preview).is_empty() and Choices.preview_positions(preview).is_empty()
 
 static func idle_intent(choices: Dictionary, state: Dictionary, hit: Dictionary,
         force_attack: bool, preference: String, mode: String, safe: bool = true) -> Dictionary:

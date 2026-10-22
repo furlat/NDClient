@@ -25,6 +25,8 @@ var light_strength = 1.0
 var fire_light_flicker = false
 var light_cap_enabled = true
 var native_spell_hit_material = false
+var auto_confirm_targets = true
+func set_auto_confirm_targets(enabled:bool)->void: auto_confirm_targets=enabled
 var character_light_profile = ""
 func error_report(message: String) -> Dictionary:
     return {"kind":"ndclient_error","message":message,"displayed_sequence":timeline.sequence}

@@ -2926,6 +2926,19 @@
    "reason": ""
   },
   {
+   "name": "player_restart_checks",
+   "script": "res://tests/player_restart_checks.gd",
+   "mode": "live",
+   "tier": "live",
+   "args": [
+    "--scenario",
+    "crypt_gallery"
+   ],
+   "timeout": 600,
+   "status": "ok",
+   "reason": "Real menu restart after movement twice; retains process, viewport and media allocations while replacing the backend encounter and preserving both old journals."
+  },
+  {
    "name": "player_profile",
    "script": "res://tests/player_profile.gd",
    "mode": "none",
@@ -5196,13 +5209,15 @@
    "script": "res://tests/targeting_hover_checks.gd",
    "mode": "gpu",
    "tier": "gate",
-   "args": [],
+   "args": [
+    "--case=res://tests/fixtures/schema18/targeting-preview/checks.json"
+   ],
    "timeout": 600,
    "options": [
     "--case"
    ],
-   "status": "needs-args",
-   "reason": "Needs --case=<genuine targeting Choices/Preview checks.json>. A recording alone lacks the required hover/original choice evidence; preserve the actual source metadata oracle."
+   "status": "ok",
+   "reason": "Retained schema18 real-server Choices/Preview and original journal: empty-floor aim, ordered/repeated targets, delayed/stale replies, upcast completion and manual confirmation."
   },
   {
    "name": "targeting_native_capture",

@@ -91,12 +91,12 @@ func _issue_input(selected:Dictionary,record:Dictionary)->void:
         await _gesture_frame(record)
     record.ui_markers.append({"kind":"target_click","position":target,"time_us":Time.get_ticks_usec(),"frame":Engine.get_process_frames()})
     click_grid(target)
-    # Free aim extends extra_target_positions and therefore uses the native
-    # explicit Confirm path, just like other compound position selections.
+    # The user's completion preference applies after the exact server Preview;
+    # incomplete multi-point selections still retain the native Confirm path.
     var spec:Variant=selected.action.get("position_selection")
     var explicit:bool=selected.action.get("position_region")!=null or selected.action.target_type=="multi_entity" or (spec!=null and spec.kind in ["path","entity_destination"])
-    record.confirmation="explicit" if explicit else "native_target_auto_confirm"
-    if explicit:
+    record.confirmation="explicit" if explicit and not scene.auto_confirm_targets else "native_target_auto_confirm"
+    if explicit and not scene.auto_confirm_targets:
         if not await until(func():return scene.action_request<0 and scene.selection_preview.get("can_confirm",false) and not scene.hud.confirm_button.disabled,"Actual target preview enables native Confirm"):return
         record.ui_markers.append({"kind":"confirm_click","time_us":Time.get_ticks_usec(),"frame":Engine.get_process_frames()})
         _ui_click(scene.hud.confirm_button.get_global_rect().get_center())
@@ -265,6 +265,7 @@ func _run()->void:
     else:
         root.add_child(scene)
         evidence.render_host="Ordinary root viewport; production admitted action handlers; no extra display blit"
+    DisplayServer.window_set_title("NDClient · Gameplay performance check · Gallery")
     check(scene.profiling_configured.ok and scene.session.transport.profiling_enabled(),"Transport profiling configured before live start")
     scene.camera.size=profile_view_size;scene.grid_visible=false
     evidence.profile_view_size=profile_view_size;evidence.window_size=[root.size.x,root.size.y]

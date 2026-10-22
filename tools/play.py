@@ -165,6 +165,10 @@ async def run(args: argparse.Namespace) -> Path:
         "trusted_operations":True,
         "journal":windows_path(output / "journal"), "seat_id":seat.seat_id,
         "test_command_delay_ms":args.test_command_delay_ms,"test_result":windows_path(output / "player-live-checks.json")}
+    restart_enabled = not args.profile_pipeline and (not (args.test_script or args.quit_after or args.headless)
+        or args.test_script == "res://tests/player_restart_checks.gd")
+    if restart_enabled:
+        client_values["restart_url"] = f"http://127.0.0.1:{port}/local/restart"
     if spell_profile:
         client_values["profile_steps"] = profile_steps + [
             {"behavior":"spell.fire_bolt", "actor_name":"Expedition sorcerer", "offered_opponent":True},
@@ -190,7 +194,12 @@ async def run(args: argparse.Namespace) -> Path:
     print(("Lantern Gallery" if args.scenario in ("crypt_gallery", "gallery_sorcerer") else "Lantern Crypt") + " · Expedition", flush=True)
     print("Run files: " + str(output), flush=True)
     with (output / "server.log").open("wb") as server_log, (output / "godot.log").open("wb") as godot_log:
-        host_entry = [str(project / "tools/profile_host.py"), "--cpu-commands", args.profile_cpu_commands] if args.profile_pipeline else ["-m", "devtools.player_server_acceptance.test_host"]
+        if args.profile_pipeline:
+            host_entry = [str(project / "tools/profile_host.py"), "--cpu-commands", args.profile_cpu_commands]
+        elif restart_enabled:
+            host_entry = [str(project / "tools/play_host.py")]
+        else:
+            host_entry = ["-m", "devtools.player_server_acceptance.test_host"]
         if args.profile_pipeline and args.profile_action_phases:
             host_entry.append("--action-phases")
         host = await asyncio.create_subprocess_exec(sys.executable, *host_entry,
@@ -281,7 +290,7 @@ def main() -> None:
     parser.add_argument("--scenario", choices=("crypt", "crypt_gallery", "gallery_sorcerer"), default="crypt_gallery", help="Backend encounter; crypt retains the original small baseline")
     parser.add_argument("--headless", action="store_true", help="Headless Godot for launch validation")
     parser.add_argument("--quit-after", type=int, default=0, metavar="FRAMES", help="Close after a bounded number of Godot frames")
-    parser.add_argument("--test-script", choices=("res://tests/player_startup_checks.gd", "res://tests/live_idle_ui_checks.gd", "res://tests/live_gallery_checks.gd", "res://tests/live_spell_checks.gd", "res://tests/player_wait_checks.gd", "res://tests/player_live_checks.gd", "res://tests/player_interaction_checks.gd", "res://tests/lighting_live_checks.gd", "res://tests/chest_live_checks.gd"), help="Run a bounded production-scene acceptance test")
+    parser.add_argument("--test-script", choices=("res://tests/player_startup_checks.gd", "res://tests/player_restart_checks.gd", "res://tests/live_idle_ui_checks.gd", "res://tests/live_gallery_checks.gd", "res://tests/live_spell_checks.gd", "res://tests/player_wait_checks.gd", "res://tests/player_live_checks.gd", "res://tests/player_interaction_checks.gd", "res://tests/lighting_live_checks.gd", "res://tests/chest_live_checks.gd"), help="Run a bounded production-scene acceptance test")
     parser.add_argument("--live-fireball-ui", action="store_true", help="Live spell profile: ordinary Gallery AI setup and native Fireball selection/hover/Confirm input")
     parser.add_argument("--profile-root-player", action="store_true", help="Live spell control: ordinary root viewport and production admitted action handlers, without GUI gesture preparation")
     parser.add_argument("--test-command-delay-ms", type=int, default=0, help="Acceptance only: hold the first real command before forwarding it")

@@ -82,6 +82,19 @@ var hover_object_materials: Dictionary = {}
 var hover_object_key: Array = []
 var hover_object_discovery: Dictionary = {}
 
+func reset_encounter()->void:
+    # Keep the HUD and its image cache; discoveries belong to the old game even
+    # when a new recipe happens to reuse an actor UUID or discovery generation.
+    _cancel_bar_build();_close_popup();clear_hover_feedback()
+    hover_object_discovery={}
+    painted_discovery={};painted_actor="";groups={};shortcuts={}
+    pages={"Base":0,"Class":0,"Spells":0,"Items":0}
+    selected_item="";selected_slot="";hovered_item="";inspected_actor_id=""
+    last_revision=-1;last_discovery="";last_selection="";last_ready=false
+    last_viewport_size=Vector2(-1,-1)
+    panel.hide();history_panel.hide_panel();history_panel.revision=-1
+    for button in action_buttons:button.disabled=true
+
 func _ready() -> void:
     set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
     mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -1146,6 +1159,9 @@ func _refresh_hover_feedback() -> void:
     if objects.is_empty(): return
     for entry in world.static_entries:
         if entry.role == "shadow" or not entry.node.visible or not objects.has(entry.placement.id): continue
+        # The arch shares the door's placement identity. Only the two native
+        # depth-partitioned leaf passes are interactive door artwork.
+        if entry.placement.kind=="door" and int(entry.get("source_role",1))==2:continue
         var material: ShaderMaterial = entry.material
         hover_object_materials[entry.node.get_instance_id()]={"entry":entry,"value":world.SourceMaterial.value(entry,"highlighted")}
         world.SourceMaterial.set_parameter(entry,"highlighted",true)
@@ -1180,9 +1196,13 @@ func _refresh_world_labels() -> void:
         var label_text = str(world.hover_hit.get("label",""))
         if not world.selected_action.is_empty():
             label_text = str(world.selected_action.display_name)+(": "+label_text if not label_text.is_empty() else "")
+            if world.selected_action.get("target_type")!="self":
+                label_text += "\nHold V to aim at ground"
             if world.selected_action.get("target_type")=="multi_entity":
                 var count = world.target_selection.get("target_indices",[]).size()
-                var total = world.selected_action.get("num_projectiles")
+                # Discovery's projectile count may describe the base spell;
+                # a selected cast level is resolved by the server Preview.
+                var total = null if world.selected_action.has("cast_at_level") else world.selected_action.get("num_projectiles")
                 label_text += "\n"+("%d / %d selected" % [count,total] if total!=null else "%d selected" % count)
         elif not world.hover_intent.is_empty():
             label_text = str(world.hover_intent.label)+(": "+label_text if not label_text.is_empty() else "")
@@ -1267,7 +1287,8 @@ func _update_ground_preview() -> void:
     var eligibility: Dictionary = world.selection_preview if ready and not world.selected_action.is_empty() else preview
     var current: Dictionary = world.visual_actors.get(world.timeline.state.get("current_actor_uuid",""),{}).get("row",{})
     var show_reachable: bool = ready and not over_ui and world.selected_action.is_empty() and world.hover_hit.get("kind")=="ground"
-    var key = [world.timeline.world_revision,cursor,current.get("position"),show_reachable,ready]
+    var targeting:bool=not world.selected_action.is_empty() and world.hover_intent.get("kind")=="target"
+    var key = [world.timeline.world_revision,cursor,current.get("position"),show_reachable,ready,targeting]
     if key==ground_preview_key and is_same(preview,ground_preview_source) and is_same(eligibility,ground_preview_eligibility) and is_same(world.available_actions,ground_preview_choices): return
     ground_preview_key = key.duplicate(true)
     ground_preview_source = preview
@@ -1307,7 +1328,11 @@ func _update_ground_preview() -> void:
         var row: Dictionary=world.visual_actors.get(id,{}).get("row",{})
         if not row.is_empty(): _ground_mark(marks,row.position,Color("f0aa69"),3.0)
     if not current.is_empty(): _ground_mark(marks,current.position,Color("e9c87e"))
-    if not cursor.is_empty(): _ground_mark(marks,cursor.position,Color("70d6be"))
+    if not cursor.is_empty():
+        _ground_mark(marks,cursor.position,Color("70d6be"),3.0 if targeting else 2.0)
+        var cursor_key:String="%d,%d"%[cursor.position[0],cursor.position[1]]
+        if targeting and marks.has(cursor_key) and not marks[cursor_key].has("fill_colour"):
+            marks[cursor_key].fill_colour=Color(0.44,0.84,0.75,0.2)
     var route = preview.get("selected_route")
     var colour = Color("70d6be")
     if route!=null and (route.get("is_hazardous",false) or not route.get("opportunity_attack_exposures",[]).is_empty()): colour=Color("eb8a6d")

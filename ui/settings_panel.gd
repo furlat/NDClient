@@ -6,12 +6,14 @@ var card = PanelContainer.new()
 var profiles = OptionButton.new()
 var fire_flicker = CheckBox.new()
 var light_cap = CheckBox.new()
+var auto_confirm_targets = CheckBox.new()
 var spell_hits = OptionButton.new()
 var strength = HSlider.new()
 var strength_value = Label.new()
 var strength_save = Timer.new()
 var description = Label.new()
 var resume_button = Button.new()
+var restart_button = Button.new()
 var close_button = Button.new()
 var prior_focus: WeakRef
 var stack=VBoxContainer.new()
@@ -108,6 +110,10 @@ func _ready() -> void:
     spell_hits.add_item("Colour treatment");spell_hits.add_item("Full spell material")
     spell_hits.item_selected.connect(func(index:int):hud.world.set_native_spell_hit_material(index==1))
     stack.add_child(spell_hits)
+    auto_confirm_targets.text = "Confirm when all targets are selected"
+    auto_confirm_targets.tooltip_text = "Automatically confirm when a multi-target, free-aim or multi-step selection is complete. Turn off to review these selections with Confirm."
+    auto_confirm_targets.toggled.connect(func(enabled:bool):hud.world.set_auto_confirm_targets(enabled))
+    stack.add_child(auto_confirm_targets)
     var note = Label.new()
     note.text = "The game continues while settings are open."
     note.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
@@ -118,6 +124,12 @@ func _ready() -> void:
     resume_button.custom_minimum_size.y = 38
     resume_button.pressed.connect(hud.close_settings)
     stack.add_child(resume_button)
+    restart_button.text = "Restart game"
+    restart_button.tooltip_text = "Start this encounter again from the beginning."
+    restart_button.custom_minimum_size.y = 38
+    restart_button.hide()
+    restart_button.pressed.connect(_restart_game)
+    stack.add_child(restart_button)
     card.minimum_size_changed.connect(func(): _layout.call_deferred())
     resized.connect(_layout)
     _layout()
@@ -129,11 +141,15 @@ func _layout() -> void:
     card.position = (size-card.size)*0.5
 
 func refresh() -> void:
+    restart_button.visible = hud.world.game_config.has("restart_url")
+    restart_button.disabled = restart_button.visible and hud.world.restart_in_progress
+    restart_button.text = "Restarting…" if restart_button.disabled else "Restart game"
     strength.set_value_no_signal(hud.world.light_strength)
     strength_value.text = "%d%%" % roundi(hud.world.light_strength*100)
     fire_flicker.set_pressed_no_signal(hud.world.fire_light_flicker)
     light_cap.set_pressed_no_signal(hud.world.light_cap_enabled)
     spell_hits.select(1 if hud.world.native_spell_hit_material else 0)
+    auto_confirm_targets.set_pressed_no_signal(hud.world.auto_confirm_targets)
     var profile: String = hud.world.character_light_profile
     for index in range(profiles.item_count):
         if profiles.get_item_metadata(index)==profile: profiles.select(index);break
@@ -184,6 +200,14 @@ func _select_strength(value: float) -> void:
 func _save_strength() -> void:
     strength_save.stop()
     hud.world.set_light_strength(strength.value)
+
+func _restart_game() -> void:
+    if hud.world.restart_in_progress: return
+    if not strength_save.is_stopped(): _save_strength()
+    restart_button.disabled = true
+    restart_button.text = "Restarting…"
+    hud.world.restart_game()
+    refresh()
 
 func _gui_input(event: InputEvent) -> void:
     if event is InputEventMouse: accept_event()

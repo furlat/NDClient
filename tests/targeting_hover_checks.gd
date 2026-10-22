@@ -3,6 +3,8 @@ extends SceneTree
 const Choices = preload("res://sdk/choices.gd")
 const Interaction = preload("res://presentation/interaction.gd")
 const UI = preload("res://presentation/ui_catalog.gd")
+const Fixtures = preload("res://tests/recording_fixtures.gd")
+const Protocol = preload("res://sdk/protocol.gd")
 class QueryPeer extends RefCounted:
     var requests: Dictionary = {}
     var responses: Dictionary = {}
@@ -14,11 +16,13 @@ class QueryPeer extends RefCounted:
         return next_id
     func retire_record(_value: Dictionary) -> void: pass
     func close() -> void: pass
+    func matches_choice_boundary(_value:Dictionary)->bool:return true
 class PointerHUD extends Control:
     var captured = false
     func pointer_over_controls(_point: Vector2 = Vector2.INF) -> bool: return captured
     func owns_keyboard_focus() -> bool: return captured
     func clear_hover_feedback() -> void: pass
+    func show_item_targets() -> void: pass
 class GroundHUD extends "res://play_hud.gd":
     func _ready() -> void:
         super._ready()
@@ -69,28 +73,31 @@ func run() -> void:
     peer.status = {"boundary":{"state_revision":evidence.before_status.boundary.state_revision,"input_actor_uuid":domain.entity_uuid}}
     scene.action_revision = peer.status.boundary.state_revision
     scene.available_actions = domain
-    scene.timeline.state = {"current_actor_uuid":domain.entity_uuid,"objects":{}}
+    var folded:Dictionary=Fixtures.canonical(fixture.get_base_dir(),int(evidence.before_status.published_cursor.sequence))
+    check(folded.ok,"Original current-schema journal folds through the query boundary")
+    if not folded.ok:quit(1);return
+    scene.timeline.state=folded.value
     var fireball = action(domain,"spell.fireball",fireballs[0].selection.action_index)
     var fireball_text = UI.action_text(fireball)
     check(fireball_text.contains("8d6 Fire") and fireball_text.contains("DC 15 dexterity save") and fireball_text.contains("Half damage on successful save"),"Real Fireball tooltip preserves native damage dice, save DC/ability and half-save fact")
     check(not fireball_text.contains("%"),"Fireball tooltip invents no target probability")
     scene.select_action(fireball)
-    reply(scene.action_request,fireballs[0].preview)
-    var first = Choices.action_options(domain,fireball).filter(func(row):return row.index==fireballs[1].selection.target_indices[0])[0]
-    var second = Choices.action_options(domain,fireball).filter(func(row):return row.index==fireballs[3].selection.target_indices[0])[0]
-    scene.pointer = {"kind":"ground","position":Choices.binding_position(domain,first)}
+    check(fireball.get("position_region")!=null and scene.action_request<0,"Current free-aim row waits for an aimed position before Preview")
+    var empty_selection:Dictionary=scene.target_selection.duplicate(true)
+    var first_record:Dictionary=evidence.indexed_fireballs[0]
+    var second_record:Dictionary=evidence.indexed_fireballs[1]
+    var first:Array=Choices.binding_position(domain,Choices.action_options(domain,fireball).filter(func(row):return row.index==first_record.selection.target_indices[0])[0])
+    var second:Array=Choices.binding_position(domain,Choices.action_options(domain,fireball).filter(func(row):return row.index==second_record.selection.target_indices[0])[0])
+    scene.pointer = {"kind":"ground","position":first}
     update_hover()
     var first_query = scene.hover_request
-    check(peer.requests[first_query].body.selection==fireballs[1].selection,"Selected Fireball hover queries exact actual candidate prefix")
+    check(Protocol._equal(peer.requests[first_query].body.selection,first_record.selection),"Selected Fireball hover queries exact actual candidate prefix")
     check(scene.target_selection.target_indices.is_empty() and scene.submitted.is_empty(),"Prospective hover does not select or spend")
-    reply(first_query,fireballs[1].preview,true)
-    check(scene.hover_preview==fireballs[1].preview and scene.selection_preview==fireballs[0].preview,"Computed Fireball hover and selected-prefix preview stay separate")
+    reply(first_query,first_record.preview,true)
+    check(scene.hover_preview==first_record.preview and scene.selection_preview.is_empty(),"Computed Fireball hover and selected-prefix preview stay separate")
     check(Choices.preview_positions(scene.hover_preview,true).size()==49,"Visible Fireball footprint is the actual 49 SDK cells")
     check(scene.hover_cursor==Input.CURSOR_CROSS,"Actual admitted spell candidate has targeting cursor")
     scene.camera = Camera3D.new(); scene.add_child(scene.camera)
-    scene.timeline.state.tiles = {}
-    for position in domain.positions+fireballs[1].preview.positions+fireballs[3].preview.positions:
-        scene.timeline.state.tiles["%d,%d" % [position[0],position[1]]] = {"position":position,"elevation_steps":0}
     var ground_hud = GroundHUD.new(); ground_hud.world=scene; root.add_child(ground_hud)
     ground_hud._update_ground_preview()
     var stable_marks: Dictionary = scene.ground_overlay.marks.duplicate(true)
@@ -99,49 +106,48 @@ func run() -> void:
     var old_cursor_position: Array = scene.hover_intent.value.position
     var old_cursor_cell = "%d,%d" % [old_cursor_position[0],old_cursor_position[1]]
     var eligibility_cells: Array = []
-    for target in Choices.next_options(scene.selection_preview):
-        var position = Choices.binding_position(scene.selection_preview,target)
-        if position!=null: eligibility_cells.append("%d,%d" % [position[0],position[1]])
+    for position in Interaction.region_positions(domain,fireball,scene.timeline.state):
+        if scene.timeline.state.tiles.has("%d,%d"%[position[0],position[1]]):eligibility_cells.append("%d,%d" % [position[0],position[1]])
     check(not eligibility_cells.is_empty() and eligibility_cells.all(func(cell):return stable_marks.has(cell)),"Computed hover retains every legal aim cell from the selected-prefix domain")
     var count = peer.requests.size()
     update_hover()
     check(peer.requests.size()==count,"Unchanged pointer/prefix does not refetch")
     # Launch two different pointer intents, and deliver the old reply last.
-    scene.pointer = {"kind":"ground","position":Choices.binding_position(domain,second)}
+    scene.pointer = {"kind":"ground","position":second}
     update_hover()
     var newer = scene.hover_request
     var new_cursor_position: Array = scene.hover_intent.value.position
     var new_cursor_cell = "%d,%d" % [new_cursor_position[0],new_cursor_position[1]]
-    check(new_cursor_position==Choices.binding_position(domain,second),"Moving aim uses the exact admitted target position for the cursor")
+    check(new_cursor_position==second,"Moving aim uses the exact admitted target position for the cursor")
     var pending_revision = -1
     for frame in range(6):
         update_hover(); ground_hud._update_ground_preview()
         if frame==0: pending_revision=scene.ground_overlay.preview_revision
         var pending_marks: Dictionary = scene.ground_overlay.marks
-        check(scene.hover_preview==fireballs[1].preview and without_cursor_outlines(pending_marks,[old_cursor_cell,new_cursor_cell])==without_cursor_outlines(stable_marks,[old_cursor_cell,new_cursor_cell]) and eligibility_cells.all(func(cell):return pending_marks.has(cell)),"Delayed valid aim frame %d preserves every eligibility/fill cell; only old/new cursor outlines may change" % frame)
+        check(scene.hover_preview==first_record.preview and without_cursor_outlines(pending_marks,[old_cursor_cell,new_cursor_cell])==without_cursor_outlines(stable_marks,[old_cursor_cell,new_cursor_cell]) and eligibility_cells.all(func(cell):return pending_marks.has(cell)),"Delayed valid aim frame %d preserves every eligibility/fill cell; only old/new cursor outlines may change" % frame)
         check(pending_marks.get(new_cursor_cell,{}).get("colour")==Color("70d6be") and scene.ground_overlay.preview_revision==pending_revision,"Delayed valid aim frame %d keeps its admitted cursor without rebuilding unchanged marks" % frame)
     check(pending_revision==stable_revision+1,"Moving cursor publishes one mark update while the authoritative footprint remains held")
-    reply(newer,fireballs[3].preview,true)
+    reply(newer,second_record.preview,true)
     ground_hud._update_ground_preview()
-    check(scene.hover_preview==fireballs[3].preview and eligibility_cells.all(func(cell):return scene.ground_overlay.marks.has(cell)),"Latest authoritative footprint replaces atomically without changing selected-prefix eligibility")
+    check(scene.hover_preview==second_record.preview and eligibility_cells.all(func(cell):return scene.ground_overlay.marks.has(cell)),"Latest authoritative footprint replaces atomically without changing selected-prefix eligibility")
     check(ground_hud.ground_base_marks==legal_styles,"Hover fill and cursor overrides do not mutate the selected-prefix legal styles")
-    var departed = Choices.preview_positions(fireballs[1].preview,true).filter(func(position):return position not in Choices.preview_positions(fireballs[3].preview,true))
+    var departed = Choices.preview_positions(first_record.preview,true).filter(func(position):return position not in Choices.preview_positions(second_record.preview,true))
     check(not departed.is_empty(),"Real Fireball aim change leaves cells outside its previous footprint")
     for position in departed:
         var cell = "%d,%d" % [position[0],position[1]]
         check(scene.ground_overlay.marks.get(cell,{}).get("fill_colour",Color.TRANSPARENT)==Color.TRANSPARENT,"Departed affected cell loses fill: "+cell)
-    scene.pointer = {"kind":"ground","position":Choices.binding_position(domain,first)}
+    scene.pointer = {"kind":"ground","position":first}
     update_hover()
-    scene.pointer = {"kind":"ground","position":Choices.binding_position(domain,second)}
+    scene.pointer = {"kind":"ground","position":second}
     update_hover()
     newer = scene.hover_request
-    scene.pointer = {"kind":"ground","position":Choices.binding_position(domain,first)}
+    scene.pointer = {"kind":"ground","position":first}
     update_hover()
     var latest = scene.hover_request
-    reply(latest,fireballs[1].preview,true)
-    reply(newer,fireballs[3].preview,true)
-    check(scene.hover_preview==fireballs[1].preview,"Late reply for earlier pointer cannot repaint latest aim")
-    check(scene.target_selection==fireballs[0].selection and scene.submitted.is_empty(),"Delayed/reordered footprint updates never select or spend the retained candidate")
+    reply(latest,first_record.preview,true)
+    reply(newer,second_record.preview,true)
+    check(scene.hover_preview==first_record.preview,"Late reply for earlier pointer cannot repaint latest aim")
+    check(scene.target_selection==empty_selection and scene.submitted.is_empty(),"Delayed/reordered footprint updates never select or spend the retained candidate")
     ground_hud.free()
     scene.hud.captured = true
     update_hover()
@@ -151,17 +157,25 @@ func run() -> void:
     count = peer.requests.size(); update_hover()
     check(scene.hover_cursor==Input.CURSOR_FORBIDDEN and peer.requests.size()==count,"Undisclosed illegal aim gets no invented preview")
     check(scene.hover_preview.is_empty(),"Invalid aim clears the retained prospective footprint")
-    scene.pointer = {"kind":"ground","position":Choices.binding_position(domain,first)}
+    var floor_record:Dictionary=fireballs[3]
+    var floor_position:Array=floor_record.selection.extra_target_positions[0]
+    scene.pointer={"kind":"ground","position":floor_position}
     update_hover()
-    reply(scene.hover_request,fireballs[1].preview,true)
-    scene.choose_target(Choices.binding_position(domain,first))
-    check(scene.hover_preview.is_empty() and scene.selection_preview.is_empty() and scene.selection_media_preview==fireballs[1].preview,"Clicked selection query retains only the last authoritative resource preview while visual authority waits for its reply")
-    reply(scene.action_request,fireballs[1].preview)
-    check(scene.submitted.size()==1 and scene.submitted[0].selection==fireballs[1].selection,"Clicked Fireball submits exactly the prospectively queried selection")
+    check(Protocol._equal(peer.requests[scene.hover_request].body.selection,floor_record.selection),"Unoccupied floor hover sends the exact free-aim coordinate")
+    reply(scene.hover_request,floor_record.preview,true)
+    check(scene.hover_preview.geometry.center==floor_position and scene.target_selection==empty_selection and scene.submitted.is_empty(),"Empty floor shows its authoritative footprint without selecting or spending")
+    scene.pointer = {"kind":"ground","position":first}
+    update_hover()
+    reply(scene.hover_request,first_record.preview,true)
+    scene.choose_target(first)
+    check(scene.hover_preview.is_empty() and scene.selection_preview.is_empty() and scene.selection_media_preview==first_record.preview,"Clicked selection query retains only the last authoritative resource preview while visual authority waits for its reply")
+    reply(scene.action_request,first_record.preview)
+    check(scene.submitted.size()==1 and Protocol._equal(scene.submitted[0].selection,first_record.selection),"Clicked Fireball submits exactly the prospectively queried selection")
     var missile = action(domain,"spell.magic_missile",missiles[0].selection.action_index)
     var missile_text = UI.action_text(missile)
     check(missile_text.contains("1d4+1 Force") and missile_text.contains("3 projectiles") and missile_text.contains("spell slot 1"),"Real Missile tooltip preserves per-projectile dice/count and actual slot cost")
     check(not missile_text.contains("%"),"Missile tooltip invents no target probability")
+    scene.auto_confirm_targets=false
     scene.select_action(missile)
     reply(scene.action_request,missiles[0].preview)
     for i in range(1,4):
@@ -171,17 +185,52 @@ func run() -> void:
         var position: Array = Choices.binding_position(scene.selection_preview,candidate)
         scene.pointer = {"kind":"actor","id":subject.uuid,"position":position}
         update_hover()
-        check(peer.requests[scene.hover_request].body.selection==missiles[i].selection,"Prospective recipient %d preserves real ordered/repeated prefix" % i)
+        check(Protocol._equal(peer.requests[scene.hover_request].body.selection,missiles[i].selection),"Prospective recipient %d preserves real ordered/repeated prefix" % i)
         reply(scene.hover_request,missiles[i].preview,true)
         scene.choose_target(position,subject.uuid)
         reply(scene.action_request,missiles[i].preview)
     check(scene.target_selection.target_indices==missiles[3].selection.target_indices and scene.submitted.size()==1,"A/B/A prefix retains repeats and never auto-confirms")
     var undo = InputEventKey.new(); undo.pressed=true; undo.physical_keycode=KEY_BACKSPACE
     scene._unhandled_input(undo)
-    check(peer.requests[scene.action_request].body.selection==missiles[4].selection,"Undo queries the actual A/B continuation")
+    check(Protocol._equal(peer.requests[scene.action_request].body.selection,missiles[4].selection),"Undo queries the actual A/B continuation")
     reply(scene.action_request,missiles[4].preview)
     scene.confirm_selection()
-    check(scene.submitted[-1].selection==missiles[4].selection,"Confirm after undo submits exact remaining ordered prefix")
+    check(Protocol._equal(scene.submitted[-1].selection,missiles[4].selection),"Confirm after undo submits exact remaining ordered prefix")
+    scene.auto_confirm_targets=true
+    scene.select_action(missile)
+    reply(scene.action_request,missiles[0].preview)
+    var before_auto:int=scene.submitted.size()
+    for i in range(1,4):
+        var candidate:Dictionary=Choices.next_options(scene.selection_preview).filter(func(row):return row.index==missiles[i].selection.target_indices[-1])[0]
+        var subject:Dictionary=Choices.binding_subject(scene.selection_preview,candidate)
+        scene.choose_target(Choices.binding_position(scene.selection_preview,candidate),subject.uuid)
+        reply(scene.action_request,missiles[i].preview)
+        check(scene.submitted.size()==before_auto+(1 if i==3 else 0),"Automatic completion waits for exhausted real continuation at selection %d"%i)
+    check(Protocol._equal(scene.submitted[-1].selection,missiles[3].selection),"Automatic completion submits the exact ordered repeated selection once")
+    var upcasts:Array=evidence.upcast_records
+    var upcast:Dictionary=Interaction.level_rows(missile).filter(func(row):return row.cast_at_level==upcasts[0].selection.cast_at_level)[0]
+    check(upcast.num_projectiles==3 and upcasts.size()==5,"Actual upcast retains base count but requires four recipient selections")
+    scene.select_action(upcast)
+    reply(scene.action_request,upcasts[0].preview)
+    var before_upcast:int=scene.submitted.size()
+    for i in range(1,upcasts.size()):
+        var candidate:Dictionary=Choices.next_options(scene.selection_preview).filter(func(row):return row.index==upcasts[i].selection.target_indices[-1])[0]
+        var subject:Dictionary=Choices.binding_subject(scene.selection_preview,candidate)
+        scene.choose_target(Choices.binding_position(scene.selection_preview,candidate),subject.uuid)
+        check(Protocol._equal(peer.requests[scene.action_request].body.selection,upcasts[i].selection),"Upcast recipient %d preserves selected level and exact prefix"%i)
+        reply(scene.action_request,upcasts[i].preview)
+        check(scene.submitted.size()==before_upcast+(1 if i==4 else 0),"Upcast auto-confirm waits for the fourth real server target at selection %d"%i)
+    check(Protocol._equal(scene.submitted[-1].selection,upcasts[-1].selection),"Completed upcast submits its exact selection once")
+    scene.auto_confirm_targets=false
+    for selected_record in [first_record,floor_record]:
+        scene.select_action(fireball)
+        var before_manual:int=scene.submitted.size()
+        scene.choose_target(selected_record.preview.geometry.center)
+        reply(scene.action_request,selected_record.preview)
+        check(scene.submitted.size()==before_manual and scene.selection_preview.can_confirm,"Disabled auto-confirm keeps a complete indexed or free floor aim for review")
+        scene.confirm_selection()
+        check(scene.submitted.size()==before_manual+1 and Protocol._equal(scene.submitted[-1].selection,selected_record.selection),"Manual Confirm submits the exact reviewed aim once")
+    scene.auto_confirm_targets=true
     scene.select_action(missile)
     var cancelled = scene.action_request
     scene.cancel_selection()

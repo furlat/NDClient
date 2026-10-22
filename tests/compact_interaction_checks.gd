@@ -62,6 +62,8 @@ func run() -> void:
     check(Interaction.target(choices,pool,[2,3],"wall").index==91,"Wall identity wins despite shared creature contact")
     check(Interaction.target(choices,pool,[2,3],"goblin").index==7,"Creature resolves independently at the same coordinate")
     check(Interaction.target(choices,pool,[2,3]).is_empty(),"Position-only targeting does not invent a subject selection")
+    check(Interaction.target(choices,[pool[1]],[2,3]).index==7,"Clicking the contact cell selects its single offered subject binding")
+    check(Interaction.target(choices,[pool[1]],[2,3],"unoffered").is_empty(),"An explicitly different body cannot fall through to a subject underneath")
     check(Interaction.target(choices,Choices.action_options(choices,opened),[],"wall").index==33,"Subject without a contact still selects by identity")
     check(Interaction.main_attack(choices,"goblin","MELEE_MAIN").selection.target_indices==[7],"Default omitted costs preserve main-attack native index")
     check(Interaction.main_attack(choices,"goblin","RANGED_MAIN").is_empty(),"Attack preference still selects exact native weapon")
@@ -110,9 +112,17 @@ func run() -> void:
         "positions":[[9,10],[11,12],[13,14]],"target_sets":[[{"kind":"subject","subject":0,"position":0,"index":82}]],
         "next_positions":[1],"affected_positions":[2],"area_preview":"computed"}
     player.selection_preview=preview
+    var mixed:Dictionary=preview.duplicate(true);mixed.next_positions=[0]
+    var explicit_body:Dictionary=Interaction.extend_selection(choices,missile,Interaction.selection(missile,[]),mixed,[9,10],"other")
+    check(explicit_body.selection.target_indices==[82] and explicit_body.selection.extra_target_positions.is_empty(),"Explicit offered body wins over a floor continuation at the same cell")
+    var explicit_floor:Dictionary=Interaction.extend_selection(choices,missile,Interaction.selection(missile,[]),mixed,[9,10])
+    check(explicit_floor.selection.target_indices.is_empty() and explicit_floor.selection.extra_target_positions==[[9,10]],"Ground gesture keeps the exact offered floor continuation")
+    check(not Interaction.selection_complete(preview),"Confirmable partial selection with offered continuation is not complete")
+    check(Interaction.selection_complete({"can_confirm":true,"target_sets":[[]],"next_target_set":0,"next_positions":[]}),"Only a confirmable exhausted server continuation is complete")
+    check(not Interaction.selection_complete({"can_confirm":false,"target_sets":[[]],"next_target_set":0}),"Empty but unconfirmable continuation cannot auto-submit")
     player.choose_target([9,10],"other"); player.choose_target([9,10],"other")
     check(player.requests.size()==2 and player.requests[-1].selection.target_indices==[82,82],"Compound continuation resolves Preview-local ref0 and preserves repeats")
-    check(not player.requests[-1].auto,"Multi-entity action keeps explicit confirmation")
+    check(not player.requests[-1].auto,"Multi-entity click waits for exact Preview completion before confirmation")
     player.choose_target([11,12])
     check(player.requests[-1].selection.extra_target_positions==[[11,12]],"Next position references resolve only within Preview")
     player.confirm_selection()
